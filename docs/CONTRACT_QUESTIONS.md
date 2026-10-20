@@ -1,0 +1,16 @@
+# Contract questions (Person A → both teammates)
+
+Things in `team/00_SHARED_CONTRACT.md` (v2) that are missing or ambiguous. For each, Person A's code
+uses the **closest compliant choice** below; nothing in the contract file was changed. Agree or
+change these at C1/M1 (a contract change needs both teammates and a version bump).
+
+| # | Topic | Question | What the code does now |
+|---|---|---|---|
+| Q1 | Event `skills_evidence[].outcome` | Only `success` and `missed_then_found` appear in examples. What is the value for a miss that was never found? | Accepts `success` · `missed_then_found` · `failure`. `missed_then_found` and `failure` both count as an **unaided miss** (the employee tried alone first, per PROJECT_PLAN §1), so they reset the "no independent failure since" clock. |
+| Q2 | Additive optional fields | Several objects gain optional fields the UI can use. OK to keep? | Role: `tasks[]` (O*NET task statements), `tags[]`. Course: `verified`, `hrd_claimable`, `hours_source`, `verification_note`. CompanyAssumptions: `shift_fractions`, `task_descriptions`, `review_triggers`, `label`, `change_note`. Snapshot: `licence`, `label`; Signal: `period`. SkillState trail item: `counted`, `note`. Recommendation role: `title`, `sdg_targets`, `score_note`; SourceLink `kind`; CardTask `workflow_task`; RequirementCard `assumption`. PathStep: `because`. NextCase: `skill_id`. All are optional, so the contract examples still validate (tests/test_contract.py). |
+| Q3 | Skill states edge cases | The rules don't name a state for (a) ≥2 counted events that are all failures, (b) ≥2 no-help successes that are not yet "demonstrated" (same session, or no check-in). | (a) `insufficient_evidence` with a `why` saying no success has been observed yet. (b) `observed_with_help` with a `why` explaining what is missing (different case / separate session / a check-in). |
+| Q4 | Case metadata for next-case and path | Person A needs each case's id, mode, scenario_variant, difficulty and practised skills to target practice, without reading `ground_truth` (only the grader may). The contract has no such field outside `ground_truth.skills`. | Person A keeps a planned case index in `data/case_index.json` (ids from the golden journey; labelled planned/synthetic). Proposal: B adds a top-level `skills` array to each Case (outside ground_truth), or exposes it in `GET /api/cases`; then A reads that instead. |
+| Q5 | `case_007` | The PathPlan example uses `case_007` for "Unsupported adjustments – 3 cases", while the golden-journey skill uses `case_007` as the AI false-alarm case. | The case index follows the golden-journey skill (`case_007` = false alarm). Practice bundles in path plans use refs like `practice:unsupported_adjustment`. |
+| Q6 | `POST /api/profile` response | "Profile + initial SkillStates": the exact shape is not given. | Returns `{"profile": Profile, "skills": SkillState[]}`. |
+| Q7 | `POST /api/events/{id}/flag` body | Body shape is not given. | `{"flag": "companion_error" \| "ambiguous_case" \| "data_issue", "value": true, "set_by": "employee" \| "senior" \| "grader"}`; returns `{"event": Event, "skills": SkillState[]}`. |
+| Q8 | Endpoints not in §5 | The task brief asks for `POST /api/ingest/run` and `POST /api/demo/reset`. | Both are implemented under `/api` (owner A). `/api/health` also exists. |
