@@ -22,4 +22,6 @@ Read first: `PROJECT_PLAN.md`, `team/00_SHARED_CONTRACT.md`, and the person file
 - Add/maintain tests (`python -m pytest`). Keep them passing before each commit.
 - Log every new library, model, dataset or API with its licence in `docs/DECLARATION_LOG.md`, and decisions in `docs/decision_log.md` (skill: qart-declaration-log).
 - Run the qart-contract-check skill before committing changes to endpoints or contract objects.
+- Follow the qart-code-standards skill for all code (typed, linted with ruff, tested, no magic numbers, formulas documented).
+- After finishing or changing a module, update its explanation doc with the qart-explain skill (docs/explain/).
 - The human must understand every component: explain non-obvious code in the commit message body.
