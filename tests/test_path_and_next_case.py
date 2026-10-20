@@ -6,7 +6,8 @@ from pathlib import Path
 from src.contract import Event, PathPlan, Profile, SkillState
 from src.engine.catalogue import checkin_cases_by_skill, default_case_index, default_catalogue
 from src.engine.next_case import next_case
-from src.engine.planner import plan_path
+from src.engine.planner import Selector, plan_path
+from src.engine.planner_cpsat import cpsat_select
 from src.engine.skills import derive_states
 from tests.helpers import golden_journey_events
 
@@ -26,7 +27,12 @@ def states_after(events: list[Event]) -> list[SkillState]:
     return derive_states(profile.id, list(cat.skills), events, confidence, checkins)
 
 
-def path_after(events: list[Event], weekly_hours: float, role_id: str = ROLE) -> PathPlan:
+def path_after(
+    events: list[Event],
+    weekly_hours: float,
+    role_id: str = ROLE,
+    selector: Selector | None = None,
+) -> PathPlan:
     cat = default_catalogue()
     return plan_path(
         "u_aina",
@@ -37,6 +43,7 @@ def path_after(events: list[Event], weekly_hours: float, role_id: str = ROLE) ->
         cat.assumptions_v1,
         default_case_index(),
         {e.case_id for e in events},
+        selector,
     )
 
 
@@ -121,3 +128,25 @@ def test_golden_journey_replaces_adjustments_module_with_one_confirmation_checki
 def test_demonstrated_skill_drops_out_of_the_path() -> None:
     plan = path_after(golden_journey_events(include_second_checkin=True), 4)
     assert all("unsupported_adjustment" not in s.skills for s in plan.steps)
+
+
+# --- CP-SAT (exact) version behind the same interface ---------------------------------------
+def test_cpsat_is_never_worse_than_greedy_and_respects_constraints() -> None:
+    courses = default_catalogue().courses
+    for events in ([], golden_journey_events()):
+        for weekly_hours in (1, 4):
+            greedy = path_after(events, weekly_hours)
+            exact = path_after(events, weekly_hours, selector=cpsat_select)
+            assert exact.worst_case_gap <= greedy.worst_case_gap + 0.01
+            assert exact.total_hours <= weekly_hours * 6
+            placed: set[str] = set()
+            for step in exact.steps:
+                if step.type == "course":
+                    assert set(courses[step.ref].prerequisites) <= placed
+                placed.add(step.ref)
+
+
+def test_cpsat_also_uses_the_confirmation_checkin() -> None:
+    plan = path_after(golden_journey_events(), 4, selector=cpsat_select)
+    steps = [(s.type, s.ref) for s in plan.steps if "unsupported_adjustment" in s.skills]
+    assert steps == [("checkin", "checkin_002")]

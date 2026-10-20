@@ -16,7 +16,7 @@ no learning module: more teaching would not produce the missing evidence.
 """
 
 import math
-from collections.abc import Sequence
+from collections.abc import Callable, Sequence
 from dataclasses import dataclass
 
 from src.contract import (
@@ -39,7 +39,8 @@ PRACTICE_COST = "free"  # in-app synthetic practice cases
 
 @dataclass(frozen=True)
 class Resource:
-    id: str
+    id: str  # unique per candidate (e.g. "practice:fx_conversion", "course_04")
+    ref: str  # what the step points to: a case id or a course id
     type: PathStepType
     title: str
     hours: float
@@ -65,10 +66,14 @@ def needs_confirmation(state: SkillState | None) -> bool:
     )
 
 
-def _first_unseen(skill_id: str, mode: str, cases: Sequence[CaseInfo], seen: set[str]) -> str:
+def _first_unseen(skill_id: str, mode: str, cases: Sequence[CaseInfo], taken: set[str]) -> str:
+    """First case of `mode` practising the skill that is neither seen nor used by another step."""
     match = next(
-        (c.id for c in cases if c.mode == mode and skill_id in c.skills and c.id not in seen), None
+        (c.id for c in cases if c.mode == mode and skill_id in c.skills and c.id not in taken),
+        None,
     )
+    if match:
+        taken.add(match)
     return match or f"{mode}:{skill_id}"
 
 
@@ -79,18 +84,19 @@ def build_resources(
     cases: Sequence[CaseInfo],
     seen: set[str],
 ) -> list[Resource]:
-    """Candidate resources for the role's skills."""
+    """Candidate resources for the role's skills (each case is the ref of at most one step)."""
     resources: list[Resource] = []
+    taken = set(seen)
     for skill_id in skill_ids:
         info = catalogue.skills[skill_id]
         state = states.get(skill_id)
         if not info.practised or credit(state) >= 1:
             continue
         if needs_confirmation(state):
-            ref = _first_unseen(skill_id, "checkin", cases, seen)
             resources.append(
                 Resource(
-                    id=ref,
+                    id=f"checkin:{skill_id}",
+                    ref=_first_unseen(skill_id, "checkin", cases, taken),
                     type="checkin",
                     title=f"Confirmation check-in: {info.name} (later session)",
                     hours=params.CHECKIN_HOURS,
@@ -105,7 +111,8 @@ def build_resources(
             continue
         resources.append(
             Resource(
-                id=_first_unseen(skill_id, "practice", cases, seen),
+                id=f"practice:{skill_id}",
+                ref=_first_unseen(skill_id, "practice", cases, taken),
                 type="practice_case",
                 title=f"{info.name}: {params.PRACTICE_BUNDLE_CASES} practice cases",
                 hours=params.PRACTICE_BUNDLE_HOURS,
@@ -122,6 +129,7 @@ def _course_resource(course: Course, skill_ids: Sequence[str]) -> Resource:
     gains = {k: params.RESOURCE_GAIN for k in covered} if course.verified else {}
     return Resource(
         id=course.id,
+        ref=course.id,
         type="course",
         title=f"{course.title} ({course.provider})",
         hours=course.hours,
@@ -195,6 +203,9 @@ def greedy_select(
         chosen.extend(best[1])
 
 
+Selector = Callable[[PlanInputs, Sequence[Resource], float], list[Resource]]
+
+
 def order_steps(inputs: PlanInputs, chosen: Sequence[Resource]) -> list[Resource]:
     """Prerequisites first, then the largest standalone worst-case gap cut per hour."""
     start, _ = worst_case_gap(inputs, [])
@@ -238,7 +249,7 @@ def _to_step(order: int, resource: Resource, catalogue: Catalogue) -> PathStep:
     return PathStep(
         order=order,
         type=resource.type,
-        ref=resource.id,
+        ref=resource.ref,
         title=resource.title,
         hours=resource.hours,
         skills=skills,
@@ -259,14 +270,18 @@ def plan_path(
     assumptions: CompanyAssumptions,
     cases: Sequence[CaseInfo],
     seen_case_ids: set[str],
+    selector: "Selector | None" = None,
 ) -> PathPlan:
-    """The robust path for one employee and target role (contract PathPlan)."""
+    """The robust path for one employee and target role (contract PathPlan).
+
+    `selector` picks the resources: greedy_select by default, or planner_cpsat.cpsat_select.
+    """
     by_skill = {s.skill_id: s for s in states}
     inputs = plan_inputs(role_id, by_skill, catalogue, assumptions)
     role_skills = [s.skill_id for s in catalogue.roles[role_id].skills]
     resources = build_resources(role_skills, by_skill, catalogue, cases, seen_case_ids)
     budget = weekly_hours * params.PLAN_HORIZON_WEEKS
-    chosen = order_steps(inputs, greedy_select(inputs, resources, budget))
+    chosen = order_steps(inputs, (selector or greedy_select)(inputs, resources, budget))
     total = sum(r.hours for r in chosen)
     return PathPlan(
         user_id=user_id,

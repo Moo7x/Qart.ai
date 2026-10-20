@@ -22,17 +22,20 @@ path visibly changes when evidence arrives.
 
 ## 4. Where in the code
 `plan_path()`, `build_resources()`, `greedy_select()`, `worst_case_gap()`, `order_steps()`.
-Tests: `tests/test_path_and_next_case.py`. OR-Tools CP-SAT version: not built yet (greedy kept;
-see decision log).
+Exact version: `src/engine/planner_cpsat.py::cpsat_select` (OR-Tools CP-SAT, same model, values
+scaled to integers), passed as `plan_path(..., selector=cpsat_select)`. The API uses greedy (easier
+to explain step by step). Tests: `tests/test_path_and_next_case.py` (CP-SAT is never worse than
+greedy and respects budget and prerequisites).
 
 ## 5. Example (Aina → AI Finance Operations Analyst, 4 h/week)
 Before evidence: step 2 is the "Challenge unsupported adjustments: 3 practice cases" bundle. After
 case_003 → case_006 → checkin_001 it is replaced by **"Confirmation check-in: Challenge unsupported
 adjustments (later session)" (checkin_002, 0.5 h)**, which moves to step 1, and the worst-case gap
-drops 0.67 → 0.58. At 1 h/week the plan shrinks to 3 steps.
+drops (greedy 0.64 → 0.57; CP-SAT 0.62 → 0.56). At 1 h/week the plan shrinks to 4 steps.
 
 ## 6. Limits and honesty
-Gains are assumptions, not measured learning. Greedy is not guaranteed optimal. Hours for some
+Gains are assumptions, not measured learning. Greedy is not guaranteed optimal (CP-SAT is, for
+the scaled model; differences on Aina's data are ≤ 0.02). Hours for some
 courses are estimates (`hours_source` in courses.json).
 
 ## 7. Likely judge questions
@@ -43,5 +46,5 @@ courses are estimates (`hours_source` in courses.json).
 - *Are the courses real?* Yes, verified URLs with retrieval dates; unverified items are excluded.
 
 ## 8. Design choices considered
-CP-SAT (exact, planned behind the same interface); LLM-generated plans (not reproducible; could
+CP-SAT as the default (exact, but its choices are harder to narrate); LLM-generated plans (not reproducible; could
 invent courses).
