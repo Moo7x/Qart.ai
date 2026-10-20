@@ -395,6 +395,7 @@ class Course(BaseModel):
     verified: bool = False
     hrd_claimable: bool = False
     hours_source: str | None = None
+    verification_note: str | None = None
 
 
 # --- OptimizerProposal ----------------------------------------------------------------------
