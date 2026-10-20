@@ -1,0 +1,71 @@
+{
+  "user_id": "u_aina",
+  "scenario": "agentic",
+  "snapshot_id": "snap_aei_2026_06",
+  "assumptions_version": 3,
+  "roles": [
+    {
+      "role_id": "ai_finops_analyst",
+      "rank": 1,
+      "score": 0.52,
+      "factors": {
+        "coverage": 0.6,
+        "confidence": 0.5,
+        "interest": 0.6,
+        "effort": 0.4
+      },
+      "formula": "0.55*coverage + 0.20*confidence + 0.10*interest - 0.15*effort",
+      "gap": [
+        {
+          "skill_id": "variance_analysis",
+          "state": "insufficient_evidence",
+          "weight": 0.2
+        }
+      ],
+      "requirement_card": {
+        "tasks": [
+          {
+            "task": "Review AI-prepared reconciliations",
+            "onet": "13-2051.00",
+            "allocation": "ai_drafts_human_reviews"
+          }
+        ],
+        "weights": [
+          {
+            "skill_id": "ai_output_review",
+            "base": 0.15,
+            "scenario": 0.27,
+            "because": "agentic: matching moves to AI → 80% of its execution weight shifts to oversight (assumption v3)"
+          }
+        ],
+        "evidence": [
+          {
+            "label": "AEI May 2026, SOC 43-3031 usage 0.32",
+            "url": "…"
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "O*NET 13-2051.00",
+          "url": "…"
+        },
+        {
+          "label": "AEI release 2026-06-26 (CC-BY)",
+          "url": "…"
+        }
+      ]
+    }
+  ],
+  "changed_since": {
+    "assumptions_version": 2,
+    "rank_changes": [
+      {
+        "role_id": "ai_finops_analyst",
+        "from": 3,
+        "to": 1,
+        "because": "…"
+      }
+    ]
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "version": 3,
+  "updated_by": "HR (synthetic)",
+  "based_on_snapshot": "snap_aei_2026_05",
+  "scenarios": {
+    "assistive": {
+      "tasks": {
+        "match_transactions": "ai_drafts_human_reviews",
+        "prepare_adjustments": "human",
+        "sign_off": "human"
+      }
+    },
+    "agentic": {
+      "tasks": {
+        "match_transactions": "ai",
+        "prepare_adjustments": "ai_drafts_human_reviews",
+        "sign_off": "human"
+      }
+    }
+  },
+  "shift_rule": "when a task moves to ai_drafts_human_reviews or ai, 50% (assistive) / 80% (agentic) of its execution-skill weight moves to oversight skills"
+}
