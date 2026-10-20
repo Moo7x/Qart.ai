@@ -6,7 +6,7 @@ def format_greeting(name: str) -> str:
     return f"Welcome to {name}!"
 
 
-def summarize(values: list[float]) -> dict:
+def summarize(values: list[float]) -> dict[str, float | None]:
     """Return basic statistics for a list of numbers."""
     if not values:
         return {"count": 0, "min": None, "max": None, "average": None}
