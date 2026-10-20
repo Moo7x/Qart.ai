@@ -91,7 +91,9 @@ HR_MIN_GROUP_SIZE: Final = 5
 HR_DEMAND_MIN_WEIGHT: Final = 0.05
 
 # --- Snapshot diff (Task A1) ------------------------------------------------------------------
-# DECLARED: a signal "changed" when its relative change is at least 5%. Smaller moves between two
-# monthly periods are treated as noise and do not trigger an assumption review.
+# DECLARED: a signal "changed" when its relative change is at least 5% AND its absolute change is at
+# least 0.02 (percentage points). AEI publishes values rounded to two decimals, so a 0.01 step on a
+# small share (0.11 → 0.12) can be rounding alone. Smaller moves do not trigger a review.
 SIGNAL_REVIEW_RELATIVE_CHANGE: Final = 0.05
+SIGNAL_REVIEW_MIN_ABS_CHANGE: Final = 0.02
 SIGNAL_DECIMALS: Final = 4

@@ -239,6 +239,32 @@ class Snapshot(BaseModel):
     label: str | None = None
 
 
+class SignalChange(BaseModel):
+    """One signal compared across two snapshots (diff response; shape proposed in Q9)."""
+
+    entity: str
+    metric: str
+    geo: str | None
+    before: float | None
+    after: float | None
+    change: float | None
+    relative_change: float | None
+    significant: bool
+
+
+class SnapshotDiff(BaseModel):
+    """`GET /api/snapshots/diff` response; the contract names the endpoint, not its shape (Q9)."""
+
+    from_id: str
+    to_id: str
+    from_period: str
+    to_period: str
+    label: str
+    changes: list[SignalChange]
+    suggested_assumption_reviews: list[AssumptionReview]
+    note: str
+
+
 # --- CompanyAssumptions (layer B: explicit, labelled, editable by HR) -----------------------
 class ScenarioAllocation(BaseModel):
     tasks: dict[str, Allocation]
