@@ -29,6 +29,8 @@ Practice loop (Person B → Person A)
 | `src/engine/params.py` | A | every module doc cites it |
 | `catalogue/`, `src/engine/catalogue.py` | A | [catalogue.md](catalogue.md) |
 | `src/engine/skills.py` (evidence rules) | A | [skills.md](skills.md) |
+| `src/engine/requirements.py` (requirement card) | A | [requirements.md](requirements.md) |
+| `src/engine/recommend.py`, `eval/sensitivity.py` | A | [recommend.md](recommend.md) |
 | `src/main.py` (app skeleton) | both | this page |
 | `src/api_engine.py`, `src/store.py` | A | added in Step 6 |
 | `src/companion/`, `src/api_companion.py`, `cases/`, `web/` | B | B's docs |
