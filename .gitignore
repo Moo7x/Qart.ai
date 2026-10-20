@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+venv/
+.venv/
+
+# Environment
+.env
+
+# OS / Editor
+.DS_Store
+.vscode/
+.idea/
+
+# Qart.ai
+data/raw/
+*.sqlite
+*.db
+node_modules/
+web/dist/
+.pytest_cache/
+.claude/settings.local.json
