@@ -1,0 +1,171 @@
+{
+  "_about": "Internal roles of the synthetic company (Kopi Kita Sdn Bhd). Each role is based on real O*NET 31.0 occupations; task statements are copied verbatim from O*NET OnLine (retrieved 2026-10-21). O*NET data: CC BY 4.0, U.S. Department of Labor, Employment and Training Administration. Role ids, summaries, base_weight values and the task-to-skill links are the team's declared design, not O*NET data. workflow_task links each O*NET task to a company workflow task in catalogue/company_assumptions.json.",
+  "attribution": "O*NET 31.0 Database, U.S. Department of Labor/Employment and Training Administration (USDOL/ETA), CC BY 4.0. https://www.onetcenter.org/database.html",
+  "retrieved": "2026-10-21",
+  "roles": [
+    {
+      "id": "recon_associate",
+      "title": "Reconciliation Associate",
+      "internal": true,
+      "based_on": [
+        {"source": "O*NET 31.0", "code": "43-3031.00", "title": "Bookkeeping, Accounting, and Auditing Clerks", "url": "https://www.onetonline.org/link/summary/43-3031.00"}
+      ],
+      "summary": "Today's role: prepares and checks month-end bank reconciliations and reports discrepancies.",
+      "tags": ["reconciliation", "accuracy", "operations"],
+      "sdg_targets": ["4.4", "8.5"],
+      "skills": [
+        {"skill_id": "recon_to_source", "base_weight": 0.9},
+        {"skill_id": "transposition_check", "base_weight": 0.8},
+        {"skill_id": "duplicate_detection", "base_weight": 0.7},
+        {"skill_id": "cutoff_timing", "base_weight": 0.7},
+        {"skill_id": "unsupported_adjustment", "base_weight": 0.6},
+        {"skill_id": "fx_conversion", "base_weight": 0.5},
+        {"skill_id": "escalation_judgment", "base_weight": 0.5},
+        {"skill_id": "spreadsheet_modelling", "base_weight": 0.5},
+        {"skill_id": "ai_output_review", "base_weight": 0.3}
+      ],
+      "tasks": [
+        {"task": "Reconcile records of bank transactions.", "onet": "43-3031.00", "workflow_task": "match_transactions",
+         "skills": ["recon_to_source", "duplicate_detection", "cutoff_timing", "fx_conversion"],
+         "source_url": "https://www.onetonline.org/link/summary/43-3031.00"},
+        {"task": "Check figures, postings, and documents for correct entry, mathematical accuracy, and proper codes.", "onet": "43-3031.00", "workflow_task": "check_entries",
+         "skills": ["transposition_check", "recon_to_source"],
+         "source_url": "https://www.onetonline.org/link/summary/43-3031.00"},
+        {"task": "Debit, credit, and total accounts on computer spreadsheets and databases, using specialized accounting software.", "onet": "43-3031.00", "workflow_task": "prepare_adjustments",
+         "skills": ["spreadsheet_modelling", "transposition_check"],
+         "source_url": "https://www.onetonline.org/link/summary/43-3031.00"},
+        {"task": "Reconcile or note and report discrepancies found in records.", "onet": "43-3031.00", "workflow_task": "investigate_exceptions",
+         "skills": ["unsupported_adjustment", "escalation_judgment"],
+         "source_url": "https://www.onetonline.org/link/summary/43-3031.00"}
+      ]
+    },
+    {
+      "id": "ai_finops_analyst",
+      "title": "AI Finance Operations Analyst",
+      "internal": true,
+      "based_on": [
+        {"source": "O*NET 31.0", "code": "13-2051.00", "title": "Financial and Investment Analysts", "url": "https://www.onetonline.org/link/summary/13-2051.00"},
+        {"source": "O*NET 31.0", "code": "43-3031.00", "title": "Bookkeeping, Accounting, and Auditing Clerks", "url": "https://www.onetonline.org/link/summary/43-3031.00"}
+      ],
+      "summary": "Reviews AI-prepared reconciliations and reports; owns exceptions.",
+      "tags": ["analysis", "automation", "ai", "review"],
+      "sdg_targets": ["4.4", "8.2", "8.5"],
+      "skills": [
+        {"skill_id": "ai_output_review", "base_weight": 0.9},
+        {"skill_id": "unsupported_adjustment", "base_weight": 0.7},
+        {"skill_id": "escalation_judgment", "base_weight": 0.7},
+        {"skill_id": "variance_analysis", "base_weight": 0.7},
+        {"skill_id": "recon_to_source", "base_weight": 0.6},
+        {"skill_id": "data_quality", "base_weight": 0.6},
+        {"skill_id": "spreadsheet_modelling", "base_weight": 0.5},
+        {"skill_id": "stakeholder_communication", "base_weight": 0.5},
+        {"skill_id": "process_automation", "base_weight": 0.5},
+        {"skill_id": "duplicate_detection", "base_weight": 0.4},
+        {"skill_id": "cutoff_timing", "base_weight": 0.4},
+        {"skill_id": "forecasting", "base_weight": 0.4}
+      ],
+      "tasks": [
+        {"task": "Reconcile records of bank transactions.", "onet": "43-3031.00", "workflow_task": "match_transactions",
+         "skills": ["recon_to_source", "duplicate_detection", "cutoff_timing"],
+         "source_url": "https://www.onetonline.org/link/summary/43-3031.00"},
+        {"task": "Reconcile or note and report discrepancies found in records.", "onet": "43-3031.00", "workflow_task": "investigate_exceptions",
+         "skills": ["unsupported_adjustment", "escalation_judgment", "ai_output_review"],
+         "source_url": "https://www.onetonline.org/link/summary/43-3031.00"},
+        {"task": "Inform investment decisions by analyzing financial information to forecast business, industry, or economic conditions.", "onet": "13-2051.00", "workflow_task": "analyse_performance",
+         "skills": ["variance_analysis", "forecasting", "data_quality"],
+         "source_url": "https://www.onetonline.org/link/summary/13-2051.00"},
+        {"task": "Draw charts and graphs, using computer spreadsheets, to illustrate technical reports.", "onet": "13-2051.00", "workflow_task": "prepare_reports",
+         "skills": ["spreadsheet_modelling", "stakeholder_communication"],
+         "source_url": "https://www.onetonline.org/link/summary/13-2051.00"},
+        {"task": "Present oral or written reports on general economic trends, individual corporations, and entire industries.", "onet": "13-2051.00", "workflow_task": "communicate_results",
+         "skills": ["stakeholder_communication"],
+         "source_url": "https://www.onetonline.org/link/summary/13-2051.00"}
+      ]
+    },
+    {
+      "id": "controls_assurance_analyst",
+      "title": "Controls & Assurance Analyst",
+      "internal": true,
+      "based_on": [
+        {"source": "O*NET 31.0", "code": "13-2011.00", "title": "Accountants and Auditors", "url": "https://www.onetonline.org/link/summary/13-2011.00"},
+        {"source": "O*NET 31.0", "code": "13-1041.00", "title": "Compliance Officers", "url": "https://www.onetonline.org/link/summary/13-1041.00"}
+      ],
+      "summary": "Designs and tests review controls around AI-assisted finance processes; follows up compliance issues.",
+      "tags": ["controls", "compliance", "review", "audit"],
+      "sdg_targets": ["4.4", "8.2"],
+      "skills": [
+        {"skill_id": "controls_design", "base_weight": 0.9},
+        {"skill_id": "escalation_judgment", "base_weight": 0.8},
+        {"skill_id": "unsupported_adjustment", "base_weight": 0.8},
+        {"skill_id": "ai_output_review", "base_weight": 0.7},
+        {"skill_id": "data_quality", "base_weight": 0.6},
+        {"skill_id": "recon_to_source", "base_weight": 0.6},
+        {"skill_id": "duplicate_detection", "base_weight": 0.5},
+        {"skill_id": "cutoff_timing", "base_weight": 0.5},
+        {"skill_id": "stakeholder_communication", "base_weight": 0.5},
+        {"skill_id": "transposition_check", "base_weight": 0.4},
+        {"skill_id": "fx_conversion", "base_weight": 0.3},
+        {"skill_id": "sql_basics", "base_weight": 0.3}
+      ],
+      "tasks": [
+        {"task": "Review accounts for discrepancies and reconcile differences.", "onet": "13-2011.00", "workflow_task": "match_transactions",
+         "skills": ["recon_to_source", "duplicate_detection", "fx_conversion"],
+         "source_url": "https://www.onetonline.org/link/summary/13-2011.00"},
+        {"task": "Prepare adjusting journal entries.", "onet": "13-2011.00", "workflow_task": "prepare_adjustments",
+         "skills": ["transposition_check", "cutoff_timing"],
+         "source_url": "https://www.onetonline.org/link/summary/13-2011.00"},
+        {"task": "Collect and analyze data to detect deficient controls, duplicated effort, extravagance, fraud, or non-compliance with laws, regulations, and management policies.", "onet": "13-2011.00", "workflow_task": "review_controls",
+         "skills": ["controls_design", "data_quality", "duplicate_detection", "sql_basics"],
+         "source_url": "https://www.onetonline.org/link/summary/13-2011.00"},
+        {"task": "Examine and evaluate financial and information systems, recommending controls to ensure system reliability and data integrity.", "onet": "13-2011.00", "workflow_task": "review_controls",
+         "skills": ["controls_design", "ai_output_review"],
+         "source_url": "https://www.onetonline.org/link/summary/13-2011.00"},
+        {"task": "Identify compliance issues that require follow-up or investigation.", "onet": "13-1041.00", "workflow_task": "investigate_exceptions",
+         "skills": ["escalation_judgment", "unsupported_adjustment"],
+         "source_url": "https://www.onetonline.org/link/summary/13-1041.00"},
+        {"task": "Prepare reports of activities, evaluations, recommendations, or decisions.", "onet": "13-1041.00", "workflow_task": "communicate_results",
+         "skills": ["stakeholder_communication"],
+         "source_url": "https://www.onetonline.org/link/summary/13-1041.00"}
+      ]
+    },
+    {
+      "id": "fpa_analyst",
+      "title": "FP&A Analyst",
+      "internal": true,
+      "based_on": [
+        {"source": "O*NET 31.0", "code": "13-2031.00", "title": "Budget Analysts", "url": "https://www.onetonline.org/link/summary/13-2031.00"},
+        {"source": "O*NET 31.0", "code": "13-2051.00", "title": "Financial and Investment Analysts", "url": "https://www.onetonline.org/link/summary/13-2051.00"}
+      ],
+      "summary": "Analyses budgets against actuals, forecasts and explains results to managers.",
+      "tags": ["analysis", "forecasting", "planning", "communication"],
+      "sdg_targets": ["4.4", "8.5"],
+      "skills": [
+        {"skill_id": "variance_analysis", "base_weight": 0.9},
+        {"skill_id": "forecasting", "base_weight": 0.8},
+        {"skill_id": "spreadsheet_modelling", "base_weight": 0.7},
+        {"skill_id": "stakeholder_communication", "base_weight": 0.7},
+        {"skill_id": "data_quality", "base_weight": 0.5},
+        {"skill_id": "ai_output_review", "base_weight": 0.5},
+        {"skill_id": "escalation_judgment", "base_weight": 0.4},
+        {"skill_id": "sql_basics", "base_weight": 0.4}
+      ],
+      "tasks": [
+        {"task": "Analyze monthly department budgeting and accounting reports to maintain expenditure controls.", "onet": "13-2031.00", "workflow_task": "analyse_performance",
+         "skills": ["variance_analysis", "data_quality"],
+         "source_url": "https://www.onetonline.org/link/summary/13-2031.00"},
+        {"task": "Review operating budgets to analyze trends affecting budget needs.", "onet": "13-2031.00", "workflow_task": "analyse_performance",
+         "skills": ["variance_analysis", "forecasting", "sql_basics"],
+         "source_url": "https://www.onetonline.org/link/summary/13-2031.00"},
+        {"task": "Examine budget estimates for completeness, accuracy, and conformance with procedures and regulations.", "onet": "13-2031.00", "workflow_task": "investigate_exceptions",
+         "skills": ["ai_output_review", "escalation_judgment"],
+         "source_url": "https://www.onetonline.org/link/summary/13-2031.00"},
+        {"task": "Communicate financial reports and budgets to stakeholders.", "onet": "13-2031.00", "workflow_task": "communicate_results",
+         "skills": ["stakeholder_communication"],
+         "source_url": "https://www.onetonline.org/link/summary/13-2031.00"},
+        {"task": "Draw charts and graphs, using computer spreadsheets, to illustrate technical reports.", "onet": "13-2051.00", "workflow_task": "prepare_reports",
+         "skills": ["spreadsheet_modelling"],
+         "source_url": "https://www.onetonline.org/link/summary/13-2051.00"}
+      ]
+    }
+  ]
+}
