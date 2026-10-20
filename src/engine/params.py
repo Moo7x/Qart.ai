@@ -1,0 +1,97 @@
+"""Every weight, threshold and parameter the engine uses, in one place.
+
+Each constant says what it is, why it has this value, and its status:
+- DECLARED: a design choice fixed in the team contract / PROJECT_PLAN (not fitted to data).
+- ASSUMPTION: a provisional value with no data behind it yet; disclosed to users and judges.
+- SOURCED: taken from a cited external source.
+
+Company adoption assumptions (task allocation, shift fractions) are NOT here: they are layer B,
+owned and edited by HR in catalogue/company_assumptions.json.
+"""
+
+from typing import Final
+
+from src.contract import SkillStateName
+
+# --- Evidence rules (contract §4 SkillState rules, v2) ----------------------------------------
+# DECLARED (contract): with fewer counted events we cannot say anything about the skill.
+MIN_COUNTED_EVENTS: Final = 2
+# DECLARED (contract): independent successes needed for "demonstrated_independently".
+REQUIRED_INDEPENDENT_SUCCESSES: Final = 2
+# DECLARED (contract): at least one of those successes must be a no-help check-in.
+REQUIRED_CHECKIN_SUCCESSES: Final = 1
+# DECLARED (contract §3): help level 0 = "none"; only this counts as independent.
+INDEPENDENT_HELP_LEVEL: Final = 0
+
+# --- Provisional estimate: help-weighted Bayesian knowledge tracing (Task A3) -----------------
+# ASSUMPTION: all four are provisional. No learner data was available to fit them. The estimate
+# only orders practice; it never decides the user-facing state and is never shown as a %.
+BKT_PRIOR: Final = 0.20  # P(L0): most new hires have not yet shown this review skill
+BKT_LEARN: Final = 0.15  # T: chance of learning the skill from one practised case
+BKT_SLIP: Final = 0.10  # S: chance a skilled person still misses an error
+# G_h by help level 0..4: more help → a success says less about the person (help is evidence,
+# not a measurement). At level 4 the answer was shown, so a "success" is almost pure guess.
+BKT_GUESS_BY_HELP: Final = (0.15, 0.30, 0.50, 0.75, 0.95)
+ESTIMATE_NOTE: Final = (
+    "internal, used only to order practice; parameters are provisional assumptions "
+    "(no learner data was available to fit them)"
+)
+# DECLARED: rounding for the internal estimate (2 decimals, as in the contract example).
+ESTIMATE_DECIMALS: Final = 2
+
+# --- Recommender (PROJECT_PLAN §6, contract Recommendation v2) --------------------------------
+# DECLARED: additive score; effort is a PENALTY (subtracted). A ±20% sensitivity test is run.
+SCORE_WEIGHT_COVERAGE: Final = 0.55  # evidence that the person already has the role's skills
+SCORE_WEIGHT_CONFIDENCE: Final = 0.20  # how much of that is backed by ≥2 counted events
+SCORE_WEIGHT_INTEREST: Final = 0.10  # people choose their direction; interest matters, a bit
+SCORE_WEIGHT_EFFORT: Final = 0.15  # penalty: hours needed to close the gaps
+SCORE_FORMULA: Final = "0.55*coverage + 0.20*confidence + 0.10*interest - 0.15*effort"
+SCORE_NOTE: Final = "suitability indicator, not a probability of getting the role"
+# DECLARED: credit per evidence state. Help-assisted evidence counts half; a self-report counts a
+# little (it is a claim, not evidence); no evidence counts nothing.
+STATE_CREDIT: Final[dict[SkillStateName, float]] = {
+    "demonstrated_independently": 1.0,
+    "observed_with_help": 0.5,
+    "self_reported": 0.2,
+    "insufficient_evidence": 0.0,
+}
+# DECLARED: "confidence" counts a skill as evidenced once it has this many counted events.
+CONFIDENCE_MIN_EVENTS: Final = MIN_COUNTED_EVENTS
+# DECLARED: effort = hours to close gaps / (weekly_hours × 12 weeks), capped at 1.
+EFFORT_HORIZON_WEEKS: Final = 12
+EFFORT_CAP: Final = 1.0
+# DECLARED: decimals for scores and factors in API output (readability, not precision).
+SCORE_DECIMALS: Final = 2
+WEIGHT_DECIMALS: Final = 2
+
+# --- Path planner (Task A5) -------------------------------------------------------------------
+# DECLARED: the plan must fit weekly_hours × 6 weeks.
+PLAN_HORIZON_WEEKS: Final = 6
+# ASSUMPTION: each covering resource is assumed to close 0.3 of a skill's gap. Coverage is not
+# demonstrated skill: the state only changes when new case evidence arrives.
+RESOURCE_GAIN: Final = 0.3
+# ASSUMPTION: a confirmation check-in, if passed, moves a skill from "observed with help with
+# 1 of 2 independent successes" to "demonstrated" (credit 0.5 → 1.0), so its expected gain is
+# the full remaining gap. It is evidence collection, not learning.
+CHECKIN_GAIN: Final = 0.5
+# ASSUMPTION: time for a bundle of 3 in-app practice cases (≈30 min per case, our case design).
+PRACTICE_BUNDLE_HOURS: Final = 1.5
+PRACTICE_BUNDLE_CASES: Final = 3
+# ASSUMPTION: time for one no-help check-in case.
+CHECKIN_HOURS: Final = 0.5
+# DECLARED: a planner step must reduce the worst-case gap by more than this to be worth adding.
+MIN_GAP_IMPROVEMENT: Final = 1e-9
+
+# --- HR aggregates (AGENTS.md privacy rule) ---------------------------------------------------
+# DECLARED: groups and cells under 5 people are suppressed. This reduces but does not eliminate
+# re-identification risk.
+HR_MIN_GROUP_SIZE: Final = 5
+# DECLARED: a skill is in a scenario's training demand when some internal role weights it at
+# least this much (normalised weight) under that scenario.
+HR_DEMAND_MIN_WEIGHT: Final = 0.05
+
+# --- Snapshot diff (Task A1) ------------------------------------------------------------------
+# DECLARED: a signal "changed" when its relative change is at least 5%. Smaller moves between two
+# monthly periods are treated as noise and do not trigger an assumption review.
+SIGNAL_REVIEW_RELATIVE_CHANGE: Final = 0.05
+SIGNAL_DECIMALS: Final = 4
