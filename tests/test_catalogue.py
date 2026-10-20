@@ -1,7 +1,7 @@
 """Integrity rules for catalogue/*.json: no dangling ids, every role cited, every course checked."""
 
 from src.contract import SCENARIOS
-from src.engine.catalogue import default_catalogue
+from src.engine.catalogue import checkin_cases_by_skill, default_case_index, default_catalogue
 
 CONTRACT_PRACTISED_SKILLS = {
     "recon_to_source",
@@ -91,3 +91,16 @@ def test_sdg_map_covers_all_roles_and_skills() -> None:
         assert set(link.targets) <= target_ids
     for role in cat.roles.values():
         assert role.sdg_targets == cat.sdg.roles[role.id].targets
+
+
+def test_case_index_uses_known_skills_and_covers_the_golden_journey() -> None:
+    cat = default_catalogue()
+    cases = default_case_index()
+    ids = {c.id for c in cases}
+    assert {"case_001", "case_003", "case_006", "case_007", "checkin_001", "checkin_002"} <= ids
+    for case in cases:
+        assert set(case.skills) <= set(cat.practised_skill_ids), case.id
+    assert checkin_cases_by_skill(cases)["unsupported_adjustment"][:2] == [
+        "checkin_001",
+        "checkin_002",
+    ]

@@ -12,10 +12,11 @@ from typing import Any
 
 from pydantic import BaseModel
 
-from src.contract import CompanyAssumptions, Course, Role, SkillType
+from src.contract import CaseMode, CompanyAssumptions, Course, Role, Scenario, SkillType
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 CATALOGUE_DIR = REPO_ROOT / "catalogue"
+CASE_INDEX_PATH = REPO_ROOT / "data" / "case_index.json"
 
 
 class SkillInfo(BaseModel):
@@ -46,6 +47,17 @@ class SdgMap(BaseModel):
     targets: list[SdgTarget]
     roles: dict[str, SdgLink]
     skills: dict[str, SdgLink]
+
+
+class CaseInfo(BaseModel):
+    """Case metadata Person A may read (never ground_truth; see CONTRACT_QUESTIONS Q4)."""
+
+    id: str
+    title: str
+    mode: CaseMode
+    scenario_variant: Scenario
+    difficulty: int
+    skills: list[str]
 
 
 @dataclass(frozen=True)
@@ -88,3 +100,23 @@ def load_catalogue(directory: Path = CATALOGUE_DIR) -> Catalogue:
 def default_catalogue() -> Catalogue:
     """The repository catalogue, loaded once per process."""
     return load_catalogue()
+
+
+def load_case_index(path: Path = CASE_INDEX_PATH) -> list[CaseInfo]:
+    """The planned case index (data/case_index.json), in file order."""
+    return [CaseInfo.model_validate(c) for c in _read_json(path)["cases"]]
+
+
+@lru_cache(maxsize=1)
+def default_case_index() -> tuple[CaseInfo, ...]:
+    return tuple(load_case_index())
+
+
+def checkin_cases_by_skill(cases: tuple[CaseInfo, ...] | list[CaseInfo]) -> dict[str, list[str]]:
+    """Check-in case ids per skill, used for SkillState.next_to_confirm."""
+    result: dict[str, list[str]] = {}
+    for case in cases:
+        if case.mode == "checkin":
+            for skill_id in case.skills:
+                result.setdefault(skill_id, []).append(case.id)
+    return result
