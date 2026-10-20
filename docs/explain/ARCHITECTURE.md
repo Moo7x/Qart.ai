@@ -35,7 +35,8 @@ Practice loop (Person B → Person A)
 | `src/engine/planner.py` (greedy robust path) | A | [planner.md](planner.md) |
 | `src/engine/snapshots.py`, `src/engine/ingest.py`, `data/snapshots/` | A | [snapshots.md](snapshots.md) |
 | `src/main.py` (app skeleton) | both | this page |
-| `src/api_engine.py`, `src/store.py` | A | added in Step 6 |
+| `src/api_engine.py`, `src/store.py`, `data/synthetic_team.json` | A | [api_engine.md](api_engine.md) |
+| `src/engine/hr.py` (aggregates only) | A | [hr.md](hr.md) |
 | `src/companion/`, `src/api_companion.py`, `cases/`, `web/` | B | B's docs |
 
 ## Labelling rule
