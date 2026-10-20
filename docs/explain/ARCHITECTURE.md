@@ -33,6 +33,7 @@ Practice loop (Person B → Person A)
 | `src/engine/recommend.py`, `eval/sensitivity.py` | A | [recommend.md](recommend.md) |
 | `src/engine/next_case.py`, `data/case_index.json` | A | [next_case.md](next_case.md) |
 | `src/engine/planner.py` (greedy robust path) | A | [planner.md](planner.md) |
+| `src/engine/snapshots.py`, `src/engine/ingest.py`, `data/snapshots/` | A | [snapshots.md](snapshots.md) |
 | `src/main.py` (app skeleton) | both | this page |
 | `src/api_engine.py`, `src/store.py` | A | added in Step 6 |
 | `src/companion/`, `src/api_companion.py`, `cases/`, `web/` | B | B's docs |
