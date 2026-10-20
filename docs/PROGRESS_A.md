@@ -66,7 +66,7 @@ fields, Q3 state edge cases, Q4 case metadata without ground_truth, Q5 `case_007
 response shapes (profile, flag, diff, HR summary, PUT assumptions).
 
 ## What you must do manually
-1. Read the diffs (31 commits on `a/engine`) and agree Q1–Q11 with Person B at C1.
+1. Read the diffs (29 new commits on `a/engine`) and agree Q1–Q11 with Person B at C1.
 2. Confirm the COSO course's free access (or drop it), and spot-check Kaggle/Microsoft course hours
    marked as estimates in `catalogue/courses.json`.
 3. Push `a/engine` when ready (`git push origin a/engine`); I did not push.
