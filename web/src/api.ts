@@ -7,10 +7,12 @@ import type {
   Case,
   CompanionMessageResponse,
   DecisionResponse,
+  HRSummaryData,
   PathPlan,
   Profile,
   Recommendation,
   SkillState,
+  Snapshot,
 } from './types';
 
 const USE_MOCKS = (import.meta.env.VITE_USE_MOCKS ?? 'true') !== 'false';
@@ -159,6 +161,10 @@ const MOCK_RECOMMENDATION: Recommendation = {
       ],
       sdg_targets: ['4.4', '8.2'],
       score_note: 'Suitability indicator, not a probability',
+      fit: 0.72,
+      time_to_ready: '~14 weeks at 4h/week',
+      close_match: true,
+      outlook: 'growing',
     },
   ],
 };
@@ -176,6 +182,49 @@ const MOCK_PATH: PathPlan = {
   total_hours: 18,
   weeks: 5,
   worst_case_gap: 0.22,
+};
+
+const MOCK_PROFILE: Profile = {
+  id: 'u_aina',
+  display_name: 'Aina',
+  current_role_id: 'recon_associate',
+  years_experience: 0.5,
+  skills_self_reported: [
+    { skill_id: 'recon_to_source', confidence: 0.6 },
+    { skill_id: 'duplicate_detection', confidence: 0.5 },
+    { skill_id: 'cutoff_timing', confidence: 0.5 },
+    { skill_id: 'unsupported_adjustment', confidence: 0.8 },
+    { skill_id: 'fx_conversion', confidence: 0.4 },
+    { skill_id: 'transposition_check', confidence: 0.75 },
+    { skill_id: 'escalation_judgment', confidence: 0.6 },
+    { skill_id: 'ai_output_review', confidence: 0.7 },
+  ],
+  interests: ['analysis', 'automation'],
+  weekly_learning_hours: 4,
+  language: 'en',
+  team: 'finops_kl',
+};
+
+const MOCK_SNAPSHOTS: Snapshot[] = [
+  {
+    id: 'snap_aei_2026_05',
+    source: 'Anthropic Economic Index (CC-BY)',
+    release_date: '2026-05',
+    period: 'retrieved 2026-10-21',
+    url: 'https://huggingface.co/datasets/Anthropic/EconomicIndex',
+  },
+];
+
+const MOCK_HR_SUMMARY: HRSummaryData = {
+  team: 'finops_kl',
+  total_employees: 12,
+  generated_at: '2026-10-21T10:00:00+08:00',
+  skill_counts: [
+    { skill_id: 'unsupported_adjustment', skill_label: 'Unsupported adjustments', demonstrated: 3, observed: 5, self_reported: 4, insufficient: null },
+    { skill_id: 'transposition_check', skill_label: 'Transposition errors', demonstrated: 2, observed: 4, self_reported: null, insufficient: 6 },
+    { skill_id: 'ai_output_review', skill_label: 'AI output review', demonstrated: 1, observed: null, self_reported: 6, insufficient: 5 },
+    { skill_id: 'escalation_judgment', skill_label: 'Escalation judgment', demonstrated: null, observed: null, self_reported: 8, insufficient: 4 },
+  ],
 };
 
 // ── API functions ──────────────────────────────────────────────────────────────
@@ -251,19 +300,20 @@ export async function postDecision(
   if (USE_MOCKS) {
     const correct = decision === 'correct';
     return {
-      event: {
+      // event is null for a wrong practice decision (missed_then_found flow)
+      event: correct ? {
         id: 'ev_mock_001',
         user_id: userId,
         case_id: caseId,
-        mode: 'practice',
-        scenario: 'assistive',
+        mode: 'practice' as const,
+        scenario: 'assistive' as const,
         timestamp: new Date().toISOString(),
         self_confidence_before: 0.8,
         help_level_max: 0,
         help_steps: [],
         checks_used: [],
         user_decision: decision as 'sign_off' | 'correct' | 'escalate',
-        decision_correct: correct,
+        decision_correct: true,
         issue_found_by: flaggedRows.length > 0 ? 'user' : 'companion',
         skills_evidence: [],
         cause_if_wrong: null,
@@ -272,13 +322,13 @@ export async function postDecision(
         difficulty: 2,
         session_id: sessionId,
         flags: { companion_error: false, ambiguous_case: false, data_issue: false },
-      },
+      } : null,
       decision_correct: correct,
       explanation: correct
         ? 'Correct! Ledger keyed 1,520 instead of 1,250. ADJ-7 was hiding the transposition error.'
         : "Not quite. The account doesn't reconcile cleanly — look more closely at the adjustments.",
       affected_rows: ['L4', 'ADJ-7'],
-      correct_decision: 'correct',
+      correct_decision: 'correct' as const,
       missed_and_walking_back: !correct,
     };
   }
@@ -289,5 +339,23 @@ export async function postDecision(
     user_id: userId,
     scenario,
   });
+  return data;
+}
+
+export async function getProfile(userId: string): Promise<Profile> {
+  if (USE_MOCKS) return MOCK_PROFILE;
+  const { data } = await axios.get<Profile>(`${BASE}/api/profile/${userId}`);
+  return data;
+}
+
+export async function getSnapshots(): Promise<Snapshot[]> {
+  if (USE_MOCKS) return MOCK_SNAPSHOTS;
+  const { data } = await axios.get<Snapshot[]>(`${BASE}/api/snapshots`);
+  return data;
+}
+
+export async function getHRSummary(team: string): Promise<HRSummaryData> {
+  if (USE_MOCKS) return MOCK_HR_SUMMARY;
+  const { data } = await axios.get<HRSummaryData>(`${BASE}/api/hr/summary`, { params: { team } });
   return data;
 }

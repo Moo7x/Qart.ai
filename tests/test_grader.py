@@ -44,10 +44,11 @@ def test_wrong_decision_no_rows_flagged(case_003):
 
 
 def test_wrong_decision_user_found_row(case_003):
-    # User flagged a row but chose the wrong overall decision
+    # Grader returns "failure" even when rows are flagged; agent.py upgrades to
+    # "missed_then_found" once the user resubmits correctly.
     result = grade(case_003, "escalate", ["L4"])
     assert result["decision_correct"] is False
-    assert all(se["outcome"] == "missed_then_found" for se in result["skills_evidence"])
+    assert all(se["outcome"] == "failure" for se in result["skills_evidence"])
     assert result["issue_found_by"] == "user"
 
 

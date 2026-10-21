@@ -27,7 +27,7 @@ export default function Result() {
     getSkills('u_aina').then(setSkills)
   }, [])
 
-  const relevantSkillIds = result?.event.skills_evidence.map(se => se.skill_id) ?? []
+  const relevantSkillIds = result?.event?.skills_evidence.map(se => se.skill_id) ?? []
   const relevantSkills = skills.filter(s => relevantSkillIds.includes(s.skill_id))
 
   return (

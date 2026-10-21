@@ -151,9 +151,9 @@ export interface CompanionMessageResponse {
   trace: string[];
 }
 
-// Decision response
+// Decision response — event is null when a wrong practice decision is held back
 export interface DecisionResponse {
-  event: CompanionEvent;
+  event: CompanionEvent | null;
   decision_correct: boolean;
   explanation: string;
   affected_rows: string[];
@@ -193,6 +193,11 @@ export interface RoleRecommendation {
   sources: { label: string; url: string }[];
   sdg_targets?: string[];
   score_note?: string;
+  // optional fields from engine v2
+  fit?: number;
+  time_to_ready?: string;
+  close_match?: boolean;
+  outlook?: string;
 }
 
 export interface Recommendation {
@@ -214,6 +219,30 @@ export interface PathStep {
   url?: string;
   sdg_targets?: string[];
   because?: string;
+}
+
+export interface Snapshot {
+  id: string;
+  source: string;
+  release_date: string;
+  period: string;
+  url?: string;
+}
+
+export interface HRSkillCount {
+  skill_id: string;
+  skill_label: string;
+  demonstrated: number | null;
+  observed: number | null;
+  self_reported: number | null;
+  insufficient: number | null;
+}
+
+export interface HRSummaryData {
+  team: string;
+  total_employees: number;
+  generated_at: string;
+  skill_counts: HRSkillCount[];
 }
 
 export interface PathPlan {

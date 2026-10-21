@@ -1,6 +1,6 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { postProfile } from '../api'
+import { getProfile, postProfile } from '../api'
 
 const SKILLS = [
   { id: 'recon_to_source', label: 'Reconcile to source' },
@@ -24,6 +24,19 @@ export default function Intake() {
   )
   const [interests, setInterests] = useState<string[]>(['analysis', 'automation'])
   const [submitting, setSubmitting] = useState(false)
+
+  // Pre-fill from Aina's existing profile so returning users see their saved values
+  useEffect(() => {
+    getProfile('u_aina').then(profile => {
+      if (profile.skills_self_reported?.length) {
+        const map: Record<string, number> = {}
+        for (const s of profile.skills_self_reported) map[s.skill_id] = s.confidence
+        setConfidences(prev => ({ ...prev, ...map }))
+      }
+      if (profile.interests?.length) setInterests(profile.interests)
+      if (profile.weekly_learning_hours) setWeeklyHours(profile.weekly_learning_hours)
+    }).catch(() => { /* first-time user — ignore */ })
+  }, [])
 
   const toggleInterest = (i: string) =>
     setInterests(prev => prev.includes(i) ? prev.filter(x => x !== i) : [...prev, i])
