@@ -30,7 +30,7 @@ intake → case_001 (largest gap: AI output review) · after case_003 → **case
 ## 6. Limits and honesty
 Until B publishes cases/index.json the planned index is used. The estimate only breaks ties.
 
-## 7. Likely judge questions
+## 7. Questions and answers
 - *Isn't this just random practice?* No: the rule is deterministic and explained in `because`.
 - *Why not repeat the same case?* A repeat tests memory, not the skill; demonstrated requires
   different cases.

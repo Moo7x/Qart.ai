@@ -52,7 +52,7 @@ shows "Check postings… is drafted by AI and reviewed by a human" and its score
 No authentication (synthetic demo accounts only). HR suppression reduces but does not eliminate
 re-identification risk. The optimiser endpoints are a stub and invent no results.
 
-## 7. Likely judge questions
+## 7. Questions and answers
 - *Can HR see Aina's results?* No; only counts per state, small cells hidden, no names or ids.
 - *What happens when new data arrives?* Ingest → diff → suggested review → human approval → new
   version → recompute; ingesting alone changes nothing (tested).

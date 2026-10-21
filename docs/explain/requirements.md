@@ -3,7 +3,7 @@
 ## 1. What it does
 For one role and one scenario, shows **which tasks the role has** (O\*NET), **who does each task**
 under the company's AI-adoption assumptions, the **resulting skill weights**, and **because** for
-every weight. It is the bridge from trends to roles that judges will inspect.
+every weight. It is the bridge from trends to roles.
 
 ## 2. Why it exists
 Must-haves 3 (explainable role score) and 6 (two scenarios labelled as estimates). PROJECT_PLAN §6:
@@ -44,7 +44,7 @@ falls 0.16 → 0.03 ("'Match ledger entries…' moves to AI … 80% … shifts t
 The 50%/80% fractions and the allocation table are synthetic company choices, not findings. Usage of
 AI on a task (AEI) is not proof that the task is replaced. Evidence links are context only.
 
-## 7. Likely judge questions
+## 7. Questions and answers
 - *How do trends change roles?* Only through HR approving a new assumption version; the card shows
   the version and the evidence that triggered the review.
 - *Why move weight instead of adding new skills?* Total importance stays comparable across scenarios.

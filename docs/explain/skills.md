@@ -46,7 +46,7 @@ fixture `tests/fixtures/golden_journey_events.json`.
 calibrated with learner data; that needs a pilot (PROJECT_PLAN §10). Difficulty is recorded but not
 used by the rules yet.
 
-## 7. Likely judge questions
+## 7. Questions and answers
 - *Why not show a mastery %?* A number implies a measurement we don't have; the state + cases are
   checkable by the employee.
 - *What if the companion was wrong?* The event is flagged and stops counting; the trail shows it.

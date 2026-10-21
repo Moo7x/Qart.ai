@@ -32,7 +32,7 @@ clean case: root cause 2/2, decision 2/2, false alarms 0/1, invalid citations 0.
 No acceptance cases exist yet (B authors them); no numbers are reported until they do. The set
 must be run once per candidate, or it stops being an acceptance set.
 
-## 7. Likely judge questions
+## 7. Questions and answers
 - *How do you know the companion works?* Counts on independent acceptance cases vs a text-only
   baseline, including false alarms on clean cases.
 - *Could you tune to the test?* The optimiser cannot read the folder or the criteria (hash shown).

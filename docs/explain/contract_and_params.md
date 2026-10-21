@@ -29,7 +29,7 @@ contract's `changed_since.rank_changes`.
 ## 6. Limits and honesty
 `outcome: "failure"` and several optional fields are our proposals until agreed at C1 (Q1, Q2).
 
-## 7. Likely judge questions
+## 7. Questions and answers
 - *Why Pydantic?* Validation at the API boundary and one source of truth for the JSON shape.
 - *Are your weights tuned?* No; they are declared and tested for ±20% sensitivity.
 

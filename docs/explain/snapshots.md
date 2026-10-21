@@ -38,7 +38,7 @@ Both periods come from one release (labelled historical replay). Usage share of 
 conversations is not adoption by companies and not proof of replacement. Indeed and HN signals are
 not ingested yet.
 
-## 7. Likely judge questions
+## 7. Questions and answers
 - *Does the data decide the roles?* No; it triggers a review, a human approves a new assumption.
 - *Why Malaysia and global?* Malaysia is our context; global is the larger, more stable sample.
 - *Is it real data?* Yes, AEI release 2026-06-26, CC-BY, cited in every snapshot.

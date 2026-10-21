@@ -43,7 +43,7 @@ Gains are assumptions, not measured learning. Greedy is not guaranteed optimal (
 the scaled model; differences on Aina's data are ≤ 0.02). Hours for some
 courses are estimates (`hours_source` in courses.json).
 
-## 7. Likely judge questions
+## 7. Questions and answers
 - *Why a check-in instead of more teaching?* She already succeeded once without help; what is missing
   is evidence, not instruction.
 - *What does "robust" mean?* We don't know which AI future the company gets, so we minimise the worse

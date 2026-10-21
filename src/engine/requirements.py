@@ -215,7 +215,7 @@ def requirement_card(
     skill_types: dict[str, SkillType],
     snapshot: Snapshot | None = None,
 ) -> RequirementCard:
-    """The card judges inspect: tasks → allocation → weights → because (assumption + evidence)."""
+    """The requirement card: tasks → allocation → weights → because (assumption + evidence)."""
     weights = scenario_weights(role, scenario, assumptions, skill_types)
     allocation = assumptions.scenarios[scenario].tasks
     tasks = [

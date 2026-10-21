@@ -27,7 +27,7 @@ headcount cuts; individual recommendations stay with the employee.
 Suppression reduces but does not eliminate re-identification risk (e.g. combining queries over time).
 With 9 people most cells are hidden: that is the honest cost of privacy at this size.
 
-## 7. Likely judge questions
+## 7. Questions and answers
 - *Why not show HR who is ready?* That turns a learning tool into a selection tool; humans decide,
   and employees own their record.
 - *Why 5?* A common small-cell rule; declared, not derived.
