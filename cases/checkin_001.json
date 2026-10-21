@@ -1,0 +1,39 @@
+{
+  "id": "checkin_001",
+  "title": "Check-in: unsupported adjustment – Sunrise Supplies",
+  "mode": "checkin",
+  "difficulty": 2,
+  "scenario_variant": "assistive",
+  "ledger": [
+    {"row_id": "L1", "date": "2026-10-01", "description": "Opening balance", "amount": 15000.00, "currency": "MYR"},
+    {"row_id": "L2", "date": "2026-10-09", "description": "Supplier payment – Sunrise Supplies", "amount": -2700.00, "currency": "MYR", "doc_ref": "INV-6601"},
+    {"row_id": "L3", "date": "2026-10-17", "description": "Marketing materials", "amount": -850.00, "currency": "MYR", "doc_ref": "INV-6602"},
+    {"row_id": "L4", "date": "2026-10-24", "description": "Staff meal allowance", "amount": -600.00, "currency": "MYR", "doc_ref": "CLM-091"}
+  ],
+  "bank": [
+    {"row_id": "B1", "date": "2026-10-01", "description": "Opening balance", "amount": 15000.00, "currency": "MYR"},
+    {"row_id": "B2", "date": "2026-10-09", "description": "SUNRISE SUPPLIES", "amount": -2700.00, "currency": "MYR"},
+    {"row_id": "B3", "date": "2026-10-17", "description": "MARKETING MATERIALS", "amount": -850.00, "currency": "MYR"},
+    {"row_id": "B4", "date": "2026-10-24", "description": "MEAL ALLOWANCE", "amount": -600.00, "currency": "MYR"},
+    {"row_id": "B5", "date": "2026-10-31", "description": "DEBIT ADJUSTMENT REF 9910", "amount": -3200.00, "currency": "MYR"}
+  ],
+  "documents": [
+    {"doc_ref": "INV-6601", "type": "invoice", "text": "Sunrise Supplies Sdn Bhd\nInvoice INV-6601\nOct packaging materials\nTotal: RM2,700.00"},
+    {"doc_ref": "INV-6602", "type": "invoice", "text": "PrintMaster Sdn Bhd\nInvoice INV-6602\nOct 2026 marketing flyers\nAmount: RM850.00"},
+    {"doc_ref": "CLM-091", "type": "form", "text": "Staff Claims CLM-091\nDate: 24 Oct 2026\nMeal allowances – Oct\nAmount: RM600.00\nApproved by: HR"}
+  ],
+  "ai_output": {
+    "claim": "Account reconciles. Difference RM0.00 after adjustment ADJ-2.",
+    "proposed_adjustments": [
+      {"id": "ADJ-2", "amount": -3200.00, "reason": "miscellaneous bank adjustment"}
+    ]
+  },
+  "ground_truth": {
+    "has_issue": true,
+    "issue_types": ["unsupported_adjustment"],
+    "affected_rows": ["ADJ-2"],
+    "correct_decision": "escalate",
+    "explanation": "Bank shows a RM3,200 debit (B5) with no ledger entry. ADJ-2 covers this as 'miscellaneous bank adjustment' without any supporting document. This is a material unverified debit that must be escalated.",
+    "skills": ["unsupported_adjustment", "escalation_judgment"]
+  }
+}

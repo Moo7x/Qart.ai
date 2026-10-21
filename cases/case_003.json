@@ -1,0 +1,47 @@
+{
+  "id": "case_003",
+  "title": "Oct bank reconciliation – Kopi Kita Sdn Bhd",
+  "mode": "practice",
+  "difficulty": 2,
+  "scenario_variant": "assistive",
+  "ledger": [
+    {"row_id": "L1", "date": "2026-10-01", "description": "Opening balance", "amount": 48000.00, "currency": "MYR"},
+    {"row_id": "L2", "date": "2026-10-03", "description": "Rent – Oct 2026", "amount": -3200.00, "currency": "MYR", "doc_ref": "INV-1001"},
+    {"row_id": "L3", "date": "2026-10-05", "description": "Utilities – Tenaga Nasional", "amount": -800.00, "currency": "MYR", "doc_ref": "INV-1002"},
+    {"row_id": "L4", "date": "2026-10-14", "description": "Supplier payment – Beans Co", "amount": -1520.00, "currency": "MYR", "doc_ref": "INV-1043"},
+    {"row_id": "L5", "date": "2026-10-18", "description": "Petty cash replenishment", "amount": -500.00, "currency": "MYR", "doc_ref": "PCF-001"},
+    {"row_id": "L6", "date": "2026-10-25", "description": "Salary advance – Oct", "amount": -2500.00, "currency": "MYR", "doc_ref": "SA-001"},
+    {"row_id": "L7", "date": "2026-10-31", "description": "Bank service charges", "amount": -100.00, "currency": "MYR", "doc_ref": "BC-001"}
+  ],
+  "bank": [
+    {"row_id": "B1", "date": "2026-10-01", "description": "Opening balance", "amount": 48000.00, "currency": "MYR"},
+    {"row_id": "B2", "date": "2026-10-03", "description": "RENT OCT 2026", "amount": -3200.00, "currency": "MYR"},
+    {"row_id": "B3", "date": "2026-10-05", "description": "TNB PAYMENT", "amount": -800.00, "currency": "MYR"},
+    {"row_id": "B4", "date": "2026-10-18", "description": "PETTY CASH", "amount": -500.00, "currency": "MYR"},
+    {"row_id": "B5", "date": "2026-10-25", "description": "SALARY ADVANCE", "amount": -2500.00, "currency": "MYR"},
+    {"row_id": "B6", "date": "2026-10-15", "description": "TRF BEANS CO", "amount": -1250.00, "currency": "MYR"},
+    {"row_id": "B7", "date": "2026-10-31", "description": "BANK CHARGES", "amount": -100.00, "currency": "MYR"}
+  ],
+  "documents": [
+    {"doc_ref": "INV-1043", "type": "invoice", "text": "Beans Co Sdn Bhd\nInvoice No: INV-1043\nDate: 14 Oct 2026\nDescription: Coffee beans supply – Oct batch\nTotal: RM1,250.00\nBank: Maybank 5141 2345 6789"},
+    {"doc_ref": "INV-1001", "type": "invoice", "text": "Selamat Property Sdn Bhd\nInvoice No: INV-1001\nOct 2026 Rental – Lot 12, Jalan Ampang\nAmount: RM3,200.00"},
+    {"doc_ref": "INV-1002", "type": "invoice", "text": "Tenaga Nasional Berhad\nAccount: 123456789\nOct 2026 electricity charges\nAmount: RM800.00"},
+    {"doc_ref": "PCF-001", "type": "form", "text": "Petty Cash Form PCF-001\nDate: 18 Oct 2026\nReplenishment of petty cash float\nAmount: RM500.00\nApproved by: Manager"},
+    {"doc_ref": "SA-001", "type": "form", "text": "Salary Advance SA-001\nDate: 25 Oct 2026\nEmployee advance – Oct payroll\nAmount: RM2,500.00\nApproved by: HR Manager"},
+    {"doc_ref": "BC-001", "type": "statement", "text": "Maybank Monthly Statement\nAccount: 5141-XXXX-6789\nOct 2026 service charges: RM100.00"}
+  ],
+  "ai_output": {
+    "claim": "Account reconciles. Difference RM0.00 after adjustment ADJ-7.",
+    "proposed_adjustments": [
+      {"id": "ADJ-7", "amount": 270.00, "reason": "rounding difference"}
+    ]
+  },
+  "ground_truth": {
+    "has_issue": true,
+    "issue_types": ["transposition_check", "unsupported_adjustment"],
+    "affected_rows": ["L4", "ADJ-7"],
+    "correct_decision": "correct",
+    "explanation": "Ledger keyed 1,520 instead of 1,250 (transposition error). ADJ-7 hides this as a 'rounding difference' with no supporting document.",
+    "skills": ["transposition_check", "unsupported_adjustment", "ai_output_review"]
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "id": "case_002",
+  "title": "Oct bank reconciliation – duplicate supplier payment",
+  "mode": "practice",
+  "difficulty": 1,
+  "scenario_variant": "assistive",
+  "ledger": [
+    {"row_id": "L1", "date": "2026-10-01", "description": "Opening balance", "amount": 22000.00, "currency": "MYR"},
+    {"row_id": "L2", "date": "2026-10-05", "description": "Supplier payment – TechParts Sdn Bhd", "amount": -2800.00, "currency": "MYR", "doc_ref": "INV-5501"},
+    {"row_id": "L3", "date": "2026-10-06", "description": "Supplier payment – TechParts Sdn Bhd", "amount": -2800.00, "currency": "MYR", "doc_ref": "INV-5501"},
+    {"row_id": "L4", "date": "2026-10-14", "description": "Phone bills – Oct", "amount": -380.00, "currency": "MYR", "doc_ref": "INV-5502"},
+    {"row_id": "L5", "date": "2026-10-21", "description": "Sales receipt – Café orders", "amount": 4600.00, "currency": "MYR", "doc_ref": "REC-301"}
+  ],
+  "bank": [
+    {"row_id": "B1", "date": "2026-10-01", "description": "Opening balance", "amount": 22000.00, "currency": "MYR"},
+    {"row_id": "B2", "date": "2026-10-05", "description": "TECHPARTS SDN BHD", "amount": -2800.00, "currency": "MYR"},
+    {"row_id": "B3", "date": "2026-10-14", "description": "PHONE BILLS", "amount": -380.00, "currency": "MYR"},
+    {"row_id": "B4", "date": "2026-10-21", "description": "CAFE ORDERS RECEIPT", "amount": 4600.00, "currency": "MYR"}
+  ],
+  "documents": [
+    {"doc_ref": "INV-5501", "type": "invoice", "text": "TechParts Sdn Bhd\nInvoice INV-5501\nOct 2026 equipment parts\nTotal: RM2,800.00\nDue: 5 Oct 2026\n\nNOTE: This invoice has already been paid on 5 Oct 2026."},
+    {"doc_ref": "INV-5502", "type": "invoice", "text": "Digi Telecommunications\nInvoice INV-5502\nOct 2026 business phone lines\nAmount: RM380.00"},
+    {"doc_ref": "REC-301", "type": "receipt", "text": "Sales Receipt REC-301\nKopi Kita Sdn Bhd\nOct café order collections\nAmount: RM4,600.00"}
+  ],
+  "ai_output": {
+    "claim": "Account reconciles. Difference RM0.00 after adjustment ADJ-2.",
+    "proposed_adjustments": [
+      {"id": "ADJ-2", "amount": 2800.00, "reason": "timing adjustment – payment clearing difference"}
+    ]
+  },
+  "ground_truth": {
+    "has_issue": true,
+    "issue_types": ["duplicate_detection"],
+    "affected_rows": ["L3", "ADJ-2"],
+    "correct_decision": "correct",
+    "explanation": "L3 is a duplicate of L2 — both reference INV-5501 and the bank only shows one payment on 5 Oct. The AI's ADJ-2 hides the duplicate instead of identifying it. Remove L3.",
+    "skills": ["duplicate_detection", "recon_to_source"]
+  }
+}
