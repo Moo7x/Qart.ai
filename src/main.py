@@ -15,7 +15,11 @@ from starlette.exceptions import HTTPException
 from starlette.responses import Response
 from starlette.types import Scope
 
-from src.api_engine import router as engine_router
+from src.envfile import load_env_file
+
+load_env_file()  # local .env (gitignored); must run before the routers read any settings
+
+from src.api_engine import router as engine_router  # noqa: E402
 
 logger = logging.getLogger(__name__)
 
