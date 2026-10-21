@@ -184,3 +184,19 @@ is no `b/app` on the remote yet). Steps at M1:
 - **COSO "GenAI" paper (Feb 2026)**, linked on https://www.coso.org/guidance-on-ic: internal control
   over generative AI; a strong free resource for `controls_design` and `ai_output_review` if free.
 - **Microsoft Learn Platform API** (successor to the Catalog API): needed if the old endpoint stops.
+
+## Local integration test with Person B's `b/app` (2026-10-21)
+Local throwaway branch `test/combined-a-b` (not pushed): merge of `a/engine` + `origin/b/app`.
+- Conflicts only in `.replit` and `.env.example`; resolved by combining both (Python 3.12 module +
+  B's `replit_start.sh`, Node 20; one merged `.env.example`). Use the same resolution at M1.
+- 169/169 tests pass after pinning my next-case tests to the planned case list. Strict mypy: 48
+  errors, all in B's files (`src/companion/*`, `src/api_companion.py`); ruff: 20 findings in B's files.
+- Web app builds (`npm ci && npm run build`); served by FastAPI. With `VITE_USE_MOCKS=false` the
+  skills and future pages show real engine data.
+- Fixed on my side (committed): page refresh 404 (SPA fallback in `src/main.py`), self-rating
+  rounding (0.85 → 9/10), shorter `score_note`.
+- For Person B: per-case help level (currently per session), report failed `/api/events` posts
+  instead of swallowing them, one `missed_then_found` event per case (contract), intake should load
+  the existing profile (Aina 8/10), show score/fit as numbers not %, show fit/time_to_ready/
+  close_match/outlook, read the snapshot banner from `/api/snapshots`, connect HR page, add `openai`
+  to requirements, make his code pass ruff + mypy, smaller commits.
