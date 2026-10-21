@@ -120,8 +120,33 @@ def build_resources(
                 because=f"{info.name} is {state.state if state else 'insufficient_evidence'}.",
             )
         )
-    resources.extend(_course_resource(c, skill_ids) for c in catalogue.courses.values())
+    courses = [_course_resource(c, skill_ids) for c in catalogue.courses.values()]
+    resources.extend(prefer_cheaper([c for c in courses if c.gains]))
     return [r for r in resources if r.gains]
+
+
+def cost_tier(cost_label: str) -> int:
+    """0 free, 1 low-cost, 2 paid or not stated (see params.py; never assume free)."""
+    label = cost_label.strip().lower()
+    if label.startswith(params.FREE_COST_PREFIX):
+        return params.COST_TIER_FREE
+    if label.startswith(params.LOW_COST_PREFIX):
+        return params.COST_TIER_LOW
+    return params.COST_TIER_PAID_OR_UNKNOWN
+
+
+def prefer_cheaper(courses: Sequence[Resource]) -> list[Resource]:
+    """Drop a course when another covers all of its skill gaps at a lower cost tier (rule 1)."""
+    kept = []
+    for course in courses:
+        dominated = any(
+            cost_tier(other.cost) < cost_tier(course.cost) and set(course.gains) <= set(other.gains)
+            for other in courses
+            if other.id != course.id
+        )
+        if not dominated:
+            kept.append(course)
+    return kept
 
 
 def _course_resource(course: Course, skill_ids: Sequence[str]) -> Resource:
@@ -184,7 +209,7 @@ def greedy_select(
         chosen_ids = {r.id for r in chosen}
         spent = sum(r.hours for r in chosen)
         worst, total = worst_case_gap(inputs, chosen)
-        best: tuple[tuple[float, float, str], list[Resource]] | None = None
+        best: tuple[tuple[float, float, int], list[Resource]] | None = None
         for resource in resources:
             if resource.id in chosen_ids:
                 continue
@@ -193,10 +218,15 @@ def greedy_select(
             if spent + hours > budget_hours:
                 continue
             new_worst, new_total = worst_case_gap(inputs, [*chosen, *bundle])
-            key = ((worst - new_worst) / hours, (total - new_total) / hours, resource.id)
+            # Rule 2: equal gap cut per hour → lower cost tier wins (negated: larger is better).
+            key = (
+                (worst - new_worst) / hours,
+                (total - new_total) / hours,
+                -cost_tier(resource.cost),
+            )
             if key[1] <= params.MIN_GAP_IMPROVEMENT:
                 continue
-            if best is None or (key[0], key[1]) > (best[0][0], best[0][1]):
+            if best is None or key > best[0]:
                 best = (key, bundle)
         if best is None:
             return chosen

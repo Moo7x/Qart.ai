@@ -11,7 +11,18 @@ Items from the second brief, done in order; each line is updated when an item is
 - [x] 3 Case index reader: `load_case_index()` reads B's `cases/index.json` (`practised_skills`)
   and falls back to `data/case_index.json`; fixture `tests/fixtures/cases_index.json`. Q4 updated
   (skills-on-Case proposal withdrawn). `cases/` was not created.
-- [ ] 4 Course costs, COSO, coverage check
+- [x] 4 Course costs: planner uses any verified course (free or paid); every step shows its cost;
+  cheaper course covering the same gap wins (`prefer_cheaper`, tie-break in greedy; params
+  `COST_TIER_*`). COSO course_16 = "paid (Coursera)", verified; new free course_17 = COSO's official
+  Executive Summary PDF. SQLBolt and MS Support relabelled "no price shown (not stated as free)".
+  Every course has `cost_source`. Tests: `tests/test_course_costs.py`.
+  Coverage of role skills by verified courses (free / paid-or-unstated):
+  - Only paid/unstated besides a free one: controls_design (free 17, paid 16), sql_basics (free 04,
+    unstated 06), spreadsheet_modelling (free 02, unstated 13).
+  - **No course at all** (covered only by in-app practice cases): duplicate_detection,
+    escalation_judgment, fx_conversion, transposition_check, unsupported_adjustment. I did not add
+    courses for them (none verified yet); candidates need your approval.
+  - All other role skills have at least one verified free course.
 - [ ] 5 Evaluation scaffold
 - [ ] 6 Q12 + docs
 - [ ] 7 Postgres backend

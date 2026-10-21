@@ -97,6 +97,21 @@ CHECKIN_HOURS: Final = 0.5
 # DECLARED: a planner step must reduce the worst-case gap by more than this to be worth adding.
 MIN_GAP_IMPROVEMENT: Final = 1e-9
 
+# --- Course cost preference (brief: "free or low-cost resources") ---------------------------
+# DECLARED: the company funds training, so verified paid courses may appear in a path, but free
+# and low-cost ones are preferred. Tiers come from the course's cost label: a label starting with
+# "free" → 0, "low-cost" → 1, anything else (paid, or no price stated) → 2, so a course is never
+# treated as free unless its label says so (and courses.json records the cost_source).
+COST_TIER_FREE: Final = 0
+COST_TIER_LOW: Final = 1
+COST_TIER_PAID_OR_UNKNOWN: Final = 2
+FREE_COST_PREFIX: Final = "free"
+LOW_COST_PREFIX: Final = "low-cost"
+# Rule 1 (dominance): a course is dropped from the candidates when another verified course covers
+# all of the same skill gaps for the role at a lower cost tier.
+# Rule 2 (tie-break): when two candidates cut the worst-case gap equally per hour, the lower cost
+# tier wins, then the id.
+
 # --- HR aggregates (AGENTS.md privacy rule) ---------------------------------------------------
 # DECLARED: groups and cells under 5 people are suppressed. This reduces but does not eliminate
 # re-identification risk.

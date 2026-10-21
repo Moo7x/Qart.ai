@@ -22,9 +22,13 @@ tags (sdg_map).
   (`human` / `ai_drafts_human_reviews` / `ai`), the shift rule (50% assistive / 80% agentic of the
   execution weight moves to oversight skills), and `review_triggers` (which external signal should make
   HR review which assumption). Later versions are stored by the API when HR approves a change.
-- **courses.json**: `verified=true` = page loaded, title matched, no paywall seen. `hours_source` says
-  whether hours are from the provider page or a team estimate. One course (COSO on Coursera) is
-  `verified=false` because free access is unconfirmed.
+- **courses.json** (17 items): `verified=true` = page loaded, title and cost checked. `cost` says
+  "free" only where the provider states it, and `cost_source` records where (Kaggle "no-cost
+  courses", Microsoft Learn FAQ "training is free", OpenLearn "Free course"…). SQLBolt and the
+  Microsoft Support Excel page show no price but do not say free, so they are labelled "no price
+  shown (not stated as free)". The COSO Coursera course is "paid (Coursera)" (checked by Person A
+  on 2026-10-21); the free COSO *Internal Control — Integrated Framework: Executive Summary* PDF on
+  coso.org is the free alternative (linked only; © COSO). `hours_source` marks estimates.
 - **sdg_map.json**: 4.4 (main), 8.2, 8.5 with one-line rationales for every role and skill.
 
 ## 4. Where in the code

@@ -16,6 +16,11 @@ path visibly changes when evidence arrives.
 - Gap per scenario: g = max(0, 1 − credit(state) − Σ gain); gain 0.3 per covering resource
   (*assumption*: coverage ≠ demonstrated skill until new case evidence), 0.5 for a check-in.
 - Objective: minimise max over {assistive, agentic} of Σ w·g (w = requirement-card weights).
+- Cost (*declared*, `params.py`): any verified course may be used, free or paid (the company funds
+  training), and every step shows its cost label. Tier from the label: "free…" 0, "low-cost…" 1,
+  anything else 2 (never assumed free). Rule 1: a course is dropped when another verified course
+  covers all its skill gaps at a lower tier (so the free COSO summary beats the paid Coursera course).
+  Rule 2: equal gap cut per hour → lower tier wins.
 - Budget: weekly_hours × 6 weeks (*declared*). Prerequisites are added with the course that needs them.
 - Greedy: repeatedly add the affordable item that cuts the worst-case gap most per hour (tie: total
   gap cut per hour, then id). Order: prerequisites first, then standalone gap cut per hour.
