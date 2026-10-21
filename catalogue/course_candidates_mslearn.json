@@ -1,0 +1,4338 @@
+{
+ "_about": "CANDIDATES ONLY, not approved: the path planner must not use these until Person A's teammate/human reviewer approves them and moves chosen items into courses.json with a verification. Metadata from the Microsoft Learn Catalog API (free, no key, Microsoft APIs Terms of Use); we only link to the training.",
+ "source": "https://learn.microsoft.com/api/catalog/?type=modules,learningPaths&locale=en-us",
+ "terms": "https://learn.microsoft.com/en-us/legal/microsoft-apis/terms-of-use",
+ "retrieved": "2026-10-21",
+ "selection_rule": "level beginner; a business-facing role; and a finance/office product (Excel, Power BI, Power Automate, Dynamics 365 Finance), a finance keyword in the title, or an AI-fundamentals / responsible-AI title",
+ "candidates": [
+  {
+   "id": "mslearn:learn-bizapps.automate-process-using-flow",
+   "title": "Automate a business process using Power Automate",
+   "type": "learningPath",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/paths/automate-process-power-automate/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 277,
+   "hours": 4.6,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "business-user",
+    "functional-consultant",
+    "maker",
+    "administrator"
+   ],
+   "products": [
+    "power-platform",
+    "power-automate"
+   ],
+   "last_modified": "2025-03-21T17:04:00+00:00",
+   "skill_hints": [
+    "process_automation"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-dynamics.configure-asset-management-dyn365-supply-chain-mgmt",
+   "title": "Configure Asset Management for Dynamics 365 Supply Chain Management",
+   "type": "learningPath",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/paths/configure-asset-management-dyn365-supply-chain-mgmt/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 213,
+   "hours": 3.5,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "functional-consultant",
+    "business-user"
+   ],
+   "products": [
+    "dynamics-365",
+    "dynamics-scm",
+    "dynamics-finance"
+   ],
+   "last_modified": "2026-07-28T17:08:00+00:00",
+   "skill_hints": [
+    "variance_analysis"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-dynamics.configure-use-general-ledger-dynamics-365-finance-ops",
+   "title": "Configure and use the general ledger in Dynamics 365 Finance",
+   "type": "learningPath",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/paths/configure-use-general-ledger-dyn365-finance/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 847,
+   "hours": 14.1,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "functional-consultant",
+    "business-user"
+   ],
+   "products": [
+    "dynamics-365",
+    "dynamics-finance"
+   ],
+   "last_modified": "2025-08-29T23:14:00+00:00",
+   "skill_hints": [
+    "variance_analysis"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-bizapps.copilot-solutions",
+   "title": "Create Power Platform solutions with AI and Copilot",
+   "type": "learningPath",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/paths/copilot-solutions/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 252,
+   "hours": 4.2,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "maker",
+    "business-user"
+   ],
+   "products": [
+    "power-platform",
+    "power-apps",
+    "power-automate",
+    "ms-copilot",
+    "ai-builder",
+    "dataverse",
+    "power-pages"
+   ],
+   "last_modified": "2025-03-21T17:04:00+00:00",
+   "skill_hints": [
+    "process_automation"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-bizapps.power-apps-online-workshop",
+   "title": "Create a machine ordering app with Power Apps - Online Workshop",
+   "type": "learningPath",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/paths/power-apps-online-workshop/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 334,
+   "hours": 5.6,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "maker",
+    "business-user"
+   ],
+   "products": [
+    "power-platform",
+    "power-apps",
+    "power-automate",
+    "dataverse"
+   ],
+   "last_modified": "2025-03-21T17:04:00+00:00",
+   "skill_hints": [
+    "process_automation"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-bizapps.work-power-platform-teams",
+   "title": "Create apps, copilots, flows, and more with Microsoft Dataverse and Teams",
+   "type": "learningPath",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/paths/work-power-platform-teams/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 146,
+   "hours": 2.4,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "business-user",
+    "maker"
+   ],
+   "products": [
+    "power-platform",
+    "power-apps",
+    "power-automate",
+    "ms-copilot",
+    "office-teams",
+    "dataverse"
+   ],
+   "last_modified": "2025-03-21T17:04:00+00:00",
+   "skill_hints": [
+    "process_automation"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-bizapps.dashboard-in-a-day",
+   "title": "Dashboard in a Day - Online workshop",
+   "type": "learningPath",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/paths/dashboard-in-a-day/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 441,
+   "hours": 7.3,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "business-analyst",
+    "business-user"
+   ],
+   "products": [
+    "power-bi",
+    "power-platform"
+   ],
+   "last_modified": "2026-05-27T17:09:00+00:00",
+   "skill_hints": [
+    "data_quality",
+    "variance_analysis"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn.wwl.demonstrate-capabilities-microsoft-power-automate",
+   "title": "Demonstrate the capabilities of Microsoft Power Automate",
+   "type": "learningPath",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/paths/demonstrate-capabilities-microsoft-power-automate/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 141,
+   "hours": 2.4,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "business-owner",
+    "business-user",
+    "maker",
+    "student"
+   ],
+   "products": [
+    "power-automate"
+   ],
+   "last_modified": "2025-10-15T17:09:00+00:00",
+   "skill_hints": [
+    "process_automation"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-bizapps.power-platform-business-value-path",
+   "title": "Describe the business value of Microsoft Power Platform",
+   "type": "learningPath",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/paths/describe-business-value-microsoft-power-platform/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 106,
+   "hours": 1.8,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "business-owner",
+    "business-user",
+    "maker",
+    "student"
+   ],
+   "products": [
+    "office-365",
+    "power-apps",
+    "power-automate",
+    "power-bi",
+    "power-pages",
+    "power-platform"
+   ],
+   "last_modified": "2026-07-10T05:13:00+00:00",
+   "skill_hints": [
+    "data_quality",
+    "process_automation",
+    "variance_analysis"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-dynamics.design-dynamics-365-solutions",
+   "title": "Design Dynamics 365 Solutions",
+   "type": "learningPath",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/paths/design-dynamics-365-solutions/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 279,
+   "hours": 4.7,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "business-analyst",
+    "functional-consultant",
+    "student",
+    "business-user",
+    "maker"
+   ],
+   "products": [
+    "dynamics-365",
+    "dynamics-finance",
+    "dynamics-sales",
+    "customer-insights-journeys",
+    "dynamics-scm",
+    "dynamics-business-central",
+    "dynamics-field-service",
+    "dynamics-customer-service",
+    "dynamics-project-operations",
+    "dynamics-human-resources",
+    "dynamics-iom",
+    "power-apps",
+    "power-automate",
+    "dataverse"
+   ],
+   "last_modified": "2026-04-14T17:12:00+00:00",
+   "skill_hints": [
+    "process_automation",
+    "variance_analysis"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn.wwl.empower-workforce-copilot-use-cases",
+   "title": "Empower your workforce with Microsoft Copilot",
+   "type": "learningPath",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/paths/empower-workforce-copilot-use-cases/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 2885,
+   "hours": 48.1,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "administrator",
+    "business-analyst",
+    "business-user",
+    "data-analyst",
+    "functional-consultant",
+    "security-operations-analyst",
+    "student"
+   ],
+   "products": [
+    "m365",
+    "office-365",
+    "office-excel",
+    "office-onedrive",
+    "office-outlook",
+    "office-powerpoint",
+    "office-teams",
+    "office-word",
+    "microsoft-whiteboard",
+    "m365-apps",
+    "ms-copilot"
+   ],
+   "last_modified": "2026-10-13T23:11:00+00:00",
+   "skill_hints": [
+    "spreadsheet_modelling"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-m365.wwl.transform-business-workflows-with-ai",
+   "title": "Enhance business workflows with AI",
+   "type": "learningPath",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/paths/transform-business-workflows-with-ai/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 270,
+   "hours": 4.5,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "business-user",
+    "business-owner"
+   ],
+   "products": [
+    "m365",
+    "office-365",
+    "office-excel",
+    "office-outlook",
+    "office-powerpoint",
+    "office-teams",
+    "office-word",
+    "m365-apps",
+    "ms-copilot"
+   ],
+   "last_modified": "2026-09-17T17:15:00+00:00",
+   "skill_hints": [
+    "spreadsheet_modelling"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn.wwl.pl-900-power-platform-fundamentals",
+   "title": "Explore the fundamentals of Microsoft Power Platform",
+   "type": "learningPath",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/paths/pl-900-power-platform-fundamentals/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 344,
+   "hours": 5.7,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "business-owner",
+    "business-user",
+    "maker",
+    "student"
+   ],
+   "products": [
+    "power-apps",
+    "power-automate",
+    "power-pages",
+    "power-platform"
+   ],
+   "last_modified": "2026-07-22T23:11:00+00:00",
+   "skill_hints": [
+    "process_automation"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn.wwl.extend-d365-sales-ai-platforms",
+   "title": "Extend Dynamics 365 Sales with AI and Power Platform tools",
+   "type": "learningPath",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/paths/extend-d365-sales-ai-platforms/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 192,
+   "hours": 3.2,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "functional-consultant",
+    "business-user",
+    "solution-architect"
+   ],
+   "products": [
+    "dynamics-365",
+    "dynamics-sales",
+    "power-platform",
+    "dataverse",
+    "power-apps",
+    "power-automate",
+    "power-bi",
+    "power-pages",
+    "microsoft-copilot-studio"
+   ],
+   "last_modified": "2026-05-04T23:16:00+00:00",
+   "skill_hints": [
+    "data_quality",
+    "process_automation",
+    "variance_analysis"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-bizapps.copilot-power-platform",
+   "title": "Get started with Copilot for Microsoft Power Platform",
+   "type": "learningPath",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/paths/copilot-power-platform/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 157,
+   "hours": 2.6,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "maker",
+    "business-user"
+   ],
+   "products": [
+    "power-platform",
+    "power-apps",
+    "power-automate",
+    "ms-copilot",
+    "dataverse"
+   ],
+   "last_modified": "2025-03-21T17:04:00+00:00",
+   "skill_hints": [
+    "process_automation"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-dynamics.get-started-cost-accounting-supply-chains-dyn365-finance",
+   "title": "Get started with cost accounting for supply chains in Dynamics 365 Finance",
+   "type": "learningPath",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/paths/get-started-cost-accounting-supply-chains-dyn365-finance/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 85,
+   "hours": 1.4,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "functional-consultant",
+    "business-user"
+   ],
+   "products": [
+    "dynamics-365",
+    "dynamics-finance",
+    "dynamics-scm"
+   ],
+   "last_modified": "2025-03-27T17:00:00+00:00",
+   "skill_hints": [
+    "variance_analysis"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-dynamics.get-started-with-dynamics-365-for-finance-and-operations",
+   "title": "Get started with finance and operations apps",
+   "type": "learningPath",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/paths/get-started-finance-operations/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 657,
+   "hours": 10.9,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "business-user",
+    "functional-consultant",
+    "administrator"
+   ],
+   "products": [
+    "dynamics-365",
+    "dynamics-finance",
+    "dynamics-scm"
+   ],
+   "last_modified": "2025-08-29T23:14:00+00:00",
+   "skill_hints": [
+    "variance_analysis"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-bizapps.introduction-process-advisor",
+   "title": "Get started with process mining in Power Automate",
+   "type": "learningPath",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/paths/introduction-process-advisor/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 185,
+   "hours": 3.1,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "maker",
+    "business-user",
+    "business-analyst",
+    "functional-consultant"
+   ],
+   "products": [
+    "power-platform",
+    "power-automate"
+   ],
+   "last_modified": "2025-03-21T17:04:00+00:00",
+   "skill_hints": [
+    "process_automation"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-dynamics.implement-dynamics-365-projects",
+   "title": "Implement Dynamics 365 Projects",
+   "type": "learningPath",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/paths/implement-dynamics-365-projects/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 388,
+   "hours": 6.5,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "business-analyst",
+    "functional-consultant",
+    "student",
+    "business-user",
+    "maker"
+   ],
+   "products": [
+    "dynamics-365",
+    "dynamics-finance",
+    "dynamics-sales",
+    "customer-insights-journeys",
+    "dynamics-scm",
+    "dynamics-business-central",
+    "dynamics-field-service",
+    "dynamics-customer-service",
+    "dynamics-project-operations",
+    "dynamics-human-resources",
+    "dynamics-iom",
+    "power-apps",
+    "power-automate",
+    "dataverse"
+   ],
+   "last_modified": "2026-04-14T17:12:00+00:00",
+   "skill_hints": [
+    "process_automation",
+    "variance_analysis"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn.data-ai.implement-data-streaming-with-asa",
+   "title": "Implement a Data Streaming Solution with Azure Stream Analytics",
+   "type": "learningPath",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/paths/implement-data-streaming-with-asa/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 182,
+   "hours": 3.0,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "data-analyst",
+    "data-engineer"
+   ],
+   "products": [
+    "azure-stream-analytics",
+    "power-bi"
+   ],
+   "last_modified": "2026-05-18T17:20:00+00:00",
+   "skill_hints": [
+    "data_quality",
+    "variance_analysis"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn.philanthropies.introduction-to-ai-skills-for-nonprofits",
+   "title": "Introduction to AI Skills for nonprofits",
+   "type": "learningPath",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/paths/introduction-to-ai-skills-for-nonprofits/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 154,
+   "hours": 2.6,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "functional-consultant",
+    "higher-ed-educator",
+    "school-leader",
+    "k-12-educator",
+    "business-user",
+    "business-owner"
+   ],
+   "products": [
+    "foundry-tools",
+    "m365-apps",
+    "ms-copilot"
+   ],
+   "last_modified": "2026-07-28T22:17:00+00:00",
+   "skill_hints": [
+    "ai_output_review"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn.wwl.azure-data-fundamentals-explore-data-warehouse-analytics",
+   "title": "Introduction to Microsoft Azure Data analytics in Azure",
+   "type": "learningPath",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/paths/azure-data-fundamentals-explore-data-warehouse-analytics/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 128,
+   "hours": 2.1,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "data-analyst",
+    "data-engineer",
+    "database-administrator",
+    "solution-architect",
+    "student"
+   ],
+   "products": [
+    "azure",
+    "fabric",
+    "power-bi",
+    "azure-databricks",
+    "azure-data-factory",
+    "azure-storage",
+    "azure-event-hubs"
+   ],
+   "last_modified": "2026-05-22T15:14:00+00:00",
+   "skill_hints": [
+    "data_quality",
+    "variance_analysis"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn.wwl.azure-data-fundamentals-explore-core-data-concepts",
+   "title": "Introduction to Microsoft Azure Data core data concepts",
+   "type": "learningPath",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/paths/azure-data-fundamentals-explore-core-data-concepts/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 57,
+   "hours": 0.9,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "data-analyst",
+    "data-engineer",
+    "database-administrator",
+    "developer",
+    "solution-architect",
+    "student"
+   ],
+   "products": [
+    "azure",
+    "fabric",
+    "power-bi",
+    "azure-databricks",
+    "microsoft-purview",
+    "microsoft-foundry",
+    "azure-data-factory",
+    "azure-storage",
+    "azure-cosmos-db",
+    "azure-sql-database"
+   ],
+   "last_modified": "2026-08-05T17:21:00+00:00",
+   "skill_hints": [
+    "data_quality",
+    "variance_analysis"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn.wwl.introduction-finance-dynamics-365",
+   "title": "Introduction to finance in Dynamics 365",
+   "type": "learningPath",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/paths/introduction-finance-dynamics-365/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 796,
+   "hours": 13.3,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "business-owner",
+    "business-user",
+    "functional-consultant",
+    "student"
+   ],
+   "products": [
+    "dynamics-365",
+    "dynamics-finance"
+   ],
+   "last_modified": "2025-12-31T19:46:00+00:00",
+   "skill_hints": [
+    "variance_analysis"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn.philanthropies.intro-generative-ai-for-trainers",
+   "title": "Introduction to generative AI for trainers",
+   "type": "learningPath",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/paths/intro-generative-ai-for-trainers/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 156,
+   "hours": 2.6,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "k-12-educator",
+    "business-user",
+    "higher-ed-educator",
+    "data-engineer",
+    "school-leader"
+   ],
+   "products": [
+    "foundry-tools",
+    "azure-machine-learning",
+    "azure-machine-learning-designer",
+    "m365-apps",
+    "azure-translator-text",
+    "azure-translator-speech",
+    "ms-copilot",
+    "language-service"
+   ],
+   "last_modified": "2026-03-16T17:10:00+00:00",
+   "skill_hints": [
+    "ai_output_review"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-dynamics.learn-fundamentals-dynamics-365-projects",
+   "title": "Learn the fundamentals of Dynamics 365 projects",
+   "type": "learningPath",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/paths/learn-fundamentals-dynamics-365-projects/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 349,
+   "hours": 5.8,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "business-analyst",
+    "functional-consultant",
+    "student",
+    "business-user",
+    "maker"
+   ],
+   "products": [
+    "dynamics-365",
+    "dynamics-finance",
+    "dynamics-sales",
+    "customer-insights-journeys",
+    "dynamics-scm",
+    "dynamics-business-central",
+    "dynamics-field-service",
+    "dynamics-customer-service",
+    "dynamics-project-operations",
+    "dynamics-human-resources",
+    "dynamics-iom",
+    "power-apps",
+    "power-automate",
+    "dataverse"
+   ],
+   "last_modified": "2026-04-14T17:12:00+00:00",
+   "skill_hints": [
+    "process_automation",
+    "variance_analysis"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-bizapps.robotic-process-automation-online-workshop",
+   "title": "Power Automate: Automation - Online Workshop",
+   "type": "learningPath",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/paths/robotic-process-automation-online-workshop/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 329,
+   "hours": 5.5,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "maker",
+    "business-user"
+   ],
+   "products": [
+    "power-platform",
+    "power-apps",
+    "power-automate"
+   ],
+   "last_modified": "2025-03-21T17:04:00+00:00",
+   "skill_hints": [
+    "process_automation"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn.wwl.prepare-visualize-data-power-bi",
+   "title": "Prepare and visualize data with Microsoft Power BI",
+   "type": "learningPath",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/paths/prepare-visualize-data-power-bi/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 492,
+   "hours": 8.2,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "data-analyst"
+   ],
+   "products": [
+    "fabric",
+    "power-bi"
+   ],
+   "last_modified": "2025-06-27T17:16:00+00:00",
+   "skill_hints": [
+    "data_quality",
+    "variance_analysis"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-dynamics.setup-work-landed-cost-dyn365-supply-chain-mgmt",
+   "title": "Set up and work with landed cost in Dynamics 365 Supply Chain Management",
+   "type": "learningPath",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/paths/setup-work-landed-cost-dyn365-supply-chain-mgmt/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 173,
+   "hours": 2.9,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "functional-consultant",
+    "business-user"
+   ],
+   "products": [
+    "dynamics-365",
+    "dynamics-scm",
+    "dynamics-finance"
+   ],
+   "last_modified": "2025-03-27T17:00:00+00:00",
+   "skill_hints": [
+    "variance_analysis"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-bizapps.share-collaborate-power-automate",
+   "title": "Share and collaborate with Power Automate",
+   "type": "learningPath",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/paths/share-collaborate-power-automate/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 98,
+   "hours": 1.6,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "business-user",
+    "functional-consultant",
+    "maker"
+   ],
+   "products": [
+    "power-platform",
+    "power-automate"
+   ],
+   "last_modified": "2026-03-04T00:08:00+00:00",
+   "skill_hints": [
+    "process_automation"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn.wwl.understand-data-concepts",
+   "title": "Understand data concepts",
+   "type": "learningPath",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/paths/understand-data-concepts/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 94,
+   "hours": 1.6,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "business-owner",
+    "business-user",
+    "k-12-educator",
+    "student"
+   ],
+   "products": [
+    "office-excel",
+    "sql-server"
+   ],
+   "last_modified": "2026-04-30T23:23:00+00:00",
+   "skill_hints": [
+    "spreadsheet_modelling"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-bizapps.access-prepare-power-bi",
+   "title": "Access and prepare data for Power BI Desktop - Online workshop",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/access-prepare-power-bi/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 43,
+   "hours": 0.7,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "business-user",
+    "business-analyst"
+   ],
+   "products": [
+    "power-bi"
+   ],
+   "last_modified": "2026-06-23T17:12:00+00:00",
+   "skill_hints": [
+    "data_quality",
+    "variance_analysis"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-bizapps.analyze-processes-process-mining",
+   "title": "Analyze processes with the Power Automate Process Mining desktop app",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/analyze-processes-process-mining/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 39,
+   "hours": 0.7,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "business-analyst",
+    "functional-consultant"
+   ],
+   "products": [
+    "power-automate"
+   ],
+   "last_modified": "2025-06-02T17:36:00+00:00",
+   "skill_hints": [
+    "process_automation"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-bizapps.get-started-with-ai-builder-sentiment-analysis",
+   "title": "Analyze the sentiment of text with AI Builder",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/get-started-with-ai-builder-sentiment-analysis/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 28,
+   "hours": 0.5,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "maker",
+    "business-user"
+   ],
+   "products": [
+    "ai-builder",
+    "power-platform",
+    "power-automate"
+   ],
+   "last_modified": "2024-08-14T22:57:00+00:00",
+   "skill_hints": [
+    "process_automation"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-dynamics.application-lifecycle-management-dynamics-365",
+   "title": "Application lifecycle management for Dynamics 365",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/application-lifecycle-management-dynamics-365/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 97,
+   "hours": 1.6,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "business-analyst",
+    "business-user",
+    "student",
+    "maker",
+    "functional-consultant"
+   ],
+   "products": [
+    "dynamics-365",
+    "dynamics-finance",
+    "dynamics-sales",
+    "customer-insights-journeys",
+    "dynamics-scm",
+    "dynamics-business-central",
+    "dynamics-field-service",
+    "dynamics-customer-service",
+    "dynamics-project-operations",
+    "dynamics-human-resources",
+    "dynamics-iom",
+    "power-apps",
+    "power-automate",
+    "dataverse"
+   ],
+   "last_modified": "2026-09-30T17:08:00+00:00",
+   "skill_hints": [
+    "process_automation",
+    "variance_analysis"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn.philanthropies.apply-responsible-ai-principles",
+   "title": "Apply responsible AI principles in learning environments",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/apply-responsible-ai-principles/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 39,
+   "hours": 0.7,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "k-12-educator",
+    "business-user",
+    "higher-ed-educator",
+    "data-engineer",
+    "school-leader"
+   ],
+   "products": [
+    "foundry-tools",
+    "azure-machine-learning",
+    "azure-machine-learning-designer",
+    "m365-apps",
+    "azure-translator-text",
+    "azure-translator-speech",
+    "ms-copilot",
+    "language-service"
+   ],
+   "last_modified": "2026-03-16T07:10:00+00:00",
+   "skill_hints": [
+    "ai_output_review"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn.wwl.build-microsoft-power-automate-flow",
+   "title": "Build a Microsoft Power Automate flow",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/build-microsoft-power-automate-flow/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 71,
+   "hours": 1.2,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "business-owner",
+    "business-user",
+    "maker",
+    "student"
+   ],
+   "products": [
+    "power-automate"
+   ],
+   "last_modified": "2025-10-15T17:09:00+00:00",
+   "skill_hints": [
+    "process_automation"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-bizapps.build-approval-flows",
+   "title": "Build approval flows with Power Automate",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/build-approval-flows/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 44,
+   "hours": 0.7,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "business-user",
+    "maker",
+    "functional-consultant"
+   ],
+   "products": [
+    "power-platform",
+    "power-automate"
+   ],
+   "last_modified": "2026-03-03T18:11:00+00:00",
+   "skill_hints": [
+    "process_automation"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-bizapps.manage-user-information",
+   "title": "Build flows to manage user information",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/manage-user-information/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 23,
+   "hours": 0.4,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "business-user",
+    "maker",
+    "functional-consultant"
+   ],
+   "products": [
+    "power-platform",
+    "power-automate"
+   ],
+   "last_modified": "2026-03-03T18:11:00+00:00",
+   "skill_hints": [
+    "process_automation"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-bizapps.build-your-first-data-model",
+   "title": "Build your first data model and explore the data by using Power BI - Online workshop",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/build-your-first-data-model/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 92,
+   "hours": 1.5,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "business-user",
+    "data-analyst",
+    "business-analyst"
+   ],
+   "products": [
+    "power-bi"
+   ],
+   "last_modified": "2026-06-23T17:12:00+00:00",
+   "skill_hints": [
+    "data_quality",
+    "variance_analysis"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-bizapps.build-first-workflow",
+   "title": "Build your first workflow with Power Automate and Dataverse for Teams",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/build-first-workflow/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 25,
+   "hours": 0.4,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "business-user",
+    "maker"
+   ],
+   "products": [
+    "power-platform",
+    "power-automate"
+   ],
+   "last_modified": "2024-10-02T17:02:00+00:00",
+   "skill_hints": [
+    "process_automation"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-dynamics.business-process-mapping-dynamics-365",
+   "title": "Business process mapping for Dynamics 365",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/business-process-mapping-dynamics-365/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 53,
+   "hours": 0.9,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "business-analyst",
+    "business-user",
+    "student",
+    "functional-consultant",
+    "maker"
+   ],
+   "products": [
+    "dynamics-365",
+    "dynamics-finance",
+    "dynamics-sales",
+    "customer-insights-journeys",
+    "dynamics-scm",
+    "dynamics-business-central",
+    "dynamics-field-service",
+    "dynamics-customer-service",
+    "dynamics-project-operations",
+    "dynamics-human-resources",
+    "dynamics-iom",
+    "power-apps",
+    "power-automate",
+    "dataverse"
+   ],
+   "last_modified": "2026-09-30T17:08:00+00:00",
+   "skill_hints": [
+    "process_automation",
+    "variance_analysis"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn.wwl.configure-your-data-dynamics-365-finance-operations-apps",
+   "title": "Configure your data in finance and operations apps",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/configure-your-data-dynamics-365-finance-operations-apps/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 16,
+   "hours": 0.3,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "administrator",
+    "business-analyst",
+    "business-user",
+    "developer",
+    "functional-consultant",
+    "solution-architect"
+   ],
+   "products": [
+    "dynamics-365",
+    "dynamics-finance",
+    "dynamics-human-resources",
+    "dynamics-scm"
+   ],
+   "last_modified": "2026-09-30T17:08:00+00:00",
+   "skill_hints": [
+    "variance_analysis"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn.wwl.configure-your-ui-dynamics-365-finance-operations-apps",
+   "title": "Configure your user interface in finance and operations apps",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/configure-your-ui-dynamics-365-finance-operations-apps/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 40,
+   "hours": 0.7,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "administrator",
+    "business-analyst",
+    "business-user",
+    "developer",
+    "functional-consultant",
+    "solution-architect"
+   ],
+   "products": [
+    "dynamics-365",
+    "dynamics-finance",
+    "dynamics-human-resources",
+    "dynamics-scm"
+   ],
+   "last_modified": "2026-09-30T17:08:00+00:00",
+   "skill_hints": [
+    "variance_analysis"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-bizapps.create-reports-process-mining",
+   "title": "Create Power BI reports with Power Automate Process Mining",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/create-reports-process-mining/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 22,
+   "hours": 0.4,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "functional-consultant",
+    "business-analyst"
+   ],
+   "products": [
+    "power-automate",
+    "power-bi"
+   ],
+   "last_modified": "2025-03-25T22:55:00+00:00",
+   "skill_hints": [
+    "data_quality",
+    "process_automation",
+    "variance_analysis"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-bizapps.dataverse-teams-power-bi",
+   "title": "Create reports with Power BI and Dataverse for Teams",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/dataverse-teams-power-bi/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 35,
+   "hours": 0.6,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "business-user"
+   ],
+   "products": [
+    "office-teams",
+    "power-platform",
+    "power-bi",
+    "dataverse"
+   ],
+   "last_modified": "2026-03-30T23:06:00+00:00",
+   "skill_hints": [
+    "data_quality",
+    "variance_analysis"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-bizapps.create-subflows-web-automation-online-workshop",
+   "title": "Create subflows and web automation with Power Automate for desktop - Online workshop",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/create-subflows-web-automation-online-workshop/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 46,
+   "hours": 0.8,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "maker",
+    "functional-consultant",
+    "business-user"
+   ],
+   "products": [
+    "power-automate",
+    "power-platform"
+   ],
+   "last_modified": "2026-08-28T22:14:00+00:00",
+   "skill_hints": [
+    "process_automation"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-dynamics.create-vendor-invoice-resource-non-stocked",
+   "title": "Create vendor invoice for resource non-stocked deployment in Dynamics 365 Project Operations",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/create-vendor-invoice-resource-non-stocked/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 43,
+   "hours": 0.7,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "functional-consultant",
+    "business-user"
+   ],
+   "products": [
+    "dynamics-365",
+    "dynamics-project-operations",
+    "dynamics-finance"
+   ],
+   "last_modified": "2026-03-04T18:14:00+00:00",
+   "skill_hints": [
+    "variance_analysis"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-bizapps.create-first-desktop-flow-online-workshop",
+   "title": "Create your first desktop flow - Online workshop",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/create-first-desktop-flow-online-workshop/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 39,
+   "hours": 0.7,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "maker",
+    "functional-consultant",
+    "business-user"
+   ],
+   "products": [
+    "power-platform",
+    "power-automate"
+   ],
+   "last_modified": "2026-08-28T05:09:00+00:00",
+   "skill_hints": [
+    "process_automation"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-bizapps.data-visualization-reports-power-bi",
+   "title": "Data visualization and reports in Power BI - Online workshop",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/data-visualization-reports-power-bi/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 25,
+   "hours": 0.4,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "business-user",
+    "business-analyst",
+    "data-analyst",
+    "developer"
+   ],
+   "products": [
+    "power-bi"
+   ],
+   "last_modified": "2026-06-23T17:12:00+00:00",
+   "skill_hints": [
+    "data_quality",
+    "variance_analysis"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn.wwl.explore-microsoft-dynamics-365-finance-core-capabilities",
+   "title": "Describe Dynamics 365 Finance core capabilities",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/explore-microsoft-dynamics-365-finance-core-capabilities/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 56,
+   "hours": 0.9,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "business-owner",
+    "business-user",
+    "functional-consultant",
+    "student"
+   ],
+   "products": [
+    "dynamics-365",
+    "dynamics-finance"
+   ],
+   "last_modified": "2025-08-04T17:09:00+00:00",
+   "skill_hints": [
+    "variance_analysis"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn.wwl.4-describe-dynamics-365-finance-core-capabilities",
+   "title": "Describe Dynamics 365 Finance core capabilities",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/describe-dynamics-365-finance-core-capabilities/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 92,
+   "hours": 1.5,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "business-analyst",
+    "business-user",
+    "student",
+    "business-owner",
+    "business-leader",
+    "auditor",
+    "functional-consultant",
+    "data-engineer"
+   ],
+   "products": [
+    "dynamics-365",
+    "dynamics-finance"
+   ],
+   "last_modified": "2026-01-03T00:06:00+00:00",
+   "skill_hints": [
+    "variance_analysis"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn.wwl.describe-finance-operations-apps",
+   "title": "Describe Dynamics 365 finance and operations apps",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/describe-finance-operations-apps/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 52,
+   "hours": 0.9,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "business-owner",
+    "business-leader",
+    "business-user",
+    "functional-consultant",
+    "student"
+   ],
+   "products": [
+    "dynamics-finance",
+    "dynamics-scm",
+    "dynamics-commerce",
+    "dynamics-human-resources",
+    "dynamics-project-operations"
+   ],
+   "last_modified": "2026-05-29T23:15:00+00:00",
+   "skill_hints": [
+    "variance_analysis"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn.wwl.describe-microsoft-power-platform-administration-governance",
+   "title": "Describe Power Platform governance and administration",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/describe-microsoft-power-platform-administration-governance/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 59,
+   "hours": 1.0,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "business-owner",
+    "business-user",
+    "maker",
+    "student"
+   ],
+   "products": [
+    "power-apps",
+    "power-automate",
+    "power-bi",
+    "power-pages",
+    "power-platform"
+   ],
+   "last_modified": "2026-07-10T23:07:00+00:00",
+   "skill_hints": [
+    "data_quality",
+    "process_automation",
+    "variance_analysis"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn.wwl.explore-accounts-payable-accounts-receivable-microsoft-dynamics-365-finance",
+   "title": "Describe accounts payable and accounts receivable in Dynamics 365 Finance",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/explore-accounts-payable-accounts-receivable-microsoft/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 61,
+   "hours": 1.0,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "business-owner",
+    "business-user",
+    "functional-consultant",
+    "student"
+   ],
+   "products": [
+    "dynamics-365",
+    "dynamics-finance"
+   ],
+   "last_modified": "2025-08-04T17:09:00+00:00",
+   "skill_hints": [
+    "variance_analysis"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn.wwl.explore-expense-management-fixed-asset-management-budgeting-microsoft-dynamics",
+   "title": "Describe expense management, fixed asset management, and budgeting in Dynamics 365 Finance",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/explore-expense-management-fixed-asset-management/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 36,
+   "hours": 0.6,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "business-owner",
+    "business-user",
+    "functional-consultant",
+    "student"
+   ],
+   "products": [
+    "dynamics-365",
+    "dynamics-finance"
+   ],
+   "last_modified": "2025-08-04T17:09:00+00:00",
+   "skill_hints": [
+    "variance_analysis"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn.wwl.describe-expense-management-fixed-asset-management",
+   "title": "Describe expense tracking, asset control, and budgeting processes in Dynamics 365 Finance",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/describe-expense-management-fixed-asset-management/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 118,
+   "hours": 2.0,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "business-analyst",
+    "student",
+    "business-user",
+    "technology-manager",
+    "auditor",
+    "functional-consultant"
+   ],
+   "products": [
+    "dynamics-365",
+    "dynamics-finance",
+    "dynamics-project-operations"
+   ],
+   "last_modified": "2025-12-23T18:10:00+00:00",
+   "skill_hints": [
+    "variance_analysis"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn.wwl.describe-general-ledger-cash-bank-management",
+   "title": "Describe general ledger and cash and bank management processes in Dynamics 365 Finance",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/describe-general-ledger-cash-bank-management/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 137,
+   "hours": 2.3,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "business-analyst",
+    "student",
+    "functional-consultant",
+    "business-owner",
+    "business-user"
+   ],
+   "products": [
+    "dynamics-365",
+    "dynamics-finance"
+   ],
+   "last_modified": "2026-01-06T00:11:00+00:00",
+   "skill_hints": [
+    "variance_analysis"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn.wwl.describe-reporting-integration",
+   "title": "Describe reporting and integration capabilities in Dynamics 365 finance and operations apps",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/describe-report-integration/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 84,
+   "hours": 1.4,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "business-leader",
+    "business-user",
+    "business-owner",
+    "data-analyst",
+    "student",
+    "functional-consultant"
+   ],
+   "products": [
+    "power-platform",
+    "power-query",
+    "azure-powerbi-embedded",
+    "dynamics-365"
+   ],
+   "last_modified": "2026-05-29T17:14:00+00:00",
+   "skill_hints": [
+    "variance_analysis"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn.wwl.describe-shared-features",
+   "title": "Describe shared features in Dynamics 365 finance and operations apps",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/describe-shared-features/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 154,
+   "hours": 2.6,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "security-operations-analyst",
+    "devops-engineer",
+    "data-engineer",
+    "functional-consultant",
+    "business-user",
+    "business-leader",
+    "business-owner",
+    "student"
+   ],
+   "products": [
+    "dynamics-365",
+    "dynamics-finance"
+   ],
+   "last_modified": "2026-05-29T17:14:00+00:00",
+   "skill_hints": [
+    "variance_analysis"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn.wwl.describe-business-value-microsoft-power-platform",
+   "title": "Describe the business value of Microsoft Power Platform",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/describe-business-value-microsoft-power-platform/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 73,
+   "hours": 1.2,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "business-owner",
+    "business-user",
+    "maker",
+    "student"
+   ],
+   "products": [
+    "microsoft-copilot-studio",
+    "power-apps",
+    "power-automate",
+    "power-pages",
+    "power-platform"
+   ],
+   "last_modified": "2026-07-10T05:13:00+00:00",
+   "skill_hints": [
+    "process_automation"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn.wwl.describe-business-value-microsoft-power-platform-services",
+   "title": "Describe the business value of Microsoft Power Platform services",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/describe-business-value-microsoft-power-platform-services/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 64,
+   "hours": 1.1,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "business-owner",
+    "business-user",
+    "maker",
+    "student"
+   ],
+   "products": [
+    "microsoft-copilot-studio",
+    "power-apps",
+    "power-automate",
+    "power-bi",
+    "power-pages",
+    "power-platform"
+   ],
+   "last_modified": "2025-10-15T17:09:00+00:00",
+   "skill_hints": [
+    "data_quality",
+    "process_automation",
+    "variance_analysis"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn.wwl.explore-general-ledger-dynamics-365",
+   "title": "Describe the general ledger in Dynamics 365 Finance",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/explore-general-ledger-dynamics-365/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 65,
+   "hours": 1.1,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "business-owner",
+    "business-user",
+    "functional-consultant",
+    "student"
+   ],
+   "products": [
+    "dynamics-finance"
+   ],
+   "last_modified": "2025-08-04T17:09:00+00:00",
+   "skill_hints": [
+    "variance_analysis"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-dynamics.design-accessibility-dynamics-365",
+   "title": "Design for accessibility in Dynamics 365",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/design-accessibility-dynamics-365/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 46,
+   "hours": 0.8,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "business-analyst",
+    "business-user",
+    "functional-consultant",
+    "maker"
+   ],
+   "products": [
+    "dynamics-365",
+    "dynamics-finance",
+    "dynamics-sales",
+    "customer-insights-journeys",
+    "customer-insights-data",
+    "dynamics-scm",
+    "dynamics-business-central",
+    "dynamics-field-service",
+    "dynamics-customer-service",
+    "dynamics-project-operations",
+    "dynamics-human-resources",
+    "dynamics-iom",
+    "power-apps",
+    "power-automate",
+    "dataverse"
+   ],
+   "last_modified": "2026-09-30T17:08:00+00:00",
+   "skill_hints": [
+    "process_automation",
+    "variance_analysis"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-dynamics.design-dynamics-365-deployment",
+   "title": "Design the Dynamics 365 deployment",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/design-dynamics-365-deployment/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 83,
+   "hours": 1.4,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "business-analyst",
+    "business-user",
+    "student",
+    "functional-consultant",
+    "maker"
+   ],
+   "products": [
+    "dynamics-365",
+    "dynamics-finance",
+    "dynamics-sales",
+    "customer-insights-journeys",
+    "dynamics-scm",
+    "dynamics-business-central",
+    "dynamics-field-service",
+    "dynamics-customer-service",
+    "dynamics-project-operations",
+    "dynamics-human-resources",
+    "dynamics-iom",
+    "power-apps",
+    "power-automate",
+    "dataverse"
+   ],
+   "last_modified": "2026-09-29T23:14:00+00:00",
+   "skill_hints": [
+    "process_automation",
+    "variance_analysis"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-bizapps.get-started-with-ai-builder-object-detection",
+   "title": "Detect objects with AI Builder",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/get-started-with-ai-builder-object-detection/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 25,
+   "hours": 0.4,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "business-user",
+    "maker"
+   ],
+   "products": [
+    "ai-builder",
+    "power-platform",
+    "power-automate"
+   ],
+   "last_modified": "2024-10-14T17:02:00+00:00",
+   "skill_hints": [
+    "process_automation"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-dynamics.determine-implementation-approach-dynamics-365",
+   "title": "Determine the implementation approach for your Dynamics 365 project",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/determine-implementation-approach-dynamics-365/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 76,
+   "hours": 1.3,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "business-analyst",
+    "business-user",
+    "student",
+    "functional-consultant",
+    "maker"
+   ],
+   "products": [
+    "dynamics-365",
+    "dynamics-finance",
+    "dynamics-sales",
+    "customer-insights-journeys",
+    "dynamics-scm",
+    "dynamics-business-central",
+    "dynamics-field-service",
+    "dynamics-customer-service",
+    "dynamics-project-operations",
+    "dynamics-human-resources",
+    "dynamics-iom",
+    "power-apps",
+    "power-automate",
+    "dataverse"
+   ],
+   "last_modified": "2026-09-28T23:06:00+00:00",
+   "skill_hints": [
+    "process_automation",
+    "variance_analysis"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-dynamics.digitally-transform-with-dynamics-365",
+   "title": "Digitally transform with Dynamics 365",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/digitally-transform-with-dynamics-365/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 83,
+   "hours": 1.4,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "business-user",
+    "functional-consultant",
+    "student",
+    "business-analyst",
+    "maker"
+   ],
+   "products": [
+    "dynamics-365",
+    "dynamics-finance",
+    "dynamics-sales",
+    "customer-insights-journeys",
+    "dynamics-scm",
+    "dynamics-business-central",
+    "dynamics-field-service",
+    "dynamics-customer-service",
+    "dynamics-project-operations",
+    "dynamics-human-resources",
+    "power-apps",
+    "power-automate",
+    "dataverse"
+   ],
+   "last_modified": "2026-09-30T17:08:00+00:00",
+   "skill_hints": [
+    "process_automation",
+    "variance_analysis"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-dynamics.discover-dynamics-365-landscape",
+   "title": "Discover the Dynamics 365 landscape",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/discover-dynamics-365-landscape/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 72,
+   "hours": 1.2,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "business-analyst",
+    "business-user",
+    "student",
+    "functional-consultant",
+    "maker"
+   ],
+   "products": [
+    "dynamics-365",
+    "dynamics-finance",
+    "dynamics-sales",
+    "customer-insights-journeys",
+    "dynamics-scm",
+    "dynamics-business-central",
+    "dynamics-field-service",
+    "dynamics-customer-service",
+    "dynamics-project-operations",
+    "power-apps",
+    "power-automate",
+    "dataverse"
+   ],
+   "last_modified": "2026-09-30T17:08:00+00:00",
+   "skill_hints": [
+    "process_automation",
+    "variance_analysis"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-dynamics.document-dynamics-365-solution-customer",
+   "title": "Document your Dynamics 365 solution for the customer",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/document-dynamics-365-solution-customer/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 45,
+   "hours": 0.8,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "business-analyst",
+    "business-user",
+    "student",
+    "maker",
+    "functional-consultant"
+   ],
+   "products": [
+    "dynamics-365",
+    "dynamics-finance",
+    "dynamics-sales",
+    "customer-insights-journeys",
+    "dynamics-scm",
+    "dynamics-business-central",
+    "dynamics-field-service",
+    "dynamics-customer-service",
+    "dynamics-project-operations",
+    "dynamics-human-resources",
+    "dynamics-iom",
+    "power-apps",
+    "power-automate",
+    "dataverse"
+   ],
+   "last_modified": "2026-09-28T23:06:00+00:00",
+   "skill_hints": [
+    "process_automation",
+    "variance_analysis"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn.wwl.embrace-responsible-ai-principles-practices",
+   "title": "Embrace responsible AI principles and practices",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/embrace-responsible-ai-principles-practices/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 58,
+   "hours": 1.0,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "business-leader",
+    "business-owner"
+   ],
+   "products": [
+    "azure",
+    "dynamics-365",
+    "m365"
+   ],
+   "last_modified": "2026-07-14T11:19:00+00:00",
+   "skill_hints": [
+    "ai_output_review"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn.wwl.empower-workforce-copilot-finance",
+   "title": "Empower your workforce with Microsoft Copilot: Finance",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/empower-workforce-copilot-finance/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 273,
+   "hours": 4.5,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "administrator",
+    "business-analyst",
+    "business-user",
+    "data-analyst",
+    "functional-consultant",
+    "security-operations-analyst",
+    "student"
+   ],
+   "products": [
+    "m365",
+    "office-365"
+   ],
+   "last_modified": "2026-10-19T23:13:00+00:00",
+   "skill_hints": [
+    "variance_analysis"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-dynamics.evaluate-requirements-dynamics-365-projects",
+   "title": "Evaluate requirements for Dynamics 365 projects",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/evaluate-requirements-dynamics-365-projects/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 62,
+   "hours": 1.0,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "business-analyst",
+    "business-user",
+    "functional-consultant",
+    "maker"
+   ],
+   "products": [
+    "dynamics-365",
+    "dynamics-finance",
+    "dynamics-sales",
+    "customer-insights-journeys",
+    "dynamics-scm",
+    "dynamics-business-central",
+    "dynamics-field-service",
+    "dynamics-customer-service",
+    "dynamics-project-operations",
+    "dynamics-human-resources",
+    "dynamics-iom",
+    "power-apps",
+    "power-automate",
+    "dataverse"
+   ],
+   "last_modified": "2026-09-30T17:08:00+00:00",
+   "skill_hints": [
+    "process_automation",
+    "variance_analysis"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn.wwl.explore-core-data-concepts",
+   "title": "Explore core data concepts",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/explore-core-data-concepts/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 35,
+   "hours": 0.6,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "business-user",
+    "data-analyst",
+    "data-engineer",
+    "database-administrator",
+    "developer",
+    "solution-architect",
+    "student"
+   ],
+   "products": [
+    "azure",
+    "fabric",
+    "power-bi",
+    "azure-databricks",
+    "microsoft-purview"
+   ],
+   "last_modified": "2026-10-13T07:29:00+00:00",
+   "skill_hints": [
+    "data_quality",
+    "variance_analysis"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn.wwl.explore-roles-responsibilities-world-of-data",
+   "title": "Explore data roles and services",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/explore-roles-responsibilities-world-of-data/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 22,
+   "hours": 0.4,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "data-analyst",
+    "data-engineer",
+    "database-administrator",
+    "student"
+   ],
+   "products": [
+    "azure",
+    "fabric",
+    "power-bi",
+    "azure-databricks",
+    "microsoft-foundry",
+    "azure-data-factory",
+    "azure-storage",
+    "azure-cosmos-db",
+    "azure-sql-database"
+   ],
+   "last_modified": "2026-10-13T11:23:00+00:00",
+   "skill_hints": [
+    "data_quality",
+    "variance_analysis"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn.wwl.explore-fundamentals-of-data-visualization",
+   "title": "Explore fundamentals of data visualization",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/explore-fundamentals-data-visualization/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 39,
+   "hours": 0.7,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "administrator",
+    "business-user",
+    "data-engineer",
+    "database-administrator"
+   ],
+   "products": [
+    "azure",
+    "power-bi",
+    "fabric"
+   ],
+   "last_modified": "2026-10-13T07:29:00+00:00",
+   "skill_hints": [
+    "data_quality",
+    "variance_analysis"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-bizapps.data-analytics-microsoft",
+   "title": "Explore the analytics process that turns data into insights",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/data-analytics-microsoft/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 18,
+   "hours": 0.3,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "business-user",
+    "data-analyst",
+    "business-analyst"
+   ],
+   "products": [
+    "power-bi",
+    "fabric"
+   ],
+   "last_modified": "2026-08-19T23:13:00+00:00",
+   "skill_hints": [
+    "data_quality",
+    "variance_analysis"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-bizapps.get-started-with-ai-business-card-reader",
+   "title": "Extract information from business cards with AI Builder",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/get-started-with-ai-business-card-reader/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 41,
+   "hours": 0.7,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "maker",
+    "business-user"
+   ],
+   "products": [
+    "ai-builder",
+    "power-platform",
+    "power-automate"
+   ],
+   "last_modified": "2024-09-11T17:00:00+00:00",
+   "skill_hints": [
+    "process_automation"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-bizapps.ai-builder-invoice-processing",
+   "title": "Extract invoice data with AI Builder’s prebuilt model",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/ai-builder-invoice-processing/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 10,
+   "hours": 0.2,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "maker",
+    "business-user"
+   ],
+   "products": [
+    "power-automate",
+    "ai-builder",
+    "power-platform"
+   ],
+   "last_modified": "2025-03-13T22:56:00+00:00",
+   "skill_hints": [
+    "process_automation"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-dynamics.get-help-with-f-and-o",
+   "title": "Get help and learn more about finance and operations apps",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/get-help-finance-operations/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 27,
+   "hours": 0.5,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "business-user",
+    "functional-consultant",
+    "administrator"
+   ],
+   "products": [
+    "dynamics-365",
+    "dynamics-finance",
+    "dynamics-scm",
+    "dynamics-commerce",
+    "dynamics-human-resources"
+   ],
+   "last_modified": "2026-03-04T18:14:00+00:00",
+   "skill_hints": [
+    "variance_analysis"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-bizapps.get-started-with-power-bi",
+   "title": "Get started building with Power BI",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/get-started-with-power-bi/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 21,
+   "hours": 0.3,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "data-analyst",
+    "business-analyst",
+    "business-user",
+    "functional-consultant"
+   ],
+   "products": [
+    "power-bi"
+   ],
+   "last_modified": "2026-06-15T23:15:00+00:00",
+   "skill_hints": [
+    "data_quality",
+    "variance_analysis"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-bizapps.get-started-with-ai-builder",
+   "title": "Get started with AI Builder",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/get-started-with-ai-builder/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 30,
+   "hours": 0.5,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "business-user",
+    "maker"
+   ],
+   "products": [
+    "ai-builder",
+    "power-platform",
+    "power-automate"
+   ],
+   "last_modified": "2026-03-03T18:11:00+00:00",
+   "skill_hints": [
+    "process_automation"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-bizapps.get-started-with-ai-builder-licensing",
+   "title": "Get started with AI Builder licensing",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/get-started-with-ai-builder-licensing/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 40,
+   "hours": 0.7,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "maker",
+    "business-user"
+   ],
+   "products": [
+    "ai-builder",
+    "power-platform",
+    "power-automate"
+   ],
+   "last_modified": "2024-08-14T22:57:00+00:00",
+   "skill_hints": [
+    "process_automation"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-dynamics.get-started-financial-management-in-dynamics-365-finance-ops",
+   "title": "Get started with Dynamics 365 Finance",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/get-started-financial-management-dyn365-finance/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 84,
+   "hours": 1.4,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "functional-consultant",
+    "business-user"
+   ],
+   "products": [
+    "dynamics-365",
+    "dynamics-finance"
+   ],
+   "last_modified": "2026-09-28T23:06:00+00:00",
+   "skill_hints": [
+    "variance_analysis"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-dynamics.get-started-intelligent-order-management",
+   "title": "Get started with Dynamics 365 Intelligent Order Management",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/get-started-intelligent-order-management/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 27,
+   "hours": 0.5,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "functional-consultant",
+    "business-user"
+   ],
+   "products": [
+    "dynamics-365",
+    "dynamics-iom",
+    "dynamics-scm",
+    "dynamics-finance",
+    "dynamics-commerce"
+   ],
+   "last_modified": "2026-04-22T23:08:00+00:00",
+   "skill_hints": [
+    "variance_analysis"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-dynamics.get-started-project-operations",
+   "title": "Get started with Dynamics 365 Project Operations",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/get-started-project-operations/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 113,
+   "hours": 1.9,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "business-user",
+    "functional-consultant"
+   ],
+   "products": [
+    "dynamics-365",
+    "dynamics-project-operations",
+    "dynamics-finance"
+   ],
+   "last_modified": "2026-03-04T18:14:00+00:00",
+   "skill_hints": [
+    "variance_analysis"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-dynamics.get-started-expense-management",
+   "title": "Get started with Expense management in Dynamics 365 Project Operations",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/get-started-expense-management/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 76,
+   "hours": 1.3,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "business-user",
+    "functional-consultant"
+   ],
+   "products": [
+    "dynamics-365",
+    "dynamics-project-operations",
+    "dynamics-finance"
+   ],
+   "last_modified": "2026-09-25T17:40:00+00:00",
+   "skill_hints": [
+    "variance_analysis"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-dynamics.get-started-finance-insights",
+   "title": "Get started with Finance insights in Dynamics 365 Finance",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/get-started-finance-insights/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 22,
+   "hours": 0.4,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "business-user",
+    "functional-consultant"
+   ],
+   "products": [
+    "dynamics-finance",
+    "dynamics-365"
+   ],
+   "last_modified": "2026-03-04T18:14:00+00:00",
+   "skill_hints": [
+    "variance_analysis"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-bizapps.get-started-dataverse-teams",
+   "title": "Get started with Microsoft Dataverse for Teams",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/get-started-dataverse-teams/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 21,
+   "hours": 0.3,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "maker",
+    "business-user"
+   ],
+   "products": [
+    "power-platform",
+    "power-apps",
+    "power-automate"
+   ],
+   "last_modified": "2026-03-30T23:06:00+00:00",
+   "skill_hints": [
+    "process_automation"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-bizapps.flow-get-started",
+   "title": "Get started with Power Automate",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/get-started-flows/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 62,
+   "hours": 1.0,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "business-user",
+    "maker",
+    "functional-consultant"
+   ],
+   "products": [
+    "power-platform",
+    "power-automate"
+   ],
+   "last_modified": "2026-06-12T17:23:00+00:00",
+   "skill_hints": [
+    "process_automation"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn.wwl.introduce-configure-personalization-dynamics-365-finance-operations-apps",
+   "title": "Get started with configuration and personalization in finance and operations apps",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/introduce-configure-personalization-dynamics-365-finance-operations-apps/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 11,
+   "hours": 0.2,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "administrator",
+    "business-analyst",
+    "business-user",
+    "developer",
+    "functional-consultant",
+    "solution-architect"
+   ],
+   "products": [
+    "dynamics-365",
+    "dynamics-finance",
+    "dynamics-human-resources",
+    "dynamics-scm"
+   ],
+   "last_modified": "2026-09-30T17:08:00+00:00",
+   "skill_hints": [
+    "variance_analysis"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-dynamics.get-started-with-cost-accounting-in-dynamics-365-finance-ops",
+   "title": "Get started with cost accounting in Dynamics 365 Finance",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/get-started-cost-accounting-dyn365-finance/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 85,
+   "hours": 1.4,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "business-user",
+    "functional-consultant"
+   ],
+   "products": [
+    "dynamics-365",
+    "dynamics-finance"
+   ],
+   "last_modified": "2026-09-28T17:07:00+00:00",
+   "skill_hints": [
+    "variance_analysis"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn.wwl.get-started-data-analytics",
+   "title": "Get started with data analytics",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/get-started-data-analytics/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 36,
+   "hours": 0.6,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "business-owner",
+    "business-user",
+    "k-12-educator",
+    "student"
+   ],
+   "products": [
+    "office-excel",
+    "sql-server"
+   ],
+   "last_modified": "2026-10-12T22:11:00+00:00",
+   "skill_hints": [
+    "spreadsheet_modelling"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn.wwl.get-started-data-concepts",
+   "title": "Get started with data concepts",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/get-started-data-concepts/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 37,
+   "hours": 0.6,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "business-owner",
+    "business-user",
+    "k-12-educator",
+    "student"
+   ],
+   "products": [
+    "office-excel",
+    "sql-server"
+   ],
+   "last_modified": "2026-10-12T22:11:00+00:00",
+   "skill_hints": [
+    "spreadsheet_modelling"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-dynamics.get-started-subscription-billing-finance",
+   "title": "Get started with subscription billing in Dynamics 365 Finance",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/get-started-subscription-billing-finance/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 48,
+   "hours": 0.8,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "functional-consultant",
+    "business-user"
+   ],
+   "products": [
+    "dynamics-365",
+    "dynamics-finance"
+   ],
+   "last_modified": "2026-10-01T17:08:00+00:00",
+   "skill_hints": [
+    "variance_analysis"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-bizapps.process-mining-desktop-app",
+   "title": "Get started with the Power Automate Process Mining desktop app",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/process-mining-desktop-app/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 41,
+   "hours": 0.7,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "business-analyst",
+    "functional-consultant"
+   ],
+   "products": [
+    "power-automate"
+   ],
+   "last_modified": "2025-06-02T17:36:00+00:00",
+   "skill_hints": [
+    "process_automation"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-dynamics.project-team-dynamics-365-implementation",
+   "title": "Get to know the project team for Dynamics 365 implementations",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/project-team-dynamics-365-implementation/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 62,
+   "hours": 1.0,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "business-analyst",
+    "business-user",
+    "student",
+    "functional-consultant",
+    "maker"
+   ],
+   "products": [
+    "dynamics-365",
+    "dynamics-finance",
+    "dynamics-sales",
+    "customer-insights-journeys",
+    "dynamics-scm",
+    "dynamics-business-central",
+    "dynamics-field-service",
+    "dynamics-customer-service",
+    "dynamics-project-operations",
+    "dynamics-human-resources",
+    "dynamics-iom",
+    "power-apps",
+    "power-automate",
+    "dataverse"
+   ],
+   "last_modified": "2026-09-30T17:08:00+00:00",
+   "skill_hints": [
+    "process_automation",
+    "variance_analysis"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-dynamics.get-know-dynamics-365-customers",
+   "title": "Get to know your Dynamics 365 customers",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/get-know-dynamics-365-customers/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 95,
+   "hours": 1.6,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "business-analyst",
+    "business-user",
+    "functional-consultant",
+    "maker"
+   ],
+   "products": [
+    "dynamics-365",
+    "dynamics-finance",
+    "dynamics-sales",
+    "customer-insights-journeys",
+    "dynamics-scm",
+    "dynamics-business-central",
+    "dynamics-field-service",
+    "dynamics-customer-service",
+    "dynamics-project-operations",
+    "dynamics-human-resources",
+    "dynamics-iom",
+    "power-apps",
+    "power-automate",
+    "dataverse"
+   ],
+   "last_modified": "2026-09-28T23:06:00+00:00",
+   "skill_hints": [
+    "process_automation",
+    "variance_analysis"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn.philanthropies.embrace-responsible-ai",
+   "title": "Guided project - Embrace responsible AI",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/embrace-responsible-ai/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 99,
+   "hours": 1.6,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "k-12-educator",
+    "business-user",
+    "higher-ed-educator",
+    "data-engineer",
+    "school-leader"
+   ],
+   "products": [
+    "foundry-tools",
+    "azure-machine-learning",
+    "azure-machine-learning-designer",
+    "m365-apps",
+    "azure-translator-text",
+    "azure-translator-speech",
+    "ms-copilot",
+    "language-service"
+   ],
+   "last_modified": "2026-03-16T07:10:00+00:00",
+   "skill_hints": [
+    "ai_output_review"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn.wwl.identify-microsoft-power-automate-components",
+   "title": "Identify Microsoft Power Automate components",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/identify-microsoft-power-automate-components/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 70,
+   "hours": 1.2,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "business-owner",
+    "business-user",
+    "maker",
+    "student"
+   ],
+   "products": [
+    "power-automate"
+   ],
+   "last_modified": "2026-07-15T18:44:00+00:00",
+   "skill_hints": [
+    "process_automation"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-bizapps.get-started-with-ai-builder-key-phrase-extraction",
+   "title": "Identify key phrases with AI Builder",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/get-started-with-ai-builder-key-phrase-extraction/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 25,
+   "hours": 0.4,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "business-user",
+    "maker"
+   ],
+   "products": [
+    "ai-builder",
+    "power-platform",
+    "power-automate"
+   ],
+   "last_modified": "2024-08-14T22:57:00+00:00",
+   "skill_hints": [
+    "process_automation"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-bizapps.get-started-with-ai-builder-language-detection",
+   "title": "Identify the language of text with AI Builder",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/get-started-with-ai-builder-language-detection/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 28,
+   "hours": 0.5,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "maker",
+    "business-user"
+   ],
+   "products": [
+    "ai-builder",
+    "power-platform",
+    "power-automate"
+   ],
+   "last_modified": "2024-08-14T22:57:00+00:00",
+   "skill_hints": [
+    "process_automation"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-bizapps.import-custom-visuals",
+   "title": "Import custom visuals and add bookmarks to a report in Power BI - Online workshop",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/import-custom-visuals/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 18,
+   "hours": 0.3,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "business-user",
+    "business-analyst",
+    "data-analyst"
+   ],
+   "products": [
+    "power-bi"
+   ],
+   "last_modified": "2026-06-23T17:12:00+00:00",
+   "skill_hints": [
+    "data_quality",
+    "variance_analysis"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-bizapps.install-required-software-online-workshop",
+   "title": "Install required software for Power Automate: Automation - Online workshop",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/install-required-software-online-workshop/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 46,
+   "hours": 0.8,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "maker",
+    "functional-consultant",
+    "business-user"
+   ],
+   "products": [
+    "power-platform",
+    "power-automate"
+   ],
+   "last_modified": "2026-08-28T05:09:00+00:00",
+   "skill_hints": [
+    "process_automation"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-bizapps.integrate-cloud-flows-online-workshop",
+   "title": "Integrate with cloud flows - Online workshop",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/integrate-cloud-flows-online-workshop/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 64,
+   "hours": 1.1,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "maker",
+    "functional-consultant",
+    "business-user"
+   ],
+   "products": [
+    "power-platform",
+    "power-automate"
+   ],
+   "last_modified": "2026-08-28T22:14:00+00:00",
+   "skill_hints": [
+    "process_automation"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-bizapps.interact-share-power-bi",
+   "title": "Interact, share, and collaborate Power BI dashboards – Online workshop",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/interact-share-power-bi/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 82,
+   "hours": 1.4,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "business-user",
+    "business-analyst"
+   ],
+   "products": [
+    "power-platform",
+    "power-bi"
+   ],
+   "last_modified": "2026-06-23T17:12:00+00:00",
+   "skill_hints": [
+    "data_quality",
+    "variance_analysis"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-bizapps.intro-power-bi",
+   "title": "Introduction and prerequisites for Power BI – Online workshop",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/intro-power-bi/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 35,
+   "hours": 0.6,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "business-analyst",
+    "business-user"
+   ],
+   "products": [
+    "power-platform",
+    "power-bi"
+   ],
+   "last_modified": "2026-06-23T17:12:00+00:00",
+   "skill_hints": [
+    "data_quality",
+    "variance_analysis"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn.philanthropies.introduction-to-microsofts-responsible-ai-approach",
+   "title": "Introduction to Microsoft's Responsible AI Approach",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/introduction-to-microsofts-responsible-ai-approach/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 24,
+   "hours": 0.4,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "k-12-educator",
+    "business-user",
+    "higher-ed-educator",
+    "data-engineer",
+    "school-leader"
+   ],
+   "products": [
+    "foundry-tools",
+    "azure-machine-learning",
+    "azure-machine-learning-designer",
+    "m365-apps",
+    "azure-translator-text",
+    "azure-translator-speech",
+    "ms-copilot",
+    "language-service"
+   ],
+   "last_modified": "2026-03-16T07:10:00+00:00",
+   "skill_hints": [
+    "ai_output_review"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-dynamics.introduction-business-applications-professional",
+   "title": "Introduction to becoming a business applications professional",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/introduction-business-applications-professional/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 56,
+   "hours": 0.9,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "business-analyst",
+    "functional-consultant",
+    "student",
+    "business-user",
+    "maker"
+   ],
+   "products": [
+    "dynamics-365",
+    "dynamics-finance",
+    "dynamics-sales",
+    "customer-insights-journeys",
+    "dynamics-scm",
+    "dynamics-business-central",
+    "dynamics-field-service",
+    "dynamics-customer-service",
+    "dynamics-project-operations",
+    "dynamics-human-resources",
+    "dynamics-iom",
+    "power-apps",
+    "power-automate",
+    "dataverse"
+   ],
+   "last_modified": "2026-09-28T23:06:00+00:00",
+   "skill_hints": [
+    "process_automation",
+    "variance_analysis"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn.philanthropies.intro-generative-ai-explore-basics",
+   "title": "Introduction to generative AI - Exploring the basics",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/intro-generative-ai-explore-basics/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 22,
+   "hours": 0.4,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "k-12-educator",
+    "business-user",
+    "higher-ed-educator",
+    "data-engineer",
+    "school-leader"
+   ],
+   "products": [
+    "foundry-tools",
+    "azure-machine-learning",
+    "azure-machine-learning-designer",
+    "m365-apps",
+    "azure-translator-text",
+    "azure-translator-speech",
+    "ms-copilot",
+    "language-service"
+   ],
+   "last_modified": "2026-03-16T07:10:00+00:00",
+   "skill_hints": [
+    "ai_output_review"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-bizapps.manage-models",
+   "title": "Manage models in AI Builder",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/manage-models/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 17,
+   "hours": 0.3,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "business-user",
+    "maker"
+   ],
+   "products": [
+    "ai-builder",
+    "power-platform",
+    "power-automate"
+   ],
+   "last_modified": "2024-10-14T17:02:00+00:00",
+   "skill_hints": [
+    "process_automation"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-dynamics.navigating-in-f-and-o",
+   "title": "Navigate finance and operations apps",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/navigate-finance-operations/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 52,
+   "hours": 0.9,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "business-user",
+    "functional-consultant",
+    "administrator"
+   ],
+   "products": [
+    "dynamics-365",
+    "dynamics-finance",
+    "dynamics-scm"
+   ],
+   "last_modified": "2026-03-04T18:14:00+00:00",
+   "skill_hints": [
+    "variance_analysis"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-bizapps.business-process-optimization-process-advisor",
+   "title": "Optimize your business process with process advisor",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/business-process-optimization-process-advisor/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 26,
+   "hours": 0.4,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "maker",
+    "business-user"
+   ],
+   "products": [
+    "power-platform",
+    "power-automate"
+   ],
+   "last_modified": "2026-06-12T17:23:00+00:00",
+   "skill_hints": [
+    "process_automation"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-bizapps.multiple-data-sources",
+   "title": "Power Automate's deep integration across multiple data sources",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/multiple-data-sources/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 49,
+   "hours": 0.8,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "business-user",
+    "maker",
+    "functional-consultant"
+   ],
+   "products": [
+    "power-platform",
+    "power-automate"
+   ],
+   "last_modified": "2026-03-03T18:11:00+00:00",
+   "skill_hints": [
+    "process_automation"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-dynamics.present-business-applications-designs",
+   "title": "Present Business Applications designs to stakeholders",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/present-business-applications-designs/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 93,
+   "hours": 1.6,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "business-analyst",
+    "business-user",
+    "maker",
+    "student",
+    "functional-consultant"
+   ],
+   "products": [
+    "dynamics-365",
+    "dynamics-finance",
+    "dynamics-sales",
+    "customer-insights-journeys",
+    "dynamics-scm",
+    "dynamics-business-central",
+    "dynamics-field-service",
+    "dynamics-customer-service",
+    "dynamics-project-operations",
+    "dynamics-human-resources",
+    "dynamics-iom",
+    "power-apps",
+    "power-automate",
+    "dataverse"
+   ],
+   "last_modified": "2026-09-28T23:06:00+00:00",
+   "skill_hints": [
+    "process_automation",
+    "variance_analysis"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-dynamics.get-started-with-form-processing",
+   "title": "Process custom documents with AI Builder",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/get-started-with-form-processing/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 32,
+   "hours": 0.5,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "business-user",
+    "maker"
+   ],
+   "products": [
+    "ai-builder",
+    "power-platform",
+    "power-automate"
+   ],
+   "last_modified": "2026-06-12T17:23:00+00:00",
+   "skill_hints": [
+    "process_automation"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-bizapps.publish-access-reports",
+   "title": "Publish and access reports in Power BI service – Online workshop",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/publish-access-reports/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 86,
+   "hours": 1.4,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "business-user",
+    "business-analyst"
+   ],
+   "products": [
+    "power-platform",
+    "power-bi"
+   ],
+   "last_modified": "2026-06-23T17:12:00+00:00",
+   "skill_hints": [
+    "data_quality",
+    "variance_analysis"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-bizapps.get-started-with-ai-builder-text-recognition",
+   "title": "Recognize text with AI Builder",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/get-started-with-ai-builder-text-recognition/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 34,
+   "hours": 0.6,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "business-user",
+    "maker"
+   ],
+   "products": [
+    "ai-builder",
+    "power-platform",
+    "power-automate"
+   ],
+   "last_modified": "2026-06-12T17:23:00+00:00",
+   "skill_hints": [
+    "process_automation"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-dynamics.set-up-non-stocked-material-track-usage",
+   "title": "Set up non-stocked materials and track usage on projects with Dynamics 365 Project Operations",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/set-up-non-stocked-material-track-usage/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 21,
+   "hours": 0.3,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "functional-consultant",
+    "business-user"
+   ],
+   "products": [
+    "dynamics-365",
+    "dynamics-project-operations",
+    "dynamics-finance"
+   ],
+   "last_modified": "2026-03-04T18:14:00+00:00",
+   "skill_hints": [
+    "variance_analysis"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn.dpu.summarize-sales-data",
+   "title": "Summarize sales data using Copilot in Excel",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/summarize-sales-data/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 16,
+   "hours": 0.3,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "business-owner",
+    "business-user",
+    "technology-manager",
+    "business-leader"
+   ],
+   "products": [
+    "microsoft-365-copilot",
+    "office-excel"
+   ],
+   "last_modified": "2025-10-13T23:09:00+00:00",
+   "skill_hints": [
+    "spreadsheet_modelling"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-bizapps.pad-first-steps",
+   "title": "Take your first steps with Power Automate desktop app",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/pad-first-steps/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 37,
+   "hours": 0.6,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "maker",
+    "business-user",
+    "developer",
+    "functional-consultant"
+   ],
+   "products": [
+    "power-platform",
+    "power-automate"
+   ],
+   "last_modified": "2026-06-12T17:23:00+00:00",
+   "skill_hints": [
+    "process_automation"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-dynamics.test-dynamics-365-implementation",
+   "title": "Test your Dynamics 365 implementation",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/test-dynamics-365-implementation/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 70,
+   "hours": 1.2,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "business-analyst",
+    "business-user",
+    "student",
+    "maker",
+    "functional-consultant"
+   ],
+   "products": [
+    "dynamics-365",
+    "dynamics-finance",
+    "dynamics-sales",
+    "customer-insights-journeys",
+    "dynamics-scm",
+    "dynamics-business-central",
+    "dynamics-field-service",
+    "dynamics-customer-service",
+    "dynamics-project-operations",
+    "dynamics-human-resources",
+    "dynamics-iom",
+    "power-apps",
+    "power-automate",
+    "dataverse"
+   ],
+   "last_modified": "2026-09-30T17:08:00+00:00",
+   "skill_hints": [
+    "process_automation",
+    "variance_analysis"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn.wwl.understand-data-roles-services-products",
+   "title": "Understand data roles, services, and products",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/understand-data-roles-services-products/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 21,
+   "hours": 0.3,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "business-owner",
+    "business-user",
+    "k-12-educator",
+    "student"
+   ],
+   "products": [
+    "office-excel",
+    "sql-server"
+   ],
+   "last_modified": "2026-10-12T22:11:00+00:00",
+   "skill_hints": [
+    "spreadsheet_modelling"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-bizapps.outlook-flows-online-workshop",
+   "title": "Use Outlook email to trigger desktop flows and pass inputs - Online workshop",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/outlook-flows-online-workshop/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 32,
+   "hours": 0.5,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "maker",
+    "functional-consultant",
+    "business-user"
+   ],
+   "products": [
+    "power-platform",
+    "power-automate"
+   ],
+   "last_modified": "2026-08-28T05:09:00+00:00",
+   "skill_hints": [
+    "process_automation"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-bizapps.use-hierarchies-dax-first-data-model",
+   "title": "Use hierarchies and DAX in your first data model - Online workshop",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/use-hierarchies-dax-first-data-model/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 60,
+   "hours": 1.0,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "business-user",
+    "data-analyst",
+    "business-analyst"
+   ],
+   "products": [
+    "power-bi"
+   ],
+   "last_modified": "2026-06-23T17:12:00+00:00",
+   "skill_hints": [
+    "data_quality",
+    "variance_analysis"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-bizapps.use-input-output-online-workshop",
+   "title": "Use input and output variables - Online workshop",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/use-input-output-online-workshop/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 28,
+   "hours": 0.5,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "maker",
+    "business-user"
+   ],
+   "products": [
+    "power-automate",
+    "power-platform"
+   ],
+   "last_modified": "2026-08-28T05:09:00+00:00",
+   "skill_hints": [
+    "process_automation"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn.dpu.windows-at-work-finance",
+   "title": "Windows at work: Transforming finance teams with Windows 11 Pro",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/windows-at-work-finance/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 19,
+   "hours": 0.3,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "business-owner",
+    "business-user",
+    "administrator",
+    "technology-manager",
+    "business-leader"
+   ],
+   "products": [
+    "microsoft-365-copilot-chat",
+    "windows-11",
+    "office-excel",
+    "office-powerpoint"
+   ],
+   "last_modified": "2025-10-23T23:09:00+00:00",
+   "skill_hints": [
+    "spreadsheet_modelling",
+    "variance_analysis"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn.dpu.work-smarter-copilot-finance",
+   "title": "Work smarter with Copilot prompts for finance professionals",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/work-smarter-copilot-finance/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 28,
+   "hours": 0.5,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "administrator",
+    "business-leader",
+    "business-owner",
+    "business-user",
+    "technology-manager"
+   ],
+   "products": [
+    "microsoft-365-copilot"
+   ],
+   "last_modified": "2026-07-21T17:10:00+00:00",
+   "skill_hints": [
+    "variance_analysis"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  },
+  {
+   "id": "mslearn:learn-bizapps.dax-power-bi-write-formulas",
+   "title": "Write DAX formulas for semantic models",
+   "type": "module",
+   "provider": "Microsoft Learn",
+   "url": "https://learn.microsoft.com/en-us/training/modules/dax-power-bi-write-formulas/?WT.mc_id=api_CatalogApi",
+   "duration_in_minutes": 30,
+   "hours": 0.5,
+   "levels": [
+    "beginner"
+   ],
+   "roles": [
+    "data-analyst"
+   ],
+   "products": [
+    "power-bi",
+    "fabric"
+   ],
+   "last_modified": "2026-06-15T23:15:00+00:00",
+   "skill_hints": [
+    "data_quality",
+    "variance_analysis"
+   ],
+   "cost": "free",
+   "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free'",
+   "language": "en",
+   "retrieved": "2026-10-21",
+   "status": "candidate"
+  }
+ ]
+}
