@@ -30,7 +30,10 @@ Items from the second brief, done in order; each line is updated when an item is
   Tests: `tests/test_eval_runner.py`. Type checks now run as `mypy src eval`.
 - [x] 6 Q12 added to `docs/CONTRACT_QUESTIONS.md`; explain docs updated (requirements, recommend,
   planner, catalogue, next_case, ARCHITECTURE) and new `docs/explain/evaluation.md`.
-- [ ] 7 Postgres backend
+- [x] 7 Postgres backend: `src/store.py` uses Postgres (psycopg 3) when `DATABASE_URL` is set,
+  SQLite otherwise; same tables/behaviour; seeding guarded by an advisory lock. Tests run on SQLite
+  (`tests/test_store_backend.py` covers selection and the placeholder adapter). **Not yet run
+  against a real Postgres**: verify on Replit (see manual steps).
 - [ ] 8 Retrieval preparation
 
 Branch `a/engine`, not pushed. All checks green at the last commit:

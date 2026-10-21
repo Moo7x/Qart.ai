@@ -41,7 +41,7 @@ from src.engine.planner import plan_path
 from src.engine.recommend import changed_since, recommend
 from src.engine.skills import derive_states
 from src.engine.snapshots import REPLAY_LABEL, diff_report, load_snapshots
-from src.store import Store, default_db_path, seed_demo
+from src.store import Store, make_store, seed_demo
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api", tags=["engine"])
@@ -63,11 +63,13 @@ def seed(store: Store) -> int:
 
 @lru_cache(maxsize=1)
 def get_store() -> Store:
-    """The process-wide store; seeded with synthetic data if empty (Replit may wipe files)."""
-    store = Store(default_db_path())
-    if store.is_empty():
-        logger.info("empty store: seeding synthetic demo data")
-        seed(store)
+    """The process-wide store (Postgres if DATABASE_URL is set, else SQLite), seeded with
+    synthetic data if empty (Replit may wipe files)."""
+    store = make_store()
+    with store.seed_lock():  # several instances may start at once on Replit
+        if store.is_empty():
+            logger.info("empty %s store: seeding synthetic demo data", store.backend)
+            seed(store)
     return store
 
 

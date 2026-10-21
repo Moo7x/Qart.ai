@@ -4,6 +4,8 @@ uvicorn==0.54.0
 pydantic==2.14.1
 pandas==3.0.6
 ortools==9.15.6755
+# Postgres driver, used only when DATABASE_URL is set (Replit deployment)
+psycopg[binary]==3.3.6
 # RunPod serverless handler (runpod/handler.py, from the organisers' template)
 runpod==1.12.0
 

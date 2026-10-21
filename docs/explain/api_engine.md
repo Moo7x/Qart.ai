@@ -2,8 +2,9 @@
 
 ## 1. What it does
 Exposes the engine over HTTP (all Person-A endpoints of contract §5) and keeps profiles, events,
-assumption versions, ingested snapshots and optimiser proposals in a small SQLite file, seeded with
-12 synthetic employees on first start.
+assumption versions, ingested snapshots and optimiser proposals in a database seeded with 12
+synthetic employees on first start: **Postgres when `DATABASE_URL` is set** (Replit's built-in
+Postgres, used for deployment) and a **SQLite file** otherwise (local runs and all tests).
 
 ## 2. Why it exists
 B's web app and companion call these routes; the golden journey runs through them. Replit may wipe
@@ -31,9 +32,14 @@ table (server-side order, not client clocks). The recommendation is recomputed *
 latest change**: before the latest *session's* events (one check-in alone may not move a factor),
 before the flag, or with the previous assumption version, and every moved role gets a reason.
 
+Backend: `select_backend(env)` picks Postgres if `DATABASE_URL` is non-empty, else SQLite at
+`QART_DB_PATH`. The SQL is shared ("?" placeholders converted to "%s" for psycopg, portable
+`ON CONFLICT` upserts, an explicit `seq` column instead of SQLite's rowid). Seeding an empty
+database is wrapped in a Postgres advisory lock so two instances starting together don't both seed.
+
 ## 4. Where in the code
 Routes in `src/api_engine.py` (`compute_changed_since`, `robust_top_role`); persistence in
-`src/store.py` (`Store`, `seed_demo`, `expand_history`); HR maths in `src/engine/hr.py`. Tests:
+`src/store.py` (`Store`, `select_backend`, `make_store`, `seed_demo`, `expand_history`); HR maths in `src/engine/hr.py`. Tests:
 `tests/test_api.py` (golden journey steps 2–6 over HTTP), `tests/conftest.py` (fresh DB per test).
 
 ## 5. Example
@@ -50,8 +56,10 @@ re-identification risk. The optimiser endpoints are a stub and invent no results
 - *Can HR see Aina's results?* No; only counts per state, small cells hidden, no names or ids.
 - *What happens when new data arrives?* Ingest → diff → suggested review → human approval → new
   version → recompute; ingesting alone changes nothing (tested).
-- *Where is the data stored?* A local SQLite file (gitignored), re-seeded from synthetic JSON.
+- *Where is the data stored?* Replit Postgres in deployment, a local SQLite file otherwise; both
+  re-seed from synthetic JSON when empty.
 
 ## 8. Design choices considered
-Postgres on Replit (more setup; SQLite is enough for a demo); event sourcing for everything
+SQLite only (Replit deployments don't keep runtime files reliably and may run several instances);
+an ORM such as SQLAlchemy (more code than six small tables need); event sourcing for everything
 (the small `changes` log gives the same explanation with less code).
