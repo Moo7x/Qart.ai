@@ -34,7 +34,10 @@ Items from the second brief, done in order; each line is updated when an item is
   SQLite otherwise; same tables/behaviour; seeding guarded by an advisory lock. Tests run on SQLite
   (`tests/test_store_backend.py` covers selection and the placeholder adapter). **Not yet run
   against a real Postgres**: verify on Replit (see manual steps).
-- [ ] 8 Retrieval preparation
+- [x] 8 Retrieval preparation: `src/retrieval/` (Retriever interface, BM25 + filters, RRF hybrid,
+  RunPod BGE-M3/bge-reranker interfaces), corpus of verified courses + O*NET 31.0 tasks/DWAs
+  (`data/processed/onet_tasks_dwas.json`), 129 Microsoft Learn candidates (not used by the
+  planner), BM25 recall@5 = 0.78 (21/28) in `eval/RESULTS.md`. Not wired into the planner or API.
 
 Branch `a/engine`, not pushed. All checks green at the last commit:
 `ruff format --check .` ✔ · `ruff check .` ✔ · `mypy src` (strict) ✔ · `pytest`: **104 passed**.
@@ -110,3 +113,74 @@ response shapes (profile, flag, diff, HR summary, PUT assumptions).
    seed. The raw AEI CSV is not needed there (snapshots are committed).
 5. Tell Person B: events must use `help_level 0` for check-ins (422 otherwise), and the default
    practice scenario for `/api/next-case` is `assistive`.
+
+## Run 2 end-of-run report (2026-10-21)
+
+### a) What was built, and results
+14 commits on `a/engine` (not pushed): items 1–8 above. Checks at the last commit:
+`ruff format --check .` ✔ · `ruff check .` ✔ · `mypy src eval` (strict) ✔ · `pytest`: **147 passed**
+(was 104; all earlier tests, incl. the golden-journey API tests, still pass; the only edited
+existing test is the score assertion, which now expects the clamp asked for in item 2).
+Results worth quoting: role outlook recon_associate 0.45 stable (assistive) / 0.79 being
+transformed (agentic), assistive → being transformed after the v2 approval; close_match flags
+exactly the rankings the ±20% check found unstable; BM25 recall@5 0.78 (21/28, synthetic set);
+companion evaluation "not run" (no acceptance cases, auto_diagnose missing).
+
+### b) Blocked or unverified, with options
+1. **Postgres path not run against a real database** (no server here).
+   Options: (i) *recommended*: on Replit, enable the built-in Postgres (sets `DATABASE_URL`), run the
+   app once, then call `POST /api/demo/reset` and the golden-journey test; (ii) run a local Postgres
+   in Docker and I add an opt-in `pytest -m postgres` test (needs Docker; more setup); (iii) deploy
+   on SQLite (works, but Replit may lose the file and multiple instances won't share data).
+2. **Five practised skills have no course** (duplicate_detection, escalation_judgment,
+   fx_conversion, transposition_check, unsupported_adjustment); they are covered by in-app
+   practice. Options: (i) keep in-app practice only (*recommended*: these are our case skills);
+   (ii) I search for verified free resources per skill and list them as candidates for your
+   approval; (iii) approve relevant Microsoft Learn candidates (none target these skills directly).
+3. **Microsoft Learn Catalog API is marked for deprecation** (Microsoft says it works through June
+   2026 and recommends the Learn Platform API; it still answered on 2026-10-21). Options: (i) keep
+   it while it answers (*current*); (ii) switch `mslearn.py` to the Learn Platform API after you
+   approve that source (see "New sources" below).
+No scope was cut; nothing from PROJECT_PLAN or the contract was removed or simplified.
+
+### c) What you must do yourself
+1. Review the 14 commits, then push `a/engine`.
+2. Approve or reject Q1–Q12 with Person B (`docs/CONTRACT_QUESTIONS.md`), especially Q4 (index
+   format), Q12 (new optional fields + clamped score).
+3. On Replit: install `requirements.txt` (now includes `psycopg[binary]`), turn on Replit Postgres,
+   check the app starts and seeds (see b1). Never put the URL in code; it lives in Replit Secrets.
+4. Spot-check estimated course hours (marked in `hours_source`) and the 129 Microsoft Learn
+   candidates; tell me which to approve into `courses.json`.
+5. Decide on the new sources below (I did not add them).
+
+### d) What unblocks my next work, and what to ask Person B
+| Checkpoint | Ask Person B for | Unblocks |
+|---|---|---|
+| C1 (Thu 22 Oct ~14:00) | Agree Q1–Q12; event JSON from the companion (check-ins with help 0; outcome `failure` OK?); UI uses `fit`, `time_to_ready`, `close_match`, `outlook` and never shows `provisional_estimate` | API contract freeze |
+| C1 | `cases/index.json` in the Q4 format (id, mode, difficulty, scenario_variant, practised_skills), with ids matching the golden journey | next-case and path on real cases (reader already done) |
+| M1 (Thu 22 Oct ~21:00) | `src/companion/auto.py::auto_diagnose(case, playbook_path)` and `grader.py::grade` per contract §5; `src/api_companion.py` exposing `router` | evaluation runner (no code change needed), golden journey steps 1–5 end to end |
+| C2 (Fri 23 Oct ~14:00) | Independently authored acceptance cases + clean cases in `eval/acceptance/`, plus a final untouched set kept aside; path of `playbook_v1.md` | real acceptance counts in `eval/RESULTS.md` |
+| C2 | Who owns the provider-agnostic LLM client (OpenAI via `LLM_API_KEY`) | text-only baseline and the optimiser (A9) |
+| M2 (Fri 23 Oct ~22:00) | UI for the snapshot diff → HR approval flow (`POST /api/ingest/run`, `PUT /api/assumptions`) | golden journey step 6 in the UI |
+
+### e) Merge to main
+**Not due now.** The next merge is at **M1 (Thu 22 Oct ~21:00)**, once B's branch is pushed and
+golden-journey steps 1–5 can run end to end (`origin/main` today only has a README update; there
+is no `b/app` on the remote yet). Steps at M1:
+1. Both push their branches (`git push origin a/engine`, B pushes `b/app`).
+2. On GitHub open a pull request `a/engine` → `main`; merge with **"Create a merge commit"**
+   (no squash, no rebase). Merge **A first**.
+3. Then open and merge B's pull request `b/app` → `main` the same way, resolving any conflict in
+   the shared files (`src/main.py`, `schemas/`) together.
+4. Each person merges `main` back into their branch (`git checkout a/engine` then
+   `git merge origin/main`, after `git fetch`), runs the checks, and pushes.
+5. Run the golden-journey test on the Replit URL.
+
+### New sources found (not added; waiting for your approval)
+- **O*NET 31.0 `emerging_tasks.csv`** (same CC BY 4.0 database): new tasks reported for
+  occupations; could inform the role outlook with evidence rather than assumptions alone.
+- **O*NET 31.0 `task_ratings.csv`**: task importance ratings; could replace our declared role
+  base weights with sourced ones.
+- **COSO "GenAI" paper (Feb 2026)**, linked on https://www.coso.org/guidance-on-ic: internal control
+  over generative AI; a strong free resource for `controls_design` and `ai_output_review` if free.
+- **Microsoft Learn Platform API** (successor to the Catalog API): needed if the old endpoint stops.
