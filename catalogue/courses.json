@@ -1,5 +1,5 @@
 {
-  "_about": "Free learning resources for the path planner. Every URL was opened on the retrieval date (WebFetch/curl). verified=true means the page loaded, the title matched and no paywall was seen for the learning content; verified=false needs a human check. hours_source says whether hours come from the provider page or are a team estimate (assumption). Prerequisites are the team's declared ordering. None are HRD Corp listings (hrd_claimable=false).",
+  "_about": "Learning resources for the path planner (free ones preferred; the company funds paid ones). Every URL was opened on the retrieval date (WebFetch/curl). verified=true means the page loaded and the title and cost were checked; cost says free only where the provider states it (see cost_source); paid courses are allowed because the company funds training; verified=false needs a human check. hours_source says whether hours come from the provider page or are a team estimate (assumption). Prerequisites are the team's declared ordering. None are HRD Corp listings (hrd_claimable=false).",
   "retrieved": "2026-10-21",
   "courses": [
     {
@@ -16,7 +16,8 @@
       "retrieved": "2026-10-21",
       "verified": true,
       "hrd_claimable": false,
-      "hours_source": "estimate: Kaggle shows course length in its client-side listing, not captured in page text at retrieval; check"
+      "hours_source": "estimate: Kaggle shows course length in its client-side listing, not captured in page text at retrieval; check",
+      "cost_source": "Kaggle Learn page description: 'no-cost courses' (kaggle.com/learn, 2026-10-21)"
     },
     {
       "id": "course_02",
@@ -35,7 +36,8 @@
       "retrieved": "2026-10-21",
       "verified": true,
       "hrd_claimable": false,
-      "hours_source": "estimate: Kaggle shows course length in its client-side listing, not captured in page text at retrieval; check"
+      "hours_source": "estimate: Kaggle shows course length in its client-side listing, not captured in page text at retrieval; check",
+      "cost_source": "Kaggle Learn page description: 'no-cost courses' (kaggle.com/learn, 2026-10-21)"
     },
     {
       "id": "course_03",
@@ -53,7 +55,8 @@
       "retrieved": "2026-10-21",
       "verified": true,
       "hrd_claimable": false,
-      "hours_source": "estimate: Kaggle shows course length in its client-side listing, not captured in page text at retrieval; check"
+      "hours_source": "estimate: Kaggle shows course length in its client-side listing, not captured in page text at retrieval; check",
+      "cost_source": "Kaggle Learn page description: 'no-cost courses' (kaggle.com/learn, 2026-10-21)"
     },
     {
       "id": "course_04",
@@ -69,7 +72,8 @@
       "retrieved": "2026-10-21",
       "verified": true,
       "hrd_claimable": false,
-      "hours_source": "estimate: Kaggle shows course length in its client-side listing, not captured in page text at retrieval; check"
+      "hours_source": "estimate: Kaggle shows course length in its client-side listing, not captured in page text at retrieval; check",
+      "cost_source": "Kaggle Learn page description: 'no-cost courses' (kaggle.com/learn, 2026-10-21)"
     },
     {
       "id": "course_05",
@@ -87,7 +91,8 @@
       "retrieved": "2026-10-21",
       "verified": true,
       "hrd_claimable": false,
-      "hours_source": "estimate: Kaggle shows course length in its client-side listing, not captured in page text at retrieval; check"
+      "hours_source": "estimate: Kaggle shows course length in its client-side listing, not captured in page text at retrieval; check",
+      "cost_source": "Kaggle Learn page description: 'no-cost courses' (kaggle.com/learn, 2026-10-21)"
     },
     {
       "id": "course_06",
@@ -95,7 +100,7 @@
       "provider": "SQLBolt",
       "url": "https://sqlbolt.com/",
       "hours": 3,
-      "cost": "free",
+      "cost": "no price shown (not stated as free)",
       "skills": [
         "sql_basics"
       ],
@@ -104,7 +109,8 @@
       "verified": true,
       "hrd_claimable": false,
       "hours_source": "assumption: duration not stated in page text at retrieval; team estimate",
-      "verification_note": "URL opened; no price or paywall seen, but the page does not state 'free'"
+      "verification_note": "URL opened; no price or paywall seen, but the page does not state 'free'",
+      "cost_source": "no price, paywall or sign-up shown, but the site does not state that it is free"
     },
     {
       "id": "course_07",
@@ -120,7 +126,8 @@
       "retrieved": "2026-10-21",
       "verified": true,
       "hrd_claimable": false,
-      "hours_source": "assumption: duration not stated in page text at retrieval; team estimate (selected chapters)"
+      "hours_source": "assumption: duration not stated in page text at retrieval; team estimate (selected chapters)",
+      "cost_source": "book preface: 'free and online' (otexts.com/fpp3, 2026-10-21)"
     },
     {
       "id": "course_08",
@@ -137,7 +144,8 @@
       "retrieved": "2026-10-21",
       "verified": true,
       "hrd_claimable": false,
-      "hours_source": "provider page: 8 hours"
+      "hours_source": "provider page: 8 hours",
+      "cost_source": "OpenLearn page: 'Free course' (2026-10-21)"
     },
     {
       "id": "course_09",
@@ -153,7 +161,8 @@
       "retrieved": "2026-10-21",
       "verified": true,
       "hrd_claimable": false,
-      "hours_source": "provider page: 24 hours study"
+      "hours_source": "provider page: 24 hours study",
+      "cost_source": "OpenLearn page: 'Free course' (2026-10-21)"
     },
     {
       "id": "course_10",
@@ -170,7 +179,8 @@
       "verified": true,
       "hrd_claimable": false,
       "hours_source": "provider page: 3-4 hours (midpoint used)",
-      "verification_note": "course is free; certificate is optional and may be paid"
+      "verification_note": "course is free; certificate is optional and may be paid",
+      "cost_source": "Alison page: 'Free Online Course'; optional certificate may be paid (2026-10-21)"
     },
     {
       "id": "course_11",
@@ -187,7 +197,8 @@
       "retrieved": "2026-10-21",
       "verified": true,
       "hrd_claimable": false,
-      "hours_source": "assumption: duration not stated in page text at retrieval; team estimate"
+      "hours_source": "assumption: duration not stated in page text at retrieval; team estimate",
+      "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free' (2026-10-21)"
     },
     {
       "id": "course_12",
@@ -203,7 +214,8 @@
       "retrieved": "2026-10-21",
       "verified": true,
       "hrd_claimable": false,
-      "hours_source": "assumption: duration not stated in page text at retrieval; team estimate"
+      "hours_source": "assumption: duration not stated in page text at retrieval; team estimate",
+      "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free' (2026-10-21)"
     },
     {
       "id": "course_13",
@@ -211,7 +223,7 @@
       "provider": "Microsoft Support",
       "url": "https://support.microsoft.com/en-us/office/excel-video-training-9bc05390-e94c-46af-a5b3-d7c22f6990bb",
       "hours": 3,
-      "cost": "free",
+      "cost": "no price shown (not stated as free)",
       "skills": [
         "spreadsheet_modelling"
       ],
@@ -219,7 +231,8 @@
       "retrieved": "2026-10-21",
       "verified": true,
       "hrd_claimable": false,
-      "hours_source": "assumption: duration not stated in page text at retrieval; team estimate"
+      "hours_source": "assumption: duration not stated in page text at retrieval; team estimate",
+      "cost_source": "no price or paywall shown, but the page does not state that it is free"
     },
     {
       "id": "course_14",
@@ -235,7 +248,8 @@
       "retrieved": "2026-10-21",
       "verified": true,
       "hrd_claimable": false,
-      "hours_source": "assumption: duration not stated in page text at retrieval; team estimate"
+      "hours_source": "assumption: duration not stated in page text at retrieval; team estimate",
+      "cost_source": "Anthropic Academy page: 'Register | FREE' (2026-10-21)"
     },
     {
       "id": "course_15",
@@ -251,7 +265,8 @@
       "retrieved": "2026-10-21",
       "verified": true,
       "hrd_claimable": false,
-      "hours_source": "assumption: duration not stated in page text at retrieval; team estimate"
+      "hours_source": "assumption: duration not stated in page text at retrieval; team estimate",
+      "cost_source": "Elements of AI page: free online course (2026-10-21)"
     },
     {
       "id": "course_16",
@@ -259,16 +274,35 @@
       "provider": "The Institute of Internal Auditors (Coursera)",
       "url": "https://www.coursera.org/learn/understanding-the-coso-internal-control-framework",
       "hours": 1,
-      "cost": "free to enrol (no-cost audit access not confirmed)",
+      "cost": "paid (Coursera)",
       "skills": [
         "controls_design"
       ],
       "prerequisites": [],
       "retrieved": "2026-10-21",
-      "verified": false,
+      "verified": true,
       "hrd_claimable": false,
       "hours_source": "provider page: about 1 hour (4 modules, 60 minutes)",
-      "verification_note": "page shows 'Enroll for free' but its FAQ says the Certificate experience is needed to access materials; a human must confirm free access"
+      "verification_note": "checked by Person A on 2026-10-21: payment required on Coursera; course URL and title verified",
+      "cost_source": "checked by Person A on 2026-10-21: Coursera requires payment (subscription or per-course purchase); no free access"
+    },
+    {
+      "id": "course_17",
+      "title": "Internal Control — Integrated Framework: Executive Summary (May 2013)",
+      "provider": "COSO (Committee of Sponsoring Organizations of the Treadway Commission)",
+      "url": "https://www.coso.org/_files/ugd/3059fc_1df7d5dd38074006bce8fdf621a942cf.pdf",
+      "hours": 1,
+      "cost": "free",
+      "skills": [
+        "controls_design"
+      ],
+      "prerequisites": [],
+      "retrieved": "2026-10-21",
+      "verified": true,
+      "hrd_claimable": false,
+      "hours_source": "assumption: about 10 pages of text (components and 17 principles); team estimate of 1 hour reading",
+      "cost_source": "free download linked as 'Integrated Framework Executive Summary' on https://www.coso.org/guidance-on-ic (official COSO site, 2026-10-21)",
+      "verification_note": "PDF opened 2026-10-21; official COSO publication, © 2013 all rights reserved, so we only link to it"
     }
   ]
 }

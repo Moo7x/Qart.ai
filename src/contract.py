@@ -464,6 +464,8 @@ class Course(BaseModel):
     hrd_claimable: bool = False
     hours_source: str | None = None
     verification_note: str | None = None
+    # Addition (optional): where the cost label was confirmed (never "free" without a source).
+    cost_source: str | None = None
 
 
 # --- OptimizerProposal ----------------------------------------------------------------------
