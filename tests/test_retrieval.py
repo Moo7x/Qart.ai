@@ -16,7 +16,12 @@ from src.retrieval.corpus import build_corpus, build_onet_processed, load_onet_p
 from src.retrieval.hybrid import DenseRetriever, HybridRetriever, reciprocal_rank_fusion
 from src.retrieval.models import Document, SearchFilters
 from src.retrieval.mslearn import CANDIDATES_PATH, is_candidate, select_candidates
-from src.retrieval.runpod_backends import RunPodBGEM3Embedder, RunPodBGEReranker
+from src.retrieval.runpod_backends import (
+    RunPodBGEM3Embedder,
+    RunPodBGEReranker,
+    RunPodClient,
+    RunPodNotConfiguredError,
+)
 
 
 def doc(doc_id: str, text: str, **meta: Any) -> Document:
@@ -142,11 +147,12 @@ def test_dense_and_hybrid_retrievers_work_with_any_backend() -> None:
     assert reranked.name == "hybrid-rrf+rerank" and top[0].retriever == "hybrid-rrf+rerank"
 
 
-def test_runpod_backends_are_interfaces_only() -> None:
-    with pytest.raises(NotImplementedError):
-        RunPodBGEM3Embedder().embed(["x"])
-    with pytest.raises(NotImplementedError):
-        RunPodBGEReranker().score("q", ["p"])
+def test_runpod_backends_refuse_to_run_without_credentials() -> None:
+    client = RunPodClient(env={})
+    with pytest.raises(RunPodNotConfiguredError):
+        RunPodBGEM3Embedder(client).embed(["x"])
+    with pytest.raises(RunPodNotConfiguredError):
+        RunPodBGEReranker(client).score("q", ["p"])
 
 
 # --- corpus ---------------------------------------------------------------------------------

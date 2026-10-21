@@ -6,12 +6,13 @@ pandas==3.0.6
 ortools==9.15.6755
 # Postgres driver, used only when DATABASE_URL is set (Replit deployment)
 psycopg[binary]==3.3.6
+# HTTP client: RunPod endpoint calls (src/retrieval/runpod_backends.py) and the companion
+httpx==0.28.1
 # RunPod serverless handler (runpod/handler.py, from the organisers' template)
 runpod==1.12.0
 
 # Development and tests
 pytest==9.1.1
-httpx==0.28.1
 ruff==0.17.1
 mypy==2.4.0
 pandas-stubs==3.0.5.260914
