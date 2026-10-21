@@ -16,7 +16,10 @@ from src.contract import CaseMode, CompanyAssumptions, Course, Role, Scenario, S
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 CATALOGUE_DIR = REPO_ROOT / "catalogue"
-CASE_INDEX_PATH = REPO_ROOT / "data" / "case_index.json"
+CASE_INDEX_PATH = REPO_ROOT / "data" / "case_index.json"  # planned fallback (Person A)
+# Person B's case index (cases/ is B's folder; Person A only reads it). Each entry has
+# id, mode, difficulty, scenario_variant, practised_skills; no ground truth.
+B_CASE_INDEX_PATH = REPO_ROOT / "cases" / "index.json"
 
 
 class SkillInfo(BaseModel):
@@ -50,10 +53,14 @@ class SdgMap(BaseModel):
 
 
 class CaseInfo(BaseModel):
-    """Case metadata Person A may read (never ground_truth; see CONTRACT_QUESTIONS Q4)."""
+    """Case metadata Person A may read (never ground_truth; see CONTRACT_QUESTIONS Q4).
+
+    `skills` are the skills a case practises. They are for targeting only and must never be shown
+    to the employee before a decision (that would leak the answer).
+    """
 
     id: str
-    title: str
+    title: str | None = None
     mode: CaseMode
     scenario_variant: Scenario
     difficulty: int
@@ -102,9 +109,29 @@ def default_catalogue() -> Catalogue:
     return load_catalogue()
 
 
-def load_case_index(path: Path = CASE_INDEX_PATH) -> list[CaseInfo]:
-    """The planned case index (data/case_index.json), in file order."""
-    return [CaseInfo.model_validate(c) for c in _read_json(path)["cases"]]
+def _case_entries(data: Any) -> list[dict[str, Any]]:
+    """Accept either a bare list or {"cases": [...]}."""
+    entries: list[dict[str, Any]] = data["cases"] if isinstance(data, dict) else data
+    return entries
+
+
+def _to_case_info(entry: dict[str, Any]) -> CaseInfo:
+    # B's index names the skill list `practised_skills`; our planned index uses `skills`.
+    skills = entry.get("practised_skills", entry.get("skills", []))
+    return CaseInfo.model_validate({**entry, "skills": skills})
+
+
+def load_case_index(
+    primary: Path = B_CASE_INDEX_PATH, fallback: Path = CASE_INDEX_PATH
+) -> list[CaseInfo]:
+    """Case metadata in file order: Person B's cases/index.json if it exists, else the planned
+    data/case_index.json."""
+    path = primary if primary.exists() else fallback
+    return [_to_case_info(e) for e in _case_entries(_read_json(path))]
+
+
+def case_index_source(primary: Path = B_CASE_INDEX_PATH) -> str:
+    return "cases/index.json (Person B)" if primary.exists() else "data/case_index.json (planned)"
 
 
 @lru_cache(maxsize=1)

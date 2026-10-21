@@ -14,8 +14,10 @@ targeted practice; after a helped success, a no-help check-in.
    unless given); ties by the internal estimate's uncertainty p(1−p), then id.
 3. Case: unseen cases containing the skill; prefer check-in if there is a helped success since the
    miss, else practice; then matching scenario variant, lower difficulty, id.
-Case metadata comes from `data/case_index.json` (planned, synthetic) because only the grader may read
-`ground_truth` (CONTRACT_QUESTIONS Q4).
+Case metadata comes from Person B's `cases/index.json` (id, mode, difficulty, scenario_variant,
+practised_skills) when it exists, else from the planned `data/case_index.json`; only the grader may
+read `ground_truth` (CONTRACT_QUESTIONS Q4). Practised skills are never shown to the employee before
+a decision: they would give the answer away.
 
 ## 4. Where in the code
 `next_case()`, `unresolved_miss()`, `helped_success_since_miss()`, `choose_case()`.
@@ -26,7 +28,7 @@ intake → case_001 (largest gap: AI output review) · after case_003 → **case
 **checkin_001** · after checkin_001 → case_009 (the transposition miss from case_003 moves up).
 
 ## 6. Limits and honesty
-The case index lists planned ids until B's cases expose their skills. The estimate only breaks ties.
+Until B publishes cases/index.json the planned index is used. The estimate only breaks ties.
 
 ## 7. Likely judge questions
 - *Isn't this just random practice?* No: the rule is deterministic and explained in `because`.

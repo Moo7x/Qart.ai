@@ -1,7 +1,15 @@
 """Integrity rules for catalogue/*.json: no dangling ids, every role cited, every course checked."""
 
+from pathlib import Path
+
 from src.contract import SCENARIOS
-from src.engine.catalogue import checkin_cases_by_skill, default_case_index, default_catalogue
+from src.engine.catalogue import (
+    case_index_source,
+    checkin_cases_by_skill,
+    default_case_index,
+    default_catalogue,
+    load_case_index,
+)
 
 CONTRACT_PRACTISED_SKILLS = {
     "recon_to_source",
@@ -104,3 +112,31 @@ def test_case_index_uses_known_skills_and_covers_the_golden_journey() -> None:
         "checkin_001",
         "checkin_002",
     ]
+
+
+def test_case_index_reads_person_b_index_when_present(tmp_path: Path) -> None:
+    fixture = Path(__file__).resolve().parent / "fixtures" / "cases_index.json"
+    cases = load_case_index(primary=fixture, fallback=tmp_path / "missing.json")
+    assert [c.id for c in cases] == ["case_101", "checkin_101"]
+    assert cases[1].skills == ["unsupported_adjustment", "escalation_judgment"]
+    assert cases[0].title is None
+    assert checkin_cases_by_skill(cases) == {
+        "unsupported_adjustment": ["checkin_101"],
+        "escalation_judgment": ["checkin_101"],
+    }
+
+
+def test_case_index_falls_back_to_planned_index(tmp_path: Path) -> None:
+    cases = load_case_index(primary=tmp_path / "cases" / "index.json")
+    assert {c.id for c in cases} >= {"case_003", "case_006", "checkin_001"}
+    assert case_index_source(tmp_path / "cases" / "index.json") == "data/case_index.json (planned)"
+
+
+def test_case_index_accepts_a_bare_list(tmp_path: Path) -> None:
+    index = tmp_path / "index.json"
+    index.write_text(
+        '[{"id": "c1", "mode": "practice", "difficulty": 1, "scenario_variant": "assistive",'
+        ' "practised_skills": ["fx_conversion"]}]',
+        encoding="utf-8",
+    )
+    assert [c.skills for c in load_case_index(primary=index)] == [["fx_conversion"]]

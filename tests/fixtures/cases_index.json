@@ -1,0 +1,7 @@
+{
+  "_about": "SYNTHETIC test fixture in the shape of Person B's cases/index.json (CONTRACT_QUESTIONS Q4).",
+  "cases": [
+    {"id": "case_101", "mode": "practice", "difficulty": 1, "scenario_variant": "assistive", "practised_skills": ["unsupported_adjustment"]},
+    {"id": "checkin_101", "mode": "checkin", "difficulty": 2, "scenario_variant": "agentic", "practised_skills": ["unsupported_adjustment", "escalation_judgment"]}
+  ]
+}

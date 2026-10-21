@@ -8,7 +8,9 @@ Items from the second brief, done in order; each line is updated when an item is
 - [x] 2 Readable ranking: `fit`, `time_to_ready`, `close_match` on each recommended role;
   displayed `score` clamped at 0 (ordering uses the unclamped formula); `score_note` explains the
   penalty. Params `SCORE_DISPLAY_FLOOR`, `CLOSE_MATCH_THRESHOLD`. Tests in `tests/test_recommend.py`.
-- [ ] 3 Case index reader (`cases/index.json` → fallback `data/case_index.json`)
+- [x] 3 Case index reader: `load_case_index()` reads B's `cases/index.json` (`practised_skills`)
+  and falls back to `data/case_index.json`; fixture `tests/fixtures/cases_index.json`. Q4 updated
+  (skills-on-Case proposal withdrawn). `cases/` was not created.
 - [ ] 4 Course costs, COSO, coverage check
 - [ ] 5 Evaluation scaffold
 - [ ] 6 Q12 + docs
