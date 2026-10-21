@@ -1,5 +1,10 @@
 """Role recommender (contract Recommendation v2, PROJECT_PLAN §6).
 
+Display: `score` is clamped at 0 (the UI never shows negative scores) while ordering uses the
+unclamped value; fit = (score + 0.15·effort) / 0.85 ∈ [0, 1]; time_to_ready = hours to close gaps
+and weeks at the employee's budget; the top two roles get close_match when their unclamped scores
+differ by less than CLOSE_MATCH_THRESHOLD.
+
 For employee u, role r, scenario s (weights w from the requirement card, summing to 1):
   coverage   = Σ_k w_k · credit(state_k) / Σ_k w_k
                credit: demonstrated 1.0 · observed_with_help 0.5 · self_reported 0.2
@@ -11,6 +16,7 @@ For employee u, role r, scenario s (weights w from the requirement card, summing
 The score is a suitability indicator, not a probability. Demographic fields are never read.
 """
 
+import math
 from collections.abc import Iterable, Sequence
 from dataclasses import dataclass, replace
 
@@ -31,6 +37,7 @@ from src.contract import (
     SkillType,
     Snapshot,
     SourceLink,
+    TimeToReady,
 )
 from src.engine import params
 from src.engine.catalogue import Catalogue
@@ -54,6 +61,15 @@ class ScoreWeights:
             f"{self.coverage:.2f}*coverage + {self.confidence:.2f}*confidence + "
             f"{self.interest:.2f}*interest - {self.effort:.2f}*effort"
         )
+
+    def fit(self, factors: Factors) -> float:
+        """The score without the effort penalty, rescaled to 0–1."""
+        positive = self.coverage + self.confidence + self.interest
+        return (
+            self.coverage * factors.coverage
+            + self.confidence * factors.confidence
+            + self.interest * factors.interest
+        ) / positive
 
     def score(self, factors: Factors) -> float:
         return (
@@ -81,6 +97,18 @@ def hours_to_learn(skill_id: str, practised: bool, courses: Iterable[Course]) ->
     return min((c.hours for c in verified), default=0.0)
 
 
+def gap_hours(
+    weights: dict[str, float], states: dict[str, SkillState], catalogue: Catalogue
+) -> float:
+    """Hours to close the gaps: Σ over weighted skills of (1 − credit) × shortest resource."""
+    return sum(
+        (1 - credit(states.get(k)))
+        * hours_to_learn(k, catalogue.skills[k].practised, catalogue.courses.values())
+        for k, w in weights.items()
+        if w > 0
+    )
+
+
 def compute_factors(
     weights: dict[str, float],
     states: dict[str, SkillState],
@@ -97,14 +125,8 @@ def compute_factors(
     )
     interests = set(profile.interests)
     interest = len(interests & set(role.tags)) / len(interests) if interests else 0.0
-    gap_hours = sum(
-        (1 - credit(states.get(k)))
-        * hours_to_learn(k, catalogue.skills[k].practised, catalogue.courses.values())
-        for k, w in weights.items()
-        if w > 0
-    )
     effort_capacity = profile.weekly_learning_hours * params.EFFORT_HORIZON_WEEKS
-    effort = min(params.EFFORT_CAP, gap_hours / effort_capacity)
+    effort = min(params.EFFORT_CAP, gap_hours(weights, states, catalogue) / effort_capacity)
     return Factors(
         coverage=coverage, confidence=evidenced / total, interest=interest, effort=effort
     )
@@ -160,8 +182,8 @@ def score_role(
     assumptions: CompanyAssumptions,
     snapshot: Snapshot | None = None,
     weights: ScoreWeights = DEFAULT_WEIGHTS,
-) -> RoleRecommendation:
-    """One role's score, factors, gap and requirement card (rank is filled in by recommend)."""
+) -> tuple[RoleRecommendation, float]:
+    """One role's recommendation (rank filled in by recommend) and its unclamped score."""
     skill_types: dict[str, SkillType] = {k: s.type for k, s in catalogue.skills.items()}
     skill_weights = scenario_weights(role, scenario, assumptions, skill_types).scenario
     factors = compute_factors(skill_weights, states, profile, role, catalogue)
@@ -169,11 +191,13 @@ def score_role(
     rounded = Factors(
         **{k: round(v, params.SCORE_DECIMALS) for k, v in factors.model_dump().items()}
     )
-    return RoleRecommendation(
+    raw = weights.score(factors)
+    hours = gap_hours(skill_weights, states, catalogue)
+    recommendation = RoleRecommendation(
         role_id=role.id,
         rank=0,
-        # "+ 0.0" turns a rounded -0.0 into 0.0 so the UI never shows "-0.00".
-        score=round(weights.score(factors), params.SCORE_DECIMALS) + 0.0,
+        # Clamped for display; "+ 0.0" turns a rounded -0.0 into 0.0.
+        score=max(params.SCORE_DISPLAY_FLOOR, round(raw, params.SCORE_DECIMALS)) + 0.0,
         factors=rounded,
         formula=weights.formula,
         gap=gap_list(skill_weights, states),
@@ -183,7 +207,13 @@ def score_role(
         sdg_targets=role.sdg_targets,
         score_note=params.SCORE_NOTE,
         outlook=card.outlook,
+        fit=round(weights.fit(factors), params.FIT_DECIMALS),
+        time_to_ready=TimeToReady(
+            hours=round(hours, params.TIME_TO_READY_DECIMALS),
+            weeks_at_current_budget=math.ceil(hours / profile.weekly_learning_hours),
+        ),
     )
+    return recommendation, raw
 
 
 def recommend(
@@ -201,18 +231,19 @@ def recommend(
         score_role(role, scenario, profile, by_skill, catalogue, assumptions, snapshot, weights)
         for role in catalogue.roles.values()
     ]
-    ordered = sorted(scored, key=lambda r: (-r.score, r.role_id))
+    ordered = sorted(scored, key=lambda pair: (-pair[1], pair[0].role_id))
+    close = len(ordered) > 1 and ordered[0][1] - ordered[1][1] < params.CLOSE_MATCH_THRESHOLD
+    roles = [
+        r.model_copy(update={"rank": rank, "close_match": close and rank <= 2})
+        for rank, (r, _) in enumerate(ordered, start=1)
+    ]
     return Recommendation(
         user_id=profile.id,
         scenario=scenario,
         snapshot_id=snapshot.id if snapshot else None,
         assumptions_version=assumptions.version,
-        roles=[replace_rank(r, rank) for rank, r in enumerate(ordered, start=1)],
+        roles=roles,
     )
-
-
-def replace_rank(role: RoleRecommendation, rank: int) -> RoleRecommendation:
-    return role.model_copy(update={"rank": rank})
 
 
 def changed_since(

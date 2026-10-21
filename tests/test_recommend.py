@@ -12,6 +12,7 @@ from src.engine.recommend import (
     DEFAULT_WEIGHTS,
     changed_since,
     recommend,
+    score_role,
     top_role_under_sensitivity,
 )
 from src.engine.skills import derive_states
@@ -44,7 +45,8 @@ def test_score_is_the_formula_applied_to_factors(scenario: Scenario) -> None:
     for role in rec.roles:
         f = role.factors
         expected = 0.55 * f.coverage + 0.20 * f.confidence + 0.10 * f.interest - 0.15 * f.effort
-        assert role.score == pytest.approx(expected, abs=0.011)  # factors are rounded to 2 dp
+        # factors are rounded to 2 dp; the displayed score is clamped at 0
+        assert role.score == pytest.approx(max(0.0, expected), abs=0.011)
         assert all(0.0 <= v <= 1.0 for v in f.model_dump().values())
         assert role.formula == params.SCORE_FORMULA
         assert role.score_note == params.SCORE_NOTE
@@ -136,3 +138,53 @@ def test_sensitivity_report_shows_near_ties_at_intake() -> None:
         profile, states_for(profile, False), cat, cat.assumptions_v1, "assistive", SENSITIVITY_DELTA
     )
     assert len(set(report.values())) > 1
+
+
+# --- readable ranking -----------------------------------------------------------------------
+def test_displayed_scores_are_never_negative_but_order_uses_the_formula() -> None:
+    cat = default_catalogue()
+    profile = aina()
+    states = states_for(profile, False)
+    rec = recommend(profile, states, cat, cat.assumptions_v1, "assistive")
+    assert all(r.score >= 0 for r in rec.roles)
+    by_skill = {s.skill_id: s for s in states}
+    raw = {
+        role.id: score_role(role, "assistive", profile, by_skill, cat, cat.assumptions_v1)[1]
+        for role in cat.roles.values()
+    }
+    assert min(raw.values()) < 0  # the clamp matters for this profile
+    assert [r.role_id for r in rec.roles] == sorted(raw, key=lambda k: (-raw[k], k))
+    assert rec.roles[0].score_note is not None and "penalty" in rec.roles[0].score_note
+
+
+@pytest.mark.parametrize("scenario", ["assistive", "agentic"])
+def test_fit_is_the_positive_part_rescaled_to_one(scenario: Scenario) -> None:
+    cat = default_catalogue()
+    profile = aina()
+    rec = recommend(profile, states_for(profile, True), cat, cat.assumptions_v1, scenario)
+    for role in rec.roles:
+        f = role.factors
+        expected = (0.55 * f.coverage + 0.20 * f.confidence + 0.10 * f.interest) / 0.85
+        assert role.fit is not None and 0.0 <= role.fit <= 1.0
+        assert role.fit == pytest.approx(expected, abs=0.011)
+
+
+def test_time_to_ready_uses_the_weekly_budget() -> None:
+    cat = default_catalogue()
+    profile = aina()
+    rec = recommend(profile, states_for(profile, True), cat, cat.assumptions_v1, "agentic")
+    for role in rec.roles:
+        ready = role.time_to_ready
+        assert ready is not None and ready.hours > 0
+        weeks = ready.weeks_at_current_budget
+        assert (weeks - 1) * profile.weekly_learning_hours < ready.hours + 0.05
+        assert ready.hours <= weeks * profile.weekly_learning_hours + 0.05
+
+
+def test_close_match_flags_the_top_two_only_when_scores_are_near() -> None:
+    cat = default_catalogue()
+    profile = aina()
+    near = recommend(profile, states_for(profile, False), cat, cat.assumptions_v1, "assistive")
+    assert [r.close_match for r in near.roles] == [True, True, False, False]
+    apart = recommend(profile, states_for(profile, True), cat, cat.assumptions_v1, "agentic")
+    assert not any(r.close_match for r in apart.roles)

@@ -46,7 +46,22 @@ SCORE_WEIGHT_CONFIDENCE: Final = 0.20  # how much of that is backed by ≥2 coun
 SCORE_WEIGHT_INTEREST: Final = 0.10  # people choose their direction; interest matters, a bit
 SCORE_WEIGHT_EFFORT: Final = 0.15  # penalty: hours needed to close the gaps
 SCORE_FORMULA: Final = "0.55*coverage + 0.20*confidence + 0.10*interest - 0.15*effort"
-SCORE_NOTE: Final = "suitability indicator, not a probability of getting the role"
+SCORE_NOTE: Final = (
+    "suitability indicator, not a probability of getting the role. Effort (the hours still "
+    "needed) is subtracted as a penalty, so a role with large gaps can fall below 0; such a "
+    "score is shown as 0, while the ranking keeps the unclamped value. See fit for how well "
+    "your evidence matches, and time_to_ready for the hours still needed."
+)
+# DECLARED: displayed scores never go below this (the UI never shows negative scores).
+SCORE_DISPLAY_FLOOR: Final = 0.0
+# DECLARED: fit = (0.55·coverage + 0.20·confidence + 0.10·interest) / 0.85, i.e. the score
+# without the effort penalty, rescaled to 0–1 by the sum of the positive weights.
+FIT_DECIMALS: Final = 2
+TIME_TO_READY_DECIMALS: Final = 1
+# DECLARED: the top two roles are a "close match" when their (unclamped) scores differ by less
+# than 0.05. eval/SENSITIVITY.md shows top-two gaps of 0.02 or less flip under ±20% weight
+# changes, while a 0.06 gap is stable; 0.05 sits between the two observations.
+CLOSE_MATCH_THRESHOLD: Final = 0.05
 # DECLARED: credit per evidence state. Help-assisted evidence counts half; a self-report counts a
 # little (it is a claim, not evidence); no evidence counts nothing.
 STATE_CREDIT: Final[dict[SkillStateName, float]] = {

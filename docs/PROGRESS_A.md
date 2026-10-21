@@ -5,7 +5,9 @@ Items from the second brief, done in order; each line is updated when an item is
 - [x] 1 Role outlook: `role_outlook()` in `src/engine/requirements.py`, `outlook` on each
   recommended role and the requirement card, `changed_since.outlook_changes`; thresholds
   `OUTLOOK_*` in `params.py`. Tests in `tests/test_requirements.py`, `tests/test_api.py`.
-- [ ] 2 Readable ranking (fit, time_to_ready, close_match, clamped score)
+- [x] 2 Readable ranking: `fit`, `time_to_ready`, `close_match` on each recommended role;
+  displayed `score` clamped at 0 (ordering uses the unclamped formula); `score_note` explains the
+  penalty. Params `SCORE_DISPLAY_FLOOR`, `CLOSE_MATCH_THRESHOLD`. Tests in `tests/test_recommend.py`.
 - [ ] 3 Case index reader (`cases/index.json` → fallback `data/case_index.json`)
 - [ ] 4 Course costs, COSO, coverage check
 - [ ] 5 Evaluation scaffold

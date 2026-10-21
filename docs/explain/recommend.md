@@ -21,6 +21,13 @@ w = scenario weights from the requirement card. Hours: 1.5 h practice bundle for
 probability**; it can be slightly negative when gaps are large. `changed_since()` compares two
 recommendations and gives a reason per moved role (new events, or a new assumption version).
 
+**Readable ranking** (ordering unchanged): the displayed `score` is clamped at 0 and `score_note`
+explains the effort penalty; ordering uses the unclamped value. `fit` = (0.55·coverage +
+0.20·confidence + 0.10·interest) / 0.85 ∈ [0, 1] (how well the evidence matches, ignoring time).
+`time_to_ready` = {hours to close gaps, weeks at the employee's weekly hours}. `close_match` marks the
+top two roles when their unclamped scores differ by < 0.05 (*declared*; in `eval/SENSITIVITY.md`
+gaps ≤ 0.02 flipped under ±20%, a 0.06 gap did not).
+
 ## 4. Where in the code
 `recommend()`, `score_role()`, `compute_factors()`, `gap_list()`, `changed_since()`,
 `top_role_under_sensitivity()`. Tests: `tests/test_recommend.py`. Report: `eval/SENSITIVITY.md`

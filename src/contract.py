@@ -354,6 +354,13 @@ class RequirementCard(BaseModel):
     outlook: RoleOutlook | None = None
 
 
+class TimeToReady(BaseModel):
+    """Hours still needed to close the role's gaps, and weeks at the current budget (Q12)."""
+
+    hours: float
+    weeks_at_current_budget: int
+
+
 class RoleRecommendation(BaseModel):
     role_id: str
     rank: int
@@ -368,6 +375,10 @@ class RoleRecommendation(BaseModel):
     sdg_targets: list[str] = []
     score_note: str | None = None
     outlook: RoleOutlook | None = None
+    # Additions (optional, Q12): readable ranking. `score` is clamped at 0 for display.
+    fit: float | None = None
+    time_to_ready: TimeToReady | None = None
+    close_match: bool = False
 
 
 class RankChange(BaseModel):
