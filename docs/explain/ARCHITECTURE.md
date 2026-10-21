@@ -14,6 +14,7 @@ Future-role reasoning (Person A)
   layer C  employee evidence: SkillStates from events (rules, not percentages)
        ▼
   recommend(): 0.55·coverage + 0.20·confidence + 0.10·interest − 0.15·effort  (+ changed_since)
+       +  outlook per role (AI-handled / oversight share), fit, time_to_ready, close_match
        ▼
   path planner (weekly hours × 6, prerequisites, min worst-case gap over both scenarios) · next_case
 
@@ -37,6 +38,7 @@ HR: GET /api/hr/summary → counts per state per skill, groups/cells < 5 suppres
 | `src/engine/snapshots.py`, `src/engine/ingest.py`, `data/snapshots/` | A | [snapshots.md](snapshots.md) |
 | `src/engine/hr.py` (aggregates only) | A | [hr.md](hr.md) |
 | `src/api_engine.py`, `src/store.py`, `data/synthetic_team.json` | A | [api_engine.md](api_engine.md) |
+| `eval/runner.py`, `eval/acceptance_criteria.py`, `eval/acceptance/` | A | [evaluation.md](evaluation.md) |
 | `src/main.py` (app: engine router, B's router and web/dist when present) | both | this page |
 | `src/companion/`, `src/api_companion.py`, `cases/`, `web/` | B | B's docs |
 

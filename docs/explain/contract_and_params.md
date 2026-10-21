@@ -14,7 +14,7 @@ from?": every number lives in one file with its status.
   validates each against its model, and `tests/test_contract_outputs.py` checks that real endpoint
   output contains every example field.
 - Fields we added are **optional**, so the examples stay valid; each is listed in
-  `docs/CONTRACT_QUESTIONS.md` (Q2) for both teammates to confirm.
+  `docs/CONTRACT_QUESTIONS.md` (Q2, Q12) for both teammates to confirm.
 - `params.py` labels each constant DECLARED (team design choice), ASSUMPTION (provisional, no data)
   or SOURCED. Company adoption assumptions are *not* there: they are layer B in
   `catalogue/company_assumptions.json`, edited by HR.

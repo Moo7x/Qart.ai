@@ -28,7 +28,8 @@ Items from the second brief, done in order; each line is updated when an item is
   called) with fixed criteria in `eval/acceptance_criteria.py` (sha256 shown in RESULTS); writes the
   "companion-evaluation" section of `eval/RESULTS.md` ("Not run" while `eval/acceptance/` is empty).
   Tests: `tests/test_eval_runner.py`. Type checks now run as `mypy src eval`.
-- [ ] 6 Q12 + docs
+- [x] 6 Q12 added to `docs/CONTRACT_QUESTIONS.md`; explain docs updated (requirements, recommend,
+  planner, catalogue, next_case, ARCHITECTURE) and new `docs/explain/evaluation.md`.
 - [ ] 7 Postgres backend
 - [ ] 8 Retrieval preparation
 
