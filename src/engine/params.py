@@ -2,7 +2,7 @@
 
 Each constant says what it is, why it has this value, and its status:
 - DECLARED: a design choice fixed in the team contract / PROJECT_PLAN (not fitted to data).
-- ASSUMPTION: a provisional value with no data behind it yet; disclosed to users and judges.
+- ASSUMPTION: a provisional value with no data behind it yet; disclosed to users and reviewers.
 - SOURCED: taken from a cited external source.
 
 Company adoption assumptions (task allocation, shift fractions) are NOT here: they are layer B,
@@ -58,9 +58,10 @@ SCORE_DISPLAY_FLOOR: Final = 0.0
 FIT_DECIMALS: Final = 2
 TIME_TO_READY_DECIMALS: Final = 1
 # DECLARED: the top two roles are a "close match" when their (unclamped) scores differ by less
-# than 0.05. eval/SENSITIVITY.md shows top-two gaps of 0.02 or less flip under ±20% weight
-# changes, while a 0.06 gap is stable; 0.05 sits between the two observations.
-CLOSE_MATCH_THRESHOLD: Final = 0.05
+# than 0.03. Rule: halfway between the largest top-two gap that flips under ±20% weight changes
+# (0.02 in the first run, 0.013 after the course update) and the smallest gap that stays stable
+# (0.033 after the course update) in eval/SENSITIVITY.md. Re-derive it when the data changes.
+CLOSE_MATCH_THRESHOLD: Final = 0.03
 # DECLARED: credit per evidence state. Help-assisted evidence counts half; a self-report counts a
 # little (it is a claim, not evidence); no evidence counts nothing.
 STATE_CREDIT: Final[dict[SkillStateName, float]] = {

@@ -303,6 +303,173 @@
       "hours_source": "assumption: about 10 pages of text (components and 17 principles); team estimate of 1 hour reading",
       "cost_source": "free download linked as 'Integrated Framework Executive Summary' on https://www.coso.org/guidance-on-ic (official COSO site, 2026-10-21)",
       "verification_note": "PDF opened 2026-10-21; official COSO publication, © 2013 all rights reserved, so we only link to it"
+    },
+    {
+      "id": "course_18",
+      "title": "Bank Reconciliation: In-Depth Explanation with Examples",
+      "provider": "AccountingCoach (Harold Averkamp, CPA)",
+      "url": "https://www.accountingcoach.com/bank-reconciliation/explanation",
+      "hours": 0.3,
+      "cost": "free",
+      "skills": [
+        "recon_to_source",
+        "cutoff_timing",
+        "transposition_check"
+      ],
+      "prerequisites": [],
+      "retrieved": "2026-10-21",
+      "verified": true,
+      "hrd_claimable": false,
+      "hours_source": "assumption: about 12-15 minutes of reading (team estimate)",
+      "cost_source": "page: 'free In-Depth Explanation', no login (2026-10-21)",
+      "verification_note": "page opened 2026-10-21: deposits in transit, outstanding checks, bank and book errors incl. transpositions, adjusting entries"
+    },
+    {
+      "id": "course_19",
+      "title": "IAS 21 The Effects of Changes in Foreign Exchange Rates (summary page)",
+      "provider": "IFRS Foundation",
+      "url": "https://www.ifrs.org/issued-standards/list-of-standards/ias-21-the-effects-of-changes-in-foreign-exchange-rates/",
+      "hours": 0.2,
+      "cost": "no price shown (not stated as free)",
+      "skills": [
+        "fx_conversion"
+      ],
+      "prerequisites": [],
+      "retrieved": "2026-10-21",
+      "verified": true,
+      "hrd_claimable": false,
+      "hours_source": "assumption: short summary page, about 10 minutes",
+      "cost_source": "summary is readable without login, but the page does not state a price (2026-10-21)",
+      "verification_note": "official standard-setter page opened 2026-10-21: which exchange rates to apply to foreign currency transactions"
+    },
+    {
+      "id": "course_20",
+      "title": "Accounting Education Insights: How Can We Become Better Skeptics?",
+      "provider": "IFAC / IAESB",
+      "url": "https://www.ifac.org/education/publications/accounting-education-insights-how-can-we-become-better-skeptics",
+      "hours": 0.5,
+      "cost": "no price shown (not stated as free)",
+      "skills": [
+        "unsupported_adjustment",
+        "escalation_judgment"
+      ],
+      "prerequisites": [],
+      "retrieved": "2026-10-21",
+      "verified": true,
+      "hrd_claimable": false,
+      "hours_source": "assumption: 6-page PDF, about 30 minutes",
+      "cost_source": "PDF downloads without login, but the page does not state a price (2026-10-21)",
+      "verification_note": "IFAC page and PDF opened 2026-10-21: questioning mindset and critical evaluation of evidence (non-authoritative)"
+    },
+    {
+      "id": "course_21",
+      "title": "Summarize sales data using Copilot in Excel",
+      "provider": "Microsoft Learn",
+      "url": "https://learn.microsoft.com/en-us/training/modules/summarize-sales-data/",
+      "hours": 0.3,
+      "cost": "free",
+      "skills": [
+        "spreadsheet_modelling"
+      ],
+      "prerequisites": [],
+      "retrieved": "2026-10-21",
+      "verified": true,
+      "hrd_claimable": false,
+      "hours_source": "Microsoft Learn Catalog API duration_in_minutes (2026-10-21): 16 min",
+      "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free' (2026-10-21)",
+      "verification_note": "module page opened 2026-10-21"
+    },
+    {
+      "id": "course_22",
+      "title": "Data visualization and reports in Power BI (online workshop)",
+      "provider": "Microsoft Learn",
+      "url": "https://learn.microsoft.com/en-us/training/modules/data-visualization-reports-power-bi/",
+      "hours": 0.4,
+      "cost": "free",
+      "skills": [
+        "variance_analysis",
+        "stakeholder_communication"
+      ],
+      "prerequisites": [],
+      "retrieved": "2026-10-21",
+      "verified": true,
+      "hrd_claimable": false,
+      "hours_source": "Microsoft Learn Catalog API duration_in_minutes (2026-10-21): 25 min",
+      "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free' (2026-10-21)",
+      "verification_note": "module page opened 2026-10-21"
+    },
+    {
+      "id": "course_23",
+      "title": "Explore core data concepts",
+      "provider": "Microsoft Learn",
+      "url": "https://learn.microsoft.com/en-us/training/modules/explore-core-data-concepts/",
+      "hours": 0.6,
+      "cost": "free",
+      "skills": [
+        "data_quality"
+      ],
+      "prerequisites": [],
+      "retrieved": "2026-10-21",
+      "verified": true,
+      "hrd_claimable": false,
+      "hours_source": "Microsoft Learn Catalog API duration_in_minutes (2026-10-21): 35 min",
+      "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free' (2026-10-21)",
+      "verification_note": "module page opened 2026-10-21"
+    },
+    {
+      "id": "course_24",
+      "title": "Build approval flows with Power Automate",
+      "provider": "Microsoft Learn",
+      "url": "https://learn.microsoft.com/en-us/training/modules/build-approval-flows/",
+      "hours": 0.7,
+      "cost": "free",
+      "skills": [
+        "process_automation",
+        "controls_design"
+      ],
+      "prerequisites": [],
+      "retrieved": "2026-10-21",
+      "verified": true,
+      "hrd_claimable": false,
+      "hours_source": "Microsoft Learn Catalog API duration_in_minutes (2026-10-21): 44 min",
+      "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free' (2026-10-21)",
+      "verification_note": "module page opened 2026-10-21"
+    },
+    {
+      "id": "course_25",
+      "title": "Introduction to generative AI - Exploring the basics",
+      "provider": "Microsoft Learn",
+      "url": "https://learn.microsoft.com/en-us/training/modules/intro-generative-ai-explore-basics/",
+      "hours": 0.4,
+      "cost": "free",
+      "skills": [
+        "ai_output_review"
+      ],
+      "prerequisites": [],
+      "retrieved": "2026-10-21",
+      "verified": true,
+      "hrd_claimable": false,
+      "hours_source": "Microsoft Learn Catalog API duration_in_minutes (2026-10-21): 22 min",
+      "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free' (2026-10-21)",
+      "verification_note": "module page opened 2026-10-21"
+    },
+    {
+      "id": "course_26",
+      "title": "Embrace responsible AI principles and practices",
+      "provider": "Microsoft Learn",
+      "url": "https://learn.microsoft.com/en-us/training/modules/embrace-responsible-ai-principles-practices/",
+      "hours": 1.0,
+      "cost": "free",
+      "skills": [
+        "ai_output_review"
+      ],
+      "prerequisites": [],
+      "retrieved": "2026-10-21",
+      "verified": true,
+      "hrd_claimable": false,
+      "hours_source": "Microsoft Learn Catalog API duration_in_minutes (2026-10-21): 58 min",
+      "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free' (2026-10-21)",
+      "verification_note": "module page opened 2026-10-21"
     }
   ]
 }

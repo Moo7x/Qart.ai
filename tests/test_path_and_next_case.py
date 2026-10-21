@@ -126,7 +126,8 @@ def test_golden_journey_replaces_adjustments_module_with_one_confirmation_checki
     def adjustment_steps(plan: PathPlan) -> list[tuple[str, str]]:
         return [(s.type, s.ref) for s in plan.steps if "unsupported_adjustment" in s.skills]
 
-    assert [t for t, _ in adjustment_steps(before)] == ["practice_case"]
+    # Before: learning steps (practice cases and/or a course), no check-in yet.
+    assert adjustment_steps(before) and all(t != "checkin" for t, _ in adjustment_steps(before))
     assert adjustment_steps(after) == [("checkin", "checkin_002")]
     checkin = next(s for s in after.steps if s.type == "checkin")
     assert checkin.because is not None and "1 of 2" in checkin.because

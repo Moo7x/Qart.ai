@@ -130,12 +130,13 @@ def test_sensitivity_top_role_is_stable_after_golden_journey() -> None:
     assert set(report.values()) == {report["baseline"]}
 
 
-def test_sensitivity_report_shows_near_ties_at_intake() -> None:
-    """At intake (no evidence) the top two roles are a near tie, so the check must reveal flips."""
+def test_sensitivity_report_reveals_flips_for_near_ties() -> None:
+    """After the golden journey (assistive) the top two roles are a near tie, so the ±20% check
+    must reveal a flip."""
     cat = default_catalogue()
     profile = aina()
     report = top_role_under_sensitivity(
-        profile, states_for(profile, False), cat, cat.assumptions_v1, "assistive", SENSITIVITY_DELTA
+        profile, states_for(profile, True), cat, cat.assumptions_v1, "assistive", SENSITIVITY_DELTA
     )
     assert len(set(report.values())) > 1
 
@@ -184,7 +185,7 @@ def test_time_to_ready_uses_the_weekly_budget() -> None:
 def test_close_match_flags_the_top_two_only_when_scores_are_near() -> None:
     cat = default_catalogue()
     profile = aina()
-    near = recommend(profile, states_for(profile, False), cat, cat.assumptions_v1, "assistive")
+    near = recommend(profile, states_for(profile, True), cat, cat.assumptions_v1, "assistive")
     assert [r.close_match for r in near.roles] == [True, True, False, False]
     apart = recommend(profile, states_for(profile, True), cat, cat.assumptions_v1, "agentic")
     assert not any(r.close_match for r in apart.roles)

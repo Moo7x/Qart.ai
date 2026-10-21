@@ -25,8 +25,9 @@ recommendations and gives a reason per moved role (new events, or a new assumpti
 explains the effort penalty; ordering uses the unclamped value. `fit` = (0.55·coverage +
 0.20·confidence + 0.10·interest) / 0.85 ∈ [0, 1] (how well the evidence matches, ignoring time).
 `time_to_ready` = {hours to close gaps, weeks at the employee's weekly hours}. `close_match` marks the
-top two roles when their unclamped scores differ by < 0.05 (*declared*; in `eval/SENSITIVITY.md`
-gaps ≤ 0.02 flipped under ±20%, a 0.06 gap did not).
+top two roles when their unclamped scores differ by < 0.03 (*declared*: halfway between the largest
+gap that flipped under ±20% in `eval/SENSITIVITY.md` and the smallest that stayed stable; re-derived
+after the course update).
 
 ## 4. Where in the code
 `recommend()`, `score_role()`, `compute_factors()`, `gap_list()`, `changed_since()`,
@@ -43,7 +44,7 @@ Weights are design choices, not fitted. ±20% check: stable after the golden jou
 ties at intake flip on interest/effort, so intake rankings are weak signals. Demographic fields are
 never read (twin test in `tests/test_recommend.py`).
 
-## 7. Likely judge questions
+## 7. Questions and answers
 - *Is 0.52 a 52% chance?* No. It is a suitability indicator; the factors are shown.
 - *Why is effort subtracted?* Long paths are a real cost to the employee; it is a penalty.
 - *What if weights are wrong?* Sensitivity is reported; HR can see every factor.

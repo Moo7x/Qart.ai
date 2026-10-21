@@ -22,7 +22,8 @@ tags (sdg_map).
   (`human` / `ai_drafts_human_reviews` / `ai`), the shift rule (50% assistive / 80% agentic of the
   execution weight moves to oversight skills), and `review_triggers` (which external signal should make
   HR review which assumption). Later versions are stored by the API when HR approves a change.
-- **courses.json** (17 items): `verified=true` = page loaded, title and cost checked. `cost` says
+- **courses.json** (26 items, incl. 6 Microsoft Learn modules, AccountingCoach on bank
+  reconciliation, the IFRS IAS 21 summary and IFAC's paper on professional skepticism): `verified=true` = page loaded, title and cost checked. `cost` says
   "free" only where the provider states it, and `cost_source` records where (Kaggle "no-cost
   courses", Microsoft Learn FAQ "training is free", OpenLearn "Free course"…). SQLBolt and the
   Microsoft Support Excel page show no price but do not say free, so they are labelled "no price
@@ -45,7 +46,7 @@ execution weights move to the role's oversight skills.
 Base weights and task-skill links are our judgment, not O\*NET importance ratings. Kaggle and some
 Microsoft hours are estimates (marked). None of the courses are HRD Corp listings yet.
 
-## 7. Likely judge questions
+## 7. Questions and answers
 - *Did you invent these roles?* No: each is an internal title built on cited O\*NET occupations and
   their task statements.
 - *Are the courses real?* Yes, every URL was opened on 2026-10-21; unconfirmed items are flagged.

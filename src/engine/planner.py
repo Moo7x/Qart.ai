@@ -120,7 +120,13 @@ def build_resources(
                 because=f"{info.name} is {state.state if state else 'insufficient_evidence'}.",
             )
         )
-    courses = [_course_resource(c, skill_ids) for c in catalogue.courses.values()]
+    # Courses only target open gaps: not skills already demonstrated, and not skills waiting for
+    # their confirmation check-in (more teaching would not produce the missing evidence).
+    closed = {
+        k for k in skill_ids if credit(states.get(k)) >= 1 or needs_confirmation(states.get(k))
+    }
+    learnable = [k for k in skill_ids if k not in closed]
+    courses = [_course_resource(c, learnable) for c in catalogue.courses.values()]
     resources.extend(prefer_cheaper([c for c in courses if c.gains]))
     return [r for r in resources if r.gains]
 

@@ -6,9 +6,9 @@ by 0.8 or 1.2, one at a time; the table shows the top-ranked role.
 
 | Evidence | Scenario | Baseline top role | Variations that change it |
 |---|---|---|---|
-| intake only | assistive | ai_finops_analyst | interest- → recon_associate |
-| intake only | agentic | ai_finops_analyst | interest- → recon_associate; effort+ → recon_associate |
-| after golden journey | assistive | recon_associate | interest+ → ai_finops_analyst; effort- → ai_finops_analyst |
+| intake only | assistive | ai_finops_analyst | none (stable) |
+| intake only | agentic | ai_finops_analyst | none (stable) |
+| after golden journey | assistive | ai_finops_analyst | interest- → recon_associate |
 | after golden journey | agentic | recon_associate | none (stable) |
 
 Reading: a row with flips means the top two roles are close (often a near tie between

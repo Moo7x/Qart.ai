@@ -127,7 +127,7 @@ def test_golden_journey_changes_skills_next_case_and_path(client: TestClient) ->
     )
     before = [(s.type, s.ref) for s in path_before.steps if SKILL in s.skills]
     after = [(s.type, s.ref) for s in path_after.steps if SKILL in s.skills]
-    assert before[0][0] == "practice_case"
+    assert before and all(kind != "checkin" for kind, _ in before)
     assert after == [("checkin", "checkin_002")]
 
     rec = Recommendation.model_validate(client.get("/api/recommendations/u_aina").json())
