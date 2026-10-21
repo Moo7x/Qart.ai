@@ -1,8 +1,12 @@
 # Contract questions (Person A → both teammates)
 
 Things in `team/00_SHARED_CONTRACT.md` (v2) that are missing or ambiguous. For each, Person A's code
-uses the **closest compliant choice** below; nothing in the contract file was changed. Agree or
-change these at C1/M1 (a contract change needs both teammates and a version bump).
+uses the **closest compliant choice** below; nothing in the contract file was changed.
+
+**Status: settled (Person A, 2026-10-21).** The "What the code does now" column is the agreed
+answer and is implemented on `a/engine`. Person B's code should follow it, in particular Q1
+(outcomes, with one `missed_then_found` event per case as in the contract example), Q4 (case
+index), Q7 (flag body) and Q12 (optional fields to display).
 
 | # | Topic | Question | What the code does now |
 |---|---|---|---|
