@@ -20,6 +20,7 @@ from src.contract import (
     Course,
     Factors,
     GapItem,
+    OutlookChange,
     Profile,
     RankChange,
     Recommendation,
@@ -164,6 +165,7 @@ def score_role(
     skill_types: dict[str, SkillType] = {k: s.type for k, s in catalogue.skills.items()}
     skill_weights = scenario_weights(role, scenario, assumptions, skill_types).scenario
     factors = compute_factors(skill_weights, states, profile, role, catalogue)
+    card = requirement_card(role, scenario, assumptions, skill_types, snapshot)
     rounded = Factors(
         **{k: round(v, params.SCORE_DECIMALS) for k, v in factors.model_dump().items()}
     )
@@ -175,11 +177,12 @@ def score_role(
         factors=rounded,
         formula=weights.formula,
         gap=gap_list(skill_weights, states),
-        requirement_card=requirement_card(role, scenario, assumptions, skill_types, snapshot),
+        requirement_card=card,
         sources=role_sources(role, assumptions, snapshot),
         title=role.title,
         sdg_targets=role.sdg_targets,
         score_note=params.SCORE_NOTE,
+        outlook=card.outlook,
     )
 
 
@@ -233,7 +236,36 @@ def changed_since(
                 because=f"{because} (score {old.score:.2f} → {role.score:.2f})",
             )
         )
-    return ChangedSince(assumptions_version=previous_assumptions_version, rank_changes=changes)
+    return ChangedSince(
+        assumptions_version=previous_assumptions_version,
+        rank_changes=changes,
+        outlook_changes=outlook_changes(previous, current, because),
+    )
+
+
+def outlook_changes(
+    previous: Recommendation, current: Recommendation, because: str
+) -> list[OutlookChange]:
+    """Roles whose outlook label or AI-handled share moved (e.g. after an assumption approval)."""
+    before = {r.role_id: r.outlook for r in previous.roles}
+    changes = []
+    for role in current.roles:
+        old, new = before.get(role.role_id), role.outlook
+        if old is None or new is None:
+            continue
+        if old.label == new.label and old.ai_handled_share == new.ai_handled_share:
+            continue
+        changes.append(
+            OutlookChange(
+                role_id=role.role_id,
+                from_label=old.label,
+                to_label=new.label,
+                from_ai_handled_share=old.ai_handled_share,
+                to_ai_handled_share=new.ai_handled_share,
+                because=f"{because}; now {new.because}",
+            )
+        )
+    return changes
 
 
 def top_role_under_sensitivity(

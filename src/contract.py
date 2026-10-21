@@ -329,12 +329,29 @@ class SourceLink(BaseModel):
     kind: str | None = None
 
 
+OutlookLabel = Literal["being transformed", "stable", "AI-era role"]
+
+
+class RoleOutlook(BaseModel):
+    """How the company's AI-adoption assumptions reshape a role (addition, Q12).
+
+    Derived from company assumptions (layer B), not a headcount forecast.
+    """
+
+    ai_handled_share: float
+    oversight_share: float
+    label: OutlookLabel
+    because: str
+    basis: str
+
+
 class RequirementCard(BaseModel):
     tasks: list[CardTask]
     weights: list[CardWeight]
     evidence: list[SourceLink]
-    # Addition (optional): the assumption text the weights follow from.
+    # Addition (optional): the assumption text the weights follow from, and the role outlook.
     assumption: str | None = None
+    outlook: RoleOutlook | None = None
 
 
 class RoleRecommendation(BaseModel):
@@ -350,6 +367,7 @@ class RoleRecommendation(BaseModel):
     title: str | None = None
     sdg_targets: list[str] = []
     score_note: str | None = None
+    outlook: RoleOutlook | None = None
 
 
 class RankChange(BaseModel):
@@ -362,9 +380,22 @@ class RankChange(BaseModel):
     model_config = ConfigDict(populate_by_name=True, serialize_by_alias=True)
 
 
+class OutlookChange(BaseModel):
+    """A role whose outlook moved between two recommendations (addition, Q12)."""
+
+    role_id: str
+    from_label: OutlookLabel
+    to_label: OutlookLabel
+    from_ai_handled_share: float
+    to_ai_handled_share: float
+    because: str
+
+
 class ChangedSince(BaseModel):
     assumptions_version: int | None = None
     rank_changes: list[RankChange] = []
+    # Addition (optional): outlook changes, e.g. after HR approves a new assumption version.
+    outlook_changes: list[OutlookChange] = []
 
 
 class Recommendation(BaseModel):

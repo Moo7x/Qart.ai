@@ -90,6 +90,20 @@ HR_MIN_GROUP_SIZE: Final = 5
 # least this much (normalised weight) under that scenario.
 HR_DEMAND_MIN_WEIGHT: Final = 0.05
 
+# --- Role outlook (brief: "predict which jobs emerge or decline") ----------------------------
+# Derived from company assumptions (layer B), never a headcount forecast.
+# DECLARED: a role is "being transformed" when at least half of its task weight is done or
+# drafted by AI under the scenario: most of its current doing-work turns into checking.
+OUTLOOK_TRANSFORMED_AI_SHARE: Final = 0.5
+# DECLARED: otherwise it is an "AI-era role" when at least 60% of its skill weight is oversight
+# (reviewing AI output, judgment, controls): it grows with AI while its own tasks stay human.
+OUTLOOK_AI_ERA_OVERSIGHT_SHARE: Final = 0.6
+OUTLOOK_BASIS: Final = (
+    "derived from company assumptions (layer B); describes how tasks shift, "
+    "not a headcount forecast"
+)
+OUTLOOK_DECIMALS: Final = 2
+
 # --- Snapshot diff (Task A1) ------------------------------------------------------------------
 # DECLARED: a signal "changed" when its relative change is at least 5% AND its absolute change is at
 # least 0.02 (percentage points). AEI publishes values rounded to two decimals, so a 0.01 step on a

@@ -12,8 +12,9 @@ from src.contract import (
     Scenario,
     SkillType,
 )
+from src.engine import params
 from src.engine.catalogue import default_catalogue
-from src.engine.requirements import requirement_card, scenario_weights
+from src.engine.requirements import requirement_card, role_outlook, scenario_weights
 
 URL = "https://www.onetonline.org/link/summary/43-3031.00"
 
@@ -132,3 +133,49 @@ def test_card_lists_onet_tasks_and_assumption_text() -> None:
     assert card.assumption is not None and "v1" in card.assumption
     assert card.evidence == []  # no snapshot given: no external evidence claimed
     assert all(w.because for w in card.weights)
+
+
+# --- role outlook (item: "predict which jobs emerge or decline") ----------------------------
+def test_agentic_recon_associate_has_higher_ai_handled_share_than_assistive() -> None:
+    cat = default_catalogue()
+    role = cat.roles["recon_associate"]
+    assistive = role_outlook(role, "assistive", cat.assumptions_v1, skill_types())
+    agentic = role_outlook(role, "agentic", cat.assumptions_v1, skill_types())
+    assert agentic.ai_handled_share > assistive.ai_handled_share
+    assert agentic.label == "being transformed"
+    assert "not a headcount forecast" in agentic.basis
+
+
+def test_outlook_labels_follow_documented_thresholds() -> None:
+    cat = default_catalogue()
+    for role in cat.roles.values():
+        for scenario in ("assistive", "agentic"):
+            outlook = role_outlook(role, scenario, cat.assumptions_v1, skill_types())
+            assert 0.0 <= outlook.ai_handled_share <= 1.0
+            assert 0.0 <= outlook.oversight_share <= 1.0
+            if outlook.ai_handled_share >= params.OUTLOOK_TRANSFORMED_AI_SHARE:
+                assert outlook.label == "being transformed"
+            elif outlook.oversight_share >= params.OUTLOOK_AI_ERA_OVERSIGHT_SHARE:
+                assert outlook.label == "AI-era role"
+            else:
+                assert outlook.label == "stable"
+
+
+def test_all_human_allocation_gives_zero_ai_share() -> None:
+    outlook = role_outlook(tiny_role(), "agentic", tiny_assumptions("human"), TINY_TYPES)
+    assert outlook.ai_handled_share == 0.0
+
+
+def test_v2_approval_changes_recon_associate_assistive_outlook() -> None:
+    cat = default_catalogue()
+    role = cat.roles["recon_associate"]
+    v2 = cat.assumptions_v1.model_copy(deep=True)
+    v2.version = 2
+    v2.scenarios["assistive"].tasks["check_entries"] = "ai_drafts_human_reviews"
+    before = role_outlook(role, "assistive", cat.assumptions_v1, skill_types())
+    after = role_outlook(role, "assistive", v2, skill_types())
+    assert after.ai_handled_share > before.ai_handled_share
+    assert (before.label, after.label) == ("stable", "being transformed")
+    assert "check_entries" in after.because and "assumption v2" in after.because
+    card = requirement_card(role, "assistive", v2, skill_types())
+    assert card.outlook == after

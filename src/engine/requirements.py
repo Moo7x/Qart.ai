@@ -18,8 +18,10 @@ from src.contract import (
     CardTask,
     CardWeight,
     CompanyAssumptions,
+    OutlookLabel,
     RequirementCard,
     Role,
+    RoleOutlook,
     Scenario,
     SkillType,
     Snapshot,
@@ -150,6 +152,62 @@ def evidence_links(role: Role, snapshot: Snapshot | None) -> list[SourceLink]:
     return links
 
 
+def task_weights(role: Role) -> list[float]:
+    """Each role task's share of base weight: Σ over its skills of base_k / (tasks using k)."""
+    base = _normalise({s.skill_id: s.base_weight for s in role.skills})
+    uses: dict[str, int] = defaultdict(int)
+    for task in role.tasks:
+        for skill_id in task.skills:
+            uses[skill_id] += 1
+    return [sum(base[k] / uses[k] for k in task.skills) for task in role.tasks]
+
+
+def role_outlook(
+    role: Role,
+    scenario: Scenario,
+    assumptions: CompanyAssumptions,
+    skill_types: dict[str, SkillType],
+) -> RoleOutlook:
+    """Share of task weight handled by AI, oversight share of skill weight, and a label.
+
+    ai_handled_share = Σ task weight allocated to ai / ai_drafts_human_reviews ÷ Σ task weight
+    oversight_share  = Σ scenario weight of oversight skills (scenario weights sum to 1)
+    label: "being transformed" if ai_handled_share ≥ 0.5; else "AI-era role" if
+           oversight_share ≥ 0.6; else "stable" (thresholds in params.py).
+    """
+    allocation = assumptions.scenarios[scenario].tasks
+    weights = task_weights(role)
+    total = sum(weights)
+    handled = [
+        (w, t)
+        for w, t in zip(weights, role.tasks, strict=True)
+        if allocation[t.workflow_task] != "human"
+    ]
+    ai_share = sum(w for w, _ in handled) / total if total > 0 else 0.0
+    scenario_w = scenario_weights(role, scenario, assumptions, skill_types).scenario
+    oversight = sum(w for k, w in scenario_w.items() if skill_types[k] == "oversight")
+    label: OutlookLabel = "stable"
+    if ai_share >= params.OUTLOOK_TRANSFORMED_AI_SHARE:
+        label = "being transformed"
+    elif oversight >= params.OUTLOOK_AI_ERA_OVERSIGHT_SHARE:
+        label = "AI-era role"
+    tasks = ", ".join(dict.fromkeys(t.workflow_task for _, t in handled)) or "none"
+    ai_rounded = round(ai_share, params.OUTLOOK_DECIMALS)
+    oversight_rounded = round(oversight, params.OUTLOOK_DECIMALS)
+    because = (
+        f"{scenario}: {ai_rounded:.2f} of this role's task weight is done or drafted by AI "
+        f"({tasks}); {oversight_rounded:.2f} of its skill weight is oversight "
+        f"({_assumption_tag(assumptions)})"
+    )
+    return RoleOutlook(
+        ai_handled_share=ai_rounded,
+        oversight_share=oversight_rounded,
+        label=label,
+        because=because,
+        basis=params.OUTLOOK_BASIS,
+    )
+
+
 def requirement_card(
     role: Role,
     scenario: Scenario,
@@ -190,4 +248,5 @@ def requirement_card(
         weights=card_weights,
         evidence=evidence_links(role, snapshot),
         assumption=assumption_text,
+        outlook=role_outlook(role, scenario, assumptions, skill_types),
     )

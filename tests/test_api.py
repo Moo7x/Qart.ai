@@ -191,6 +191,11 @@ def test_snapshot_ingest_review_approval_changes_card_and_ranking(client: TestCl
     ]
     assert after.changed_since is not None and after.changed_since.assumptions_version == 1
     assert any("v1 → v2" in c.because for c in after.changed_since.rank_changes)
+    outlook = {c.role_id: c for c in after.changed_since.outlook_changes}
+    assert outlook["recon_associate"].from_label == "stable"
+    assert outlook["recon_associate"].to_label == "being transformed"
+    recon = next(r for r in after.roles if r.role_id == "recon_associate")
+    assert recon.outlook is not None and recon.outlook == new_card.outlook
 
 
 def test_put_assumptions_rejects_changed_task_list(client: TestClient) -> None:

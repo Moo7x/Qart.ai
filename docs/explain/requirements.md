@@ -19,8 +19,18 @@ external evidence (layer A) informs company assumptions (layer B); weights follo
 Worked example (unit-tested): A (execution, 0.6, in task t) and B (oversight, 0.4). Assistive, t → AI:
 A loses 0.5 × 0.6 = 0.3 → A 0.3, B 0.7.
 
+**Role outlook** (brief: "predict which jobs emerge or decline"), `role_outlook()`:
+`ai_handled_share` = share of the role's task weight (each task = Σ of its skills' base shares)
+that the scenario gives to `ai` or `ai_drafts_human_reviews`; `oversight_share` = oversight skills'
+share of the scenario weights. Label (*declared*, `params.py`): **being transformed** if
+ai_handled_share ≥ 0.5, else **AI-era role** if oversight_share ≥ 0.6, else **stable**. It is
+derived from company assumptions and is **not a headcount forecast**. Today (v1): recon_associate
+0.45 stable (assistive) / 0.79 being transformed (agentic); ai_finops_analyst AI-era role (assistive);
+controls_assurance_analyst AI-era role in both. After v2 (assistive check_entries → AI drafts),
+recon_associate assistive becomes "being transformed"; `changed_since.outlook_changes` shows it.
+
 ## 4. Where in the code
-`scenario_weights()` (the rule), `requirement_card()` (tasks, weights, because, assumption text,
+`scenario_weights()` (the rule), `role_outlook()`, `requirement_card()` (tasks, weights, because, assumption text,
 evidence links), `evidence_links()` (AEI signals for the role's SOC codes). Tests:
 `tests/test_requirements.py`.
 
