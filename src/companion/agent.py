@@ -108,6 +108,25 @@ _TOOLS: list[dict] = [
 ]
 
 
+def _reset_case_state(session: dict, case: dict, mode: str) -> None:
+    """Reset per-case fields when the user opens a new case in the same session."""
+    session.update(
+        {
+            "current_case_id": case["id"],
+            "case": case,
+            "mode": mode,
+            "help_level": 0,
+            "help_steps": [],
+            "checks_used": [],
+            "messages": [],  # clear chat history so case B doesn't inherit case A's context
+            "start_time": datetime.now(timezone.utc),
+            "decided": False,
+            "flagged_rows": [],
+            "missed_decision": False,
+        }
+    )
+
+
 def get_or_create_session(
     session_id: str,
     case: dict,
@@ -115,22 +134,32 @@ def get_or_create_session(
     user_id: str = "u_aina",
     scenario: str = "assistive",
 ) -> dict:
+    case_id = case["id"]
     if session_id not in _sessions:
         _sessions[session_id] = {
-            "case": case,
-            "mode": mode,
             "user_id": user_id,
             "scenario": scenario,
+            "messages": [],
+            "current_case_id": None,
+            # per-case fields (populated by _reset_case_state below):
+            "case": case,
+            "mode": mode,
             "help_level": 0,
             "help_steps": [],
             "checks_used": [],
-            "messages": [],
             "start_time": datetime.now(timezone.utc),
             "decided": False,
             "flagged_rows": [],
             "missed_decision": False,
         }
-    return _sessions[session_id]
+    session = _sessions[session_id]
+    # Reset per-case state whenever the user opens a different case.
+    if session["current_case_id"] != case_id:
+        _reset_case_state(session, case, mode)
+    # Check-in is always independent — help is never allowed.
+    if mode == "checkin":
+        session["help_level"] = 0
+    return session
 
 
 def _call_tool(name: str, args: dict, case: dict) -> Any:
@@ -239,7 +268,7 @@ def _mock_reply(session: dict) -> dict:
         }
 
     totals = recompute_totals(case)
-    ui_actions = [
+    ui_actions: list[dict[str, Any]] = [
         {
             "type": "show_check",
             "check": "recompute_totals",
@@ -264,7 +293,7 @@ def _mock_reply(session: dict) -> dict:
         trace.append("matching entries")
         unmatched = matches.get("unmatched_ledger", [])
         if unmatched:
-            ui_actions.append({"type": "highlight_rows", "rows": [r["row_id"] for r in unmatched]})
+            ui_actions.append({"type": "highlight_rows", "rows": [str(r["row_id"]) for r in unmatched]})
         ui_actions.append({"type": "open_document", "doc_ref": "INV-1043"})
         trace.append("checking document INV-1043")
 
@@ -326,7 +355,7 @@ def process_message(
         trace: list[str] = []
 
         for _ in range(6):
-            response = client.chat.completions.create(
+            response = client.chat.completions.create(  # type: ignore[call-overload]
                 model=model,
                 messages=messages,
                 tools=_TOOLS,
@@ -377,7 +406,7 @@ def process_message(
             "ui_actions": [],
             "trace": [],
         }
-    except Exception:
+    except Exception:  # noqa: BLE001
         return _mock_reply(session)
 
 
@@ -391,7 +420,12 @@ def process_decision(
     scenario: str = "assistive",
     self_confidence_before: float | None = None,
 ) -> dict:
-    """Grade a decision and return an Event plus grader metadata."""
+    """Grade a decision and return an Event plus grader metadata.
+
+    Practice mode wrong decision: event is None — don't post yet; session stays open.
+    Practice mode correct after a prior miss: ONE event with outcome='missed_then_found'.
+    All other decisions: event is built immediately.
+    """
     from src.companion.grader import grade  # local import to avoid circular
 
     session = get_or_create_session(session_id, case, mode, user_id, scenario)
@@ -405,13 +439,28 @@ def process_decision(
 
     duration_sec = int((datetime.now(timezone.utc) - session["start_time"]).total_seconds())
 
-    # In practice mode a wrong decision starts remediation; keep session open
+    # Practice wrong decision: hold the event, keep session open for remediation.
+    # event=None signals the API layer to skip posting.
     if not grader_result["decision_correct"] and mode == "practice":
         session["missed_decision"] = True
-    else:
-        session["decided"] = True
+        return {
+            "event": None,
+            "decision_correct": False,
+            "explanation": grader_result["explanation"],
+            "affected_rows": grader_result["affected_rows"],
+            "correct_decision": grader_result["correct_decision"],
+            "missed_and_walking_back": True,
+        }
 
-    event = {
+    # If the user previously missed and now found it, upgrade the outcome for all skills.
+    if grader_result["decision_correct"] and session.get("missed_decision"):
+        for se in grader_result["skills_evidence"]:
+            se["outcome"] = "missed_then_found"
+        session["missed_decision"] = False
+
+    session["decided"] = True
+
+    event: dict = {
         "id": f"ev_{uuid.uuid4().hex[:8]}",
         "user_id": user_id,
         "case_id": case["id"],
@@ -440,5 +489,5 @@ def process_decision(
         "explanation": grader_result["explanation"],
         "affected_rows": grader_result["affected_rows"],
         "correct_decision": grader_result["correct_decision"],
-        "missed_and_walking_back": session.get("missed_decision", False),
+        "missed_and_walking_back": False,
     }
