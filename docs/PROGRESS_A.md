@@ -1,5 +1,18 @@
 # Person A progress (engine & data), 2026-10-21
 
+## Run 2 status (resume here)
+Items from the second brief, done in order; each line is updated when an item is committed.
+- [x] 1 Role outlook: `role_outlook()` in `src/engine/requirements.py`, `outlook` on each
+  recommended role and the requirement card, `changed_since.outlook_changes`; thresholds
+  `OUTLOOK_*` in `params.py`. Tests in `tests/test_requirements.py`, `tests/test_api.py`.
+- [ ] 2 Readable ranking (fit, time_to_ready, close_match, clamped score)
+- [ ] 3 Case index reader (`cases/index.json` → fallback `data/case_index.json`)
+- [ ] 4 Course costs, COSO, coverage check
+- [ ] 5 Evaluation scaffold
+- [ ] 6 Q12 + docs
+- [ ] 7 Postgres backend
+- [ ] 8 Retrieval preparation
+
 Branch `a/engine`, not pushed. All checks green at the last commit:
 `ruff format --check .` ✔ · `ruff check .` ✔ · `mypy src` (strict) ✔ · `pytest`: **104 passed**.
 
