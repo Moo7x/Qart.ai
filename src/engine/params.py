@@ -141,3 +141,13 @@ OUTLOOK_DECIMALS: Final = 2
 SIGNAL_REVIEW_RELATIVE_CHANGE: Final = 0.05
 SIGNAL_REVIEW_MIN_ABS_CHANGE: Final = 0.02
 SIGNAL_DECIMALS: Final = 4
+
+# --- Retrieval (src/retrieval, RAG preparation; not used by the planner yet) ----------------
+# SOURCED: standard Okapi BM25 defaults (Robertson & Zaragoza, 2009): term-frequency saturation
+# k1 = 1.5 and length normalisation b = 0.75. Not tuned on our evaluation set.
+BM25_K1: Final = 1.5
+BM25_B: Final = 0.75
+# SOURCED: reciprocal-rank fusion constant k = 60 (Cormack, Clarke & Büttcher, SIGIR 2009).
+RRF_K: Final = 60
+# DECLARED: results returned by default and the cut-off for recall@k in eval/retrieval_eval.py.
+RETRIEVAL_TOP_K: Final = 5
