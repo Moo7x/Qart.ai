@@ -11,6 +11,9 @@ from pathlib import Path
 
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
+from starlette.exceptions import HTTPException
+from starlette.responses import Response
+from starlette.types import Scope
 
 from src.api_engine import router as engine_router
 
@@ -18,6 +21,23 @@ logger = logging.getLogger(__name__)
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 WEB_DIST = REPO_ROOT / "web" / "dist"
+NOT_FOUND = 404
+API_PREFIX = "api/"
+
+
+class SinglePageApp(StaticFiles):
+    """Serves web/dist. An unknown non-API path (e.g. a refresh on /skills) gets index.html, so
+    the React router can show that page instead of a 404; unknown /api paths stay 404."""
+
+    async def get_response(self, path: str, scope: Scope) -> Response:
+        try:
+            return await super().get_response(path, scope)
+        except HTTPException as error:
+            # Starlette passes an OS path ("api\\x" on Windows), so compare with "/" separators.
+            if error.status_code != NOT_FOUND or path.replace("\\", "/").startswith(API_PREFIX):
+                raise
+            return await super().get_response("index.html", scope)
+
 
 app = FastAPI(
     title="Qart.ai",
@@ -46,6 +66,6 @@ _include_companion_router(app)
 # --- Person B: built web app (web/dist) --------------------------------------------------------
 # PLACEHOLDER for Person B. Served at "/" once `npm run build` has produced web/dist.
 if WEB_DIST.is_dir():
-    app.mount("/", StaticFiles(directory=WEB_DIST, html=True), name="web")
+    app.mount("/", SinglePageApp(directory=WEB_DIST, html=True), name="web")
 else:
     logger.info("web/dist not built yet; only the API is served")
