@@ -1,0 +1,41 @@
+{
+  "id": "a009",
+  "title": "Oct bank reconciliation – intercompany transfer amount discrepancy",
+  "mode": "practice",
+  "difficulty": 2,
+  "scenario_variant": "agentic",
+  "ledger": [
+    {"row_id": "L1", "date": "2026-10-01", "description": "Opening balance", "amount": 40000.00, "currency": "MYR"},
+    {"row_id": "L2", "date": "2026-10-18", "description": "Intercompany transfer – Kopi Kita Sub (Penang)", "amount": -10000.00, "currency": "MYR", "doc_ref": "XFER-K01"},
+    {"row_id": "L3", "date": "2026-10-11", "description": "Equipment hire – Oct", "amount": -3500.00, "currency": "MYR", "doc_ref": "INV-K101"},
+    {"row_id": "L4", "date": "2026-10-20", "description": "Sales receipt – Lestari Corp", "amount": 15000.00, "currency": "MYR", "doc_ref": "REC-K01"},
+    {"row_id": "L5", "date": "2026-10-27", "description": "Staff training – Oct", "amount": -2800.00, "currency": "MYR", "doc_ref": "INV-K102"}
+  ],
+  "bank": [
+    {"row_id": "B1", "date": "2026-10-01", "description": "Opening balance", "amount": 40000.00, "currency": "MYR"},
+    {"row_id": "B2", "date": "2026-10-18", "description": "INTERCO TRF SUB-01", "amount": -10500.00, "currency": "MYR"},
+    {"row_id": "B3", "date": "2026-10-11", "description": "EQUIPMENT HIRE", "amount": -3500.00, "currency": "MYR"},
+    {"row_id": "B4", "date": "2026-10-20", "description": "LESTARI CORP", "amount": 15000.00, "currency": "MYR"},
+    {"row_id": "B5", "date": "2026-10-27", "description": "STAFF TRAINING", "amount": -2800.00, "currency": "MYR"}
+  ],
+  "documents": [
+    {"doc_ref": "XFER-K01", "type": "form", "text": "Intercompany Transfer Authorisation XFER-K01\nFrom: Kopi Kita Sdn Bhd\nTo: Kopi Kita Sub (Penang) Sdn Bhd\nAmount authorised: RM10,000.00\nDate: 18 Oct 2026\nPurpose: operational funding\nSigned by: CFO"},
+    {"doc_ref": "INV-K101", "type": "invoice", "text": "ProLift Equipment Sdn Bhd\nInvoice INV-K101\nOct 2026 equipment hire\nAmount: RM3,500.00"},
+    {"doc_ref": "REC-K01", "type": "receipt", "text": "Payment Receipt REC-K01\nFrom: Lestari Corp Sdn Bhd\nDate: 20 Oct 2026\nAmount: RM15,000.00"},
+    {"doc_ref": "INV-K102", "type": "invoice", "text": "SkillBridge Training Sdn Bhd\nInvoice INV-K102\nOct 2026 staff training programme\nAmount: RM2,800.00"}
+  ],
+  "ai_output": {
+    "claim": "Account reconciles. Difference RM0.00 after adjustment ADJ-K1.",
+    "proposed_adjustments": [
+      {"id": "ADJ-K1", "amount": -500.00, "reason": "intercompany transfer fee"}
+    ]
+  },
+  "ground_truth": {
+    "has_issue": true,
+    "issue_types": ["unsupported_adjustment"],
+    "affected_rows": ["L2", "B2", "ADJ-K1"],
+    "correct_decision": "escalate",
+    "explanation": "Transfer authorisation XFER-K01 is for RM10,000 but the bank debited RM10,500 — an unexplained RM500 excess. ADJ-K1 labels this a transfer fee but no fee schedule or approval exists. An intercompany discrepancy of this nature requires management investigation and escalation.",
+    "skills": ["recon_to_source", "escalation_judgment", "ai_output_review"]
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "id": "a008",
+  "title": "Oct bank reconciliation – customer short payment recorded at full invoice value",
+  "mode": "practice",
+  "difficulty": 2,
+  "scenario_variant": "assistive",
+  "ledger": [
+    {"row_id": "L1", "date": "2026-10-01", "description": "Opening balance", "amount": 33000.00, "currency": "MYR"},
+    {"row_id": "L2", "date": "2026-10-15", "description": "Customer receipt – Ace Trading Sdn Bhd", "amount": 12000.00, "currency": "MYR", "doc_ref": "REC-J01"},
+    {"row_id": "L3", "date": "2026-10-08", "description": "Supplier payment – Kencana Parts", "amount": -4800.00, "currency": "MYR", "doc_ref": "INV-J101"},
+    {"row_id": "L4", "date": "2026-10-17", "description": "Advertising – Oct campaign", "amount": -2200.00, "currency": "MYR", "doc_ref": "INV-J102"},
+    {"row_id": "L5", "date": "2026-10-29", "description": "Staff performance bonus", "amount": -5000.00, "currency": "MYR", "doc_ref": "CLM-J01"}
+  ],
+  "bank": [
+    {"row_id": "B1", "date": "2026-10-01", "description": "Opening balance", "amount": 33000.00, "currency": "MYR"},
+    {"row_id": "B2", "date": "2026-10-15", "description": "ACE TRADING SDN BHD", "amount": 11200.00, "currency": "MYR"},
+    {"row_id": "B3", "date": "2026-10-08", "description": "KENCANA PARTS", "amount": -4800.00, "currency": "MYR"},
+    {"row_id": "B4", "date": "2026-10-17", "description": "ADVERTISING OCT", "amount": -2200.00, "currency": "MYR"},
+    {"row_id": "B5", "date": "2026-10-29", "description": "STAFF BONUS OCT", "amount": -5000.00, "currency": "MYR"}
+  ],
+  "documents": [
+    {"doc_ref": "REC-J01", "type": "receipt", "text": "Sales Receipt REC-J01\nCustomer: Ace Trading Sdn Bhd\nInvoice amount: RM12,000.00\nAmount received: RM11,200.00\nOutstanding balance: RM800.00\nDate: 15 Oct 2026\nNote: customer confirmed partial payment; RM800 to settle by 30 Nov 2026"},
+    {"doc_ref": "INV-J101", "type": "invoice", "text": "Kencana Parts Sdn Bhd\nInvoice INV-J101\nOct 2026 spare parts supply\nTotal: RM4,800.00"},
+    {"doc_ref": "INV-J102", "type": "invoice", "text": "Prism Media Sdn Bhd\nInvoice INV-J102\nOct 2026 advertising campaign\nAmount: RM2,200.00"},
+    {"doc_ref": "CLM-J01", "type": "form", "text": "Staff Bonus Claim CLM-J01\nDate: 29 Oct 2026\nOct 2026 performance bonuses\nTotal: RM5,000.00\nApproved by: Director"}
+  ],
+  "ai_output": {
+    "claim": "Account reconciles. Difference RM0.00 after adjustment ADJ-J1.",
+    "proposed_adjustments": [
+      {"id": "ADJ-J1", "amount": -800.00, "reason": "customer receipt timing difference"}
+    ]
+  },
+  "ground_truth": {
+    "has_issue": true,
+    "issue_types": ["recon_to_source"],
+    "affected_rows": ["L2", "ADJ-J1"],
+    "correct_decision": "correct",
+    "explanation": "L2 records the full invoice value of RM12,000 but the bank only received RM11,200 (REC-J01 confirms RM800 is outstanding). ADJ-J1 hides the shortfall as a timing difference. L2 should be corrected to RM11,200, and a separate accounts-receivable entry raised for the RM800 balance. This is a partial payment, not a timing item.",
+    "skills": ["recon_to_source", "ai_output_review", "escalation_judgment"]
+  }
+}

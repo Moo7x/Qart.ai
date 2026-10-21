@@ -1,0 +1,39 @@
+{
+  "id": "a002",
+  "title": "Oct bank reconciliation – split payment second installment missing from ledger",
+  "mode": "practice",
+  "difficulty": 2,
+  "scenario_variant": "assistive",
+  "ledger": [
+    {"row_id": "L1", "date": "2026-10-01", "description": "Opening balance", "amount": 20000.00, "currency": "MYR"},
+    {"row_id": "L2", "date": "2026-10-08", "description": "Office supplies – Wira Stationery", "amount": -1500.00, "currency": "MYR", "doc_ref": "INV-B101"},
+    {"row_id": "L3", "date": "2026-10-10", "description": "Supplier payment – Meja Prints (1st instalment)", "amount": -3000.00, "currency": "MYR", "doc_ref": "INV-B102"},
+    {"row_id": "L4", "date": "2026-10-20", "description": "Sales receipt – BrightMart Sdn Bhd", "amount": 8000.00, "currency": "MYR", "doc_ref": "REC-B01"}
+  ],
+  "bank": [
+    {"row_id": "B1", "date": "2026-10-01", "description": "Opening balance", "amount": 20000.00, "currency": "MYR"},
+    {"row_id": "B2", "date": "2026-10-08", "description": "WIRA STATIONERY", "amount": -1500.00, "currency": "MYR"},
+    {"row_id": "B3", "date": "2026-10-10", "description": "MEJAPRINTS SDN BHD", "amount": -3000.00, "currency": "MYR"},
+    {"row_id": "B4", "date": "2026-10-24", "description": "MEJAPRINTS 2ND INSTAL", "amount": -3000.00, "currency": "MYR"},
+    {"row_id": "B5", "date": "2026-10-20", "description": "BRIGHTMART RECEIPT", "amount": 8000.00, "currency": "MYR"}
+  ],
+  "documents": [
+    {"doc_ref": "INV-B101", "type": "invoice", "text": "Wira Stationery Sdn Bhd\nInvoice INV-B101\nOct 2026 office supplies\nTotal: RM1,500.00"},
+    {"doc_ref": "INV-B102", "type": "invoice", "text": "Meja Prints Sdn Bhd\nInvoice INV-B102\nOct 2026 commercial printing\nTotal: RM6,000.00\nPayment plan: two equal instalments of RM3,000 each\n1st instalment due: 10 Oct 2026\n2nd instalment due: 24 Oct 2026"},
+    {"doc_ref": "REC-B01", "type": "receipt", "text": "Payment Receipt REC-B01\nFrom: BrightMart Sdn Bhd\nDate: 20 Oct 2026\nAmount: RM8,000.00"}
+  ],
+  "ai_output": {
+    "claim": "Account reconciles. Difference RM0.00 after adjustment ADJ-B1.",
+    "proposed_adjustments": [
+      {"id": "ADJ-B1", "amount": -3000.00, "reason": "timing adjustment – second instalment pending"}
+    ]
+  },
+  "ground_truth": {
+    "has_issue": true,
+    "issue_types": ["recon_to_source"],
+    "affected_rows": ["B4", "ADJ-B1"],
+    "correct_decision": "correct",
+    "explanation": "Bank shows two payments of RM3,000 each to Meja Prints (B3 + B4) matching the split-payment terms on INV-B102 (RM6,000 in two instalments). The ledger only records the first instalment (L3). The second instalment (B4 = RM3,000, 24 Oct) is missing from the ledger. ADJ-B1 incorrectly labels it a timing item. Add the missing ledger entry for the second instalment.",
+    "skills": ["recon_to_source", "ai_output_review"]
+  }
+}

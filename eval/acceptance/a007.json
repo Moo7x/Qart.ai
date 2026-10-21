@@ -1,0 +1,40 @@
+{
+  "id": "a007",
+  "title": "Oct bank reconciliation – November invoice posted in October (cutoff error)",
+  "mode": "practice",
+  "difficulty": 2,
+  "scenario_variant": "assistive",
+  "ledger": [
+    {"row_id": "L1", "date": "2026-10-01", "description": "Opening balance", "amount": 22000.00, "currency": "MYR"},
+    {"row_id": "L2", "date": "2026-10-10", "description": "Staff claims – Oct", "amount": -1800.00, "currency": "MYR", "doc_ref": "CLM-I01"},
+    {"row_id": "L3", "date": "2026-10-15", "description": "Advance rental – Premier Properties", "amount": -3600.00, "currency": "MYR", "doc_ref": "INV-I101"},
+    {"row_id": "L4", "date": "2026-10-18", "description": "Sales receipt – Omega Retail", "amount": 7200.00, "currency": "MYR", "doc_ref": "REC-I01"},
+    {"row_id": "L5", "date": "2026-10-25", "description": "Utilities – Oct", "amount": -920.00, "currency": "MYR", "doc_ref": "INV-I102"}
+  ],
+  "bank": [
+    {"row_id": "B1", "date": "2026-10-01", "description": "Opening balance", "amount": 22000.00, "currency": "MYR"},
+    {"row_id": "B2", "date": "2026-10-10", "description": "STAFF CLAIMS OCT", "amount": -1800.00, "currency": "MYR"},
+    {"row_id": "B3", "date": "2026-10-18", "description": "OMEGA RETAIL", "amount": 7200.00, "currency": "MYR"},
+    {"row_id": "B4", "date": "2026-10-25", "description": "UTILITIES OCT", "amount": -920.00, "currency": "MYR"}
+  ],
+  "documents": [
+    {"doc_ref": "CLM-I01", "type": "form", "text": "Staff Claims Form CLM-I01\nDate: 10 Oct 2026\nOct 2026 staff expense reimbursements\nTotal: RM1,800.00\nApproved by: HR"},
+    {"doc_ref": "INV-I101", "type": "invoice", "text": "Premier Properties Sdn Bhd\nInvoice INV-I101\nNovember 2026 advance rental\nDate: 1 Nov 2026\nAmount: RM3,600.00\nDue: 1 Nov 2026\nNote: advance payment per lease agreement"},
+    {"doc_ref": "REC-I01", "type": "receipt", "text": "Payment Receipt REC-I01\nFrom: Omega Retail Sdn Bhd\nDate: 18 Oct 2026\nAmount: RM7,200.00"},
+    {"doc_ref": "INV-I102", "type": "invoice", "text": "Tenaga Nasional Berhad\nInvoice INV-I102\nOct 2026 utilities\nAmount: RM920.00"}
+  ],
+  "ai_output": {
+    "claim": "Account reconciles. Difference RM0.00 after adjustment ADJ-I1.",
+    "proposed_adjustments": [
+      {"id": "ADJ-I1", "amount": 3600.00, "reason": "advance payment in transit"}
+    ]
+  },
+  "ground_truth": {
+    "has_issue": true,
+    "issue_types": ["cutoff_timing"],
+    "affected_rows": ["L3", "ADJ-I1"],
+    "correct_decision": "correct",
+    "explanation": "L3 records a RM3,600 advance rent payment against INV-I101, which is dated 1 November 2026 — this is a November expense posted to October's books. The bank has no October entry for this payment. ADJ-I1 incorrectly treats it as a transit item. Reverse L3 from October and post it in November.",
+    "skills": ["cutoff_timing", "recon_to_source", "ai_output_review"]
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "id": "c005",
+  "title": "Oct bank reconciliation – clean, annual insurance direct debit matched",
+  "mode": "practice",
+  "difficulty": 2,
+  "scenario_variant": "assistive",
+  "ledger": [
+    {"row_id": "L1", "date": "2026-10-01", "description": "Opening balance", "amount": 28000.00, "currency": "MYR"},
+    {"row_id": "L2", "date": "2026-10-03", "description": "Insurance premium – annual policy", "amount": -3600.00, "currency": "MYR", "doc_ref": "POL-T01"},
+    {"row_id": "L3", "date": "2026-10-16", "description": "Cash sales receipt – Oct batch", "amount": 11500.00, "currency": "MYR", "doc_ref": "REC-T01"},
+    {"row_id": "L4", "date": "2026-10-28", "description": "Salaries – Oct direct debit", "amount": -18000.00, "currency": "MYR", "doc_ref": "PAY-T01"},
+    {"row_id": "L5", "date": "2026-10-30", "description": "Supplier refund – Cahaya Maju", "amount": 250.00, "currency": "MYR", "doc_ref": "REC-T02"}
+  ],
+  "bank": [
+    {"row_id": "B1", "date": "2026-10-01", "description": "Opening balance", "amount": 28000.00, "currency": "MYR"},
+    {"row_id": "B2", "date": "2026-10-03", "description": "INSURANCE DIRECT DEBIT", "amount": -3600.00, "currency": "MYR"},
+    {"row_id": "B3", "date": "2026-10-16", "description": "CASH SALES OCT", "amount": 11500.00, "currency": "MYR"},
+    {"row_id": "B4", "date": "2026-10-28", "description": "SALARY OCT", "amount": -18000.00, "currency": "MYR"},
+    {"row_id": "B5", "date": "2026-10-30", "description": "CAHAYA MAJU REFUND", "amount": 250.00, "currency": "MYR"}
+  ],
+  "documents": [
+    {"doc_ref": "POL-T01", "type": "invoice", "text": "Great Eastern Takaful\nPolicy Renewal Notice POL-T01\nAnnual business insurance – Oct 2026 to Oct 2027\nPremium: RM3,600.00\nDirect debit date: 3 Oct 2026"},
+    {"doc_ref": "REC-T01", "type": "receipt", "text": "Cash Sales Summary REC-T01\nDate: 16 Oct 2026\nOct 2026 mid-month cash collections\nTotal: RM11,500.00"},
+    {"doc_ref": "PAY-T01", "type": "form", "text": "Payroll Instruction PAY-T01\nOct 2026 salaries direct debit\nTotal net pay: RM18,000.00\nDebit date: 28 Oct 2026"},
+    {"doc_ref": "REC-T02", "type": "receipt", "text": "Credit Note / Refund REC-T02\nFrom: Cahaya Maju Sdn Bhd\nDate: 30 Oct 2026\nOverpayment refund on previous order\nAmount: RM250.00"}
+  ],
+  "ai_output": {
+    "claim": "Account reconciles. Difference RM0.00. No adjustments required.",
+    "proposed_adjustments": []
+  },
+  "ground_truth": {
+    "has_issue": false,
+    "issue_types": [],
+    "affected_rows": [],
+    "correct_decision": "sign_off",
+    "explanation": "All five ledger entries match bank entries exactly. The insurance direct debit (L2/B2 RM3,600) is supported by policy renewal notice POL-T01 showing the correct amount and debit date. The supplier refund (L5/B5 RM250) is documented by REC-T02. No discrepancies or timing items. Sign off.",
+    "skills": ["recon_to_source", "ai_output_review"]
+  }
+}

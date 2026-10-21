@@ -1,0 +1,39 @@
+{
+  "id": "a012",
+  "title": "Oct bank reconciliation – supplier credit note received but not recorded",
+  "mode": "practice",
+  "difficulty": 1,
+  "scenario_variant": "assistive",
+  "ledger": [
+    {"row_id": "L1", "date": "2026-10-01", "description": "Opening balance", "amount": 20000.00, "currency": "MYR"},
+    {"row_id": "L2", "date": "2026-10-09", "description": "Supplier payment – Cahaya Supplies", "amount": -7200.00, "currency": "MYR", "doc_ref": "INV-N101"},
+    {"row_id": "L3", "date": "2026-10-17", "description": "Sales receipt – Mulia Traders", "amount": 9500.00, "currency": "MYR", "doc_ref": "REC-N01"},
+    {"row_id": "L4", "date": "2026-10-25", "description": "Administration costs – Oct", "amount": -1800.00, "currency": "MYR", "doc_ref": "INV-N102"}
+  ],
+  "bank": [
+    {"row_id": "B1", "date": "2026-10-01", "description": "Opening balance", "amount": 20000.00, "currency": "MYR"},
+    {"row_id": "B2", "date": "2026-10-09", "description": "CAHAYA SUPPLIES", "amount": -7200.00, "currency": "MYR"},
+    {"row_id": "B3", "date": "2026-10-17", "description": "MULIA TRADERS", "amount": 9500.00, "currency": "MYR"},
+    {"row_id": "B4", "date": "2026-10-25", "description": "ADMIN COSTS OCT", "amount": -1800.00, "currency": "MYR"},
+    {"row_id": "B5", "date": "2026-10-29", "description": "SUPPLIER REFUND CREDITNOTE", "amount": 1500.00, "currency": "MYR"}
+  ],
+  "documents": [
+    {"doc_ref": "INV-N101", "type": "invoice", "text": "Cahaya Supplies Sdn Bhd\nInvoice INV-N101\nOct 2026 cleaning products and consumables\nTotal: RM7,200.00"},
+    {"doc_ref": "REC-N01", "type": "receipt", "text": "Payment Receipt REC-N01\nFrom: Mulia Traders Sdn Bhd\nDate: 17 Oct 2026\nAmount: RM9,500.00"},
+    {"doc_ref": "INV-N102", "type": "invoice", "text": "SecureAdmin Solutions\nInvoice INV-N102\nOct 2026 admin and secretarial services\nAmount: RM1,800.00"}
+  ],
+  "ai_output": {
+    "claim": "Account reconciles. Difference RM0.00 after adjustment ADJ-N1.",
+    "proposed_adjustments": [
+      {"id": "ADJ-N1", "amount": -1500.00, "reason": "unidentified credit – miscellaneous"}
+    ]
+  },
+  "ground_truth": {
+    "has_issue": true,
+    "issue_types": ["recon_to_source"],
+    "affected_rows": ["B5", "ADJ-N1"],
+    "correct_decision": "correct",
+    "explanation": "Bank shows a RM1,500 credit labelled SUPPLIER REFUND CREDITNOTE (B5) not recorded in the ledger. ADJ-N1 labels it 'unidentified' despite the bank description being clear. Obtain the credit note from the supplier, add a ledger entry for +RM1,500, and remove ADJ-N1.",
+    "skills": ["recon_to_source", "ai_output_review"]
+  }
+}
