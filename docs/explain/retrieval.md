@@ -11,7 +11,7 @@ PERSON_A Task A7 (RunPod retrieval) and the rule "no source → no claim": every
 source, URL and date. Recall@5 is measured now so the later GPU gain can be shown honestly.
 
 ## 3. How it works
-- **Corpus** (218 docs): the 17 verified courses (text = provider + the names and descriptions of the
+- **Corpus** (227 docs): the 26 verified courses (text = provider + the names and descriptions of the
   skills they cover, our own catalogue metadata) + O\*NET 31.0 task statements (113) and detailed
   work activities (88) for the five occupations our roles are based on. Raw O\*NET CSVs stay in
   gitignored `data/raw/onet_31_0/`; `data/processed/onet_tasks_dwas.json` (40 KB) is committed with
@@ -37,7 +37,8 @@ source, URL and date. Recall@5 is measured now so the later GPU gain can be show
 ## 5. Example
 "spot weak controls or possible fraud" → top 5 includes O\*NET 13-2011 tasks 21507 ("Collect and
 analyze data to detect deficient controls…") and 21511, plus both COSO resources. Overall BM25 mean
-recall@5 = **0.78 (21/28 relevant found, 15 synthetic queries)**; misses are vocabulary mismatches
+recall@5 = **0.74 (20/28 relevant found, 15 synthetic queries)**, down from 0.78 when the corpus
+grew from 17 to 26 courses (more look-alike documents compete); misses are vocabulary mismatches
 ("build a sales forecast from history" does not share words with "Forecasting: Principles and
 Practice"), which is what dense embeddings are expected to fix.
 
@@ -46,7 +47,7 @@ The labelled set is small, synthetic and written by us; course texts include our
 descriptions, which helps BM25. Microsoft Learn skill hints are keyword guesses for a reviewer. The
 Catalog API endpoint is marked for deprecation in favour of the Learn Platform API.
 
-## 7. Likely judge questions
+## 7. Questions and answers
 - *Why BM25 first?* It runs on CPU, is explainable, and gives the baseline the GPU version must beat.
 - *Where is RunPod?* The interfaces are ready; the endpoint is the next spike (A7).
 - *Can retrieval invent a course?* No: it only returns indexed documents, each with source and date.
