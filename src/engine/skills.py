@@ -13,6 +13,7 @@ Rules (contract v2, with the edge cases in docs/CONTRACT_QUESTIONS.md Q1/Q3):
 - observed_with_help: everything else with ≥2 counted events and at least one success.
 """
 
+import math
 from collections.abc import Iterable, Sequence
 from dataclasses import dataclass
 from datetime import datetime
@@ -31,6 +32,7 @@ from src.engine import params
 
 UNAIDED_MISS_OUTCOMES: frozenset[Outcome] = frozenset({"missed_then_found", "failure"})
 NOT_COUNTED_FLAGS: tuple[FlagName, ...] = ("companion_error", "ambiguous_case")
+HALF = 0.5  # offset for half-up rounding of the self-rating
 SELF_RATING_SCALE = 10  # intake confidence 0..1 is shown as the employee's own n/10 rating
 HELP_PHRASE: dict[int, str] = {
     1: "after a question",
@@ -226,7 +228,8 @@ def explain(
     counted = [o for o in observations if o.counted]
     qualifying = qualifying_independent_successes(counted)
     if state == "self_reported":
-        rating = round((self_confidence or 0.0) * SELF_RATING_SCALE)
+        # Half-up rounding (0.85 → 9/10), the same as the web app; Python's round() would give 8.
+        rating = math.floor((self_confidence or 0.0) * SELF_RATING_SCALE + HALF)
         head = (
             f"Only your intake self-rating so far ({rating}/{SELF_RATING_SCALE}); "
             "no case evidence yet."

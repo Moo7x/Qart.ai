@@ -205,3 +205,7 @@ def test_self_confidence_does_not_inflate_estimate() -> None:
     low = derive_skill_state("u_aina", SKILL, events, 0.1).provisional_estimate
     high = derive_skill_state("u_aina", SKILL, events, 1.0).provisional_estimate
     assert low == high
+
+
+def test_self_rating_rounds_half_up_like_the_web_app() -> None:
+    assert "9/10" in derive_skill_state("u_x", SKILL, [], 0.85).why

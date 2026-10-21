@@ -46,11 +46,10 @@ SCORE_WEIGHT_CONFIDENCE: Final = 0.20  # how much of that is backed by ≥2 coun
 SCORE_WEIGHT_INTEREST: Final = 0.10  # people choose their direction; interest matters, a bit
 SCORE_WEIGHT_EFFORT: Final = 0.15  # penalty: hours needed to close the gaps
 SCORE_FORMULA: Final = "0.55*coverage + 0.20*confidence + 0.10*interest - 0.15*effort"
+# Shown next to every score in the UI, so it stays short.
 SCORE_NOTE: Final = (
-    "suitability indicator, not a probability of getting the role. Effort (the hours still "
-    "needed) is subtracted as a penalty, so a role with large gaps can fall below 0; such a "
-    "score is shown as 0, while the ranking keeps the unclamped value. See fit for how well "
-    "your evidence matches, and time_to_ready for the hours still needed."
+    "Suitability indicator, not a probability. Hours still needed count as a penalty, so a "
+    "score below 0 is shown as 0 (the ranking still uses the real value)."
 )
 # DECLARED: displayed scores never go below this (the UI never shows negative scores).
 SCORE_DISPLAY_FLOOR: Final = 0.0
