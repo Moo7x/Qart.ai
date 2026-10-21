@@ -4,7 +4,12 @@ import json
 from pathlib import Path
 
 from src.contract import Event, PathPlan, Profile, SkillState
-from src.engine.catalogue import checkin_cases_by_skill, default_case_index, default_catalogue
+from src.engine.catalogue import (
+    CASE_INDEX_PATH,
+    checkin_cases_by_skill,
+    default_catalogue,
+    load_case_index,
+)
 from src.engine.next_case import next_case
 from src.engine.planner import Selector, plan_path
 from src.engine.planner_cpsat import cpsat_select
@@ -13,6 +18,9 @@ from tests.helpers import golden_journey_events
 
 PROFILE_EXAMPLE = Path(__file__).resolve().parent.parent / "schemas" / "examples" / "profile.json"
 ROLE = "ai_finops_analyst"
+# These tests pin the planned case list (data/case_index.json) so their expected case ids stay
+# fixed even when Person B's cases/index.json is present.
+PLANNED_CASES = tuple(load_case_index(primary=CASE_INDEX_PATH))
 
 
 def aina() -> Profile:
@@ -23,7 +31,7 @@ def states_after(events: list[Event]) -> list[SkillState]:
     cat = default_catalogue()
     profile = aina()
     confidence = {s.skill_id: s.confidence for s in profile.skills_self_reported}
-    checkins = checkin_cases_by_skill(default_case_index())
+    checkins = checkin_cases_by_skill(PLANNED_CASES)
     return derive_states(profile.id, list(cat.skills), events, confidence, checkins)
 
 
@@ -41,7 +49,7 @@ def path_after(
         states_after(events),
         cat,
         cat.assumptions_v1,
-        default_case_index(),
+        PLANNED_CASES,
         {e.case_id for e in events},
         selector,
     )
@@ -56,7 +64,7 @@ def next_after(events: list[Event]) -> tuple[str | None, str]:
         cat,
         cat.assumptions_v1,
         "assistive",
-        default_case_index(),
+        PLANNED_CASES,
     )
     return result.case_id, result.because
 

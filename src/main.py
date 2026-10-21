@@ -33,7 +33,7 @@ app.include_router(engine_router)
 # PLACEHOLDER for Person B. Mounted automatically once src/api_companion.py exposes `router`.
 def _include_companion_router(application: FastAPI) -> None:
     try:
-        from src.api_companion import router as companion_router  # type: ignore[import-not-found]
+        from src.api_companion import router as companion_router  # type: ignore[import-not-found,unused-ignore]
     except ModuleNotFoundError:
         logger.info("src/api_companion.py not present yet; companion routes not mounted")
         return
