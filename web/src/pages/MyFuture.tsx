@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import { getPath, getRecommendation } from '../api'
-import type { PathPlan, Recommendation, RoleRecommendation, Scenario } from '../types'
+import { getPath, getRecommendation, getSnapshots } from '../api'
+import type { PathPlan, Recommendation, RoleRecommendation, Scenario, Snapshot } from '../types'
 
 const SDG_COLORS: Record<string, string> = {
   '4.4': 'bg-red-100 text-red-700',
@@ -77,11 +77,28 @@ function RoleCard({ role, expanded, onToggle }: { role: RoleRecommendation; expa
             {role.rank}
           </span>
           <div>
-            <div className="font-semibold text-gray-900">{role.title ?? role.role_id.replace(/_/g, ' ')}</div>
-            <div className="text-xs text-gray-400 mt-0.5">
-              Score: {Math.round(role.score * 100)}%
-              {role.score_note && <span className="ml-1 text-gray-400 italic">({role.score_note})</span>}
+            <div className="font-semibold text-gray-900 flex items-center gap-2">
+              {role.title ?? role.role_id.replace(/_/g, ' ')}
+              {role.close_match && (
+                <span className="text-xs bg-green-100 text-green-700 px-1.5 py-0.5 rounded font-medium">Close match</span>
+              )}
             </div>
+            <div className="flex items-center gap-3 mt-0.5 flex-wrap">
+              {role.time_to_ready && (
+                <span className="text-xs text-indigo-600 font-medium">{role.time_to_ready}</span>
+              )}
+              {role.fit !== undefined && (
+                <span className="text-xs text-gray-500">Fit: {Math.round(role.fit * 100)}%</span>
+              )}
+              {role.outlook && (
+                <span className={`text-xs px-1.5 py-0.5 rounded font-medium ${role.outlook === 'growing' ? 'bg-emerald-100 text-emerald-700' : role.outlook === 'stable' ? 'bg-gray-100 text-gray-600' : 'bg-orange-100 text-orange-700'}`}>
+                  {role.outlook}
+                </span>
+              )}
+            </div>
+            {role.score_note && (
+              <div className="text-xs text-gray-400 italic mt-0.5">{role.score_note}</div>
+            )}
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -228,8 +245,13 @@ export default function MyFuture() {
   const [scenario, setScenario] = useState<Scenario>('assistive')
   const [recommendation, setRecommendation] = useState<Recommendation | null>(null)
   const [path, setPath] = useState<PathPlan | null>(null)
+  const [snapshots, setSnapshots] = useState<Snapshot[]>([])
   const [expandedRole, setExpandedRole] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    getSnapshots().then(setSnapshots).catch(() => {})
+  }, [])
 
   useEffect(() => {
     Promise.all([
@@ -251,22 +273,24 @@ export default function MyFuture() {
         <span className="text-xs text-gray-400">Recommendations, not decisions</span>
       </div>
 
-      {/* Snapshot card */}
-      {recommendation?.snapshot_id && (
-        <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 flex items-start gap-3">
-          <div className="flex-1">
-            <div className="flex items-center gap-2 flex-wrap">
-              <span className="text-xs font-medium text-blue-800">External evidence</span>
-              <span className="bg-blue-100 text-blue-700 border border-blue-200 text-xs px-1.5 py-0.5 rounded font-medium">Historical data replay</span>
+      {/* Snapshot card — reads source/release_date/period from GET /api/snapshots */}
+      {snapshots.length > 0 && (
+        <div className="bg-blue-50 border border-blue-100 rounded-xl p-4">
+          <div className="flex items-center gap-2 flex-wrap mb-1">
+            <span className="text-xs font-medium text-blue-800">External evidence</span>
+            <span className="bg-blue-100 text-blue-700 border border-blue-200 text-xs px-1.5 py-0.5 rounded font-medium">Historical data replay</span>
+            {recommendation?.assumptions_version !== undefined && (
               <span className="text-xs text-gray-500">Assumptions version {recommendation.assumptions_version}</span>
-            </div>
-            <p className="text-sm text-blue-700 mt-1">
-              Anthropic Economic Index (CC-BY) · May 2026 release · retrieved 2026-10-21
-            </p>
-            <p className="text-xs text-blue-500 mt-0.5">
-              Signal data informs skill weight assumptions. Usage ≠ replacement — see requirement card for how.
-            </p>
+            )}
           </div>
+          {snapshots.map(snap => (
+            <p key={snap.id} className="text-sm text-blue-700">
+              {snap.source} · {snap.release_date} release · {snap.period}
+            </p>
+          ))}
+          <p className="text-xs text-blue-500 mt-0.5">
+            Signal data informs skill weight assumptions. Usage ≠ replacement — see requirement card for how.
+          </p>
         </div>
       )}
 
