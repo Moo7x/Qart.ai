@@ -23,7 +23,11 @@ Items from the second brief, done in order; each line is updated when an item is
     escalation_judgment, fx_conversion, transposition_check, unsupported_adjustment. I did not add
     courses for them (none verified yet); candidates need your approval.
   - All other role skills have at least one verified free course.
-- [ ] 5 Evaluation scaffold
+- [x] 5 Evaluation scaffold: `eval/runner.py` (`python -m eval.runner`) grades B's
+  `auto_diagnose` (stub until `src/companion/auto.py` exists) and a text-only baseline (stub; no LLM
+  called) with fixed criteria in `eval/acceptance_criteria.py` (sha256 shown in RESULTS); writes the
+  "companion-evaluation" section of `eval/RESULTS.md` ("Not run" while `eval/acceptance/` is empty).
+  Tests: `tests/test_eval_runner.py`. Type checks now run as `mypy src eval`.
 - [ ] 6 Q12 + docs
 - [ ] 7 Postgres backend
 - [ ] 8 Retrieval preparation
