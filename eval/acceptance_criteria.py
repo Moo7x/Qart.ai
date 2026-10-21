@@ -56,6 +56,10 @@ def grade(case: dict[str, Any], diagnosis: dict[str, Any]) -> CaseResult:
 
 
 def criteria_hash() -> str:
-    """SHA-256 of this file, so a changed criterion is detectable in every report."""
-    digest = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
+    """SHA-256 of this file, so a changed criterion is detectable in every report.
+
+    Line endings are normalised first, so Windows (CRLF) and Linux/Replit (LF) checkouts agree.
+    """
+    text = Path(__file__).read_bytes().replace(b"\r\n", b"\n")
+    digest = hashlib.sha256(text).hexdigest()
     return f"{HASH_PREFIX}{digest}"

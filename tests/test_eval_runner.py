@@ -107,3 +107,16 @@ def test_write_section_replaces_only_its_own_block(tmp_path: Path) -> None:
     write_section("a", "second", path)
     text = path.read_text(encoding="utf-8")
     assert "second" in text and "first" not in text and "other" in text
+
+
+def test_criteria_hash_ignores_line_endings(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    import eval.acceptance_criteria as criteria
+
+    source = Path(criteria.__file__).read_bytes().replace(b"\r\n", b"\n")
+    crlf = tmp_path / "crlf.py"
+    crlf.write_bytes(source.replace(b"\n", b"\r\n"))
+    lf_hash = criteria.criteria_hash()
+    monkeypatch.setattr(criteria, "__file__", str(crlf))
+    assert criteria.criteria_hash() == lf_hash
