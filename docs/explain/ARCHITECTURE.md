@@ -39,11 +39,13 @@ HR: GET /api/hr/summary → counts per state per skill, groups/cells < 5 suppres
 | `src/engine/hr.py` (aggregates only) | A | [hr.md](hr.md) |
 | `src/api_engine.py`, `src/store.py`, `data/synthetic_team.json` | A | [api_engine.md](api_engine.md) |
 | `eval/runner.py`, `eval/acceptance_criteria.py`, `eval/acceptance/` | A | [evaluation.md](evaluation.md) |
+| `src/retrieval/` (BM25 baseline, RunPod interfaces, corpus), `eval/retrieval_eval.py` | A | [retrieval.md](retrieval.md) |
 | `src/main.py` (app: engine router, B's router and web/dist when present) | both | this page |
 | `src/companion/`, `src/api_companion.py`, `cases/`, `web/` | B | B's docs |
 
-Engine modules are pure functions (no FastAPI, no DB); `ingest.py` is the only one doing I/O
-(download, CSV, files). Routes validate, call the engine and return contract models.
+Engine modules are pure functions (no FastAPI, no DB); `ingest.py`, `src/retrieval/corpus.py` and
+`src/retrieval/mslearn.py` are the only ones doing I/O (download, CSV, files). Retrieval is not yet
+used by the planner or any endpoint. Routes validate, call the engine and return contract models.
 
 ## Labelling rule
 Every number is **evidence** (dated source), **assumption** (company layer B or a declared parameter
