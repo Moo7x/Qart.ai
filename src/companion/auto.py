@@ -8,7 +8,6 @@ import os
 from pathlib import Path
 
 from src.companion.tools import (
-    compare_amounts,
     find_document,
     list_adjustments,
     match_entries,
@@ -73,10 +72,10 @@ def auto_diagnose(case: dict, playbook_path: str) -> dict:
             response_format={"type": "json_object"},
             max_tokens=500,
         )
-        result = json.loads(response.choices[0].message.content)
+        result = json.loads(response.choices[0].message.content or "")
         result["tool_calls"] = tool_calls_log
         return result
-    except Exception:
+    except Exception:  # noqa: BLE001
         return _rule_based_diagnose(case, totals, matches, adjustments, tool_calls_log)
 
 

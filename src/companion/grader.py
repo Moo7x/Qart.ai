@@ -36,15 +36,11 @@ def grade(case: dict, decision: str, flagged_rows: list) -> dict:
     else:
         issue_found_by = "companion"
 
-    # Determine outcome for each skill
+    # outcome is "success" or "failure" only; agent.py upgrades to "missed_then_found"
+    # when the user eventually finds the issue after a prior wrong decision.
     skills_evidence = []
     for skill_id in skills:
-        if decision_correct:
-            outcome = "success"
-        elif user_found:
-            outcome = "missed_then_found"
-        else:
-            outcome = "failure"
+        outcome = "success" if decision_correct else "failure"
         skills_evidence.append({"skill_id": skill_id, "outcome": outcome, "help_level": 0})
 
     return {
