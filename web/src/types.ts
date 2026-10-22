@@ -157,7 +157,7 @@ export interface DecisionResponse {
   decision_correct: boolean;
   explanation: string;
   affected_rows: string[];
-  correct_decision: Decision;
+  correct_decision: Decision | null; // null while a wrong practice decision is held back
   missed_and_walking_back: boolean;
 }
 
@@ -193,11 +193,24 @@ export interface RoleRecommendation {
   sources: { label: string; url: string }[];
   sdg_targets?: string[];
   score_note?: string;
-  // optional fields from engine v2
+  // readable ranking and role outlook (engine additions)
   fit?: number;
-  time_to_ready?: string;
+  time_to_ready?: TimeToReady;
   close_match?: boolean;
-  outlook?: string;
+  outlook?: RoleOutlook | null;
+}
+
+export interface TimeToReady {
+  hours: number;
+  weeks_at_current_budget: number;
+}
+
+export interface RoleOutlook {
+  ai_handled_share: number;
+  oversight_share: number;
+  label: 'being transformed' | 'AI-era role' | 'stable';
+  because: string;
+  basis: string;
 }
 
 export interface Recommendation {
@@ -229,20 +242,26 @@ export interface Snapshot {
   url?: string;
 }
 
+// HR summary (GET /api/hr/summary): null means suppressed (fewer than min_group_size people).
 export interface HRSkillCount {
   skill_id: string;
-  skill_label: string;
-  demonstrated: number | null;
-  observed: number | null;
-  self_reported: number | null;
-  insufficient: number | null;
+  counts: Record<SkillStateName, number | null>;
+}
+
+export interface HRDemandItem {
+  skill_id: string;
+  people_without_demonstration: number | null;
+  max_role_weight: number;
 }
 
 export interface HRSummaryData {
   team: string;
-  total_employees: number;
-  generated_at: string;
-  skill_counts: HRSkillCount[];
+  group_size: number | null;
+  min_group_size: number;
+  suppressed: boolean;
+  skills: HRSkillCount[];
+  training_demand: { scenario: Scenario; skills: HRDemandItem[] }[];
+  note: string;
 }
 
 export interface PathPlan {
@@ -254,4 +273,11 @@ export interface PathPlan {
   total_hours: number;
   weeks: number;
   worst_case_gap: number;
+}
+
+// GET /api/next-case/{user_id}: the case the engine picks next, and why.
+export interface NextCase {
+  case_id: string | null;
+  because: string;
+  skill_id?: string | null;
 }

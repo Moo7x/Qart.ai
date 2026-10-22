@@ -8,6 +8,7 @@ import type {
   CompanionMessageResponse,
   DecisionResponse,
   HRSummaryData,
+  NextCase,
   PathPlan,
   Profile,
   Recommendation,
@@ -162,9 +163,15 @@ const MOCK_RECOMMENDATION: Recommendation = {
       sdg_targets: ['4.4', '8.2'],
       score_note: 'Suitability indicator, not a probability',
       fit: 0.72,
-      time_to_ready: '~14 weeks at 4h/week',
+      time_to_ready: { hours: 14, weeks_at_current_budget: 4 },
       close_match: true,
-      outlook: 'growing',
+      outlook: {
+        ai_handled_share: 0.79,
+        oversight_share: 0.85,
+        label: 'being transformed',
+        because: 'Sample data: most task weight is drafted by AI; most skill weight is oversight.',
+        basis: 'derived from company assumptions (layer B); not a headcount forecast',
+      },
     },
   ],
 };
@@ -217,14 +224,17 @@ const MOCK_SNAPSHOTS: Snapshot[] = [
 
 const MOCK_HR_SUMMARY: HRSummaryData = {
   team: 'finops_kl',
-  total_employees: 12,
-  generated_at: '2026-10-21T10:00:00+08:00',
-  skill_counts: [
-    { skill_id: 'unsupported_adjustment', skill_label: 'Unsupported adjustments', demonstrated: 3, observed: 5, self_reported: 4, insufficient: null },
-    { skill_id: 'transposition_check', skill_label: 'Transposition errors', demonstrated: 2, observed: 4, self_reported: null, insufficient: 6 },
-    { skill_id: 'ai_output_review', skill_label: 'AI output review', demonstrated: 1, observed: null, self_reported: 6, insufficient: 5 },
-    { skill_id: 'escalation_judgment', skill_label: 'Escalation judgment', demonstrated: null, observed: null, self_reported: 8, insufficient: 4 },
+  group_size: 12,
+  min_group_size: 5,
+  suppressed: false,
+  skills: [
+    { skill_id: 'unsupported_adjustment', counts: { demonstrated_independently: null, observed_with_help: 5, self_reported: null, insufficient_evidence: 6 } },
+    { skill_id: 'transposition_check', counts: { demonstrated_independently: null, observed_with_help: null, self_reported: 6, insufficient_evidence: 5 } },
   ],
+  training_demand: [
+    { scenario: 'assistive', skills: [{ skill_id: 'unsupported_adjustment', people_without_demonstration: 12, max_role_weight: 0.23 }] },
+  ],
+  note: 'Sample data. Groups and cells under 5 people are suppressed.',
 };
 
 // ── API functions ──────────────────────────────────────────────────────────────
@@ -250,6 +260,14 @@ export async function postProfile(profile: Omit<Profile, 'id'>): Promise<{ profi
 export async function getSkills(userId: string): Promise<SkillState[]> {
   if (USE_MOCKS) return MOCK_SKILLS;
   const { data } = await axios.get<SkillState[]>(`${BASE}/api/skills/${userId}`);
+  return data;
+}
+
+export async function getNextCase(userId: string): Promise<NextCase> {
+  if (USE_MOCKS) {
+    return { case_id: 'case_006', because: 'Sample data: case_006 practises the skill you missed in case_003.' };
+  }
+  const { data } = await axios.get<NextCase>(`${BASE}/api/next-case/${userId}`);
   return data;
 }
 

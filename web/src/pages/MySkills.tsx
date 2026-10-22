@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { getSkills } from '../api'
 import type { SkillState } from '../types'
+import { SKILL_NAMES } from '../skillNames'
 
 const STATE_COLORS: Record<string, string> = {
   demonstrated_independently: 'bg-green-100 text-green-800 border-green-200',
@@ -22,16 +23,6 @@ const OUTCOME_ICONS: Record<string, { icon: string; label: string; color: string
   failure: { icon: '✗', label: 'missed', color: 'text-red-600', badge: 'bg-red-100 text-red-700 border-red-200' },
 }
 
-const SKILL_NAMES: Record<string, string> = {
-  recon_to_source: 'Reconcile to source',
-  duplicate_detection: 'Duplicate detection',
-  cutoff_timing: 'Cut-off & timing',
-  unsupported_adjustment: 'Unsupported adjustment',
-  fx_conversion: 'FX conversion',
-  transposition_check: 'Transposition check',
-  escalation_judgment: 'Escalation judgment',
-  ai_output_review: 'AI output review',
-}
 
 function HelpBadge({ level }: { level: number }) {
   const labels = ['no help', 'question', 'hint', 'explanation', 'answer shown']

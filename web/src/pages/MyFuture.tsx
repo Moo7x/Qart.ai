@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { getPath, getRecommendation, getSnapshots } from '../api'
 import type { PathPlan, Recommendation, RoleRecommendation, Scenario, Snapshot } from '../types'
+import { SKILL_NAMES } from '../skillNames'
 
 const SDG_COLORS: Record<string, string> = {
   '4.4': 'bg-red-100 text-red-700',
@@ -9,24 +10,6 @@ const SDG_COLORS: Record<string, string> = {
   '5.5': 'bg-pink-100 text-pink-700',
 }
 
-const SKILL_NAMES: Record<string, string> = {
-  recon_to_source: 'Reconcile to source',
-  duplicate_detection: 'Duplicate detection',
-  cutoff_timing: 'Cut-off & timing',
-  unsupported_adjustment: 'Unsupported adjustment',
-  fx_conversion: 'FX conversion',
-  transposition_check: 'Transposition check',
-  escalation_judgment: 'Escalation judgment',
-  ai_output_review: 'AI output review',
-  variance_analysis: 'Variance analysis',
-  data_quality: 'Data quality',
-  controls_design: 'Controls design',
-  process_automation: 'Process automation',
-  stakeholder_communication: 'Stakeholder comms',
-  forecasting: 'Forecasting',
-  spreadsheet_modelling: 'Spreadsheet modelling',
-  sql_basics: 'SQL basics',
-}
 
 const STATE_LABELS: Record<string, string> = {
   demonstrated_independently: 'Demonstrated',
@@ -85,14 +68,19 @@ function RoleCard({ role, expanded, onToggle }: { role: RoleRecommendation; expa
             </div>
             <div className="flex items-center gap-3 mt-0.5 flex-wrap">
               {role.time_to_ready && (
-                <span className="text-xs text-indigo-600 font-medium">{role.time_to_ready}</span>
+                <span className="text-xs text-indigo-600 font-medium">
+                  ~{role.time_to_ready.hours} h to ready · {role.time_to_ready.weeks_at_current_budget} wk at your weekly hours
+                </span>
               )}
               {role.fit !== undefined && (
-                <span className="text-xs text-gray-500">Fit: {Math.round(role.fit * 100)}%</span>
+                <span className="text-xs text-gray-500">Fit {role.fit.toFixed(2)} (indicator, not a probability)</span>
               )}
               {role.outlook && (
-                <span className={`text-xs px-1.5 py-0.5 rounded font-medium ${role.outlook === 'growing' ? 'bg-emerald-100 text-emerald-700' : role.outlook === 'stable' ? 'bg-gray-100 text-gray-600' : 'bg-orange-100 text-orange-700'}`}>
-                  {role.outlook}
+                <span
+                  title={`${role.outlook.because} · ${role.outlook.basis}`}
+                  className={`text-xs px-1.5 py-0.5 rounded font-medium ${role.outlook.label === 'AI-era role' ? 'bg-emerald-100 text-emerald-700' : role.outlook.label === 'stable' ? 'bg-gray-100 text-gray-600' : 'bg-orange-100 text-orange-700'}`}
+                >
+                  {role.outlook.label}
                 </span>
               )}
             </div>
@@ -202,7 +190,7 @@ function PathTimeline({ plan }: { plan: PathPlan }) {
     <div className="space-y-3">
       <div className="flex items-center justify-between text-sm text-gray-600">
         <span className="font-medium">{plan.total_hours}h total · {plan.weeks} weeks at {plan.weekly_hours}h/week</span>
-        <span className="text-xs text-gray-400">Worst-case gap: {Math.round(plan.worst_case_gap * 100)}%</span>
+        <span className="text-xs text-gray-400">Weighted gap left after this path (worse scenario): {plan.worst_case_gap.toFixed(2)}</span>
       </div>
       <div className="relative space-y-0">
         <div className="absolute left-3 top-3 bottom-3 w-px bg-indigo-100" aria-hidden="true" />
