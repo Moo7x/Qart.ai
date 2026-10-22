@@ -3,10 +3,13 @@
 grade() is called after the user submits a decision. Only this function may access
 case["ground_truth"]. All other modules must treat ground_truth as absent.
 """
+
 from __future__ import annotations
 
+from typing import Any
 
-def grade(case: dict, decision: str, flagged_rows: list) -> dict:
+
+def grade(case: dict[str, Any], decision: str, flagged_rows: list[str]) -> dict[str, Any]:
     """
     Grade a user decision against the case ground truth.
 

@@ -1,11 +1,12 @@
 """Companion agent – manages sessions, runs the help ladder, calls the LLM."""
+
 from __future__ import annotations
 
 import json
 import os
 import re
 import uuid
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
@@ -21,7 +22,7 @@ from src.companion.tools import (
 PLAYBOOK_PATH = Path(__file__).parent / "playbooks" / "playbook_v1.md"
 
 # In-memory session store (fine for hackathon; one process)
-_sessions: dict[str, dict] = {}
+_sessions: dict[str, dict[str, Any]] = {}
 
 HELP_LEVEL_NAMES = {
     0: "no help",
@@ -32,7 +33,7 @@ HELP_LEVEL_NAMES = {
 }
 HELP_STEP_NAMES = {1: "question", 2: "hint", 3: "explanation", 4: "answer"}
 
-_TOOLS: list[dict] = [
+_TOOLS: list[dict[str, Any]] = [
     {
         "type": "function",
         "function": {
@@ -108,7 +109,7 @@ _TOOLS: list[dict] = [
 ]
 
 
-def _reset_case_state(session: dict, case: dict, mode: str) -> None:
+def _reset_case_state(session: dict[str, Any], case: dict[str, Any], mode: str) -> None:
     """Reset per-case fields when the user opens a new case in the same session."""
     session.update(
         {
@@ -119,7 +120,7 @@ def _reset_case_state(session: dict, case: dict, mode: str) -> None:
             "help_steps": [],
             "checks_used": [],
             "messages": [],  # clear chat history so case B doesn't inherit case A's context
-            "start_time": datetime.now(timezone.utc),
+            "start_time": datetime.now(UTC),
             "decided": False,
             "flagged_rows": [],
             "missed_decision": False,
@@ -129,11 +130,11 @@ def _reset_case_state(session: dict, case: dict, mode: str) -> None:
 
 def get_or_create_session(
     session_id: str,
-    case: dict,
+    case: dict[str, Any],
     mode: str,
     user_id: str = "u_aina",
     scenario: str = "assistive",
-) -> dict:
+) -> dict[str, Any]:
     case_id = case["id"]
     if session_id not in _sessions:
         _sessions[session_id] = {
@@ -147,7 +148,7 @@ def get_or_create_session(
             "help_level": 0,
             "help_steps": [],
             "checks_used": [],
-            "start_time": datetime.now(timezone.utc),
+            "start_time": datetime.now(UTC),
             "decided": False,
             "flagged_rows": [],
             "missed_decision": False,
@@ -162,7 +163,7 @@ def get_or_create_session(
     return session
 
 
-def _call_tool(name: str, args: dict, case: dict) -> Any:
+def _call_tool(name: str, args: dict[str, Any], case: dict[str, Any]) -> Any:
     if name == "recompute_totals":
         return recompute_totals(case)
     if name == "match_entries":
@@ -178,32 +179,50 @@ def _call_tool(name: str, args: dict, case: dict) -> Any:
     return {"error": f"Unknown tool: {name}"}
 
 
-def _build_system_prompt(session: dict, playbook: str) -> str:
+def _build_system_prompt(session: dict[str, Any], playbook: str) -> str:
     case_no_gt = {k: v for k, v in session["case"].items() if k != "ground_truth"}
     mode = session["mode"]
     hl = session["help_level"]
 
     reveal_rules = {
-        0: "You may ONLY answer clarifying questions about the process. Do NOT reveal any issues, rows, or amounts that suggest a problem.",
-        1: "You may ask ONE leading question (e.g. 'What would make this total change?'). Do NOT identify the specific issue or rows.",
-        2: "You may give a HINT pointing to a specific area (e.g. 'Look closely at the adjustments'). Do NOT name specific row IDs or the exact error.",
-        3: "You may EXPLAIN the concept behind the issue (e.g. 'A transposition error means digits are swapped'). Do NOT give the specific row ID or exact amount.",
-        4: "You may show the SPECIFIC ANSWER including exact row IDs, amounts, and what the correct value should be.",
+        0: (
+            "You may ONLY answer clarifying questions about the process. Do NOT reveal any "
+            "issues, rows, or amounts that suggest a problem."
+        ),
+        1: (
+            "You may ask ONE leading question (e.g. 'What would make this total change?'). "
+            "Do NOT identify the specific issue or rows."
+        ),
+        2: (
+            "You may give a HINT pointing to a specific area (e.g. 'Look closely at the "
+            "adjustments'). Do NOT name specific row IDs or the exact error."
+        ),
+        3: (
+            "You may EXPLAIN the concept behind the issue (e.g. 'A transposition error means "
+            "digits are swapped'). Do NOT give the specific row ID or exact amount."
+        ),
+        4: (
+            "You may show the SPECIFIC ANSWER including exact row IDs, amounts, and what the "
+            "correct value should be."
+        ),
     }
 
     checkin_note = (
-        "\n\nCHECK-IN MODE: Independent assessment. NEVER offer hints, questions, or explanations about the case."
+        "\n\nCHECK-IN MODE: Independent assessment. NEVER offer hints, questions, or "
+        "explanations about the case."
         if mode == "checkin"
         else ""
     )
     missed_note = (
-        "\n\nThe employee just submitted an incorrect decision. Walk them back through the case step by step, starting with the most obvious clue."
+        "\n\nThe employee just submitted an incorrect decision. Walk them back through the "
+        "case step by step, starting with the most obvious clue."
         if session.get("missed_decision")
         else ""
     )
 
     return (
-        f"You are a finance companion helping an employee review an AI-prepared bank reconciliation.\n\n"
+        "You are a finance companion helping an employee review an AI-prepared bank "
+        "reconciliation.\n\n"
         f"PLAYBOOK:\n{playbook}\n\n"
         f"CASE:\n{json.dumps(case_no_gt, indent=2)}\n\n"
         f"CURRENT HELP LEVEL: {hl} ({HELP_LEVEL_NAMES[hl]})\n"
@@ -217,8 +236,8 @@ def _build_system_prompt(session: dict, playbook: str) -> str:
     )
 
 
-def _extract_ui_actions(tool_name: str, result: Any, help_level: int) -> list[dict]:
-    actions: list[dict] = []
+def _extract_ui_actions(tool_name: str, result: Any, help_level: int) -> list[dict[str, Any]]:
+    actions: list[dict[str, Any]] = []
     if tool_name == "recompute_totals":
         summary = (
             f"Ledger {result.get('ledger_total')} vs Bank {result.get('bank_total')}"
@@ -240,7 +259,7 @@ def _extract_ui_actions(tool_name: str, result: Any, help_level: int) -> list[di
     return actions
 
 
-def _validate_reply(reply: str, case: dict) -> bool:
+def _validate_reply(reply: str, case: dict[str, Any]) -> bool:
     """Return False if the reply mentions a row ID that doesn't exist in the case."""
     all_ids: set[str] = set()
     for row in case.get("ledger", []):
@@ -253,7 +272,7 @@ def _validate_reply(reply: str, case: dict) -> bool:
     return all(m in all_ids for m in mentioned)
 
 
-def _mock_reply(session: dict) -> dict:
+def _mock_reply(session: dict[str, Any]) -> dict[str, Any]:
     """Deterministic reply used when no LLM key is configured."""
     hl = session["help_level"]
     case = session["case"]
@@ -280,22 +299,42 @@ def _mock_reply(session: dict) -> dict:
     ]
     trace = ["checking totals"]
 
+    # Built only from tool results on this case (never ground_truth), so it fits every case.
+    matches = match_entries(case)
+    unmatched = [str(r["row_id"]) for r in matches["unmatched_ledger"] + matches["unmatched_bank"]]
+    adjustments = [str(a["id"]) for a in list_adjustments(case)]
     replies = {
         0: "I'm here if you need help. Take your time reviewing the reconciliation.",
-        1: "What would make the totals differ? Think about whether every adjustment has a supporting document.",
-        2: "Look closely at the adjustments and whether each one has a supporting document.",
-        3: "A transposition error means digits are swapped (e.g. 1,520 vs 1,250). Also check if every adjustment has a document.",
-        4: "The issue is in row L4 (RM1,520) — INV-1043 shows RM1,250, a transposition error. ADJ-7 hides this as 'rounding' without any supporting document.",
+        1: (
+            "What would make the totals differ? Does every row have a partner on the other side, "
+            "and does every adjustment have a supporting document?"
+        ),
+        2: "Look closely at the rows that do not match and at the proposed adjustments.",
+        3: (
+            "Unmatched rows can mean a typo (e.g. digits swapped), a timing difference or a "
+            "duplicate; an adjustment without a document should be challenged, not accepted."
+        ),
+        4: (
+            f"The checks show unmatched rows: {', '.join(unmatched) or 'none'}; proposed "
+            f"adjustments: {', '.join(adjustments) or 'none'}. Compare each one with its "
+            "document before you decide."
+        ),
     }
 
     if hl >= 2:
-        matches = match_entries(case)
         trace.append("matching entries")
-        unmatched = matches.get("unmatched_ledger", [])
         if unmatched:
-            ui_actions.append({"type": "highlight_rows", "rows": [str(r["row_id"]) for r in unmatched]})
-        ui_actions.append({"type": "open_document", "doc_ref": "INV-1043"})
-        trace.append("checking document INV-1043")
+            ui_actions.append({"type": "highlight_rows", "rows": unmatched})
+        doc_refs = [str(r["doc_ref"]) for r in case.get("ledger", []) if r.get("doc_ref")]
+        unmatched_docs = [
+            str(r["doc_ref"])
+            for r in case.get("ledger", [])
+            if r.get("doc_ref") and str(r["row_id"]) in unmatched
+        ]
+        doc = next(iter(unmatched_docs or doc_refs), None)
+        if doc:
+            ui_actions.append({"type": "open_document", "doc_ref": doc})
+            trace.append(f"checking document {doc}")
 
     return {
         "reply": replies.get(hl, replies[0]),
@@ -308,11 +347,11 @@ def _mock_reply(session: dict) -> dict:
 def process_message(
     session_id: str,
     user_message: str,
-    case: dict,
+    case: dict[str, Any],
     mode: str,
     user_id: str = "u_aina",
     scenario: str = "assistive",
-) -> dict:
+) -> dict[str, Any]:
     """Process a user message and return a companion response."""
     session = get_or_create_session(session_id, case, mode, user_id, scenario)
 
@@ -337,7 +376,7 @@ def process_message(
         return result
 
     try:
-        from openai import OpenAI  # type: ignore[import-not-found]
+        from openai import OpenAI
 
         client = OpenAI(
             api_key=api_key,
@@ -347,11 +386,11 @@ def process_message(
         playbook = PLAYBOOK_PATH.read_text()
         system_prompt = _build_system_prompt(session, playbook)
 
-        messages: list[dict] = [{"role": "system", "content": system_prompt}]
+        messages: list[dict[str, Any]] = [{"role": "system", "content": system_prompt}]
         messages.extend(session["messages"])
         messages.append({"role": "user", "content": user_message})
 
-        ui_actions: list[dict] = []
+        ui_actions: list[dict[str, Any]] = []
         trace: list[str] = []
 
         for _ in range(6):
@@ -365,7 +404,7 @@ def process_message(
             msg = response.choices[0].message
 
             if msg.tool_calls:
-                messages.append(msg)  # type: ignore[arg-type]
+                messages.append(msg.model_dump(exclude_none=True))
                 for tc in msg.tool_calls:
                     name = tc.function.name
                     args = json.loads(tc.function.arguments or "{}")
@@ -381,7 +420,10 @@ def process_message(
                 reply = msg.content or ""
                 if not _validate_reply(reply, session["case"]):
                     messages.append(
-                        {"role": "user", "content": "Only reference row IDs that exist in the case."}
+                        {
+                            "role": "user",
+                            "content": "Only reference row IDs that exist in the case.",
+                        }
                     )
                     continue
 
@@ -391,7 +433,11 @@ def process_message(
                 # Pop-in if the AI claim says "reconciles" and user hasn't decided yet
                 ai_claim = session["case"].get("ai_output", {}).get("claim", "")
                 if "reconciles" in ai_claim.lower() and not session["decided"]:
-                    ui_actions.insert(0, {"type": "pop_in", "message": "Want a second look before you sign off?"})
+                    pop_in = {
+                        "type": "pop_in",
+                        "message": "Want a second look before you sign off?",
+                    }
+                    ui_actions.insert(0, pop_in)
 
                 return {
                     "reply": reply,
@@ -413,13 +459,13 @@ def process_message(
 def process_decision(
     session_id: str,
     decision: str,
-    flagged_rows: list,
-    case: dict,
+    flagged_rows: list[str],
+    case: dict[str, Any],
     mode: str,
     user_id: str = "u_aina",
     scenario: str = "assistive",
     self_confidence_before: float | None = None,
-) -> dict:
+) -> dict[str, Any]:
     """Grade a decision and return an Event plus grader metadata.
 
     Practice mode wrong decision: event is None — don't post yet; session stays open.
@@ -437,7 +483,7 @@ def process_decision(
     for se in grader_result["skills_evidence"]:
         se["help_level"] = session["help_level"]
 
-    duration_sec = int((datetime.now(timezone.utc) - session["start_time"]).total_seconds())
+    duration_sec = int((datetime.now(UTC) - session["start_time"]).total_seconds())
 
     # Practice wrong decision: hold the event, keep session open for remediation.
     # event=None signals the API layer to skip posting.
@@ -460,13 +506,13 @@ def process_decision(
 
     session["decided"] = True
 
-    event: dict = {
+    event: dict[str, Any] = {
         "id": f"ev_{uuid.uuid4().hex[:8]}",
         "user_id": user_id,
         "case_id": case["id"],
         "mode": mode,
         "scenario": scenario,
-        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "timestamp": datetime.now(UTC).isoformat(),
         "self_confidence_before": self_confidence_before,
         "help_level_max": session["help_level"],
         "help_steps": session["help_steps"],

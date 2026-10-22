@@ -1,4 +1,5 @@
 """Unit tests for src/companion/grader.py."""
+
 import json
 import pathlib
 import sys
@@ -28,6 +29,7 @@ def case_006():
 
 
 # ── case_003 (correct_decision = "correct") ───────────────────────────────────
+
 
 def test_correct_decision(case_003):
     result = grade(case_003, "correct", ["L4", "ADJ-7"])
@@ -62,6 +64,7 @@ def test_skills_evidence_skills(case_003):
 
 # ── case_001 (clean case, correct_decision = "sign_off") ──────────────────────
 
+
 def test_clean_case_correct(case_001):
     result = grade(case_001, "sign_off", [])
     assert result["decision_correct"] is True
@@ -74,6 +77,7 @@ def test_clean_case_wrong(case_001):
 
 
 # ── case_006 (escalate) ────────────────────────────────────────────────────────
+
 
 def test_escalate_correct(case_006):
     result = grade(case_006, "escalate", ["ADJ-1"])
@@ -89,9 +93,10 @@ def test_escalate_wrong_sign_off(case_006):
 
 # ── grader never reads ground_truth implicitly ─────────────────────────────────
 
+
 def test_grade_missing_ground_truth():
     """If ground_truth is missing, grade() returns failure gracefully."""
     case_no_gt = {"id": "x", "mode": "practice", "ledger": [], "bank": []}
     result = grade(case_no_gt, "sign_off", [])
-    assert result["decision_correct"] is True   # default correct_decision is sign_off
+    assert result["decision_correct"] is True  # default correct_decision is sign_off
     assert result["skills_evidence"] == []

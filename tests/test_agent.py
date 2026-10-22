@@ -1,4 +1,5 @@
 """Integration tests for src/companion/agent.py — session-level behaviour."""
+
 import json
 import pathlib
 import sys
@@ -28,6 +29,7 @@ def _sid() -> str:
 
 
 # ── missed_then_found two-step flow ───────────────────────────────────────────
+
 
 def test_wrong_decision_holds_event(case_003):
     sid = _sid()
@@ -73,6 +75,7 @@ def test_correct_first_attempt_emits_success(case_003):
 
 # ── checkin mode: wrong decision emits event immediately ──────────────────────
 
+
 def test_checkin_wrong_emits_event_immediately(case_003):
     sid = _sid()
     # Override mode to checkin
@@ -95,6 +98,7 @@ def test_checkin_help_level_always_zero(case_003):
 
 # ── per-case help state reset ─────────────────────────────────────────────────
 
+
 def test_help_level_resets_on_new_case(case_003, case_001):
     sid = _sid()
     # Open case_003, advance help level
@@ -114,3 +118,24 @@ def test_messages_cleared_on_new_case(case_003, case_001):
 
     get_or_create_session(sid, case_001, "practice")
     assert _sessions[sid]["messages"] == [], "messages must clear when switching cases"
+
+
+# ── offline (no LLM key) replies ──────────────────────────────────────────────
+
+
+def test_offline_answer_uses_only_this_case(case_001, monkeypatch):
+    """The no-key reply at full help must come from this case's rows, not another case."""
+    monkeypatch.delenv("LLM_API_KEY", raising=False)
+    from src.companion.agent import process_message
+
+    sid = _sid()
+    result = {}
+    for _ in range(4):
+        result = process_message(sid, "I'm stuck", case_001, "practice")
+    assert result["help_level"] == 4
+    assert "INV-1043" not in result["reply"]
+    assert all(
+        a.get("doc_ref") in {d["doc_ref"] for d in case_001["documents"]}
+        for a in result["ui_actions"]
+        if a["type"] == "open_document"
+    )

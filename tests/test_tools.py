@@ -1,4 +1,5 @@
 """Unit tests for src/companion/tools.py using case_003 fixture data."""
+
 import json
 import pathlib
 import sys
@@ -31,6 +32,7 @@ def case_001():
 
 # ── recompute_totals ──────────────────────────────────────────────────────────
 
+
 def test_recompute_totals_case003(case_003):
     result = recompute_totals(case_003)
     assert result["ledger_total"] == pytest.approx(39380.0)
@@ -48,12 +50,13 @@ def test_recompute_totals_clean(case_001):
 
 # ── match_entries ─────────────────────────────────────────────────────────────
 
+
 def test_match_entries_unmatched_row(case_003):
     result = match_entries(case_003)
     unmatched_l = [r["row_id"] for r in result["unmatched_ledger"]]
     unmatched_b = [r["row_id"] for r in result["unmatched_bank"]]
-    assert "L4" in unmatched_l   # -1520 doesn't match -1250
-    assert "B6" in unmatched_b   # -1250 doesn't match -1520
+    assert "L4" in unmatched_l  # -1520 doesn't match -1250
+    assert "B6" in unmatched_b  # -1250 doesn't match -1520
 
 
 def test_match_entries_all_match(case_001):
@@ -74,6 +77,7 @@ def test_match_entries_matched_rows(case_003):
 
 # ── find_document ─────────────────────────────────────────────────────────────
 
+
 def test_find_document_found(case_003):
     doc = find_document(case_003, "INV-1043")
     assert doc["doc_ref"] == "INV-1043"
@@ -86,6 +90,7 @@ def test_find_document_not_found(case_003):
 
 
 # ── compare_amounts ───────────────────────────────────────────────────────────
+
 
 def test_compare_amounts_mismatch():
     result = compare_amounts(1520.0, 1250.0)
@@ -101,6 +106,7 @@ def test_compare_amounts_match():
 
 # ── list_adjustments ──────────────────────────────────────────────────────────
 
+
 def test_list_adjustments(case_003):
     adjs = list_adjustments(case_003)
     assert len(adjs) == 1
@@ -114,6 +120,7 @@ def test_list_adjustments_empty(case_001):
 
 
 # ── get_section ───────────────────────────────────────────────────────────────
+
 
 def test_get_section_ledger(case_003):
     result = get_section(case_003, "ledger")
