@@ -495,6 +495,9 @@ class OptimizerProposal(BaseModel):
     decided_by: str | None
     decided_at: str | None
     rollback_to: str
+    # Additions (optional): why the optimiser changed the text, and its development-set log.
+    rationale: str | None = None
+    development_log: list[str] = []
 
 
 # --- Small response objects (§5) ------------------------------------------------------------
