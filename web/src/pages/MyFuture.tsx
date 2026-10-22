@@ -1,7 +1,12 @@
 import { useEffect, useState } from 'react'
-import { getPath, getRecommendation, getSnapshots } from '../api'
-import type { PathPlan, Recommendation, RoleRecommendation, Scenario, Snapshot } from '../types'
+import { getPath, getRecommendation, getSnapshots, searchResources } from '../api'
+import { ResourceList, SkillResources } from '../components/ResourceList'
+import { useUserId } from '../persona'
+import type { PathPlan, Recommendation, RoleRecommendation, Scenario, SearchResponse, Snapshot } from '../types'
 import { SKILL_NAMES } from '../skillNames'
+
+const SEARCH_RETRIES = 4 // a GPU cold start took ~100 s; 4 × 25 s covers it
+const SEARCH_RETRY_MS = 25000
 
 const SDG_COLORS: Record<string, string> = {
   '4.4': 'bg-red-100 text-red-700',
@@ -48,7 +53,14 @@ function FactorBar({ label, value, penalty = false }: { label: string; value: nu
   )
 }
 
-function RoleCard({ role, expanded, onToggle }: { role: RoleRecommendation; expanded: boolean; onToggle: () => void }) {
+function RoleCard({ role, expanded, onToggle, planned, onPlan }: {
+  role: RoleRecommendation
+  expanded: boolean
+  onToggle: () => void
+  planned: boolean
+  onPlan: () => void
+}) {
+  const [openSkill, setOpenSkill] = useState<string | null>(null)
   return (
     <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
       <div
@@ -101,6 +113,14 @@ function RoleCard({ role, expanded, onToggle }: { role: RoleRecommendation; expa
 
       {expanded && (
         <div className="border-t border-gray-100 p-4 space-y-5">
+          <button
+            onClick={onPlan}
+            disabled={planned}
+            className={`text-sm px-3 py-1.5 rounded-lg font-medium ${planned ? 'bg-gray-100 text-gray-500' : 'bg-indigo-600 text-white hover:bg-indigo-700'}`}
+          >
+            {planned ? 'Your learning path below is for this role' : 'Plan my learning path for this role'}
+          </button>
+
           {/* Score breakdown */}
           <div>
             <div className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">Score breakdown</div>
@@ -121,12 +141,23 @@ function RoleCard({ role, expanded, onToggle }: { role: RoleRecommendation; expa
               <div className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">Skill gaps</div>
               <div className="space-y-1.5">
                 {role.gap.map(g => (
-                  <div key={g.skill_id} className="flex items-center justify-between text-sm">
-                    <span className="text-gray-700">{SKILL_NAMES[g.skill_id] ?? g.skill_id.replace(/_/g, ' ')}</span>
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs text-gray-400">{STATE_LABELS[g.state]}</span>
-                      <span className="text-xs text-gray-400">weight {Math.round(g.weight * 100)}%</span>
+                  <div key={g.skill_id}>
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-gray-700">{SKILL_NAMES[g.skill_id] ?? g.skill_id.replace(/_/g, ' ')}</span>
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs text-gray-400">{STATE_LABELS[g.state]}</span>
+                        <span className="text-xs text-gray-400">weight {Math.round(g.weight * 100)}%</span>
+                        <button
+                          onClick={() => setOpenSkill(openSkill === g.skill_id ? null : g.skill_id)}
+                          className="text-xs text-indigo-600 hover:underline"
+                        >
+                          {openSkill === g.skill_id ? 'hide courses' : 'find courses'}
+                        </button>
+                      </div>
                     </div>
+                    {openSkill === g.skill_id && (
+                      <div className="mt-1.5 mb-2"><SkillResources skillId={g.skill_id} /></div>
+                    )}
                   </div>
                 ))}
               </div>
@@ -232,12 +263,35 @@ function PathTimeline({ plan }: { plan: PathPlan }) {
 }
 
 export default function MyFuture() {
+  const userId = useUserId()
   const [scenario, setScenario] = useState<Scenario>('assistive')
   const [recommendation, setRecommendation] = useState<Recommendation | null>(null)
   const [path, setPath] = useState<PathPlan | null>(null)
   const [snapshots, setSnapshots] = useState<Snapshot[]>([])
   const [expandedRole, setExpandedRole] = useState<string | null>(null)
+  const [pathRole, setPathRole] = useState<string | null>(null) // null: server picks the best role
   const [loading, setLoading] = useState(true)
+  const [query, setQuery] = useState('')
+  const [found, setFound] = useState<SearchResponse | null>(null)
+  const [searching, setSearching] = useState(false)
+
+  const runSearch = async (text: string) => {
+    if (text.trim().length < 2) return
+    setSearching(true)
+    try {
+      const first = await searchResources(text.trim(), undefined, 6)
+      setFound(first)
+      // While the GPU worker starts, ask again so the keyword results get replaced by GPU results.
+      let latest = first
+      for (let attempt = 0; attempt < SEARCH_RETRIES && latest.engine === 'keyword' && latest.note.includes('starting up'); attempt++) {
+        await new Promise(resolve => window.setTimeout(resolve, SEARCH_RETRY_MS))
+        latest = await searchResources(text.trim(), undefined, 6)
+        setFound(latest)
+      }
+    } finally {
+      setSearching(false)
+    }
+  }
 
   useEffect(() => {
     getSnapshots().then(setSnapshots).catch(() => {})
@@ -245,14 +299,18 @@ export default function MyFuture() {
 
   useEffect(() => {
     Promise.all([
-      getRecommendation('u_aina', scenario),
-      getPath('u_aina', 'ai_finops_analyst', 4),
+      getRecommendation(userId, scenario),
+      getPath(userId, pathRole),
     ]).then(([rec, p]) => {
       setRecommendation(rec)
       setPath(p)
       setLoading(false)
     })
-  }, [scenario])
+  }, [scenario, pathRole, userId])
+
+  const pathRoleTitle = path
+    ? recommendation?.roles.find(r => r.role_id === path.target_role_id)?.title ?? path.target_role_id
+    : ''
 
   if (loading) return <div className="text-gray-400 text-center py-12">Loading…</div>
 
@@ -314,6 +372,8 @@ export default function MyFuture() {
             role={role}
             expanded={expandedRole === role.role_id}
             onToggle={() => setExpandedRole(expandedRole === role.role_id ? null : role.role_id)}
+            planned={path?.target_role_id === role.role_id}
+            onPlan={() => setPathRole(role.role_id)}
           />
         ))}
       </div>
@@ -322,8 +382,10 @@ export default function MyFuture() {
       {path && (
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <h2 className="text-sm font-semibold text-gray-700">Your learning path</h2>
-            <span className="text-xs text-gray-400">Robust across both scenarios</span>
+            <h2 className="text-sm font-semibold text-gray-700">Your learning path · {pathRoleTitle}</h2>
+            <span className="text-xs text-gray-400">
+              {pathRole ? 'Role you chose' : 'Best role across both scenarios'} · robust across both scenarios
+            </span>
           </div>
           <PathTimeline plan={path} />
           <p className="text-xs text-gray-400">
@@ -331,6 +393,29 @@ export default function MyFuture() {
           </p>
         </div>
       )}
+
+      {/* Resource search (RunPod hybrid search when available) */}
+      <div className="space-y-3">
+        <h2 className="text-sm font-semibold text-gray-700">Search learning resources and work evidence</h2>
+        <form
+          onSubmit={e => { e.preventDefault(); runSearch(query) }}
+          className="flex gap-2"
+        >
+          <input
+            value={query}
+            onChange={e => setQuery(e.target.value)}
+            placeholder="e.g. challenge adjustments without documents"
+            className="flex-1 border border-gray-200 rounded-lg px-3 py-2 text-sm"
+          />
+          <button type="submit" disabled={searching} className="px-4 py-2 rounded-lg bg-indigo-600 text-white text-sm font-medium">
+            {searching ? 'Searching…' : 'Search'}
+          </button>
+        </form>
+        <p className="text-xs text-gray-400">
+          Searches verified courses and O*NET task statements. Every result carries its source and date.
+        </p>
+        {found && <ResourceList response={found} />}
+      </div>
     </div>
   )
 }

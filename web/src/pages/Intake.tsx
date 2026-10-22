@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { getProfile, postProfile } from '../api'
+import { getNextCase, getProfile, postProfile } from '../api'
+import { useUserId } from '../persona'
+import type { Profile } from '../types'
 
 const SKILLS = [
   { id: 'recon_to_source', label: 'Reconcile to source' },
@@ -17,7 +19,10 @@ const INTEREST_OPTIONS = ['analysis', 'automation', 'reporting', 'controls', 'da
 
 export default function Intake() {
   const navigate = useNavigate()
-  const [name] = useState('Aina')
+  const userId = useUserId()
+  const [profile, setProfile] = useState<Profile | null>(null)
+  const [error, setError] = useState<string | null>(null)
+  const name = profile?.display_name.replace(' (synthetic)', '') ?? ''
   const [weeklyHours, setWeeklyHours] = useState(4)
   const [confidences, setConfidences] = useState<Record<string, number>>(
     Object.fromEntries(SKILLS.map(s => [s.id, 0.5]))
@@ -25,9 +30,10 @@ export default function Intake() {
   const [interests, setInterests] = useState<string[]>(['analysis', 'automation'])
   const [submitting, setSubmitting] = useState(false)
 
-  // Pre-fill from Aina's existing profile so returning users see their saved values
+  // Pre-fill from the employee's saved profile so the form shows their current values
   useEffect(() => {
-    getProfile('u_aina').then(profile => {
+    getProfile(userId).then(profile => {
+      setProfile(profile)
       if (profile.skills_self_reported?.length) {
         const map: Record<string, number> = {}
         for (const s of profile.skills_self_reported) map[s.skill_id] = s.confidence
@@ -35,27 +41,29 @@ export default function Intake() {
       }
       if (profile.interests?.length) setInterests(profile.interests)
       if (profile.weekly_learning_hours) setWeeklyHours(profile.weekly_learning_hours)
-    }).catch(() => { /* first-time user — ignore */ })
-  }, [])
+    }).catch(() => setError('Could not load your profile.'))
+  }, [userId])
 
   const toggleInterest = (i: string) =>
     setInterests(prev => prev.includes(i) ? prev.filter(x => x !== i) : [...prev, i])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    if (!profile) return
     setSubmitting(true)
+    setError(null)
     try {
+      // Keep everything else in the profile; only the answers on this page change.
       await postProfile({
-        display_name: name,
-        current_role_id: 'recon_associate',
-        years_experience: 0.5,
+        ...profile,
         skills_self_reported: SKILLS.map(s => ({ skill_id: s.id, confidence: confidences[s.id] })),
         interests,
         weekly_learning_hours: weeklyHours,
-        language: 'en',
-        team: 'finops_kl',
       })
-      navigate('/workspace/case_003')
+      const next = await getNextCase(userId).catch(() => null)
+      navigate(next?.case_id ? `/workspace/${next.case_id}` : '/queue')
+    } catch {
+      setError('Saving your answers failed. Please try again.')
     } finally {
       setSubmitting(false)
     }
@@ -66,7 +74,8 @@ export default function Intake() {
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-gray-900">Welcome, {name}</h1>
         <p className="text-gray-500 mt-1 text-sm">Tell us where you are today so we can personalise your practice.</p>
-        <span className="inline-block mt-2 text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded">Synthetic demo data · Aina is a synthetic persona</span>
+        <span className="inline-block mt-2 text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded">Synthetic demo data · {name} is a synthetic persona</span>
+        {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
@@ -119,7 +128,7 @@ export default function Intake() {
 
         <button
           type="submit"
-          disabled={submitting}
+          disabled={submitting || !profile}
           className="w-full bg-indigo-600 text-white py-3 rounded-xl font-medium hover:bg-indigo-700 disabled:opacity-60 transition-colors"
         >
           {submitting ? 'Starting…' : 'Start practising →'}

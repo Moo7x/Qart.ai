@@ -136,9 +136,10 @@ def next_case(
         if case is None:
             continue
         state = by_skill.get(skill_id)
+        state_name = state.state if state else "insufficient_evidence"
         gap_text = (
             f"weight {weights.get(skill_id, 0.0):.2f} in {role.title} ({scenario}), "
-            f"state {state.state if state else 'insufficient_evidence'}"
+            f"evidence so far: {state_name.replace('_', ' ')}"
         )
         because = _because(
             catalogue.skills[skill_id].name,

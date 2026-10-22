@@ -6,7 +6,6 @@ All A-owned endpoints of contract §5, plus `POST /api/ingest/run`, `POST /api/d
 
 import logging
 from collections.abc import Callable
-from datetime import UTC, datetime
 from functools import lru_cache
 from typing import Annotated, Literal
 
@@ -19,7 +18,6 @@ from src.contract import (
     Event,
     FlagName,
     NextCase,
-    OptimizerProposal,
     PathPlan,
     Profile,
     Recommendation,
@@ -424,38 +422,6 @@ def put_assumptions(update: CompanyAssumptions, store: StoreDep) -> CompanyAssum
     new = update.model_copy(update={"version": current.version + 1})
     store.put_assumptions(new)
     return new
-
-
-# --- optimiser proposals (stub: no optimiser run yet) ---------------------------------------
-class ProposalDecision(BaseModel):
-    decision: Literal["approve", "reject"]
-    decided_by: str
-
-
-@router.get("/optimizer/proposals")
-def get_proposals(store: StoreDep) -> list[OptimizerProposal]:
-    """Empty until the optimiser (Task A9) writes a proposal; no results are invented."""
-    return store.list_proposals()
-
-
-@router.post("/optimizer/proposals/{proposal_id}/decision")
-def decide_proposal(
-    proposal_id: str, decision: ProposalDecision, store: StoreDep
-) -> OptimizerProposal:
-    proposal = store.get_proposal(proposal_id)
-    if proposal is None:
-        raise HTTPException(status_code=404, detail=f"unknown proposal {proposal_id}")
-    if proposal.status != "pending":
-        raise HTTPException(status_code=409, detail=f"proposal already {proposal.status}")
-    decided = proposal.model_copy(
-        update={
-            "status": "approved" if decision.decision == "approve" else "rejected",
-            "decided_by": decision.decided_by,
-            "decided_at": datetime.now(UTC).isoformat(timespec="seconds"),
-        }
-    )
-    store.put_proposal(decided)
-    return decided
 
 
 # --- demo -----------------------------------------------------------------------------------

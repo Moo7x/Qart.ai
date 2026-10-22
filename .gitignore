@@ -14,6 +14,7 @@ venv/
 
 # Qart.ai
 data/raw/
+data/cache/
 *.sqlite
 *.db
 node_modules/

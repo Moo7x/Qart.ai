@@ -41,12 +41,17 @@ SCHEMA_TEMPLATE = (
     "CREATE TABLE IF NOT EXISTS proposals (id TEXT PRIMARY KEY, body TEXT NOT NULL)",
     "CREATE TABLE IF NOT EXISTS changes (seq {serial}, kind TEXT NOT NULL, ref TEXT NOT NULL, "
     "user_id TEXT)",
+    "CREATE TABLE IF NOT EXISTS settings (key TEXT PRIMARY KEY, value TEXT NOT NULL)",
+    "CREATE TABLE IF NOT EXISTS playbooks (version TEXT PRIMARY KEY, body TEXT NOT NULL)",
 )
 SERIAL_TYPE = {
     "sqlite": "INTEGER PRIMARY KEY AUTOINCREMENT",
     "postgres": "BIGSERIAL PRIMARY KEY",
 }
-TABLES = ("profiles", "events", "assumptions", "snapshots", "proposals", "changes")
+# Cleared by a demo reset: practice, evidence and assumption state. Optimiser state (proposals,
+# playbook texts, the active version in settings) is kept on purpose: a run takes minutes and
+# costs LLM calls, and the senior can roll back to playbook_v1 at any time.
+TABLES = ("profiles", "events", "assumptions", "snapshots", "changes")
 
 BackendKind = Literal["sqlite", "postgres"]
 
@@ -253,6 +258,40 @@ class Store:
         with self._connect() as conn:
             rows = conn.execute("SELECT body FROM proposals ORDER BY id").fetchall()
         return [OptimizerProposal.model_validate_json(r[0]) for r in rows]
+
+    # --- settings and playbook versions ---------------------------------------------------
+    def get_setting(self, key: str) -> str | None:
+        with self._connect() as conn:
+            row = conn.execute("SELECT value FROM settings WHERE key = ?", (key,)).fetchone()
+        return str(row[0]) if row else None
+
+    def put_setting(self, key: str, value: str) -> None:
+        with self._connect() as conn:
+            conn.execute(
+                "INSERT INTO settings (key, value) VALUES (?, ?) "
+                "ON CONFLICT (key) DO UPDATE SET value = excluded.value",
+                (key, value),
+            )
+
+    def put_playbook(self, version: str, body: str) -> None:
+        with self._connect() as conn:
+            conn.execute(
+                "INSERT INTO playbooks (version, body) VALUES (?, ?) "
+                "ON CONFLICT (version) DO UPDATE SET body = excluded.body",
+                (version, body),
+            )
+
+    def get_playbook(self, version: str) -> str | None:
+        with self._connect() as conn:
+            row = conn.execute(
+                "SELECT body FROM playbooks WHERE version = ?", (version,)
+            ).fetchone()
+        return str(row[0]) if row else None
+
+    def playbook_versions(self) -> list[str]:
+        with self._connect() as conn:
+            rows = conn.execute("SELECT version FROM playbooks").fetchall()
+        return [str(r[0]) for r in rows]
 
     # --- change log ----------------------------------------------------------------------
     def last_change(self, user_id: str) -> Change | None:

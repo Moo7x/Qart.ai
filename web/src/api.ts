@@ -6,9 +6,16 @@ import axios from 'axios';
 import type {
   Case,
   CompanionMessageResponse,
+  CompanyAssumptions,
   DecisionResponse,
   HRSummaryData,
+  IngestResult,
+  OptimizerProposal,
+  OptimizerStatus,
+  PlaybookInfo,
+  SnapshotDiff,
   NextCase,
+  SearchResponse,
   PathPlan,
   Profile,
   Recommendation,
@@ -277,9 +284,36 @@ export async function getRecommendation(userId: string, scenario: string): Promi
   return data;
 }
 
-export async function getPath(userId: string, roleId: string, weeklyHours: number): Promise<PathPlan> {
+// Without roleId / weeklyHours the server uses the best role across both scenarios and the
+// weekly hours from the employee's intake.
+export async function getPath(userId: string, roleId?: string | null, weeklyHours?: number): Promise<PathPlan> {
   if (USE_MOCKS) return MOCK_PATH;
-  const { data } = await axios.get<PathPlan>(`${BASE}/api/path/${userId}`, { params: { role_id: roleId, weekly_hours: weeklyHours } });
+  const params: Record<string, string | number> = {};
+  if (roleId) params.role_id = roleId;
+  if (weeklyHours) params.weekly_hours = weeklyHours;
+  const { data } = await axios.get<PathPlan>(`${BASE}/api/path/${userId}`, { params });
+  return data;
+}
+
+const MOCK_SEARCH: SearchResponse = {
+  query: 'sample',
+  engine: 'keyword',
+  note: 'Sample data.',
+  results: [],
+};
+
+export async function getResources(skillId: string, k = 3): Promise<SearchResponse> {
+  if (USE_MOCKS) return MOCK_SEARCH;
+  const { data } = await axios.get<SearchResponse>(`${BASE}/api/resources/${skillId}`, { params: { k } });
+  return data;
+}
+
+export async function searchResources(q: string, kinds?: string[], k = 5): Promise<SearchResponse> {
+  if (USE_MOCKS) return { ...MOCK_SEARCH, query: q };
+  const { data } = await axios.get<SearchResponse>(`${BASE}/api/search`, {
+    params: { q, k, kinds },
+    paramsSerializer: { indexes: null },
+  });
   return data;
 }
 
@@ -375,5 +409,78 @@ export async function getSnapshots(): Promise<Snapshot[]> {
 export async function getHRSummary(team: string): Promise<HRSummaryData> {
   if (USE_MOCKS) return MOCK_HR_SUMMARY;
   const { data } = await axios.get<HRSummaryData>(`${BASE}/api/hr/summary`, { params: { team } });
+  return data;
+}
+
+// ── Demo, flags, HR evidence, optimiser ───────────────────────────────────────
+
+export async function resetDemo(): Promise<void> {
+  if (USE_MOCKS) return;
+  await axios.post(`${BASE}/api/demo/reset`);
+}
+
+export async function flagSession(
+  sessionId: string,
+  flag: 'companion_error' | 'ambiguous_case' | 'data_issue',
+  userId: string,
+): Promise<void> {
+  if (USE_MOCKS) return;
+  await axios.post(`${BASE}/api/companion/${sessionId}/flag`, { flag, user_id: userId });
+}
+
+export async function getAssumptions(): Promise<CompanyAssumptions> {
+  const { data } = await axios.get<CompanyAssumptions>(`${BASE}/api/assumptions`);
+  return data;
+}
+
+export async function putAssumptions(update: CompanyAssumptions): Promise<CompanyAssumptions> {
+  const { data } = await axios.put<CompanyAssumptions>(`${BASE}/api/assumptions`, update);
+  return data;
+}
+
+export async function ingestNextSnapshot(): Promise<IngestResult> {
+  const { data } = await axios.post<IngestResult>(`${BASE}/api/ingest/run`);
+  return data;
+}
+
+export async function getSnapshotDiff(): Promise<SnapshotDiff | null> {
+  try {
+    const { data } = await axios.get<SnapshotDiff>(`${BASE}/api/snapshots/diff`);
+    return data;
+  } catch {
+    return null; // fewer than two snapshots ingested yet
+  }
+}
+
+export async function getProposals(): Promise<OptimizerProposal[]> {
+  const { data } = await axios.get<OptimizerProposal[]>(`${BASE}/api/optimizer/proposals`);
+  return data;
+}
+
+export async function decideProposal(id: string, decision: 'approve' | 'reject', decidedBy: string): Promise<OptimizerProposal> {
+  const { data } = await axios.post<OptimizerProposal>(`${BASE}/api/optimizer/proposals/${id}/decision`, {
+    decision,
+    decided_by: decidedBy,
+  });
+  return data;
+}
+
+export async function rollbackProposal(id: string): Promise<PlaybookInfo> {
+  const { data } = await axios.post<PlaybookInfo>(`${BASE}/api/optimizer/proposals/${id}/rollback`);
+  return data;
+}
+
+export async function getPlaybook(): Promise<PlaybookInfo> {
+  const { data } = await axios.get<PlaybookInfo>(`${BASE}/api/optimizer/playbook`);
+  return data;
+}
+
+export async function startOptimizer(): Promise<OptimizerStatus> {
+  const { data } = await axios.post<OptimizerStatus>(`${BASE}/api/optimizer/run`);
+  return data;
+}
+
+export async function getOptimizerStatus(): Promise<OptimizerStatus> {
+  const { data } = await axios.get<OptimizerStatus>(`${BASE}/api/optimizer/status`);
   return data;
 }

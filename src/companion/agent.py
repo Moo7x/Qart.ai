@@ -7,9 +7,9 @@ import os
 import re
 import uuid
 from datetime import UTC, datetime
-from pathlib import Path
 from typing import Any
 
+from src.companion.playbook_versions import BASE_VERSION, read_playbook
 from src.companion.tools import (
     compare_amounts,
     find_document,
@@ -18,8 +18,6 @@ from src.companion.tools import (
     match_entries,
     recompute_totals,
 )
-
-PLAYBOOK_PATH = Path(__file__).parent / "playbooks" / "playbook_v1.md"
 
 # In-memory session store (fine for hackathon; one process)
 _sessions: dict[str, dict[str, Any]] = {}
@@ -361,6 +359,7 @@ def process_message(
     mode: str,
     user_id: str = "u_aina",
     scenario: str = "assistive",
+    playbook: tuple[str, str] | None = None,
 ) -> dict[str, Any]:
     """Process a user message and return a companion response."""
     session = get_or_create_session(session_id, case, mode, user_id, scenario)
@@ -393,8 +392,8 @@ def process_message(
             base_url=os.getenv("LLM_BASE_URL", "https://api.openai.com/v1"),
         )
         model = os.getenv("LLM_MODEL", "gpt-4o-mini")
-        playbook = PLAYBOOK_PATH.read_text()
-        system_prompt = _build_system_prompt(session, playbook)
+        playbook_text = playbook[1] if playbook else read_playbook(BASE_VERSION)
+        system_prompt = _build_system_prompt(session, playbook_text)
 
         messages: list[dict[str, Any]] = [{"role": "system", "content": system_prompt}]
         messages.extend(session["messages"])
@@ -475,6 +474,7 @@ def process_decision(
     user_id: str = "u_aina",
     scenario: str = "assistive",
     self_confidence_before: float | None = None,
+    playbook_version: str = BASE_VERSION,
 ) -> dict[str, Any]:
     """Grade a decision and return an Event plus grader metadata.
 
@@ -534,7 +534,7 @@ def process_decision(
         "issue_found_by": grader_result["issue_found_by"],
         "skills_evidence": grader_result["skills_evidence"],
         "cause_if_wrong": None,
-        "companion_version": "playbook_v1",
+        "companion_version": playbook_version,
         "duration_sec": duration_sec,
         "difficulty": case.get("difficulty", 1),
         "session_id": session_id,
