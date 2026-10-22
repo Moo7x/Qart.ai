@@ -63,3 +63,10 @@ def test_flag_marks_the_latest_session_event_so_it_stops_counting(client: TestCl
     assert state["counted_events"] == 0
     missing = client.post("/api/companion/s_none/flag", json={"flag": "ambiguous_case"})
     assert missing.status_code == 404
+
+
+def test_demo_reset_clears_companion_sessions(client: TestClient) -> None:
+    msg = {"user_message": "I'm stuck", "case_id": "case_003"}
+    assert client.post("/api/companion/s_reset/message", json=msg).json()["help_level"] == 1
+    client.post("/api/demo/reset").raise_for_status()
+    assert client.post("/api/companion/s_reset/message", json=msg).json()["help_level"] == 1

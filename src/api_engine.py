@@ -5,6 +5,7 @@ All A-owned endpoints of contract §5, plus `POST /api/ingest/run`, `POST /api/d
 """
 
 import logging
+from collections.abc import Callable
 from datetime import UTC, datetime
 from functools import lru_cache
 from typing import Annotated, Literal
@@ -465,10 +466,17 @@ class ResetResult(BaseModel):
     assumptions_version: int
 
 
+# Modules with in-memory state (the companion's chat sessions) register a clear function here,
+# so a demo reset starts everything fresh without the engine importing them.
+DEMO_RESET_HOOKS: list[Callable[[], None]] = []
+
+
 @router.post("/demo/reset")
 def demo_reset(store: StoreDep) -> ResetResult:
     """Back to the synthetic seed: v1 assumptions, oldest snapshot only, Aina with no events."""
     people = seed(store)
+    for clear in DEMO_RESET_HOOKS:
+        clear()
     return ResetResult(
         status="reset",
         people=people,

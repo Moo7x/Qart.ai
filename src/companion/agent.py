@@ -128,6 +128,11 @@ def _reset_case_state(session: dict[str, Any], case: dict[str, Any], mode: str) 
     )
 
 
+def clear_sessions() -> None:
+    """Forget every chat session (used by the demo reset)."""
+    _sessions.clear()
+
+
 def get_or_create_session(
     session_id: str,
     case: dict[str, Any],
@@ -154,8 +159,9 @@ def get_or_create_session(
             "missed_decision": False,
         }
     session = _sessions[session_id]
-    # Reset per-case state whenever the user opens a different case.
-    if session["current_case_id"] != case_id:
+    # Reset per-case state whenever the user opens a different case, or starts a new attempt on
+    # a case already decided (otherwise the old help level would leak into the new attempt).
+    if session["current_case_id"] != case_id or session["decided"]:
         _reset_case_state(session, case, mode)
     # Check-in is always independent — help is never allowed.
     if mode == "checkin":

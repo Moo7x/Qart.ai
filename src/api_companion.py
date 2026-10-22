@@ -13,14 +13,15 @@ from typing import Any, Literal
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 
+from src.api_engine import DEMO_RESET_HOOKS, FlagResponse, StoreDep, flag_event, record_event
 from src.api_engine import FlagRequest as EngineFlagRequest
-from src.api_engine import FlagResponse, StoreDep, flag_event, record_event
-from src.companion.agent import process_decision, process_message
+from src.companion.agent import clear_sessions, process_decision, process_message
 from src.contract import Event, FlagName
 from src.store import Store
 
 router = APIRouter(tags=["companion"])
 _log = logging.getLogger(__name__)
+DEMO_RESET_HOOKS.append(clear_sessions)
 
 CASES_DIR = Path(__file__).resolve().parent.parent / "cases"
 INDEX_FILE = "index.json"

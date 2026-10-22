@@ -139,3 +139,14 @@ def test_offline_answer_uses_only_this_case(case_001, monkeypatch):
         for a in result["ui_actions"]
         if a["type"] == "open_document"
     )
+
+
+def test_new_attempt_after_decision_starts_without_help(case_001, monkeypatch):
+    """Reopening a decided case in the same session must not carry the old help level."""
+    monkeypatch.delenv("LLM_API_KEY", raising=False)
+    from src.companion.agent import process_message
+
+    sid = _sid()
+    process_message(sid, "I'm stuck", case_001, "practice")
+    process_decision(sid, "sign_off", [], case_001, "practice")
+    assert process_message(sid, "hello", case_001, "practice")["help_level"] == 0
