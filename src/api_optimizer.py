@@ -14,7 +14,13 @@ from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 
 from src.api_engine import StoreDep
-from src.companion.playbook_versions import active_playbook, known_versions, set_active
+from src.companion.playbook_versions import (
+    active_playbook,
+    known_versions,
+    read_playbook,
+    save_version,
+    set_active,
+)
 from src.contract import OptimizerProposal
 from src.optimizer.jobs import JOB, OptimizerStatus
 from src.optimizer.pipeline import run_optimizer
@@ -60,6 +66,8 @@ def decide_proposal(
         raise HTTPException(status_code=409, detail=f"proposal already {proposal.status}")
     approved = decision.decision == "approve"
     if approved:
+        text = read_playbook(proposal.candidate_version, store)
+        save_version(store, proposal.candidate_version, text)  # approved: also a reviewable file
         set_active(store, proposal.candidate_version)
     decided = proposal.model_copy(
         update={

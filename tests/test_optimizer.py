@@ -126,6 +126,7 @@ def test_an_improvement_becomes_a_pending_proposal_and_is_not_active(
     assert FIX in proposal.diff and proposal.rollback_to == "playbook_v1"
     assert pv.active_playbook(store)[0] == "playbook_v1"  # nothing activates without a senior
     assert FIX in pv.read_playbook("playbook_v2", store)
+    assert not (playbook_dir / "playbook_v2.md").exists()  # files only for approved versions
 
 
 def test_no_gain_is_rejected_automatically_without_touching_acceptance(
@@ -147,6 +148,7 @@ def test_senior_approval_activates_and_rollback_restores(
     approved = client.post(decide, json={"decision": "approve", "decided_by": "senior (synthetic)"})
     assert approved.json()["status"] == "approved"
     assert client.get("/api/optimizer/playbook").json()["active_version"] == "playbook_v2"
+    assert (playbook_dir / "playbook_v2.md").exists()
     assert client.post(decide, json={"decision": "reject", "decided_by": "x"}).status_code == 409
     rolled = client.post(f"/api/optimizer/proposals/{proposal.id}/rollback").json()
     assert rolled["active_version"] == "playbook_v1"

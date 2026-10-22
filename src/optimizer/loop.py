@@ -17,6 +17,7 @@ the candidate is frozen, in eval/gate.py, so acceptance results cannot shape the
 
 import json
 import os
+from collections import Counter
 from collections.abc import Callable, Sequence
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
@@ -32,7 +33,7 @@ INDEX_FILE = "index.json"
 # DECLARED: variants per practice case (5 practice + 2 check-in cases → 7 + 2×5 = 17 cases).
 VARIANTS_PER_CASE = 2
 # DECLARED: revision rounds per run (each round = 1 proposal call + one pass over the set).
-ROUNDS = 2
+ROUNDS = 3
 # DECLARED: parallel diagnosis calls (keeps a pass under a minute without hitting rate limits).
 WORKERS = 4
 # DECLARED: weights of the improvement rule. Decisions and root causes count once; a false alarm
@@ -43,7 +44,7 @@ FALSE_ALARM_COST = 2
 INVALID_CITATION_COST = 1
 MAX_PLAYBOOK_GROWTH = 2.0  # a revision may at most double the text (keeps it a readable procedure)
 PROPOSAL_MAX_TOKENS = 2500
-PROPOSAL_TEMPERATURE = 0.2  # a little variety between rounds; scoring calls stay at 0
+PROPOSAL_TEMPERATURE = 0.4  # variety between rounds (first live run: revisions were near copies)
 
 Diagnose = Callable[[dict[str, Any], str], Diagnosis]
 Propose = Callable[[str, list[dict[str, Any]]], tuple[str, str]]
@@ -172,6 +173,25 @@ def _proposal_schema() -> dict[str, Any]:
     }
 
 
+def _counts(counter: Counter[str]) -> str:
+    return ", ".join(f"{key} ({n})" for key, n in counter.most_common()) or "none"
+
+
+def failure_pattern(failures: Sequence[dict[str, Any]]) -> str:
+    """Counts of the mistakes, so the proposer sees the pattern and not only single cases."""
+    decisions = Counter(f"{f['decided']} instead of {f['right_decision']}" for f in failures)
+    extra: Counter[str] = Counter()
+    missing: Counter[str] = Counter()
+    for f in failures:
+        extra.update(set(f["found_issue_types"]) - set(f["right_issue_types"]))
+        missing.update(set(f["right_issue_types"]) - set(f["found_issue_types"]))
+    return (
+        f"Decision mistakes: {_counts(decisions)}.\n"
+        f"Issue types reported but not present: {_counts(extra)}.\n"
+        f"Issue types present but missed: {_counts(missing)}."
+    )
+
+
 def llm_propose(playbook: str, failures: list[dict[str, Any]]) -> tuple[str, str]:
     """One revision from the LLM: (new playbook text, rationale)."""
     from openai import OpenAI
@@ -181,7 +201,10 @@ def llm_propose(playbook: str, failures: list[dict[str, Any]]) -> tuple[str, str
     )
     user = (
         f"Current procedure:\n\n{playbook}\n\n"
-        f"Mistakes made when following it ({len(failures)} cases):\n"
+        f"Pattern of the mistakes:\n{failure_pattern(failures)}\n\n"
+        "Fix the pattern first: make the decision criteria in the procedure precise enough that "
+        "these mistakes stop, without causing the opposite mistake.\n\n"
+        f"The cases ({len(failures)}):\n"
         f"{json.dumps(failures, ensure_ascii=False, indent=1)}\n\n"
         "Return the full revised procedure and a short rationale (what you changed and why)."
     )

@@ -102,7 +102,7 @@ def run_optimizer(
         gate = gate_fn(base_text, loop.best_text)
     candidate_version = next_version(store)
     proposal, text = build_proposal(base_version, candidate_version, loop, gate)
-    save_version(store, candidate_version, text)
+    save_version(store, candidate_version, text, write_file=False)
     store.put_proposal(proposal)
     progress(f"proposal {proposal.id} stored ({proposal.status})")
     return proposal

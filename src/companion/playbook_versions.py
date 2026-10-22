@@ -2,10 +2,10 @@
 
 playbook_v1 is the hand-written procedure committed in src/companion/playbooks/. Later versions come
 from the optimiser; a senior approves one before it becomes active. Texts are kept in the store
-(Replit does not keep files written at runtime) and also written to src/companion/playbooks/ so a
-local run can be reviewed in git. The active version is a store setting; a demo reset clears it,
-which means playbook_v1 again. Every event records the version that produced it
-(companion_version), so evidence can always be traced to the procedure in force.
+(Replit does not keep files written at runtime); an approved version is also written to
+src/companion/playbooks/ so it can be reviewed in git. The active version is a store setting; a
+demo reset clears it, which means playbook_v1 again. Every event records the version that produced
+it (companion_version), so evidence can always be traced to the procedure in force.
 """
 
 import logging
@@ -73,12 +73,17 @@ def next_version(store: Store) -> str:
     return f"playbook_v{max(numbers, default=1) + 1}"
 
 
-def save_version(store: Store, version: str, body: str) -> Path:
-    """Keep a new version in the store and, when the disk is writable, as a reviewable file."""
+def save_version(store: Store, version: str, body: str, write_file: bool = True) -> Path:
+    """Keep a version in the store and, when asked and the disk is writable, as a file.
+
+    The optimiser stores candidates without a file; approving one writes it (write_file), so the
+    repository only gains versions a senior accepted.
+    """
     store.put_playbook(version, body)
     path = playbook_file(version)
-    try:
-        path.write_text(body, encoding="utf-8")
-    except OSError as error:  # read-only deployment: the store copy is the one that counts
-        _log.warning("could not write %s: %s", path, error)
+    if write_file:
+        try:
+            path.write_text(body, encoding="utf-8")
+        except OSError as error:  # read-only deployment: the store copy is the one that counts
+            _log.warning("could not write %s: %s", path, error)
     return path
