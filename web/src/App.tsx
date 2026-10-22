@@ -1,25 +1,27 @@
 import type { ReactNode } from 'react'
-import { useState } from 'react'
+import { lazy, Suspense, useState } from 'react'
 import { BrowserRouter, Link, Navigate, NavLink, Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 import { RotateCcw } from 'lucide-react'
 import { resetDemo } from './api'
-import CompanionUpdates from './pages/CompanionUpdates'
-import Evidence from './pages/Evidence'
-import HRSummary from './pages/HRSummary'
-import Impact from './pages/Impact'
-import Intake from './pages/Intake'
-import MyFuture from './pages/MyFuture'
-import MySkills from './pages/MySkills'
-import Pathway from './pages/Pathway'
-import Result from './pages/Result'
-import Scenarios from './pages/Scenarios'
-import Signals from './pages/Signals'
-import WorkQueue from './pages/WorkQueue'
-import Workspace from './pages/Workspace'
 import { FUTURE_FLOW_PATHS } from './components/FlowSteps'
 import { PERSONAS, PersonaProvider, usePersona } from './persona'
 import type { PersonaRole } from './persona'
-import { EmptyState, ProvenanceTag } from './ui'
+import { EmptyState, Loading, ProvenanceTag } from './ui'
+
+// Pages load on first visit, so the first screen does not download all of them.
+const CompanionUpdates = lazy(() => import('./pages/CompanionUpdates'))
+const Evidence = lazy(() => import('./pages/Evidence'))
+const HRSummary = lazy(() => import('./pages/HRSummary'))
+const Impact = lazy(() => import('./pages/Impact'))
+const Intake = lazy(() => import('./pages/Intake'))
+const MyFuture = lazy(() => import('./pages/MyFuture'))
+const MySkills = lazy(() => import('./pages/MySkills'))
+const Pathway = lazy(() => import('./pages/Pathway'))
+const Result = lazy(() => import('./pages/Result'))
+const Scenarios = lazy(() => import('./pages/Scenarios'))
+const Signals = lazy(() => import('./pages/Signals'))
+const WorkQueue = lazy(() => import('./pages/WorkQueue'))
+const Workspace = lazy(() => import('./pages/Workspace'))
 
 const LINKS: Record<PersonaRole, { to: string; label: string }[]> = {
   employee: [
@@ -141,22 +143,24 @@ export default function App() {
       <BrowserRouter>
         <Nav />
         <Main>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/start" element={<Only role="employee"><Intake /></Only>} />
-            <Route path="/queue" element={<Only role="employee"><WorkQueue /></Only>} />
-            <Route path="/workspace/:caseId" element={<Only role="employee"><Workspace /></Only>} />
-            <Route path="/result/:caseId" element={<Only role="employee"><Result /></Only>} />
-            <Route path="/skills" element={<Only role="employee"><MySkills /></Only>} />
-            <Route path="/signals" element={<Only role="employee"><Signals /></Only>} />
-            <Route path="/future" element={<Only role="employee"><MyFuture /></Only>} />
-            <Route path="/pathway" element={<Only role="employee"><Pathway /></Only>} />
-            <Route path="/impact" element={<Only role="employee"><Impact /></Only>} />
-            <Route path="/scenarios" element={<Only role="employee"><Scenarios /></Only>} />
-            <Route path="/hr" element={<Only role="hr"><HRSummary /></Only>} />
-            <Route path="/evidence" element={<Only role="hr"><Evidence /></Only>} />
-            <Route path="/improve" element={<Only role="senior"><CompanionUpdates /></Only>} />
-          </Routes>
+          <Suspense fallback={<Loading what="page" />}>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/start" element={<Only role="employee"><Intake /></Only>} />
+              <Route path="/queue" element={<Only role="employee"><WorkQueue /></Only>} />
+              <Route path="/workspace/:caseId" element={<Only role="employee"><Workspace /></Only>} />
+              <Route path="/result/:caseId" element={<Only role="employee"><Result /></Only>} />
+              <Route path="/skills" element={<Only role="employee"><MySkills /></Only>} />
+              <Route path="/signals" element={<Only role="employee"><Signals /></Only>} />
+              <Route path="/future" element={<Only role="employee"><MyFuture /></Only>} />
+              <Route path="/pathway" element={<Only role="employee"><Pathway /></Only>} />
+              <Route path="/impact" element={<Only role="employee"><Impact /></Only>} />
+              <Route path="/scenarios" element={<Only role="employee"><Scenarios /></Only>} />
+              <Route path="/hr" element={<Only role="hr"><HRSummary /></Only>} />
+              <Route path="/evidence" element={<Only role="hr"><Evidence /></Only>} />
+              <Route path="/improve" element={<Only role="senior"><CompanionUpdates /></Only>} />
+            </Routes>
+          </Suspense>
         </Main>
       </BrowserRouter>
     </PersonaProvider>
