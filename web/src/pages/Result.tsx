@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, useLocation, useParams } from 'react-router-dom'
 import { getNextCase, getSkills } from '../api'
 import { skillName } from '../skillNames'
+import { SkillResources } from '../components/ResourceList'
 import type { DecisionResponse, NextCase, SkillState } from '../types'
 
 const STATE_COLORS: Record<string, string> = {
@@ -66,6 +67,21 @@ export default function Result() {
             ))}
           </div>
           <p className="text-xs text-gray-400 mt-3">Evidence state, not a score. See My skills for your full trail.</p>
+        </div>
+      )}
+
+      {relevantSkills.some(s => s.state !== 'demonstrated_independently') && (
+        <div className="bg-white rounded-xl border border-gray-200 p-4 space-y-3">
+          <div className="text-xs font-medium text-gray-500 uppercase tracking-wide">Learn more</div>
+          {relevantSkills
+            .filter(s => s.state !== 'demonstrated_independently')
+            .slice(0, 2)
+            .map(s => (
+              <div key={s.skill_id} className="space-y-1">
+                <div className="text-sm font-medium text-gray-800">{skillName(s.skill_id)}</div>
+                <SkillResources skillId={s.skill_id} k={2} />
+              </div>
+            ))}
         </div>
       )}
 

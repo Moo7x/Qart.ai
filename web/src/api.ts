@@ -9,6 +9,7 @@ import type {
   DecisionResponse,
   HRSummaryData,
   NextCase,
+  SearchResponse,
   PathPlan,
   Profile,
   Recommendation,
@@ -277,9 +278,36 @@ export async function getRecommendation(userId: string, scenario: string): Promi
   return data;
 }
 
-export async function getPath(userId: string, roleId: string, weeklyHours: number): Promise<PathPlan> {
+// Without roleId / weeklyHours the server uses the best role across both scenarios and the
+// weekly hours from the employee's intake.
+export async function getPath(userId: string, roleId?: string | null, weeklyHours?: number): Promise<PathPlan> {
   if (USE_MOCKS) return MOCK_PATH;
-  const { data } = await axios.get<PathPlan>(`${BASE}/api/path/${userId}`, { params: { role_id: roleId, weekly_hours: weeklyHours } });
+  const params: Record<string, string | number> = {};
+  if (roleId) params.role_id = roleId;
+  if (weeklyHours) params.weekly_hours = weeklyHours;
+  const { data } = await axios.get<PathPlan>(`${BASE}/api/path/${userId}`, { params });
+  return data;
+}
+
+const MOCK_SEARCH: SearchResponse = {
+  query: 'sample',
+  engine: 'keyword',
+  note: 'Sample data.',
+  results: [],
+};
+
+export async function getResources(skillId: string, k = 3): Promise<SearchResponse> {
+  if (USE_MOCKS) return MOCK_SEARCH;
+  const { data } = await axios.get<SearchResponse>(`${BASE}/api/resources/${skillId}`, { params: { k } });
+  return data;
+}
+
+export async function searchResources(q: string, kinds?: string[], k = 5): Promise<SearchResponse> {
+  if (USE_MOCKS) return { ...MOCK_SEARCH, query: q };
+  const { data } = await axios.get<SearchResponse>(`${BASE}/api/search`, {
+    params: { q, k, kinds },
+    paramsSerializer: { indexes: null },
+  });
   return data;
 }
 

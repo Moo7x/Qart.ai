@@ -281,3 +281,23 @@ export interface NextCase {
   because: string;
   skill_id?: string | null;
 }
+
+// GET /api/search and /api/resources/{skill_id}: engine says which search produced the results.
+export interface SearchResult {
+  document_id: string;
+  kind: 'course' | 'course_candidate' | 'onet_task' | 'onet_dwa';
+  title: string;
+  score: number;
+  rank: number;
+  source: string;
+  url: string;
+  date: string;
+  retriever: string;
+}
+
+export interface SearchResponse {
+  query: string;
+  engine: 'hybrid' | 'keyword';
+  note: string;
+  results: SearchResult[];
+}
