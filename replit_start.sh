@@ -13,4 +13,4 @@ npm run build
 cd ..
 
 echo "==> Starting Qart.ai server on port 8000..."
-exec uvicorn src.main:app --host 0.0.0.0 --port 8000
+exec uvicorn src.app:app --host 0.0.0.0 --port 8000
