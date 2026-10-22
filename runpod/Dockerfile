@@ -1,9 +1,10 @@
 # RunPod serverless worker: BGE-M3 embeddings + bge-reranker-v2-m3 (see runpod/README.md).
 # Build context is the REPOSITORY ROOT (RunPod's GitHub build has no build-context setting):
 #   docker build -f runpod/Dockerfile .
-# Base image with CUDA 12.1 and PyTorch preinstalled, so choose "previous generation" GPUs
-# (latest-generation GPUs need CUDA 12.8+).
-FROM pytorch/pytorch:2.4.1-cuda12.1-cudnn9-runtime
+# Base image with CUDA 12.4 and PyTorch 2.6 preinstalled, so choose "previous generation" GPUs
+# (latest-generation GPUs need CUDA 12.8+). PyTorch must be >= 2.6: transformers refuses to load
+# .bin weights (BGE-M3 ships only pytorch_model.bin) with older torch because of a torch.load CVE.
+FROM pytorch/pytorch:2.6.0-cuda12.4-cudnn9-runtime
 
 WORKDIR /worker
 COPY runpod/requirements.txt .
