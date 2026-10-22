@@ -33,3 +33,8 @@
 | 2026-10-22 | library | openai 3.36.1 (Python SDK) | OpenAI-compatible LLM client used by the companion; provider and model set by LLM_BASE_URL / LLM_MODEL | Apache-2.0 | free / open source | Person A |
 | 2026-10-22 | AI model (called) | OpenAI gpt-4o-mini via API (LLM_API_KEY from the environment) | Companion replies, automatic diagnosis, the text-only baseline and the playbook optimiser's revisions | OpenAI API terms | paid API (team key) | Person A |
 | 2026-10-22 | AI model (called) | OpenAI gpt-4o via API, only when OPTIMIZER_MODEL is set (LLM_API_KEY) | Writes the playbook optimiser's revisions; all scoring still uses gpt-4o-mini | OpenAI API terms | paid API (team key) | Person A |
+| 2026-10-23 | library | SQLAlchemy 2.1.6 (Core only) | One database layer for SQLite (local) and PostgreSQL (Replit) | MIT | free / open source | team |
+| 2026-10-23 | library | PyYAML 6.0.3 | Reading data packs, field profiles and the source registry | MIT | free / open source | team |
+| 2026-10-23 | library (dev) | types-PyYAML 6.0.12.20260906 | Type stubs for mypy | Apache-2.0 | free / open source | team |
+| 2026-10-23 | removed | pandas, Google OR-Tools, runpod SDK (app side), old catalogue courses and O*NET extracts, Anthropic Economic Index snapshots of the previous product | Removed with the previous product on branch v3; anything reused later is re-added here with its new purpose | — | — | team |
+| 2026-10-23 | browser API | Web Speech API (speechSynthesis, SpeechRecognition) | Optional voice for the on-screen agent (spike S2); runs in the user's browser, no server call | Browser built-in (Chrome sends recognition audio to Google's service) | free | team |
