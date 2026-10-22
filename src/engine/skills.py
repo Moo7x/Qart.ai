@@ -34,7 +34,11 @@ UNAIDED_MISS_OUTCOMES: frozenset[Outcome] = frozenset({"missed_then_found", "fai
 NOT_COUNTED_FLAGS: tuple[FlagName, ...] = ("companion_error", "ambiguous_case")
 HALF = 0.5  # offset for half-up rounding of the self-rating
 SELF_RATING_SCALE = 10  # intake confidence 0..1 is shown as the employee's own n/10 rating
+# Level 0 appears on a walk-back: a wrong practice decision is held back and the person then
+# finds the issue on their own. It is still missed_then_found (never an independent success),
+# so it only needs wording; without it the explanation raised KeyError and /skills returned 500.
 HELP_PHRASE: dict[int, str] = {
+    0: "on a second look, without help",
     1: "after a question",
     2: "after a hint",
     3: "after an explanation",

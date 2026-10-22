@@ -70,3 +70,25 @@ def test_demo_reset_clears_companion_sessions(client: TestClient) -> None:
     assert client.post("/api/companion/s_reset/message", json=msg).json()["help_level"] == 1
     client.post("/api/demo/reset").raise_for_status()
     assert client.post("/api/companion/s_reset/message", json=msg).json()["help_level"] == 1
+
+
+def test_walk_back_corrected_without_help_records_and_keeps_skills_readable(
+    client: TestClient,
+) -> None:
+    # Regression: this path used to raise KeyError in the explanation and return 500.
+    g = truth("case_003")
+    client.post(
+        "/api/companion/s_back/decision", json={"decision": "sign_off", "case_id": "case_003"}
+    )
+    second = client.post(
+        "/api/companion/s_back/decision",
+        json={
+            "decision": g["correct_decision"],
+            "case_id": "case_003",
+            "flagged_rows": g["affected_rows"],
+        },
+    )
+    assert second.status_code == 200
+    outcomes = {e["outcome"] for e in second.json()["event"]["skills_evidence"]}
+    assert outcomes == {"missed_then_found"}
+    assert client.get("/api/skills/u_aina").status_code == 200

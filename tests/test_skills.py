@@ -209,3 +209,11 @@ def test_self_confidence_does_not_inflate_estimate() -> None:
 
 def test_self_rating_rounds_half_up_like_the_web_app() -> None:
     assert "9/10" in derive_skill_state("u_x", SKILL, [], 0.85).why
+
+
+def test_walk_back_found_without_help_is_explained_and_not_independent() -> None:
+    # A held-back wrong decision corrected with no help is missed_then_found at help 0.
+    events = [make_event(1, outcome="missed_then_found", help_level=0), make_event(2, help_level=2)]
+    result = derive_skill_state("u_test", SKILL, events, None)
+    assert "on a second look, without help" in result.why
+    assert result.independent_successes == 0
