@@ -170,6 +170,11 @@ def auto_diagnose(case: dict[str, Any], playbook_path: str, use_llm: bool = True
     the rule-based path (the evaluation reports both).
     """
     playbook = Path(playbook_path).read_text(encoding="utf-8")
+    return diagnose_with_playbook(case, playbook, use_llm)
+
+
+def diagnose_with_playbook(case: dict[str, Any], playbook: str, use_llm: bool = True) -> Diagnosis:
+    """auto_diagnose with the playbook given as text (the optimiser tries candidates this way)."""
     api_key = os.getenv("LLM_API_KEY", "") if use_llm else ""
     totals, matches, adjustments, tool_log = _tool_results(case)
     if not api_key:
