@@ -34,3 +34,4 @@
 | 2026-10-22 | font | Switzer (Indian Type Foundry, via Fontshare CDN api.fontshare.com) | UI typeface for the web app (qart-design-system skill) | ITF Free Font License (free for commercial use) | free | team |
 | 2026-10-22 | font | Source Serif 4 (Adobe, via Google Fonts) | Occasional serif for intro and "why" lines in the web app | SIL Open Font License 1.1 | free / open source | team |
 | 2026-10-22 | reference (design) | Refero Styles "Notion" and "Perplexity AI" design systems (styles.refero.design, read 2026-10-22) | Starting point for the qart-design-system tokens and layout; values adapted, contrast re-checked | Refero terms; inspiration only, no assets copied | free | team |
+| 2026-10-22 | library | lucide-react 1.61 (web) | Icon set for the web app; the only icons allowed by qart-design-system | ISC | free / open source | team |
