@@ -198,8 +198,13 @@ def get_skills(user_id: str, store: StoreDep) -> list[SkillState]:
 
 
 # --- events ---------------------------------------------------------------------------------
-@router.post("/events")
-def post_event(event: Event, store: StoreDep) -> list[SkillState]:
+def record_event(event: Event, store: Store | None = None) -> list[SkillState]:
+    """Validate and store one event; return the user's updated SkillStates.
+
+    Shared by POST /api/events and by the companion, which calls it in-process after grading
+    (no HTTP round trip). Raises HTTPException (404 unknown user, 422 invalid, 409 duplicate).
+    """
+    store = store or get_store()
     catalogue = default_catalogue()
     profile = require_profile(store, event.user_id)
     unknown = {e.skill_id for e in event.skills_evidence} - set(catalogue.skills)
@@ -212,6 +217,11 @@ def post_event(event: Event, store: StoreDep) -> list[SkillState]:
         raise HTTPException(status_code=409, detail=f"event {event.id} already recorded")
     store.add_event(event)
     return states_for(profile, store.events_for(event.user_id), catalogue)
+
+
+@router.post("/events")
+def post_event(event: Event, store: StoreDep) -> list[SkillState]:
+    return record_event(event, store)
 
 
 class FlagRequest(BaseModel):

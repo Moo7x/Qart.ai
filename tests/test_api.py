@@ -2,6 +2,8 @@
 
 from typing import Any
 
+import pytest
+from fastapi import HTTPException
 from fastapi.testclient import TestClient
 
 from src.contract import (
@@ -245,3 +247,18 @@ def test_recommendation_never_exposes_a_percentage_state(client: TestClient) -> 
     states = client.get("/api/skills/u_aina").json()
     for state in states:
         assert "%" not in state["why"]
+
+
+def test_record_event_can_be_called_in_process(client: TestClient) -> None:
+    """The companion records graded events without HTTP; validation is the same as the route."""
+    from src.api_engine import get_store, record_event
+    from src.contract import Event
+    from src.main import app
+
+    store = app.dependency_overrides[get_store]()
+    event = Event.model_validate(golden_journey_raw()["events"][0])
+    states = record_event(event, store)
+    assert skill([s.model_dump() for s in states]).counted_events == 1
+    with pytest.raises(HTTPException) as duplicate:
+        record_event(event, store)
+    assert duplicate.value.status_code == 409
