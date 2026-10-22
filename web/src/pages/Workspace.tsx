@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { getCase, postDecision, postMessage } from '../api'
+import { useUserId } from '../persona'
 import type { Case, CaseDocument, DecisionResponse, UiAction } from '../types'
 
 const HELP_DOTS = ['●', '●', '●', '●', '●']
@@ -24,6 +25,7 @@ export default function Workspace() {
   const { caseId } = useParams<{ caseId: string }>()
   const navigate = useNavigate()
   const sessionId = useRef(`s_${Date.now()}`)
+  const userId = useUserId()
 
   const [caseData, setCaseData] = useState<Case | null>(null)
   const [loading, setLoading] = useState(true)
@@ -52,7 +54,8 @@ export default function Workspace() {
   }, [caseId])
 
   useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+    // 'nearest' scrolls only the chat panel, not the whole page
+    chatEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
   }, [messages])
 
   const applyActions = (actions: UiAction[]) => {
@@ -71,7 +74,7 @@ export default function Workspace() {
     setMessages(prev => [...prev, { role: 'user', text }])
     setInput('')
     try {
-      const res = await postMessage(sessionId.current, caseId, text)
+      const res = await postMessage(sessionId.current, caseId, text, userId, caseData?.scenario_variant ?? 'assistive')
       setMessages(prev => [...prev, { role: 'assistant', text: res.reply }])
       setHelpLevel(res.help_level)
       setTrace(res.trace)
@@ -86,7 +89,7 @@ export default function Workspace() {
     setDeciding(true)
     setPopIn(null)
     try {
-      const res = await postDecision(sessionId.current, caseId, decision, [...flaggedRows])
+      const res = await postDecision(sessionId.current, caseId, decision, [...flaggedRows], userId, caseData?.scenario_variant ?? 'assistive')
       setDecisionResult(res)
       if (!res.missed_and_walking_back) {
         // Navigate to result page after a brief moment

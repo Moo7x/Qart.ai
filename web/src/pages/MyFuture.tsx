@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { getPath, getRecommendation, getSnapshots, searchResources } from '../api'
 import { ResourceList, SkillResources } from '../components/ResourceList'
+import { useUserId } from '../persona'
 import type { PathPlan, Recommendation, RoleRecommendation, Scenario, SearchResponse, Snapshot } from '../types'
 import { SKILL_NAMES } from '../skillNames'
 
@@ -259,6 +260,7 @@ function PathTimeline({ plan }: { plan: PathPlan }) {
 }
 
 export default function MyFuture() {
+  const userId = useUserId()
   const [scenario, setScenario] = useState<Scenario>('assistive')
   const [recommendation, setRecommendation] = useState<Recommendation | null>(null)
   const [path, setPath] = useState<PathPlan | null>(null)
@@ -286,14 +288,14 @@ export default function MyFuture() {
 
   useEffect(() => {
     Promise.all([
-      getRecommendation('u_aina', scenario),
-      getPath('u_aina', pathRole),
+      getRecommendation(userId, scenario),
+      getPath(userId, pathRole),
     ]).then(([rec, p]) => {
       setRecommendation(rec)
       setPath(p)
       setLoading(false)
     })
-  }, [scenario, pathRole])
+  }, [scenario, pathRole, userId])
 
   const pathRoleTitle = path
     ? recommendation?.roles.find(r => r.role_id === path.target_role_id)?.title ?? path.target_role_id

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { getSkills } from '../api'
+import { useUserId } from '../persona'
 import type { SkillState } from '../types'
 import { SKILL_NAMES } from '../skillNames'
 
@@ -120,12 +121,13 @@ function SkillCard({ skill }: { skill: SkillState }) {
 }
 
 export default function MySkills() {
+  const userId = useUserId()
   const [skills, setSkills] = useState<SkillState[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    getSkills('u_aina').then(s => { setSkills(s); setLoading(false) })
-  }, [])
+    getSkills(userId).then(s => { setSkills(s); setLoading(false) })
+  }, [userId])
 
   if (loading) return <div className="text-gray-400 text-center py-12">Loading…</div>
 
