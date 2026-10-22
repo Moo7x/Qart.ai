@@ -5,9 +5,13 @@ Counts on synthetic data, never rounded up. Each section is rewritten by its own
 <!-- companion-evaluation:start -->
 ## Companion evaluation (acceptance set)
 
-Criteria: `eval/acceptance_criteria.py` (sha256:c80fce4f321f83d2dc93ca6d71caab4b09a6a32690d51c681cf02f217588fd0f). Cases: 0.
+Criteria: `eval/acceptance_criteria.py` (sha256:c80fce4f321f83d2dc93ca6d71caab4b09a6a32690d51c681cf02f217588fd0f). Cases: 17.
 
-**Not run:** no acceptance cases in `eval/acceptance/` yet (Person B).
+| Diagnoser | Root cause | Decision | False alarms (clean) | Invalid citations | Note |
+|---|---|---|---|---|---|
+| companion, rules only | 5/17 | 6/17 | 2/5 | 0 |  |
+| companion, LLM (gpt-4o-mini) | 4/17 | 6/17 | 2/5 | 0 | 17/17 answered by the LLM |
+| text-only baseline (gpt-4o-mini) | 8/17 | 14/17 | 0/5 | 0 | 17/17 answered by the LLM |
 <!-- companion-evaluation:end -->
 
 <!-- retrieval:start -->
