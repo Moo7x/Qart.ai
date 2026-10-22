@@ -32,6 +32,10 @@ HELP_LEVEL_NAMES = {
     4: "the answer shown",
 }
 HELP_STEP_NAMES = {1: "question", 2: "hint", 3: "explanation", 4: "answer"}
+WALK_BACK_MESSAGE = (
+    "That decision does not match what the evidence shows. Have another look: press "
+    "'I'm stuck' for a question, then a hint, if you need one."
+)
 
 _TOOLS: list[dict[str, Any]] = [
     {
@@ -493,14 +497,16 @@ def process_decision(
 
     # Practice wrong decision: hold the event, keep session open for remediation.
     # event=None signals the API layer to skip posting.
+    # Nothing from ground_truth is returned here: the user keeps working through the help ladder,
+    # and the help level recorded when they find it must be the real amount of help they had.
     if not grader_result["decision_correct"] and mode == "practice":
         session["missed_decision"] = True
         return {
             "event": None,
             "decision_correct": False,
-            "explanation": grader_result["explanation"],
-            "affected_rows": grader_result["affected_rows"],
-            "correct_decision": grader_result["correct_decision"],
+            "explanation": WALK_BACK_MESSAGE,
+            "affected_rows": [],
+            "correct_decision": None,
             "missed_and_walking_back": True,
         }
 

@@ -37,6 +37,11 @@ def test_wrong_decision_holds_event(case_003):
     assert result["event"] is None, "wrong practice decision must not emit an event"
     assert result["missed_and_walking_back"] is True
     assert result["decision_correct"] is False
+    # The answer stays hidden while the user works through the help ladder.
+    truth = case_003["ground_truth"]
+    assert result["affected_rows"] == [] and result["correct_decision"] is None
+    assert truth["explanation"] not in result["explanation"]
+    assert not any(row in result["explanation"] for row in truth["affected_rows"])
 
 
 def test_correct_after_miss_emits_missed_then_found(case_003):
