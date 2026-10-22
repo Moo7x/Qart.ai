@@ -2,7 +2,9 @@
 
 Cases are served without `ground_truth` (only the grader reads it). After grading, the decision
 route records the event in the engine in-process (`record_event`), so evidence, next case and path
-update immediately; a recording error is returned to the client instead of being swallowed.
+update immediately; a recording error is returned to the client instead of being swallowed. Both
+routes use the playbook version that is active in the store (playbook_v1 until a senior approves
+an optimiser proposal), and each event records that version.
 """
 
 import json
@@ -16,6 +18,7 @@ from pydantic import BaseModel
 from src.api_engine import DEMO_RESET_HOOKS, FlagResponse, StoreDep, flag_event, record_event
 from src.api_engine import FlagRequest as EngineFlagRequest
 from src.companion.agent import clear_sessions, process_decision, process_message
+from src.companion.playbook_versions import active_playbook
 from src.contract import Event, FlagName
 from src.store import Store
 
@@ -101,7 +104,7 @@ class SessionFlagRequest(BaseModel):
 
 
 @router.post("/api/companion/{session_id}/message")
-def companion_message(session_id: str, body: MessageRequest) -> dict[str, Any]:
+def companion_message(session_id: str, body: MessageRequest, store: StoreDep) -> dict[str, Any]:
     case = _load_case(body.case_id)
     return process_message(
         session_id=session_id,
@@ -110,6 +113,7 @@ def companion_message(session_id: str, body: MessageRequest) -> dict[str, Any]:
         mode=case.get("mode", "practice"),
         user_id=body.user_id,
         scenario=body.scenario,
+        playbook=active_playbook(store),
     )
 
 
@@ -125,6 +129,7 @@ def companion_decision(session_id: str, body: DecisionRequest, store: StoreDep) 
         user_id=body.user_id,
         scenario=body.scenario,
         self_confidence_before=body.self_confidence_before,
+        playbook_version=active_playbook(store)[0],
     )
     # event is None when a wrong practice decision is held back (missed_then_found flow).
     if result.get("event") is not None:
