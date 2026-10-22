@@ -10,6 +10,7 @@ import Intake from './pages/Intake'
 import MyFuture from './pages/MyFuture'
 import MySkills from './pages/MySkills'
 import Result from './pages/Result'
+import Signals from './pages/Signals'
 import WorkQueue from './pages/WorkQueue'
 import Workspace from './pages/Workspace'
 import { FUTURE_FLOW_PATHS } from './components/FlowSteps'
@@ -144,6 +145,7 @@ export default function App() {
             <Route path="/workspace/:caseId" element={<Only role="employee"><Workspace /></Only>} />
             <Route path="/result/:caseId" element={<Only role="employee"><Result /></Only>} />
             <Route path="/skills" element={<Only role="employee"><MySkills /></Only>} />
+            <Route path="/signals" element={<Only role="employee"><Signals /></Only>} />
             <Route path="/future" element={<Only role="employee"><MyFuture /></Only>} />
             <Route path="/hr" element={<Only role="hr"><HRSummary /></Only>} />
             <Route path="/evidence" element={<Only role="hr"><Evidence /></Only>} />
