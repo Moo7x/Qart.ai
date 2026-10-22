@@ -49,7 +49,7 @@ NOTES_MAX_CHARS = 500  # free text is synthetic demo data; capped so it stays a 
 
 
 class Preferences(BaseModel):
-    """Intake answers from the six-screen flow (addition, v2.3). All optional.
+    """Intake answers from the six-screen flow (addition, v2.1). All optional.
 
     Stored and returned only: none of these change scores or the path yet, so the UI labels
     them "saved; not used for ranking yet". `notes` is never logged or sent to an LLM.
@@ -75,7 +75,7 @@ class Profile(BaseModel):
     weekly_learning_hours: float = Field(gt=0.0)
     language: str = "en"
     team: str
-    # Addition (optional, v2.3): defaults to empty so older clients and stored rows stay valid.
+    # Addition (optional, v2.1): defaults to empty so older clients and stored rows stay valid.
     preferences: Preferences = Field(default_factory=Preferences)
 
 

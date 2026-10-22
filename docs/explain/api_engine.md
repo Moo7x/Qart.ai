@@ -37,6 +37,11 @@ Backend: `select_backend(env)` picks Postgres if `DATABASE_URL` is non-empty, el
 `ON CONFLICT` upserts, an explicit `seq` column instead of SQLite's rowid). Seeding an empty
 database is wrapped in a Postgres advisory lock so two instances starting together don't both seed.
 
+**v2.1 additions.** `GET /api/sdg` returns the catalogue's SDG map as-is (targets 4.4, 8.2, 8.5 with
+titles, UN links, rationales; role and skill tags; `about` says the mapping is the team's declared
+judgment). `POST /api/profile` accepts optional `preferences`, which are stored and returned but not
+used for scoring yet.
+
 ## 4. Where in the code
 Routes in `src/api_engine.py` (`compute_changed_since`, `robust_top_role`); persistence in
 `src/store.py` (`Store`, `select_backend`, `make_store`, `seed_demo`, `expand_history`); HR maths in `src/engine/hr.py`. Tests:

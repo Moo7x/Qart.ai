@@ -41,6 +41,11 @@ fixture `tests/fixtures/golden_journey_events.json`.
 | checkin_001 success, no help | observed_with_help | **1 of 2 independent successes (checkin_001)**, next: checkin_002 (later session) |
 | optional checkin_002 in session s_0002 | demonstrated_independently | on these cases, not lasting mastery |
 
+**Walk-backs without help (v2.1).** A wrong practice decision is held back; if the person then finds
+the issue on their own, the event is `missed_then_found` at help 0. The "why" says "found on a second
+look, without help". It still never counts as an independent success (`UNAIDED_MISS_OUTCOMES`). Before
+v2.1 there was no wording for help 0, so the explanation crashed and `/api/skills` returned 500.
+
 ## 6. Limits and honesty
 "Demonstrated" means on the listed cases, not lasting mastery. Rules and BKT parameters are not
 calibrated with learner data; that needs a pilot (PROJECT_PLAN §10). Difficulty is recorded but not

@@ -10,6 +10,11 @@ Contract version: **v2** (21 Oct 2026). v2 aligns with `PROJECT_PLAN.md` v2:
 - HR endpoints are aggregate-only.
 - The optimiser can only edit the playbook and is judged on a separate acceptance set.
 
+**v2.1 additions (22 Oct 2026, additive; old clients unaffected), for the six-screen flow (`design/qart-flow/`):**
+- `Profile.preferences` (optional, default empty): industry, education, tools, direction (`grow`/`adjacent`/`switch`), timeframe_months (3/6/12), formats, ai_comfort (0–10), notes (≤500 chars, synthetic, never logged or sent to an LLM). **Stored only: no engine factor reads them yet**, so rankings and the golden-journey numbers are unchanged (pinned by a test).
+- `GET /api/sdg`: read-only SDG map from `catalogue/sdg_map.json` (targets with titles, UN links, rationales; role and skill tags; `about` = "declared judgment, not external evidence").
+- Fix: a walk-back corrected without help (`missed_then_found`, help 0) is now explained ("on a second look, without help") instead of returning 500. Evidence rules unchanged.
+
 ---
 
 ## 1. Repo layout (who owns what)
@@ -200,6 +205,7 @@ Results are **counts on synthetic variants**. The acceptance set and its criteri
 | `POST /api/events` | A | updated SkillState[] |
 | `GET /api/snapshots` · `GET /api/snapshots/diff?from=&to=` | A | Snapshot[] / diff |
 | `GET /api/roles` | A | Role[] |
+| `GET /api/sdg` *(v2.1)* | A | SDG targets (title, UN link, rationale) + role/skill tags from the catalogue |
 | `GET /api/recommendations/{user_id}?scenario=&snapshot=` | A | Recommendation |
 | `GET /api/path/{user_id}?role_id=&weekly_hours=` | A | PathPlan |
 | `GET /api/next-case/{user_id}?scenario=` | A | `{"case_id": "...", "because": "..."}` |

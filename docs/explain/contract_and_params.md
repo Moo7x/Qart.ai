@@ -19,6 +19,11 @@ from?": every number lives in one file with its status.
   or SOURCED. Company adoption assumptions are *not* there: they are layer B in
   `catalogue/company_assumptions.json`, edited by HR.
 
+**Profile.preferences (v2.1).** Optional intake answers from the six-screen flow (industry,
+education, tools, direction, timeframe in months, learning formats, AI comfort 0–10, a short
+synthetic note). Defaults to empty, so older clients and stored rows stay valid. No engine factor
+reads them yet: a test pins that recommendation scores are unchanged, and the UI says so.
+
 ## 4. Where in the code
 `src/contract.py` (enums `HelpLevel`, `Scenario`, `Outcome`, `Allocation`…), `src/engine/params.py`.
 
