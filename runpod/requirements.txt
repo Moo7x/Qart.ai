@@ -1,3 +1,5 @@
 # Installed only inside the RunPod worker image (runpod/Dockerfile), not in the app.
 runpod==1.12.0
 sentence-transformers==3.4.1
+# Pinned so a new release cannot change the build; sentence-transformers 3.4.1 needs <5.
+transformers==4.51.3
