@@ -113,8 +113,8 @@ export default function Pathway() {
       <FlowSteps />
       <div data-reveal>
         <PageHeader
-          title={<>Your pathway to <Highlight>{roleTitle || 'your next role'}</Highlight></>}
-          intro="Steps in order, each closing a gap from your match. Free resources come first; every course links to its source."
+          title={<>Your <Highlight>pathway</Highlight></>}
+          intro={<>To <strong className="font-medium text-ink">{roleTitle || 'your next role'}</strong>. Steps in order, each closing a gap from your match. Free resources come first; every course links to its source.</>}
           aside={<Tag tone="linen">{roleId ? 'Role you chose' : 'Best role across both scenarios'}</Tag>}
         />
       </div>
@@ -143,7 +143,7 @@ export default function Pathway() {
       </div>
 
       <section data-reveal>
-        <SectionTitle aside={<Tag tone="linen">Works in: {path.robust_across.map(s => SCENARIO_LABEL[s]).join(' · ')}</Tag>}>Steps</SectionTitle>
+        <SectionTitle aside={<span className="text-xs text-graphite">Works in: {path.robust_across.map(s => SCENARIO_LABEL[s]).join(' · ')}</span>}>Steps</SectionTitle>
         <ol className="relative">
           <div className="absolute left-4 top-4 bottom-4 w-px bg-hairline-strong" aria-hidden="true" />
           {path.steps.map((step, i) => {

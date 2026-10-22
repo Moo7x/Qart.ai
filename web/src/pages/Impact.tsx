@@ -9,7 +9,7 @@ import { skillName } from '../skillNames'
 import type { PathPlan, RoleRecommendation, SdgMap, SdgTarget } from '../types'
 import { btn, Card, EmptyState, Highlight, label, Loading, NextStepCard, PageHeader, ProvenanceTag, SectionTitle, StatTile, Tag } from '../ui'
 
-function TargetCard({ target, why }: { target: SdgTarget; why?: string }) {
+function TargetCard({ target }: { target: SdgTarget }) {
   return (
     <Card className="p-5 flex gap-4">
       <span className="w-12 h-12 rounded-lg bg-action-tint text-action-ink flex flex-col items-center justify-center shrink-0" aria-hidden="true">
@@ -22,7 +22,6 @@ function TargetCard({ target, why }: { target: SdgTarget; why?: string }) {
           {target.main && <Tag tone="marigold">Main target</Tag>}
         </div>
         <p className="text-sm text-ink">{target.title}</p>
-        {why && <p className="text-sm text-graphite"><strong className="font-medium text-ink">This role: </strong>{why}</p>}
         <p className="text-sm text-graphite"><strong className="font-medium text-ink">Why Qart tags it: </strong>{target.rationale}</p>
         <a href={target.url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-sm text-action-ink hover:underline">
           UN Goal {target.goal} page <ExternalLink size={12} aria-hidden="true" />
@@ -106,9 +105,10 @@ export default function Impact() {
 
       <section data-reveal className="space-y-3">
         <SectionTitle>Targets this role contributes to</SectionTitle>
+        {roleLink?.rationale && <p className="font-serif text-lg leading-[1.56] text-ink">{roleLink.rationale}</p>}
         {roleTargets.length === 0
           ? <EmptyState title="No targets tagged for this role">The catalogue declares no SDG target for it.</EmptyState>
-          : roleTargets.map(t => <TargetCard key={t.id} target={t} why={roleLink?.rationale} />)}
+          : roleTargets.map(t => <TargetCard key={t.id} target={t} />)}
       </section>
 
       {taggedSkills.length > 0 && (
