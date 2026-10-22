@@ -5,6 +5,9 @@ import { useUserId } from '../persona'
 import type { PathPlan, Recommendation, RoleRecommendation, Scenario, SearchResponse, Snapshot } from '../types'
 import { SKILL_NAMES } from '../skillNames'
 
+const SEARCH_RETRIES = 4 // a GPU cold start took ~100 s; 4 × 25 s covers it
+const SEARCH_RETRY_MS = 25000
+
 const SDG_COLORS: Record<string, string> = {
   '4.4': 'bg-red-100 text-red-700',
   '8.2': 'bg-orange-100 text-orange-700',
@@ -276,7 +279,15 @@ export default function MyFuture() {
     if (text.trim().length < 2) return
     setSearching(true)
     try {
-      setFound(await searchResources(text.trim(), undefined, 6))
+      const first = await searchResources(text.trim(), undefined, 6)
+      setFound(first)
+      // While the GPU worker starts, ask again so the keyword results get replaced by GPU results.
+      let latest = first
+      for (let attempt = 0; attempt < SEARCH_RETRIES && latest.engine === 'keyword' && latest.note.includes('starting up'); attempt++) {
+        await new Promise(resolve => window.setTimeout(resolve, SEARCH_RETRY_MS))
+        latest = await searchResources(text.trim(), undefined, 6)
+        setFound(latest)
+      }
     } finally {
       setSearching(false)
     }
