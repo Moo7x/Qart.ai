@@ -8,12 +8,13 @@ from typing import Any
 import pytest
 
 from eval.acceptance_criteria import criteria_hash, grade
+from eval.baseline import text_only_baseline
 from eval.results_md import write_section
 from eval.runner import (
     auto_diagnose_not_available,
+    default_diagnosers,
     evaluate,
     run,
-    text_only_baseline_not_built,
 )
 
 EXAMPLE_CASE = Path(__file__).resolve().parent.parent / "schemas" / "examples" / "case.json"
@@ -68,12 +69,12 @@ def test_stubs_raise_and_runner_reports_not_run(tmp_path: Path) -> None:
     with pytest.raises(NotImplementedError):
         auto_diagnose_not_available(issue_case(), "pb")
     with pytest.raises(NotImplementedError):
-        text_only_baseline_not_built(issue_case(), "pb")
+        text_only_baseline(issue_case(), "pb")  # no LLM_API_KEY in tests
     cases = tmp_path / "cases"
     cases.mkdir()
     (cases / "case_003.json").write_text(json.dumps(issue_case()), encoding="utf-8")
     results = tmp_path / "RESULTS.md"
-    summaries = run(cases, "pb", results, companion=auto_diagnose_not_available)
+    summaries = run(cases, "pb", results, {"companion": auto_diagnose_not_available})
     assert all(s.error for s in summaries)
     assert "not run" in results.read_text(encoding="utf-8")
 
@@ -84,7 +85,7 @@ def test_runner_with_a_diagnoser_writes_counts(tmp_path: Path) -> None:
     for case in (issue_case(), clean_case()):
         (cases / f"{case['id']}.json").write_text(json.dumps(case), encoding="utf-8")
     results = tmp_path / "RESULTS.md"
-    run(cases, "pb", results, companion=perfect)
+    run(cases, "pb", results, {"companion (auto_diagnose)": perfect})
     text = results.read_text(encoding="utf-8")
     assert "| companion (auto_diagnose) | 2/2 | 2/2 | 0/1 | 0 |" in text
 
@@ -128,3 +129,26 @@ def test_index_files_are_not_treated_as_cases(tmp_path: Path) -> None:
     (tmp_path / "index.json").write_text('{"cases": []}', encoding="utf-8")
     (tmp_path / "a001.json").write_text(json.dumps(issue_case()), encoding="utf-8")
     assert [c["id"] for c in load_cases(tmp_path)] == ["case_003"]
+
+
+def test_llm_answers_are_counted_and_fallbacks_are_not(tmp_path: Path) -> None:
+    def half_llm(case: dict[str, Any], playbook: str) -> dict[str, Any]:
+        source = "llm" if case["id"] == "case_clean" else "rule_based_fallback"
+        return {**perfect(case, playbook), "source": source}
+
+    cases = tmp_path / "cases"
+    cases.mkdir()
+    for case in (issue_case(), clean_case()):
+        (cases / f"{case['id']}.json").write_text(json.dumps(case), encoding="utf-8")
+    results = tmp_path / "RESULTS.md"
+    [summary] = run(cases, "pb", results, {"companion, LLM": half_llm})
+    assert summary.llm_answers == 1
+    assert "1/2 answered by the LLM" in results.read_text(encoding="utf-8")
+
+
+def test_without_a_key_only_the_rules_companion_runs(tmp_path: Path) -> None:
+    (tmp_path / "case_003.json").write_text(json.dumps(issue_case()), encoding="utf-8")
+    results = tmp_path / "RESULTS.md"
+    summaries = run(tmp_path, "src/companion/playbooks/playbook_v1.md", results)
+    assert [s.error is None for s in summaries] == [True, False, False]
+    assert len(default_diagnosers()) == 3
