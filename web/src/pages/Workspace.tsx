@@ -1,20 +1,19 @@
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import { ArrowUpRight, Bot, Check, FileText, LifeBuoy, Paperclip, PencilLine, Send, X, type LucideIcon } from 'lucide-react'
 import { getCase, postDecision, postMessage } from '../api'
 import type { Case, CaseDocument, DecisionResponse, UiAction } from '../types'
+import { btn, Card, input as inputCls, label, Loading, Tag } from '../ui'
 
-const HELP_DOTS = ['●', '●', '●', '●', '●']
-const DECISION_LABELS: Record<string, string> = {
-  sign_off: 'Sign off',
-  correct: 'Correct',
-  escalate: 'Escalate',
-}
+// Help ladder from the contract (help_level 1..4); 0 means no help used yet.
+const HELP_STEPS = ['Question', 'Hint', 'Explanation', 'Answer']
+const MAX_HELP_LEVEL = HELP_STEPS.length
 
-const DECISION_ICONS: Record<string, string> = {
-  sign_off: '✓',
-  correct: '✗',
-  escalate: '↑',
-}
+const DECISIONS: { id: 'sign_off' | 'correct' | 'escalate'; label: string; icon: LucideIcon }[] = [
+  { id: 'sign_off', label: 'Sign off', icon: Check },
+  { id: 'correct', label: 'Correct', icon: PencilLine },
+  { id: 'escalate', label: 'Escalate', icon: ArrowUpRight },
+]
 
 function fmt(n: number) {
   return n.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
@@ -114,264 +113,245 @@ export default function Workspace() {
     : null
 
   if (loading || !caseData) {
-    return <div className="text-center py-16 text-gray-400">Loading case…</div>
+    return <Loading what="case" />
   }
 
   const isCheckin = caseData.mode === 'checkin'
 
+  const rowTone = (id: string) => highlightedRows.has(id) ? 'bg-marigold-tint shadow-[inset_3px_0_0_var(--color-marigold)]' : flaggedRows.has(id) ? 'bg-coral-tint' : ''
+
   return (
     <div className="flex flex-col gap-4">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-lg font-bold text-gray-900">{caseData.title}</h1>
-          <div className="flex items-center gap-2 mt-1">
-            <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full">{caseData.mode}</span>
-            <span className="text-xs text-gray-400">{caseData.scenario_variant} scenario</span>
-            {isCheckin && <span className="text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full font-medium">No hints available</span>}
+      <div className="flex flex-wrap items-end justify-between gap-4">
+        <div className="min-w-0">
+          <h1 className="text-[28px] leading-[1.2] font-semibold tracking-[-0.02em] text-ink">{caseData.title}</h1>
+          <div className="flex flex-wrap items-center gap-2 mt-2">
+            <Tag tone={isCheckin ? 'coral' : 'action'}>{isCheckin ? 'Check-in · no help' : caseData.mode}</Tag>
+            <span className="text-xs text-graphite">{caseData.scenario_variant} scenario</span>
           </div>
         </div>
-        <div className="flex items-center gap-1" title={`Help level: ${helpLevel}/4`}>
-          {HELP_DOTS.map((d, i) => (
-            <span key={i} className={`text-lg ${i < helpLevel ? 'text-indigo-500' : 'text-gray-200'}`}>{d}</span>
-          ))}
-        </div>
+        {!isCheckin && (
+          <ol className="flex items-center gap-1 text-xs" aria-label={`Help used: ${helpLevel} of ${MAX_HELP_LEVEL}`}>
+            {HELP_STEPS.map((step, i) => (
+              <li key={step} className="flex items-center gap-1">
+                {i > 0 && <span className="text-hairline-strong" aria-hidden="true">→</span>}
+                <span className={i < helpLevel ? 'font-medium text-action-ink' : 'text-graphite'}>{step}</span>
+              </li>
+            ))}
+          </ol>
+        )}
       </div>
 
-      {/* Pop-in toast */}
+      {/* Pop-in from the companion */}
       {popIn && (
-        <div className="bg-indigo-50 border border-indigo-200 rounded-xl p-3 flex items-center justify-between">
-          <span className="text-sm text-indigo-800 font-medium">🤖 {popIn}</span>
-          <button onClick={() => setPopIn(null)} className="text-indigo-400 hover:text-indigo-600 text-lg leading-none">×</button>
+        <div className="bg-action-tint rounded-lg px-4 py-3 flex items-center justify-between gap-3" role="status">
+          <span className="flex items-center gap-2 text-sm text-action-ink font-medium"><Bot size={16} aria-hidden="true" /> {popIn}</span>
+          <button onClick={() => setPopIn(null)} aria-label="Dismiss" className="text-action-ink/70 hover:text-action-ink rounded-sm p-1"><X size={16} /></button>
         </div>
       )}
 
       {/* Trace strip */}
       {trace.length > 0 && (
-        <div className="bg-gray-50 border border-gray-200 rounded-lg px-4 py-2 text-xs text-gray-500">
-          <span className="font-medium text-gray-600 mr-2">Agent:</span>
+        <div className="bg-linen rounded-md px-4 py-2 text-xs text-graphite">
+          <span className="font-medium text-ink mr-2">Companion steps:</span>
           {trace.join(' → ')}
         </div>
       )}
 
-      {/* Main 3-column layout */}
-      <div className="grid grid-cols-3 gap-4">
-        {/* Ledger */}
-        <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-          <div className="bg-gray-50 px-4 py-2 border-b border-gray-200 text-xs font-semibold text-gray-600 uppercase tracking-wide">
-            Ledger
+      <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_380px] items-start">
+        {/* Work area */}
+        <div className="flex flex-col gap-4 min-w-0">
+          {/* AI draft: kept visually separate from the person's decision */}
+          <div className="bg-linen rounded-lg p-4">
+            <div className="flex items-center gap-1.5 text-xs font-medium text-graphite mb-1.5"><Bot size={14} aria-hidden="true" /> AI draft</div>
+            <p className="text-ink">{caseData.ai_output.claim}</p>
           </div>
-          <table className="w-full text-xs">
-            <thead>
-              <tr className="border-b border-gray-100">
-                <th className="px-3 py-2 text-left text-gray-500">Date</th>
-                <th className="px-3 py-2 text-left text-gray-500">Description</th>
-                <th className="px-3 py-2 text-right text-gray-500">Amount</th>
-                <th className="px-2 py-2"></th>
-              </tr>
-            </thead>
-            <tbody>
-              {caseData.ledger.map(row => (
-                <tr
-                  key={row.row_id}
-                  className={`border-b border-gray-100 transition-colors ${highlightedRows.has(row.row_id) ? 'bg-amber-50 border-l-4 border-l-amber-400' : flaggedRows.has(row.row_id) ? 'bg-red-50' : 'even:bg-gray-50'}`}
-                >
-                  <td className="px-3 py-2 text-gray-500">{row.date.slice(5)}</td>
-                  <td className="px-3 py-2 text-gray-800 max-w-0 truncate">
-                    {row.description}
-                    {row.doc_ref && (
-                      <button
-                        onClick={() => setOpenDoc(row.doc_ref!)}
-                        className="ml-1 text-indigo-400 hover:text-indigo-600 text-xs"
-                        title={`Open ${row.doc_ref}`}
-                      >📎</button>
-                    )}
-                  </td>
-                  <td className={`px-3 py-2 text-right font-mono ${row.amount < 0 ? 'text-red-600' : 'text-green-600'}`}>
-                    {fmt(row.amount)}
-                  </td>
-                  <td className="px-2 py-2">
-                    <input type="checkbox" aria-label={`Flag row ${row.row_id}`} checked={flaggedRows.has(row.row_id)} onChange={() => toggleFlag(row.row_id)} className="accent-red-400" />
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          {/* Adjustments */}
-          {caseData.ai_output.proposed_adjustments.length > 0 && (
-            <div className="border-t border-dashed border-gray-200 px-3 py-2">
-              <div className="text-xs text-gray-400 mb-1 font-medium">AI adjustments</div>
-              {caseData.ai_output.proposed_adjustments.map(adj => (
-                <div key={adj.id} className={`flex items-center justify-between text-xs py-1 ${flaggedRows.has(adj.id) ? 'bg-red-50 rounded px-1' : ''} ${highlightedRows.has(adj.id) ? 'bg-amber-50 rounded px-1' : ''}`}>
-                  <div>
-                    <span className="font-medium text-gray-700">{adj.id}</span>
-                    <span className="text-gray-400 ml-1">— {adj.reason}</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <span className={`font-mono ${adj.amount < 0 ? 'text-red-600' : 'text-green-600'}`}>{fmt(adj.amount)}</span>
-                    <input type="checkbox" aria-label={`Flag adjustment ${adj.id}`} checked={flaggedRows.has(adj.id)} onChange={() => toggleFlag(adj.id)} className="accent-red-400" />
-                  </div>
+
+          <div className="grid gap-4 xl:grid-cols-2">
+            {/* Ledger */}
+            <Card className="overflow-hidden">
+              <div className={`${label} px-4 py-3 border-b border-hairline`}>Ledger</div>
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="text-xs text-graphite">
+                    <th className="px-3 py-2 text-left font-medium">Date</th>
+                    <th className="px-3 py-2 text-left font-medium">Description</th>
+                    <th className="px-3 py-2 text-right font-medium">Amount</th>
+                    <th className="px-2 py-2"><span className="sr-only">Flag</span></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {caseData.ledger.map(row => (
+                    <tr key={row.row_id} className={`border-t border-hairline transition-colors duration-200 ${rowTone(row.row_id)}`}>
+                      <td className="px-3 py-2 text-graphite tabular-nums whitespace-nowrap">{row.date.slice(5)}</td>
+                      <td className="px-3 py-2 text-ink max-w-0 truncate">
+                        {row.description}
+                        {row.doc_ref && (
+                          <button
+                            onClick={() => setOpenDoc(row.doc_ref!)}
+                            className="ml-1 align-middle text-action-ink hover:text-action rounded-sm"
+                            title={`Open ${row.doc_ref}`} aria-label={`Open ${row.doc_ref}`}
+                          ><Paperclip size={14} /></button>
+                        )}
+                      </td>
+                      <td className="px-3 py-2 text-right tabular-nums text-ink whitespace-nowrap">{fmt(row.amount)}</td>
+                      <td className="px-2 py-2">
+                        <input type="checkbox" aria-label={`Flag row ${row.row_id}`} checked={flaggedRows.has(row.row_id)} onChange={() => toggleFlag(row.row_id)} />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              {/* Adjustments */}
+              {caseData.ai_output.proposed_adjustments.length > 0 && (
+                <div className="border-t border-dashed border-hairline-strong px-3 py-3">
+                  <div className={`${label} mb-1 flex items-center gap-1`}><Bot size={12} aria-hidden="true" /> AI adjustments</div>
+                  {caseData.ai_output.proposed_adjustments.map(adj => (
+                    <div key={adj.id} className={`flex items-center justify-between gap-2 text-sm py-1 px-1 rounded-sm ${rowTone(adj.id)}`}>
+                      <div className="min-w-0">
+                        <span className="font-medium text-ink">{adj.id}</span>
+                        <span className="text-graphite ml-1">· {adj.reason}</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="tabular-nums text-ink whitespace-nowrap">{fmt(adj.amount)}</span>
+                        <input type="checkbox" aria-label={`Flag adjustment ${adj.id}`} checked={flaggedRows.has(adj.id)} onChange={() => toggleFlag(adj.id)} />
+                      </div>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-          )}
-        </div>
+              )}
+            </Card>
 
-        {/* Bank statement */}
-        <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-          <div className="bg-gray-50 px-4 py-2 border-b border-gray-200 text-xs font-semibold text-gray-600 uppercase tracking-wide">
-            Bank statement
-          </div>
-          <table className="w-full text-xs">
-            <thead>
-              <tr className="border-b border-gray-100">
-                <th className="px-3 py-2 text-left text-gray-500">Date</th>
-                <th className="px-3 py-2 text-left text-gray-500">Description</th>
-                <th className="px-3 py-2 text-right text-gray-500">Amount</th>
-              </tr>
-            </thead>
-            <tbody>
-              {caseData.bank.map(row => (
-                <tr
-                  key={row.row_id}
-                  className={`border-b border-gray-100 transition-colors ${highlightedRows.has(row.row_id) ? 'bg-amber-50 border-l-4 border-l-amber-400' : 'even:bg-gray-50'}`}
-                >
-                  <td className="px-3 py-2 text-gray-500">{row.date.slice(5)}</td>
-                  <td className="px-3 py-2 text-gray-800 max-w-0 truncate">{row.description}</td>
-                  <td className={`px-3 py-2 text-right font-mono ${row.amount < 0 ? 'text-red-600' : 'text-green-600'}`}>
-                    {fmt(row.amount)}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        {/* Right panel: AI claim + documents */}
-        <div className="flex flex-col gap-3">
-          {/* AI claim */}
-          <div className="bg-white rounded-xl border border-indigo-100 p-4">
-            <div className="text-xs font-semibold text-indigo-600 uppercase tracking-wide mb-2">AI claim</div>
-            <p className="text-sm text-gray-800">{caseData.ai_output.claim}</p>
+            {/* Bank statement */}
+            <Card className="overflow-hidden">
+              <div className={`${label} px-4 py-3 border-b border-hairline`}>Bank statement</div>
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="text-xs text-graphite">
+                    <th className="px-3 py-2 text-left font-medium">Date</th>
+                    <th className="px-3 py-2 text-left font-medium">Description</th>
+                    <th className="px-3 py-2 text-right font-medium">Amount</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {caseData.bank.map(row => (
+                    <tr key={row.row_id} className={`border-t border-hairline transition-colors duration-200 ${rowTone(row.row_id)}`}>
+                      <td className="px-3 py-2 text-graphite tabular-nums whitespace-nowrap">{row.date.slice(5)}</td>
+                      <td className="px-3 py-2 text-ink max-w-0 truncate">{row.description}</td>
+                      <td className="px-3 py-2 text-right tabular-nums text-ink whitespace-nowrap">{fmt(row.amount)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </Card>
           </div>
 
           {/* Check results */}
           {checkResults.map(cr => (
-            <div key={cr.check} className="bg-white rounded-xl border border-gray-200 p-3">
-              <div className="text-xs font-medium text-gray-500 mb-1">✓ {cr.check.replace(/_/g, ' ')}</div>
-              <p className="text-xs text-gray-700 font-mono">{cr.result}</p>
-            </div>
+            <Card key={cr.check} className="p-4">
+              <div className={`${label} mb-1 flex items-center gap-1`}><Check size={12} aria-hidden="true" /> {cr.check.replace(/_/g, ' ')}</div>
+              <p className="text-sm text-ink font-mono">{cr.result}</p>
+            </Card>
           ))}
 
-          {/* Document panel */}
-          {openDocData && (
-            <div className="bg-white rounded-xl border border-green-200 p-4">
-              <div className="flex items-center justify-between mb-2">
-                <div className="text-xs font-semibold text-green-700 uppercase tracking-wide">📄 {openDocData.doc_ref}</div>
-                <button onClick={() => setOpenDoc(null)} className="text-gray-400 hover:text-gray-600 text-lg leading-none">×</button>
-              </div>
-              <pre className="text-xs text-gray-700 whitespace-pre-wrap font-mono leading-relaxed">{openDocData.text}</pre>
-            </div>
-          )}
-
-          {/* Documents list */}
-          <div className="bg-white rounded-xl border border-gray-200 p-3">
-            <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Documents</div>
-            <div className="space-y-1">
+          {/* Documents */}
+          <Card className="p-4">
+            <div className={`${label} mb-2`}>Documents</div>
+            <div className="flex flex-wrap gap-2">
               {caseData.documents.map(doc => (
                 <button
                   key={doc.doc_ref}
                   onClick={() => setOpenDoc(openDoc === doc.doc_ref ? null : doc.doc_ref)}
-                  className={`w-full text-left px-2 py-1.5 rounded text-xs transition-colors ${openDoc === doc.doc_ref ? 'bg-green-50 text-green-700' : 'hover:bg-gray-50 text-gray-600'}`}
+                  aria-pressed={openDoc === doc.doc_ref}
+                  className={`inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm transition-colors duration-200 ${openDoc === doc.doc_ref ? 'bg-action-tint text-action-ink font-medium' : 'border border-hairline-strong text-ink hover:bg-linen'}`}
                 >
-                  📄 {doc.doc_ref} <span className="text-gray-400">— {doc.type}</span>
+                  <FileText size={14} aria-hidden="true" /> {doc.doc_ref} <span className="text-graphite font-normal">· {doc.type}</span>
                 </button>
               ))}
             </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Companion panel */}
-      <div className="bg-white rounded-xl border border-gray-200 border-t-4 border-t-indigo-500 overflow-hidden shadow-sm">
-        {/* Chat messages */}
-        <div className="h-48 overflow-y-auto p-4 space-y-3">
-          {messages.length === 0 && (
-            <p className="text-sm text-gray-400 text-center py-6">
-              {isCheckin
-                ? 'Check-in mode — no hints available. Review and submit your decision.'
-                : "Review the reconciliation above. Use 'I'm stuck' if you need a nudge."}
-            </p>
-          )}
-          {messages.map((m, i) => (
-            <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-              <div className={`max-w-sm px-3 py-2 rounded-xl text-sm ${m.role === 'user' ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-800'}`}>
-                {m.text}
+            {openDocData && (
+              <div className="mt-3 bg-linen rounded-md p-4">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-1.5 text-sm font-medium text-ink"><FileText size={14} aria-hidden="true" /> {openDocData.doc_ref}</div>
+                  <button onClick={() => setOpenDoc(null)} aria-label="Close document" className="text-graphite hover:text-ink rounded-sm p-1"><X size={16} /></button>
+                </div>
+                <pre className="text-sm text-ink whitespace-pre-wrap font-mono leading-relaxed">{openDocData.text}</pre>
               </div>
-            </div>
-          ))}
-          {decisionResult && (
-            <div className={`rounded-xl p-3 text-sm ${decisionResult.decision_correct ? 'bg-green-50 text-green-800 border border-green-200' : 'bg-red-50 text-red-800 border border-red-200'}`}>
-              {decisionResult.decision_correct ? '✓ Correct! ' : '✗ Not quite. '}
-              {decisionResult.explanation}
-            </div>
-          )}
-          <div ref={chatEndRef} />
+            )}
+          </Card>
         </div>
 
-        {/* Input and controls */}
-        <div className="border-t border-gray-200 p-3 bg-gray-50">
-          <div className="flex gap-2 mb-3">
-            <input
-              value={input}
-              onChange={e => setInput(e.target.value)}
-              onKeyDown={e => e.key === 'Enter' && !e.shiftKey && sendMessage(input)}
-              placeholder="Ask the companion…"
-              className="flex-1 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-300 bg-white"
-              disabled={sending}
-            />
-            <button
-              onClick={() => sendMessage(input)}
-              disabled={sending || !input.trim()}
-              className="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 disabled:opacity-50 transition-colors"
-            >
-              Send
-            </button>
+        {/* Companion panel */}
+        <Card className="flex flex-col lg:sticky lg:top-20 lg:h-[calc(100svh-6rem)] overflow-hidden">
+          <div className="flex items-center gap-2 px-4 py-3 border-b border-hairline">
+            <Bot size={20} strokeWidth={1.75} className="text-action" aria-hidden="true" />
+            <span className="font-semibold text-ink">Companion</span>
+          </div>
+
+          <div className="flex-1 min-h-48 overflow-y-auto p-4 space-y-3" aria-live="polite">
+            {messages.length === 0 && (
+              <p className="text-sm text-graphite text-center py-6">
+                {isCheckin
+                  ? 'Check-in: no hints this time. Review the work and make your decision.'
+                  : 'Review the AI draft. Ask a question, or say you are stuck to get the next step of help.'}
+              </p>
+            )}
+            {messages.map((m, i) => (
+              <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                <div className={`max-w-[85%] px-3 py-2 rounded-lg text-sm ${m.role === 'user' ? 'bg-action text-white' : 'bg-linen text-ink'}`}>
+                  {m.text}
+                </div>
+              </div>
+            ))}
+            {decisionResult && (
+              <div className={`rounded-lg p-3 text-sm ${decisionResult.decision_correct ? 'bg-action-tint text-action-ink' : 'bg-coral-tint text-coral-ink'}`}>
+                <span className="font-medium">{decisionResult.decision_correct ? 'Correct. ' : 'Not quite. '}</span>
+                {decisionResult.explanation}
+              </div>
+            )}
+            <div ref={chatEndRef} />
+          </div>
+
+          <div className="border-t border-hairline p-4 space-y-3">
+            <div className="flex gap-2">
+              <input
+                value={input}
+                onChange={e => setInput(e.target.value)}
+                onKeyDown={e => e.key === 'Enter' && !e.shiftKey && sendMessage(input)}
+                placeholder="Ask the companion…"
+                aria-label="Message the companion"
+                className={`${inputCls} flex-1 min-w-0`}
+                disabled={sending}
+              />
+              <button onClick={() => sendMessage(input)} disabled={sending || !input.trim()} className={btn.ghost} aria-label="Send">
+                <Send size={16} aria-hidden="true" />
+              </button>
+            </div>
             {!isCheckin && (
-              <button
-                onClick={() => sendMessage("I'm stuck")}
-                disabled={sending || helpLevel >= 4}
-                className="bg-amber-100 text-amber-700 px-4 py-2 rounded-lg text-sm font-medium hover:bg-amber-200 disabled:opacity-50 transition-colors"
-              >
-                I'm stuck
+              <button onClick={() => sendMessage("I'm stuck")} disabled={sending || helpLevel >= MAX_HELP_LEVEL} className={`${btn.text} w-full border border-dashed border-hairline-strong`}>
+                <LifeBuoy size={16} aria-hidden="true" /> I'm stuck
               </button>
             )}
-          </div>
 
-          {flaggedRows.size > 0 && (
-            <div className="text-xs text-gray-500 mb-2">
-              Flagged rows: {[...flaggedRows].join(', ')}
+            {flaggedRows.size > 0 && (
+              <div className="text-xs text-graphite">Flagged: {[...flaggedRows].join(', ')}</div>
+            )}
+
+            <div>
+              <div className={`${label} mb-2`}>Your decision</div>
+              {/* Equal weight on purpose: the UI must not nudge the person toward one decision. */}
+              <div className="grid grid-cols-3 gap-2">
+                {DECISIONS.map(d => (
+                  <button key={d.id} onClick={() => handleDecision(d.id)} disabled={deciding} className={`${btn.outline} flex-col gap-1 py-3 px-2`}>
+                    <d.icon size={20} strokeWidth={1.75} aria-hidden="true" />
+                    {d.label}
+                  </button>
+                ))}
+              </div>
             </div>
-          )}
-
-          <div className="flex gap-2">
-            {(['sign_off', 'correct', 'escalate'] as const).map(d => (
-              <button
-                key={d}
-                onClick={() => handleDecision(d)}
-                disabled={deciding}
-                className={`flex-1 py-3 px-6 rounded-lg text-sm font-semibold transition-colors disabled:opacity-50 flex items-center justify-center gap-2 ${
-                  d === 'sign_off' ? 'bg-green-100 text-green-700 hover:bg-green-200' :
-                  d === 'correct' ? 'bg-blue-100 text-blue-700 hover:bg-blue-200' :
-                  'bg-red-100 text-red-700 hover:bg-red-200'
-                }`}
-              >
-                <span>{DECISION_ICONS[d]}</span>
-                {DECISION_LABELS[d]}
-              </button>
-            ))}
           </div>
-        </div>
+        </Card>
       </div>
     </div>
   )
