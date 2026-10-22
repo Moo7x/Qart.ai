@@ -119,6 +119,16 @@ Every page follows the same rhythm, using the pieces in `web/src/ui.tsx`:
 
 Other shared pieces: `Drawer` (right slide-over for documents; Esc closes, focus is trapped and returned), `EmptyState` (also used for the role guard "Not available for this persona"), `Tag`, `StatePill`, `ProvenanceTag`.
 
+### Six-screen reskilling flow
+Profile (`/start`) → Signals (`/signals`) → Matches (`/future`) → Pathway (`/pathway?role=`) → SDG impact (`/impact?role=`) → Scenarios (`/scenarios`). Each page starts with `<FlowSteps />` (`web/src/components/FlowSteps.tsx`), and "My future" stays highlighted in the nav on every step after Profile. Rules:
+- **Scenarios** are labelled with `SCENARIO_LABEL` from `web/src/scenarios.ts` ("AI helps with routine work" / "AI does most routine work"), never "moderate/fast".
+- **Fit** is a suitability indicator: never "/100" and never a "±" band. `ai_handled_share` is a layer-B assumption shown as a point value, not a range.
+- **Profile.preferences** fields carry a "Saved · not used for ranking yet" tag until the engine reads them.
+- Interest chips offer only options that match role tags; tag-less options lower every score.
+- **SDG text comes from `GET /api/sdg`**, so goal names are never hard-coded. Pathway costs show the catalogue's own wording, with no HRD Corp badge unless a verified listing exists.
+- Pathway ticks are a per-persona browser checklist, labelled "not evidence".
+- Mockup numbers in `design/qart-flow/` are illustrative. Never copy them; see `docs/screens_gap_report.md`.
+
 ### Personas and roles
 The nav changes with the persona (`web/src/persona.tsx`): employees get Start / Work queue / My skills / My future, HR gets HR summary / Evidence & assumptions, and the senior gets Companion updates. Use `useUserId()` for every per-person call; never hard-code a user or case id. The persona select and Reset demo sit at the right of the nav. "Synthetic · demo data" appears from `lg` up.
 
