@@ -192,6 +192,12 @@ def failure_pattern(failures: Sequence[dict[str, Any]]) -> str:
     )
 
 
+def proposer_model() -> str:
+    """OPTIMIZER_MODEL writes the revisions (may be stronger); scoring always uses LLM_MODEL, so the
+    numbers measure the companion the employees actually get."""
+    return os.getenv("OPTIMIZER_MODEL") or llm_model()
+
+
 def llm_propose(playbook: str, failures: list[dict[str, Any]]) -> tuple[str, str]:
     """One revision from the LLM: (new playbook text, rationale)."""
     from openai import OpenAI
@@ -209,7 +215,7 @@ def llm_propose(playbook: str, failures: list[dict[str, Any]]) -> tuple[str, str
         "Return the full revised procedure and a short rationale (what you changed and why)."
     )
     response = client.chat.completions.create(  # type: ignore[call-overload]
-        model=llm_model(),
+        model=proposer_model(),
         messages=[
             {"role": "system", "content": PROPOSER_SYSTEM},
             {"role": "user", "content": user},
