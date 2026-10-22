@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ArrowRight, Check } from 'lucide-react'
-import FlowSteps from '../components/FlowSteps'
 import { getNextCase, getProfile, getRoles, postProfile } from '../api'
 import { useReveal } from '../motion'
 import { useUserId } from '../persona'
@@ -120,7 +119,6 @@ export default function Intake() {
 
   return (
     <div ref={root} className="max-w-3xl mx-auto">
-      <FlowSteps />
       <PageHeader
         title={name ? <>Welcome, <Highlight>{name}</Highlight></> : 'Welcome'}
         intro="Tell us about your work and where you want to go. We'll turn it into your reskilling pathway."

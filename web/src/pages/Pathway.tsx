@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { ArrowRight, Check, Clock, ExternalLink, Search } from 'lucide-react'
-import FlowSteps from '../components/FlowSteps'
 import { ResourceList } from '../components/ResourceList'
 import { getPath, getRoles, searchResources } from '../api'
 import { useReveal } from '../motion'
@@ -97,7 +96,6 @@ export default function Pathway() {
   if (failed || !path) {
     return (
       <div className="max-w-3xl mx-auto">
-        <FlowSteps />
         <EmptyState title="Could not plan a pathway">The server did not return a plan. Check that the backend is running.</EmptyState>
       </div>
     )
@@ -110,7 +108,6 @@ export default function Pathway() {
 
   return (
     <div ref={root} className="max-w-3xl mx-auto space-y-8">
-      <FlowSteps />
       <div data-reveal>
         <PageHeader
           title={<>Your <Highlight>pathway</Highlight></>}
@@ -211,7 +208,7 @@ export default function Pathway() {
 
       <div data-reveal>
         <NextStepCard
-          eyebrow="Step 5"
+          eyebrow="Next"
           title="How this path helps the Global Goals"
           action={<Link to={`/impact?role=${encodeURIComponent(path.target_role_id)}`} className={`${btn.primary} whitespace-nowrap`}>See my SDG impact <ArrowRight size={16} aria-hidden="true" /></Link>}
         >

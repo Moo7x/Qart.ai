@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { ArrowRight, ExternalLink } from 'lucide-react'
-import FlowSteps from '../components/FlowSteps'
 import { getPath, getRecommendation, getSdg } from '../api'
 import { useReveal } from '../motion'
 import { useUserId } from '../persona'
@@ -58,7 +57,6 @@ export default function Impact() {
   if (!sdg) {
     return (
       <div className="max-w-3xl mx-auto">
-        <FlowSteps />
         <EmptyState title="Could not load the SDG map">The server did not respond. Check that the backend is running.</EmptyState>
       </div>
     )
@@ -73,7 +71,6 @@ export default function Impact() {
 
   return (
     <div ref={root} className="max-w-3xl mx-auto space-y-8">
-      <FlowSteps />
       <div data-reveal>
         <PageHeader
           title={<>How your path helps the Global <Highlight>Goals</Highlight></>}
@@ -141,7 +138,7 @@ export default function Impact() {
 
       <div data-reveal>
         <NextStepCard
-          eyebrow="Step 6"
+          eyebrow="Next"
           title="How your plan holds up in two possible futures"
           action={<Link to="/scenarios" className={`${btn.primary} whitespace-nowrap`}>Explore scenarios <ArrowRight size={16} aria-hidden="true" /></Link>}
         >

@@ -3,7 +3,7 @@
 *22 Oct 2026 · Person B · for `design/qart-flow/` (brief: `design/qart-flow/BACKEND_BRIEF.md`).*
 
 The six mockups (Profile, Signals, Matches, Pathway, SDG impact, Scenarios) are built on the existing
-API. This report lists what the API already covered, what was added (contract v2.1), and what was
+API, each as its own top-level nav item. This report lists what the API already covered, what was added (contract v2.1), and what was
 **not built because no real data exists**. AGENTS.md forbids inventing statistics, and every mockup
 number is illustrative.
 

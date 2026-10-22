@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowDownRight, ArrowRight, ArrowUpRight, DatabaseZap, ExternalLink, Lightbulb } from 'lucide-react'
-import FlowSteps from '../components/FlowSteps'
 import { getSnapshotDiff, getSnapshots, ingestNextSnapshot } from '../api'
 import { useReveal } from '../motion'
 import type { Signal, Snapshot, SnapshotDiff } from '../types'
@@ -65,7 +64,6 @@ export default function Signals() {
 
   return (
     <div ref={root} className="max-w-4xl mx-auto space-y-8">
-      <FlowSteps />
       <div data-reveal>
         <PageHeader
           title={<>What the AI-use data is <Highlight>saying</Highlight></>}
@@ -191,9 +189,9 @@ export default function Signals() {
 
       <div data-reveal>
         <NextStepCard
-          eyebrow="Step 3"
+          eyebrow="Next"
           title="See which roles fit you"
-          action={<Link to="/future" className={`${btn.primary} whitespace-nowrap`}>See my role matches <ArrowRight size={16} aria-hidden="true" /></Link>}
+          action={<Link to="/matches" className={`${btn.primary} whitespace-nowrap`}>See my role matches <ArrowRight size={16} aria-hidden="true" /></Link>}
         >
           Your matches combine your evidence with these signals, through the company's assumptions.
         </NextStepCard>

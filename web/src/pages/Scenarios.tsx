@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowRight, ChevronDown, ChevronUp, History } from 'lucide-react'
-import FlowSteps from '../components/FlowSteps'
 import { getProfile, getRecommendation, getSnapshots } from '../api'
 import { useReveal } from '../motion'
 import { useUserId } from '../persona'
@@ -41,7 +40,6 @@ export default function Scenarios() {
   if (failed || !recs.assistive || !recs.agentic) {
     return (
       <div className="max-w-4xl mx-auto">
-        <FlowSteps />
         <EmptyState title="Could not load the scenarios">The server did not respond. Check that the backend is running.</EmptyState>
       </div>
     )
@@ -64,7 +62,6 @@ export default function Scenarios() {
 
   return (
     <div ref={root} className="max-w-4xl mx-auto space-y-8">
-      <FlowSteps />
       <div data-reveal>
         <PageHeader
           title={<>Two possible <Highlight>futures</Highlight></>}

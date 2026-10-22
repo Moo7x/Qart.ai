@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowRight, BadgeCheck, ChevronDown, ChevronUp, Clock, ExternalLink } from 'lucide-react'
-import FlowSteps from '../components/FlowSteps'
 import { useReveal } from '../motion'
 import { getRecommendation, getRoles, getSnapshots } from '../api'
 import { SkillResources } from '../components/ResourceList'
@@ -217,7 +216,6 @@ export default function MyFuture() {
 
   return (
     <div ref={root} className="max-w-3xl mx-auto space-y-8">
-      <FlowSteps />
       <div data-reveal>
         <PageHeader
           title={<>Roles that fit your <Highlight>evidence</Highlight></>}

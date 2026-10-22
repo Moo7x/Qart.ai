@@ -1,9 +1,8 @@
 import type { ReactNode } from 'react'
-import { lazy, Suspense, useState } from 'react'
+import { lazy, Suspense, useEffect, useRef, useState } from 'react'
 import { BrowserRouter, Link, Navigate, NavLink, Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 import { RotateCcw } from 'lucide-react'
 import { resetDemo } from './api'
-import { FUTURE_FLOW_PATHS } from './components/FlowSteps'
 import { PERSONAS, PersonaProvider, usePersona } from './persona'
 import type { PersonaRole } from './persona'
 import { EmptyState, Loading, ProvenanceTag } from './ui'
@@ -24,11 +23,16 @@ const WorkQueue = lazy(() => import('./pages/WorkQueue'))
 const Workspace = lazy(() => import('./pages/Workspace'))
 
 const LINKS: Record<PersonaRole, { to: string; label: string }[]> = {
+  // The reskilling flow in order, then the practice loop.
   employee: [
     { to: '/start', label: 'Profile' },
+    { to: '/signals', label: 'Signals' },
+    { to: '/matches', label: 'Matches' },
+    { to: '/pathway', label: 'Pathway' },
+    { to: '/impact', label: 'SDG impact' },
+    { to: '/scenarios', label: 'Scenarios' },
     { to: '/queue', label: 'Work queue' },
     { to: '/skills', label: 'My skills' },
-    { to: '/future', label: 'My future' },
   ],
   senior: [{ to: '/improve', label: 'Companion updates' }],
   hr: [
@@ -42,11 +46,16 @@ const HOME: Record<PersonaRole, string> = { employee: '/start', senior: '/improv
 
 function Nav() {
   const navigate = useNavigate()
-  const { pathname } = useLocation()
-  // "My future" covers every flow screen after the intake (Signals … Scenarios).
-  const inFutureFlow = FUTURE_FLOW_PATHS.some(p => pathname.startsWith(p))
   const { persona, setPersona } = usePersona()
   const [resetting, setResetting] = useState(false)
+  const navRef = useRef<HTMLElement>(null)
+  const { pathname } = useLocation()
+  // A case and its result belong to the work queue.
+  const inCase = pathname.startsWith('/workspace') || pathname.startsWith('/result')
+  // On narrow screens the link row scrolls; keep the current screen's link visible.
+  useEffect(() => {
+    navRef.current?.querySelector('[aria-current="page"]')?.scrollIntoView({ block: 'nearest', inline: 'nearest' })
+  }, [pathname])
 
   const reset = async () => {
     if (!window.confirm('Reset the demo to its synthetic starting state? Practice results, the newer snapshot and assumption approvals are cleared; companion updates are kept.')) return
@@ -62,24 +71,11 @@ function Nav() {
 
   return (
     <header className="sticky top-0 z-40 bg-surface/90 backdrop-blur border-b border-hairline shadow-nav">
-      <div className="max-w-6xl mx-auto h-16 px-4 flex items-center gap-3 sm:gap-6">
+      <div className="max-w-6xl mx-auto h-14 px-4 flex items-center gap-3 sm:gap-6">
         <Link to={HOME[persona.role]} className="shrink-0 flex items-center gap-2 text-base font-semibold tracking-[-0.01em] text-ink">
           <img src="/favicon.svg" alt="" width={24} height={24} />
-          <span className="hidden sm:inline">Qart.ai</span>
+          <span>Qart.ai</span>
         </Link>
-        <nav aria-label="Main" className="min-w-0 flex gap-1 overflow-x-auto">
-          {LINKS[persona.role].map(l => (
-            <NavLink
-              key={l.to}
-              to={l.to}
-              className={({ isActive }) =>
-                `whitespace-nowrap rounded-md px-3 py-2 text-sm transition-colors duration-200 ${isActive || (l.to === '/future' && inFutureFlow) ? 'bg-action-tint text-action-ink font-medium' : 'text-ink/60 hover:text-ink'}`
-              }
-            >
-              {l.label}
-            </NavLink>
-          ))}
-        </nav>
         <div className="ml-auto flex items-center gap-2 sm:gap-3 shrink-0">
           <span className="hidden lg:inline-flex"><ProvenanceTag kind="synthetic">demo data</ProvenanceTag></span>
           <label className="flex items-center gap-2 text-xs text-graphite">
@@ -109,6 +105,20 @@ function Nav() {
           </button>
         </div>
       </div>
+      {/* Links get their own row: eight employee screens do not fit beside the controls. */}
+        <nav ref={navRef} aria-label="Main" className="max-w-6xl mx-auto px-4 flex gap-1 overflow-x-auto pb-2 -mt-1">
+          {LINKS[persona.role].map(l => (
+            <NavLink
+              key={l.to}
+              to={l.to}
+              className={({ isActive }) =>
+                `whitespace-nowrap rounded-md px-3 py-2 text-sm transition-colors duration-200 ${isActive || (l.to === '/queue' && inCase) ? 'bg-action-tint text-action-ink font-medium' : 'text-ink/60 hover:text-ink'}`
+              }
+            >
+              {l.label}
+            </NavLink>
+          ))}
+        </nav>
     </header>
   )
 }
@@ -153,7 +163,8 @@ export default function App() {
               <Route path="/result/:caseId" element={<Only role="employee"><Result /></Only>} />
               <Route path="/skills" element={<Only role="employee"><MySkills /></Only>} />
               <Route path="/signals" element={<Only role="employee"><Signals /></Only>} />
-              <Route path="/future" element={<Only role="employee"><MyFuture /></Only>} />
+              <Route path="/matches" element={<Only role="employee"><MyFuture /></Only>} />
+              <Route path="/future" element={<Navigate to="/matches" replace />} />
               <Route path="/pathway" element={<Only role="employee"><Pathway /></Only>} />
               <Route path="/impact" element={<Only role="employee"><Impact /></Only>} />
               <Route path="/scenarios" element={<Only role="employee"><Scenarios /></Only>} />

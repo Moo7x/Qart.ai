@@ -352,7 +352,7 @@ export default function Workspace() {
         </div>
 
         {/* Companion */}
-        <Card data-reveal className="flex flex-col lg:sticky lg:top-20 lg:h-[calc(100svh-6rem)] overflow-hidden">
+        <Card data-reveal className="flex flex-col lg:sticky lg:top-28 lg:h-[calc(100svh-8rem)] overflow-hidden">
           <div className="px-4 py-3 border-b border-hairline">
             <div className="flex items-center gap-2.5">
               <span className="w-9 h-9 rounded-full bg-action-tint text-action flex items-center justify-center"><Bot size={20} strokeWidth={1.75} aria-hidden="true" /></span>
