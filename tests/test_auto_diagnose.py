@@ -18,7 +18,7 @@ def case() -> dict[str, Any]:
 
 
 def test_labels_are_error_types_only() -> None:
-    labels = auto._issue_labels()
+    labels = auto.issue_labels()
     assert "unsupported_adjustment" in labels and "transposition_check" in labels
     assert not set(labels) & auto.BEHAVIOUR_SKILLS
 
@@ -47,7 +47,7 @@ def test_clean_diagnosis_drops_unknown_labels_and_rows_and_keeps_consistency() -
 
 
 def test_schema_restricts_rows_to_the_case(monkeypatch: pytest.MonkeyPatch) -> None:
-    schema = auto._schema(["a"], auto._row_ids(case()))
+    schema = auto.diagnosis_schema(["a"], auto.row_ids(case()))
     rows = schema["json_schema"]["schema"]["properties"]["affected_rows"]["items"]["enum"]
     assert "L4" in rows and "ADJ-7" in rows and schema["json_schema"]["strict"] is True
 

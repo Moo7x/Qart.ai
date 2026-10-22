@@ -40,7 +40,7 @@ BEHAVIOUR_SKILLS = frozenset({"escalation_judgment", "ai_output_review"})
 UNSUPPORTED_ADJUSTMENT_MIN = 100.0
 
 
-def _issue_labels() -> dict[str, str]:
+def issue_labels() -> dict[str, str]:
     """Allowed issue_types: error-type skill ids (practised, not behaviour) and their meaning."""
     catalogue = default_catalogue()
     return {
@@ -50,7 +50,7 @@ def _issue_labels() -> dict[str, str]:
     }
 
 
-def _row_ids(case: dict[str, Any]) -> list[str]:
+def row_ids(case: dict[str, Any]) -> list[str]:
     rows = [r["row_id"] for r in case.get("ledger", [])] + [
         r["row_id"] for r in case.get("bank", [])
     ]
@@ -58,11 +58,11 @@ def _row_ids(case: dict[str, Any]) -> list[str]:
     return rows + [a["id"] for a in adjustments]
 
 
-def _schema(labels: list[str], row_ids: list[str]) -> dict[str, Any]:
+def diagnosis_schema(labels: list[str], allowed_rows: list[str]) -> dict[str, Any]:
     properties = {
         "has_issue": {"type": "boolean"},
         "issue_types": {"type": "array", "items": {"type": "string", "enum": labels}},
-        "affected_rows": {"type": "array", "items": {"type": "string", "enum": row_ids}},
+        "affected_rows": {"type": "array", "items": {"type": "string", "enum": allowed_rows}},
         "decision": {"type": "string", "enum": list(DECISIONS)},
         "explanation": {"type": "string"},
     }
@@ -95,11 +95,11 @@ def _tool_results(
     return totals, matches, adjustments, log
 
 
-def clean_diagnosis(raw: dict[str, Any], labels: list[str], row_ids: list[str]) -> Diagnosis:
+def clean_diagnosis(raw: dict[str, Any], labels: list[str], allowed_rows: list[str]) -> Diagnosis:
     """Keep only allowed labels and existing rows; make has_issue agree with the decision."""
     decision = raw.get("decision") if raw.get("decision") in DECISIONS else "escalate"
     issue_types = [str(t) for t in raw.get("issue_types", []) if str(t) in labels]
-    rows = [r for r in raw.get("affected_rows", []) if isinstance(r, str) and r in row_ids]
+    rows = [r for r in raw.get("affected_rows", []) if isinstance(r, str) and r in allowed_rows]
     has_issue = decision != "sign_off"
     return {
         "has_issue": has_issue,
@@ -110,49 +110,67 @@ def clean_diagnosis(raw: dict[str, Any], labels: list[str], row_ids: list[str]) 
     }
 
 
-def _llm_diagnose(
-    case: dict[str, Any], playbook: str, tool_log: list[Any], api_key: str
-) -> Diagnosis:
-    from openai import OpenAI
+def public_case(case: dict[str, Any]) -> dict[str, Any]:
+    return {k: v for k, v in case.items() if k != "ground_truth"}
 
-    client = OpenAI(api_key=api_key, base_url=os.getenv("LLM_BASE_URL", DEFAULT_BASE_URL))
-    labels = _issue_labels()
-    row_ids = _row_ids(case)
-    case_no_gt = {k: v for k, v in case.items() if k != "ground_truth"}
-    label_text = "\n".join(f"- {k}: {v}" for k, v in labels.items())
-    user = (
+
+def diagnosis_request(case: dict[str, Any], decision_rule: str) -> str:
+    """The answer format shared by the companion and the text-only baseline (same labels)."""
+    label_text = "\n".join(f"- {k}: {v}" for k, v in issue_labels().items())
+    return (
         "Diagnose this AI-prepared bank reconciliation.\n\n"
         "issue_types: the kinds of error present, only from these ids (empty list if the "
         "reconciliation is clean):\n"
         f"{label_text}\n\n"
         "affected_rows: only the row or adjustment ids that are actually wrong (empty if clean).\n"
-        "decision: follow Step 6 of the procedure.\n\n"
-        f"Case:\n{json.dumps(case_no_gt, ensure_ascii=False)}\n\n"
-        f"Tool results:\n{json.dumps(tool_log, ensure_ascii=False)}"
+        f"decision: {decision_rule}\n\n"
+        f"Case:\n{json.dumps(public_case(case), ensure_ascii=False)}"
     )
+
+
+def llm_diagnosis(case: dict[str, Any], system: str, user: str, api_key: str) -> Diagnosis:
+    """One structured LLM call; the answer is constrained by the schema and cleaned again."""
+    from openai import OpenAI
+
+    client = OpenAI(api_key=api_key, base_url=os.getenv("LLM_BASE_URL", DEFAULT_BASE_URL))
+    labels = list(issue_labels())
+    allowed_rows = row_ids(case)
     response = client.chat.completions.create(  # type: ignore[call-overload]
-        model=os.getenv("LLM_MODEL", DEFAULT_MODEL),
-        messages=[
-            {"role": "system", "content": f"Follow this checking procedure exactly:\n\n{playbook}"},
-            {"role": "user", "content": user},
-        ],
-        response_format=_schema(list(labels), row_ids),
+        model=llm_model(),
+        messages=[{"role": "system", "content": system}, {"role": "user", "content": user}],
+        response_format=diagnosis_schema(labels, allowed_rows),
         temperature=TEMPERATURE,
         max_tokens=MAX_TOKENS,
     )
     raw = json.loads(response.choices[0].message.content or "{}")
-    return clean_diagnosis(raw, list(labels), row_ids)
+    return clean_diagnosis(raw, labels, allowed_rows)
 
 
-def auto_diagnose(case: dict[str, Any], playbook_path: str) -> Diagnosis:
+def llm_model() -> str:
+    return os.getenv("LLM_MODEL", DEFAULT_MODEL)
+
+
+def _llm_diagnose(
+    case: dict[str, Any], playbook: str, tool_log: list[Any], api_key: str
+) -> Diagnosis:
+    user = (
+        diagnosis_request(case, "follow Step 6 of the procedure.")
+        + f"\n\nTool results:\n{json.dumps(tool_log, ensure_ascii=False)}"
+    )
+    system = f"Follow this checking procedure exactly:\n\n{playbook}"
+    return llm_diagnosis(case, system, user, api_key)
+
+
+def auto_diagnose(case: dict[str, Any], playbook_path: str, use_llm: bool = True) -> Diagnosis:
     """Diagnose the case using the playbook, with no user interaction.
 
     Returns has_issue, issue_types (practised skill ids), affected_rows (row ids), decision
     (sign_off | correct | escalate), explanation, tool_calls, and source (llm | rule_based |
-    rule_based_fallback, with fallback_reason when the LLM call failed).
+    rule_based_fallback, with fallback_reason when the LLM call failed). use_llm=False forces
+    the rule-based path (the evaluation reports both).
     """
     playbook = Path(playbook_path).read_text(encoding="utf-8")
-    api_key = os.getenv("LLM_API_KEY", "")
+    api_key = os.getenv("LLM_API_KEY", "") if use_llm else ""
     totals, matches, adjustments, tool_log = _tool_results(case)
     if not api_key:
         result = _rule_based_diagnose(case, totals, matches, adjustments, tool_log)
