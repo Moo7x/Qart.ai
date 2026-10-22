@@ -1,38 +1,76 @@
 # Project rules for coding agents: Qart.ai
 
-Qart.ai (SDC Hackathon 2026, Domain 1: Aiversecity Future-Ready Workforce) is a web app a company deploys so employees practise reviewing AI-prepared finance work (bank reconciliations) with a stepped-help companion. Their mistakes and successes become evidence of skill. Dated public trend data plus explicit company AI-adoption assumptions drive explainable future-role matching and a time-budgeted learning path. The goal is to train people as AI changes the work, rather than replace them.
+Qart.ai (SDC Hackathon 2026, Domain 1: Aiversecity Future-Ready Workforce) takes a person in
+Malaysia from "who I am today" to "where I can be in the AI era". A continuous intelligence loop
+and a field-aware research agent collect dated public evidence about AI and the job market; code
+turns that evidence into task-level change, skill emphasis per scenario, ranked future roles with an
+explainable fit score and skills gap, and an ordered reskilling pathway where every role, skill and
+step is tagged to an SDG target. A visible on-screen agent opens the evidence, courses and real job
+openings for the user. People make the decisions.
 
-Read first: `PROJECT_PLAN.md`, `team/00_SHARED_CONTRACT.md`, and the person file for whoever you are helping (`team/PERSON_A_ENGINE_AND_DATA.md` or `team/PERSON_B_APP_AND_COMPANION.md`).
+Read first: `docs/PLAN.md` (product and system design). It is the only source of truth for scope.
+
+## Scope
+- Users: working adults at risk of displacement, fresh graduates / students (also via TVET and
+  university career centres), career switchers, HR / L&D managers (aggregate team view only).
+- Demo field with deep coverage: Malaysian Global Business Services (GBS), finance & accounting.
+  Other fields get "basic coverage", labelled as such on every screen.
+- Six must-haves (brief §4): profile intake (CV / form / questionnaire) · updatable AI and job-market
+  signal layer showing source and date (hard-coded lists do not count) · ranked future roles with an
+  explainable match score and skills gap · ordered pathway with time and free / low-cost resources ·
+  every role and skill tagged to at least one SDG with how the chosen path contributes · more than
+  one future scenario, labelled as estimates.
+- Core SDG targets: 4.4, 4.3, 8.2, 8.5. Others (5, 9, 10, 13 ...) only where the work supports them.
+- The on-screen agent researches and shows. It never tutors, hints at answers or grades the user.
+- Out of scope (brief §6): full course content, payments, real recruitment integrations.
+- Any change of product direction or scope is a question for the human before it goes into code
+  or the plan. Do not add, remove or reinterpret features on your own.
 
 ## Hard rules (hackathon)
-- Synthetic or public/open data only. Never add real personal data or real CVs.
-- Never invent jobs, courses or statistics. Every recommendation or claim shown to users carries a source + date. If you cannot verify a URL, mark the item `"verified": false` for a human to check.
+- Public, open or synthetic data only. No real personal data and no real CVs; sample profiles are
+  synthetic and labelled.
+- Never invent jobs, courses or statistics. The LLM never produces numbers; code computes them from
+  stored observations. Every recommendation, role, skill, course and claim shown to users carries
+  its source and date. Anything that cannot be verified is stored with `verified: false` and is
+  never recommended.
+- Name the LLM wherever it is used (OpenAI gpt-4o-mini) and in the declaration log.
 - Humans decide. The system recommends; it never makes hiring, promotion or dismissal decisions.
-- No secrets in code or commits. Read keys from environment variables only; keep `.env.example` with names only.
-- Respect the JSON contract in `team/00_SHARED_CONTRACT.md` / `schemas/`. If a change is needed, stop and tell the human (contract changes need both teammates).
-- Only edit the folders owned by the person you are working for (contract §1). Shared files (`src/main.py`, `schemas/`) only with care.
-- Never show users a mastery percentage. Show evidence states, the cases behind them, and why they changed.
-- Label every number as evidence (dated source), assumption (company layer B / declared parameter) or synthetic.
-- HR sees aggregates only (groups under 5 suppressed, which reduces but does not eliminate re-identification risk). Individual recommendations are employee-facing only.
-- The optimiser may only edit `src/companion/playbooks/`. It must never read `eval/acceptance/` or change grading criteria.
+  New evidence only proposes revisions with a diff; the user accepts or declines.
+- Label every number shown as **observed** (source + date), **assumption** (scenario rule or
+  declared parameter) or **estimate** (forecast). Missing is not zero.
+- Keep the four kinds of task-change evidence separate: observed AI use, reported deployment,
+  potential exposure, expert impact. No "being automated" verdict from usage alone.
+- Essential skills and prerequisites keep their required level in every scenario; scenarios only
+  shift emphasis weights.
+- A person's skill level is always a claim (CV span or self-rating), never shown as verified.
+- PII is stripped before matching. Protected attributes never change a result (paired-profile test).
+- HR sees aggregates only; groups under 5 are suppressed.
+- No secrets in code or commits. Keys come from environment variables; `.env.example` holds names
+  only.
 
 ## Engineering rules
-- Small, reviewable changes; one feature per commit; meaningful commit messages (e.g. `engine: add evidence-state rules`). Commit often. Never one giant commit. Follow the qart-git-workflow skill (commit size, messages, no force-push/squash, never commit data/raw, .env or secrets).
-- Prefer simple, explainable logic. Comment the "why" of every formula, weight and threshold.
-- Add/maintain tests (`python -m pytest`). Keep them passing before each commit.
-- Log every new library, model, dataset or API with its licence in `docs/DECLARATION_LOG.md`, and decisions in `docs/decision_log.md` (skill: qart-declaration-log).
-- Run the qart-contract-check skill before committing changes to endpoints or contract objects.
-- Follow the qart-code-standards skill for all code (typed, linted with ruff, tested, no magic numbers, formulas documented).
-- After finishing or changing a module, update its explanation doc with the qart-explain skill (docs/explain/).
-- The human must understand every component: explain non-obvious code in the commit message body.
+- Python 3.12 (`src/__init__.py` stops older versions). FastAPI backend in `src/`, React +
+  TypeScript + Vite + Tailwind frontend in `web/`. SQLite locally, Postgres on Replit, through one
+  SQLAlchemy Core layer.
+- Simple, explainable logic. Every formula, weight and threshold lives in a named, commented
+  parameter (what, why this value, and whether it is evidence, assumption or declared parameter).
+- Agents and LLM calls: every answer is schema-constrained and validated in code; every fallback is
+  visible (`source`, `engine`, `note` fields) and never reported as a model result. Remote services
+  (LLM, RunPod) get a time budget and a labelled fallback; no page waits for a GPU cold start.
+- The research agent never writes scores. It publishes validated evidence; code recomputes.
+- Tests with `python -m pytest`; `ruff` and `mypy` clean before each commit. Tests never call paid
+  services: use fakes for LLM, RunPod and network sources.
+- Verify every screen against the real API, not only mocks; frontend types match server shapes.
+- No hard-coded user ids, role ids or answers in the UI; everything comes from the API or data.
+- Log every new library, model, dataset or API with its licence in `docs/DECLARATION_LOG.md`, and
+  decisions in `docs/decision_log.md` (skill: qart-declaration-log).
+- Follow qart-code-standards for code and qart-git-workflow for commits. After finishing or
+  changing a module, update its explanation in `docs/explain/` (skill: qart-explain).
 
-## Rules learned from testing (each one fixes a bug we actually shipped)
-- Never send ground truth to the browser before a correct decision. A held-back wrong decision returns no explanation, rows or correct decision; the help level recorded must equal the help shown.
-- Verify every screen against the real API (`VITE_USE_MOCKS=false`), not only mocks. Frontend types and mock data must have the exact shapes the server returns.
-- No hard-coded user ids, case ids or answers in the UI or in companion fallbacks: everything comes from the persona, the API or the case's own data.
-- Tests never call paid services: `tests/conftest.py` removes LLM and RunPod keys. Use fakes (MockTransport, fake diagnosers) for LLM and GPU paths.
-- Every LLM answer is schema-constrained and validated in code, and every fallback is visible (`source`, `engine`, `note` fields). A fallback must never be reported as a model result.
-- Remote services (RunPod, LLM) get a time budget and a labelled fallback; a page must not wait for a GPU cold start.
-- The evaluation's acceptance set is scored once per playbook version. Development and the optimiser use practice cases and `eval/variants.py`; `eval/holdout/` is for final numbers only.
-- Python 3.12 is required (`src/__init__.py` stops older versions). The RunPod worker builds from the repository root (`runpod/Dockerfile`), needs PyTorch >= 2.6, and every push to `main` rebuilds it.
-- Commit messages carry no AI attribution lines (no "Co-Authored-By" for tools).
+## Git
+- Small commits, one change each, plain messages (`area: what changed`). No AI attribution lines
+  (no "Co-Authored-By" for tools).
+- Never push, force-push, rebase shared branches, `reset --hard`, `clean`, delete branches, or
+  change git config or remotes. The human pushes.
+- Never commit `.env`, keys, `data/raw/`, databases, `node_modules/`, `web/dist/` or `notes/`.
+- Nothing addressed to the human goes in the repository; the repo is written for readers and judges.
