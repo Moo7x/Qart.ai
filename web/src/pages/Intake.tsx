@@ -8,21 +8,6 @@ import { useUserId } from '../persona'
 import type { Preferences, Profile, Role } from '../types'
 import { btn, Card, Highlight, input as inputCls, PageHeader, ProvenanceTag, Tag } from '../ui'
 
-const SKILLS = [
-  { id: 'recon_to_source', label: 'Reconcile to source' },
-  { id: 'duplicate_detection', label: 'Duplicate detection' },
-  { id: 'cutoff_timing', label: 'Cutoff / timing items' },
-  { id: 'unsupported_adjustment', label: 'Unsupported adjustments' },
-  { id: 'fx_conversion', label: 'FX conversion' },
-  { id: 'transposition_check', label: 'Transposition errors' },
-  { id: 'escalation_judgment', label: 'Escalation judgment' },
-  { id: 'ai_output_review', label: 'AI output review' },
-]
-
-// Interest factor = |interests ∩ role tags| / |interests|, so an option that matches no role tag
-// lowers every score. Only the options the engine already knows are offered.
-const INTEREST_OPTIONS = ['analysis', 'automation', 'reporting', 'controls', 'data quality', 'forecasting']
-
 // Years are chosen as a band; the profile stores a number, so each band maps to its midpoint
 // (10+ maps to 12). Declared mapping, not data.
 const YEAR_BANDS = [
@@ -83,10 +68,6 @@ export default function Intake() {
   const [roleId, setRoleId] = useState('')
   const [yearsBand, setYearsBand] = useState('')
   const [weeklyHours, setWeeklyHours] = useState(4)
-  const [confidences, setConfidences] = useState<Record<string, number>>(
-    Object.fromEntries(SKILLS.map(s => [s.id, 0.5]))
-  )
-  const [interests, setInterests] = useState<string[]>(['analysis', 'automation'])
   const [prefs, setPrefs] = useState<Preferences>({ tools: [], formats: [] })
   const [submitting, setSubmitting] = useState(false)
   const root = useRef<HTMLDivElement>(null)
@@ -99,12 +80,6 @@ export default function Intake() {
       setProfile(profile)
       setRoleId(profile.current_role_id)
       setYearsBand(bandFor(profile.years_experience))
-      if (profile.skills_self_reported?.length) {
-        const map: Record<string, number> = {}
-        for (const s of profile.skills_self_reported) map[s.skill_id] = s.confidence
-        setConfidences(prev => ({ ...prev, ...map }))
-      }
-      if (profile.interests?.length) setInterests(profile.interests)
       if (profile.weekly_learning_hours) setWeeklyHours(profile.weekly_learning_hours)
       setPrefs({ tools: [], formats: [], ...profile.preferences })
     }).catch(() => setError('Could not load your profile.'))
@@ -118,13 +93,12 @@ export default function Intake() {
     setSubmitting(true)
     setError(null)
     try {
-      // Keep everything else in the profile; only the answers on this page change.
+      // Keep everything else in the profile, including the stored self-ratings and interests
+      // (no longer asked here); only the answers on this page change.
       await postProfile({
         ...profile,
         current_role_id: roleId || profile.current_role_id,
         years_experience: YEAR_BANDS.find(b => b.label === yearsBand)?.value ?? profile.years_experience,
-        skills_self_reported: SKILLS.map(s => ({ skill_id: s.id, confidence: confidences[s.id] })),
-        interests,
         weekly_learning_hours: weeklyHours,
         preferences: { ...prefs, notes: prefs.notes?.trim() || null },
       })
@@ -149,7 +123,7 @@ export default function Intake() {
       <FlowSteps />
       <PageHeader
         title={name ? <>Welcome, <Highlight>{name}</Highlight></> : 'Welcome'}
-        intro="Tell us about your work and what you enjoy. We'll turn it into your reskilling pathway."
+        intro="Tell us about your work and where you want to go. We'll turn it into your reskilling pathway."
         aside={name ? <ProvenanceTag kind="synthetic">{name} is a demo persona</ProvenanceTag> : undefined}
       />
       {error && <p role="alert" className="-mt-4 mb-6 rounded-md bg-coral-tint px-4 py-3 text-sm text-coral-ink">{error}</p>}
@@ -192,34 +166,6 @@ export default function Intake() {
             </div>
           </fieldset>
           <p className="text-xs text-graphite">Industry and education are saved with your profile; the ranking does not use them yet.</p>
-        </Card>
-
-        <Card data-reveal className="p-6">
-          <CardTitle aside={<Tag tone="linen">Your own view, not evidence</Tag>}>How confident are you today?</CardTitle>
-          <p className="mt-1 mb-5 text-sm text-graphite">This is your own starting view. Practice and check-in cases add real evidence next to it.</p>
-          <div className="space-y-4">
-            {SKILLS.map(skill => (
-              <div key={skill.id} className="grid grid-cols-[1fr_auto] sm:grid-cols-[13rem_1fr_3rem] items-center gap-x-4 gap-y-1">
-                <label htmlFor={`conf-${skill.id}`} className="col-start-1 row-start-1 text-sm text-ink">{skill.label}</label>
-                <input
-                  id={`conf-${skill.id}`}
-                  type="range" min={0} max={1} step={0.05}
-                  value={confidences[skill.id]}
-                  onChange={e => setConfidences(prev => ({ ...prev, [skill.id]: parseFloat(e.target.value) }))}
-                  className="col-span-2 row-start-2 sm:col-span-1 sm:col-start-2 sm:row-start-1 w-full"
-                />
-                <span className="col-start-2 row-start-1 sm:col-start-3 text-sm text-graphite tabular-nums text-right">{Math.round(confidences[skill.id] * 10)}/10</span>
-              </div>
-            ))}
-          </div>
-        </Card>
-
-        <Card data-reveal className="p-6">
-          <CardTitle>What do you enjoy?</CardTitle>
-          <p className="mt-1 mb-4 text-sm text-graphite">Pick any. They help rank future roles for you.</p>
-          <div className="flex flex-wrap gap-2">
-            {INTEREST_OPTIONS.map(i => <Chip key={i} on={interests.includes(i)} onClick={() => setInterests(prev => toggle(prev, i))}>{i}</Chip>)}
-          </div>
         </Card>
 
         <Card data-reveal className="p-6 space-y-5">

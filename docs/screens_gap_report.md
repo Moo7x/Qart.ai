@@ -52,4 +52,4 @@ number is illustrative.
 - No mastery percentages.
 - Personas come from `useUserId()`; no hard-coded user or case ids.
 - The practice loop (golden journey) still starts from Start → "Or start practising now".
-- Interests: only the six options the engine already knows are offered. The interest factor is |interests ∩ role tags| / |interests|, so the mockup's extra options ("working with people", "building tools") match no role tag and would lower every score.
+- Self-ratings and interests are no longer asked on the Profile screen (product decision); saving keeps the stored values, so the confidence and interest factors and golden journey step 1 are unchanged. If interests are asked again: only offer the options the engine already knows. The interest factor is |interests ∩ role tags| / |interests|, so the mockup's extra options ("working with people", "building tools") match no role tag and would lower every score.

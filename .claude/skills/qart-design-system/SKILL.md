@@ -120,11 +120,11 @@ Every page follows the same rhythm, using the pieces in `web/src/ui.tsx`:
 Other shared pieces: `Drawer` (right slide-over for documents; Esc closes, focus is trapped and returned), `EmptyState` (also used for the role guard "Not available for this persona"), `Tag`, `StatePill`, `ProvenanceTag`.
 
 ### Six-screen reskilling flow
-Profile (`/start`) → Signals (`/signals`) → Matches (`/future`) → Pathway (`/pathway?role=`) → SDG impact (`/impact?role=`) → Scenarios (`/scenarios`). Each page starts with `<FlowSteps />` (`web/src/components/FlowSteps.tsx`), and "My future" stays highlighted in the nav on every step after Profile. Rules:
+Profile (`/start`) → Signals (`/signals`) → Matches (`/future`) → Pathway (`/pathway?role=`) → SDG impact (`/impact?role=`) → Scenarios (`/scenarios`). Profile is the employees' home page (nav item "Profile", `HOME.employee = '/start'`). Each page starts with `<FlowSteps />` (`web/src/components/FlowSteps.tsx`), and "My future" stays highlighted in the nav on every step after Profile. Rules:
 - **Scenarios** are labelled with `SCENARIO_LABEL` from `web/src/scenarios.ts` ("AI helps with routine work" / "AI does most routine work"), never "moderate/fast".
 - **Fit** is a suitability indicator: never "/100" and never a "±" band. `ai_handled_share` is a layer-B assumption shown as a point value, not a range.
 - **Profile.preferences** fields carry a "Saved · not used for ranking yet" tag until the engine reads them.
-- Interest chips offer only options that match role tags; tag-less options lower every score.
+- Profile does not ask for self-ratings or interests (removed at the user's request); saving keeps the values already stored, which the ranking's confidence and interest factors still use. If interest chips come back, offer only options that match role tags: tag-less options lower every score.
 - **SDG text comes from `GET /api/sdg`**, so goal names are never hard-coded. Pathway costs show the catalogue's own wording, with no HRD Corp badge unless a verified listing exists.
 - Pathway ticks are a per-persona browser checklist, labelled "not evidence".
 - Mockup numbers in `design/qart-flow/` are illustrative. Never copy them; see `docs/screens_gap_report.md`.

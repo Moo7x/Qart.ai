@@ -25,7 +25,7 @@ const Workspace = lazy(() => import('./pages/Workspace'))
 
 const LINKS: Record<PersonaRole, { to: string; label: string }[]> = {
   employee: [
-    { to: '/start', label: 'Start' },
+    { to: '/start', label: 'Profile' },
     { to: '/queue', label: 'Work queue' },
     { to: '/skills', label: 'My skills' },
     { to: '/future', label: 'My future' },
@@ -37,7 +37,8 @@ const LINKS: Record<PersonaRole, { to: string; label: string }[]> = {
   ],
 }
 
-const HOME: Record<PersonaRole, string> = { employee: '/queue', senior: '/improve', hr: '/hr' }
+// Employees land on their Profile, the first step of the reskilling flow.
+const HOME: Record<PersonaRole, string> = { employee: '/start', senior: '/improve', hr: '/hr' }
 
 function Nav() {
   const navigate = useNavigate()
@@ -128,7 +129,7 @@ function Only({ role, children }: { role: PersonaRole; children: ReactNode }) {
 
 function Home() {
   const { persona } = usePersona()
-  return <Navigate to={persona.role === 'employee' ? '/start' : HOME[persona.role]} replace />
+  return <Navigate to={HOME[persona.role]} replace />
 }
 
 // The workspace needs the full width so two tables fit without truncating descriptions.
