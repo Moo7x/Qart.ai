@@ -159,3 +159,21 @@ def test_cpsat_also_uses_the_confirmation_checkin() -> None:
     plan = path_after(golden_journey_events(), 4, selector=cpsat_select)
     steps = [(s.type, s.ref) for s in plan.steps if "unsupported_adjustment" in s.skills]
     assert steps == [("checkin", "checkin_002")]
+
+
+def test_real_grader_events_still_target_the_overconfident_skill_first() -> None:
+    """Person B's grader records every skill of case_003 (incl. ai_output_review). Aina rated
+    unsupported adjustments 8/10, so that mistake is practised first, then checked without help."""
+    events = golden_journey_events()
+    first = events[0].model_copy(deep=True)
+    first.skills_evidence.append(
+        first.skills_evidence[0].model_copy(update={"skill_id": "ai_output_review"})
+    )
+    case_id, because = next_after([first])
+    assert case_id == "case_006" and "unsupported adjustments" in because
+    second = events[1].model_copy(deep=True)
+    second.skills_evidence.append(
+        second.skills_evidence[0].model_copy(update={"skill_id": "ai_output_review"})
+    )
+    case_id, _ = next_after([first, second])
+    assert case_id == "checkin_001"

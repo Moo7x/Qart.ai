@@ -5,7 +5,10 @@ Rule ("your mistakes are your future skills"):
    first: the employee's own mistake is the next lesson. Among them, a skill that already has a
    help-assisted success since the miss goes first, so the loop on that mistake is closed with a
    no-help check-in while it is fresh (golden journey: case_003 → case_006 → checkin_001).
-2. Within that tier (or over all practised skills if no miss is open), pick the highest
+2. Within the two mistake tiers, a skill the employee rated highly at intake goes first: a miss
+   on a skill you believe you master is the largest calibration gap (PROJECT_PLAN "reality
+   gauge"), e.g. Aina rated adjustments 8/10 and missed one in case_003.
+   Then (and over all practised skills if no miss is open) pick the highest
    w·(1 − credit(state)), where w is the skill's scenario weight in the target role (the user's
    top-ranked role unless one is given). Ties: higher provisional-estimate uncertainty p(1−p),
    then skill id.
@@ -105,9 +108,14 @@ def next_case(
     weights = scenario_weights(role, scenario, assumptions, skill_types).scenario
     seen = {e.case_id for e in events}
 
+    claimed = {s.skill_id: s.confidence for s in profile.skills_self_reported}
+
     def priority(skill_id: str) -> tuple[float, float, str]:
         need = weights.get(skill_id, 0.0) * (1 - credit(by_skill.get(skill_id)))
         return (-need, -_uncertainty(by_skill.get(skill_id)), skill_id)
+
+    def mistake_priority(skill_id: str) -> tuple[float, float, float, str]:
+        return (-claimed.get(skill_id, 0.0), *priority(skill_id))
 
     counted = {
         k: [o for o in observations_for(k, events) if o.counted]
@@ -115,8 +123,12 @@ def next_case(
     }
     missed = [k for k, obs in counted.items() if unresolved_miss(obs)]
     closing = [k for k in missed if helped_success_since_miss(counted[k])]
-    tiers = [closing, [k for k in missed if k not in closing], catalogue.practised_skill_ids]
-    pool = [k for tier in tiers for k in sorted(tier, key=priority)]
+    open_misses = [k for k in missed if k not in closing]
+    pool = [
+        *sorted(closing, key=mistake_priority),
+        *sorted(open_misses, key=mistake_priority),
+        *sorted(catalogue.practised_skill_ids, key=priority),
+    ]
 
     for skill_id in dict.fromkeys(pool):
         helped = helped_success_since_miss(counted[skill_id])
