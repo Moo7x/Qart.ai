@@ -86,7 +86,8 @@ Hierarchy comes from size and weight, not colour. Use `tabular-nums` for every n
 
 - 4px base. Use Tailwind steps 1, 2, 3, 4, 5, 6, 8, 16, 20 (4–80px). Card padding `p-6` (24px), gaps inside cards `gap-2`/`gap-3`, between cards `gap-4`, between page sections `mt-12`–`mt-16`.
 - Content max width `max-w-6xl` for list/grid pages; `max-w-3xl` for reading pages (Result, explanations).
-- **Workspace / companion screen** (Perplexity borrow): work area on the left (`lg:grid-cols-[minmax(0,1fr)_380px]`), companion as a sticky white side column on the right (`lg:sticky lg:top-20 lg:h-[calc(100svh-6rem)]`) holding the chat, "I'm stuck" and the decision, so help and the decision stay in view while scrolling the data. It stacks below the work area on phones. No other page uses a side column.
+- **Workspace / companion screen** (Perplexity borrow): this route alone uses a `max-w-[1440px]` container. A marigold **task strip** ("Your job: check the AI's draft, then decide" plus 4 steps that tick themselves) sits under the title. Below it, the work area is on the left (`lg:grid-cols-[minmax(0,1fr)_360px]`): the AI draft in serif, then a Side by side / Ledger / Bank switch (side by side from `xl` up) with descriptions that wrap, never truncate. Document chips open the `Drawer`. The companion is a sticky white side column on the right (`lg:sticky lg:top-20 lg:h-[calc(100svh-6rem)]`): avatar, help ladder, starter questions when empty, chat, "I'm stuck", and the decision pinned at the bottom. It stacks below the work area on phones. No other page uses a side column.
+- **Evidence & assumptions** (HR): layer A (source) and layer B (assumption) as separate sections with provenance tags; the assumptions are one table (task × scenario) with edited cells highlighted in marigold.
 - Shared pieces live in `web/src/ui.tsx` (`StatePill`, `ProvenanceTag`, `Tag`, `Card`, `PageHeader`, `SectionTitle`, `Loading`, `EmptyState`, `btn.*`). Use them instead of re-writing class strings.
 - Top nav: sticky, `h-16`, `bg-surface/90 backdrop-blur`, `shadow-nav`, hairline bottom border.
 
@@ -107,7 +108,22 @@ Hierarchy comes from size and weight, not colour. Use `tabular-nums` for every n
 | Table | header `text-xs font-medium text-graphite`, rows `border-t border-hairline`, selected row `bg-linen`, numbers right-aligned `tabular-nums` |
 | Focus (all interactive) | `focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-action` |
 
-Motion: hovers and state changes `transition-colors duration-200 ease-out`. No bounce, parallax, scroll effects or animated gradients. Respect `motion-reduce:transition-none`.
+Motion: **all animation goes through GSAP** via `web/src/motion.ts` (`useReveal`, `enter`, `pop`; 0.25 s, `power2.out`, 8px rise). Hover colour changes may stay CSS `transition-colors duration-200`. Everything is skipped under `prefers-reduced-motion`. No bounce (except the small `pop` on a ticked step), parallax, scroll effects or animated gradients. Mark page blocks with `data-reveal` and call `useReveal(rootRef, [loading])` before any early return.
+
+### Page patterns (UI v2)
+Every page follows the same rhythm, using the pieces in `web/src/ui.tsx`:
+1. **Headline** (`PageHeader`): 40px title with **one** word wrapped in `<Highlight>`, put at the end of the phrase (a highlight followed by punctuation leaves a gap), plus a serif intro line.
+2. **Count tiles** (`StatTile`): colour-filled tiles with a count and a label. Counts only, never a percentage or score.
+3. **One dark next-step card** (`NextStepCard`, `bg-midnight`): the single most useful next action on the page, holding the page's only primary button. Other actions on the page are outlined.
+4. Content cards and sections below.
+
+Other shared pieces: `Drawer` (right slide-over for documents; Esc closes, focus is trapped and returned), `EmptyState` (also used for the role guard "Not available for this persona"), `Tag`, `StatePill`, `ProvenanceTag`.
+
+### Personas and roles
+The nav changes with the persona (`web/src/persona.tsx`): employees get Start / Work queue / My skills / My future, HR gets HR summary / Evidence & assumptions, and the senior gets Companion updates. Use `useUserId()` for every per-person call; never hard-code a user or case id. The persona select and Reset demo sit at the right of the nav. "Synthetic · demo data" appears from `lg` up.
+
+### Decision screens (humans decide)
+Wherever a person makes a decision (case decision in the workspace, a senior approving or rejecting an optimiser proposal), the options are **equal outlined buttons**, so the UI does not nudge the choice. HR's "Approve as version N" is the one exception: it is a single action, not a choice between options.
 
 ## 5. Project-specific patterns (non-negotiable)
 
