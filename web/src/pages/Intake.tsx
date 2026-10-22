@@ -258,7 +258,7 @@ export default function Intake() {
           <div>
             <label htmlFor="ai-comfort" className="flex flex-wrap justify-between gap-2 text-sm font-medium text-ink">
               <span className="inline-flex flex-wrap items-center gap-2">How comfortable are you using AI tools at work? <NotScored /></span>
-              <span className="tabular-nums text-action-ink">{prefs.ai_comfort ?? '–'}/10</span>
+              <span className="tabular-nums text-action-ink">{prefs.ai_comfort == null ? 'not set' : `${prefs.ai_comfort}/10`}</span>
             </label>
             <input id="ai-comfort" type="range" min={0} max={10} step={1} value={prefs.ai_comfort ?? 5} onChange={e => setPref('ai_comfort', parseInt(e.target.value, 10))} className="mt-3 w-full" />
           </div>
