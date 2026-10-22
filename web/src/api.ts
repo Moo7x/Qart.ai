@@ -1,6 +1,6 @@
 /**
- * API client. USE_MOCKS=true uses local mock data so the frontend works
- * standalone without a backend. Flip to false (or set VITE_USE_MOCKS=false) at M1.
+ * API client. Calls the real backend by default; set VITE_USE_MOCKS=true to use the
+ * local sample data so the frontend runs standalone without a backend.
  */
 import axios from 'axios';
 import type {
