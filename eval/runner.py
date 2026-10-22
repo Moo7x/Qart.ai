@@ -57,10 +57,16 @@ def load_auto_diagnose() -> Diagnoser:
 
 
 def load_cases(directory: Path = ACCEPTANCE_DIR) -> list[dict[str, Any]]:
-    """Acceptance cases (contract Case JSON with ground_truth), sorted by file name."""
-    return [
-        json.loads(path.read_text(encoding="utf-8")) for path in sorted(directory.glob("*.json"))
+    """Acceptance cases (contract Case JSON with ground_truth), sorted by file name.
+
+    Index files (index.json) and anything without a ground_truth are skipped.
+    """
+    cases = [
+        json.loads(path.read_text(encoding="utf-8"))
+        for path in sorted(directory.glob("*.json"))
+        if path.name != "index.json"
     ]
+    return [c for c in cases if isinstance(c, dict) and "ground_truth" in c]
 
 
 @dataclass(frozen=True)

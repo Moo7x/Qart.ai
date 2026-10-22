@@ -120,3 +120,11 @@ def test_criteria_hash_ignores_line_endings(
     lf_hash = criteria.criteria_hash()
     monkeypatch.setattr(criteria, "__file__", str(crlf))
     assert criteria.criteria_hash() == lf_hash
+
+
+def test_index_files_are_not_treated_as_cases(tmp_path: Path) -> None:
+    from eval.runner import load_cases
+
+    (tmp_path / "index.json").write_text('{"cases": []}', encoding="utf-8")
+    (tmp_path / "a001.json").write_text(json.dumps(issue_case()), encoding="utf-8")
+    assert [c["id"] for c in load_cases(tmp_path)] == ["case_003"]
