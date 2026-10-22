@@ -22,8 +22,11 @@ source, URL and date. Recall@5 is measured now so the later GPU gain can be show
   language, document kinds, skills. A filter only applies to documents carrying that field.
 - **Hybrid** (`hybrid.py`): BM25 + dense rankings fused by reciprocal-rank fusion,
   RRF(d) = Σ 1/(60 + rank), then an optional cross-encoder rerank of the fused pool.
-- **RunPod backends** (`runpod_backends.py`): `RunPodBGEM3Embedder`, `RunPodBGEReranker` raise
-  NotImplementedError until the endpoint exists (no silent fallback).
+- **RunPod backends** (`runpod_backends.py`): `RunPodBGEM3Embedder`, `RunPodBGEReranker` call the
+  deployed serverless worker (`runpod/handler.py`, previous-generation GPU, min workers 0). Without
+  `RUNPOD_API_KEY` / `RUNPOD_ENDPOINT_ID` they raise `RunPodNotConfiguredError` (no silent
+  fallback). A cold start (both models loading, measured 98 s) is handled by polling the job
+  status for up to 300 s.
 - **Microsoft Learn candidates** (`mslearn.py`): the public Catalog API (no key, Microsoft APIs Terms
   of Use, free) filtered to beginner, business-facing items on Excel / Power BI / Power Automate /
   Dynamics Finance, finance titles or AI fundamentals → 129 items in
@@ -42,14 +45,19 @@ grew from 17 to 26 courses (more look-alike documents compete); misses are vocab
 ("build a sales forecast from history" does not share words with "Forecasting: Principles and
 Practice"), which is what dense embeddings are expected to fix.
 
+With the RunPod hybrid (BGE-M3 embeddings + RRF + bge-reranker) on the same set and corpus:
+mean recall@5 = **0.88 (23/28)**, three more relevant items found than BM25 (2026-10-22).
+
 ## 6. Limits and honesty
 The labelled set is small, synthetic and written by us; course texts include our skill
-descriptions, which helps BM25. Microsoft Learn skill hints are keyword guesses for a reviewer. The
+descriptions, which helps BM25. 3 extra hits out of 28 is a real but small-sample difference.
+Hybrid search is measured here but not yet used by the path planner or the companion. Microsoft Learn skill hints are keyword guesses for a reviewer. The
 Catalog API endpoint is marked for deprecation in favour of the Learn Platform API.
 
 ## 7. Questions and answers
 - *Why BM25 first?* It runs on CPU, is explainable, and gives the baseline the GPU version must beat.
-- *Where is RunPod?* The interfaces are ready; the endpoint is the next spike (A7).
+- *Where is RunPod?* A serverless GPU endpoint serves both models; `python -m eval.retrieval_eval`
+  calls it and reports the hybrid next to BM25 (0.88 vs 0.74 recall@5).
 - *Can retrieval invent a course?* No: it only returns indexed documents, each with source and date.
 
 ## 8. Design choices considered
