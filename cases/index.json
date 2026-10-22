@@ -1,0 +1,9 @@
+[
+  {"id": "case_001", "mode": "practice", "difficulty": 1, "scenario_variant": "assistive", "skills": ["recon_to_source", "escalation_judgment", "ai_output_review"]},
+  {"id": "case_002", "mode": "practice", "difficulty": 1, "scenario_variant": "assistive", "skills": ["duplicate_detection", "recon_to_source"]},
+  {"id": "case_003", "mode": "practice", "difficulty": 2, "scenario_variant": "assistive", "skills": ["transposition_check", "unsupported_adjustment", "ai_output_review"]},
+  {"id": "case_006", "mode": "practice", "difficulty": 2, "scenario_variant": "assistive", "skills": ["unsupported_adjustment", "ai_output_review", "escalation_judgment"]},
+  {"id": "case_007", "mode": "practice", "difficulty": 2, "scenario_variant": "agentic",   "skills": ["ai_output_review", "cutoff_timing", "escalation_judgment"]},
+  {"id": "checkin_001", "mode": "checkin", "difficulty": 2, "scenario_variant": "assistive", "skills": ["unsupported_adjustment", "escalation_judgment"]},
+  {"id": "checkin_002", "mode": "checkin", "difficulty": 2, "scenario_variant": "agentic",   "skills": ["unsupported_adjustment", "ai_output_review"]}
+]

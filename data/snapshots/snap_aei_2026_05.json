@@ -1,0 +1,286 @@
+{
+  "id": "snap_aei_2026_05",
+  "source": "Anthropic Economic Index (data CC-BY)",
+  "release_date": "2026-06-26",
+  "period": "2026-05",
+  "geo": "MYS+GLOBAL",
+  "url": "https://huggingface.co/datasets/Anthropic/EconomicIndex",
+  "retrieved_at": "2026-10-21",
+  "signals": [
+    {
+      "entity": "GLOBAL overall",
+      "metric": "augmentation_pct",
+      "geo": "GLOBAL",
+      "value": 51.38,
+      "period": "2026-05"
+    },
+    {
+      "entity": "GLOBAL overall",
+      "metric": "automation_pct",
+      "geo": "GLOBAL",
+      "value": 48.62,
+      "period": "2026-05"
+    },
+    {
+      "entity": "MYS overall",
+      "metric": "augmentation_pct",
+      "geo": "MYS",
+      "value": 52.8,
+      "period": "2026-05"
+    },
+    {
+      "entity": "MYS overall",
+      "metric": "automation_pct",
+      "geo": "MYS",
+      "value": 47.2,
+      "period": "2026-05"
+    },
+    {
+      "entity": "SOC 13-1041 Compliance Officers",
+      "metric": "augmentation_pct",
+      "geo": "GLOBAL",
+      "value": 59.76,
+      "period": "2026-05"
+    },
+    {
+      "entity": "SOC 13-1041 Compliance Officers",
+      "metric": "automation_pct",
+      "geo": "GLOBAL",
+      "value": 40.24,
+      "period": "2026-05"
+    },
+    {
+      "entity": "SOC 13-1041 Compliance Officers",
+      "metric": "usage_pct",
+      "geo": "GLOBAL",
+      "value": 0.12,
+      "period": "2026-05"
+    },
+    {
+      "entity": "SOC 13-1041 Compliance Officers",
+      "metric": "usage_pct",
+      "geo": "MYS",
+      "value": 0.12,
+      "period": "2026-05"
+    },
+    {
+      "entity": "SOC 13-2011 Accountants and Auditors",
+      "metric": "augmentation_pct",
+      "geo": "GLOBAL",
+      "value": 54.98,
+      "period": "2026-05"
+    },
+    {
+      "entity": "SOC 13-2011 Accountants and Auditors",
+      "metric": "automation_pct",
+      "geo": "GLOBAL",
+      "value": 45.02,
+      "period": "2026-05"
+    },
+    {
+      "entity": "SOC 13-2011 Accountants and Auditors",
+      "metric": "usage_pct",
+      "geo": "GLOBAL",
+      "value": 0.12,
+      "period": "2026-05"
+    },
+    {
+      "entity": "SOC 13-2011 Accountants and Auditors",
+      "metric": "usage_pct",
+      "geo": "MYS",
+      "value": 0.15,
+      "period": "2026-05"
+    },
+    {
+      "entity": "SOC 13-2031 Budget Analysts",
+      "metric": "augmentation_pct",
+      "geo": "GLOBAL",
+      "value": 66.04,
+      "period": "2026-05"
+    },
+    {
+      "entity": "SOC 13-2031 Budget Analysts",
+      "metric": "automation_pct",
+      "geo": "GLOBAL",
+      "value": 33.96,
+      "period": "2026-05"
+    },
+    {
+      "entity": "SOC 13-2031 Budget Analysts",
+      "metric": "usage_pct",
+      "geo": "GLOBAL",
+      "value": 0.03,
+      "period": "2026-05"
+    },
+    {
+      "entity": "SOC 13-2051 Financial and Investment Analysts",
+      "metric": "augmentation_pct",
+      "geo": "GLOBAL",
+      "value": 55.81,
+      "period": "2026-05"
+    },
+    {
+      "entity": "SOC 13-2051 Financial and Investment Analysts",
+      "metric": "automation_pct",
+      "geo": "GLOBAL",
+      "value": 44.19,
+      "period": "2026-05"
+    },
+    {
+      "entity": "SOC 13-2051 Financial and Investment Analysts",
+      "metric": "usage_pct",
+      "geo": "GLOBAL",
+      "value": 0.21,
+      "period": "2026-05"
+    },
+    {
+      "entity": "SOC 13-2051 Financial and Investment Analysts",
+      "metric": "usage_pct",
+      "geo": "MYS",
+      "value": 0.29,
+      "period": "2026-05"
+    },
+    {
+      "entity": "SOC 15-2051 Data Scientists",
+      "metric": "augmentation_pct",
+      "geo": "GLOBAL",
+      "value": 52.57,
+      "period": "2026-05"
+    },
+    {
+      "entity": "SOC 15-2051 Data Scientists",
+      "metric": "automation_pct",
+      "geo": "GLOBAL",
+      "value": 47.43,
+      "period": "2026-05"
+    },
+    {
+      "entity": "SOC 15-2051 Data Scientists",
+      "metric": "usage_pct",
+      "geo": "GLOBAL",
+      "value": 0.61,
+      "period": "2026-05"
+    },
+    {
+      "entity": "SOC 15-2051 Data Scientists",
+      "metric": "usage_pct",
+      "geo": "MYS",
+      "value": 0.76,
+      "period": "2026-05"
+    },
+    {
+      "entity": "SOC 43-3021 Billing and Posting Clerks",
+      "metric": "augmentation_pct",
+      "geo": "GLOBAL",
+      "value": 55.19,
+      "period": "2026-05"
+    },
+    {
+      "entity": "SOC 43-3021 Billing and Posting Clerks",
+      "metric": "automation_pct",
+      "geo": "GLOBAL",
+      "value": 44.81,
+      "period": "2026-05"
+    },
+    {
+      "entity": "SOC 43-3021 Billing and Posting Clerks",
+      "metric": "usage_pct",
+      "geo": "GLOBAL",
+      "value": 0.04,
+      "period": "2026-05"
+    },
+    {
+      "entity": "SOC 43-3031 Bookkeeping, Accounting, and Auditing Clerks",
+      "metric": "augmentation_pct",
+      "geo": "GLOBAL",
+      "value": 48.1,
+      "period": "2026-05"
+    },
+    {
+      "entity": "SOC 43-3031 Bookkeeping, Accounting, and Auditing Clerks",
+      "metric": "automation_pct",
+      "geo": "GLOBAL",
+      "value": 51.9,
+      "period": "2026-05"
+    },
+    {
+      "entity": "SOC 43-3031 Bookkeeping, Accounting, and Auditing Clerks",
+      "metric": "usage_pct",
+      "geo": "GLOBAL",
+      "value": 0.32,
+      "period": "2026-05"
+    },
+    {
+      "entity": "SOC 43-3031 Bookkeeping, Accounting, and Auditing Clerks",
+      "metric": "usage_pct",
+      "geo": "MYS",
+      "value": 0.3,
+      "period": "2026-05"
+    },
+    {
+      "entity": "SOC 43-3051 Payroll and Timekeeping Clerks",
+      "metric": "augmentation_pct",
+      "geo": "GLOBAL",
+      "value": 53.06,
+      "period": "2026-05"
+    },
+    {
+      "entity": "SOC 43-3051 Payroll and Timekeeping Clerks",
+      "metric": "automation_pct",
+      "geo": "GLOBAL",
+      "value": 46.94,
+      "period": "2026-05"
+    },
+    {
+      "entity": "SOC 43-3051 Payroll and Timekeeping Clerks",
+      "metric": "usage_pct",
+      "geo": "GLOBAL",
+      "value": 0.01,
+      "period": "2026-05"
+    },
+    {
+      "entity": "SOC 43-9111 Statistical Assistants",
+      "metric": "augmentation_pct",
+      "geo": "GLOBAL",
+      "value": 41.67,
+      "period": "2026-05"
+    },
+    {
+      "entity": "SOC 43-9111 Statistical Assistants",
+      "metric": "automation_pct",
+      "geo": "GLOBAL",
+      "value": 58.33,
+      "period": "2026-05"
+    },
+    {
+      "entity": "SOC 43-9111 Statistical Assistants",
+      "metric": "usage_pct",
+      "geo": "GLOBAL",
+      "value": 0.44,
+      "period": "2026-05"
+    },
+    {
+      "entity": "SOC 43-9111 Statistical Assistants",
+      "metric": "usage_pct",
+      "geo": "MYS",
+      "value": 0.52,
+      "period": "2026-05"
+    }
+  ],
+  "suggested_assumption_reviews": [
+    {
+      "assumption_id": "agentic.prepare_adjustments",
+      "reason": "usage_pct for SOC 43-3031 Bookkeeping, Accounting, and Auditing Clerks (GLOBAL) rose 0.30→0.32 (Apr 2026→May 2026, Anthropic Economic Index (data CC-BY))"
+    },
+    {
+      "assumption_id": "assistive.check_entries",
+      "reason": "usage_pct for SOC 43-3031 Bookkeeping, Accounting, and Auditing Clerks (GLOBAL) rose 0.30→0.32 (Apr 2026→May 2026, Anthropic Economic Index (data CC-BY)); usage_pct for SOC 43-3031 Bookkeeping, Accounting, and Auditing Clerks (MYS) rose 0.28→0.30 (Apr 2026→May 2026, Anthropic Economic Index (data CC-BY))"
+    },
+    {
+      "assumption_id": "assistive.match_transactions",
+      "reason": "usage_pct for SOC 43-3031 Bookkeeping, Accounting, and Auditing Clerks (GLOBAL) rose 0.30→0.32 (Apr 2026→May 2026, Anthropic Economic Index (data CC-BY)); usage_pct for SOC 43-3031 Bookkeeping, Accounting, and Auditing Clerks (MYS) rose 0.28→0.30 (Apr 2026→May 2026, Anthropic Economic Index (data CC-BY))"
+    }
+  ],
+  "licence": "CC-BY (data), MIT (code); attribution: Anthropic Economic Index, release 2026-06-26",
+  "label": "historical data replay: period 2026-05 from the 2026-06-26 release"
+}

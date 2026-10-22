@@ -1,0 +1,728 @@
+{
+ "_about": "SYNTHETIC employees of the fictional company Kopi Kita Sdn Bhd. No real people or CVs. Profiles follow the contract Profile; `history` is a compact form of past events (case, session, day of October 2026, evidence = [skill_id, outcome, help_level]) that src/store.py::seed_demo expands into contract Events. Aina starts with no events so the golden journey can be replayed; Siti is the long-serving clerk whose execution skills are strong and whose AI-review skills are not yet shown. Team ap_penang has 3 people so the HR view must suppress it.",
+ "label": "synthetic",
+ "people": [
+  {
+   "profile": {
+    "id": "u_aina",
+    "display_name": "Aina (synthetic)",
+    "current_role_id": "recon_associate",
+    "years_experience": 0.5,
+    "skills_self_reported": [
+     {
+      "skill_id": "recon_to_source",
+      "confidence": 0.85
+     },
+     {
+      "skill_id": "unsupported_adjustment",
+      "confidence": 0.8
+     }
+    ],
+    "interests": [
+     "analysis",
+     "automation"
+    ],
+    "weekly_learning_hours": 4,
+    "language": "en",
+    "team": "finops_kl"
+   },
+   "history": []
+  },
+  {
+   "profile": {
+    "id": "u_siti",
+    "display_name": "Siti (synthetic)",
+    "current_role_id": "recon_associate",
+    "years_experience": 18,
+    "skills_self_reported": [
+     {
+      "skill_id": "recon_to_source",
+      "confidence": 0.9
+     },
+     {
+      "skill_id": "duplicate_detection",
+      "confidence": 0.9
+     },
+     {
+      "skill_id": "cutoff_timing",
+      "confidence": 0.85
+     },
+     {
+      "skill_id": "fx_conversion",
+      "confidence": 0.7
+     }
+    ],
+    "interests": [
+     "controls",
+     "review"
+    ],
+    "weekly_learning_hours": 3,
+    "language": "en",
+    "team": "finops_kl"
+   },
+   "history": [
+    {
+     "case": "case_002",
+     "session": "s1",
+     "day": 2,
+     "evidence": [
+      [
+       "duplicate_detection",
+       "success",
+       0
+      ],
+      [
+       "recon_to_source",
+       "success",
+       0
+      ]
+     ]
+    },
+    {
+     "case": "case_004",
+     "session": "s1",
+     "day": 2,
+     "evidence": [
+      [
+       "cutoff_timing",
+       "success",
+       0
+      ],
+      [
+       "escalation_judgment",
+       "success",
+       1
+      ]
+     ]
+    },
+    {
+     "case": "checkin_004",
+     "session": "s2",
+     "day": 6,
+     "evidence": [
+      [
+       "duplicate_detection",
+       "success",
+       0
+      ],
+      [
+       "cutoff_timing",
+       "success",
+       0
+      ]
+     ]
+    },
+    {
+     "case": "case_005",
+     "session": "s2",
+     "day": 6,
+     "evidence": [
+      [
+       "fx_conversion",
+       "success",
+       1
+      ],
+      [
+       "recon_to_source",
+       "success",
+       0
+      ]
+     ]
+    },
+    {
+     "case": "case_003",
+     "session": "s3",
+     "day": 9,
+     "evidence": [
+      [
+       "unsupported_adjustment",
+       "missed_then_found",
+       3
+      ],
+      [
+       "transposition_check",
+       "success",
+       0
+      ],
+      [
+       "ai_output_review",
+       "missed_then_found",
+       3
+      ]
+     ]
+    },
+    {
+     "case": "case_007",
+     "session": "s3",
+     "day": 9,
+     "evidence": [
+      [
+       "ai_output_review",
+       "failure",
+       2
+      ],
+      [
+       "cutoff_timing",
+       "success",
+       0
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "profile": {
+    "id": "u_farid",
+    "display_name": "Farid (synthetic)",
+    "current_role_id": "recon_associate",
+    "years_experience": 3,
+    "skills_self_reported": [
+     {
+      "skill_id": "transposition_check",
+      "confidence": 0.7
+     }
+    ],
+    "interests": [
+     "analysis",
+     "forecasting"
+    ],
+    "weekly_learning_hours": 5,
+    "language": "en",
+    "team": "finops_kl"
+   },
+   "history": [
+    {
+     "case": "case_009",
+     "session": "s1",
+     "day": 3,
+     "evidence": [
+      [
+       "transposition_check",
+       "success",
+       0
+      ],
+      [
+       "recon_to_source",
+       "success",
+       0
+      ]
+     ]
+    },
+    {
+     "case": "checkin_003",
+     "session": "s2",
+     "day": 7,
+     "evidence": [
+      [
+       "transposition_check",
+       "success",
+       0
+      ],
+      [
+       "recon_to_source",
+       "success",
+       0
+      ]
+     ]
+    },
+    {
+     "case": "case_003",
+     "session": "s2",
+     "day": 7,
+     "evidence": [
+      [
+       "unsupported_adjustment",
+       "success",
+       1
+      ],
+      [
+       "transposition_check",
+       "success",
+       0
+      ],
+      [
+       "ai_output_review",
+       "success",
+       1
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "profile": {
+    "id": "u_meiling",
+    "display_name": "Mei Ling (synthetic)",
+    "current_role_id": "recon_associate",
+    "years_experience": 6,
+    "skills_self_reported": [
+     {
+      "skill_id": "ai_output_review",
+      "confidence": 0.6
+     },
+     {
+      "skill_id": "escalation_judgment",
+      "confidence": 0.7
+     }
+    ],
+    "interests": [
+     "review",
+     "ai"
+    ],
+    "weekly_learning_hours": 4,
+    "language": "en",
+    "team": "finops_kl"
+   },
+   "history": [
+    {
+     "case": "case_001",
+     "session": "s1",
+     "day": 1,
+     "evidence": [
+      [
+       "recon_to_source",
+       "success",
+       0
+      ],
+      [
+       "escalation_judgment",
+       "success",
+       0
+      ],
+      [
+       "ai_output_review",
+       "success",
+       0
+      ]
+     ]
+    },
+    {
+     "case": "case_007",
+     "session": "s2",
+     "day": 5,
+     "evidence": [
+      [
+       "ai_output_review",
+       "success",
+       0
+      ],
+      [
+       "cutoff_timing",
+       "success",
+       1
+      ],
+      [
+       "escalation_judgment",
+       "success",
+       0
+      ]
+     ]
+    },
+    {
+     "case": "case_006",
+     "session": "s2",
+     "day": 5,
+     "evidence": [
+      [
+       "unsupported_adjustment",
+       "success",
+       2
+      ],
+      [
+       "ai_output_review",
+       "success",
+       1
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "profile": {
+    "id": "u_raj",
+    "display_name": "Raj (synthetic)",
+    "current_role_id": "recon_associate",
+    "years_experience": 2,
+    "skills_self_reported": [
+     {
+      "skill_id": "fx_conversion",
+      "confidence": 0.8
+     }
+    ],
+    "interests": [
+     "automation"
+    ],
+    "weekly_learning_hours": 6,
+    "language": "en",
+    "team": "finops_kl"
+   },
+   "history": [
+    {
+     "case": "case_005",
+     "session": "s1",
+     "day": 4,
+     "evidence": [
+      [
+       "fx_conversion",
+       "missed_then_found",
+       2
+      ],
+      [
+       "recon_to_source",
+       "success",
+       0
+      ]
+     ]
+    },
+    {
+     "case": "checkin_005",
+     "session": "s2",
+     "day": 8,
+     "evidence": [
+      [
+       "fx_conversion",
+       "success",
+       0
+      ],
+      [
+       "escalation_judgment",
+       "success",
+       0
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "profile": {
+    "id": "u_nurul",
+    "display_name": "Nurul (synthetic)",
+    "current_role_id": "recon_associate",
+    "years_experience": 1,
+    "skills_self_reported": [
+     {
+      "skill_id": "recon_to_source",
+      "confidence": 0.6
+     }
+    ],
+    "interests": [
+     "communication",
+     "planning"
+    ],
+    "weekly_learning_hours": 3,
+    "language": "en",
+    "team": "finops_kl"
+   },
+   "history": [
+    {
+     "case": "case_001",
+     "session": "s1",
+     "day": 3,
+     "evidence": [
+      [
+       "recon_to_source",
+       "success",
+       1
+      ],
+      [
+       "escalation_judgment",
+       "failure",
+       2
+      ],
+      [
+       "ai_output_review",
+       "success",
+       2
+      ]
+     ]
+    },
+    {
+     "case": "case_002",
+     "session": "s1",
+     "day": 3,
+     "evidence": [
+      [
+       "duplicate_detection",
+       "missed_then_found",
+       2
+      ],
+      [
+       "recon_to_source",
+       "success",
+       1
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "profile": {
+    "id": "u_daniel",
+    "display_name": "Daniel (synthetic)",
+    "current_role_id": "recon_associate",
+    "years_experience": 4,
+    "skills_self_reported": [
+     {
+      "skill_id": "duplicate_detection",
+      "confidence": 0.75
+     },
+     {
+      "skill_id": "cutoff_timing",
+      "confidence": 0.6
+     }
+    ],
+    "interests": [
+     "controls",
+     "audit"
+    ],
+    "weekly_learning_hours": 4,
+    "language": "en",
+    "team": "finops_kl"
+   },
+   "history": [
+    {
+     "case": "case_004",
+     "session": "s1",
+     "day": 2,
+     "evidence": [
+      [
+       "cutoff_timing",
+       "success",
+       0
+      ],
+      [
+       "escalation_judgment",
+       "success",
+       0
+      ]
+     ]
+    },
+    {
+     "case": "checkin_004",
+     "session": "s2",
+     "day": 9,
+     "evidence": [
+      [
+       "duplicate_detection",
+       "success",
+       0
+      ],
+      [
+       "cutoff_timing",
+       "success",
+       0
+      ]
+     ]
+    },
+    {
+     "case": "case_008",
+     "session": "s2",
+     "day": 9,
+     "evidence": [
+      [
+       "unsupported_adjustment",
+       "success",
+       0
+      ],
+      [
+       "escalation_judgment",
+       "success",
+       0
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "profile": {
+    "id": "u_priya",
+    "display_name": "Priya (synthetic)",
+    "current_role_id": "recon_associate",
+    "years_experience": 2.5,
+    "skills_self_reported": [
+     {
+      "skill_id": "unsupported_adjustment",
+      "confidence": 0.5
+     }
+    ],
+    "interests": [
+     "analysis",
+     "planning"
+    ],
+    "weekly_learning_hours": 5,
+    "language": "en",
+    "team": "finops_kl"
+   },
+   "history": [
+    {
+     "case": "case_006",
+     "session": "s1",
+     "day": 5,
+     "evidence": [
+      [
+       "unsupported_adjustment",
+       "success",
+       1
+      ],
+      [
+       "ai_output_review",
+       "success",
+       1
+      ]
+     ]
+    },
+    {
+     "case": "checkin_001",
+     "session": "s2",
+     "day": 10,
+     "evidence": [
+      [
+       "unsupported_adjustment",
+       "success",
+       0
+      ],
+      [
+       "ai_output_review",
+       "success",
+       0
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "profile": {
+    "id": "u_hafiz",
+    "display_name": "Hafiz (synthetic)",
+    "current_role_id": "recon_associate",
+    "years_experience": 0.8,
+    "skills_self_reported": [],
+    "interests": [
+     "automation",
+     "ai"
+    ],
+    "weekly_learning_hours": 6,
+    "language": "en",
+    "team": "finops_kl"
+   },
+   "history": [
+    {
+     "case": "case_001",
+     "session": "s1",
+     "day": 6,
+     "evidence": [
+      [
+       "recon_to_source",
+       "success",
+       2
+      ],
+      [
+       "escalation_judgment",
+       "success",
+       1
+      ],
+      [
+       "ai_output_review",
+       "success",
+       2
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "profile": {
+    "id": "u_kumar",
+    "display_name": "Kumar (synthetic)",
+    "current_role_id": "recon_associate",
+    "years_experience": 12,
+    "skills_self_reported": [
+     {
+      "skill_id": "recon_to_source",
+      "confidence": 0.9
+     }
+    ],
+    "interests": [
+     "controls"
+    ],
+    "weekly_learning_hours": 2,
+    "language": "en",
+    "team": "ap_penang"
+   },
+   "history": [
+    {
+     "case": "case_002",
+     "session": "s1",
+     "day": 4,
+     "evidence": [
+      [
+       "duplicate_detection",
+       "success",
+       0
+      ],
+      [
+       "recon_to_source",
+       "success",
+       0
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "profile": {
+    "id": "u_azlin",
+    "display_name": "Azlin (synthetic)",
+    "current_role_id": "recon_associate",
+    "years_experience": 5,
+    "skills_self_reported": [
+     {
+      "skill_id": "cutoff_timing",
+      "confidence": 0.7
+     }
+    ],
+    "interests": [
+     "analysis"
+    ],
+    "weekly_learning_hours": 3,
+    "language": "en",
+    "team": "ap_penang"
+   },
+   "history": [
+    {
+     "case": "case_004",
+     "session": "s1",
+     "day": 5,
+     "evidence": [
+      [
+       "cutoff_timing",
+       "missed_then_found",
+       2
+      ],
+      [
+       "escalation_judgment",
+       "success",
+       1
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "profile": {
+    "id": "u_wei",
+    "display_name": "Wei (synthetic)",
+    "current_role_id": "recon_associate",
+    "years_experience": 1.5,
+    "skills_self_reported": [],
+    "interests": [
+     "automation"
+    ],
+    "weekly_learning_hours": 4,
+    "language": "en",
+    "team": "ap_penang"
+   },
+   "history": []
+  }
+ ]
+}

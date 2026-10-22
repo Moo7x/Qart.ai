@@ -1,0 +1,39 @@
+{
+  "id": "case_001",
+  "title": "Oct bank reconciliation – clean, all items matched",
+  "mode": "practice",
+  "difficulty": 1,
+  "scenario_variant": "assistive",
+  "ledger": [
+    {"row_id": "L1", "date": "2026-10-01", "description": "Opening balance", "amount": 18500.00, "currency": "MYR"},
+    {"row_id": "L2", "date": "2026-10-06", "description": "Office supplies – Staples MY", "amount": -650.00, "currency": "MYR", "doc_ref": "INV-4401"},
+    {"row_id": "L3", "date": "2026-10-12", "description": "Customer receipt – Brew House", "amount": 3200.00, "currency": "MYR", "doc_ref": "REC-201"},
+    {"row_id": "L4", "date": "2026-10-19", "description": "Internet subscription", "amount": -180.00, "currency": "MYR", "doc_ref": "INV-4402"},
+    {"row_id": "L5", "date": "2026-10-27", "description": "Cleaning services", "amount": -420.00, "currency": "MYR", "doc_ref": "INV-4403"}
+  ],
+  "bank": [
+    {"row_id": "B1", "date": "2026-10-01", "description": "Opening balance", "amount": 18500.00, "currency": "MYR"},
+    {"row_id": "B2", "date": "2026-10-06", "description": "STAPLES MY", "amount": -650.00, "currency": "MYR"},
+    {"row_id": "B3", "date": "2026-10-12", "description": "BREW HOUSE PAYMENT", "amount": 3200.00, "currency": "MYR"},
+    {"row_id": "B4", "date": "2026-10-19", "description": "INTERNET SUBS", "amount": -180.00, "currency": "MYR"},
+    {"row_id": "B5", "date": "2026-10-27", "description": "CLEANING SVCS", "amount": -420.00, "currency": "MYR"}
+  ],
+  "documents": [
+    {"doc_ref": "INV-4401", "type": "invoice", "text": "Staples Malaysia\nInvoice INV-4401\nOct 2026 office supplies\nTotal: RM650.00"},
+    {"doc_ref": "REC-201", "type": "receipt", "text": "Payment Receipt REC-201\nFrom: Brew House Sdn Bhd\nDate: 12 Oct 2026\nAmount: RM3,200.00"},
+    {"doc_ref": "INV-4402", "type": "invoice", "text": "Maxis Business\nMonthly internet subscription – Oct 2026\nAmount: RM180.00"},
+    {"doc_ref": "INV-4403", "type": "invoice", "text": "ShineBright Cleaning\nInvoice INV-4403\nOct 2026 cleaning services\nAmount: RM420.00"}
+  ],
+  "ai_output": {
+    "claim": "Account reconciles. All entries matched. Difference RM0.00. No adjustments required.",
+    "proposed_adjustments": []
+  },
+  "ground_truth": {
+    "has_issue": false,
+    "issue_types": [],
+    "affected_rows": [],
+    "correct_decision": "sign_off",
+    "explanation": "All ledger entries match the bank statement with supporting documents. The AI's assessment is correct. Sign off.",
+    "skills": ["recon_to_source", "escalation_judgment", "ai_output_review"]
+  }
+}

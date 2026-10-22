@@ -1,0 +1,160 @@
+{
+  "version": "1.0",
+  "created": "2026-10-21",
+  "description": "Acceptance test set for Qart.ai bank reconciliation companion. 12 error cases + 5 clean cases. Do not modify after the evaluation run begins.",
+  "cases": [
+    {
+      "id": "a001",
+      "file": "a001.json",
+      "title": "Oct bank reconciliation – bank side transposition error (RM2530 vs RM2350)",
+      "difficulty": 2,
+      "correct_decision": "escalate",
+      "issue_types": ["transposition_check"],
+      "skills": ["transposition_check", "recon_to_source", "ai_output_review"]
+    },
+    {
+      "id": "a002",
+      "file": "a002.json",
+      "title": "Oct bank reconciliation – split payment second instalment missing",
+      "difficulty": 2,
+      "correct_decision": "correct",
+      "issue_types": ["recon_to_source"],
+      "skills": ["recon_to_source", "ai_output_review"]
+    },
+    {
+      "id": "a003",
+      "file": "a003.json",
+      "title": "Oct bank reconciliation – bank fee recorded as income (reversed sign)",
+      "difficulty": 2,
+      "correct_decision": "correct",
+      "issue_types": ["recon_to_source"],
+      "skills": ["recon_to_source", "ai_output_review"]
+    },
+    {
+      "id": "a004",
+      "file": "a004.json",
+      "title": "Oct bank reconciliation – two errors that cancel each other out",
+      "difficulty": 3,
+      "correct_decision": "correct",
+      "issue_types": ["recon_to_source"],
+      "skills": ["recon_to_source", "ai_output_review"]
+    },
+    {
+      "id": "a005",
+      "file": "a005.json",
+      "title": "Oct bank reconciliation – FX conversion at wrong rate (4.05 vs 4.50)",
+      "difficulty": 2,
+      "correct_decision": "correct",
+      "issue_types": ["fx_conversion"],
+      "skills": ["fx_conversion", "recon_to_source", "ai_output_review"]
+    },
+    {
+      "id": "a006",
+      "file": "a006.json",
+      "title": "Oct bank reconciliation – unrecorded interbank transfer fee RM680",
+      "difficulty": 1,
+      "correct_decision": "correct",
+      "issue_types": ["unsupported_adjustment"],
+      "skills": ["recon_to_source", "unsupported_adjustment", "ai_output_review"]
+    },
+    {
+      "id": "a007",
+      "file": "a007.json",
+      "title": "Oct bank reconciliation – November invoice posted in October",
+      "difficulty": 2,
+      "correct_decision": "correct",
+      "issue_types": ["cutoff_timing"],
+      "skills": ["cutoff_timing", "recon_to_source", "ai_output_review"]
+    },
+    {
+      "id": "a008",
+      "file": "a008.json",
+      "title": "Oct bank reconciliation – customer short payment recorded at full invoice amount",
+      "difficulty": 2,
+      "correct_decision": "correct",
+      "issue_types": ["recon_to_source"],
+      "skills": ["recon_to_source", "ai_output_review", "escalation_judgment"]
+    },
+    {
+      "id": "a009",
+      "file": "a009.json",
+      "title": "Oct bank reconciliation – intercompany transfer RM10,000 vs RM10,500",
+      "difficulty": 2,
+      "correct_decision": "escalate",
+      "issue_types": ["unsupported_adjustment"],
+      "skills": ["recon_to_source", "escalation_judgment", "ai_output_review"]
+    },
+    {
+      "id": "a010",
+      "file": "a010.json",
+      "title": "Oct bank reconciliation – cash receipt recorded but never deposited",
+      "difficulty": 2,
+      "correct_decision": "escalate",
+      "issue_types": ["unsupported_adjustment"],
+      "skills": ["recon_to_source", "escalation_judgment", "ai_output_review"]
+    },
+    {
+      "id": "a011",
+      "file": "a011.json",
+      "title": "Oct bank reconciliation – early-payment discount not reflected in ledger",
+      "difficulty": 2,
+      "correct_decision": "correct",
+      "issue_types": ["recon_to_source"],
+      "skills": ["recon_to_source", "ai_output_review"]
+    },
+    {
+      "id": "a012",
+      "file": "a012.json",
+      "title": "Oct bank reconciliation – supplier credit note received but not recorded",
+      "difficulty": 1,
+      "correct_decision": "correct",
+      "issue_types": ["recon_to_source"],
+      "skills": ["recon_to_source", "ai_output_review"]
+    },
+    {
+      "id": "c001",
+      "file": "c001.json",
+      "title": "Oct bank reconciliation – clean, documented deposit in transit",
+      "difficulty": 2,
+      "correct_decision": "sign_off",
+      "issue_types": [],
+      "skills": ["recon_to_source", "cutoff_timing", "ai_output_review"]
+    },
+    {
+      "id": "c002",
+      "file": "c002.json",
+      "title": "Oct bank reconciliation – clean, documented outstanding cheque",
+      "difficulty": 2,
+      "correct_decision": "sign_off",
+      "issue_types": [],
+      "skills": ["recon_to_source", "cutoff_timing", "ai_output_review"]
+    },
+    {
+      "id": "c003",
+      "file": "c003.json",
+      "title": "Oct bank reconciliation – clean, petty cash reimbursement documented",
+      "difficulty": 1,
+      "correct_decision": "sign_off",
+      "issue_types": [],
+      "skills": ["recon_to_source", "ai_output_review"]
+    },
+    {
+      "id": "c004",
+      "file": "c004.json",
+      "title": "Oct bank reconciliation – clean, bank service charge pre-recorded",
+      "difficulty": 1,
+      "correct_decision": "sign_off",
+      "issue_types": [],
+      "skills": ["recon_to_source", "ai_output_review"]
+    },
+    {
+      "id": "c005",
+      "file": "c005.json",
+      "title": "Oct bank reconciliation – clean, annual insurance direct debit matched",
+      "difficulty": 2,
+      "correct_decision": "sign_off",
+      "issue_types": [],
+      "skills": ["recon_to_source", "ai_output_review"]
+    }
+  ]
+}

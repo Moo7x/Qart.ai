@@ -1,0 +1,21 @@
+{
+ "_about": "SYNTHETIC labelled set written by Person A (2026-10-21) for retrieval recall@5: each query is a skill gap phrased as an employee might say it (not copied from titles), with the documents a reviewer would accept as correct. Used to compare the CPU BM25 baseline with the later RunPod hybrid (BGE-M3 + reranker). Never used to tune BM25 parameters.",
+ "label": "synthetic",
+ "queries": [
+  {"id": "q01", "query": "learn to query ledger tables with SQL", "relevant": ["course_04", "course_06"]},
+  {"id": "q02", "query": "explain gaps between budget and actual spending", "relevant": ["course_10", "course_11", "onet_task_3394"]},
+  {"id": "q03", "query": "design review controls for an AI-assisted finance process", "relevant": ["course_17", "course_16"]},
+  {"id": "q04", "query": "present findings to managers clearly", "relevant": ["course_09", "course_05"]},
+  {"id": "q05", "query": "build a sales forecast from history", "relevant": ["course_07"]},
+  {"id": "q06", "query": "automate repetitive finance steps with a flow", "relevant": ["course_12", "course_01"]},
+  {"id": "q07", "query": "check whether AI output can be trusted", "relevant": ["course_14", "course_15"]},
+  {"id": "q08", "query": "fix messy, incomplete data before analysis", "relevant": ["course_03", "course_02"]},
+  {"id": "q09", "query": "match bank statement lines to the ledger", "relevant": ["onet_task_2503", "onet_task_21516", "onet_task_2496"]},
+  {"id": "q10", "query": "spot weak controls or possible fraud", "relevant": ["onet_task_21507", "onet_task_21511"]},
+  {"id": "q11", "query": "post correcting entries at month end", "relevant": ["onet_task_21515"]},
+  {"id": "q12", "query": "find keying mistakes in postings", "relevant": ["onet_task_2486"]},
+  {"id": "q13", "query": "spreadsheet formulas and schedules", "relevant": ["course_02", "course_13"]},
+  {"id": "q14", "query": "follow up compliance problems", "relevant": ["onet_task_21458"]},
+  {"id": "q15", "query": "bookkeeping basics: double entry and trial balance", "relevant": ["course_08", "onet_task_2504"]}
+ ]
+}

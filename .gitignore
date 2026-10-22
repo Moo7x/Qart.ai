@@ -20,3 +20,9 @@ node_modules/
 web/dist/
 .pytest_cache/
 .claude/settings.local.json
+
+# Generated optimisation-set variants (regenerate with python -m eval.variants)
+eval/optimisation/variants/
+
+# Local scratch files (not part of the project)
+notes/

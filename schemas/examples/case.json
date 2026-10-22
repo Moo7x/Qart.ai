@@ -1,0 +1,61 @@
+{
+  "id": "case_003",
+  "title": "Oct bank reconciliation – Kopi Kita Sdn Bhd",
+  "mode": "practice",
+  "difficulty": 2,
+  "scenario_variant": "assistive",
+  "ledger": [
+    {
+      "row_id": "L4",
+      "date": "2026-10-14",
+      "description": "Supplier payment – Beans Co",
+      "amount": -1520.0,
+      "currency": "MYR",
+      "doc_ref": "INV-1043"
+    }
+  ],
+  "bank": [
+    {
+      "row_id": "B6",
+      "date": "2026-10-15",
+      "description": "TRF BEANS CO",
+      "amount": -1250.0,
+      "currency": "MYR"
+    }
+  ],
+  "documents": [
+    {
+      "doc_ref": "INV-1043",
+      "type": "invoice",
+      "text": "Beans Co Sdn Bhd … Total RM1,250.00"
+    }
+  ],
+  "ai_output": {
+    "claim": "Account reconciles. Difference RM0.00 after adjustment ADJ-7.",
+    "proposed_adjustments": [
+      {
+        "id": "ADJ-7",
+        "amount": 270.0,
+        "reason": "rounding difference"
+      }
+    ]
+  },
+  "ground_truth": {
+    "has_issue": true,
+    "issue_types": [
+      "transposition_check",
+      "unsupported_adjustment"
+    ],
+    "affected_rows": [
+      "L4",
+      "ADJ-7"
+    ],
+    "correct_decision": "correct",
+    "explanation": "Ledger keyed 1,520 instead of 1,250; ADJ-7 hides it as 'rounding'.",
+    "skills": [
+      "transposition_check",
+      "unsupported_adjustment",
+      "ai_output_review"
+    ]
+  }
+}

@@ -17,9 +17,11 @@ Read first: `PROJECT_PLAN.md`, `team/00_SHARED_CONTRACT.md`, and the person file
 - The optimiser may only edit `src/companion/playbooks/`. It must never read `eval/acceptance/` or change grading criteria.
 
 ## Engineering rules
-- Small, reviewable changes; one feature per commit; meaningful commit messages (e.g. `engine: add evidence-state rules`). Commit often. Never one giant commit.
+- Small, reviewable changes; one feature per commit; meaningful commit messages (e.g. `engine: add evidence-state rules`). Commit often. Never one giant commit. Follow the qart-git-workflow skill (commit size, messages, no force-push/squash, never commit data/raw, .env or secrets).
 - Prefer simple, explainable logic. Comment the "why" of every formula, weight and threshold.
 - Add/maintain tests (`python -m pytest`). Keep them passing before each commit.
 - Log every new library, model, dataset or API with its licence in `docs/DECLARATION_LOG.md`, and decisions in `docs/decision_log.md` (skill: qart-declaration-log).
 - Run the qart-contract-check skill before committing changes to endpoints or contract objects.
+- Follow the qart-code-standards skill for all code (typed, linted with ruff, tested, no magic numbers, formulas documented).
+- After finishing or changing a module, update its explanation doc with the qart-explain skill (docs/explain/).
 - The human must understand every component: explain non-obvious code in the commit message body.

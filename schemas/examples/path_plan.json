@@ -1,0 +1,41 @@
+{
+  "user_id": "u_aina",
+  "target_role_id": "ai_finops_analyst",
+  "weekly_hours": 4,
+  "robust_across": [
+    "assistive",
+    "agentic"
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "type": "practice_case",
+      "ref": "case_007",
+      "title": "Unsupported adjustments – 3 cases",
+      "hours": 1.5,
+      "skills": [
+        "unsupported_adjustment"
+      ],
+      "cost": "free"
+    },
+    {
+      "order": 2,
+      "type": "course",
+      "ref": "course_12",
+      "title": "…",
+      "hours": 3,
+      "skills": [
+        "variance_analysis"
+      ],
+      "url": "…",
+      "cost": "free",
+      "retrieved": "2026-10-21",
+      "sdg_targets": [
+        "4.4"
+      ]
+    }
+  ],
+  "total_hours": 18,
+  "weeks": 5,
+  "worst_case_gap": 0.22
+}

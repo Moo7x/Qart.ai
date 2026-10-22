@@ -1,0 +1,41 @@
+{
+  "id": "a011",
+  "title": "Oct bank reconciliation – early-payment discount not reflected in ledger",
+  "mode": "practice",
+  "difficulty": 2,
+  "scenario_variant": "assistive",
+  "ledger": [
+    {"row_id": "L1", "date": "2026-10-01", "description": "Opening balance", "amount": 50000.00, "currency": "MYR"},
+    {"row_id": "L2", "date": "2026-10-05", "description": "Supplier payment – Platinum Packaging", "amount": -10000.00, "currency": "MYR", "doc_ref": "INV-M101"},
+    {"row_id": "L3", "date": "2026-10-14", "description": "Rental income – Unit 2A", "amount": 8000.00, "currency": "MYR", "doc_ref": "REC-M01"},
+    {"row_id": "L4", "date": "2026-10-21", "description": "Equipment purchase", "amount": -5500.00, "currency": "MYR", "doc_ref": "INV-M102"},
+    {"row_id": "L5", "date": "2026-10-28", "description": "Marketing – Oct campaign", "amount": -3200.00, "currency": "MYR", "doc_ref": "INV-M103"}
+  ],
+  "bank": [
+    {"row_id": "B1", "date": "2026-10-01", "description": "Opening balance", "amount": 50000.00, "currency": "MYR"},
+    {"row_id": "B2", "date": "2026-10-05", "description": "PLATINUM PACKAGING", "amount": -9800.00, "currency": "MYR"},
+    {"row_id": "B3", "date": "2026-10-14", "description": "RENTAL INCOME UNIT2A", "amount": 8000.00, "currency": "MYR"},
+    {"row_id": "B4", "date": "2026-10-21", "description": "EQUIPMENT PURCHASE", "amount": -5500.00, "currency": "MYR"},
+    {"row_id": "B5", "date": "2026-10-28", "description": "MARKETING OCT", "amount": -3200.00, "currency": "MYR"}
+  ],
+  "documents": [
+    {"doc_ref": "INV-M101", "type": "invoice", "text": "Platinum Packaging Sdn Bhd\nInvoice INV-M101\nOct 2026 packaging materials\nInvoice total: RM10,000.00\nEarly payment terms: 2% discount if paid within 7 days\nAmount paid: RM9,800.00 (2% discount applied)\nDate paid: 5 Oct 2026"},
+    {"doc_ref": "REC-M01", "type": "receipt", "text": "Rental Receipt REC-M01\nTenant: Horizon Café\nUnit 2A – Oct 2026\nAmount: RM8,000.00"},
+    {"doc_ref": "INV-M102", "type": "invoice", "text": "TechVision Sdn Bhd\nInvoice INV-M102\nOct 2026 equipment\nTotal: RM5,500.00"},
+    {"doc_ref": "INV-M103", "type": "invoice", "text": "Prism Media Group\nInvoice INV-M103\nOct 2026 marketing campaign\nAmount: RM3,200.00"}
+  ],
+  "ai_output": {
+    "claim": "Account reconciles. Difference RM0.00 after adjustment ADJ-M1.",
+    "proposed_adjustments": [
+      {"id": "ADJ-M1", "amount": 200.00, "reason": "settlement discount"}
+    ]
+  },
+  "ground_truth": {
+    "has_issue": true,
+    "issue_types": ["recon_to_source"],
+    "affected_rows": ["L2", "ADJ-M1"],
+    "correct_decision": "correct",
+    "explanation": "L2 records the full invoice amount of RM10,000 but INV-M101 confirms a 2% early-payment discount was taken — actual payment was RM9,800. The RM200 difference is a settlement discount that should be credited to a discount income account, not hidden in ADJ-M1. Correct L2 to RM9,800 and record RM200 as discount income.",
+    "skills": ["recon_to_source", "ai_output_review"]
+  }
+}
