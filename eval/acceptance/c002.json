@@ -1,0 +1,40 @@
+{
+  "id": "c002",
+  "title": "Oct bank reconciliation – clean, documented outstanding cheque",
+  "mode": "practice",
+  "difficulty": 2,
+  "scenario_variant": "assistive",
+  "ledger": [
+    {"row_id": "L1", "date": "2026-10-01", "description": "Opening balance", "amount": 35000.00, "currency": "MYR"},
+    {"row_id": "L2", "date": "2026-10-04", "description": "Office rent – Oct", "amount": -6000.00, "currency": "MYR", "doc_ref": "INV-Q101"},
+    {"row_id": "L3", "date": "2026-10-28", "description": "Cheque payment – PaperSupplies Sdn Bhd", "amount": -2400.00, "currency": "MYR", "doc_ref": "INV-Q102"},
+    {"row_id": "L4", "date": "2026-10-14", "description": "Cash sales receipt", "amount": 8800.00, "currency": "MYR", "doc_ref": "REC-Q01"},
+    {"row_id": "L5", "date": "2026-10-21", "description": "Utilities – Oct", "amount": -1650.00, "currency": "MYR", "doc_ref": "INV-Q103"}
+  ],
+  "bank": [
+    {"row_id": "B1", "date": "2026-10-01", "description": "Opening balance", "amount": 35000.00, "currency": "MYR"},
+    {"row_id": "B2", "date": "2026-10-04", "description": "OFFICE RENT OCT", "amount": -6000.00, "currency": "MYR"},
+    {"row_id": "B3", "date": "2026-10-14", "description": "CASH SALES", "amount": 8800.00, "currency": "MYR"},
+    {"row_id": "B4", "date": "2026-10-21", "description": "UTILITIES OCT", "amount": -1650.00, "currency": "MYR"}
+  ],
+  "documents": [
+    {"doc_ref": "INV-Q101", "type": "invoice", "text": "Vista Plaza Management\nInvoice INV-Q101\nOct 2026 office rental\nAmount: RM6,000.00"},
+    {"doc_ref": "INV-Q102", "type": "invoice", "text": "PaperSupplies Sdn Bhd\nInvoice INV-Q102\nDate: 25 Oct 2026\nOct 2026 printing materials\nAmount: RM2,400.00\nPayment: Cheque CH-0421 issued 28 Oct 2026 – outstanding as at 31 Oct 2026"},
+    {"doc_ref": "REC-Q01", "type": "receipt", "text": "Cash Sales Receipt REC-Q01\nDate: 14 Oct 2026\nOct mid-month cash collections\nAmount: RM8,800.00"},
+    {"doc_ref": "INV-Q103", "type": "invoice", "text": "Tenaga Nasional Berhad\nInvoice INV-Q103\nOct 2026 utilities\nAmount: RM1,650.00"}
+  ],
+  "ai_output": {
+    "claim": "Account reconciles. Difference RM0.00 after adjustment ADJ-Q1.",
+    "proposed_adjustments": [
+      {"id": "ADJ-Q1", "amount": -2400.00, "reason": "outstanding cheque CH-0421 – PaperSupplies Sdn Bhd, issued 28 Oct 2026"}
+    ]
+  },
+  "ground_truth": {
+    "has_issue": false,
+    "issue_types": [],
+    "affected_rows": [],
+    "correct_decision": "sign_off",
+    "explanation": "L3 is an outstanding cheque (CH-0421) issued 28 Oct to PaperSupplies. INV-Q102 confirms the amount and that the cheque had not yet been presented as at month-end. ADJ-Q1 correctly identifies this timing item. Sign off.",
+    "skills": ["recon_to_source", "cutoff_timing", "ai_output_review"]
+  }
+}

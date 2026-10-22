@@ -1,0 +1,39 @@
+{
+  "id": "c004",
+  "title": "Oct bank reconciliation – clean, bank service charge pre-recorded",
+  "mode": "practice",
+  "difficulty": 1,
+  "scenario_variant": "assistive",
+  "ledger": [
+    {"row_id": "L1", "date": "2026-10-01", "description": "Opening balance", "amount": 12500.00, "currency": "MYR"},
+    {"row_id": "L2", "date": "2026-10-10", "description": "Sales receipt – Kinabalu Traders", "amount": 9000.00, "currency": "MYR", "doc_ref": "REC-S01"},
+    {"row_id": "L3", "date": "2026-10-15", "description": "Bank service charge – Oct", "amount": -85.00, "currency": "MYR", "doc_ref": "CHG-S01"},
+    {"row_id": "L4", "date": "2026-10-18", "description": "Stationery supplies – Aman Office", "amount": -620.00, "currency": "MYR", "doc_ref": "INV-S101"},
+    {"row_id": "L5", "date": "2026-10-25", "description": "Consultant fee – Oct engagement", "amount": -4500.00, "currency": "MYR", "doc_ref": "INV-S102"}
+  ],
+  "bank": [
+    {"row_id": "B1", "date": "2026-10-01", "description": "Opening balance", "amount": 12500.00, "currency": "MYR"},
+    {"row_id": "B2", "date": "2026-10-10", "description": "KINABALU TRADERS", "amount": 9000.00, "currency": "MYR"},
+    {"row_id": "B3", "date": "2026-10-15", "description": "SERVICE CHARGE OCT", "amount": -85.00, "currency": "MYR"},
+    {"row_id": "B4", "date": "2026-10-18", "description": "AMAN OFFICE SUPPLIES", "amount": -620.00, "currency": "MYR"},
+    {"row_id": "B5", "date": "2026-10-25", "description": "CONSULTANT FEE OCT", "amount": -4500.00, "currency": "MYR"}
+  ],
+  "documents": [
+    {"doc_ref": "REC-S01", "type": "receipt", "text": "Payment Receipt REC-S01\nFrom: Kinabalu Traders Sdn Bhd\nDate: 10 Oct 2026\nAmount: RM9,000.00"},
+    {"doc_ref": "CHG-S01", "type": "form", "text": "Bank Charge Notification CHG-S01\nMayBank account statement – Oct 2026\nService charge (monthly account fee): RM85.00\nDebit date: 15 Oct 2026\nPre-notified to accounts team 1 Oct 2026"},
+    {"doc_ref": "INV-S101", "type": "invoice", "text": "Aman Office Supplies Sdn Bhd\nInvoice INV-S101\nOct 2026 stationery and printing materials\nTotal: RM620.00"},
+    {"doc_ref": "INV-S102", "type": "invoice", "text": "Meridian Consulting\nInvoice INV-S102\nOct 2026 engagement – business process review\nAmount: RM4,500.00"}
+  ],
+  "ai_output": {
+    "claim": "Account reconciles. Difference RM0.00. No adjustments required.",
+    "proposed_adjustments": []
+  },
+  "ground_truth": {
+    "has_issue": false,
+    "issue_types": [],
+    "affected_rows": [],
+    "correct_decision": "sign_off",
+    "explanation": "All five ledger entries match the bank. The bank service charge (L3/B3 RM85) was pre-notified and correctly recorded. CHG-S01 confirms the charge. No timing items or discrepancies. Sign off.",
+    "skills": ["recon_to_source", "ai_output_review"]
+  }
+}
