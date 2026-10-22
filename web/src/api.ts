@@ -15,7 +15,7 @@ import type {
   Snapshot,
 } from './types';
 
-const USE_MOCKS = (import.meta.env.VITE_USE_MOCKS ?? 'true') !== 'false';
+const USE_MOCKS = (import.meta.env.VITE_USE_MOCKS ?? 'false') === 'true';
 const BASE = import.meta.env.VITE_API_URL ?? '';
 
 // ── Mock data ──────────────────────────────────────────────────────────────────
