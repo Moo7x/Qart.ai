@@ -6,7 +6,7 @@ pip install -r requirements.txt -q
 
 echo "==> Building web app..."
 cd web
-npm install --silent
+npm ci --silent  # installs exactly package-lock.json and never rewrites it
 npm run build
 cd ..
 
