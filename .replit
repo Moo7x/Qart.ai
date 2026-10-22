@@ -1,10 +1,9 @@
-modules = ["python-3.12"]
+modules = ["python-3.12", "nodejs-22"]
 run = "bash replit_start.sh"
 entrypoint = "src/main.py"
 
 [nix]
 channel = "stable-24_05"
-packages = ["nodejs_20"]
 
 [[ports]]
 localPort = 8000
