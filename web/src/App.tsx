@@ -1,4 +1,4 @@
-import { BrowserRouter, Link, NavLink, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Link, NavLink, Route, Routes, useLocation } from 'react-router-dom'
 import HRSummary from './pages/HRSummary'
 import Intake from './pages/Intake'
 import MyFuture from './pages/MyFuture'
@@ -52,11 +52,17 @@ function Nav() {
   )
 }
 
+// The workspace needs the full width so two tables fit without truncating descriptions.
+function Main({ children }: { children: React.ReactNode }) {
+  const wide = useLocation().pathname.startsWith('/workspace')
+  return <main className={`${wide ? 'max-w-[1440px]' : 'max-w-6xl'} mx-auto px-4 py-8 sm:py-10`}>{children}</main>
+}
+
 export default function App() {
   return (
     <BrowserRouter>
       <Nav />
-      <main className="max-w-6xl mx-auto px-4 py-10">
+      <Main>
         <Routes>
           <Route path="/" element={<Intake />} />
           <Route path="/queue" element={<WorkQueue />} />
@@ -66,7 +72,7 @@ export default function App() {
           <Route path="/future" element={<MyFuture />} />
           <Route path="/hr" element={<HRSummary />} />
         </Routes>
-      </main>
+      </Main>
     </BrowserRouter>
   )
 }
