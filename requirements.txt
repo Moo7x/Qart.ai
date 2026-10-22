@@ -1,3 +1,5 @@
+# Requires Python 3.12 or newer (pyproject.toml requires-python; .python-version).
+# pip cannot check this from here: create the venv with Python 3.12 first.
 # Runtime
 fastapi==0.155.0
 uvicorn==0.54.0
