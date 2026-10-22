@@ -8,6 +8,8 @@ ortools==9.15.6755
 psycopg[binary]==3.3.6
 # HTTP client: RunPod endpoint calls (src/retrieval/runpod_backends.py) and the companion
 httpx==0.28.1
+# OpenAI-compatible LLM client for the companion (src/companion); provider set via LLM_BASE_URL
+openai==3.36.1
 # RunPod serverless handler (runpod/handler.py, from the organisers' template)
 runpod==1.12.0
 

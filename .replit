@@ -1,13 +1,18 @@
 modules = ["python-3.12"]
-run = "uvicorn src.main:app --host 0.0.0.0 --port 8000"
+run = "bash replit_start.sh"
 entrypoint = "src/main.py"
 
 [nix]
 channel = "stable-24_05"
+packages = ["nodejs_20"]
 
 [[ports]]
 localPort = 8000
 externalPort = 80
 
 [deployment]
-run = ["sh", "-c", "uvicorn src.main:app --host 0.0.0.0 --port 8000"]
+run = ["sh", "-c", "bash replit_start.sh"]
+deploymentTarget = "cloudrun"
+
+[env]
+PORT = "8000"
