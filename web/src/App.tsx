@@ -6,6 +6,7 @@ import { resetDemo } from './api'
 import CompanionUpdates from './pages/CompanionUpdates'
 import Evidence from './pages/Evidence'
 import HRSummary from './pages/HRSummary'
+import Impact from './pages/Impact'
 import Intake from './pages/Intake'
 import MyFuture from './pages/MyFuture'
 import MySkills from './pages/MySkills'
@@ -149,6 +150,7 @@ export default function App() {
             <Route path="/signals" element={<Only role="employee"><Signals /></Only>} />
             <Route path="/future" element={<Only role="employee"><MyFuture /></Only>} />
             <Route path="/pathway" element={<Only role="employee"><Pathway /></Only>} />
+            <Route path="/impact" element={<Only role="employee"><Impact /></Only>} />
             <Route path="/hr" element={<Only role="hr"><HRSummary /></Only>} />
             <Route path="/evidence" element={<Only role="hr"><Evidence /></Only>} />
             <Route path="/improve" element={<Only role="senior"><CompanionUpdates /></Only>} />
