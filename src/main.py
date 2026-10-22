@@ -20,6 +20,7 @@ from src.envfile import load_env_file
 load_env_file()  # local .env (gitignored); must run before the routers read any settings
 
 from src.api_engine import router as engine_router  # noqa: E402
+from src.api_search import router as search_router  # noqa: E402
 
 logger = logging.getLogger(__name__)
 
@@ -49,8 +50,9 @@ app = FastAPI(
     version="0.1.0",
 )
 
-# --- Person A: engine routes (src/api_engine.py) -----------------------------------------------
+# --- Person A: engine routes (src/api_engine.py) and search (src/api_search.py) -----------------
 app.include_router(engine_router)
+app.include_router(search_router)
 
 
 # --- Person B: companion + cases routes (src/api_companion.py) ---------------------------------
