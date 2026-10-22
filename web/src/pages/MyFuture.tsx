@@ -1,234 +1,194 @@
 import { useEffect, useState } from 'react'
+import { ChevronDown, ChevronUp, Clock, ExternalLink } from 'lucide-react'
 import { getPath, getRecommendation, getSnapshots } from '../api'
 import type { PathPlan, Recommendation, RoleRecommendation, Scenario, Snapshot } from '../types'
-import { SKILL_NAMES } from '../skillNames'
+import { skillName } from '../skillNames'
+import { asProvenance, Card, label, Loading, PageHeader, ProvenanceTag, SectionTitle, STATE_META, Tag, type Tone } from '../ui'
 
-const SDG_COLORS: Record<string, string> = {
-  '4.4': 'bg-red-100 text-red-700',
-  '8.2': 'bg-orange-100 text-orange-700',
-  '8.5': 'bg-yellow-100 text-yellow-700',
-  '5.5': 'bg-pink-100 text-pink-700',
+const ALLOC_META: Record<string, { label: string; tone: Tone }> = {
+  human: { label: 'Human', tone: 'action' },
+  ai_drafts_human_reviews: { label: 'AI drafts → human reviews', tone: 'marigold' },
+  ai: { label: 'AI', tone: 'linen' },
 }
 
+const STEP_TONE: Record<string, Tone> = { checkin: 'coral', course: 'action' }
 
-const STATE_LABELS: Record<string, string> = {
-  demonstrated_independently: 'Demonstrated',
-  observed_with_help: 'Observed',
-  self_reported: 'Self-reported',
-  insufficient_evidence: 'Not yet evidenced',
-}
-
-const ALLOC_LABELS: Record<string, { label: string; color: string }> = {
-  human: { label: 'Human', color: 'bg-green-100 text-green-700' },
-  ai_drafts_human_reviews: { label: 'AI drafts → Human reviews', color: 'bg-blue-100 text-blue-700' },
-  ai: { label: 'AI', color: 'bg-purple-100 text-purple-700' },
-}
-
-const KIND_BADGES: Record<string, string> = {
-  evidence: 'bg-blue-50 text-blue-700 border-blue-200',
-  assumption: 'bg-amber-50 text-amber-700 border-amber-200',
-  synthetic: 'bg-gray-50 text-gray-600 border-gray-200',
-}
-
-function FactorBar({ label, value, penalty = false }: { label: string; value: number; penalty?: boolean }) {
+function FactorBar({ label: name, value, penalty = false }: { label: string; value: number; penalty?: boolean }) {
+  // Role-fit factors (not skill mastery), so a bar is allowed here.
   const pct = Math.round(value * 100)
   return (
-    <div className="space-y-0.5">
-      <div className="flex justify-between text-xs text-gray-500">
-        <span>{label}{penalty ? ' (penalty)' : ''}</span>
-        <span className={penalty ? 'text-red-600' : 'text-gray-700'}>{pct}%</span>
+    <div className="space-y-1">
+      <div className="flex justify-between text-xs text-graphite">
+        <span>{name}{penalty ? ' (counts against)' : ''}</span>
+        <span className="tabular-nums text-ink">{pct}%</span>
       </div>
-      <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
-        <div
-          className={`h-full rounded-full ${penalty ? 'bg-red-400' : 'bg-indigo-500'}`}
-          style={{ width: `${pct}%` }}
-        />
+      <div className="h-1.5 bg-linen rounded-full overflow-hidden">
+        <div className={`h-full rounded-full ${penalty ? 'bg-coral' : 'bg-action'}`} style={{ width: `${pct}%` }} />
       </div>
     </div>
   )
 }
 
 function RoleCard({ role, expanded, onToggle }: { role: RoleRecommendation; expanded: boolean; onToggle: () => void }) {
+  const detailsId = `role-${role.role_id}`
   return (
-    <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-      <div
-        className="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-50"
-        onClick={onToggle}
+    <Card className="overflow-hidden">
+      <button
+        type="button" onClick={onToggle} aria-expanded={expanded} aria-controls={detailsId}
+        className="w-full text-left flex items-start justify-between gap-3 p-5 hover:bg-canvas transition-colors duration-200"
       >
-        <div className="flex items-center gap-3">
-          <span className="w-7 h-7 rounded-full bg-indigo-100 text-indigo-700 text-sm font-bold flex items-center justify-center">
+        <div className="flex items-start gap-3 min-w-0">
+          <span className="w-8 h-8 rounded-full bg-action-tint text-action-ink text-sm font-semibold flex items-center justify-center shrink-0 tabular-nums">
             {role.rank}
           </span>
-          <div>
-            <div className="font-semibold text-gray-900 flex items-center gap-2">
+          <div className="min-w-0">
+            <div className="font-semibold text-ink flex items-center gap-2 flex-wrap">
               {role.title ?? role.role_id.replace(/_/g, ' ')}
-              {role.close_match && (
-                <span className="text-xs bg-green-100 text-green-700 px-1.5 py-0.5 rounded font-medium">Close match</span>
+              {role.close_match && <Tag tone="marigold">Close match</Tag>}
+              {role.outlook && (
+                <Tag tone={role.outlook.label === 'AI-era role' ? 'action' : role.outlook.label === 'stable' ? 'linen' : 'coral'} title={`${role.outlook.because} · ${role.outlook.basis}`}>
+                  {role.outlook.label}
+                </Tag>
               )}
             </div>
-            <div className="flex items-center gap-3 mt-0.5 flex-wrap">
+            <div className="flex items-center gap-x-3 gap-y-1 mt-1 flex-wrap text-sm">
               {role.time_to_ready && (
-                <span className="text-xs text-indigo-600 font-medium">
-                  ~{role.time_to_ready.hours} h to ready · {role.time_to_ready.weeks_at_current_budget} wk at your weekly hours
+                <span className="inline-flex items-center gap-1 text-action-ink font-medium tabular-nums">
+                  <Clock size={14} aria-hidden="true" />
+                  ~{role.time_to_ready.hours} h to ready · {role.time_to_ready.weeks_at_current_budget} wk at your pace
                 </span>
               )}
               {role.fit !== undefined && (
-                <span className="text-xs text-gray-500">Fit {role.fit.toFixed(2)} (indicator, not a probability)</span>
-              )}
-              {role.outlook && (
-                <span
-                  title={`${role.outlook.because} · ${role.outlook.basis}`}
-                  className={`text-xs px-1.5 py-0.5 rounded font-medium ${role.outlook.label === 'AI-era role' ? 'bg-emerald-100 text-emerald-700' : role.outlook.label === 'stable' ? 'bg-gray-100 text-gray-600' : 'bg-orange-100 text-orange-700'}`}
-                >
-                  {role.outlook.label}
-                </span>
+                <span className="text-graphite tabular-nums">Fit {role.fit.toFixed(2)} <span className="text-xs">(indicator, not a probability)</span></span>
               )}
             </div>
-            {role.score_note && (
-              <div className="text-xs text-gray-400 italic mt-0.5">{role.score_note}</div>
-            )}
+            {role.score_note && <div className="text-xs text-stone italic mt-1">{role.score_note}</div>}
           </div>
         </div>
-        <div className="flex items-center gap-2">
-          {role.sdg_targets?.map(t => (
-            <span key={t} className={`text-xs px-1.5 py-0.5 rounded font-medium ${SDG_COLORS[t] ?? 'bg-gray-100 text-gray-600'}`}>
-              SDG {t}
-            </span>
-          ))}
-          <span className="text-indigo-400 text-sm font-medium">{expanded ? '▲' : '→'}</span>
+        <div className="flex items-center gap-2 shrink-0">
+          <span className="hidden sm:flex gap-1">
+            {role.sdg_targets?.map(t => <Tag key={t} tone="linen">SDG {t}</Tag>)}
+          </span>
+          {expanded ? <ChevronUp size={20} className="text-graphite" aria-hidden="true" /> : <ChevronDown size={20} className="text-graphite" aria-hidden="true" />}
         </div>
-      </div>
+      </button>
 
       {expanded && (
-        <div className="border-t border-gray-100 p-4 space-y-5">
-          {/* Score breakdown */}
+        <div id={detailsId} className="border-t border-hairline p-5 space-y-6">
           <div>
-            <div className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">Score breakdown</div>
-            <div className="space-y-2">
+            <div className={`${label} mb-3`}>Why this rank</div>
+            <div className="space-y-3">
               <FactorBar label="Coverage" value={role.factors.coverage} />
               <FactorBar label="Confidence" value={role.factors.confidence} />
               <FactorBar label="Interest" value={role.factors.interest} />
               <FactorBar label="Effort" value={role.factors.effort} penalty />
             </div>
-            <div className="mt-2 text-xs text-gray-400 font-mono bg-gray-50 rounded px-2 py-1">
-              {role.formula}
-            </div>
+            <div className="mt-3 text-xs text-graphite font-mono bg-linen rounded-sm px-3 py-2 overflow-x-auto">{role.formula}</div>
           </div>
 
-          {/* Gap */}
           {role.gap.length > 0 && (
             <div>
-              <div className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">Skill gaps</div>
-              <div className="space-y-1.5">
+              <div className={`${label} mb-2`}>Skills to build</div>
+              <ul className="space-y-2">
                 {role.gap.map(g => (
-                  <div key={g.skill_id} className="flex items-center justify-between text-sm">
-                    <span className="text-gray-700">{SKILL_NAMES[g.skill_id] ?? g.skill_id.replace(/_/g, ' ')}</span>
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs text-gray-400">{STATE_LABELS[g.state]}</span>
-                      <span className="text-xs text-gray-400">weight {Math.round(g.weight * 100)}%</span>
-                    </div>
-                  </div>
+                  <li key={g.skill_id} className="flex items-center justify-between gap-3 text-sm">
+                    <span className="text-ink">{skillName(g.skill_id)}</span>
+                    <span className="flex items-center gap-2">
+                      <Tag tone={STATE_META[g.state].tone}>{STATE_META[g.state].label}</Tag>
+                      <span className="text-xs text-graphite tabular-nums">weight {Math.round(g.weight * 100)}%</span>
+                    </span>
+                  </li>
                 ))}
-              </div>
+              </ul>
             </div>
           )}
 
-          {/* Requirement card */}
           <div>
-            <div className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">Requirement card</div>
-            <div className="text-xs text-gray-400 mb-2 italic">
-              How this role's tasks are allocated under the selected scenario, and why the skill weights changed.
-            </div>
-            <div className="space-y-2">
+            <div className={`${label} mb-1`}>Requirement card</div>
+            <p className="text-xs text-stone mb-3">How this role's tasks are split under the selected scenario, and why the skill weights changed.</p>
+            <ul className="space-y-1.5">
               {role.requirement_card.tasks.map((t, i) => {
-                const alloc = ALLOC_LABELS[t.allocation] ?? { label: t.allocation, color: 'bg-gray-100 text-gray-600' }
+                const alloc = ALLOC_META[t.allocation] ?? { label: t.allocation, tone: 'linen' as Tone }
                 return (
-                  <div key={i} className="flex items-center justify-between text-xs bg-gray-50 rounded px-3 py-2">
-                    <span className="text-gray-700">{t.task}</span>
-                    <span className={`px-2 py-0.5 rounded font-medium ${alloc.color}`}>{alloc.label}</span>
-                  </div>
+                  <li key={i} className="flex items-center justify-between gap-3 text-sm bg-canvas rounded-sm px-3 py-2">
+                    <span className="text-ink">{t.task}</span>
+                    <Tag tone={alloc.tone}>{alloc.label}</Tag>
+                  </li>
                 )
               })}
-            </div>
+            </ul>
             {role.requirement_card.weights.length > 0 && (
-              <div className="mt-3 space-y-1">
-                <div className="text-xs text-gray-500 font-medium">Weight changes</div>
+              <div className="mt-4 space-y-2">
+                <div className={label}>Weight changes</div>
                 {role.requirement_card.weights.map((w, i) => (
-                  <div key={i} className="text-xs text-gray-600 bg-amber-50 border border-amber-100 rounded px-3 py-2">
-                    <span className="font-medium">{SKILL_NAMES[w.skill_id] ?? w.skill_id}</span>
-                    : base {Math.round(w.base * 100)}% → scenario {Math.round(w.scenario * 100)}%
-                    <div className="text-gray-400 mt-0.5">
-                      <span className="bg-amber-100 text-amber-700 border border-amber-200 px-1 py-0.5 rounded text-xs mr-1">assumption</span>
-                      {w.because}
+                  <div key={i} className="text-sm bg-coral-tint/50 rounded-sm px-3 py-2">
+                    <div className="text-ink tabular-nums">
+                      <span className="font-medium">{skillName(w.skill_id)}</span>: base {Math.round(w.base * 100)}% → scenario {Math.round(w.scenario * 100)}%
+                    </div>
+                    <div className="mt-1 flex items-start gap-2 text-xs text-graphite">
+                      <ProvenanceTag kind="assumption" />
+                      <span>{w.because}</span>
                     </div>
                   </div>
                 ))}
               </div>
             )}
-            {/* Evidence sources */}
-            <div className="mt-3 space-y-1">
+            <ul className="mt-4 space-y-1.5">
               {role.requirement_card.evidence.map((e, i) => (
-                <div key={i} className="flex items-center gap-2 text-xs">
-                  <span className={`px-1.5 py-0.5 rounded border font-medium ${KIND_BADGES[e.kind ?? 'evidence']}`}>
-                    {e.kind ?? 'evidence'}
-                  </span>
-                  <a href={e.url} target="_blank" rel="noreferrer" className="text-indigo-600 hover:underline truncate">
-                    {e.label}
+                <li key={i} className="flex items-center gap-2 text-sm min-w-0">
+                  <ProvenanceTag kind={asProvenance(e.kind)} />
+                  <a href={e.url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-action-ink hover:underline truncate">
+                    {e.label} <ExternalLink size={12} aria-hidden="true" />
                   </a>
-                </div>
+                </li>
               ))}
-            </div>
+            </ul>
           </div>
         </div>
       )}
-    </div>
+    </Card>
   )
 }
 
 function PathTimeline({ plan }: { plan: PathPlan }) {
   return (
-    <div className="space-y-3">
-      <div className="flex items-center justify-between text-sm text-gray-600">
-        <span className="font-medium">{plan.total_hours}h total · {plan.weeks} weeks at {plan.weekly_hours}h/week</span>
-        <span className="text-xs text-gray-400">Weighted gap left after this path (worse scenario): {plan.worst_case_gap.toFixed(2)}</span>
+    <div className="space-y-4">
+      <div className="flex flex-wrap items-center justify-between gap-2 text-sm">
+        <span className="font-medium text-ink tabular-nums">{plan.total_hours} h total · {plan.weeks} weeks at {plan.weekly_hours} h/week</span>
+        <span className="text-xs text-graphite tabular-nums">Gap left after this path (worse scenario): {plan.worst_case_gap.toFixed(2)}</span>
       </div>
-      <div className="relative space-y-0">
-        <div className="absolute left-3 top-3 bottom-3 w-px bg-indigo-100" aria-hidden="true" />
+      <ol className="relative">
+        <div className="absolute left-4 top-4 bottom-4 w-px bg-hairline-strong" aria-hidden="true" />
         {plan.steps.map(step => (
-          <div key={step.order} className="relative flex items-start gap-3 bg-white border border-gray-200 rounded-xl p-3 mb-2">
-            <div className="w-6 h-6 rounded-full bg-indigo-100 text-indigo-700 text-xs font-bold flex items-center justify-center shrink-0 mt-0.5 relative z-10">
+          <li key={step.order} className="relative flex items-start gap-4 pb-3">
+            <span className="w-8 h-8 rounded-full bg-surface border border-hairline-strong text-ink text-sm font-semibold flex items-center justify-center shrink-0 relative z-10 tabular-nums">
               {step.order}
-            </div>
-            <div className="flex-1 min-w-0">
+            </span>
+            <Card className="flex-1 min-w-0 p-4">
               <div className="flex items-center gap-2 flex-wrap">
-                <span className="font-medium text-gray-900 text-sm">{step.title}</span>
-                <span className={`text-xs px-1.5 py-0.5 rounded ${step.type === 'checkin' ? 'bg-purple-100 text-purple-700' : step.type === 'course' ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-600'}`}>
-                  {step.type.replace('_', ' ')}
-                </span>
-                {step.cost === 'free' && <span className="text-xs bg-green-100 text-green-700 px-1.5 py-0.5 rounded">free</span>}
-                {step.sdg_targets?.map(t => (
-                  <span key={t} className={`text-xs px-1 py-0.5 rounded font-medium ${SDG_COLORS[t] ?? 'bg-gray-100 text-gray-600'}`}>SDG {t}</span>
-                ))}
+                <span className="font-semibold text-ink">{step.title}</span>
+                <Tag tone={STEP_TONE[step.type] ?? 'linen'}>{step.type.replace('_', ' ')}</Tag>
+                {step.cost === 'free' && <Tag tone="mocha">free</Tag>}
+                {step.sdg_targets?.map(t => <Tag key={t} tone="linen">SDG {t}</Tag>)}
               </div>
-              <div className="flex items-center gap-2 mt-1 text-xs text-gray-400">
-                <span>{step.hours}h</span>
-                {step.url && <a href={step.url} target="_blank" rel="noreferrer" className="text-indigo-500 hover:underline">Open →</a>}
-                {step.because && <span className="text-gray-400 italic">· {step.because}</span>}
+              <div className="flex items-center gap-2 mt-1.5 text-sm text-graphite flex-wrap">
+                <span className="inline-flex items-center gap-1 tabular-nums"><Clock size={14} aria-hidden="true" /> {step.hours} h</span>
+                {step.url && (
+                  <a href={step.url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-action-ink hover:underline">
+                    Open <ExternalLink size={12} aria-hidden="true" />
+                  </a>
+                )}
+                {step.because && <span className="italic">· {step.because}</span>}
               </div>
-              <div className="flex flex-wrap gap-1 mt-1">
-                {step.skills.map(sk => (
-                  <span key={sk} className="text-xs bg-gray-50 text-gray-500 border border-gray-200 px-1.5 py-0.5 rounded">
-                    {SKILL_NAMES[sk] ?? sk.replace(/_/g, ' ')}
-                  </span>
-                ))}
+              <div className="flex flex-wrap gap-1 mt-2">
+                {step.skills.map(sk => <Tag key={sk} tone="outline">{skillName(sk)}</Tag>)}
               </div>
-            </div>
-          </div>
+            </Card>
+          </li>
         ))}
-      </div>
+      </ol>
     </div>
   )
-
 }
 
 export default function MyFuture() {
@@ -254,82 +214,66 @@ export default function MyFuture() {
     })
   }, [scenario])
 
-  if (loading) return <div className="text-gray-400 text-center py-12">Loading…</div>
+  if (loading) return <Loading what="your future roles" />
 
   return (
-    <div className="max-w-3xl mx-auto space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-xl font-semibold text-gray-900">My future</h1>
-        <span className="text-xs text-gray-400">Recommendations, not decisions</span>
-      </div>
+    <div className="max-w-3xl mx-auto space-y-10">
+      <PageHeader title="My future" intro="Roles your evidence points toward, and a path to get there. The system recommends; you decide." />
 
-      {/* Snapshot card — reads source/release_date/period from GET /api/snapshots */}
+      {/* Snapshot card: reads source/release_date/period from GET /api/snapshots */}
       {snapshots.length > 0 && (
-        <div className="bg-blue-50 border border-blue-100 rounded-xl p-4">
-          <div className="flex items-center gap-2 flex-wrap mb-1">
-            <span className="text-xs font-medium text-blue-800">External evidence</span>
-            <span className="bg-blue-100 text-blue-700 border border-blue-200 text-xs px-1.5 py-0.5 rounded font-medium">Historical data replay</span>
+        <div className="bg-mocha-tint rounded-lg p-5">
+          <div className="flex items-center gap-2 flex-wrap mb-2">
+            <span className="text-sm font-semibold text-mocha-ink">External evidence</span>
+            <Tag tone="linen">Historical data replay</Tag>
             {recommendation?.assumptions_version !== undefined && (
-              <span className="text-xs text-gray-500">Assumptions version {recommendation.assumptions_version}</span>
+              <ProvenanceTag kind="assumption">v{recommendation.assumptions_version}</ProvenanceTag>
             )}
           </div>
           {snapshots.map(snap => (
-            <p key={snap.id} className="text-sm text-blue-700">
-              {snap.source} · {snap.release_date} release · {snap.period}
-            </p>
+            <p key={snap.id} className="text-sm text-ink tabular-nums">{snap.source} · {snap.release_date} release · {snap.period}</p>
           ))}
-          <p className="text-xs text-blue-500 mt-0.5">
-            Signal data informs skill weight assumptions. Usage ≠ replacement — see requirement card for how.
-          </p>
+          <p className="text-xs text-mocha-ink mt-2">Usage data informs the skill-weight assumptions. Usage is not replacement; each requirement card shows how.</p>
         </div>
       )}
 
-      {/* Scenario toggle */}
-      <div className="flex items-center gap-2">
-        <span className="text-sm text-gray-600 font-medium">Scenario:</span>
-        {(['assistive', 'agentic'] as Scenario[]).map(s => (
-          <button
-            key={s}
-            onClick={() => { setScenario(s); setLoading(true) }}
-            className={`px-4 py-1.5 rounded-lg text-sm font-medium transition-colors ${scenario === s ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
-          >
-            {s.charAt(0).toUpperCase() + s.slice(1)}
-          </button>
-        ))}
-        <div className="ml-auto flex items-center gap-1">
-          <span className="text-xs bg-amber-50 text-amber-700 border border-amber-200 px-1.5 py-0.5 rounded font-medium">assumption</span>
-          <span className="text-xs text-gray-400">company adoption scenario</span>
+      <div className="flex flex-wrap items-center gap-3">
+        <span className="text-sm text-ink font-medium" id="scenario-label">Company AI scenario</span>
+        <div role="radiogroup" aria-labelledby="scenario-label" className="inline-flex bg-linen rounded-md p-1">
+          {(['assistive', 'agentic'] as Scenario[]).map(s => (
+            <button
+              key={s} role="radio" aria-checked={scenario === s}
+              onClick={() => { setScenario(s); setLoading(true) }}
+              className={`px-4 py-1.5 rounded-sm text-sm transition-colors duration-200 ${scenario === s ? 'bg-surface text-ink font-medium shadow-[0_1px_2px_rgb(0_0_0/0.06)]' : 'text-graphite hover:text-ink'}`}
+            >
+              {s.charAt(0).toUpperCase() + s.slice(1)}
+            </button>
+          ))}
         </div>
+        <ProvenanceTag kind="assumption">company adoption scenario</ProvenanceTag>
       </div>
 
-      {/* Role recommendations */}
-      <div className="space-y-3">
-        <h2 className="text-sm font-semibold text-gray-700">Suggested future roles</h2>
-        <p className="text-xs text-gray-400">
-          These are suitability indicators based on your evidence, not probabilities. The system recommends; you decide.
-        </p>
-        {recommendation?.roles.map(role => (
-          <RoleCard
-            key={role.role_id}
-            role={role}
-            expanded={expandedRole === role.role_id}
-            onToggle={() => setExpandedRole(expandedRole === role.role_id ? null : role.role_id)}
-          />
-        ))}
-      </div>
-
-      {/* Learning path */}
-      {path && (
+      <section>
+        <SectionTitle>Roles that fit your evidence</SectionTitle>
+        <p className="text-sm text-graphite mb-4">Suitability indicators from your evidence, not probabilities.</p>
         <div className="space-y-3">
-          <div className="flex items-center justify-between">
-            <h2 className="text-sm font-semibold text-gray-700">Your learning path</h2>
-            <span className="text-xs text-gray-400">Robust across both scenarios</span>
-          </div>
-          <PathTimeline plan={path} />
-          <p className="text-xs text-gray-400">
-            Course coverage is an assumption until new evidence arrives. Hours are estimates.
-          </p>
+          {recommendation?.roles.map(role => (
+            <RoleCard
+              key={role.role_id}
+              role={role}
+              expanded={expandedRole === role.role_id}
+              onToggle={() => setExpandedRole(expandedRole === role.role_id ? null : role.role_id)}
+            />
+          ))}
         </div>
+      </section>
+
+      {path && (
+        <section>
+          <SectionTitle aside={<Tag tone="linen">Works in both scenarios</Tag>}>Your learning path</SectionTitle>
+          <PathTimeline plan={path} />
+          <p className="text-xs text-graphite mt-2">Course coverage is an assumption until new evidence arrives. Hours are estimates.</p>
+        </section>
       )}
     </div>
   )
