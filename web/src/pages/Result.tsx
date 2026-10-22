@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
 import { Link, useLocation, useParams } from 'react-router-dom'
-import { getSkills } from '../api'
-import type { DecisionResponse, SkillState } from '../types'
+import { getNextCase, getSkills } from '../api'
+import { skillName } from '../skillNames'
+import type { DecisionResponse, NextCase, SkillState } from '../types'
 
 const STATE_COLORS: Record<string, string> = {
   demonstrated_independently: 'bg-green-100 text-green-700',
@@ -22,9 +23,11 @@ export default function Result() {
   const location = useLocation()
   const result: DecisionResponse | null = location.state?.result ?? null
   const [skills, setSkills] = useState<SkillState[]>([])
+  const [nextCase, setNextCase] = useState<NextCase | null>(null)
 
   useEffect(() => {
     getSkills('u_aina').then(setSkills)
+    getNextCase('u_aina').then(setNextCase).catch(() => setNextCase(null))
   }, [])
 
   const relevantSkillIds = result?.event?.skills_evidence.map(se => se.skill_id) ?? []
@@ -40,7 +43,7 @@ export default function Result() {
           <p className="text-gray-700">{result.explanation}</p>
           {!result.decision_correct && result.affected_rows.length > 0 && (
             <p className="text-sm text-gray-500 mt-2">
-              Issue in rows: {result.affected_rows.join(', ')}. Correct decision was: <strong>{result.correct_decision.replace('_', ' ')}</strong>.
+              Issue in rows: {result.affected_rows.join(', ')}. Correct decision was: <strong>{result.correct_decision?.replace('_', ' ')}</strong>.
             </p>
           )}
         </div>
@@ -56,7 +59,7 @@ export default function Result() {
                   {STATE_LABELS[s.state]}
                 </span>
                 <div>
-                  <div className="text-sm font-medium text-gray-800">{s.skill_id.replace(/_/g, ' ')}</div>
+                  <div className="text-sm font-medium text-gray-800">{skillName(s.skill_id)}</div>
                   <div className="text-xs text-gray-500 mt-0.5">{s.why}</div>
                 </div>
               </div>
@@ -66,12 +69,19 @@ export default function Result() {
         </div>
       )}
 
+      {nextCase?.case_id && (
+        <div className="bg-indigo-50 border border-indigo-100 rounded-xl p-4 text-sm text-indigo-900">
+          <div className="text-xs font-medium text-indigo-500 uppercase tracking-wide mb-1">Suggested next</div>
+          <strong>{nextCase.case_id}</strong> · {nextCase.because}
+        </div>
+      )}
+
       <div className="flex gap-3">
         <Link
-          to="/queue"
+          to={nextCase?.case_id ? `/workspace/${nextCase.case_id}` : '/queue'}
           className="flex-1 text-center bg-indigo-600 text-white py-3 rounded-xl font-medium hover:bg-indigo-700 transition-colors"
         >
-          Next case
+          {nextCase?.case_id ? `Next case: ${nextCase.case_id}` : 'Next case'}
         </Link>
         <Link
           to="/skills"

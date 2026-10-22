@@ -93,10 +93,9 @@ export default function Workspace() {
         setTimeout(() => navigate(`/result/${caseId}`, { state: { result: res } }), 1200)
       } else {
         // Walk back: keep workspace open, companion guides
-        setMessages(prev => [...prev, {
-          role: 'assistant',
-          text: `Not quite. ${res.explanation} Let me walk you through it.`
-        }])
+        // The server reveals nothing from the answer here; help comes through the ladder.
+        setDecisionResult(null)
+        setMessages(prev => [...prev, { role: 'assistant', text: `Not quite. ${res.explanation}` }])
       }
     } finally {
       setDeciding(false)
@@ -192,7 +191,7 @@ export default function Workspace() {
                     {fmt(row.amount)}
                   </td>
                   <td className="px-2 py-2">
-                    <input type="checkbox" checked={flaggedRows.has(row.row_id)} onChange={() => toggleFlag(row.row_id)} className="accent-red-400" />
+                    <input type="checkbox" aria-label={`Flag row ${row.row_id}`} checked={flaggedRows.has(row.row_id)} onChange={() => toggleFlag(row.row_id)} className="accent-red-400" />
                   </td>
                 </tr>
               ))}
@@ -210,7 +209,7 @@ export default function Workspace() {
                   </div>
                   <div className="flex items-center gap-1">
                     <span className={`font-mono ${adj.amount < 0 ? 'text-red-600' : 'text-green-600'}`}>{fmt(adj.amount)}</span>
-                    <input type="checkbox" checked={flaggedRows.has(adj.id)} onChange={() => toggleFlag(adj.id)} className="accent-red-400" />
+                    <input type="checkbox" aria-label={`Flag adjustment ${adj.id}`} checked={flaggedRows.has(adj.id)} onChange={() => toggleFlag(adj.id)} className="accent-red-400" />
                   </div>
                 </div>
               ))}
