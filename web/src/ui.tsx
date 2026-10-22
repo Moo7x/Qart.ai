@@ -1,6 +1,7 @@
 /** Shared building blocks for the qart-design-system skill, so every screen uses one look. */
-import { useEffect, useRef, type ReactNode } from 'react'
+import { useEffect, useLayoutEffect, useRef, type HTMLAttributes, type ReactNode } from 'react'
 import { BadgeCheck, CircleDashed, LifeBuoy, MessageSquareQuote, X, type LucideIcon } from 'lucide-react'
+import { DURATION, EASE, gsap, reducedMotion } from './motion'
 import type { SkillStateName } from './types'
 
 /** Class recipes from the skill's component table. */
@@ -68,8 +69,8 @@ export function asProvenance(kind: string | undefined): Provenance {
   return kind === 'assumption' || kind === 'synthetic' ? kind : 'evidence'
 }
 
-export function Card({ children, className = '' }: { children: ReactNode; className?: string }) {
-  return <div className={`bg-surface border border-hairline rounded-lg ${className}`}>{children}</div>
+export function Card({ children, className = '', ...rest }: { children: ReactNode; className?: string } & HTMLAttributes<HTMLDivElement> & { 'data-reveal'?: boolean }) {
+  return <div {...rest} className={`bg-surface border border-hairline rounded-lg ${className}`}>{children}</div>
 }
 
 /** Notion's hero highlight pill: an accent fill behind one key word of a headline. */
@@ -131,6 +132,16 @@ const FOCUSABLE = 'a[href], button:not([disabled]), input:not([disabled]), selec
 /** Right-side slide-over. Esc closes it, focus stays inside, and returns to the opener on close. */
 export function Drawer({ open, onClose, title, children }: { open: boolean; onClose: () => void; title: ReactNode; children: ReactNode }) {
   const panelRef = useRef<HTMLDivElement>(null)
+  const overlayRef = useRef<HTMLDivElement>(null)
+
+  // Slide in with GSAP; closing is instant so focus returns to the opener without waiting.
+  useLayoutEffect(() => {
+    if (!open || reducedMotion()) return
+    const tl = gsap.timeline()
+    tl.from(overlayRef.current, { opacity: 0, duration: DURATION, ease: EASE })
+      .from(panelRef.current, { x: 24, opacity: 0, duration: DURATION, ease: EASE, clearProps: 'transform,opacity' }, 0)
+    return () => { tl.kill() }
+  }, [open])
 
   useEffect(() => {
     if (!open) return
@@ -152,10 +163,10 @@ export function Drawer({ open, onClose, title, children }: { open: boolean; onCl
   if (!open) return null
   return (
     <div className="fixed inset-0 z-50">
-      <div className="absolute inset-0 bg-ink/20 motion-safe:animate-[fade_200ms_ease-out]" onClick={onClose} aria-hidden="true" />
+      <div ref={overlayRef} className="absolute inset-0 bg-ink/20" onClick={onClose} aria-hidden="true" />
       <div
         ref={panelRef} role="dialog" aria-modal="true" aria-label={typeof title === 'string' ? title : 'Details'}
-        className="absolute right-0 top-0 h-full w-full max-w-md bg-surface shadow-pop flex flex-col motion-safe:animate-[slide-in_200ms_ease-out]"
+        className="absolute right-0 top-0 h-full w-full max-w-md bg-surface shadow-pop flex flex-col"
       >
         <div className="flex items-center justify-between gap-3 px-5 h-16 border-b border-hairline">
           <div className="font-semibold text-ink min-w-0 truncate">{title}</div>
