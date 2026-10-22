@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { ArrowRight, Check } from 'lucide-react'
 import { getProfile, postProfile } from '../api'
+import { btn, Card, PageHeader, ProvenanceTag } from '../ui'
 
 const SKILLS = [
   { id: 'recon_to_source', label: 'Reconcile to source' },
@@ -63,66 +65,69 @@ export default function Intake() {
 
   return (
     <div className="max-w-2xl mx-auto">
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Welcome, {name}</h1>
-        <p className="text-gray-500 mt-1 text-sm">Tell us where you are today so we can personalise your practice.</p>
-        <span className="inline-block mt-2 text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded">Synthetic demo data · Aina is a synthetic persona</span>
-      </div>
+      <PageHeader
+        title={`Welcome, ${name}`}
+        intro="Tell us where you are today. Your practice starts from here and changes as you work."
+        aside={<ProvenanceTag kind="synthetic">{name} is a demo persona</ProvenanceTag>}
+      />
 
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <section className="bg-white rounded-xl border border-gray-200 p-5">
-          <h2 className="font-semibold text-gray-800 mb-4">Self-rated confidence</h2>
-          <p className="text-xs text-gray-500 mb-4">These are your starting self-reports. They will be updated as you practice and check-in cases provide evidence.</p>
-          <div className="space-y-3">
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <Card className="p-6">
+          <h2 className="text-base font-semibold text-ink">How confident are you today?</h2>
+          <p className="mt-1 mb-5 text-sm text-graphite">This is your own starting view. Practice and check-in cases add real evidence next to it.</p>
+          <div className="space-y-4">
             {SKILLS.map(skill => (
-              <div key={skill.id} className="flex items-center gap-3">
-                <span className="text-sm text-gray-700 w-52 shrink-0">{skill.label}</span>
+              <div key={skill.id} className="grid grid-cols-[1fr_auto] sm:grid-cols-[13rem_1fr_auto] items-center gap-x-4 gap-y-1">
+                <label htmlFor={`conf-${skill.id}`} className="text-sm text-ink">{skill.label}</label>
                 <input
+                  id={`conf-${skill.id}`}
                   type="range" min={0} max={1} step={0.05}
                   value={confidences[skill.id]}
                   onChange={e => setConfidences(prev => ({ ...prev, [skill.id]: parseFloat(e.target.value) }))}
-                  className="flex-1 accent-indigo-600"
+                  className="col-span-2 sm:col-span-1 row-start-2 sm:row-start-auto w-full"
                 />
-                <span className="text-sm text-gray-500 w-10 text-right">{Math.round(confidences[skill.id] * 10)}/10</span>
+                <span className="text-sm text-graphite tabular-nums text-right w-12 row-start-1 col-start-2 sm:col-start-auto">{Math.round(confidences[skill.id] * 10)}/10</span>
               </div>
             ))}
           </div>
-        </section>
+        </Card>
 
-        <section className="bg-white rounded-xl border border-gray-200 p-5">
-          <h2 className="font-semibold text-gray-800 mb-3">Interests</h2>
+        <Card className="p-6">
+          <h2 className="text-base font-semibold text-ink">What do you enjoy?</h2>
+          <p className="mt-1 mb-4 text-sm text-graphite">Pick any. They help rank future roles for you.</p>
           <div className="flex flex-wrap gap-2">
-            {INTEREST_OPTIONS.map(i => (
-              <button
-                key={i} type="button"
-                onClick={() => toggleInterest(i)}
-                className={`px-3 py-1.5 rounded-full text-sm border transition-colors ${interests.includes(i) ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white text-gray-600 border-gray-200 hover:border-indigo-300'}`}
-              >
-                {i}
-              </button>
-            ))}
+            {INTEREST_OPTIONS.map(i => {
+              const on = interests.includes(i)
+              return (
+                <button
+                  key={i} type="button" aria-pressed={on}
+                  onClick={() => toggleInterest(i)}
+                  className={`inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-sm transition-colors duration-200 ${on ? 'bg-action-tint text-action-ink font-medium' : 'bg-surface border border-hairline-strong text-graphite hover:bg-linen'}`}
+                >
+                  {on && <Check size={14} strokeWidth={2} aria-hidden="true" />}
+                  {i}
+                </button>
+              )
+            })}
           </div>
-        </section>
+        </Card>
 
-        <section className="bg-white rounded-xl border border-gray-200 p-5">
-          <h2 className="font-semibold text-gray-800 mb-3">Weekly learning hours</h2>
-          <div className="flex items-center gap-3">
+        <Card className="p-6">
+          <label htmlFor="weekly-hours" className="text-base font-semibold text-ink">Time for learning each week</label>
+          <div className="mt-4 flex items-center gap-4">
             <input
+              id="weekly-hours"
               type="range" min={1} max={10} step={0.5}
               value={weeklyHours}
               onChange={e => setWeeklyHours(parseFloat(e.target.value))}
-              className="flex-1 accent-indigo-600"
+              className="flex-1"
             />
-            <span className="text-sm text-gray-700 w-16">{weeklyHours} h/week</span>
+            <span className="text-sm text-ink tabular-nums w-20 text-right">{weeklyHours} h/week</span>
           </div>
-        </section>
+        </Card>
 
-        <button
-          type="submit"
-          disabled={submitting}
-          className="w-full bg-indigo-600 text-white py-3 rounded-xl font-medium hover:bg-indigo-700 disabled:opacity-60 transition-colors"
-        >
-          {submitting ? 'Starting…' : 'Start practising →'}
+        <button type="submit" disabled={submitting} className={`${btn.primary} w-full py-3`}>
+          {submitting ? 'Starting…' : <>Start practising <ArrowRight size={16} aria-hidden="true" /></>}
         </button>
       </form>
     </div>
