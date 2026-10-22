@@ -25,8 +25,10 @@ Inference only: no model is trained or fine-tuned.
 At most 256 texts of 8,000 characters per job; invalid input returns `{"error": ...}`.
 
 ## Deployment
-Serverless endpoint built from this repository (Dockerfile `runpod/Dockerfile`, build context
-`runpod/`), min workers 0, max workers 1, short idle timeout, with an account spending limit.
+Serverless endpoint built from this repository: Dockerfile `runpod/Dockerfile`, built from the
+repository root (`docker build -f runpod/Dockerfile .`). The base image uses CUDA 12.1, so the
+endpoint uses previous-generation GPUs (16–24 GB is enough for both models). Min workers 0, max
+workers 1, short idle timeout, with an account spending limit.
 
 ## Configuration
 The app reads `RUNPOD_API_KEY` and `RUNPOD_ENDPOINT_ID` from the environment (or the local `.env`,
