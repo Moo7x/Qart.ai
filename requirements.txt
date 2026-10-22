@@ -4,19 +4,19 @@
 fastapi==0.155.0
 uvicorn==0.54.0
 pydantic==2.14.1
-pandas==3.0.6
-ortools==9.15.6755
+# One database layer for SQLite (local) and Postgres (Replit)
+sqlalchemy==2.1.6
 # Postgres driver, used only when DATABASE_URL is set (Replit deployment)
 psycopg[binary]==3.3.6
-# HTTP client: RunPod endpoint calls (src/retrieval/runpod_backends.py) and the companion
+# HTTP client: public data sources, RunPod endpoint calls
 httpx==0.28.1
-# OpenAI-compatible LLM client for the companion (src/companion); provider set via LLM_BASE_URL
+# OpenAI-compatible LLM client (gpt-4o-mini); provider set via LLM_BASE_URL
 openai==3.36.1
-# RunPod serverless handler (runpod/handler.py, from the organisers' template)
-runpod==1.12.0
+# Data packs, field profiles and source registry are YAML
+pyyaml==6.0.3
 
 # Development and tests
 pytest==9.1.1
 ruff==0.17.1
 mypy==2.4.0
-pandas-stubs==3.0.5.260914
+types-PyYAML==6.0.12.20260906
