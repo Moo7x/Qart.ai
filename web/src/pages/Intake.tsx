@@ -86,16 +86,16 @@ export default function Intake() {
           <p className="mt-1 mb-5 text-sm text-graphite">This is your own starting view. Practice and check-in cases add real evidence next to it.</p>
           <div className="space-y-4">
             {SKILLS.map(skill => (
-              <div key={skill.id} className="grid grid-cols-[1fr_auto] sm:grid-cols-[13rem_1fr_auto] items-center gap-x-4 gap-y-1">
-                <label htmlFor={`conf-${skill.id}`} className="text-sm text-ink">{skill.label}</label>
+              <div key={skill.id} className="grid grid-cols-[1fr_auto] sm:grid-cols-[13rem_1fr_3rem] items-center gap-x-4 gap-y-1">
+                <label htmlFor={`conf-${skill.id}`} className="col-start-1 row-start-1 text-sm text-ink">{skill.label}</label>
                 <input
                   id={`conf-${skill.id}`}
                   type="range" min={0} max={1} step={0.05}
                   value={confidences[skill.id]}
                   onChange={e => setConfidences(prev => ({ ...prev, [skill.id]: parseFloat(e.target.value) }))}
-                  className="col-span-2 sm:col-span-1 row-start-2 sm:row-start-auto w-full"
+                  className="col-span-2 row-start-2 sm:col-span-1 sm:col-start-2 sm:row-start-1 w-full"
                 />
-                <span className="text-sm text-graphite tabular-nums text-right w-12 row-start-1 col-start-2 sm:col-start-auto">{Math.round(confidences[skill.id] * 10)}/10</span>
+                <span className="col-start-2 row-start-1 sm:col-start-3 text-sm text-graphite tabular-nums text-right">{Math.round(confidences[skill.id] * 10)}/10</span>
               </div>
             ))}
           </div>
