@@ -301,3 +301,88 @@ export interface SearchResponse {
   note: string;
   results: SearchResult[];
 }
+
+// HR: external evidence and company assumptions (layer A diff, layer B versions).
+export type Allocation = 'human' | 'ai_drafts_human_reviews' | 'ai';
+
+export interface CompanyAssumptions {
+  version: number;
+  updated_by: string;
+  based_on_snapshot: string | null;
+  scenarios: Record<Scenario, { tasks: Record<string, Allocation> }>;
+  shift_rule: string;
+  shift_fractions: Record<string, number>;
+  task_descriptions: Record<string, string>;
+  label?: string | null;
+  change_note?: string | null;
+  [extra: string]: unknown;
+}
+
+export interface SignalChange {
+  entity: string;
+  metric: string;
+  geo: string | null;
+  before: number | null;
+  after: number | null;
+  change: number | null;
+  relative_change: number | null;
+  significant: boolean;
+}
+
+export interface SnapshotDiff {
+  from_id: string;
+  to_id: string;
+  from_period: string;
+  to_period: string;
+  label: string;
+  changes: SignalChange[];
+  suggested_assumption_reviews: { assumption_id: string; reason: string }[];
+  note: string;
+}
+
+export interface IngestResult {
+  ingested: string | null;
+  active_snapshots: string[];
+  diff: SnapshotDiff | null;
+  label: string;
+  message: string;
+}
+
+// Senior: companion playbook optimiser.
+export interface OptimizerProposal {
+  id: string;
+  editable_scope: 'playbook';
+  base_version: string;
+  candidate_version: string;
+  diff: string;
+  optimisation_set: { before: string; after: string };
+  acceptance_set: {
+    before: string;
+    after: string;
+    criteria_hash: string;
+    false_alarms_clean: { before: string; after: string };
+    invalid_citations: number;
+  };
+  regressions: string[];
+  status: 'pending' | 'approved' | 'rejected';
+  decided_by: string | null;
+  decided_at: string | null;
+  rollback_to: string;
+  rationale?: string | null;
+  development_log?: string[];
+}
+
+export interface OptimizerStatus {
+  state: 'idle' | 'running' | 'done' | 'failed';
+  step: string;
+  started_at: string | null;
+  finished_at: string | null;
+  proposal_id: string | null;
+  error: string | null;
+}
+
+export interface PlaybookInfo {
+  active_version: string;
+  text: string;
+  versions: string[];
+}
