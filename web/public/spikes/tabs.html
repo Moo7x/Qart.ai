@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Spike S1: agent-opened tabs</title>
+<style>
+  body { font: 15px/1.5 system-ui, sans-serif; max-width: 46rem; margin: 2rem auto; padding: 0 1rem; color: #1e293b; }
+  button { font: inherit; padding: .4rem .8rem; margin: .25rem .25rem .25rem 0; cursor: pointer; }
+  .card { border: 1px solid #cbd5e1; border-radius: 8px; padding: .75rem 1rem; margin: 1rem 0; }
+  #log li { font-family: ui-monospace, monospace; font-size: 13px; }
+  .done { color: #166534; } .blocked { color: #b45309; }
+</style>
+</head>
+<body>
+<h1>Spike S1: can the on-screen agent open tabs?</h1>
+<p>Each test calls <code>window.open</code> in a different situation and records whether the
+browser allowed it (<code>window.open</code> returns <code>null</code> when blocked). The target is a
+public page (the UN SDG 4 page). Results feed the agent's execution contract (docs/PLAN.md §4.9).</p>
+
+<div class="card">
+  <strong>A. Inside a user click</strong> (expected: allowed)<br>
+  <button id="a">Open now</button>
+</div>
+<div class="card">
+  <strong>B. No user gesture: 6 s after a click</strong> (transient activation has expired; expected: blocked)<br>
+  <button id="b">Start 6 s timer</button>
+</div>
+<div class="card">
+  <strong>C. On page load, no click at all</strong> (expected: blocked) — runs once when the page opens.
+</div>
+<div class="card">
+  <strong>D. Agent card pattern</strong>: the agent proposes an action; the user clicks its card.
+  <div id="agentCard" hidden>
+    <p>Agent: "I found the official SDG 4 targets page. Open it?"</p>
+    <button id="d">Open</button>
+  </div>
+  <button id="dPropose">Agent proposes (no gesture needed)</button>
+</div>
+<div class="card">
+  <strong>E. Blocked fallback</strong>: when a tab is blocked, show a link the user can click.
+  <p id="fallback">—</p>
+</div>
+
+<h2>Results</h2>
+<ol id="log"></ol>
+<button id="copy">Copy results</button>
+
+<script>
+  const TARGET = 'https://sdgs.un.org/goals/goal4';
+  const TIMER_MS = 6000;  // longer than Chrome's ~5 s transient user activation
+  const log = document.getElementById('log');
+
+  function record(test, status, detail) {
+    const li = document.createElement('li');
+    li.className = status;
+    li.textContent = `${new Date().toISOString()} · ${test} · ${status} · ${detail}`;
+    log.appendChild(li);
+  }
+
+  // With the "noopener" feature window.open returns null even when the tab opened, so open
+  // without it (to learn whether it was blocked) and detach the opener ourselves.
+  function tryOpenReliable(test) {
+    const win = window.open(TARGET, '_blank');
+    if (win) {
+      win.opener = null;
+      record(test, 'done', 'tab opened');
+    } else {
+      record(test, 'blocked', 'window.open returned null');
+      const fallback = document.getElementById('fallback');
+      fallback.innerHTML = '';
+      const a = document.createElement('a');
+      a.href = TARGET; a.target = '_blank'; a.rel = 'noopener';
+      a.textContent = `Blocked (${test}). Click to open the page`;
+      a.addEventListener('click', () => record('E (fallback link)', 'done', 'user clicked the link'));
+      fallback.appendChild(a);
+    }
+  }
+
+  document.getElementById('a').addEventListener('click', () => tryOpenReliable('A (click)'));
+  document.getElementById('b').addEventListener('click', () => {
+    record('B (timer)', 'pending', `waiting ${TIMER_MS / 1000} s`);
+    setTimeout(() => tryOpenReliable('B (timer)'), TIMER_MS);
+  });
+  document.getElementById('dPropose').addEventListener('click', () => {
+    document.getElementById('agentCard').hidden = false;
+  });
+  document.getElementById('d').addEventListener('click', () => tryOpenReliable('D (agent card click)'));
+  document.getElementById('copy').addEventListener('click', () => {
+    const text = `${navigator.userAgent}\n` + [...log.children].map((li) => li.textContent).join('\n');
+    navigator.clipboard.writeText(text).then(() => record('copy', 'done', 'results copied'));
+  });
+
+  window.addEventListener('load', () => tryOpenReliable('C (page load)'));
+</script>
+</body>
+</html>
