@@ -22,7 +22,7 @@ Set: `eval/retrieval_set.json` (15 queries, labelled synthetic). Corpus: 227 doc
 | Retriever | Mean recall@5 | Relevant found | Notes |
 |---|---|---|---|
 | bm25 (CPU baseline) | 0.74 | 20/28 | k1=1.5, b=0.75, not tuned |
-| RunPod hybrid (BGE-M3 + RRF + bge-reranker) | not run | not run | set RUNPOD_API_KEY and RUNPOD_ENDPOINT_ID (runpod/README.md) |
+| RunPod hybrid (BGE-M3 + RRF + bge-reranker) | 0.88 | 23/28 | same set and corpus |
 
 | Query | Found (BM25) | Top 5 (BM25) |
 |---|---|---|
