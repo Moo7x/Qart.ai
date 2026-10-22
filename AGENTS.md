@@ -1,27 +1,27 @@
 # Project rules for coding agents: Qart.ai
 
 Qart.ai (SDC Hackathon 2026, Domain 1: Aiversecity Future-Ready Workforce) takes a person in
-Malaysia from "who I am today" to "where I can be in the AI era". A continuous intelligence loop
-and a field-aware research agent collect dated public evidence about AI and the job market; code
-turns that evidence into task-level change, skill emphasis per scenario, ranked future roles with an
+Malaysia from "who I am today" to "where I can be in the AI era". A scheduled intelligence pipeline
+collects dated public evidence about AI and the job market from registered sources; code turns that
+evidence into task-level change, skill emphasis per scenario, ranked future roles with an
 explainable fit score and skills gap, and an ordered reskilling pathway where every role, skill and
-step is tagged to an SDG target. A visible on-screen agent opens the evidence, courses and real job
-openings for the user. People make the decisions.
+step is tagged to an SDG target. People make the decisions.
 
 Read first: `docs/PLAN.md` (product and system design). It is the only source of truth for scope.
+Build the **MVP scope** listed at its top first; items marked improvement phase or on hold are not
+built until the human says so.
 
 ## Scope
 - Users: working adults at risk of displacement, fresh graduates / students (also via TVET and
-  university career centres), career switchers, HR / L&D managers (aggregate team view only).
-- Demo field with deep coverage: Malaysian Global Business Services (GBS), finance & accounting.
-  Other fields get "basic coverage", labelled as such on every screen.
+  university career centres), career switchers; later HR / L&D managers (aggregate team view only).
+- Field: Malaysian Global Business Services (GBS), finance & accounting only.
 - Six must-haves (brief §4): profile intake (CV / form / questionnaire) · updatable AI and job-market
   signal layer showing source and date (hard-coded lists do not count) · ranked future roles with an
   explainable match score and skills gap · ordered pathway with time and free / low-cost resources ·
   every role and skill tagged to at least one SDG with how the chosen path contributes · more than
   one future scenario, labelled as estimates.
 - Core SDG targets: 4.4, 4.3, 8.2, 8.5. Others (5, 9, 10, 13 ...) only where the work supports them.
-- The on-screen agent researches and shows. It never tutors, hints at answers or grades the user.
+- The app never tutors, hints at answers or grades the user; it shows evidence and options.
 - Out of scope (brief §6): full course content, payments, real recruitment integrations.
 - Any change of product direction or scope is a question for the human before it goes into code
   or the plan. Do not add, remove or reinterpret features on your own.

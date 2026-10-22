@@ -8,6 +8,38 @@ that acts for the user (opens tabs, navigates, highlights, explains), inspired b
 researches and shows; it never tutors, hints at answers or grades. Agent look: a simple Qart icon;
 voice off by default, one click to turn on.
 
+## MVP scope (decided 23 Oct 2026)
+Build the baseline first, verify it against the brief, then improve. Sections below marked
+*(improvement phase)* or *(on hold)* are designed but not part of the MVP.
+
+**In the MVP**
+- **Field:** Malaysian GBS finance & accounting only (the field with verified public data). No
+  other fields; "basic coverage" is dropped.
+- **Users:** working adult, graduate / student, career switcher, each tailored as in §1. Roles:
+  *person* (own journey) and *admin* (pipeline "Run now", source controls). Everyone can read the
+  Live intelligence page.
+- **Onboarding:** a step-by-step flow, one question per screen, every step skippable, CV upload
+  pre-fills the answers; it ends at the dashboard.
+- **Signal layer:** fixed registered sources collected on a schedule — OpenDOSM API, DOSM Job Market
+  Insights, TalentCorp GBS study (versioned extraction), Anthropic Economic Index, O*NET / ESCO.
+  Live intelligence page: the pipeline as an icon diagram, run history, source registry.
+- **Engine:** task evidence, scenarios, matching, gap, pathway and SDG mapping as in §4.3–4.6,
+  without the what-if tools and the targeted-vs-robust plans.
+- **What changed:** replay of genuine earlier releases → recompute → before/after with the
+  evidence chain (success test: the output visibly changes when trend data changes).
+- **Models:** gpt-4o-mini for CV extraction (cited spans; form fallback) and plain-language
+  explanations of computed results (never numbers); RunPod BGE-M3 for skill mapping (BM25 fallback).
+
+**Improvement phase** (after the baseline is verified; order to be confirmed)
+1. HR / L&D team view (aggregates, groups < 5 suppressed).
+2. Telegram: change and progress notifications, then a question-answering bot that replies only
+   from the app's own API, with sources.
+3. What-if tools and targeted-vs-robust plans (§4.5, §4.6).
+4. Research agent with its own search (§4.2).
+5. EN / BM interface, mobile polish, fairness badge.
+
+**On hold** (no use case agreed yet): the on-screen agent (§4.9) and voice.
+
 ## 0. Constraints from the brief and handbook
 - Problem: continuously track AI advancement → predict emerging/declining skills and jobs → match
   today's workforce and tomorrow's talent to future roles → personalised reskilling pathways → show how
@@ -52,11 +84,8 @@ its evidence, shown on screen by the agent.
 Services (GBS), finance & accounting function: TalentCorp's Malaysian study assesses 80 GBS roles
 (18 highly, 49 medium, 8 low impacted by AI/digital/green), names 5 emerging roles and 16 in-demand
 skills, documents career pathways with upskilling skills and covers ESG/green (2024, verified 23 Oct).
-Engine and data model are field-agnostic. **Coverage levels:** *deep* for the curated GBS finance
-pack (verified roles, tasks, essentials, courses, SDG mappings); *basic* for any other field — built
-automatically from O*NET/ESCO occupations and skills, Economic Index task use and the research agent's
-findings for that field, with fewer verified courses, labelled "basic coverage" on every screen. More
-deep packs can be added later.
+The MVP covers this field only, with a curated GBS finance pack (verified roles, tasks, essentials,
+courses, SDG mappings). Engine and data model stay field-agnostic, so another field is a new pack.
 
 ## 2. User journey (screens)
 1. **Tell us about yourself:** situation → upload a synthetic CV (PDF/DOCX/text; samples provided) or
@@ -105,7 +134,7 @@ recomputation → each user's matches and pathway proposals → change records �
 on-screen agent, Telegram). Every run, including "no change", is logged and shown. Plain Python
 (no n8n/LangGraph framework; their ideas are implemented directly).
 
-### 4.2 Research agent (field-aware, finds information itself, keeps working)
+### 4.2 Research agent (field-aware, finds information itself, keeps working) *(improvement phase)*
 Tool-calling agent (gpt-4o-mini) with field profiles ("character files", YAML: field, roles, tasks,
 keywords, ESCO/O*NET codes, allowed source types, cadence) and a rules file (cite everything, never
 produce numbers itself, respect rate limits and terms, prefer primary sources).
@@ -236,7 +265,7 @@ identical results (test; the badge names the test and date). HR sees aggregates 
 | Source terms | per-source terms notes; MY job sites linked, not scraped | connector disabled with reason |
 | Misuse of admin actions | admin token for pipeline run, review queue, source approval; profiles bound to a browser session | 403 with reason |
 
-### 4.9 Visible on-screen agent (Burrow-inspired; not a tutor)
+### 4.9 Visible on-screen agent (Burrow-inspired; not a tutor) *(on hold)*
 An agent icon always on screen. It acts on the real interface: a visible cursor moves to the real
 element, and real external pages open in new tabs. Typed actions, validated by the app before they run:
 open_evidence (drawer with the cited row/passage) · open_tab (real course page, real job-search
@@ -309,43 +338,46 @@ optimiser, evaluation, old UI pages and their tests); keep only neutral infrastr
 and start script, RunPod embedding worker, LICENSE, Python/Node config). Everything else written new.
 README, declaration log and decision log rewritten. Merged into `main` slice by slice; the user pushes.
 
-## 10. Build order (vertical slices, UI from slice 1; each slice ships its own validation,
-persistence, access control, provider fallback and cancellation — no separate 'reliability later')
-0. **Reset:** AGENTS.md/CLAUDE.md rewritten, docs/PLAN.md added, old code removed.
-1. **Evidence:** DOSM + TalentCorp + Economic Index collectors, store, measures, task model for the
-   field, backtest, run log + lock, source registry; first Radar + pipeline page with real data.
-   Replit Scheduled Deployment set up here (manual step) so real run history accumulates.
-2. **Journey:** intake (CV/form, extraction, skill mapping, PII) → matching → gaps → scenarios →
-   pathway + SDG → destination; full UI; checks 1, 3, 4, 5.
-3. **Research agent + change:** agent workflow (§4.2), replay of genuine historical releases + live
-   refresh → recompute → What-changed view with the evidence chain; checks 2, 6.
-4. **On-screen agent:** cursor, tabs, highlights, explanations, voice, proactive change walkthrough;
-   check 7.
-5. **Extras:** HR heatmap, EN/BM, mobile, Telegram, fairness test.
-6. **Submission (drafting from slice 1):** PRD, deck, video script, README, declaration, Replit and
+## 10. Build order (MVP first; each slice ships its own validation, persistence, access control,
+provider fallback and tests; UI from slice 1)
+0. **Reset:** agent rules rewritten, this plan added, old code removed, browser spikes (done).
+1. **Evidence:** registered-source collectors (DOSM, DOSM JMI, TalentCorp, Economic Index,
+   O*NET/ESCO), evidence store, measures, task model for the field, backtest, pipeline run + lock +
+   schedule, source registry; Live intelligence page (icon diagram, run history, registry) with
+   real data. Replit Scheduled Deployment set up here (manual step).
+2. **Journey:** onboarding flow (CV/answers, extraction, skill mapping, PII) → personalised radar →
+   matching and gaps → scenarios → pathway + SDG → destination → Today → Future you.
+3. **Change + baseline check:** replay of genuine earlier releases → recompute → What changed with
+   the evidence chain; every must-have and the success test verified on the deployed app.
+4. **Improvement phase:** items in the MVP scope list, one at a time, each verified before the next.
+5. **Submission (drafting from slice 1):** PRD, deck, video script, README, declaration, Replit and
    RunPod proof, public Apache-2.0 repo, committee access.
 
 ## 11. Manual setup steps
 Replit Scheduled Deployment + Secrets (slice 1) · Telegram bot via @BotFather (slice 5) · committee
 GitHub access · demo video · team fields.
 
-## 12. UI design (to approve as a clickable mockup before frontend code)
-- **Character:** an evidence-first intelligence product — calm, data-dense, trustworthy (references:
-  Linear and Stripe dashboards for workflows, IBM Carbon for tables, GitHub Primer for empty / loading
-  / error states). Built with the frontend-design and web-design-guidelines skills.
-- **System:** Tailwind + Radix primitives; Radix Colors scales with semantic roles (evidence = blue,
-  assumption = amber, estimate = violet, stale/fallback = grey, SDG targets in official UN colours);
-  Geist / Inter typography; WCAG AA contrast; keyboard navigable; light theme first.
-- **Layout:** left journey stepper (Start → Radar → Matched → Pathway → Future you) · main canvas ·
-  right evidence drawer (source, date, cited passage, observed/assumed tag) · agent dock bottom-right
-  (icon, status, plan of actions, stop) · top bar with scenario toggle, language EN/BM, data freshness.
-- **Signature visuals:** Future Skills Radar (radar chart + rising/weakening lists with sparklines);
-  Get matched cards with a stacked fit bar and the 3-column gap; Today → Future you split view; the
-  animated live-intelligence pipeline canvas; What changed diff view; agent cursor gliding to targets.
+## 12. UI design (approved as a clickable mockup before frontend code)
+- **Direction:** inspired by Clerk's style (reference kept by the team): a light fog canvas
+  (#f7f7f8) with white reading surfaces, near-black obsidian panels (#212126 / #2f3037) for the
+  "intelligence" surfaces (pipeline diagram, evidence being collected, key numbers), and one
+  electric-violet accent (#6c47ff) used only for primary actions and the active state. Geist for
+  text with tight negative tracking on headings; a monospace face for numbers, sources and dates.
+  Hairline borders (#d9d9de); radii 6 px (buttons, inputs), 8 px (cards), pills only for tags.
+  Semantic colours stay but muted: observed = blue, assumption = amber, estimate = violet,
+  stale / fallback = grey; SDG targets in official UN colours. WCAG AA contrast, keyboard navigable.
+  We take the style principles, not Clerk's brand or components.
+- **Onboarding:** full-screen step flow, one question per screen, progress bar, Skip and Back on
+  every step, CV upload pre-fills; finishes into the dashboard.
+- **App layout:** dark left sidebar (journey steps, Live intelligence) · main canvas with one main
+  thing per screen and room around it · evidence drawer on the right · top bar with scenario switch
+  and data freshness.
+- **Signature visuals:** Future Skills Radar (radar + rising / weakening lists with sparklines);
+  role cards with a stacked fit bar and the 3-column gap; Today → Future you split view; the Live
+  intelligence pipeline as an icon diagram in lanes (Collect → Understand → Decide → Notify) with
+  curved connectors and moving data dots (React Flow in the build); What changed before/after.
 - **States:** every data element has loading, empty, stale, fallback and error states that name the
-  reason. Mobile: stepper becomes top tabs, drawer becomes a bottom sheet, agent dock stays.
-- **Process:** slice 0 produces a clickable mockup (static HTML) of Start, Radar, Get matched, Pathway,
-  Today → Future you and the pipeline page for approval; slices then build the real UI to it.
+  reason. Mobile: sidebar becomes a top bar menu, drawer becomes a bottom sheet.
 
 ## 13. Optional (not in current scope)
 Agent-found YouTube learning videos; more on-screen agent capabilities.
