@@ -5,8 +5,8 @@ import type { SkillState } from '../types'
 const STATE_COLORS: Record<string, string> = {
   demonstrated_independently: 'bg-green-100 text-green-800 border-green-200',
   observed_with_help: 'bg-blue-100 text-blue-800 border-blue-200',
-  self_reported: 'bg-gray-100 text-gray-700 border-gray-200',
-  insufficient_evidence: 'bg-yellow-50 text-yellow-800 border-yellow-200',
+  self_reported: 'bg-amber-100 text-amber-700 border-amber-200',
+  insufficient_evidence: 'bg-gray-100 text-gray-500 border-gray-200',
 }
 
 const STATE_LABELS: Record<string, string> = {
@@ -16,10 +16,10 @@ const STATE_LABELS: Record<string, string> = {
   insufficient_evidence: 'Insufficient evidence',
 }
 
-const OUTCOME_ICONS: Record<string, { icon: string; label: string; color: string }> = {
-  success: { icon: '✓', label: 'success', color: 'text-green-600' },
-  missed_then_found: { icon: '◑', label: 'missed, then found', color: 'text-amber-600' },
-  failure: { icon: '✗', label: 'missed', color: 'text-red-600' },
+const OUTCOME_ICONS: Record<string, { icon: string; label: string; color: string; badge: string }> = {
+  success: { icon: '✓', label: 'success', color: 'text-green-600', badge: 'bg-green-100 text-green-700 border-green-200' },
+  missed_then_found: { icon: '◑', label: 'missed, then found', color: 'text-purple-600', badge: 'bg-purple-100 text-purple-700 border-purple-200' },
+  failure: { icon: '✗', label: 'missed', color: 'text-red-600', badge: 'bg-red-100 text-red-700 border-red-200' },
 }
 
 const SKILL_NAMES: Record<string, string> = {
@@ -93,10 +93,9 @@ function SkillCard({ skill }: { skill: SkillState }) {
               const o = OUTCOME_ICONS[item.outcome] ?? OUTCOME_ICONS.failure
               const counted = item.counted !== false
               return (
-                <div key={i} className={`flex items-center gap-2 text-xs ${!counted ? 'opacity-50' : ''}`}>
-                  <span className={`font-mono font-bold ${o.color}`}>{o.icon}</span>
+                <div key={i} className={`flex items-center gap-2 text-xs flex-wrap ${!counted ? 'opacity-50' : ''}`}>
                   <span className="text-gray-700 font-medium">{item.case_id}</span>
-                  <span className="text-gray-400">{o.label}</span>
+                  <span className={`px-1.5 py-0.5 rounded border font-medium ${o.badge}`}>{o.icon} {o.label}</span>
                   <HelpBadge level={item.help_level} />
                   {!counted && <span className="text-gray-400 italic">(not counted)</span>}
                   {item.note && <span className="text-gray-400 italic">{item.note}</span>}

@@ -10,6 +10,12 @@ const DECISION_LABELS: Record<string, string> = {
   escalate: 'Escalate',
 }
 
+const DECISION_ICONS: Record<string, string> = {
+  sign_off: '✓',
+  correct: '✗',
+  escalate: '↑',
+}
+
 function fmt(n: number) {
   return n.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
 }
@@ -152,7 +158,7 @@ export default function Workspace() {
       {/* Main 3-column layout */}
       <div className="grid grid-cols-3 gap-4">
         {/* Ledger */}
-        <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+        <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
           <div className="bg-gray-50 px-4 py-2 border-b border-gray-200 text-xs font-semibold text-gray-600 uppercase tracking-wide">
             Ledger
           </div>
@@ -169,7 +175,7 @@ export default function Workspace() {
               {caseData.ledger.map(row => (
                 <tr
                   key={row.row_id}
-                  className={`border-b border-gray-50 transition-colors ${highlightedRows.has(row.row_id) ? 'bg-amber-50 border-l-4 border-l-amber-400' : ''} ${flaggedRows.has(row.row_id) ? 'bg-red-50' : ''}`}
+                  className={`border-b border-gray-100 transition-colors ${highlightedRows.has(row.row_id) ? 'bg-amber-50 border-l-4 border-l-amber-400' : flaggedRows.has(row.row_id) ? 'bg-red-50' : 'even:bg-gray-50'}`}
                 >
                   <td className="px-3 py-2 text-gray-500">{row.date.slice(5)}</td>
                   <td className="px-3 py-2 text-gray-800 max-w-0 truncate">
@@ -213,7 +219,7 @@ export default function Workspace() {
         </div>
 
         {/* Bank statement */}
-        <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+        <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
           <div className="bg-gray-50 px-4 py-2 border-b border-gray-200 text-xs font-semibold text-gray-600 uppercase tracking-wide">
             Bank statement
           </div>
@@ -229,7 +235,7 @@ export default function Workspace() {
               {caseData.bank.map(row => (
                 <tr
                   key={row.row_id}
-                  className={`border-b border-gray-50 transition-colors ${highlightedRows.has(row.row_id) ? 'bg-amber-50 border-l-4 border-l-amber-400' : ''}`}
+                  className={`border-b border-gray-100 transition-colors ${highlightedRows.has(row.row_id) ? 'bg-amber-50 border-l-4 border-l-amber-400' : 'even:bg-gray-50'}`}
                 >
                   <td className="px-3 py-2 text-gray-500">{row.date.slice(5)}</td>
                   <td className="px-3 py-2 text-gray-800 max-w-0 truncate">{row.description}</td>
@@ -288,7 +294,7 @@ export default function Workspace() {
       </div>
 
       {/* Companion panel */}
-      <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+      <div className="bg-white rounded-xl border border-gray-200 border-t-4 border-t-indigo-500 overflow-hidden shadow-sm">
         {/* Chat messages */}
         <div className="h-48 overflow-y-auto p-4 space-y-3">
           {messages.length === 0 && (
@@ -355,12 +361,13 @@ export default function Workspace() {
                 key={d}
                 onClick={() => handleDecision(d)}
                 disabled={deciding}
-                className={`flex-1 py-2 rounded-lg text-sm font-medium transition-colors disabled:opacity-50 ${
+                className={`flex-1 py-3 px-6 rounded-lg text-sm font-semibold transition-colors disabled:opacity-50 flex items-center justify-center gap-2 ${
                   d === 'sign_off' ? 'bg-green-100 text-green-700 hover:bg-green-200' :
                   d === 'correct' ? 'bg-blue-100 text-blue-700 hover:bg-blue-200' :
                   'bg-red-100 text-red-700 hover:bg-red-200'
                 }`}
               >
+                <span>{DECISION_ICONS[d]}</span>
                 {DECISION_LABELS[d]}
               </button>
             ))}

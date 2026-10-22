@@ -107,7 +107,7 @@ function RoleCard({ role, expanded, onToggle }: { role: RoleRecommendation; expa
               SDG {t}
             </span>
           ))}
-          <span className="text-gray-400 text-sm">{expanded ? '▲' : '▼'}</span>
+          <span className="text-indigo-400 text-sm font-medium">{expanded ? '▲' : '→'}</span>
         </div>
       </div>
 
@@ -204,10 +204,11 @@ function PathTimeline({ plan }: { plan: PathPlan }) {
         <span className="font-medium">{plan.total_hours}h total · {plan.weeks} weeks at {plan.weekly_hours}h/week</span>
         <span className="text-xs text-gray-400">Worst-case gap: {Math.round(plan.worst_case_gap * 100)}%</span>
       </div>
-      <div className="space-y-2">
+      <div className="relative space-y-0">
+        <div className="absolute left-3 top-3 bottom-3 w-px bg-indigo-100" aria-hidden="true" />
         {plan.steps.map(step => (
-          <div key={step.order} className="flex items-start gap-3 bg-white border border-gray-200 rounded-xl p-3">
-            <div className="w-6 h-6 rounded-full bg-indigo-100 text-indigo-700 text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">
+          <div key={step.order} className="relative flex items-start gap-3 bg-white border border-gray-200 rounded-xl p-3 mb-2">
+            <div className="w-6 h-6 rounded-full bg-indigo-100 text-indigo-700 text-xs font-bold flex items-center justify-center shrink-0 mt-0.5 relative z-10">
               {step.order}
             </div>
             <div className="flex-1 min-w-0">
@@ -239,6 +240,7 @@ function PathTimeline({ plan }: { plan: PathPlan }) {
       </div>
     </div>
   )
+
 }
 
 export default function MyFuture() {
