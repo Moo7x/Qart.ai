@@ -12,6 +12,7 @@ import MySkills from './pages/MySkills'
 import Result from './pages/Result'
 import WorkQueue from './pages/WorkQueue'
 import Workspace from './pages/Workspace'
+import { FUTURE_FLOW_PATHS } from './components/FlowSteps'
 import { PERSONAS, PersonaProvider, usePersona } from './persona'
 import type { PersonaRole } from './persona'
 import { EmptyState, ProvenanceTag } from './ui'
@@ -34,6 +35,9 @@ const HOME: Record<PersonaRole, string> = { employee: '/queue', senior: '/improv
 
 function Nav() {
   const navigate = useNavigate()
+  const { pathname } = useLocation()
+  // "My future" covers every flow screen after the intake (Signals … Scenarios).
+  const inFutureFlow = FUTURE_FLOW_PATHS.some(p => pathname.startsWith(p))
   const { persona, setPersona } = usePersona()
   const [resetting, setResetting] = useState(false)
 
@@ -62,7 +66,7 @@ function Nav() {
               key={l.to}
               to={l.to}
               className={({ isActive }) =>
-                `whitespace-nowrap rounded-md px-3 py-2 text-sm transition-colors duration-200 ${isActive ? 'bg-action-tint text-action-ink font-medium' : 'text-ink/60 hover:text-ink'}`
+                `whitespace-nowrap rounded-md px-3 py-2 text-sm transition-colors duration-200 ${isActive || (l.to === '/future' && inFutureFlow) ? 'bg-action-tint text-action-ink font-medium' : 'text-ink/60 hover:text-ink'}`
               }
             >
               {l.label}

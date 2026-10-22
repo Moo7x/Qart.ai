@@ -5,6 +5,8 @@
 import axios from 'axios';
 import type {
   Case,
+  Role,
+  SdgMap,
   CompanionMessageResponse,
   CompanyAssumptions,
   DecisionResponse,
@@ -397,6 +399,18 @@ export async function postDecision(
 export async function getProfile(userId: string): Promise<Profile> {
   if (USE_MOCKS) return MOCK_PROFILE;
   const { data } = await axios.get<Profile>(`${BASE}/api/profile/${userId}`);
+  return data;
+}
+
+export async function getRoles(): Promise<Role[]> {
+  if (USE_MOCKS) return [];
+  const { data } = await axios.get<Role[]>(`${BASE}/api/roles`);
+  return data;
+}
+
+export async function getSdg(): Promise<SdgMap> {
+  if (USE_MOCKS) return { about: 'Sample data.', retrieved: '', targets: [], roles: {}, skills: {} };
+  const { data } = await axios.get<SdgMap>(`${BASE}/api/sdg`);
   return data;
 }
 

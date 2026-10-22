@@ -132,6 +132,48 @@ export interface Profile {
   weekly_learning_hours: number;
   language: string;
   team: string;
+  preferences?: Preferences; // v2.1: stored only, not used for ranking yet
+}
+
+// Optional intake answers (contract v2.1). The engine does not score them yet.
+export interface Preferences {
+  industry?: string | null;
+  education?: string | null;
+  tools?: string[];
+  direction?: 'grow' | 'adjacent' | 'switch' | null;
+  timeframe_months?: 3 | 6 | 12 | null;
+  formats?: string[];
+  ai_comfort?: number | null;
+  notes?: string | null;
+}
+
+// GET /api/roles
+export interface Role {
+  id: string;
+  title: string;
+  internal: boolean;
+  skills: { skill_id: string; base_weight: number }[];
+  sdg_targets: string[];
+  summary: string;
+  tags?: string[];
+}
+
+// GET /api/sdg (v2.1): the catalogue's SDG map; `about` says it is declared judgment.
+export interface SdgTarget {
+  id: string;
+  main: boolean;
+  goal: number;
+  title: string;
+  url: string;
+  rationale: string;
+}
+
+export interface SdgMap {
+  about: string;
+  retrieved: string;
+  targets: SdgTarget[];
+  roles: Record<string, { targets: string[]; rationale: string }>;
+  skills: Record<string, { targets: string[]; rationale: string }>;
 }
 
 // Companion message response
@@ -219,6 +261,20 @@ export interface Recommendation {
   snapshot_id: string | null;
   assumptions_version: number;
   roles: RoleRecommendation[];
+  changed_since?: ChangedSince | null;
+}
+
+export interface ChangedSince {
+  assumptions_version: number | null;
+  rank_changes: { role_id: string; from: number; to: number; because: string }[];
+  outlook_changes?: {
+    role_id: string;
+    from_label: string;
+    to_label: string;
+    from_ai_handled_share: number;
+    to_ai_handled_share: number;
+    because: string;
+  }[];
 }
 
 export interface PathStep {
@@ -230,8 +286,17 @@ export interface PathStep {
   skills: string[];
   cost: string;
   url?: string;
+  retrieved?: string | null;
   sdg_targets?: string[];
   because?: string;
+}
+
+export interface Signal {
+  entity: string;
+  metric: string;
+  geo: string | null;
+  value: number;
+  period: string | null;
 }
 
 export interface Snapshot {
@@ -240,6 +305,11 @@ export interface Snapshot {
   release_date: string;
   period: string;
   url?: string;
+  geo?: string;
+  retrieved_at?: string;
+  signals?: Signal[];
+  licence?: string | null;
+  label?: string | null;
 }
 
 // HR summary (GET /api/hr/summary): null means suppressed (fewer than min_group_size people).
