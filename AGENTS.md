@@ -25,3 +25,14 @@ Read first: `PROJECT_PLAN.md`, `team/00_SHARED_CONTRACT.md`, and the person file
 - Follow the qart-code-standards skill for all code (typed, linted with ruff, tested, no magic numbers, formulas documented).
 - After finishing or changing a module, update its explanation doc with the qart-explain skill (docs/explain/).
 - The human must understand every component: explain non-obvious code in the commit message body.
+
+## Rules learned from testing (each one fixes a bug we actually shipped)
+- Never send ground truth to the browser before a correct decision. A held-back wrong decision returns no explanation, rows or correct decision; the help level recorded must equal the help shown.
+- Verify every screen against the real API (`VITE_USE_MOCKS=false`), not only mocks. Frontend types and mock data must have the exact shapes the server returns.
+- No hard-coded user ids, case ids or answers in the UI or in companion fallbacks: everything comes from the persona, the API or the case's own data.
+- Tests never call paid services: `tests/conftest.py` removes LLM and RunPod keys. Use fakes (MockTransport, fake diagnosers) for LLM and GPU paths.
+- Every LLM answer is schema-constrained and validated in code, and every fallback is visible (`source`, `engine`, `note` fields). A fallback must never be reported as a model result.
+- Remote services (RunPod, LLM) get a time budget and a labelled fallback; a page must not wait for a GPU cold start.
+- The evaluation's acceptance set is scored once per playbook version. Development and the optimiser use practice cases and `eval/variants.py`; `eval/holdout/` is for final numbers only.
+- Python 3.12 is required (`src/__init__.py` stops older versions). The RunPod worker builds from the repository root (`runpod/Dockerfile`), needs PyTorch >= 2.6, and every push to `main` rebuilds it.
+- Commit messages carry no AI attribution lines (no "Co-Authored-By" for tools).
