@@ -37,7 +37,7 @@ function Nav() {
   const [resetting, setResetting] = useState(false)
 
   const reset = async () => {
-    if (!window.confirm('Reset the demo to its synthetic starting state? All practice results and approvals are cleared.')) return
+    if (!window.confirm('Reset the demo to its synthetic starting state? Practice results, the newer snapshot and assumption approvals are cleared; companion updates are kept.')) return
     setResetting(true)
     try {
       await resetDemo()

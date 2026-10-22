@@ -48,9 +48,10 @@ SERIAL_TYPE = {
     "sqlite": "INTEGER PRIMARY KEY AUTOINCREMENT",
     "postgres": "BIGSERIAL PRIMARY KEY",
 }
-# Cleared by a demo reset. `playbooks` is kept on purpose: generated playbook texts stay
-# available (and version numbers stay unique) after the active version goes back to v1.
-TABLES = ("profiles", "events", "assumptions", "snapshots", "proposals", "changes", "settings")
+# Cleared by a demo reset: practice, evidence and assumption state. Optimiser state (proposals,
+# playbook texts, the active version in settings) is kept on purpose: a run takes minutes and
+# costs LLM calls, and the senior can roll back to playbook_v1 at any time.
+TABLES = ("profiles", "events", "assumptions", "snapshots", "changes")
 
 BackendKind = Literal["sqlite", "postgres"]
 

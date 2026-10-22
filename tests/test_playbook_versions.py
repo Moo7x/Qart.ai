@@ -44,7 +44,7 @@ def test_unknown_or_malformed_versions_are_refused(tmp_path: Path, playbook_dir:
         pv.playbook_file("../../secrets")
 
 
-def test_events_record_the_active_version_and_reset_returns_to_v1(
+def test_events_record_the_active_version_and_reset_keeps_it(
     client: TestClient, playbook_dir: Path
 ) -> None:
     store = client.app.dependency_overrides[get_store]()  # type: ignore[attr-defined]
@@ -54,4 +54,4 @@ def test_events_record_the_active_version_and_reset_returns_to_v1(
     event = client.post("/api/companion/s_v2/decision", json=body).json()["event"]
     assert event["companion_version"] == "playbook_v2"
     client.post("/api/demo/reset").raise_for_status()
-    assert pv.active_playbook(store)[0] == pv.BASE_VERSION
+    assert pv.active_playbook(store)[0] == "playbook_v2"  # optimiser state survives a reset

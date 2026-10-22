@@ -3,9 +3,10 @@
 playbook_v1 is the hand-written procedure committed in src/companion/playbooks/. Later versions come
 from the optimiser; a senior approves one before it becomes active. Texts are kept in the store
 (Replit does not keep files written at runtime); an approved version is also written to
-src/companion/playbooks/ so it can be reviewed in git. The active version is a store setting; a
-demo reset clears it, which means playbook_v1 again. Every event records the version that produced
-it (companion_version), so evidence can always be traced to the procedure in force.
+src/companion/playbooks/ so it can be reviewed in git. The active version is a store setting:
+playbook_v1 until a senior approves another; a demo reset keeps it and rollback restores the
+previous one. Every event records the version that produced it (companion_version), so evidence
+can always be traced to the procedure in force.
 """
 
 import logging
