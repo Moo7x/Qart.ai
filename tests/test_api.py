@@ -300,3 +300,19 @@ def test_record_event_can_be_called_in_process(client: TestClient) -> None:
     with pytest.raises(HTTPException) as duplicate:
         record_event(event, store)
     assert duplicate.value.status_code == 409
+
+
+def test_sdg_map_is_served_from_the_catalogue(client: TestClient) -> None:
+    sdg = client.get("/api/sdg").json()
+    assert {t["id"] for t in sdg["targets"]} == {"4.4", "8.2", "8.5"}
+    assert all(
+        t["url"].startswith("https://sdgs.un.org/") and t["rationale"] for t in sdg["targets"]
+    )
+    assert "declared judgment" in sdg["about"]
+    roles = {r["id"] for r in client.get("/api/roles").json()}
+    assert set(sdg["roles"]) == roles
+    declared = {t["id"] for t in sdg["targets"]}
+    tagged = {
+        t for link in [*sdg["roles"].values(), *sdg["skills"].values()] for t in link["targets"]
+    }
+    assert tagged <= declared

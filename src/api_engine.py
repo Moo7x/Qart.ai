@@ -29,6 +29,7 @@ from src.contract import (
 )
 from src.engine.catalogue import (
     Catalogue,
+    SdgMap,
     checkin_cases_by_skill,
     default_case_index,
     default_catalogue,
@@ -321,6 +322,16 @@ def ingest_run(store: StoreDep, request: IngestRequest | None = None) -> IngestR
 @router.get("/roles")
 def get_roles() -> list[Role]:
     return list(default_catalogue().roles.values())
+
+
+@router.get("/sdg")
+def get_sdg() -> SdgMap:
+    """SDG targets with titles, UN links and rationales, plus the role and skill tags (read-only).
+
+    Served from catalogue/sdg_map.json so the UI never hard-codes goal names; only the targets the
+    catalogue declares exist.
+    """
+    return default_catalogue().sdg
 
 
 @router.get("/recommendations/{user_id}")

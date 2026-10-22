@@ -10,7 +10,7 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict, Field
 
 from src.contract import CaseMode, CompanyAssumptions, Course, Role, Scenario, SkillType
 
@@ -46,6 +46,11 @@ class SdgLink(BaseModel):
 
 
 class SdgMap(BaseModel):
+    # `_about` in the file says the mapping is the team's declared judgment, not external
+    # evidence; the UI shows it, so it is exposed as `about`.
+    model_config = ConfigDict(populate_by_name=True)
+
+    about: str = Field(default="", validation_alias="_about")
     retrieved: str
     targets: list[SdgTarget]
     roles: dict[str, SdgLink]
