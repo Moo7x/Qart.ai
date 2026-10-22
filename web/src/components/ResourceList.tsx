@@ -2,6 +2,9 @@ import { useEffect, useState } from 'react'
 import { getResources } from '../api'
 import type { SearchResponse } from '../types'
 
+const GPU_RETRIES = 4 // a cold start took ~100 s; 4 × 25 s covers it
+const GPU_RETRY_MS = 25000
+
 const KIND_LABELS: Record<string, string> = {
   course: 'course',
   course_candidate: 'course (unreviewed)',
@@ -44,7 +47,26 @@ export function SkillResources({ skillId, k = 3 }: { skillId: string; k?: number
   const [failed, setFailed] = useState(false)
 
   useEffect(() => {
-    getResources(skillId, k).then(setResponse).catch(() => setFailed(true))
+    let cancelled = false
+    let timer: number | undefined
+    // While the GPU worker starts, the server answers with keyword results; ask again a few
+    // times so the list switches to GPU results without a reload.
+    const load = (attempt: number) => {
+      getResources(skillId, k)
+        .then(r => {
+          if (cancelled) return
+          setResponse(r)
+          if (r.engine === 'keyword' && r.note.includes('starting up') && attempt < GPU_RETRIES) {
+            timer = window.setTimeout(() => load(attempt + 1), GPU_RETRY_MS)
+          }
+        })
+        .catch(() => !cancelled && setFailed(true))
+    }
+    load(0)
+    return () => {
+      cancelled = true
+      window.clearTimeout(timer)
+    }
   }, [skillId, k])
 
   if (failed) return <p className="text-xs text-gray-400">Search is not available right now.</p>
