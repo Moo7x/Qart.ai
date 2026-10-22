@@ -65,6 +65,44 @@ def test_post_profile_returns_profile_and_initial_states(client: TestClient) -> 
     assert skill(response.json()["skills"], "fx_conversion").state == "self_reported"
     bad = {**body, "skills_self_reported": [{"skill_id": "juggling", "confidence": 0.5}]}
     assert client.post("/api/profile", json=bad).status_code == 422
+    # A body without preferences (older clients) gets the empty default.
+    assert response.json()["profile"]["preferences"]["tools"] == []
+
+
+PREFERENCES = {
+    "industry": "Finance & accounting",
+    "education": "Diploma",
+    "tools": ["Excel", "SQL"],
+    "direction": "adjacent",
+    "timeframe_months": 6,
+    "formats": ["Hands-on cases"],
+    "ai_comfort": 4,
+    "notes": "Weekends only (synthetic)",
+}
+
+
+def test_profile_preferences_round_trip(client: TestClient) -> None:
+    profile = client.get("/api/profile/u_aina").json()
+    saved = client.post("/api/profile", json={**profile, "preferences": PREFERENCES})
+    assert saved.status_code == 200
+    assert client.get("/api/profile/u_aina").json()["preferences"] == PREFERENCES
+    too_comfortable = {**PREFERENCES, "ai_comfort": 11}
+    bad = client.post("/api/profile", json={**profile, "preferences": too_comfortable})
+    assert bad.status_code == 422
+    unknown_direction = {**PREFERENCES, "direction": "sideways"}
+    bad = client.post("/api/profile", json={**profile, "preferences": unknown_direction})
+    assert bad.status_code == 422
+
+
+def test_preferences_do_not_change_scores_yet(client: TestClient) -> None:
+    # Stored only until the engine is wired to use them; the UI says so.
+    before = client.get("/api/recommendations/u_aina?scenario=assistive").json()
+    profile = client.get("/api/profile/u_aina").json()
+    client.post("/api/profile", json={**profile, "preferences": PREFERENCES})
+    after = client.get("/api/recommendations/u_aina?scenario=assistive").json()
+    assert [(r["role_id"], r["score"]) for r in after["roles"]] == [
+        (r["role_id"], r["score"]) for r in before["roles"]
+    ]
 
 
 def test_roles_snapshots_assumptions_shapes(client: TestClient) -> None:
