@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Qart.ai — SDG impact</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Source+Serif+4:wght@400;500&amp;display=swap">
+<style>
+body{margin:0;background:#F5F4F1}
+a{color:#2B66D1}a:hover{color:#1E4FA8}
+a:focus-visible,button:focus-visible{outline:2px solid #2B66D1;outline-offset:2px}
+</style>
+</helmet>
+<div style="min-height: 100vh; background: #F5F4F1; color: #1F1E1C; font-family: Inter, system-ui, sans-serif; box-sizing: border-box; padding: 56px 16px 96px">
+<div style="max-width: 1040px; margin: 0 auto; display: flex; flex-direction: column; gap: 28px">
+
+<header style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px">
+<a href="Main.dc.html" style="font-weight: 800; font-size: 20px; letter-spacing: -0.02em; color: #1F1E1C; text-decoration: none">Qart<span style="color: #2B66D1">.ai</span></a>
+<nav aria-label="Steps">
+<ol style="list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px">
+<li><a href="Main.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px; border-radius: 999px; font-size: 14px; font-weight: 600; text-decoration: none; color: #1E4FA8; background: #E8F0FC">✓ 1 Profile</a></li>
+<li><a href="Signals.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px; border-radius: 999px; font-size: 14px; font-weight: 600; text-decoration: none; color: #1E4FA8; background: #E8F0FC">✓ 2 Signals</a></li>
+<li><a href="Matches.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px; border-radius: 999px; font-size: 14px; font-weight: 600; text-decoration: none; color: #1E4FA8; background: #E8F0FC">✓ 3 Matches</a></li>
+<li><a href="Pathway.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px; border-radius: 999px; font-size: 14px; font-weight: 600; text-decoration: none; color: #1E4FA8; background: #E8F0FC">✓ 4 Pathway</a></li>
+<li><a href="Impact.dc.html" aria-current="page" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px; border-radius: 999px; font-size: 14px; font-weight: 600; text-decoration: none; color: #FFFFFF; background: #2B66D1">5 SDG impact</a></li>
+<li><a href="Scenarios.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px; border-radius: 999px; font-size: 14px; font-weight: 500; text-decoration: none; color: #4A4742; background: #EAE7E1">6 Scenarios</a></li>
+</ol>
+</nav>
+</header>
+
+<div style="display: flex; flex-direction: column; gap: 14px">
+<h1 style="margin: 0; font-size: clamp(36px, 6vw, 56px); line-height: 1.05; letter-spacing: -0.035em; font-weight: 800">How your path helps the Global Goals</h1>
+<p style="margin: 0; font-family: 'Source Serif 4', Georgia, serif; font-size: 22px; line-height: 1.45; color: #5F5C57; max-width: 720px">Every role and skill in Qart is tagged to the UN Sustainable Development Goals. Here is what your chosen career path contributes to.</p>
+</div>
+
+<!-- Role picker -->
+<div style="display: flex; flex-direction: column; gap: 10px">
+<span style="font-size: 15px; font-weight: 600">Showing goals for</span>
+<div role="group" aria-label="Role" style="display: flex; flex-wrap: wrap; gap: 10px">
+<sc-for list="{{roleTabs}}" as="o" hint-placeholder-count="4">
+<sc-if value="{{o.on}}" hint-placeholder-val="{{ false }}">
+<button type="button" aria-pressed="true" onClick="{{o.pick}}" style="font: inherit; font-size: 15px; font-weight: 600; color: #FFFFFF; background: #2B66D1; border: 0; border-radius: 999px; padding: 0 18px; min-height: 44px; cursor: pointer">{{o.label}}</button>
+</sc-if>
+<sc-if value="{{o.off}}" hint-placeholder-val="{{ true }}">
+<button type="button" aria-pressed="false" onClick="{{o.pick}}" style="font: inherit; font-size: 15px; color: #3F3C38; background: #FFFFFF; border: 1px solid #D5D1CA; border-radius: 999px; padding: 0 18px; min-height: 44px; cursor: pointer">{{o.label}}</button>
+</sc-if>
+</sc-for>
+</div>
+</div>
+
+<!-- Goal cards -->
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px">
+<sc-for list="{{goals}}" as="g" hint-placeholder-count="3">
+<article style="background: #FFFFFF; border: 1px solid #E2DFD9; border-radius: 20px; overflow: hidden; display: flex; flex-direction: column">
+<div style="background: {{g.color}}; color: {{g.ink}}; padding: 20px 24px; display: flex; align-items: center; gap: 16px">
+<span style="font-size: 44px; font-weight: 800; line-height: 1">{{g.n}}</span>
+<span style="font-size: 17px; font-weight: 700; line-height: 1.25">{{g.name}}</span>
+</div>
+<div style="padding: 20px 24px 24px; display: flex; flex-direction: column; gap: 10px">
+<span style="font-size: 13px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: #5F5C57">Target {{g.target}}</span>
+<p style="margin: 0; font-size: 15px; color: #3F3C38; line-height: 1.5">{{g.targetText}}</p>
+<p style="margin: 0; font-size: 15px; line-height: 1.55; border-top: 1px solid #EEECE8; padding-top: 12px"><strong style="font-weight: 700">Your part: </strong>{{g.how}}</p>
+</div>
+</article>
+</sc-for>
+</div>
+
+<!-- Skills mapping -->
+<section aria-labelledby="map-h" style="background: #FFFFFF; border: 1px solid #E2DFD9; border-radius: 20px; padding: 32px 40px; display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<h2 id="map-h" style="margin: 0; font-size: 20px; font-weight: 700">Skills on your pathway, mapped to goals</h2>
+<p style="margin: 0; font-size: 15px; color: #5F5C57">Each skill you build adds to at least one goal.</p>
+</div>
+<div role="table" aria-label="Skill to SDG mapping" style="display: flex; flex-direction: column">
+<div role="row" style="display: grid; grid-template-columns: minmax(160px, 1fr) minmax(0, 2fr); gap: 16px; padding: 10px 0; border-bottom: 1px solid #E2DFD9; font-size: 13px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: #5F5C57">
+<span role="columnheader">Skill</span><span role="columnheader">Goals</span>
+</div>
+<sc-for list="{{skillMap}}" as="s" hint-placeholder-count="6">
+<div role="row" style="display: grid; grid-template-columns: minmax(160px, 1fr) minmax(0, 2fr); gap: 16px; padding: 12px 0; border-bottom: 1px solid #F0EEEA; align-items: center">
+<span role="cell" style="font-size: 15px; font-weight: 600">{{s.skill}}</span>
+<span role="cell" style="display: flex; flex-wrap: wrap; gap: 8px">
+<sc-for list="{{s.tags}}" as="t" hint-placeholder-count="2">
+<span style="display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: #3F3C38; background: #F3F1EE; border-radius: 999px; padding: 6px 12px 6px 8px"><span style="width: 14px; height: 14px; border-radius: 3px; background: {{t.color}}" aria-hidden="true"></span>SDG {{t.n}} · {{t.name}}</span>
+</sc-for>
+</span>
+</div>
+</sc-for>
+</div>
+</section>
+
+<div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap">
+<a href="Pathway.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; font-size: 16px; font-weight: 600; color: #3F3C38; text-decoration: none">← Pathway</a>
+<a href="Scenarios.dc.html" style="display: inline-flex; align-items: center; font-size: 17px; font-weight: 600; color: #FFFFFF; background: #2B66D1; border-radius: 999px; padding: 0 32px; min-height: 52px; text-decoration: none">Explore future scenarios →</a>
+</div>
+
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":1700}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { role: 'fa' };
+  }
+  renderVals() {
+    var self = this;
+    var G = {
+      4: { n: 4, name: 'Quality education', color: '#C5192D', ink: '#FFFFFF', target: '4.4', targetText: 'More youth and adults with relevant skills, including technical skills, for decent jobs.' },
+      8: { n: 8, name: 'Decent work and economic growth', color: '#A21942', ink: '#FFFFFF', target: '8.2', targetText: 'Higher productivity through technological upgrading and innovation.' },
+      9: { n: 9, name: 'Industry, innovation and infrastructure', color: '#FD6925', ink: '#1F1E1C', target: '9.5', targetText: 'Upgrade the technological capabilities of industries.' },
+      12: { n: 12, name: 'Responsible consumption and production', color: '#BF8B2E', ink: '#1F1E1C', target: '12.6', targetText: 'Encourage companies to report sustainability information.' },
+      13: { n: 13, name: 'Climate action', color: '#3F7E44', ink: '#FFFFFF', target: '13.3', targetText: 'Improve awareness and capacity on climate change mitigation.' },
+      16: { n: 16, name: 'Peace, justice and strong institutions', color: '#00689D', ink: '#FFFFFF', target: '16.6', targetText: 'Effective, accountable and transparent institutions.' }
+    };
+    var roles = {
+      fa: { label: 'Finance automation analyst', goals: [[8, 'Automating repetitive month-end work frees teams for higher-value analysis.'], [9, 'You help move finance processes from manual spreadsheets to digital workflows.'], [4, 'Completing this pathway is itself a step up in job-relevant skills.']] },
+      esg: { label: 'ESG reporting analyst', goals: [[12, 'Accurate sustainability disclosures let investors and the public hold companies to account.'], [13, 'Emissions data you check feeds real climate targets.'], [4, 'You gain new, in-demand reporting skills.']] },
+      audit: { label: 'AI audit & controls specialist', goals: [[16, 'Testing AI outputs keeps financial decisions accurate and accountable.'], [9, 'Safe AI adoption depends on people who can check it.'], [4, 'You gain new, in-demand assurance skills.']] },
+      fpa: { label: 'FP&A data analyst', goals: [[8, 'Better forecasts help organisations plan jobs and investment.'], [4, 'You gain new, in-demand analytics skills.']] }
+    };
+    var cur = roles[this.state.role];
+    var goals = cur.goals.map(function (g) {
+      var s = G[g[0]];
+      return { n: s.n, name: s.name, color: s.color, ink: s.ink, target: s.target, targetText: s.targetText, how: g[1] };
+    });
+    var roleTabs = ['fa', 'esg', 'audit', 'fpa'].map(function (id) {
+      var on = self.state.role === id;
+      return { label: roles[id].label, on: on, off: !on, pick: function () { self.setState({ role: id }); } };
+    });
+    var SHORT = { 4: 'Quality education', 8: 'Decent work', 9: 'Industry & innovation', 12: 'Responsible consumption', 13: 'Climate action', 16: 'Strong institutions' };
+    function tag(n) { return { n: n, name: SHORT[n], color: G[n].color }; }
+    var skillMap = [
+      ['Process mapping', [8]], ['Python basics', [9, 4]], ['Power Automate / RPA', [9, 8]],
+      ['Power BI reporting', [16]], ['Controls & reconciliation', [16]], ['Capstone portfolio', [4, 8]]
+    ].map(function (r) { return { skill: r[0], tags: r[1].map(tag) }; });
+    return { goals: goals, roleTabs: roleTabs, skillMap: skillMap };
+  }
+}
+</script>
+</body>
+</html>

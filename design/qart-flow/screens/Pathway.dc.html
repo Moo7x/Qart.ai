@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Qart.ai — Reskilling pathway</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Source+Serif+4:wght@400;500&amp;display=swap">
+<style>
+body{margin:0;background:#F5F4F1}
+a{color:#2B66D1}a:hover{color:#1E4FA8}
+a:focus-visible,button:focus-visible{outline:2px solid #2B66D1;outline-offset:2px}
+</style>
+</helmet>
+<div style="min-height: 100vh; background: #F5F4F1; color: #1F1E1C; font-family: Inter, system-ui, sans-serif; box-sizing: border-box; padding: 56px 16px 96px">
+<div style="max-width: 1040px; margin: 0 auto; display: flex; flex-direction: column; gap: 28px">
+
+<header style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px">
+<a href="Main.dc.html" style="font-weight: 800; font-size: 20px; letter-spacing: -0.02em; color: #1F1E1C; text-decoration: none">Qart<span style="color: #2B66D1">.ai</span></a>
+<nav aria-label="Steps">
+<ol style="list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px">
+<li><a href="Main.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px; border-radius: 999px; font-size: 14px; font-weight: 600; text-decoration: none; color: #1E4FA8; background: #E8F0FC">✓ 1 Profile</a></li>
+<li><a href="Signals.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px; border-radius: 999px; font-size: 14px; font-weight: 600; text-decoration: none; color: #1E4FA8; background: #E8F0FC">✓ 2 Signals</a></li>
+<li><a href="Matches.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px; border-radius: 999px; font-size: 14px; font-weight: 600; text-decoration: none; color: #1E4FA8; background: #E8F0FC">✓ 3 Matches</a></li>
+<li><a href="Pathway.dc.html" aria-current="page" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px; border-radius: 999px; font-size: 14px; font-weight: 600; text-decoration: none; color: #FFFFFF; background: #2B66D1">4 Pathway</a></li>
+<li><a href="Impact.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px; border-radius: 999px; font-size: 14px; font-weight: 500; text-decoration: none; color: #4A4742; background: #EAE7E1">5 SDG impact</a></li>
+<li><a href="Scenarios.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px; border-radius: 999px; font-size: 14px; font-weight: 500; text-decoration: none; color: #4A4742; background: #EAE7E1">6 Scenarios</a></li>
+</ol>
+</nav>
+</header>
+
+<div style="display: flex; flex-direction: column; gap: 14px">
+<span style="font-size: 14px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: #5F5C57">Your pathway to</span>
+<h1 style="margin: 0; font-size: clamp(36px, 6vw, 56px); line-height: 1.05; letter-spacing: -0.035em; font-weight: 800">Finance automation analyst</h1>
+<p style="margin: 0; font-family: 'Source Serif 4', Georgia, serif; font-size: 22px; line-height: 1.45; color: #5F5C57; max-width: 720px">Six steps in order, each closing one gap from your match. Free courses first, with one employer-claimable programme to tie it together.</p>
+</div>
+
+<!-- Summary -->
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px">
+<div style="background: #FFFFFF; border: 1px solid #E2DFD9; border-radius: 18px; padding: 20px 24px; display: flex; flex-direction: column; gap: 4px">
+<span style="font-size: 14px; color: #5F5C57">Total learning time</span>
+<span style="font-size: 32px; font-weight: 800; letter-spacing: -0.02em">{{total}} h</span>
+</div>
+<div style="background: #FFFFFF; border: 1px solid #E2DFD9; border-radius: 18px; padding: 20px 24px; display: flex; flex-direction: column; gap: 4px">
+<span style="font-size: 14px; color: #5F5C57">At {{perWeek}} h a week</span>
+<span style="font-size: 32px; font-weight: 800; letter-spacing: -0.02em">≈ {{weeks}} weeks</span>
+</div>
+<div style="background: #FFFFFF; border: 1px solid #E2DFD9; border-radius: 18px; padding: 20px 24px; display: flex; flex-direction: column; gap: 4px">
+<span style="font-size: 14px; color: #5F5C57">Cost to you</span>
+<span style="font-size: 32px; font-weight: 800; letter-spacing: -0.02em">RM 0*</span>
+</div>
+<div style="background: #FFFFFF; border: 1px solid #E2DFD9; border-radius: 18px; padding: 20px 24px; display: flex; flex-direction: column; gap: 4px">
+<span style="font-size: 14px; color: #5F5C57">Progress</span>
+<span style="font-size: 32px; font-weight: 800; letter-spacing: -0.02em">{{doneCount}} / 6</span>
+</div>
+</div>
+
+<div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap">
+<span style="font-size: 15px; font-weight: 600">Hours per week:</span>
+<sc-for list="{{paces}}" as="o" hint-placeholder-count="4">
+<sc-if value="{{o.on}}" hint-placeholder-val="{{ false }}">
+<button type="button" aria-pressed="true" onClick="{{o.pick}}" style="font: inherit; font-size: 15px; font-weight: 600; color: #1E4FA8; background: #E8F0FC; border: 1px solid #E8F0FC; border-radius: 999px; padding: 0 18px; min-height: 44px; cursor: pointer">{{o.label}} h</button>
+</sc-if>
+<sc-if value="{{o.off}}" hint-placeholder-val="{{ true }}">
+<button type="button" aria-pressed="false" onClick="{{o.pick}}" style="font: inherit; font-size: 15px; color: #3F3C38; background: #FFFFFF; border: 1px solid #D5D1CA; border-radius: 999px; padding: 0 18px; min-height: 44px; cursor: pointer">{{o.label}} h</button>
+</sc-if>
+</sc-for>
+</div>
+
+<!-- Steps -->
+<ol style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 14px">
+<sc-for list="{{modules}}" as="m" hint-placeholder-count="6">
+<li style="background: #FFFFFF; border: 1px solid #E2DFD9; border-radius: 20px; padding: 24px 28px; display: flex; gap: 20px; align-items: flex-start; flex-wrap: wrap">
+<sc-if value="{{m.done}}" hint-placeholder-val="{{ false }}">
+<button type="button" aria-pressed="true" aria-label="Mark step {{m.n}} not done" onClick="{{m.toggle}}" style="width: 44px; height: 44px; flex: none; border-radius: 50%; border: 0; background: #2B66D1; color: #FFFFFF; font: inherit; font-weight: 800; font-size: 18px; cursor: pointer">✓</button>
+</sc-if>
+<sc-if value="{{m.todo}}" hint-placeholder-val="{{ true }}">
+<button type="button" aria-pressed="false" aria-label="Mark step {{m.n}} done" onClick="{{m.toggle}}" style="width: 44px; height: 44px; flex: none; border-radius: 50%; border: 2px solid #D5D1CA; background: #FFFFFF; color: #3F3C38; font: inherit; font-weight: 800; font-size: 18px; cursor: pointer">{{m.n}}</button>
+</sc-if>
+<div style="flex: 1 1 360px; display: flex; flex-direction: column; gap: 8px; min-width: 0">
+<div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap">
+<h2 style="margin: 0; font-size: 19px; font-weight: 700">{{m.title}}</h2>
+<span style="font-size: 13px; font-weight: 600; color: {{m.costColor}}; background: {{m.costBg}}; border-radius: 999px; padding: 4px 10px">{{m.cost}}</span>
+</div>
+<span style="font-size: 15px; color: #3F3C38">{{m.resource}}</span>
+<span style="font-size: 14px; color: #5F5C57">Closes gap: <strong style="font-weight: 600; color: #3F3C38">{{m.closes}}</strong> · SDG {{m.sdg}}</span>
+</div>
+<div style="display: flex; flex-direction: column; align-items: flex-end; gap: 2px; flex: none">
+<span style="font-size: 20px; font-weight: 700; font-variant-numeric: tabular-nums">{{m.hours}} h</span>
+<span style="font-size: 13px; color: #5F5C57">{{m.weeks}}</span>
+</div>
+</li>
+</sc-for>
+</ol>
+
+<div style="background: #FFF7E6; border: 1px solid #F1DDB0; border-radius: 16px; padding: 18px 22px; display: flex; gap: 14px; align-items: flex-start">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8A5A00" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none; margin-top: 2px"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5"></path><path d="M12 16h.01"></path></svg>
+<p style="margin: 0; font-size: 15px; line-height: 1.55; color: #5C3D00">If AI spreads faster (see <a href="Scenarios.dc.html" style="color: #5C3D00; font-weight: 600">Scenarios</a>), move step 3 before step 2: demand for workflow automation is projected to rise first. Timings are estimates based on typical learners.</p>
+</div>
+
+<p style="margin: 0; font-size: 14px; color: #5F5C57; line-height: 1.6">* Free courses cost nothing. HRD Corp-claimable programmes are paid by employers registered with HRD Corp, so there is usually no cost to the employee — check with your HR team. Course and provider details are demo placeholders.</p>
+
+<div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap">
+<a href="Matches.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; font-size: 16px; font-weight: 600; color: #3F3C38; text-decoration: none">← Role matches</a>
+<a href="Impact.dc.html" style="display: inline-flex; align-items: center; font-size: 17px; font-weight: 600; color: #FFFFFF; background: #2B66D1; border-radius: 999px; padding: 0 32px; min-height: 52px; text-decoration: none">See my SDG impact →</a>
+</div>
+
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":2000}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { perWeek: 5, done: [] };
+  }
+  renderVals() {
+    var self = this;
+    var h = this.state.perWeek;
+    var list = [
+      { title: 'Process mapping basics', resource: 'Free online course + Qart worksheet', hours: 8, cost: 'Free', closes: 'Process mapping', sdg: '8' },
+      { title: 'Python for spreadsheet work', resource: 'Kaggle Learn — Python & Pandas courses', hours: 20, cost: 'Free', closes: 'Python basics', sdg: '9' },
+      { title: 'Automate a finance workflow', resource: 'Microsoft Learn — Power Automate modules', hours: 16, cost: 'Free', closes: 'Power Automate / RPA', sdg: '9' },
+      { title: 'Reporting dashboards', resource: 'Microsoft Learn — Power BI learning path', hours: 24, cost: 'Free', closes: 'Power BI', sdg: '16' },
+      { title: 'Intelligent automation in finance', resource: '3-day classroom programme · [Training provider]', hours: 21, cost: 'HRD Corp claimable', closes: 'Applying it at work', sdg: '8' },
+      { title: 'Capstone: automate a month-end reconciliation', resource: 'Qart practice case on synthetic ledger data', hours: 25, cost: 'Free', closes: 'Portfolio evidence', sdg: '4, 8' }
+    ];
+    var cum = 0;
+    var modules = list.map(function (m, i) {
+      var start = Math.floor(cum / h) + 1;
+      cum += m.hours;
+      var end = Math.ceil(cum / h);
+      var isDone = self.state.done.indexOf(i) !== -1;
+      var hrd = m.cost !== 'Free';
+      return {
+        n: i + 1, title: m.title, resource: m.resource, hours: m.hours, cost: m.cost, closes: m.closes, sdg: m.sdg,
+        costColor: hrd ? '#5C3D00' : '#166534', costBg: hrd ? '#FCEFCF' : '#E7F4EA',
+        weeks: start === end ? 'Week ' + start : 'Weeks ' + start + '–' + end,
+        done: isDone, todo: !isDone,
+        toggle: function () {
+          var d = self.state.done;
+          self.setState({ done: isDone ? d.filter(function (x) { return x !== i; }) : d.concat([i]) });
+        }
+      };
+    });
+    var paces = [3, 5, 8, 10].map(function (p) {
+      var on = h === p;
+      return { label: String(p), on: on, off: !on, pick: function () { self.setState({ perWeek: p }); } };
+    });
+    return { modules: modules, paces: paces, total: cum, perWeek: h, weeks: Math.ceil(cum / h), doneCount: this.state.done.length };
+  }
+}
+</script>
+</body>
+</html>

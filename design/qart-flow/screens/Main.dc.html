@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Qart.ai onboarding</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Source+Serif+4:wght@400;500&amp;display=swap">
+<style>
+body{margin:0;background:#F5F4F1}
+a{color:#2B66D1}a:hover{color:#1E4FA8}
+input[type=range]{accent-color:#2B66D1}
+input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-visible{outline:2px solid #2B66D1;outline-offset:2px}
+</style>
+</helmet>
+<div style="min-height: 100vh; background: #F5F4F1; color: #1F1E1C; font-family: Inter, system-ui, sans-serif; box-sizing: border-box; padding: 56px 16px 96px">
+<div style="max-width: 840px; margin: 0 auto; display: flex; flex-direction: column; gap: 28px">
+
+<header style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px">
+<a href="Main.dc.html" style="font-weight: 800; font-size: 20px; letter-spacing: -0.02em; color: #1F1E1C; text-decoration: none">Qart<span style="color: #2B66D1">.ai</span></a>
+<nav aria-label="Steps">
+<ol style="list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px">
+<li><a href="Main.dc.html" aria-current="page" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px; border-radius: 999px; font-size: 14px; font-weight: 600; text-decoration: none; color: #FFFFFF; background: #2B66D1">1 Profile</a></li>
+<li><a href="Signals.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px; border-radius: 999px; font-size: 14px; font-weight: 500; text-decoration: none; color: #4A4742; background: #EAE7E1">2 Signals</a></li>
+<li><a href="Matches.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px; border-radius: 999px; font-size: 14px; font-weight: 500; text-decoration: none; color: #4A4742; background: #EAE7E1">3 Matches</a></li>
+<li><a href="Pathway.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px; border-radius: 999px; font-size: 14px; font-weight: 500; text-decoration: none; color: #4A4742; background: #EAE7E1">4 Pathway</a></li>
+<li><a href="Impact.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px; border-radius: 999px; font-size: 14px; font-weight: 500; text-decoration: none; color: #4A4742; background: #EAE7E1">5 SDG impact</a></li>
+<li><a href="Scenarios.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px; border-radius: 999px; font-size: 14px; font-weight: 500; text-decoration: none; color: #4A4742; background: #EAE7E1">6 Scenarios</a></li>
+</ol>
+</nav>
+</header>
+
+<!-- ============ FORM ============ -->
+<sc-if value="{{onForm}}" hint-placeholder-val="{{ true }}">
+<section style="display: flex; flex-direction: column; gap: 24px">
+<div style="display: flex; flex-direction: column; gap: 16px">
+<h1 style="margin: 0; font-size: clamp(40px, 7vw, 64px); line-height: 1.05; letter-spacing: -0.035em; font-weight: 800">Welcome to <span style="background: #FCEFCF; border-radius: 999px; padding: 0 18px">Qart.ai</span></h1>
+<p style="margin: 0; font-family: 'Source Serif 4', Georgia, serif; font-size: 24px; line-height: 1.45; color: #5F5C57; max-width: 680px">Tell us about your work and what you enjoy. We'll turn it into your personalised reskilling pathway.</p>
+<div><span style="display: inline-block; background: #EAE7E1; color: #4A4742; font-size: 14px; padding: 6px 14px; border-radius: 999px">Synthetic · demo data only</span></div>
+</div>
+
+<!-- About you -->
+<div style="background: #FFFFFF; border: 1px solid #E2DFD9; border-radius: 20px; padding: 32px 40px; display: flex; flex-direction: column; gap: 20px">
+<h2 style="margin: 0; font-size: 20px; font-weight: 700">Where you are now</h2>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px">
+<label style="display: flex; flex-direction: column; gap: 8px; font-size: 15px; font-weight: 600">Your name
+<input type="text" placeholder="e.g. Siti" style="font: inherit; font-weight: 400; font-size: 16px; padding: 12px 14px; border: 1px solid #D5D1CA; border-radius: 10px; min-height: 44px; box-sizing: border-box">
+</label>
+<label style="display: flex; flex-direction: column; gap: 8px; font-size: 15px; font-weight: 600">Current role
+<input type="text" placeholder="e.g. Accounts executive" style="font: inherit; font-weight: 400; font-size: 16px; padding: 12px 14px; border: 1px solid #D5D1CA; border-radius: 10px; min-height: 44px; box-sizing: border-box">
+</label>
+<label style="display: flex; flex-direction: column; gap: 8px; font-size: 15px; font-weight: 600">Industry
+<select style="font: inherit; font-weight: 400; font-size: 16px; padding: 12px 14px; border: 1px solid #D5D1CA; border-radius: 10px; min-height: 44px; background: #FFFFFF; box-sizing: border-box">
+<option value="">Select…</option>
+<option>Finance &amp; accounting</option>
+<option>Banking &amp; insurance</option>
+<option>Retail &amp; e-commerce</option>
+<option>Manufacturing &amp; logistics</option>
+<option>Healthcare</option>
+<option>Public sector</option>
+<option>Technology</option>
+<option>Other</option>
+</select>
+</label>
+<label style="display: flex; flex-direction: column; gap: 8px; font-size: 15px; font-weight: 600">Highest education
+<select style="font: inherit; font-weight: 400; font-size: 16px; padding: 12px 14px; border: 1px solid #D5D1CA; border-radius: 10px; min-height: 44px; background: #FFFFFF; box-sizing: border-box">
+<option value="">Select…</option>
+<option>SPM / secondary school</option>
+<option>Diploma</option>
+<option>Bachelor's degree</option>
+<option>Master's or higher</option>
+<option>Professional certification</option>
+</select>
+</label>
+</div>
+<div style="display: flex; flex-direction: column; gap: 10px">
+<span style="font-size: 15px; font-weight: 600">Years of experience</span>
+<div style="display: flex; flex-wrap: wrap; gap: 10px">
+<sc-for list="{{years}}" as="o" hint-placeholder-count="4">
+<sc-if value="{{o.on}}" hint-placeholder-val="{{ false }}">
+<button type="button" aria-pressed="true" onClick="{{o.pick}}" style="font: inherit; font-size: 16px; font-weight: 500; color: #1E4FA8; background: #E8F0FC; border: 1px solid #E8F0FC; border-radius: 999px; padding: 10px 20px; min-height: 44px; cursor: pointer">✓ {{o.label}}</button>
+</sc-if>
+<sc-if value="{{o.off}}" hint-placeholder-val="{{ true }}">
+<button type="button" aria-pressed="false" onClick="{{o.pick}}" style="font: inherit; font-size: 16px; color: #3F3C38; background: #FFFFFF; border: 1px solid #D5D1CA; border-radius: 999px; padding: 10px 20px; min-height: 44px; cursor: pointer">{{o.label}}</button>
+</sc-if>
+</sc-for>
+</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 10px">
+<span style="font-size: 15px; font-weight: 600">Tools you use today <span style="font-weight: 400; color: #5F5C57">— pick any</span></span>
+<div style="display: flex; flex-wrap: wrap; gap: 10px">
+<sc-for list="{{tools}}" as="o" hint-placeholder-count="7">
+<sc-if value="{{o.on}}" hint-placeholder-val="{{ false }}">
+<button type="button" aria-pressed="true" onClick="{{o.pick}}" style="font: inherit; font-size: 16px; font-weight: 500; color: #1E4FA8; background: #E8F0FC; border: 1px solid #E8F0FC; border-radius: 999px; padding: 10px 20px; min-height: 44px; cursor: pointer">✓ {{o.label}}</button>
+</sc-if>
+<sc-if value="{{o.off}}" hint-placeholder-val="{{ true }}">
+<button type="button" aria-pressed="false" onClick="{{o.pick}}" style="font: inherit; font-size: 16px; color: #3F3C38; background: #FFFFFF; border: 1px solid #D5D1CA; border-radius: 999px; padding: 10px 20px; min-height: 44px; cursor: pointer">{{o.label}}</button>
+</sc-if>
+</sc-for>
+</div>
+</div>
+</div>
+
+<!-- Interests -->
+<div style="background: #FFFFFF; border: 1px solid #E2DFD9; border-radius: 20px; padding: 32px 40px; display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<h2 style="margin: 0; font-size: 20px; font-weight: 700">What do you enjoy?</h2>
+<p style="margin: 0; font-size: 16px; color: #5F5C57">Pick any. They help rank future roles for you.</p>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 10px">
+<sc-for list="{{interests}}" as="o" hint-placeholder-count="8">
+<sc-if value="{{o.on}}" hint-placeholder-val="{{ false }}">
+<button type="button" aria-pressed="true" onClick="{{o.pick}}" style="font: inherit; font-size: 16px; font-weight: 500; color: #1E4FA8; background: #E8F0FC; border: 1px solid #E8F0FC; border-radius: 999px; padding: 10px 20px; min-height: 44px; cursor: pointer">✓ {{o.label}}</button>
+</sc-if>
+<sc-if value="{{o.off}}" hint-placeholder-val="{{ true }}">
+<button type="button" aria-pressed="false" onClick="{{o.pick}}" style="font: inherit; font-size: 16px; color: #3F3C38; background: #FFFFFF; border: 1px solid #D5D1CA; border-radius: 999px; padding: 10px 20px; min-height: 44px; cursor: pointer">{{o.label}}</button>
+</sc-if>
+</sc-for>
+</div>
+</div>
+
+<!-- Direction -->
+<div style="background: #FFFFFF; border: 1px solid #E2DFD9; border-radius: 20px; padding: 32px 40px; display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<h2 style="margin: 0; font-size: 20px; font-weight: 700">Where do you want to go next?</h2>
+<p style="margin: 0; font-size: 16px; color: #5F5C57">Choose the move that fits you best.</p>
+</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px">
+<sc-for list="{{goals}}" as="o" hint-placeholder-count="3">
+<sc-if value="{{o.on}}" hint-placeholder-val="{{ false }}">
+<button type="button" aria-pressed="true" onClick="{{o.pick}}" style="font: inherit; text-align: left; display: flex; flex-direction: column; gap: 6px; background: #EEF3FC; border: 2px solid #2B66D1; border-radius: 14px; padding: 18px 20px; min-height: 44px; cursor: pointer">
+<span style="font-size: 16px; font-weight: 700; color: #1E4FA8">{{o.label}}</span>
+<span style="font-size: 14px; color: #3E5A8A">{{o.hint}}</span>
+</button>
+</sc-if>
+<sc-if value="{{o.off}}" hint-placeholder-val="{{ true }}">
+<button type="button" aria-pressed="false" onClick="{{o.pick}}" style="font: inherit; text-align: left; display: flex; flex-direction: column; gap: 6px; background: #FFFFFF; border: 2px solid #E2DFD9; border-radius: 14px; padding: 18px 20px; min-height: 44px; cursor: pointer">
+<span style="font-size: 16px; font-weight: 700; color: #1F1E1C">{{o.label}}</span>
+<span style="font-size: 14px; color: #5F5C57">{{o.hint}}</span>
+</button>
+</sc-if>
+</sc-for>
+</div>
+<div style="display: flex; flex-direction: column; gap: 10px; padding-top: 8px">
+<span style="font-size: 15px; font-weight: 600">Timeframe</span>
+<div style="display: flex; flex-wrap: wrap; gap: 10px">
+<sc-for list="{{horizons}}" as="o" hint-placeholder-count="3">
+<sc-if value="{{o.on}}" hint-placeholder-val="{{ false }}">
+<button type="button" aria-pressed="true" onClick="{{o.pick}}" style="font: inherit; font-size: 16px; font-weight: 500; color: #1E4FA8; background: #E8F0FC; border: 1px solid #E8F0FC; border-radius: 999px; padding: 10px 20px; min-height: 44px; cursor: pointer">✓ {{o.label}}</button>
+</sc-if>
+<sc-if value="{{o.off}}" hint-placeholder-val="{{ true }}">
+<button type="button" aria-pressed="false" onClick="{{o.pick}}" style="font: inherit; font-size: 16px; color: #3F3C38; background: #FFFFFF; border: 1px solid #D5D1CA; border-radius: 999px; padding: 10px 20px; min-height: 44px; cursor: pointer">{{o.label}}</button>
+</sc-if>
+</sc-for>
+</div>
+</div>
+</div>
+
+<!-- Learning -->
+<div style="background: #FFFFFF; border: 1px solid #E2DFD9; border-radius: 20px; padding: 32px 40px; display: flex; flex-direction: column; gap: 20px">
+<h2 style="margin: 0; font-size: 20px; font-weight: 700">How you learn</h2>
+<label style="display: flex; flex-direction: column; gap: 10px; font-size: 15px; font-weight: 600">
+<span style="display: flex; justify-content: space-between; gap: 12px">Time for learning each week <span style="color: #2B66D1">{{hours}} h</span></span>
+<input type="range" min="1" max="20" step="1" value="{{hours}}" onChange="{{setHours}}" style="width: 100%; min-height: 44px">
+</label>
+<label style="display: flex; flex-direction: column; gap: 10px; font-size: 15px; font-weight: 600">
+<span style="display: flex; justify-content: space-between; gap: 12px">How comfortable are you using AI tools at work? <span style="color: #2B66D1">{{aiComfort}}/10</span></span>
+<input type="range" min="0" max="10" step="1" value="{{aiComfort}}" onChange="{{setAi}}" style="width: 100%; min-height: 44px">
+</label>
+<div style="display: flex; flex-direction: column; gap: 10px">
+<span style="font-size: 15px; font-weight: 600">Preferred format</span>
+<div style="display: flex; flex-wrap: wrap; gap: 10px">
+<sc-for list="{{styles}}" as="o" hint-placeholder-count="4">
+<sc-if value="{{o.on}}" hint-placeholder-val="{{ false }}">
+<button type="button" aria-pressed="true" onClick="{{o.pick}}" style="font: inherit; font-size: 16px; font-weight: 500; color: #1E4FA8; background: #E8F0FC; border: 1px solid #E8F0FC; border-radius: 999px; padding: 10px 20px; min-height: 44px; cursor: pointer">✓ {{o.label}}</button>
+</sc-if>
+<sc-if value="{{o.off}}" hint-placeholder-val="{{ true }}">
+<button type="button" aria-pressed="false" onClick="{{o.pick}}" style="font: inherit; font-size: 16px; color: #3F3C38; background: #FFFFFF; border: 1px solid #D5D1CA; border-radius: 999px; padding: 10px 20px; min-height: 44px; cursor: pointer">{{o.label}}</button>
+</sc-if>
+</sc-for>
+</div>
+</div>
+<label style="display: flex; flex-direction: column; gap: 8px; font-size: 15px; font-weight: 600">Anything else we should know? <span style="font-weight: 400; color: #5F5C57">(optional)</span>
+<textarea rows="3" placeholder="e.g. I want to stay in Kuala Lumpur, I can only study on weekends, I'd like a certificate at the end" style="font: inherit; font-weight: 400; font-size: 16px; padding: 12px 14px; border: 1px solid #D5D1CA; border-radius: 10px; resize: vertical"></textarea>
+</label>
+</div>
+
+<div style="display: flex; justify-content: flex-end">
+<a href="Signals.dc.html" style="display: inline-flex; align-items: center; font-size: 17px; font-weight: 600; color: #FFFFFF; background: #2B66D1; border-radius: 999px; padding: 0 32px; min-height: 52px; text-decoration: none">Build my reskilling pathway →</a>
+</div>
+</section>
+</sc-if>
+
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":1800}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = {
+      done: false,
+      years: '',
+      tools: [],
+      interests: [],
+      goal: '',
+      horizon: '',
+      hours: 5,
+      aiComfort: 5,
+      styles: []
+    };
+  }
+  single(key, options) {
+    var self = this;
+    return options.map(function (o) {
+      var label = typeof o === 'string' ? o : o.label;
+      var on = self.state[key] === label;
+      var item = { label: label, on: on, off: !on, pick: function () { var p = {}; p[key] = label; self.setState(p); } };
+      if (typeof o !== 'string') item.hint = o.hint;
+      return item;
+    });
+  }
+  multi(key, options) {
+    var self = this;
+    return options.map(function (label) {
+      var on = self.state[key].indexOf(label) !== -1;
+      return {
+        label: label, on: on, off: !on,
+        pick: function () {
+          var cur = self.state[key];
+          var next = on ? cur.filter(function (x) { return x !== label; }) : cur.concat([label]);
+          var p = {}; p[key] = next; self.setState(p);
+        }
+      };
+    });
+  }
+  renderVals() {
+    var s = this.state;
+    var self = this;
+    return {
+      onForm: !s.done,
+      onDone: s.done,
+      hours: s.hours,
+      aiComfort: s.aiComfort,
+      setHours: function (e) { self.setState({ hours: Number(e.target.value) }); },
+      setAi: function (e) { self.setState({ aiComfort: Number(e.target.value) }); },
+      years: this.single('years', ['Under 2 years', '2–5 years', '5–10 years', '10+ years']),
+      tools: this.multi('tools', ['Excel', 'SQL', 'Python', 'Power BI / Tableau', 'ERP (SAP, Oracle)', 'AI assistants', 'None of these']),
+      interests: this.multi('interests', ['analysis', 'automation', 'reporting', 'controls', 'data quality', 'forecasting', 'working with people', 'building tools']),
+      goals: this.single('goal', [
+        { label: 'Grow in my current role', hint: 'Add AI and automation skills to the job I do now' },
+        { label: 'Move to a nearby role', hint: 'Use what I know in a new role, e.g. finance → data analyst' },
+        { label: 'Switch to a new field', hint: 'Start fresh in a different area' }
+      ]),
+      horizons: this.single('horizon', ['3 months', '6 months', '12 months']),
+      styles: this.multi('styles', ['Hands-on cases', 'Short videos', 'Reading', 'Mentor sessions'])
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Qart.ai — Future-role matches</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Source+Serif+4:wght@400;500&amp;display=swap">
+<style>
+body{margin:0;background:#F5F4F1}
+a{color:#2B66D1}a:hover{color:#1E4FA8}
+a:focus-visible,button:focus-visible{outline:2px solid #2B66D1;outline-offset:2px}
+</style>
+</helmet>
+<div style="min-height: 100vh; background: #F5F4F1; color: #1F1E1C; font-family: Inter, system-ui, sans-serif; box-sizing: border-box; padding: 56px 16px 96px">
+<div style="max-width: 1040px; margin: 0 auto; display: flex; flex-direction: column; gap: 28px">
+
+<header style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px">
+<a href="Main.dc.html" style="font-weight: 800; font-size: 20px; letter-spacing: -0.02em; color: #1F1E1C; text-decoration: none">Qart<span style="color: #2B66D1">.ai</span></a>
+<nav aria-label="Steps">
+<ol style="list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px">
+<li><a href="Main.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px; border-radius: 999px; font-size: 14px; font-weight: 600; text-decoration: none; color: #1E4FA8; background: #E8F0FC">✓ 1 Profile</a></li>
+<li><a href="Signals.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px; border-radius: 999px; font-size: 14px; font-weight: 600; text-decoration: none; color: #1E4FA8; background: #E8F0FC">✓ 2 Signals</a></li>
+<li><a href="Matches.dc.html" aria-current="page" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px; border-radius: 999px; font-size: 14px; font-weight: 600; text-decoration: none; color: #FFFFFF; background: #2B66D1">3 Matches</a></li>
+<li><a href="Pathway.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px; border-radius: 999px; font-size: 14px; font-weight: 500; text-decoration: none; color: #4A4742; background: #EAE7E1">4 Pathway</a></li>
+<li><a href="Impact.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px; border-radius: 999px; font-size: 14px; font-weight: 500; text-decoration: none; color: #4A4742; background: #EAE7E1">5 SDG impact</a></li>
+<li><a href="Scenarios.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px; border-radius: 999px; font-size: 14px; font-weight: 500; text-decoration: none; color: #4A4742; background: #EAE7E1">6 Scenarios</a></li>
+</ol>
+</nav>
+</header>
+
+<div style="display: flex; flex-direction: column; gap: 14px">
+<h1 style="margin: 0; font-size: clamp(36px, 6vw, 56px); line-height: 1.05; letter-spacing: -0.035em; font-weight: 800">Your best-fit future roles, Siti</h1>
+<p style="margin: 0; font-family: 'Source Serif 4', Georgia, serif; font-size: 22px; line-height: 1.45; color: #5F5C57; max-width: 720px">Ranked by how well your skills, interests and the market line up. Open any role to see exactly how its score was built.</p>
+</div>
+
+<!-- Scenario switch -->
+<div style="background: #FFFFFF; border: 1px solid #E2DFD9; border-radius: 18px; padding: 20px 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px">
+<div style="display: flex; flex-direction: column; gap: 4px">
+<span style="font-size: 16px; font-weight: 700">Scenario</span>
+<span style="font-size: 14px; color: #5F5C57">Scores are estimates. Switch to see how they move if AI spreads faster.</span>
+</div>
+<div role="group" aria-label="AI disruption scenario" style="display: flex; background: #F3F1EE; border-radius: 999px; padding: 4px; gap: 4px">
+<sc-for list="{{scenarios}}" as="o" hint-placeholder-count="2">
+<sc-if value="{{o.on}}" hint-placeholder-val="{{ false }}">
+<button type="button" aria-pressed="true" onClick="{{o.pick}}" style="font: inherit; font-size: 15px; font-weight: 600; color: #FFFFFF; background: #2B66D1; border: 0; border-radius: 999px; padding: 0 18px; min-height: 44px; cursor: pointer">{{o.label}}</button>
+</sc-if>
+<sc-if value="{{o.off}}" hint-placeholder-val="{{ true }}">
+<button type="button" aria-pressed="false" onClick="{{o.pick}}" style="font: inherit; font-size: 15px; font-weight: 500; color: #3F3C38; background: transparent; border: 0; border-radius: 999px; padding: 0 18px; min-height: 44px; cursor: pointer">{{o.label}}</button>
+</sc-if>
+</sc-for>
+</div>
+</div>
+
+<!-- Role cards -->
+<ol style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 16px">
+<sc-for list="{{roles}}" as="r" hint-placeholder-count="4">
+<li style="background: #FFFFFF; border: 1px solid #E2DFD9; border-radius: 20px; padding: 28px 32px; display: flex; flex-direction: column; gap: 20px">
+<div style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap">
+<span style="width: 44px; height: 44px; border-radius: 50%; background: #F3F1EE; display: inline-flex; align-items: center; justify-content: center; font-weight: 800; font-size: 18px; flex: none">{{r.rank}}</span>
+<div style="flex: 1 1 260px; display: flex; flex-direction: column; gap: 4px; min-width: 0">
+<h2 style="margin: 0; font-size: 22px; font-weight: 700">{{r.title}}</h2>
+<p style="margin: 0; font-size: 15px; color: #5F5C57; line-height: 1.5">{{r.blurb}}</p>
+</div>
+<div style="display: flex; flex-direction: column; align-items: flex-end; gap: 2px; flex: none">
+<span style="font-size: 40px; font-weight: 800; letter-spacing: -0.03em; color: #1E4FA8; font-variant-numeric: tabular-nums">{{r.score}}<span style="font-size: 18px; font-weight: 600; color: #5F5C57">/100</span></span>
+<span style="font-size: 13px; color: #5F5C57">estimate · ±{{r.band}}</span>
+</div>
+</div>
+
+<div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center">
+<sc-for list="{{r.sdgs}}" as="g" hint-placeholder-count="2">
+<span style="display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: #3F3C38; background: #F3F1EE; border-radius: 999px; padding: 6px 12px 6px 8px"><span style="width: 14px; height: 14px; border-radius: 3px; background: {{g.color}}" aria-hidden="true"></span>SDG {{g.n}} · {{g.name}}</span>
+</sc-for>
+<span style="flex: 1 1 auto"></span>
+<button type="button" aria-expanded="{{r.openAttr}}" onClick="{{r.toggle}}" style="font: inherit; font-size: 15px; font-weight: 600; color: #2B66D1; background: none; border: 1px solid #C7D8F5; border-radius: 999px; padding: 0 16px; min-height: 44px; cursor: pointer">{{r.toggleLabel}}</button>
+</div>
+
+<sc-if value="{{r.open}}" hint-placeholder-val="{{ false }}">
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 28px; border-top: 1px solid #EEECE8; padding-top: 20px">
+<div style="display: flex; flex-direction: column; gap: 14px">
+<h3 style="margin: 0; font-size: 16px; font-weight: 700">Why this score</h3>
+<sc-for list="{{r.parts}}" as="p" hint-placeholder-count="4">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<div style="display: flex; justify-content: space-between; gap: 12px; font-size: 14px">
+<span style="font-weight: 600">{{p.label}}</span>
+<span style="font-variant-numeric: tabular-nums; color: #3F3C38">{{p.pts}} / {{p.max}}</span>
+</div>
+<span style="display: block; height: 10px; background: #F3F1EE; border-radius: 5px">
+<span style="display: block; height: 10px; border-radius: 5px; background: #2B66D1; width: {{p.pct}}%"></span>
+</span>
+<span style="font-size: 13px; color: #5F5C57">{{p.note}}</span>
+</div>
+</sc-for>
+</div>
+<div style="display: flex; flex-direction: column; gap: 14px">
+<h3 style="margin: 0; font-size: 16px; font-weight: 700">Your skills gap</h3>
+<div style="display: flex; flex-direction: column; gap: 8px">
+<span style="font-size: 14px; color: #5F5C57">You already have</span>
+<div style="display: flex; flex-wrap: wrap; gap: 8px">
+<sc-for list="{{r.have}}" as="h" hint-placeholder-count="3">
+<span style="font-size: 14px; font-weight: 500; color: #166534; background: #E7F4EA; border-radius: 999px; padding: 6px 12px">✓ {{h}}</span>
+</sc-for>
+</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 8px">
+<span style="font-size: 14px; color: #5F5C57">To learn</span>
+<div style="display: flex; flex-wrap: wrap; gap: 8px">
+<sc-for list="{{r.learn}}" as="l" hint-placeholder-count="3">
+<span style="font-size: 14px; font-weight: 500; color: #3F3C38; background: #FFFFFF; border: 1px dashed #B8B2A8; border-radius: 999px; padding: 5px 12px">{{l}}</span>
+</sc-for>
+</div>
+</div>
+<span style="font-size: 14px; color: #3F3C38">Estimated learning time: <strong>{{r.hours}} hours</strong></span>
+<div><a href="Pathway.dc.html" style="display: inline-flex; align-items: center; font-size: 15px; font-weight: 600; color: #FFFFFF; background: #2B66D1; border-radius: 999px; padding: 0 22px; min-height: 44px; text-decoration: none">Build this pathway →</a></div>
+</div>
+</div>
+</sc-if>
+</li>
+</sc-for>
+</ol>
+
+<p style="margin: 0; font-size: 14px; color: #5F5C57; line-height: 1.6; max-width: 760px">How scores work: skills overlap (40 pts) compares your profile with the role's skills; interests (20) uses what you said you enjoy; market demand (25) comes from the job-postings and research signals for the selected scenario; time to transition (15) rewards smaller gaps. All figures are synthetic demo values.</p>
+
+<div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap">
+<a href="Signals.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; font-size: 16px; font-weight: 600; color: #3F3C38; text-decoration: none">← Market signals</a>
+<a href="Pathway.dc.html" style="display: inline-flex; align-items: center; font-size: 17px; font-weight: 600; color: #FFFFFF; background: #2B66D1; border-radius: 999px; padding: 0 32px; min-height: 52px; text-decoration: none">See my pathway →</a>
+</div>
+
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":2000}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { scenario: 'moderate', open: 'fa' };
+  }
+  renderVals() {
+    var self = this;
+    var sc = this.state.scenario;
+    var SDG = {
+      8: { n: 8, name: 'Decent work', color: '#A21942' },
+      9: { n: 9, name: 'Industry & innovation', color: '#FD6925' },
+      12: { n: 12, name: 'Responsible consumption', color: '#BF8B2E' },
+      13: { n: 13, name: 'Climate action', color: '#3F7E44' },
+      16: { n: 16, name: 'Strong institutions', color: '#00689D' }
+    };
+    var data = [
+      { id: 'fa', title: 'Finance automation analyst', blurb: 'Redesign month-end and reconciliation work so software does the repetitive parts.',
+        skills: 34, interests: 18, demand: { moderate: 22, fast: 24 }, time: 9, band: 5, hours: 114, sdgs: [8, 9],
+        have: ['Reconcile to source', 'Excel', 'Reporting', 'Controls'], learn: ['Process mapping', 'Python basics', 'Power Automate / RPA', 'Power BI'] },
+      { id: 'esg', title: 'ESG reporting analyst', blurb: 'Collect, check and report sustainability data for company disclosures.',
+        skills: 27, interests: 16, demand: { moderate: 20, fast: 21 }, time: 10, band: 6, hours: 96, sdgs: [12, 13],
+        have: ['Reporting', 'Reconcile to source', 'Data quality'], learn: ['ESG frameworks basics', 'Carbon accounting', 'Data validation tools'] },
+      { id: 'audit', title: 'AI audit & controls specialist', blurb: 'Test whether AI outputs in finance are accurate, fair and well controlled.',
+        skills: 28, interests: 17, demand: { moderate: 19, fast: 24 }, time: 8, band: 8, hours: 130, sdgs: [16, 9],
+        have: ['Controls', 'Escalation judgment', 'Duplicate detection'], learn: ['AI risk frameworks', 'AI output review', 'Data lineage'] },
+      { id: 'fpa', title: 'FP&A data analyst', blurb: 'Build forecasts and dashboards that guide budget decisions.',
+        skills: 25, interests: 12, demand: { moderate: 18, fast: 15 }, time: 9, band: 7, hours: 120, sdgs: [8],
+        have: ['Excel', 'Reporting'], learn: ['SQL', 'Forecasting models', 'Power BI'] }
+    ];
+    var notes = {
+      skills: 'Overlap between your profile and the role’s core skills',
+      interests: 'Matches what you said you enjoy',
+      demand: sc === 'fast' ? 'Job-posting trend under fast AI disruption' : 'Job-posting trend under moderate AI disruption',
+      time: 'Smaller skills gap = faster move'
+    };
+    var roles = data.map(function (d) {
+      var dem = d.demand[sc];
+      var score = d.skills + d.interests + dem + d.time;
+      var isOpen = self.state.open === d.id;
+      return {
+        id: d.id, title: d.title, blurb: d.blurb, score: score, band: d.band, hours: d.hours,
+        have: d.have, learn: d.learn,
+        sdgs: d.sdgs.map(function (n) { return SDG[n]; }),
+        open: isOpen, openAttr: isOpen ? 'true' : 'false',
+        toggleLabel: isOpen ? 'Hide details' : 'Why this score',
+        toggle: function () { self.setState({ open: isOpen ? '' : d.id }); },
+        parts: [
+          { label: 'Skills overlap', pts: d.skills, max: 40, pct: Math.round(d.skills / 40 * 100), note: notes.skills },
+          { label: 'Interests', pts: d.interests, max: 20, pct: Math.round(d.interests / 20 * 100), note: notes.interests },
+          { label: 'Market demand', pts: dem, max: 25, pct: Math.round(dem / 25 * 100), note: notes.demand },
+          { label: 'Time to transition', pts: d.time, max: 15, pct: Math.round(d.time / 15 * 100), note: notes.time }
+        ]
+      };
+    }).sort(function (a, b) { return b.score - a.score; });
+    roles.forEach(function (r, i) { r.rank = i + 1; });
+    var scenarios = [['moderate', 'Moderate AI disruption'], ['fast', 'Fast AI disruption']].map(function (o) {
+      var on = sc === o[0];
+      return { label: o[1], on: on, off: !on, pick: function () { self.setState({ scenario: o[0] }); } };
+    });
+    return { roles: roles, scenarios: scenarios };
+  }
+}
+</script>
+</body>
+</html>
