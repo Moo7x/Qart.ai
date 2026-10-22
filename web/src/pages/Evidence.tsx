@@ -9,8 +9,15 @@ const ALLOCATIONS: { value: Allocation; label: string }[] = [
 ]
 const SCENARIOS: Scenario[] = ['assistive', 'agentic']
 
+// AEI values are already percentages: usage_pct 0.30 = 0.30 % of the geography's conversations.
+const METRICS: Record<string, string> = {
+  usage_pct: 'share of AI conversations',
+  automation_pct: 'automation share',
+  augmentation_pct: 'augmentation share',
+}
+
 function pct(value: number | null): string {
-  return value === null ? '–' : `${(value * 100).toFixed(1)}%`
+  return value === null ? '–' : `${value.toFixed(2)}%`
 }
 
 export default function Evidence() {
@@ -111,7 +118,7 @@ export default function Evidence() {
               <tbody>
                 {diff.changes.filter(c => c.significant).map((c, i) => (
                   <tr key={i} className="border-t border-gray-100">
-                    <td className="py-1 text-gray-700">{c.entity} · {c.metric}{c.geo ? ` · ${c.geo}` : ''}</td>
+                    <td className="py-1 text-gray-700">{c.entity} · {METRICS[c.metric] ?? c.metric}{c.geo ? ` · ${c.geo}` : ''}</td>
                     <td>{pct(c.before)}</td>
                     <td>{pct(c.after)}</td>
                     <td className="font-medium">{c.relative_change === null ? '–' : `${(c.relative_change * 100).toFixed(0)}%`}</td>
