@@ -1,6 +1,6 @@
 # Qart.ai
 
-> From "who I am today" to "where I can be in the AI era", for people in Malaysia. Qart.ai keeps collecting dated public evidence on AI and the job market, turns it into task-level change and skill forecasts under more than one scenario, ranks real future roles with an explainable fit score and skills gap, and builds a reskilling pathway where every role, skill and step is tied to an SDG target. A visible on-screen agent opens the evidence, courses and job openings for you; you make the decisions.
+> From "who I am today" to "where I can be in the AI era", for people in Malaysia. Qart.ai keeps collecting dated public evidence on AI and the job market, turns it into task-level change and skill forecasts under more than one scenario, ranks real future roles with an explainable fit score and skills gap, and builds a reskilling pathway where every role, skill and step is tied to an SDG target. You make the decisions.
 
 ---
 
@@ -36,7 +36,7 @@ AI is changing which jobs exist faster than training programmes and skills frame
 
 ### Solution
 
-A continuous intelligence loop and a field-aware research agent collect dated evidence from public sources (DOSM labour statistics and job-ad insights, TalentCorp's GBS role study, the Anthropic Economic Index, taxonomies such as O*NET and ESCO). Code, not the language model, turns that evidence into:
+A scheduled intelligence pipeline collects dated evidence from registered public sources (DOSM labour statistics and job-ad insights, TalentCorp's GBS role study, the Anthropic Economic Index, taxonomies such as O*NET and ESCO). Code, not the language model, turns that evidence into:
 
 1. task-level change for each role, keeping observed AI use, reported deployment, potential exposure and expert impact separate;
 2. skill emphasis under two scenarios (moderate and fast AI adoption), labelled as estimates, with essential skills never lowered;
@@ -51,7 +51,7 @@ Working adults at risk of displacement, fresh graduates and students (also throu
 
 ### Status
 
-This branch is being rebuilt slice by slice to the design in [`docs/PLAN.md`](docs/PLAN.md). What works today: the app skeleton (`/api/health`) and the browser spikes for the on-screen agent (`/spikes/tabs.html`, `/spikes/speech.html`). Each slice adds a working, tested part of the journey.
+This branch is being rebuilt slice by slice to the design in [`docs/PLAN.md`](docs/PLAN.md). What works today: the app skeleton (`/api/health`) and two browser spikes (`/spikes/tabs.html`, `/spikes/speech.html`). Each slice adds a working, tested part of the journey.
 
 ### Tech Stack
 
@@ -60,7 +60,7 @@ This branch is being rebuilt slice by slice to the design in [`docs/PLAN.md`](do
 | Frontend      | React 19, TypeScript, Vite, Tailwind CSS |
 | Backend       | Python 3.12, FastAPI, Pydantic, SQLAlchemy Core |
 | Database      | SQLite locally; PostgreSQL on Replit (`DATABASE_URL`) |
-| AI / Compute  | OpenAI gpt-4o-mini (extraction, explanations, research agent, on-screen agent); RunPod Serverless GPU hosting BAAI/bge-m3 and bge-reranker-v2-m3 (skill mapping) |
+| AI / Compute  | OpenAI gpt-4o-mini (CV extraction, plain-language explanations); RunPod Serverless GPU hosting BAAI/bge-m3 and bge-reranker-v2-m3 (skill mapping) |
 | Hosting / Dev | Replit (app, database, scheduled pipeline runs) |
 
 All libraries, datasets and models, with licences, are listed in [`docs/DECLARATION_LOG.md`](docs/DECLARATION_LOG.md).
