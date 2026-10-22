@@ -1,12 +1,71 @@
 @import "tailwindcss";
 
+/* Design tokens from the qart-design-system skill (.claude/skills/qart-design-system).
+   Text/background pairs were checked against WCAG AA; see the skill for the ratios. */
+@theme {
+  /* Surfaces */
+  --color-canvas: #f6f5f4;
+  --color-surface: #ffffff;
+  --color-linen: #efedea;
+  --color-hairline: rgb(0 0 0 / 0.08);
+  --color-hairline-strong: rgb(0 0 0 / 0.16);
+
+  /* Text */
+  --color-ink: #1f1e1d;
+  --color-graphite: #615d59;
+  --color-stone: #757575; /* white surfaces only: 4.23 on canvas fails AA */
+
+  /* Action: the only filled button colour */
+  --color-action: #0075de;
+  --color-action-hover: #005bab;
+  --color-action-tint: #e6f3fe;
+  --color-action-ink: #005bab; /* #0075de on the tint is only 4.05 */
+
+  /* Accent tints: pills, tags and card fills, never buttons */
+  --color-marigold: #ffb110;
+  --color-marigold-tint: #fff1d1;
+  --color-marigold-ink: #7a4d00;
+  --color-coral: #f64932;
+  --color-coral-tint: #feeae6;
+  --color-coral-ink: #a3200f;
+  --color-mocha: #b18164;
+  --color-mocha-tint: #f4ece6;
+  --color-mocha-ink: #6b4a35;
+  --color-midnight: #02093a;
+
+  /* Type */
+  --font-sans: "Switzer", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Source Serif 4", ui-serif, Georgia, serif;
+
+  /* Shape */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+
+  /* Elevation: sticky nav and floating popovers only, never cards */
+  --shadow-nav: 0 0.7px 1.5px rgb(0 0 0 / 0.015), 0 3px 9px rgb(0 0 0 / 0.03);
+  --shadow-pop: 0 4px 12px rgb(0 0 0 / 0.1);
+}
+
 body {
   margin: 0;
-  font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
-  background: #f9fafb;
-  color: #111827;
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
 }
 
 #root {
   min-height: 100svh;
+}
+
+/* One focus style for every interactive element */
+:where(a, button, input, select, textarea, summary):focus-visible {
+  outline: 2px solid var(--color-action);
+  outline-offset: 2px;
+}
+
+input[type="range"],
+input[type="checkbox"] {
+  accent-color: var(--color-action);
 }
