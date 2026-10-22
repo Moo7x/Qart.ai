@@ -1,121 +1,94 @@
 import { useEffect, useState } from 'react'
+import { ChevronDown, ChevronUp, CircleCheck, CircleDot, CircleX, Flag, Info, type LucideIcon } from 'lucide-react'
 import { getSkills } from '../api'
 import type { SkillState } from '../types'
-import { SKILL_NAMES } from '../skillNames'
+import { skillName } from '../skillNames'
+import { btn, Card, EmptyState, label, Loading, PageHeader, StatePill, Tag, type Tone } from '../ui'
 
-const STATE_COLORS: Record<string, string> = {
-  demonstrated_independently: 'bg-green-100 text-green-800 border-green-200',
-  observed_with_help: 'bg-blue-100 text-blue-800 border-blue-200',
-  self_reported: 'bg-amber-100 text-amber-700 border-amber-200',
-  insufficient_evidence: 'bg-gray-100 text-gray-500 border-gray-200',
+const OUTCOMES: Record<string, { icon: LucideIcon; label: string; tone: Tone }> = {
+  success: { icon: CircleCheck, label: 'Found it', tone: 'action' },
+  missed_then_found: { icon: CircleDot, label: 'Missed, then found', tone: 'marigold' },
+  failure: { icon: CircleX, label: 'Missed', tone: 'coral' },
 }
 
-const STATE_LABELS: Record<string, string> = {
-  demonstrated_independently: 'Demonstrated independently',
-  observed_with_help: 'Observed with help',
-  self_reported: 'Self-reported',
-  insufficient_evidence: 'Insufficient evidence',
-}
-
-const OUTCOME_ICONS: Record<string, { icon: string; label: string; color: string; badge: string }> = {
-  success: { icon: '✓', label: 'success', color: 'text-green-600', badge: 'bg-green-100 text-green-700 border-green-200' },
-  missed_then_found: { icon: '◑', label: 'missed, then found', color: 'text-purple-600', badge: 'bg-purple-100 text-purple-700 border-purple-200' },
-  failure: { icon: '✗', label: 'missed', color: 'text-red-600', badge: 'bg-red-100 text-red-700 border-red-200' },
-}
-
-
-function HelpBadge({ level }: { level: number }) {
-  const labels = ['no help', 'question', 'hint', 'explanation', 'answer shown']
-  const colors = ['bg-green-100 text-green-700', 'bg-blue-100 text-blue-700', 'bg-amber-100 text-amber-700', 'bg-orange-100 text-orange-700', 'bg-red-100 text-red-700']
-  return (
-    <span className={`text-xs px-1.5 py-0.5 rounded font-medium ${colors[level] ?? colors[0]}`}>
-      {labels[level] ?? 'unknown'}
-    </span>
-  )
-}
+// help_level 0..4 from the contract; recorded as evidence, not a penalty, so one neutral tone.
+const HELP_LABELS = ['No help', 'Question', 'Hint', 'Explanation', 'Answer shown']
 
 function SkillCard({ skill }: { skill: SkillState }) {
   const [expanded, setExpanded] = useState(false)
   const [flagged, setFlagged] = useState(false)
+  const trailId = `trail-${skill.skill_id}`
 
   return (
-    <div className={`rounded-xl border p-4 bg-white ${STATE_COLORS[skill.state].split(' ').slice(2).join(' ')}`}>
-      <div className="flex items-start justify-between gap-2">
-        <div className="flex-1">
+    <Card className="p-5">
+      <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
+        <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="font-medium text-gray-900">
-              {SKILL_NAMES[skill.skill_id] ?? skill.skill_id.replace(/_/g, ' ')}
-            </span>
-            <span className={`text-xs px-2 py-0.5 rounded-full font-medium border ${STATE_COLORS[skill.state]}`}>
-              {STATE_LABELS[skill.state]}
-            </span>
+            <span className="font-semibold text-ink">{skillName(skill.skill_id)}</span>
+            <StatePill state={skill.state} />
           </div>
-          <p className="text-sm text-gray-600 mt-1">{skill.why}</p>
+          <p className="text-sm text-graphite mt-1.5">{skill.why}</p>
           {skill.next_to_confirm && (
-            <p className="text-xs text-indigo-600 mt-1">Next: {skill.next_to_confirm}</p>
+            <p className="text-sm text-action-ink mt-1">Next: {skill.next_to_confirm}</p>
           )}
         </div>
-        <div className="flex items-center gap-2 shrink-0">
-          {/* Reality gauge: self-rating label only, no percentage */}
+        <div className="flex items-center gap-3 shrink-0">
+          {/* Self-rating only, never a mastery percentage */}
           {skill.self_confidence != null && (
             <div className="text-right">
-              <div className="text-xs text-gray-400">Self-rating</div>
-              <div className="text-sm font-medium text-gray-600">
-                {Math.round(skill.self_confidence * 10)}/10
-              </div>
+              <div className="text-xs text-stone">Your rating</div>
+              <div className="text-sm font-medium text-ink tabular-nums">{Math.round(skill.self_confidence * 10)}/10</div>
             </div>
           )}
-          <button
-            onClick={() => setExpanded(e => !e)}
-            className="text-xs text-gray-400 hover:text-gray-600 px-2 py-1 rounded hover:bg-gray-100"
-          >
-            {expanded ? '▲ hide' : '▼ trail'}
+          <button onClick={() => setExpanded(e => !e)} aria-expanded={expanded} aria-controls={trailId} className={`${btn.text} px-2 py-1 text-xs`}>
+            {expanded ? <>Hide <ChevronUp size={14} aria-hidden="true" /></> : <>Evidence <ChevronDown size={14} aria-hidden="true" /></>}
           </button>
         </div>
       </div>
 
       {expanded && (
-        <div className="mt-3 border-t border-gray-100 pt-3 space-y-2">
-          <div className="text-xs font-medium text-gray-500 uppercase tracking-wide">Evidence trail</div>
+        <div id={trailId} className="mt-4 border-t border-hairline pt-4 space-y-2">
+          <div className={label}>Evidence trail</div>
           {skill.evidence_trail.length === 0 ? (
-            <p className="text-xs text-gray-400">No cases yet.</p>
+            <p className="text-sm text-stone">No cases yet.</p>
           ) : (
-            skill.evidence_trail.map((item, i) => {
-              const o = OUTCOME_ICONS[item.outcome] ?? OUTCOME_ICONS.failure
-              const counted = item.counted !== false
-              return (
-                <div key={i} className={`flex items-center gap-2 text-xs flex-wrap ${!counted ? 'opacity-50' : ''}`}>
-                  <span className="text-gray-700 font-medium">{item.case_id}</span>
-                  <span className={`px-1.5 py-0.5 rounded border font-medium ${o.badge}`}>{o.icon} {o.label}</span>
-                  <HelpBadge level={item.help_level} />
-                  {!counted && <span className="text-gray-400 italic">(not counted)</span>}
-                  {item.note && <span className="text-gray-400 italic">{item.note}</span>}
-                </div>
-              )
-            })
+            <ul className="space-y-2">
+              {skill.evidence_trail.map((item, i) => {
+                const o = OUTCOMES[item.outcome] ?? OUTCOMES.failure
+                const counted = item.counted !== false
+                return (
+                  <li key={i} className={`flex items-center gap-2 text-sm flex-wrap ${!counted ? 'opacity-60' : ''}`}>
+                    <span className="text-ink font-medium tabular-nums">{item.case_id}</span>
+                    <Tag tone={o.tone} icon={o.icon}>{o.label}</Tag>
+                    <Tag tone="linen">{HELP_LABELS[item.help_level] ?? 'Unknown help'}</Tag>
+                    {!counted && <span className="text-stone italic text-xs">not counted</span>}
+                    {item.note && <span className="text-stone italic text-xs">{item.note}</span>}
+                  </li>
+                )
+              })}
+            </ul>
           )}
-          <div className="text-xs text-gray-400 pt-1">
+          <p className="text-xs text-stone pt-1 tabular-nums">
             {skill.counted_events} counted event{skill.counted_events !== 1 ? 's' : ''} ·{' '}
-            {skill.independent_successes} independent success{skill.independent_successes !== 1 ? 'es' : ''}
-          </div>
+            {skill.independent_successes} success{skill.independent_successes !== 1 ? 'es' : ''} on your own
+          </p>
 
-          {/* Flag button */}
-          <div className="pt-2 border-t border-gray-100">
+          <div className="pt-3 border-t border-hairline">
             <button
               onClick={() => setFlagged(f => !f)}
-              className={`text-xs px-3 py-1 rounded border transition-colors ${flagged ? 'bg-amber-50 border-amber-300 text-amber-700' : 'border-gray-200 text-gray-500 hover:bg-gray-50'}`}
+              aria-pressed={flagged}
+              className={`inline-flex items-center gap-1.5 text-xs rounded-sm px-2.5 py-1 transition-colors duration-200 ${flagged ? 'bg-marigold-tint text-marigold-ink' : 'border border-hairline-strong text-graphite hover:bg-linen'}`}
             >
-              {flagged ? '⚑ Flagged as unclear' : '⚑ Flag as companion error / unclear case'}
+              <Flag size={12} aria-hidden="true" />
+              {flagged ? 'Flagged as unclear' : 'Flag a companion error or unclear case'}
             </button>
             {flagged && (
-              <p className="text-xs text-amber-600 mt-1">
-                Flagged events don't count toward or against this skill. A senior will review.
-              </p>
+              <p className="text-xs text-marigold-ink mt-1.5">Flagged events count neither for nor against this skill. A senior will review it.</p>
             )}
           </div>
         </div>
       )}
-    </div>
+    </Card>
   )
 }
 
@@ -127,28 +100,25 @@ export default function MySkills() {
     getSkills('u_aina').then(s => { setSkills(s); setLoading(false) })
   }, [])
 
-  if (loading) return <div className="text-gray-400 text-center py-12">Loading…</div>
+  if (loading) return <Loading what="your skills" />
 
   return (
     <div className="max-w-3xl mx-auto space-y-4">
-      <div className="flex items-center justify-between">
-        <h1 className="text-xl font-semibold text-gray-900">My skills</h1>
-        <span className="text-xs text-gray-400">Evidence states, not scores</span>
+      <PageHeader title="My skills" intro="What your work has shown so far, and why each state changed." aside={<Tag tone="linen">Evidence states, not scores</Tag>} />
+
+      <div className="bg-action-tint rounded-lg p-4 text-sm text-action-ink flex gap-3">
+        <Info size={20} className="shrink-0" aria-hidden="true" />
+        <p>
+          States come from what you did in cases, never a percentage. <strong>Shown on your own</strong> needs at least 2 no-help
+          successes (one a check-in) on different cases in separate sessions. Help you asked for is recorded as evidence, not a penalty.
+        </p>
       </div>
 
-      <div className="bg-indigo-50 border border-indigo-100 rounded-xl p-4 text-sm text-indigo-800">
-        <strong>How this works:</strong> States are based on what you've done in cases, not a percentage.
-        "Demonstrated independently" requires ≥2 no-help successes (including a check-in) on different cases in separate sessions.
-        Help level is recorded as evidence, not a penalty.
-      </div>
-
-      <div className="space-y-3">
-        {skills.map(s => <SkillCard key={s.skill_id} skill={s} />)}
-      </div>
-
-      {skills.length === 0 && (
-        <div className="text-center text-gray-400 py-12">
-          Complete a case to see your skill evidence here.
+      {skills.length === 0 ? (
+        <EmptyState title="No skill evidence yet">Complete a case and your skills appear here.</EmptyState>
+      ) : (
+        <div className="space-y-3">
+          {skills.map(s => <SkillCard key={s.skill_id} skill={s} />)}
         </div>
       )}
     </div>
