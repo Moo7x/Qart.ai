@@ -44,6 +44,38 @@ def test_incomplete_or_rejected_jobs_raise() -> None:
         RunPodClient(ENV, fake_runpod({"error": "bad input"})).run({"task": "embed"})
 
 
+def test_a_cold_start_is_polled_until_the_job_completes() -> None:
+    calls: list[str] = []
+
+    def respond(request: httpx.Request) -> httpx.Response:
+        calls.append(request.url.path)
+        if request.url.path.endswith("/runsync"):
+            return httpx.Response(200, json={"id": "job1", "status": "IN_QUEUE"})
+        if len(calls) < 3:
+            return httpx.Response(200, json={"id": "job1", "status": "IN_PROGRESS"})
+        return httpx.Response(200, json={"status": "COMPLETED", "output": {"vectors": [[1.0]]}})
+
+    waits: list[float] = []
+    client = RunPodClient(ENV, httpx.MockTransport(respond), sleep=waits.append)
+    assert client.run({"task": "embed", "texts": ["x"]}) == {"vectors": [[1.0]]}
+    assert calls == ["/v2/endpoint123/runsync", *["/v2/endpoint123/status/job1"] * 2]
+    assert len(waits) == 2
+
+
+def test_polling_gives_up_after_the_maximum_wait() -> None:
+    def respond(request: httpx.Request) -> httpx.Response:
+        return httpx.Response(200, json={"id": "job1", "status": "IN_PROGRESS"})
+
+    now = [0.0]
+
+    def sleep(seconds: float) -> None:
+        now[0] += seconds
+
+    client = RunPodClient(ENV, httpx.MockTransport(respond), sleep=sleep, clock=lambda: now[0])
+    with pytest.raises(RunPodError, match="IN_PROGRESS"):
+        client.run({"task": "embed"})
+
+
 def load_handler() -> ModuleType:
     spec = importlib.util.spec_from_file_location("qart_runpod_handler", HANDLER)
     assert spec and spec.loader
