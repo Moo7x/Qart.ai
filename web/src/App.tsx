@@ -12,6 +12,7 @@ import MyFuture from './pages/MyFuture'
 import MySkills from './pages/MySkills'
 import Pathway from './pages/Pathway'
 import Result from './pages/Result'
+import Scenarios from './pages/Scenarios'
 import Signals from './pages/Signals'
 import WorkQueue from './pages/WorkQueue'
 import Workspace from './pages/Workspace'
@@ -151,6 +152,7 @@ export default function App() {
             <Route path="/future" element={<Only role="employee"><MyFuture /></Only>} />
             <Route path="/pathway" element={<Only role="employee"><Pathway /></Only>} />
             <Route path="/impact" element={<Only role="employee"><Impact /></Only>} />
+            <Route path="/scenarios" element={<Only role="employee"><Scenarios /></Only>} />
             <Route path="/hr" element={<Only role="hr"><HRSummary /></Only>} />
             <Route path="/evidence" element={<Only role="hr"><Evidence /></Only>} />
             <Route path="/improve" element={<Only role="senior"><CompanionUpdates /></Only>} />
