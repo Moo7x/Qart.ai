@@ -21,11 +21,11 @@ function Nav() {
   return (
     <header className="sticky top-0 z-40 bg-surface/90 backdrop-blur border-b border-hairline shadow-nav">
       <div className="max-w-6xl mx-auto h-16 px-4 flex items-center gap-3 sm:gap-6">
-        <Link to="/" className="flex items-center gap-2 text-base font-semibold tracking-[-0.01em] text-ink">
+        <Link to="/" className="shrink-0 flex items-center gap-2 text-base font-semibold tracking-[-0.01em] text-ink">
           <img src="/favicon.svg" alt="" width={24} height={24} />
           Qart.ai
         </Link>
-        <nav aria-label="Main" className="flex gap-1 overflow-x-auto">
+        <nav aria-label="Main" className="min-w-0 flex gap-1 overflow-x-auto">
           {LINKS.map(l => (
             <NavLink
               key={l.to}

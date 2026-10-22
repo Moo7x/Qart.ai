@@ -86,7 +86,8 @@ Hierarchy comes from size and weight, not colour. Use `tabular-nums` for every n
 
 - 4px base. Use Tailwind steps 1, 2, 3, 4, 5, 6, 8, 16, 20 (4–80px). Card padding `p-6` (24px), gaps inside cards `gap-2`/`gap-3`, between cards `gap-4`, between page sections `mt-12`–`mt-16`.
 - Content max width `max-w-6xl` for list/grid pages; `max-w-3xl` for reading pages (Result, explanations).
-- **Workspace / companion screen** (Perplexity borrow): fixed left rail `w-64` on `bg-surface` with a hairline right border (case list, steps, skills in play), main column centred `max-w-4xl`, companion panel as a white card on the right or bottom. No other page uses a sidebar.
+- **Workspace / companion screen** (Perplexity borrow): work area on the left (`lg:grid-cols-[minmax(0,1fr)_380px]`), companion as a sticky white side column on the right (`lg:sticky lg:top-20 lg:h-[calc(100svh-6rem)]`) holding the chat, "I'm stuck" and the decision, so help and the decision stay in view while scrolling the data. It stacks below the work area on phones. No other page uses a side column.
+- Shared pieces live in `web/src/ui.tsx` (`StatePill`, `ProvenanceTag`, `Tag`, `Card`, `PageHeader`, `SectionTitle`, `Loading`, `EmptyState`, `btn.*`). Use them instead of re-writing class strings.
 - Top nav: sticky, `h-16`, `bg-surface/90 backdrop-blur`, `shadow-nav`, hairline bottom border.
 
 ## 4. Components (Tailwind recipes)
