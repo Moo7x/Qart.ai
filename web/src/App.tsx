@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 import { useState } from 'react'
-import { BrowserRouter, Link, Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom'
+import { BrowserRouter, Link, Navigate, NavLink, Route, Routes, useLocation, useNavigate } from 'react-router-dom'
+import { RotateCcw } from 'lucide-react'
 import { resetDemo } from './api'
 import CompanionUpdates from './pages/CompanionUpdates'
 import Evidence from './pages/Evidence'
@@ -13,6 +14,7 @@ import WorkQueue from './pages/WorkQueue'
 import Workspace from './pages/Workspace'
 import { PERSONAS, PersonaProvider, usePersona } from './persona'
 import type { PersonaRole } from './persona'
+import { EmptyState, ProvenanceTag } from './ui'
 
 const LINKS: Record<PersonaRole, { to: string; label: string }[]> = {
   employee: [
@@ -31,7 +33,6 @@ const LINKS: Record<PersonaRole, { to: string; label: string }[]> = {
 const HOME: Record<PersonaRole, string> = { employee: '/queue', senior: '/improve', hr: '/hr' }
 
 function Nav() {
-  const loc = useLocation()
   const navigate = useNavigate()
   const { persona, setPersona } = usePersona()
   const [resetting, setResetting] = useState(false)
@@ -49,42 +50,53 @@ function Nav() {
   }
 
   return (
-    <header className="bg-white border-b border-gray-200 px-4 py-2 flex items-center gap-4 text-sm sticky top-0 z-40 shadow-sm flex-wrap">
-      <Link to={HOME[persona.role]} className="font-bold text-indigo-700 text-base mr-2">Qart.ai</Link>
-      <span className="bg-amber-100 text-amber-800 px-2 py-0.5 rounded text-xs font-medium">Synthetic demo data</span>
-      <nav className="flex gap-1 ml-2 flex-wrap">
-        {LINKS[persona.role].map(l => (
-          <Link
-            key={l.to}
-            to={l.to}
-            className={`px-3 py-1.5 rounded text-sm transition-colors ${loc.pathname.startsWith(l.to) ? 'bg-indigo-50 text-indigo-700 font-medium' : 'text-gray-600 hover:bg-gray-100'}`}
+    <header className="sticky top-0 z-40 bg-surface/90 backdrop-blur border-b border-hairline shadow-nav">
+      <div className="max-w-6xl mx-auto h-16 px-4 flex items-center gap-3 sm:gap-6">
+        <Link to={HOME[persona.role]} className="shrink-0 flex items-center gap-2 text-base font-semibold tracking-[-0.01em] text-ink">
+          <img src="/favicon.svg" alt="" width={24} height={24} />
+          <span className="hidden sm:inline">Qart.ai</span>
+        </Link>
+        <nav aria-label="Main" className="min-w-0 flex gap-1 overflow-x-auto">
+          {LINKS[persona.role].map(l => (
+            <NavLink
+              key={l.to}
+              to={l.to}
+              className={({ isActive }) =>
+                `whitespace-nowrap rounded-md px-3 py-2 text-sm transition-colors duration-200 ${isActive ? 'bg-action-tint text-action-ink font-medium' : 'text-ink/60 hover:text-ink'}`
+              }
+            >
+              {l.label}
+            </NavLink>
+          ))}
+        </nav>
+        <div className="ml-auto flex items-center gap-2 sm:gap-3 shrink-0">
+          <span className="hidden lg:inline-flex"><ProvenanceTag kind="synthetic">demo data</ProvenanceTag></span>
+          <label className="flex items-center gap-2 text-xs text-graphite">
+            <span className="hidden md:inline">Viewing as</span>
+            <select
+              aria-label="Persona"
+              value={persona.key}
+              onChange={e => {
+                const next = PERSONAS.find(p => p.key === e.target.value) ?? PERSONAS[0]
+                setPersona(next)
+                navigate(HOME[next.role])
+              }}
+              className="bg-surface border border-hairline-strong rounded-sm px-2 py-1 text-xs text-ink focus:outline-none"
+            >
+              {PERSONAS.map(p => <option key={p.key} value={p.key}>{p.label}</option>)}
+            </select>
+          </label>
+          <button
+            onClick={reset}
+            disabled={resetting}
+            title="Back to the synthetic starting state"
+            aria-label="Reset demo"
+            className="inline-flex items-center gap-1.5 rounded-sm border border-hairline-strong px-2 py-1 text-xs text-graphite hover:bg-linen transition-colors duration-200 disabled:opacity-50"
           >
-            {l.label}
-          </Link>
-        ))}
-      </nav>
-      <div className="ml-auto flex items-center gap-2">
-        <span className="text-xs text-gray-500">Persona:</span>
-        <select
-          aria-label="Persona"
-          value={persona.key}
-          onChange={e => {
-            const next = PERSONAS.find(p => p.key === e.target.value) ?? PERSONAS[0]
-            setPersona(next)
-            navigate(HOME[next.role])
-          }}
-          className="text-xs border border-gray-200 rounded px-2 py-1 bg-white focus:outline-none"
-        >
-          {PERSONAS.map(p => <option key={p.key} value={p.key}>{p.label}</option>)}
-        </select>
-        <button
-          onClick={reset}
-          disabled={resetting}
-          className="text-xs text-gray-500 border border-gray-200 rounded px-2 py-1 hover:bg-gray-50"
-          title="Back to the synthetic starting state"
-        >
-          {resetting ? 'Resetting…' : 'Reset demo'}
-        </button>
+            <RotateCcw size={12} aria-hidden="true" />
+            <span className="hidden md:inline">{resetting ? 'Resetting…' : 'Reset demo'}</span>
+          </button>
+        </div>
       </div>
     </header>
   )
@@ -98,8 +110,8 @@ function Only({ role, children }: { role: PersonaRole; children: ReactNode }) {
     ? 'This page shows one employee’s own results. HR and seniors do not see individual results.'
     : 'This page is not available for the selected persona.'
   return (
-    <div className="max-w-xl mx-auto bg-white border border-gray-200 rounded-xl p-6 text-center text-sm text-gray-600">
-      {message}
+    <div className="max-w-xl mx-auto">
+      <EmptyState title="Not available for this persona">{message}</EmptyState>
     </div>
   )
 }
@@ -109,12 +121,18 @@ function Home() {
   return <Navigate to={persona.role === 'employee' ? '/start' : HOME[persona.role]} replace />
 }
 
+// The workspace needs the full width so two tables fit without truncating descriptions.
+function Main({ children }: { children: ReactNode }) {
+  const wide = useLocation().pathname.startsWith('/workspace')
+  return <main className={`${wide ? 'max-w-[1440px]' : 'max-w-6xl'} mx-auto px-4 py-8 sm:py-10`}>{children}</main>
+}
+
 export default function App() {
   return (
     <PersonaProvider>
       <BrowserRouter>
         <Nav />
-        <main className="max-w-7xl mx-auto px-4 py-6">
+        <Main>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/start" element={<Only role="employee"><Intake /></Only>} />
@@ -127,7 +145,7 @@ export default function App() {
             <Route path="/evidence" element={<Only role="hr"><Evidence /></Only>} />
             <Route path="/improve" element={<Only role="senior"><CompanionUpdates /></Only>} />
           </Routes>
-        </main>
+        </Main>
       </BrowserRouter>
     </PersonaProvider>
   )

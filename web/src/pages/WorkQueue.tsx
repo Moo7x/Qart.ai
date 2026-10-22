@@ -1,18 +1,24 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { ArrowRight, Star } from 'lucide-react'
 import { listCases } from '../api'
 import type { Case } from '../types'
+import { btn, Card, EmptyState, Loading, PageHeader, Tag, type Tone } from '../ui'
 
-const MODE_COLORS: Record<string, string> = {
-  practice: 'bg-blue-100 text-blue-700',
-  checkin: 'bg-purple-100 text-purple-700',
-  real: 'bg-green-100 text-green-700',
+const MODE_META: Record<string, { label: string; tone: Tone }> = {
+  practice: { label: 'Practice', tone: 'action' },
+  checkin: { label: 'Check-in · no help', tone: 'coral' },
+  real: { label: 'Real work', tone: 'mocha' },
 }
 
-function Stars({ n }: { n: number }) {
+const MAX_DIFFICULTY = 3
+
+function Difficulty({ n }: { n: number }) {
   return (
-    <span className="text-yellow-400 text-sm">
-      {'★'.repeat(n)}{'☆'.repeat(3 - n)}
+    <span className="inline-flex items-center gap-0.5 text-marigold" aria-label={`Difficulty ${n} of ${MAX_DIFFICULTY}`}>
+      {Array.from({ length: MAX_DIFFICULTY }, (_, i) => (
+        <Star key={i} size={14} strokeWidth={1.75} fill={i < n ? 'currentColor' : 'none'} className={i < n ? '' : 'text-hairline-strong'} aria-hidden="true" />
+      ))}
     </span>
   )
 }
@@ -25,39 +31,38 @@ export default function WorkQueue() {
     listCases().then(setCases).finally(() => setLoading(false))
   }, [])
 
-  if (loading) return <div className="text-center py-12 text-gray-400">Loading cases…</div>
+  if (loading) return <Loading what="cases" />
 
   return (
     <div className="max-w-3xl mx-auto">
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Work queue</h1>
-        <p className="text-gray-500 text-sm mt-1">AI-prepared reconciliations waiting for your review.</p>
-      </div>
-      <div className="space-y-3">
-        {cases.map(c => (
-          <div key={c.id} className="bg-white rounded-xl border border-gray-200 p-4 flex items-center gap-4 hover:border-indigo-300 transition-colors">
-            <div className="flex-1">
-              <div className="flex items-center gap-2 mb-1">
-                <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${MODE_COLORS[c.mode] ?? 'bg-gray-100 text-gray-600'}`}>
-                  {c.mode}
-                </span>
-                <span className="text-xs text-gray-400">{c.scenario_variant}</span>
-              </div>
-              <div className="font-medium text-gray-900 text-sm">{c.title}</div>
-              <div className="flex items-center gap-2 mt-1">
-                <Stars n={c.difficulty} />
-                <span className="text-xs text-gray-400">difficulty {c.difficulty}/3</span>
-              </div>
-            </div>
-            <Link
-              to={`/workspace/${c.id}`}
-              className="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors whitespace-nowrap"
-            >
-              {c.mode === 'checkin' ? 'Take check-in' : 'Start review'}
-            </Link>
-          </div>
-        ))}
-      </div>
+      <PageHeader title="Work queue" intro="AI-prepared work waiting for your review. You decide what happens to each one." />
+      {cases.length === 0 ? (
+        <EmptyState title="No cases yet">Your first practice case appears here.</EmptyState>
+      ) : (
+        <ul className="space-y-3">
+          {cases.map(c => {
+            const mode = MODE_META[c.mode] ?? { label: c.mode, tone: 'linen' as Tone }
+            return (
+              <li key={c.id}>
+                <Card className="p-5 flex flex-col sm:flex-row sm:items-center gap-4 hover:border-hairline-strong transition-colors duration-200">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex flex-wrap items-center gap-2 mb-2">
+                      <Tag tone={mode.tone}>{mode.label}</Tag>
+                      <span className="text-xs text-graphite">{c.scenario_variant} scenario</span>
+                    </div>
+                    <div className="font-semibold text-ink">{c.title}</div>
+                    <div className="mt-1"><Difficulty n={c.difficulty} /></div>
+                  </div>
+                  <Link to={`/workspace/${c.id}`} className={`${btn.primary} whitespace-nowrap`}>
+                    {c.mode === 'checkin' ? 'Take check-in' : 'Start review'}
+                    <ArrowRight size={16} aria-hidden="true" />
+                  </Link>
+                </Card>
+              </li>
+            )
+          })}
+        </ul>
+      )}
     </div>
   )
 }

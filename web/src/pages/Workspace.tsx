@@ -1,24 +1,59 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import { ArrowUpRight, Bot, Check, CircleCheck, FileText, Flag, LifeBuoy, PencilLine, Send, type LucideIcon } from 'lucide-react'
 import { getCase, postDecision, postMessage } from '../api'
 import { useUserId } from '../persona'
 import type { Case, CaseDocument, DecisionResponse, UiAction } from '../types'
+import { enter, pop, useReveal } from '../motion'
+import { btn, Card, Drawer, input as inputCls, label, Loading, Tag } from '../ui'
 
-const HELP_DOTS = ['●', '●', '●', '●', '●']
-const DECISION_LABELS: Record<string, string> = {
-  sign_off: 'Sign off',
-  correct: 'Correct',
-  escalate: 'Escalate',
-}
+// Help ladder from the contract (help_level 1..4); 0 means no help used yet.
+const HELP_STEPS = ['Question', 'Hint', 'Explanation', 'Answer']
+const MAX_HELP_LEVEL = HELP_STEPS.length
 
-const DECISION_ICONS: Record<string, string> = {
-  sign_off: '✓',
-  correct: '✗',
-  escalate: '↑',
-}
+const DECISIONS: { id: 'sign_off' | 'correct' | 'escalate'; label: string; icon: LucideIcon }[] = [
+  { id: 'sign_off', label: 'Sign off', icon: Check },
+  { id: 'correct', label: 'Correct', icon: PencilLine },
+  { id: 'escalate', label: 'Escalate', icon: ArrowUpRight },
+]
+
+type TableView = 'both' | 'ledger' | 'bank'
+const TABLE_VIEWS: { id: TableView; label: string }[] = [
+  { id: 'both', label: 'Side by side' },
+  { id: 'ledger', label: 'Ledger' },
+  { id: 'bank', label: 'Bank statement' },
+]
+// Below this width two tables side by side would truncate descriptions again.
+const WIDE_SCREEN_PX = 1280
 
 function fmt(n: number) {
   return n.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+}
+
+/** Rises in once when it first appears (GSAP). */
+function Appear({ children, className = '' }: { children: ReactNode; className?: string }) {
+  const ref = useRef<HTMLDivElement>(null)
+  useLayoutEffect(() => enter(ref.current), [])
+  return <div ref={ref} className={className}>{children}</div>
+}
+
+function TaskStep({ n, done, children }: { n: number; done: boolean; children: ReactNode }) {
+  const circle = useRef<HTMLSpanElement>(null)
+  const wasDone = useRef(done)
+  // Pop only on the change to done, not on first render.
+  useEffect(() => {
+    if (done && !wasDone.current) pop(circle.current)
+    wasDone.current = done
+  }, [done])
+  return (
+    <li className={`flex items-center gap-2 text-sm ${done ? 'text-ink' : 'text-marigold-ink'}`}>
+      <span ref={circle} className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-semibold shrink-0 ${done ? 'bg-action text-white' : 'bg-surface text-marigold-ink border border-marigold/60'}`}>
+        {done ? <Check size={14} strokeWidth={2.5} aria-hidden="true" /> : n}
+      </span>
+      <span>{children}</span>
+      <span className="sr-only">{done ? '(done)' : '(to do)'}</span>
+    </li>
+  )
 }
 
 export default function Workspace() {
@@ -37,6 +72,7 @@ export default function Workspace() {
   const [helpLevel, setHelpLevel] = useState(0)
   const [highlightedRows, setHighlightedRows] = useState<Set<string>>(new Set())
   const [openDoc, setOpenDoc] = useState<string | null>(null)
+  const [docsViewed, setDocsViewed] = useState(false)
   const [popIn, setPopIn] = useState<string | null>(null)
   const [input, setInput] = useState('')
   const [sending, setSending] = useState(false)
@@ -47,6 +83,8 @@ export default function Workspace() {
   const [deciding, setDeciding] = useState(false)
 
   const chatEndRef = useRef<HTMLDivElement>(null)
+  const rootRef = useRef<HTMLDivElement>(null)
+  useReveal(rootRef, [loading])
 
   useEffect(() => {
     if (!caseId) return
@@ -58,10 +96,16 @@ export default function Workspace() {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
   }, [messages])
 
+  const showDoc = (ref: string) => { setOpenDoc(ref); setDocsViewed(true) }
+  const closeDoc = useCallback(() => setOpenDoc(null), [])
+
+  // Pick the table layout once from the screen width; the person can switch it.
+  const [tableView, setTableView] = useState<TableView>(() => (window.innerWidth >= WIDE_SCREEN_PX ? 'both' : 'ledger'))
+
   const applyActions = (actions: UiAction[]) => {
     for (const a of actions) {
       if (a.type === 'highlight_rows' && a.rows) setHighlightedRows(new Set(a.rows))
-      if (a.type === 'open_document' && a.doc_ref) setOpenDoc(a.doc_ref)
+      if (a.type === 'open_document' && a.doc_ref) showDoc(a.doc_ref)
       if (a.type === 'show_check' && a.check && a.result)
         setCheckResults(prev => [...prev.filter(c => c.check !== a.check!), { check: a.check!, result: a.result! }])
       if (a.type === 'pop_in' && a.message) setPopIn(a.message)
@@ -117,265 +161,305 @@ export default function Workspace() {
     : null
 
   if (loading || !caseData) {
-    return <div className="text-center py-16 text-gray-400">Loading case…</div>
+    return <Loading what="case" />
   }
 
   const isCheckin = caseData.mode === 'checkin'
+  const adjustments = caseData.ai_output.proposed_adjustments
+  const starters = [
+    'Where should I start?',
+    adjustments[0] ? `What is ${adjustments[0].id} based on?` : 'What does the AI claim rest on?',
+    'Do the totals match?',
+  ]
+
+  // Task strip ticks itself from what the person has already done; nothing new is stored.
+  const compared = docsViewed || checkResults.length > 0 || messages.length > 0
+  const steps = [
+    { done: true, text: 'Read the AI draft' },
+    { done: compared, text: 'Compare rows and documents' },
+    { done: flaggedRows.size > 0, text: flaggedRows.size > 0 ? `Flag anything wrong (${flaggedRows.size} flagged)` : 'Flag anything wrong' },
+    { done: deciding || decisionResult !== null, text: 'Decide' },
+  ]
+
+  const rowTone = (id: string) =>
+    highlightedRows.has(id) ? 'bg-marigold-tint shadow-[inset_3px_0_0_var(--color-marigold)]'
+      : flaggedRows.has(id) ? 'bg-coral-tint shadow-[inset_3px_0_0_var(--color-coral)]' : ''
+
+  const flagCell = (id: string) => (
+    <label className="inline-flex items-center gap-1.5 cursor-pointer text-xs text-graphite">
+      <input type="checkbox" checked={flaggedRows.has(id)} onChange={() => toggleFlag(id)} aria-label={`Flag ${id}`} />
+      {flaggedRows.has(id) && <span className="text-coral-ink font-medium">Flagged</span>}
+    </label>
+  )
+
+  const ledgerTable = (
+    <Card className="overflow-hidden">
+      <div className={`${label} px-4 py-3 border-b border-hairline`}>Ledger</div>
+      <table className="w-full text-sm">
+        <thead>
+          <tr className="text-xs text-graphite">
+            <th className="px-3 py-2 text-left font-medium w-14">Date</th>
+            <th className="px-3 py-2 text-left font-medium">Description</th>
+            <th className="px-3 py-2 text-right font-medium">Amount</th>
+            <th className="px-3 py-2 text-left font-medium w-24">Flag</th>
+          </tr>
+        </thead>
+        <tbody>
+          {caseData.ledger.map(row => (
+            <tr key={row.row_id} className={`border-t border-hairline align-top transition-colors duration-200 ${rowTone(row.row_id)}`}>
+              <td className="px-3 py-2.5 text-graphite tabular-nums whitespace-nowrap">{row.date.slice(5)}</td>
+              <td className="px-3 py-2.5 text-ink">
+                {row.description}
+                {row.doc_ref && (
+                  <button
+                    onClick={() => showDoc(row.doc_ref!)}
+                    className="ml-2 inline-flex items-center gap-1 whitespace-nowrap rounded-full bg-action-tint text-action-ink px-2 py-0.5 text-xs font-medium hover:bg-[#d6eafd] align-middle"
+                  >
+                    <FileText size={12} aria-hidden="true" /> {row.doc_ref}
+                  </button>
+                )}
+              </td>
+              <td className="px-3 py-2.5 text-right tabular-nums text-ink whitespace-nowrap">{fmt(row.amount)}</td>
+              <td className="px-3 py-2.5">{flagCell(row.row_id)}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </Card>
+  )
+
+  const bankTable = (
+    <Card className="overflow-hidden">
+      <div className={`${label} px-4 py-3 border-b border-hairline`}>Bank statement</div>
+      <table className="w-full text-sm">
+        <thead>
+          <tr className="text-xs text-graphite">
+            <th className="px-3 py-2 text-left font-medium w-14">Date</th>
+            <th className="px-3 py-2 text-left font-medium">Description</th>
+            <th className="px-3 py-2 text-right font-medium">Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          {caseData.bank.map(row => (
+            <tr key={row.row_id} className={`border-t border-hairline align-top transition-colors duration-200 ${rowTone(row.row_id)}`}>
+              <td className="px-3 py-2.5 text-graphite tabular-nums whitespace-nowrap">{row.date.slice(5)}</td>
+              <td className="px-3 py-2.5 text-ink">{row.description}</td>
+              <td className="px-3 py-2.5 text-right tabular-nums text-ink whitespace-nowrap">{fmt(row.amount)}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </Card>
+  )
 
   return (
-    <div className="flex flex-col gap-4">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-lg font-bold text-gray-900">{caseData.title}</h1>
-          <div className="flex items-center gap-2 mt-1">
-            <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full">{caseData.mode}</span>
-            <span className="text-xs text-gray-400">{caseData.scenario_variant} scenario</span>
-            {isCheckin && <span className="text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full font-medium">No hints available</span>}
-          </div>
-        </div>
-        <div className="flex items-center gap-1" title={`Help level: ${helpLevel}/4`}>
-          {HELP_DOTS.map((d, i) => (
-            <span key={i} className={`text-lg ${i < helpLevel ? 'text-indigo-500' : 'text-gray-200'}`}>{d}</span>
-          ))}
+    <div ref={rootRef} className="flex flex-col gap-5">
+      {/* Case header */}
+      <div data-reveal>
+        <h1 className="text-[28px] sm:text-[32px] leading-[1.15] font-semibold tracking-[-0.025em] text-ink">{caseData.title}</h1>
+        <div className="flex flex-wrap items-center gap-2 mt-2">
+          <Tag tone={isCheckin ? 'coral' : 'action'}>{isCheckin ? 'Check-in · no help' : caseData.mode}</Tag>
+          <span className="text-xs text-graphite">{caseData.scenario_variant} scenario</span>
         </div>
       </div>
 
-      {/* Pop-in toast */}
+      {/* Task strip: what to do on this screen */}
+      <div data-reveal className="bg-marigold-tint rounded-lg px-5 py-4 flex flex-col xl:flex-row xl:items-center gap-3 xl:gap-8">
+        <p className="text-ink font-medium shrink-0">Your job: check the AI's draft, then decide.</p>
+        <ol className="flex flex-wrap gap-x-6 gap-y-2">
+          {steps.map((st, i) => <TaskStep key={st.text} n={i + 1} done={st.done}>{st.text}</TaskStep>)}
+        </ol>
+      </div>
+
       {popIn && (
-        <div className="bg-indigo-50 border border-indigo-200 rounded-xl p-3 flex items-center justify-between">
-          <span className="text-sm text-indigo-800 font-medium">🤖 {popIn}</span>
-          <button onClick={() => setPopIn(null)} className="text-indigo-400 hover:text-indigo-600 text-lg leading-none">×</button>
+        <div className="bg-action-tint rounded-lg px-4 py-3 flex items-center gap-2 text-sm text-action-ink font-medium" role="status">
+          <Bot size={16} aria-hidden="true" /> {popIn}
+          <button onClick={() => setPopIn(null)} className="ml-auto text-xs underline underline-offset-2">Dismiss</button>
         </div>
       )}
 
-      {/* Trace strip */}
-      {trace.length > 0 && (
-        <div className="bg-gray-50 border border-gray-200 rounded-lg px-4 py-2 text-xs text-gray-500">
-          <span className="font-medium text-gray-600 mr-2">Agent:</span>
-          {trace.join(' → ')}
-        </div>
-      )}
-
-      {/* Main 3-column layout */}
-      <div className="grid grid-cols-3 gap-4">
-        {/* Ledger */}
-        <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-          <div className="bg-gray-50 px-4 py-2 border-b border-gray-200 text-xs font-semibold text-gray-600 uppercase tracking-wide">
-            Ledger
+      <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_360px] items-start">
+        {/* Work area */}
+        <div data-reveal className="flex flex-col gap-4 min-w-0">
+          {/* AI draft: kept visually apart from the person's decision */}
+          <div className="bg-linen rounded-lg p-5">
+            <div className="flex items-center gap-1.5 text-xs font-medium text-graphite"><Bot size={14} aria-hidden="true" /> AI draft</div>
+            <p className="mt-2 font-serif text-xl leading-[1.45] text-ink">{caseData.ai_output.claim}</p>
+            {adjustments.length > 0 && (
+              <div className="mt-4 border-t border-hairline-strong/60 pt-3">
+                <div className={`${label} mb-1.5`}>Adjustments the AI proposes</div>
+                <ul className="space-y-1">
+                  {adjustments.map(adj => (
+                    <li key={adj.id} className={`flex flex-wrap items-center justify-between gap-2 text-sm rounded-sm px-2 py-1.5 -mx-2 ${rowTone(adj.id)}`}>
+                      <span><span className="font-medium text-ink">{adj.id}</span> <span className="text-graphite">· {adj.reason}</span></span>
+                      <span className="flex items-center gap-4">
+                        <span className="tabular-nums text-ink">{fmt(adj.amount)}</span>
+                        {flagCell(adj.id)}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
-          <table className="w-full text-xs">
-            <thead>
-              <tr className="border-b border-gray-100">
-                <th className="px-3 py-2 text-left text-gray-500">Date</th>
-                <th className="px-3 py-2 text-left text-gray-500">Description</th>
-                <th className="px-3 py-2 text-right text-gray-500">Amount</th>
-                <th className="px-2 py-2"></th>
-              </tr>
-            </thead>
-            <tbody>
-              {caseData.ledger.map(row => (
-                <tr
-                  key={row.row_id}
-                  className={`border-b border-gray-100 transition-colors ${highlightedRows.has(row.row_id) ? 'bg-amber-50 border-l-4 border-l-amber-400' : flaggedRows.has(row.row_id) ? 'bg-red-50' : 'even:bg-gray-50'}`}
+
+          {/* Table view switch */}
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div role="tablist" aria-label="Table view" className="inline-flex bg-linen rounded-md p-1">
+              {TABLE_VIEWS.map(v => (
+                <button
+                  key={v.id} role="tab" aria-selected={tableView === v.id}
+                  onClick={() => setTableView(v.id)}
+                  className={`px-3 py-1.5 rounded-sm text-sm transition-colors duration-200 ${v.id === 'both' ? 'hidden xl:inline-block' : ''} ${tableView === v.id ? 'bg-surface text-ink font-medium shadow-[0_1px_2px_rgb(0_0_0/0.06)]' : 'text-graphite hover:text-ink'}`}
                 >
-                  <td className="px-3 py-2 text-gray-500">{row.date.slice(5)}</td>
-                  <td className="px-3 py-2 text-gray-800 max-w-0 truncate">
-                    {row.description}
-                    {row.doc_ref && (
-                      <button
-                        onClick={() => setOpenDoc(row.doc_ref!)}
-                        className="ml-1 text-indigo-400 hover:text-indigo-600 text-xs"
-                        title={`Open ${row.doc_ref}`}
-                      >📎</button>
-                    )}
-                  </td>
-                  <td className={`px-3 py-2 text-right font-mono ${row.amount < 0 ? 'text-red-600' : 'text-green-600'}`}>
-                    {fmt(row.amount)}
-                  </td>
-                  <td className="px-2 py-2">
-                    <input type="checkbox" aria-label={`Flag row ${row.row_id}`} checked={flaggedRows.has(row.row_id)} onChange={() => toggleFlag(row.row_id)} className="accent-red-400" />
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          {/* Adjustments */}
-          {caseData.ai_output.proposed_adjustments.length > 0 && (
-            <div className="border-t border-dashed border-gray-200 px-3 py-2">
-              <div className="text-xs text-gray-400 mb-1 font-medium">AI adjustments</div>
-              {caseData.ai_output.proposed_adjustments.map(adj => (
-                <div key={adj.id} className={`flex items-center justify-between text-xs py-1 ${flaggedRows.has(adj.id) ? 'bg-red-50 rounded px-1' : ''} ${highlightedRows.has(adj.id) ? 'bg-amber-50 rounded px-1' : ''}`}>
-                  <div>
-                    <span className="font-medium text-gray-700">{adj.id}</span>
-                    <span className="text-gray-400 ml-1">— {adj.reason}</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <span className={`font-mono ${adj.amount < 0 ? 'text-red-600' : 'text-green-600'}`}>{fmt(adj.amount)}</span>
-                    <input type="checkbox" aria-label={`Flag adjustment ${adj.id}`} checked={flaggedRows.has(adj.id)} onChange={() => toggleFlag(adj.id)} className="accent-red-400" />
-                  </div>
-                </div>
+                  {v.label}
+                </button>
               ))}
             </div>
-          )}
-        </div>
-
-        {/* Bank statement */}
-        <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-          <div className="bg-gray-50 px-4 py-2 border-b border-gray-200 text-xs font-semibold text-gray-600 uppercase tracking-wide">
-            Bank statement
-          </div>
-          <table className="w-full text-xs">
-            <thead>
-              <tr className="border-b border-gray-100">
-                <th className="px-3 py-2 text-left text-gray-500">Date</th>
-                <th className="px-3 py-2 text-left text-gray-500">Description</th>
-                <th className="px-3 py-2 text-right text-gray-500">Amount</th>
-              </tr>
-            </thead>
-            <tbody>
-              {caseData.bank.map(row => (
-                <tr
-                  key={row.row_id}
-                  className={`border-b border-gray-100 transition-colors ${highlightedRows.has(row.row_id) ? 'bg-amber-50 border-l-4 border-l-amber-400' : 'even:bg-gray-50'}`}
-                >
-                  <td className="px-3 py-2 text-gray-500">{row.date.slice(5)}</td>
-                  <td className="px-3 py-2 text-gray-800 max-w-0 truncate">{row.description}</td>
-                  <td className={`px-3 py-2 text-right font-mono ${row.amount < 0 ? 'text-red-600' : 'text-green-600'}`}>
-                    {fmt(row.amount)}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        {/* Right panel: AI claim + documents */}
-        <div className="flex flex-col gap-3">
-          {/* AI claim */}
-          <div className="bg-white rounded-xl border border-indigo-100 p-4">
-            <div className="text-xs font-semibold text-indigo-600 uppercase tracking-wide mb-2">AI claim</div>
-            <p className="text-sm text-gray-800">{caseData.ai_output.claim}</p>
+            <span className="text-xs text-graphite">Tick a row to flag it. Document chips open the source.</span>
           </div>
 
-          {/* Check results */}
+          {tableView === 'both' ? (
+            <div className="grid gap-4 xl:grid-cols-2">{ledgerTable}{bankTable}</div>
+          ) : tableView === 'ledger' ? ledgerTable : bankTable}
+
+          {/* Check results from the companion */}
           {checkResults.map(cr => (
-            <div key={cr.check} className="bg-white rounded-xl border border-gray-200 p-3">
-              <div className="text-xs font-medium text-gray-500 mb-1">✓ {cr.check.replace(/_/g, ' ')}</div>
-              <p className="text-xs text-gray-700 font-mono">{cr.result}</p>
-            </div>
+            <Appear key={cr.check}>
+              <Card className="p-4">
+                <div className={`${label} mb-1 flex items-center gap-1`}><CircleCheck size={12} aria-hidden="true" /> {cr.check.replace(/_/g, ' ')}</div>
+                <p className="text-sm text-ink font-mono">{cr.result}</p>
+              </Card>
+            </Appear>
           ))}
 
-          {/* Document panel */}
-          {openDocData && (
-            <div className="bg-white rounded-xl border border-green-200 p-4">
-              <div className="flex items-center justify-between mb-2">
-                <div className="text-xs font-semibold text-green-700 uppercase tracking-wide">📄 {openDocData.doc_ref}</div>
-                <button onClick={() => setOpenDoc(null)} className="text-gray-400 hover:text-gray-600 text-lg leading-none">×</button>
-              </div>
-              <pre className="text-xs text-gray-700 whitespace-pre-wrap font-mono leading-relaxed">{openDocData.text}</pre>
-            </div>
-          )}
-
-          {/* Documents list */}
-          <div className="bg-white rounded-xl border border-gray-200 p-3">
-            <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Documents</div>
-            <div className="space-y-1">
+          {/* Documents */}
+          <div>
+            <div className={`${label} mb-2`}>Documents</div>
+            <div className="flex flex-wrap gap-2">
               {caseData.documents.map(doc => (
                 <button
                   key={doc.doc_ref}
-                  onClick={() => setOpenDoc(openDoc === doc.doc_ref ? null : doc.doc_ref)}
-                  className={`w-full text-left px-2 py-1.5 rounded text-xs transition-colors ${openDoc === doc.doc_ref ? 'bg-green-50 text-green-700' : 'hover:bg-gray-50 text-gray-600'}`}
+                  onClick={() => showDoc(doc.doc_ref)}
+                  className="inline-flex items-center gap-1.5 rounded-md bg-surface border border-hairline px-3 py-2 text-sm text-ink hover:border-hairline-strong transition-colors duration-200"
                 >
-                  📄 {doc.doc_ref} <span className="text-gray-400">— {doc.type}</span>
+                  <FileText size={14} className="text-action" aria-hidden="true" /> {doc.doc_ref}
+                  <span className="text-graphite">· {doc.type}</span>
                 </button>
               ))}
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Companion panel */}
-      <div className="bg-white rounded-xl border border-gray-200 border-t-4 border-t-indigo-500 overflow-hidden shadow-sm">
-        {/* Chat messages */}
-        <div className="h-48 overflow-y-auto p-4 space-y-3">
-          {messages.length === 0 && (
-            <p className="text-sm text-gray-400 text-center py-6">
-              {isCheckin
-                ? 'Check-in mode — no hints available. Review and submit your decision.'
-                : "Review the reconciliation above. Use 'I'm stuck' if you need a nudge."}
-            </p>
-          )}
-          {messages.map((m, i) => (
-            <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-              <div className={`max-w-sm px-3 py-2 rounded-xl text-sm ${m.role === 'user' ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-800'}`}>
-                {m.text}
+        {/* Companion */}
+        <Card data-reveal className="flex flex-col lg:sticky lg:top-20 lg:h-[calc(100svh-6rem)] overflow-hidden">
+          <div className="px-4 py-3 border-b border-hairline">
+            <div className="flex items-center gap-2.5">
+              <span className="w-9 h-9 rounded-full bg-action-tint text-action flex items-center justify-center"><Bot size={20} strokeWidth={1.75} aria-hidden="true" /></span>
+              <div>
+                <div className="font-semibold text-ink leading-tight">Companion</div>
+                <div className="text-xs text-graphite">{isCheckin ? 'Watching only during check-ins' : 'Asks before it tells'}</div>
               </div>
             </div>
-          ))}
-          {decisionResult && (
-            <div className={`rounded-xl p-3 text-sm ${decisionResult.decision_correct ? 'bg-green-50 text-green-800 border border-green-200' : 'bg-red-50 text-red-800 border border-red-200'}`}>
-              {decisionResult.decision_correct ? '✓ Correct! ' : '✗ Not quite. '}
-              {decisionResult.explanation}
-            </div>
-          )}
-          <div ref={chatEndRef} />
-        </div>
-
-        {/* Input and controls */}
-        <div className="border-t border-gray-200 p-3 bg-gray-50">
-          <div className="flex gap-2 mb-3">
-            <input
-              value={input}
-              onChange={e => setInput(e.target.value)}
-              onKeyDown={e => e.key === 'Enter' && !e.shiftKey && sendMessage(input)}
-              placeholder="Ask the companion…"
-              className="flex-1 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-300 bg-white"
-              disabled={sending}
-            />
-            <button
-              onClick={() => sendMessage(input)}
-              disabled={sending || !input.trim()}
-              className="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 disabled:opacity-50 transition-colors"
-            >
-              Send
-            </button>
             {!isCheckin && (
-              <button
-                onClick={() => sendMessage("I'm stuck")}
-                disabled={sending || helpLevel >= 4}
-                className="bg-amber-100 text-amber-700 px-4 py-2 rounded-lg text-sm font-medium hover:bg-amber-200 disabled:opacity-50 transition-colors"
-              >
-                I'm stuck
-              </button>
+              <ol className="mt-3 flex flex-wrap items-center gap-1 text-xs" aria-label={`Help used: ${helpLevel} of ${MAX_HELP_LEVEL}`}>
+                {HELP_STEPS.map((step, i) => (
+                  <li key={step} className="flex items-center gap-1">
+                    {i > 0 && <span className="text-hairline-strong" aria-hidden="true">→</span>}
+                    <span className={`rounded-full px-2 py-0.5 ${i < helpLevel ? 'bg-action-tint text-action-ink font-medium' : 'text-graphite'}`}>{step}</span>
+                  </li>
+                ))}
+              </ol>
             )}
           </div>
 
-          {flaggedRows.size > 0 && (
-            <div className="text-xs text-gray-500 mb-2">
-              Flagged rows: {[...flaggedRows].join(', ')}
+          <div className="flex-1 min-h-56 overflow-y-auto p-4 space-y-3" aria-live="polite">
+            {messages.length === 0 && (isCheckin ? (
+              <div className="bg-coral-tint text-coral-ink rounded-lg p-4 text-sm">
+                <div className="font-semibold">No help in check-ins</div>
+                <p className="mt-1">This one shows what you can do on your own. Review the work and make your decision.</p>
+              </div>
+            ) : (
+              <div className="text-sm text-graphite">
+                <p>Stuck or unsure? Ask anything. I'll start with a question, not the answer.</p>
+                <div className="mt-3 flex flex-col items-start gap-2">
+                  {starters.map(q => (
+                    <button key={q} onClick={() => sendMessage(q)} disabled={sending} className="rounded-full border border-hairline-strong px-3 py-1.5 text-sm text-ink hover:bg-linen transition-colors duration-200 text-left disabled:opacity-50">
+                      {q}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ))}
+            {messages.map((m, i) => (
+              <Appear key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                <div className={`max-w-[85%] px-3 py-2 rounded-lg text-sm ${m.role === 'user' ? 'bg-action text-white' : 'bg-linen text-ink'}`}>
+                  {m.text}
+                </div>
+              </Appear>
+            ))}
+            {sending && <div className="text-xs text-graphite" role="status">Companion is thinking…</div>}
+            {decisionResult && (
+              <div className={`rounded-lg p-3 text-sm ${decisionResult.decision_correct ? 'bg-action-tint text-action-ink' : 'bg-coral-tint text-coral-ink'}`}>
+                <span className="font-medium">{decisionResult.decision_correct ? 'Correct. ' : 'Not quite. '}</span>
+                {decisionResult.explanation}
+              </div>
+            )}
+            {trace.length > 0 && (
+              <details className="text-xs text-graphite">
+                <summary className="cursor-pointer select-none">How the companion decided</summary>
+                <p className="mt-1">{trace.join(' → ')}</p>
+              </details>
+            )}
+            <div ref={chatEndRef} />
+          </div>
+
+          {!isCheckin && (
+            <div className="border-t border-hairline p-3 space-y-2">
+              <div className="flex gap-2">
+                <input
+                  value={input}
+                  onChange={e => setInput(e.target.value)}
+                  onKeyDown={e => e.key === 'Enter' && !e.shiftKey && sendMessage(input)}
+                  placeholder="Ask the companion…"
+                  aria-label="Message the companion"
+                  className={`${inputCls} flex-1 min-w-0`}
+                  disabled={sending}
+                />
+                <button onClick={() => sendMessage(input)} disabled={sending || !input.trim()} className={`${btn.ghost} px-3`} aria-label="Send">
+                  <Send size={16} aria-hidden="true" />
+                </button>
+              </div>
+              <button onClick={() => sendMessage("I'm stuck")} disabled={sending || helpLevel >= MAX_HELP_LEVEL} className={`${btn.text} w-full border border-dashed border-hairline-strong`}>
+                <LifeBuoy size={16} aria-hidden="true" /> I'm stuck
+              </button>
             </div>
           )}
 
-          <div className="flex gap-2">
-            {(['sign_off', 'correct', 'escalate'] as const).map(d => (
-              <button
-                key={d}
-                onClick={() => handleDecision(d)}
-                disabled={deciding}
-                className={`flex-1 py-3 px-6 rounded-lg text-sm font-semibold transition-colors disabled:opacity-50 flex items-center justify-center gap-2 ${
-                  d === 'sign_off' ? 'bg-green-100 text-green-700 hover:bg-green-200' :
-                  d === 'correct' ? 'bg-blue-100 text-blue-700 hover:bg-blue-200' :
-                  'bg-red-100 text-red-700 hover:bg-red-200'
-                }`}
-              >
-                <span>{DECISION_ICONS[d]}</span>
-                {DECISION_LABELS[d]}
-              </button>
-            ))}
+          {/* Decision footer, always in view */}
+          <div className="border-t border-hairline bg-canvas p-4">
+            <div className="flex items-center justify-between gap-2 mb-2">
+              <span className="text-sm font-semibold text-ink">Your decision</span>
+              {flaggedRows.size > 0
+                ? <span className="inline-flex items-center gap-1 text-xs text-coral-ink"><Flag size={12} aria-hidden="true" /> {[...flaggedRows].join(', ')}</span>
+                : <span className="text-xs text-graphite">Nothing flagged</span>}
+            </div>
+            {/* Equal weight on purpose: the UI must not nudge the person toward one decision. */}
+            <div className="grid grid-cols-3 gap-2">
+              {DECISIONS.map(d => (
+                <button key={d.id} onClick={() => handleDecision(d.id)} disabled={deciding} className={`${btn.outline} flex-col gap-1 py-3 px-2`}>
+                  <d.icon size={20} strokeWidth={1.75} aria-hidden="true" />
+                  {d.label}
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
+        </Card>
       </div>
+
+      <Drawer open={openDocData !== null} onClose={closeDoc} title={openDocData ? `${openDocData.doc_ref} · ${openDocData.type}` : ''}>
+        {openDocData && <pre className="text-sm text-ink whitespace-pre-wrap font-mono leading-relaxed bg-linen rounded-md p-4">{openDocData.text}</pre>}
+      </Drawer>
     </div>
   )
 }

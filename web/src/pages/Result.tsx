@@ -1,24 +1,12 @@
 import { useEffect, useState } from 'react'
 import { Link, useLocation, useParams } from 'react-router-dom'
+import { ArrowRight, CircleCheck, CircleX, Flag } from 'lucide-react'
 import { flagSession, getNextCase, getSkills } from '../api'
 import { useUserId } from '../persona'
 import { skillName } from '../skillNames'
 import { SkillResources } from '../components/ResourceList'
 import type { DecisionResponse, NextCase, SkillState } from '../types'
-
-const STATE_COLORS: Record<string, string> = {
-  demonstrated_independently: 'bg-green-100 text-green-700',
-  observed_with_help: 'bg-blue-100 text-blue-700',
-  self_reported: 'bg-gray-100 text-gray-600',
-  insufficient_evidence: 'bg-yellow-100 text-yellow-700',
-}
-
-const STATE_LABELS: Record<string, string> = {
-  demonstrated_independently: 'Demonstrated independently',
-  observed_with_help: 'Observed with help',
-  self_reported: 'Self-reported',
-  insufficient_evidence: 'Insufficient evidence',
-}
+import { btn, Card, label, SectionTitle, StatePill } from '../ui'
 
 const FLAGS = [
   { value: 'companion_error', label: 'The companion was wrong or misleading' },
@@ -30,14 +18,16 @@ const FLAGS = [
 function ReportProblem({ sessionId, userId, onFlagged }: { sessionId: string; userId: string; onFlagged: () => void }) {
   const [open, setOpen] = useState(false)
   const [done, setDone] = useState<string | null>(null)
-  if (done) return <p className="text-xs text-gray-500">Reported ({done}). This attempt no longer counts as evidence.</p>
+  if (done) {
+    return <p className="text-sm text-marigold-ink bg-marigold-tint rounded-md px-4 py-3">Reported ({done}). This attempt no longer counts as evidence.</p>
+  }
   return (
-    <div className="text-xs">
-      <button onClick={() => setOpen(!open)} className="text-gray-500 hover:text-gray-700 underline">
-        Report a problem with this case
+    <div className="text-sm">
+      <button onClick={() => setOpen(!open)} aria-expanded={open} className="inline-flex items-center gap-1.5 text-graphite hover:text-ink underline underline-offset-2">
+        <Flag size={14} aria-hidden="true" /> Report a problem with this case
       </button>
       {open && (
-        <div className="mt-2 flex flex-col gap-1">
+        <div className="mt-3 flex flex-col gap-2">
           {FLAGS.map(f => (
             <button
               key={f.value}
@@ -46,7 +36,7 @@ function ReportProblem({ sessionId, userId, onFlagged }: { sessionId: string; us
                 setDone(f.label.toLowerCase())
                 onFlagged()
               }}
-              className="text-left px-3 py-1.5 rounded border border-gray-200 hover:bg-gray-50 text-gray-700"
+              className="text-left rounded-md border border-hairline-strong bg-surface px-3 py-2 text-ink hover:bg-linen transition-colors duration-200"
             >
               {f.label}
             </button>
@@ -72,42 +62,69 @@ export default function Result() {
 
   const relevantSkillIds = result?.event?.skills_evidence.map(se => se.skill_id) ?? []
   const relevantSkills = skills.filter(s => relevantSkillIds.includes(s.skill_id))
+  const toLearn = relevantSkills.filter(s => s.state !== 'demonstrated_independently').slice(0, 2)
 
   return (
     <div className="max-w-2xl mx-auto space-y-6">
       {result && (
-        <div className={`rounded-xl p-6 border ${result.decision_correct ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'}`}>
-          <div className={`text-2xl font-bold mb-2 ${result.decision_correct ? 'text-green-800' : 'text-red-800'}`}>
-            {result.decision_correct ? '✓ Correct!' : '✗ Incorrect'}
+        <div className={`rounded-lg p-6 ${result.decision_correct ? 'bg-action-tint' : 'bg-coral-tint'}`}>
+          <div className={`flex items-center gap-2 text-[28px] leading-[1.2] font-semibold tracking-[-0.02em] ${result.decision_correct ? 'text-action-ink' : 'text-coral-ink'}`}>
+            {result.decision_correct ? <CircleCheck size={28} aria-hidden="true" /> : <CircleX size={28} aria-hidden="true" />}
+            {result.decision_correct ? 'Correct' : 'Not this time'}
           </div>
-          <p className="text-gray-700">{result.explanation}</p>
+          <p className="mt-3 font-serif text-lg leading-[1.56] text-ink">{result.explanation}</p>
           {!result.decision_correct && result.affected_rows.length > 0 && (
-            <p className="text-sm text-gray-500 mt-2">
-              Issue in rows: {result.affected_rows.join(', ')}. Correct decision was: <strong>{result.correct_decision?.replace('_', ' ')}</strong>.
+            <p className="text-sm text-graphite mt-3">
+              Issue in rows: {result.affected_rows.join(', ')}. The right decision was <strong className="text-ink">{result.correct_decision?.replace('_', ' ')}</strong>.
             </p>
           )}
         </div>
       )}
 
       {relevantSkills.length > 0 && (
-        <div className="bg-white rounded-xl border border-gray-200 p-5">
-          <h2 className="font-semibold text-gray-800 mb-3">Skills updated</h2>
-          <div className="space-y-3">
+        <Card className="p-6">
+          <SectionTitle>What this case showed</SectionTitle>
+          <ul className="space-y-4">
             {relevantSkills.map(s => (
-              <div key={s.skill_id} className="flex items-start gap-3">
-                <span className={`px-2 py-0.5 rounded-full text-xs font-medium mt-0.5 ${STATE_COLORS[s.state]}`}>
-                  {STATE_LABELS[s.state]}
-                </span>
+              <li key={s.skill_id} className="flex flex-col sm:flex-row sm:items-start gap-2 sm:gap-4">
+                <div className="sm:w-52 shrink-0"><StatePill state={s.state} /></div>
                 <div>
-                  <div className="text-sm font-medium text-gray-800">{skillName(s.skill_id)}</div>
-                  <div className="text-xs text-gray-500 mt-0.5">{s.why}</div>
+                  <div className="font-medium text-ink">{skillName(s.skill_id)}</div>
+                  <div className="text-sm text-graphite mt-0.5">{s.why}</div>
                 </div>
-              </div>
+              </li>
             ))}
-          </div>
-          <p className="text-xs text-gray-400 mt-3">Evidence state, not a score. See My skills for your full trail.</p>
+          </ul>
+          <p className="text-xs text-stone mt-5">Evidence states, not scores. My skills shows the full trail.</p>
+        </Card>
+      )}
+
+      {toLearn.length > 0 && (
+        <Card className="p-6 space-y-4">
+          <SectionTitle>Learn more</SectionTitle>
+          {toLearn.map(s => (
+            <div key={s.skill_id} className="space-y-2">
+              <div className="font-medium text-ink">{skillName(s.skill_id)}</div>
+              <SkillResources skillId={s.skill_id} k={2} />
+            </div>
+          ))}
+        </Card>
+      )}
+
+      {nextCase?.case_id && (
+        <div className="bg-marigold-tint rounded-lg p-5">
+          <div className={`${label} text-marigold-ink mb-1`}>Suggested next</div>
+          <p className="text-ink"><strong>{nextCase.case_id}</strong> · {nextCase.because}</p>
         </div>
       )}
+
+      <div className="flex flex-col sm:flex-row gap-3">
+        <Link to={nextCase?.case_id ? `/workspace/${nextCase.case_id}` : '/queue'} className={`${btn.primary} flex-1 py-3`}>
+          {nextCase?.case_id ? `Next case: ${nextCase.case_id}` : 'Next case'}
+          <ArrowRight size={16} aria-hidden="true" />
+        </Link>
+        <Link to="/skills" className={`${btn.outline} flex-1 py-3`}>See my skills</Link>
+      </div>
 
       {result?.event?.session_id && (
         <ReportProblem
@@ -116,43 +133,6 @@ export default function Result() {
           onFlagged={() => getSkills(userId).then(setSkills)}
         />
       )}
-
-      {relevantSkills.some(s => s.state !== 'demonstrated_independently') && (
-        <div className="bg-white rounded-xl border border-gray-200 p-4 space-y-3">
-          <div className="text-xs font-medium text-gray-500 uppercase tracking-wide">Learn more</div>
-          {relevantSkills
-            .filter(s => s.state !== 'demonstrated_independently')
-            .slice(0, 2)
-            .map(s => (
-              <div key={s.skill_id} className="space-y-1">
-                <div className="text-sm font-medium text-gray-800">{skillName(s.skill_id)}</div>
-                <SkillResources skillId={s.skill_id} k={2} />
-              </div>
-            ))}
-        </div>
-      )}
-
-      {nextCase?.case_id && (
-        <div className="bg-indigo-50 border border-indigo-100 rounded-xl p-4 text-sm text-indigo-900">
-          <div className="text-xs font-medium text-indigo-500 uppercase tracking-wide mb-1">Suggested next</div>
-          <strong>{nextCase.case_id}</strong> · {nextCase.because}
-        </div>
-      )}
-
-      <div className="flex gap-3">
-        <Link
-          to={nextCase?.case_id ? `/workspace/${nextCase.case_id}` : '/queue'}
-          className="flex-1 text-center bg-indigo-600 text-white py-3 rounded-xl font-medium hover:bg-indigo-700 transition-colors"
-        >
-          {nextCase?.case_id ? `Next case: ${nextCase.case_id}` : 'Next case'}
-        </Link>
-        <Link
-          to="/skills"
-          className="flex-1 text-center bg-gray-100 text-gray-700 py-3 rounded-xl font-medium hover:bg-gray-200 transition-colors"
-        >
-          My skills
-        </Link>
-      </div>
     </div>
   )
 }
