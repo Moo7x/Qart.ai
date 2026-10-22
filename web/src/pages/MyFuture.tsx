@@ -1,15 +1,15 @@
 import { useEffect, useRef, useState } from 'react'
-import { ArrowDown, ChevronDown, ChevronUp, Clock, ExternalLink, Search } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import { ArrowRight, BadgeCheck, ChevronDown, ChevronUp, Clock, ExternalLink } from 'lucide-react'
+import FlowSteps from '../components/FlowSteps'
 import { useReveal } from '../motion'
-import { getPath, getRecommendation, getSnapshots, searchResources } from '../api'
-import { ResourceList, SkillResources } from '../components/ResourceList'
+import { getRecommendation, getRoles, getSnapshots } from '../api'
+import { SkillResources } from '../components/ResourceList'
 import { useUserId } from '../persona'
-import type { PathPlan, Recommendation, RoleRecommendation, Scenario, SearchResponse, Snapshot } from '../types'
+import { SCENARIO_LABEL, SCENARIOS } from '../scenarios'
+import type { Recommendation, Role, RoleRecommendation, Scenario, Snapshot } from '../types'
 import { skillName } from '../skillNames'
-import { asProvenance, btn, Card, Highlight, input as inputCls, label, Loading, NextStepCard, PageHeader, ProvenanceTag, SectionTitle, STATE_META, Tag, type Tone } from '../ui'
-
-const SEARCH_RETRIES = 4 // a GPU cold start took ~100 s; 4 × 25 s covers it
-const SEARCH_RETRY_MS = 25000
+import { asProvenance, btn, Card, Highlight, label, Loading, NextStepCard, PageHeader, ProvenanceTag, SectionTitle, STATE_META, Tag, type Tone } from '../ui'
 
 const ALLOC_META: Record<string, { label: string; tone: Tone }> = {
   human: { label: 'Human', tone: 'action' },
@@ -17,9 +17,6 @@ const ALLOC_META: Record<string, { label: string; tone: Tone }> = {
   ai: { label: 'AI', tone: 'linen' },
 }
 
-const STEP_TONE: Record<string, Tone> = { checkin: 'coral', course: 'action', practice_case: 'marigold' }
-// Path markers share the step colours: course blue, check-in coral, practice marigold.
-const MARKER: Record<string, string> = { course: 'bg-action-tint text-action-ink', checkin: 'bg-coral-tint text-coral-ink', practice_case: 'bg-marigold-tint text-marigold-ink' }
 
 function FactorBar({ label: name, value, penalty = false }: { label: string; value: number; penalty?: boolean }) {
   // Role-fit factors (not skill mastery), so a bar is allowed here.
@@ -37,13 +34,15 @@ function FactorBar({ label: name, value, penalty = false }: { label: string; val
   )
 }
 
-function RoleCard({ role, expanded, onToggle, planned, onPlan }: {
+function RoleCard({ role, info, expanded, onToggle }: {
   role: RoleRecommendation
+  info?: Role
   expanded: boolean
   onToggle: () => void
-  planned: boolean
-  onPlan: () => void
 }) {
+  // Skills outside gap[] have full credit, i.e. were shown on the person's own (engine: gap_list).
+  const gapIds = new Set(role.gap.map(g => g.skill_id))
+  const shown = (info?.skills ?? []).map(s => s.skill_id).filter(id => !gapIds.has(id))
   const detailsId = `role-${role.role_id}`
   const [openSkill, setOpenSkill] = useState<string | null>(null)
   return (
@@ -77,6 +76,7 @@ function RoleCard({ role, expanded, onToggle, planned, onPlan }: {
                 <span className="text-graphite tabular-nums">Fit {role.fit.toFixed(2)} <span className="text-xs">(indicator, not a probability)</span></span>
               )}
             </div>
+            {info?.summary && <p className="mt-1.5 text-sm text-graphite">{info.summary}</p>}
             {role.score_note && <div className="text-xs text-stone italic mt-1">{role.score_note}</div>}
           </div>
         </div>
@@ -90,9 +90,9 @@ function RoleCard({ role, expanded, onToggle, planned, onPlan }: {
 
       {expanded && (
         <div id={detailsId} className="border-t border-hairline p-5 space-y-6">
-          <button onClick={onPlan} disabled={planned} className={planned ? `${btn.ghost} disabled:opacity-100` : btn.primary}>
-            {planned ? 'Your learning path below is for this role' : 'Plan my learning path for this role'}
-          </button>
+          <Link to={`/pathway?role=${encodeURIComponent(role.role_id)}`} className={btn.outline}>
+            Build this pathway <ArrowRight size={16} aria-hidden="true" />
+          </Link>
           <div>
             <div className={`${label} mb-3`}>Why this rank</div>
             <div className="space-y-3">
@@ -103,6 +103,15 @@ function RoleCard({ role, expanded, onToggle, planned, onPlan }: {
             </div>
             <div className="mt-3 text-xs text-graphite font-mono bg-linen rounded-sm px-3 py-2 overflow-x-auto">{role.formula}</div>
           </div>
+
+          {shown.length > 0 && (
+            <div>
+              <div className={`${label} mb-2`}>Already shown on your own</div>
+              <div className="flex flex-wrap gap-1.5">
+                {shown.map(id => <Tag key={id} tone="action" icon={BadgeCheck}>{skillName(id)}</Tag>)}
+              </div>
+            </div>
+          )}
 
           {role.gap.length > 0 && (
             <div>
@@ -178,199 +187,96 @@ function RoleCard({ role, expanded, onToggle, planned, onPlan }: {
   )
 }
 
-function PathTimeline({ plan }: { plan: PathPlan }) {
-  return (
-    <div className="space-y-4">
-      <div className="flex flex-wrap items-center justify-between gap-2 text-sm">
-        <span className="font-medium text-ink tabular-nums">{plan.total_hours} h total · {plan.weeks} weeks at {plan.weekly_hours} h/week</span>
-        <span className="text-xs text-graphite tabular-nums">Gap left after this path (worse scenario): {plan.worst_case_gap.toFixed(2)}</span>
-      </div>
-      <ol className="relative">
-        <div className="absolute left-4 top-4 bottom-4 w-px bg-hairline-strong" aria-hidden="true" />
-        {plan.steps.map(step => (
-          <li key={step.order} className="relative flex items-start gap-4 pb-3">
-            <span className={`w-8 h-8 rounded-full text-sm font-semibold flex items-center justify-center shrink-0 relative z-10 tabular-nums ring-4 ring-canvas ${MARKER[step.type] ?? 'bg-linen text-graphite'}`}>
-              {step.order}
-            </span>
-            <Card className="flex-1 min-w-0 p-4">
-              <div className="flex items-center gap-2 flex-wrap">
-                <span className="font-semibold text-ink">{step.title}</span>
-                <Tag tone={STEP_TONE[step.type] ?? 'linen'}>{step.type.replace('_', ' ')}</Tag>
-                {step.cost === 'free' && <Tag tone="mocha">free</Tag>}
-                {step.sdg_targets?.map(t => <Tag key={t} tone="linen">SDG {t}</Tag>)}
-              </div>
-              <div className="flex items-center gap-2 mt-1.5 text-sm text-graphite flex-wrap">
-                <span className="inline-flex items-center gap-1 tabular-nums"><Clock size={14} aria-hidden="true" /> {step.hours} h</span>
-                {step.url && (
-                  <a href={step.url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-action-ink hover:underline">
-                    Open <ExternalLink size={12} aria-hidden="true" />
-                  </a>
-                )}
-                {step.because && <span className="italic">· {step.because}</span>}
-              </div>
-              <div className="flex flex-wrap gap-1 mt-2">
-                {step.skills.map(sk => <Tag key={sk} tone="outline">{skillName(sk)}</Tag>)}
-              </div>
-            </Card>
-          </li>
-        ))}
-      </ol>
-    </div>
-  )
-}
-
 export default function MyFuture() {
   const userId = useUserId()
   const [scenario, setScenario] = useState<Scenario>('assistive')
   const [recommendation, setRecommendation] = useState<Recommendation | null>(null)
-  const [path, setPath] = useState<PathPlan | null>(null)
+  const [roles, setRoles] = useState<Record<string, Role>>({})
   const [snapshots, setSnapshots] = useState<Snapshot[]>([])
   const [expandedRole, setExpandedRole] = useState<string | null>(null)
-  const [pathRole, setPathRole] = useState<string | null>(null) // null: server picks the best role
   const [loading, setLoading] = useState(true)
-  const [query, setQuery] = useState('')
-  const [found, setFound] = useState<SearchResponse | null>(null)
-  const [searching, setSearching] = useState(false)
   const root = useRef<HTMLDivElement>(null)
   useReveal(root, [loading])
 
-  const runSearch = async (text: string) => {
-    if (text.trim().length < 2) return
-    setSearching(true)
-    try {
-      const first = await searchResources(text.trim(), undefined, 6)
-      setFound(first)
-      // While the GPU worker starts, ask again so the keyword results get replaced by GPU results.
-      let latest = first
-      for (let attempt = 0; attempt < SEARCH_RETRIES && latest.engine === 'keyword' && latest.note.includes('starting up'); attempt++) {
-        await new Promise(resolve => window.setTimeout(resolve, SEARCH_RETRY_MS))
-        latest = await searchResources(text.trim(), undefined, 6)
-        setFound(latest)
-      }
-    } finally {
-      setSearching(false)
-    }
-  }
-
   useEffect(() => {
     getSnapshots().then(setSnapshots).catch(() => {})
+    getRoles().then(list => setRoles(Object.fromEntries(list.map(r => [r.id, r])))).catch(() => {})
   }, [])
 
   useEffect(() => {
-    Promise.all([
-      getRecommendation(userId, scenario),
-      getPath(userId, pathRole),
-    ]).then(([rec, p]) => {
+    getRecommendation(userId, scenario).then(rec => {
       setRecommendation(rec)
-      setPath(p)
       setLoading(false)
     })
-  }, [scenario, pathRole, userId])
+  }, [scenario, userId])
 
-  const pathRoleTitle = path
-    ? recommendation?.roles.find(r => r.role_id === path.target_role_id)?.title ?? path.target_role_id
-    : ''
+  if (loading) return <Loading what="your role matches" />
 
-  const pathRoleData = path ? recommendation?.roles.find(r => r.role_id === path.target_role_id) : undefined
-
-  if (loading) return <Loading what="your future roles" />
+  const top = recommendation?.roles[0]
+  const latest = snapshots[snapshots.length - 1]
 
   return (
-    <div ref={root} className="max-w-3xl mx-auto space-y-10">
+    <div ref={root} className="max-w-3xl mx-auto space-y-8">
+      <FlowSteps />
       <div data-reveal>
         <PageHeader
-          title={<>Where your skills can <Highlight>lead</Highlight></>}
-          intro="Roles your evidence points toward, and a path to get there. The system recommends; you decide."
+          title={<>Roles that fit your <Highlight>evidence</Highlight></>}
+          intro="Ranked from your evidence, your interests and the company's AI assumptions. Open a role to see exactly how its rank was built. The system recommends; you decide."
         />
-        {path && pathRoleData?.time_to_ready && (
-          <NextStepCard
-            eyebrow={pathRole ? 'The role you chose' : 'Your closest role right now'}
-            title={pathRoleTitle}
-            action={<a href="#learning-path" className={`${btn.outline} whitespace-nowrap`}>See the path <ArrowDown size={16} aria-hidden="true" /></a>}
-          >
-            About {pathRoleData.time_to_ready.hours} hours of learning, or {pathRoleData.time_to_ready.weeks_at_current_budget} weeks at your weekly pace. Estimates, not a promise.
-          </NextStepCard>
-        )}
       </div>
 
-      {/* Snapshot card: reads source/release_date/period from GET /api/snapshots */}
-      {snapshots.length > 0 && (
-        <div data-reveal className="bg-mocha-tint rounded-lg p-5">
-          <div className="flex items-center gap-2 flex-wrap mb-2">
-            <span className="text-sm font-semibold text-mocha-ink">External evidence</span>
-            <Tag tone="linen">Historical data replay</Tag>
-            {recommendation?.assumptions_version !== undefined && (
-              <ProvenanceTag kind="assumption">v{recommendation.assumptions_version}</ProvenanceTag>
-            )}
-          </div>
-          {snapshots.map(snap => (
-            <p key={snap.id} className="text-sm text-ink tabular-nums">{snap.source} · {snap.release_date} release · {snap.period}</p>
-          ))}
-          <p className="text-xs text-mocha-ink mt-2">Usage data informs the skill-weight assumptions. Usage is not replacement; each requirement card shows how.</p>
-        </div>
-      )}
-
-      <div className="flex flex-wrap items-center gap-3">
+      <div data-reveal className="flex flex-wrap items-center gap-3">
         <span className="text-sm text-ink font-medium" id="scenario-label">Company AI scenario</span>
-        <div role="radiogroup" aria-labelledby="scenario-label" className="inline-flex bg-linen rounded-md p-1">
-          {(['assistive', 'agentic'] as Scenario[]).map(s => (
+        <div role="radiogroup" aria-labelledby="scenario-label" className="inline-flex flex-wrap bg-linen rounded-md p-1">
+          {SCENARIOS.map(s => (
             <button
               key={s} role="radio" aria-checked={scenario === s}
               onClick={() => { setScenario(s); setLoading(true) }}
               className={`px-4 py-1.5 rounded-sm text-sm transition-colors duration-200 ${scenario === s ? 'bg-surface text-ink font-medium shadow-[0_1px_2px_rgb(0_0_0/0.06)]' : 'text-graphite hover:text-ink'}`}
             >
-              {s.charAt(0).toUpperCase() + s.slice(1)}
+              {SCENARIO_LABEL[s]}
             </button>
           ))}
         </div>
-        <ProvenanceTag kind="assumption">company adoption scenario</ProvenanceTag>
+        {recommendation && <ProvenanceTag kind="assumption">company assumptions v{recommendation.assumptions_version}</ProvenanceTag>}
       </div>
 
+      {top && (
+        <div data-reveal>
+          <NextStepCard
+            eyebrow="Your closest role right now"
+            title={top.title ?? top.role_id}
+            action={<Link to={`/pathway?role=${encodeURIComponent(top.role_id)}`} className={`${btn.primary} whitespace-nowrap`}>Build this pathway <ArrowRight size={16} aria-hidden="true" /></Link>}
+          >
+            {top.time_to_ready
+              ? `About ${top.time_to_ready.hours} hours of learning, or ${top.time_to_ready.weeks_at_current_budget} weeks at your weekly pace. Estimates, not a promise.`
+              : 'Open the role below to see why it ranks first.'}
+          </NextStepCard>
+        </div>
+      )}
+
       <section data-reveal>
-        <SectionTitle>Roles that fit your evidence</SectionTitle>
-        <p className="text-sm text-graphite mb-4">Suitability indicators from your evidence, not probabilities.</p>
+        <SectionTitle>Ranked roles</SectionTitle>
+        <p className="text-sm text-graphite mb-4">Fit is a suitability indicator from your evidence, not a probability.</p>
         <div className="space-y-3">
           {recommendation?.roles.map(role => (
             <RoleCard
               key={role.role_id}
               role={role}
+              info={roles[role.role_id]}
               expanded={expandedRole === role.role_id}
               onToggle={() => setExpandedRole(expandedRole === role.role_id ? null : role.role_id)}
-              planned={path?.target_role_id === role.role_id}
-              onPlan={() => setPathRole(role.role_id)}
             />
           ))}
         </div>
       </section>
 
-      {path && (
-        <section data-reveal id="learning-path" className="scroll-mt-24">
-          <SectionTitle aside={<Tag tone="linen">{pathRole ? 'Role you chose' : 'Best role across both scenarios'} · works in both</Tag>}>
-            Your learning path · {pathRoleTitle}
-          </SectionTitle>
-          <PathTimeline plan={path} />
-          <p className="text-xs text-graphite mt-2">Course coverage is an assumption until new evidence arrives. Hours are estimates.</p>
-        </section>
+      {latest && (
+        <p data-reveal className="text-xs text-graphite">
+          External evidence behind the assumptions: {latest.source} · {latest.release_date} release · period {latest.period}.{' '}
+          <Link to="/signals" className="text-action-ink hover:underline">See the signals</Link>
+        </p>
       )}
-
-      {/* Resource search (RunPod hybrid search when available) */}
-      <section data-reveal>
-        <SectionTitle>Search learning resources and work evidence</SectionTitle>
-        <form onSubmit={e => { e.preventDefault(); runSearch(query) }} className="flex gap-2">
-          <input
-            value={query}
-            onChange={e => setQuery(e.target.value)}
-            placeholder="e.g. challenge adjustments without documents"
-            aria-label="Search learning resources"
-            className={`${inputCls} flex-1 min-w-0`}
-          />
-          <button type="submit" disabled={searching} className={btn.outline}>
-            <Search size={16} aria-hidden="true" /> {searching ? 'Searching…' : 'Search'}
-          </button>
-        </form>
-        <p className="text-xs text-graphite mt-2">Searches verified courses and O*NET task statements. Every result carries its source and date.</p>
-        {found && <div className="mt-4"><ResourceList response={found} /></div>}
-      </section>
     </div>
   )
 }
