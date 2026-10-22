@@ -1,11 +1,12 @@
-import { useEffect, useState } from 'react'
-import { ChevronDown, ChevronUp, Clock, ExternalLink, Search } from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
+import { ArrowDown, ChevronDown, ChevronUp, Clock, ExternalLink, Search } from 'lucide-react'
+import { useReveal } from '../motion'
 import { getPath, getRecommendation, getSnapshots, searchResources } from '../api'
 import { ResourceList, SkillResources } from '../components/ResourceList'
 import { useUserId } from '../persona'
 import type { PathPlan, Recommendation, RoleRecommendation, Scenario, SearchResponse, Snapshot } from '../types'
 import { skillName } from '../skillNames'
-import { asProvenance, btn, Card, input as inputCls, label, Loading, PageHeader, ProvenanceTag, SectionTitle, STATE_META, Tag, type Tone } from '../ui'
+import { asProvenance, btn, Card, Highlight, input as inputCls, label, Loading, NextStepCard, PageHeader, ProvenanceTag, SectionTitle, STATE_META, Tag, type Tone } from '../ui'
 
 const SEARCH_RETRIES = 4 // a GPU cold start took ~100 s; 4 × 25 s covers it
 const SEARCH_RETRY_MS = 25000
@@ -16,7 +17,9 @@ const ALLOC_META: Record<string, { label: string; tone: Tone }> = {
   ai: { label: 'AI', tone: 'linen' },
 }
 
-const STEP_TONE: Record<string, Tone> = { checkin: 'coral', course: 'action' }
+const STEP_TONE: Record<string, Tone> = { checkin: 'coral', course: 'action', practice_case: 'marigold' }
+// Path markers share the step colours: course blue, check-in coral, practice marigold.
+const MARKER: Record<string, string> = { course: 'bg-action-tint text-action-ink', checkin: 'bg-coral-tint text-coral-ink', practice_case: 'bg-marigold-tint text-marigold-ink' }
 
 function FactorBar({ label: name, value, penalty = false }: { label: string; value: number; penalty?: boolean }) {
   // Role-fit factors (not skill mastery), so a bar is allowed here.
@@ -186,7 +189,7 @@ function PathTimeline({ plan }: { plan: PathPlan }) {
         <div className="absolute left-4 top-4 bottom-4 w-px bg-hairline-strong" aria-hidden="true" />
         {plan.steps.map(step => (
           <li key={step.order} className="relative flex items-start gap-4 pb-3">
-            <span className="w-8 h-8 rounded-full bg-surface border border-hairline-strong text-ink text-sm font-semibold flex items-center justify-center shrink-0 relative z-10 tabular-nums">
+            <span className={`w-8 h-8 rounded-full text-sm font-semibold flex items-center justify-center shrink-0 relative z-10 tabular-nums ring-4 ring-canvas ${MARKER[step.type] ?? 'bg-linen text-graphite'}`}>
               {step.order}
             </span>
             <Card className="flex-1 min-w-0 p-4">
@@ -228,6 +231,8 @@ export default function MyFuture() {
   const [query, setQuery] = useState('')
   const [found, setFound] = useState<SearchResponse | null>(null)
   const [searching, setSearching] = useState(false)
+  const root = useRef<HTMLDivElement>(null)
+  useReveal(root, [loading])
 
   const runSearch = async (text: string) => {
     if (text.trim().length < 2) return
@@ -266,15 +271,31 @@ export default function MyFuture() {
     ? recommendation?.roles.find(r => r.role_id === path.target_role_id)?.title ?? path.target_role_id
     : ''
 
+  const pathRoleData = path ? recommendation?.roles.find(r => r.role_id === path.target_role_id) : undefined
+
   if (loading) return <Loading what="your future roles" />
 
   return (
-    <div className="max-w-3xl mx-auto space-y-10">
-      <PageHeader title="My future" intro="Roles your evidence points toward, and a path to get there. The system recommends; you decide." />
+    <div ref={root} className="max-w-3xl mx-auto space-y-10">
+      <div data-reveal>
+        <PageHeader
+          title={<>Where your skills can <Highlight>lead</Highlight></>}
+          intro="Roles your evidence points toward, and a path to get there. The system recommends; you decide."
+        />
+        {path && pathRoleData?.time_to_ready && (
+          <NextStepCard
+            eyebrow={pathRole ? 'The role you chose' : 'Your closest role right now'}
+            title={pathRoleTitle}
+            action={<a href="#learning-path" className={`${btn.outline} whitespace-nowrap`}>See the path <ArrowDown size={16} aria-hidden="true" /></a>}
+          >
+            About {pathRoleData.time_to_ready.hours} hours of learning, or {pathRoleData.time_to_ready.weeks_at_current_budget} weeks at your weekly pace. Estimates, not a promise.
+          </NextStepCard>
+        )}
+      </div>
 
       {/* Snapshot card: reads source/release_date/period from GET /api/snapshots */}
       {snapshots.length > 0 && (
-        <div className="bg-mocha-tint rounded-lg p-5">
+        <div data-reveal className="bg-mocha-tint rounded-lg p-5">
           <div className="flex items-center gap-2 flex-wrap mb-2">
             <span className="text-sm font-semibold text-mocha-ink">External evidence</span>
             <Tag tone="linen">Historical data replay</Tag>
@@ -305,7 +326,7 @@ export default function MyFuture() {
         <ProvenanceTag kind="assumption">company adoption scenario</ProvenanceTag>
       </div>
 
-      <section>
+      <section data-reveal>
         <SectionTitle>Roles that fit your evidence</SectionTitle>
         <p className="text-sm text-graphite mb-4">Suitability indicators from your evidence, not probabilities.</p>
         <div className="space-y-3">
@@ -323,7 +344,7 @@ export default function MyFuture() {
       </section>
 
       {path && (
-        <section>
+        <section data-reveal id="learning-path" className="scroll-mt-24">
           <SectionTitle aside={<Tag tone="linen">{pathRole ? 'Role you chose' : 'Best role across both scenarios'} · works in both</Tag>}>
             Your learning path · {pathRoleTitle}
           </SectionTitle>
@@ -333,7 +354,7 @@ export default function MyFuture() {
       )}
 
       {/* Resource search (RunPod hybrid search when available) */}
-      <section>
+      <section data-reveal>
         <SectionTitle>Search learning resources and work evidence</SectionTitle>
         <form onSubmit={e => { e.preventDefault(); runSearch(query) }} className="flex gap-2">
           <input

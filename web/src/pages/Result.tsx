@@ -1,12 +1,13 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link, useLocation, useParams } from 'react-router-dom'
 import { ArrowRight, CircleCheck, CircleX, Flag } from 'lucide-react'
 import { flagSession, getNextCase, getSkills } from '../api'
+import { useReveal } from '../motion'
 import { useUserId } from '../persona'
 import { skillName } from '../skillNames'
 import { SkillResources } from '../components/ResourceList'
 import type { DecisionResponse, NextCase, SkillState } from '../types'
-import { btn, Card, label, SectionTitle, StatePill } from '../ui'
+import { btn, Card, NextStepCard, SectionTitle, StatePill } from '../ui'
 
 const FLAGS = [
   { value: 'companion_error', label: 'The companion was wrong or misleading' },
@@ -54,6 +55,8 @@ export default function Result() {
   const result: DecisionResponse | null = location.state?.result ?? null
   const [skills, setSkills] = useState<SkillState[]>([])
   const [nextCase, setNextCase] = useState<NextCase | null>(null)
+  const root = useRef<HTMLDivElement>(null)
+  useReveal(root, [])
 
   useEffect(() => {
     getSkills(userId).then(setSkills)
@@ -65,9 +68,9 @@ export default function Result() {
   const toLearn = relevantSkills.filter(s => s.state !== 'demonstrated_independently').slice(0, 2)
 
   return (
-    <div className="max-w-2xl mx-auto space-y-6">
+    <div ref={root} className="max-w-2xl mx-auto space-y-6">
       {result && (
-        <div className={`rounded-lg p-6 ${result.decision_correct ? 'bg-action-tint' : 'bg-coral-tint'}`}>
+        <div data-reveal className={`rounded-lg p-6 ${result.decision_correct ? 'bg-action-tint' : 'bg-coral-tint'}`}>
           <div className={`flex items-center gap-2 text-[28px] leading-[1.2] font-semibold tracking-[-0.02em] ${result.decision_correct ? 'text-action-ink' : 'text-coral-ink'}`}>
             {result.decision_correct ? <CircleCheck size={28} aria-hidden="true" /> : <CircleX size={28} aria-hidden="true" />}
             {result.decision_correct ? 'Correct' : 'Not this time'}
@@ -82,7 +85,7 @@ export default function Result() {
       )}
 
       {relevantSkills.length > 0 && (
-        <Card className="p-6">
+        <Card data-reveal className="p-6">
           <SectionTitle>What this case showed</SectionTitle>
           <ul className="space-y-4">
             {relevantSkills.map(s => (
@@ -111,28 +114,31 @@ export default function Result() {
         </Card>
       )}
 
-      {nextCase?.case_id && (
-        <div className="bg-marigold-tint rounded-lg p-5">
-          <div className={`${label} text-marigold-ink mb-1`}>Suggested next</div>
-          <p className="text-ink"><strong>{nextCase.case_id}</strong> · {nextCase.because}</p>
-        </div>
-      )}
-
-      <div className="flex flex-col sm:flex-row gap-3">
-        <Link to={nextCase?.case_id ? `/workspace/${nextCase.case_id}` : '/queue'} className={`${btn.primary} flex-1 py-3`}>
-          {nextCase?.case_id ? `Next case: ${nextCase.case_id}` : 'Next case'}
-          <ArrowRight size={16} aria-hidden="true" />
-        </Link>
-        <Link to="/skills" className={`${btn.outline} flex-1 py-3`}>See my skills</Link>
+      <div data-reveal>
+        <NextStepCard
+          eyebrow="Suggested next"
+          title={nextCase?.case_id ?? 'Pick your next case'}
+          action={
+            <Link to={nextCase?.case_id ? `/workspace/${nextCase.case_id}` : '/queue'} className={`${btn.primary} whitespace-nowrap`}>
+              {nextCase?.case_id ? 'Start it' : 'Work queue'} <ArrowRight size={16} aria-hidden="true" />
+            </Link>
+          }
+        >
+          {nextCase?.because ?? 'Choose any case from your work queue.'}
+        </NextStepCard>
       </div>
 
-      {result?.event?.session_id && (
-        <ReportProblem
-          sessionId={result.event.session_id}
-          userId={userId}
-          onFlagged={() => getSkills(userId).then(setSkills)}
-        />
-      )}
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <Link to="/skills" className={btn.outline}>See my skills</Link>
+        {result?.event?.session_id && (
+          <ReportProblem
+            sessionId={result.event.session_id}
+            userId={userId}
+            onFlagged={() => getSkills(userId).then(setSkills)}
+          />
+        )}
+      </div>
+
     </div>
   )
 }

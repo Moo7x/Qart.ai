@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ArrowRight, Check } from 'lucide-react'
 import { getNextCase, getProfile, postProfile } from '../api'
+import { useReveal } from '../motion'
 import { useUserId } from '../persona'
 import type { Profile } from '../types'
-import { btn, Card, PageHeader, ProvenanceTag } from '../ui'
+import { btn, Card, Highlight, PageHeader, ProvenanceTag } from '../ui'
 
 const SKILLS = [
   { id: 'recon_to_source', label: 'Reconcile to source' },
@@ -31,6 +32,8 @@ export default function Intake() {
   )
   const [interests, setInterests] = useState<string[]>(['analysis', 'automation'])
   const [submitting, setSubmitting] = useState(false)
+  const root = useRef<HTMLDivElement>(null)
+  useReveal(root, [profile !== null])
 
   // Pre-fill from the employee's saved profile so the form shows their current values
   useEffect(() => {
@@ -72,16 +75,16 @@ export default function Intake() {
   }
 
   return (
-    <div className="max-w-2xl mx-auto">
+    <div ref={root} className="max-w-2xl mx-auto">
       <PageHeader
-        title={name ? `Welcome, ${name}` : 'Welcome'}
+        title={name ? <>Welcome, <Highlight>{name}</Highlight></> : 'Welcome'}
         intro="Tell us where you are today. Your practice starts from here and changes as you work."
         aside={name ? <ProvenanceTag kind="synthetic">{name} is a demo persona</ProvenanceTag> : undefined}
       />
       {error && <p role="alert" className="-mt-4 mb-6 rounded-md bg-coral-tint px-4 py-3 text-sm text-coral-ink">{error}</p>}
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        <Card className="p-6">
+        <Card data-reveal className="p-6">
           <h2 className="text-base font-semibold text-ink">How confident are you today?</h2>
           <p className="mt-1 mb-5 text-sm text-graphite">This is your own starting view. Practice and check-in cases add real evidence next to it.</p>
           <div className="space-y-4">
@@ -101,7 +104,7 @@ export default function Intake() {
           </div>
         </Card>
 
-        <Card className="p-6">
+        <Card data-reveal className="p-6">
           <h2 className="text-base font-semibold text-ink">What do you enjoy?</h2>
           <p className="mt-1 mb-4 text-sm text-graphite">Pick any. They help rank future roles for you.</p>
           <div className="flex flex-wrap gap-2">
@@ -121,7 +124,7 @@ export default function Intake() {
           </div>
         </Card>
 
-        <Card className="p-6">
+        <Card data-reveal className="p-6">
           <label htmlFor="weekly-hours" className="text-base font-semibold text-ink">Time for learning each week</label>
           <div className="mt-4 flex items-center gap-4">
             <input

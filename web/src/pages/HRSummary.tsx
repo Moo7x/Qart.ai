@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react'
-import { ShieldCheck } from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
+import { EyeOff, Grid3x3, ShieldCheck, Users } from 'lucide-react'
+import { useReveal } from '../motion'
 import { getHRSummary } from '../api'
 import { skillName } from '../skillNames'
 import type { HRSummaryData, SkillStateName } from '../types'
-import { Card, EmptyState, label, Loading, PageHeader, ProvenanceTag, StatePill, Tag } from '../ui'
+import { Card, EmptyState, Highlight, label, Loading, PageHeader, ProvenanceTag, StatePill, StatTile, Tag } from '../ui'
 
 const COLUMNS: SkillStateName[] = ['demonstrated_independently', 'observed_with_help', 'self_reported', 'insufficient_evidence']
 
@@ -17,6 +18,8 @@ function CountCell({ value }: { value: number | null | undefined }) {
 export default function HRSummary() {
   const [summary, setSummary] = useState<HRSummaryData | null>(null)
   const [loading, setLoading] = useState(true)
+  const root = useRef<HTMLDivElement>(null)
+  useReveal(root, [loading])
 
   useEffect(() => {
     getHRSummary('finops_kl')
@@ -24,15 +27,20 @@ export default function HRSummary() {
       .catch(() => setLoading(false))
   }, [])
 
-  return (
-    <div className="max-w-4xl mx-auto space-y-6">
-      <PageHeader
-        title="HR summary"
-        intro="How skill evidence looks across the team. Aggregates only, never individuals."
-        aside={<Tag tone="mocha" icon={ShieldCheck}>Aggregates only</Tag>}
-      />
+  // Cells hidden because the group is too small (counted, never revealed).
+  const hiddenCells = summary?.skills.reduce((n, row) => n + COLUMNS.filter(c => row.counts[c] === null || row.counts[c] === undefined).length, 0) ?? 0
 
-      <div className="bg-marigold-tint rounded-lg p-4 text-sm text-marigold-ink flex gap-3">
+  return (
+    <div ref={root} className="max-w-4xl mx-auto space-y-6">
+      <div data-reveal>
+        <PageHeader
+          title={<>Your team, in <Highlight>aggregate</Highlight></>}
+          intro="How skill evidence looks across the team. Aggregates only, never individuals."
+          aside={<Tag tone="mocha" icon={ShieldCheck}>Aggregates only</Tag>}
+        />
+      </div>
+
+      <div data-reveal className="bg-marigold-tint rounded-lg p-4 text-sm text-marigold-ink flex gap-3">
         <ShieldCheck size={20} className="shrink-0" aria-hidden="true" />
         <p>
           <strong>Privacy:</strong> individual recommendations are visible only to each employee.
@@ -49,13 +57,17 @@ export default function HRSummary() {
 
       {!loading && summary && !summary.suppressed && (
         <>
-          <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-graphite">
+          <div data-reveal className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-graphite">
             <span>Team <strong className="text-ink">{summary.team}</strong></span>
-            <span>People <strong className="text-ink tabular-nums">{summary.group_size ?? '—'}</strong></span>
             <span className="ml-auto"><ProvenanceTag kind="synthetic" /></span>
           </div>
+          <div data-reveal className="grid grid-cols-3 gap-3">
+            <StatTile tone="action" icon={Users} label="People" value={summary.group_size ?? '—'} />
+            <StatTile tone="linen" icon={Grid3x3} label="Skills tracked" value={summary.skills.length} />
+            <StatTile tone="marigold" icon={EyeOff} label={`Hidden cells (group < ${summary.min_group_size})`} value={hiddenCells} />
+          </div>
 
-          <Card className="overflow-x-auto">
+          <Card data-reveal className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
                 <tr>

@@ -1,10 +1,14 @@
-import { useEffect, useState } from 'react'
-import { ChevronDown, ChevronUp, CircleCheck, CircleDot, CircleX, Flag, Info, type LucideIcon } from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
+import { Link } from 'react-router-dom'
+import { ArrowRight, ChevronDown, ChevronUp, CircleCheck, CircleDot, CircleX, Flag, Info, type LucideIcon } from 'lucide-react'
 import { getSkills } from '../api'
 import { useUserId } from '../persona'
-import type { SkillState } from '../types'
+import { useReveal } from '../motion'
+import type { SkillState, SkillStateName } from '../types'
 import { skillName } from '../skillNames'
-import { btn, Card, EmptyState, label, Loading, PageHeader, StatePill, Tag, type Tone } from '../ui'
+import { btn, Card, EmptyState, Highlight, label, Loading, NextStepCard, PageHeader, StatePill, STATE_META, StatTile, Tag, type Tone } from '../ui'
+
+const STATE_ORDER: SkillStateName[] = ['demonstrated_independently', 'observed_with_help', 'self_reported', 'insufficient_evidence']
 
 const OUTCOMES: Record<string, { icon: LucideIcon; label: string; tone: Tone }> = {
   success: { icon: CircleCheck, label: 'Found it', tone: 'action' },
@@ -97,6 +101,8 @@ export default function MySkills() {
   const userId = useUserId()
   const [skills, setSkills] = useState<SkillState[]>([])
   const [loading, setLoading] = useState(true)
+  const root = useRef<HTMLDivElement>(null)
+  useReveal(root, [loading])
 
   useEffect(() => {
     getSkills(userId).then(s => { setSkills(s); setLoading(false) })
@@ -104,11 +110,37 @@ export default function MySkills() {
 
   if (loading) return <Loading what="your skills" />
 
-  return (
-    <div className="max-w-3xl mx-auto space-y-4">
-      <PageHeader title="My skills" intro="What your work has shown so far, and why each state changed." aside={<Tag tone="linen">Evidence states, not scores</Tag>} />
+  // Counts of skills per evidence state: counts only, never a percentage.
+  const byState = (state: SkillStateName) => skills.filter(s => s.state === state).length
+  const toConfirm = skills.find(s => s.next_to_confirm)
 
-      <div className="bg-action-tint rounded-lg p-4 text-sm text-action-ink flex gap-3">
+  return (
+    <div ref={root} className="max-w-3xl mx-auto space-y-4">
+      <div data-reveal>
+        <PageHeader
+          title={<>What your work <Highlight>shows</Highlight></>}
+          intro="What your work has shown so far, and why each state changed."
+          aside={<Tag tone="linen">Evidence states, not scores</Tag>}
+        />
+      </div>
+
+      <div data-reveal className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        {STATE_ORDER.map(state => (
+          <StatTile key={state} tone={STATE_META[state].tone} icon={STATE_META[state].icon} label={STATE_META[state].label} value={byState(state)} />
+        ))}
+      </div>
+
+      {toConfirm && (
+        <div data-reveal>
+          <NextStepCard
+            eyebrow={`Next for ${skillName(toConfirm.skill_id)}`}
+            title={toConfirm.next_to_confirm}
+            action={<Link to="/queue" className={`${btn.primary} whitespace-nowrap`}>Go to work queue <ArrowRight size={16} aria-hidden="true" /></Link>}
+          />
+        </div>
+      )}
+
+      <div data-reveal className="bg-action-tint rounded-lg p-4 text-sm text-action-ink flex gap-3">
         <Info size={20} className="shrink-0" aria-hidden="true" />
         <p>
           States come from what you did in cases, never a percentage. <strong>Shown on your own</strong> needs at least 2 no-help
@@ -119,7 +151,7 @@ export default function MySkills() {
       {skills.length === 0 ? (
         <EmptyState title="No skill evidence yet">Complete a case and your skills appear here.</EmptyState>
       ) : (
-        <div className="space-y-3">
+        <div data-reveal className="space-y-3">
           {skills.map(s => <SkillCard key={s.skill_id} skill={s} />)}
         </div>
       )}
