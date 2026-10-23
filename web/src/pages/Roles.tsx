@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { sendJSON, useApi } from '../api'
 import { Dots, ScenarioSwitch, SdgTag } from '../components/journey'
+import { ExplainRole } from '../components/ExplainRole'
 import { RoleTasks } from '../components/RoleTasks'
 import { Loading, Problem } from '../components/ui'
 import { useJourney } from '../state'
@@ -37,6 +38,7 @@ function bars(role: RoleCard) {
 
 function Why({ role, onChoose, chosen, busy }: { role: RoleCard; onChoose: () => void; chosen: boolean; busy: boolean }) {
   const { ready, partly } = bars(role)
+  const { profileId, scenario } = useJourney()
   return (
     <section className="card-dark flex flex-col gap-4 bg-[radial-gradient(70%_80%_at_90%_0%,rgba(108,71,255,0.2),rgba(33,33,38,0)_70%)] p-6">
       <div className="flex flex-wrap items-start justify-between gap-4">
@@ -90,6 +92,7 @@ function Why({ role, onChoose, chosen, busy }: { role: RoleCard; onChoose: () =>
           </tbody>
         </table>
       </div>
+      {profileId && <ExplainRole key={`${role.role_id}-${scenario}`} profileId={profileId} roleId={role.role_id} scenario={scenario} />}
       <div className="flex flex-wrap gap-2">
         <button type="button" className="btn btn-v" onClick={onChoose} disabled={busy}>
           {chosen ? 'Your destination ✓ · open the pathway' : 'Choose as my destination'}

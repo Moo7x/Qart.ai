@@ -1,11 +1,15 @@
 """Plain-language explanation of one computed role result (OpenAI gpt-4o-mini, never numbers).
 
-Code first turns the computed match, pathway and outlook into numbered facts (with their numbers).
-The model may only rephrase those facts: it returns a few sentences, each citing the fact ids it
-uses, under a strict JSON schema. Code then drops any sentence that contains a digit, cites no
-fact or cites an unknown one, so a number on screen always comes from code, shown next to the
-sentence through its cited facts. With no key, a failure or nothing left after the check, the
-explanation is a labelled template built from the same facts.
+Code first turns the computed match and pathway into numbered facts (with their numbers). The
+model may only rephrase those facts: it returns a few sentences, each citing the fact ids it
+uses, under a strict JSON schema. Code then drops any sentence that contains a number (digits or
+words), a forecast or promise word, cites no fact or cites an unknown one, so a number on screen
+always comes from code, shown next to the sentence through its cited facts. With no key, a
+failure or nothing left after the check, the explanation is a labelled template of the facts.
+
+Market evidence (the outlook) is not given to the model: in testing, gpt-4o-mini turned an
+observed employment share into "expected to rise significantly". The outlook is shown in its own
+words, with its sources, next to the explanation.
 """
 
 import json
@@ -23,14 +27,25 @@ MAX_SENTENCES = 5
 MAX_SENTENCE_CHARS = 320
 CACHE_SIZE = 256  # explanations kept in memory, so the same request is not paid for twice
 DIGIT = re.compile(r"\d")
+# Numbers written as words count as numbers too ("forty-three out of one hundred").
+NUMBER_WORD = re.compile(
+    r"\b(zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|"
+    r"fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty|thirty|forty|fifty|sixty|"
+    r"seventy|eighty|ninety|hundred|thousand|percent|per cent|half|quarter|dozen)\b",
+    re.I,
+)
+# Sentences that forecast or promise are dropped: the facts are observations and estimates only.
+FORECAST_WORD = re.compile(
+    r"\b(will|expected|expect|forecast|predict\w*|guarantee\w*|promising|definitely|"
+    r"certainly|surely|bright|secure)\b",
+    re.I,
+)
 
 Complete = Callable[[list[dict[str, str]], dict[str, Any]], str]
 _cache: OrderedDict[str, dict[str, Any]] = OrderedDict()
 
 
-def facts(
-    match: RoleMatch, path: Pathway, outlook: list[dict[str, str]], scenario_label: str
-) -> list[dict[str, str]]:
+def facts(match: RoleMatch, path: Pathway, scenario_label: str) -> list[dict[str, str]]:
     """Computed results as short sentences with ids; the only material the model may use."""
     out = [
         {
@@ -74,8 +89,6 @@ def facts(
             ),
         }
     )
-    for i, item in enumerate(outlook, 1):
-        out.append({"id": f"outlook{i}", "text": f"{item['text']} ({item['source']})"})
     return out
 
 
@@ -108,11 +121,16 @@ def messages(fact_list: list[dict[str, str]]) -> list[dict[str, str]]:
             "content": (
                 "You explain a computed career-match result to the person it belongs to, in "
                 f"plain, friendly English, in at most {MAX_SENTENCES} short sentences: why the "
-                "role scores as it does, what the biggest gaps are, and what the evidence says "
-                "about the role. Use only the facts given. Never write a digit or a number "
-                "(the screen shows the numbers next to your sentences). Cite the ids of the "
-                "facts each sentence uses. Do not invent skills, courses, jobs or causes; do "
-                "not say a job will disappear; do not tell the person what to decide."
+                "role scores as it does, which skills help most, what the biggest gaps are and "
+                "what the planned pathway covers. Use only the facts given. Never write a "
+                "number, neither in digits nor in words (no 'forty', 'one', 'half', "
+                "'percent'): the screen shows the numbers next to your sentences, so say "
+                "'your strongest skill', 'a large gap', 'a few courses' instead. Name skills "
+                "by name. Put the ids of the facts a sentence uses only in its 'facts' list, "
+                "never in the text. Do not forecast or promise anything. AI-use figures "
+                "describe how people use an AI chat assistant on these tasks, not how much of "
+                "the work is automated. Do not invent skills, courses, jobs or causes; do not "
+                "say a job will disappear; do not tell the person what to decide."
             ),
         },
         {"role": "user", "content": json.dumps(fact_list, ensure_ascii=False)},
@@ -149,7 +167,10 @@ def _validate(answer: dict[str, Any], by_id: dict[str, str]) -> tuple[list[dict[
     for item in answer.get("sentences", [])[:MAX_SENTENCES]:
         text = str(item.get("text", "")).strip()
         cited = [f for f in item.get("facts", []) if f in by_id]
-        if not text or len(text) > MAX_SENTENCE_CHARS or DIGIT.search(text) or not cited:
+        # An id the model echoed into the text, e.g. "(fit)", is removed rather than shown.
+        text = re.sub(r"\s*\((?:" + "|".join(map(re.escape, by_id)) + r")(?:,\s*\w+)*\)", "", text)
+        banned = DIGIT.search(text) or NUMBER_WORD.search(text) or FORECAST_WORD.search(text)
+        if not text or len(text) > MAX_SENTENCE_CHARS or banned or not cited:
             dropped += 1
             continue
         kept.append({"text": text, "facts": [{"id": f, "text": by_id[f]} for f in cited]})
@@ -159,7 +180,7 @@ def _validate(answer: dict[str, Any], by_id: dict[str, str]) -> tuple[list[dict[
 def _template(fact_list: list[dict[str, str]]) -> list[dict[str, Any]]:
     """Fallback: the most telling facts themselves, as written by code."""
     by_id = {f["id"]: f["text"] for f in fact_list}
-    chosen = ["fit", "essentials", "pathway", "outlook1"]
+    chosen = ["fit", "essentials", "pathway"]
     return [
         {"text": by_id[i], "facts": [{"id": i, "text": by_id[i]}]} for i in chosen if i in by_id
     ]
@@ -183,7 +204,8 @@ def explain(
                     "sentences": sentences,
                     "engine": f"{settings.llm_model} (schema-constrained)",
                     "note": (
-                        f"{dropped} sentence(s) removed by the no-numbers / cited-fact check"
+                        f"{dropped} sentence(s) removed by the no-numbers, no-forecast and "
+                        "cited-fact checks"
                         if dropped
                         else ""
                     ),

@@ -1,0 +1,54 @@
+import { useState } from 'react'
+import { getJSON } from '../api'
+import type { Explanation, Scenario } from '../types'
+
+// Plain-language sentences written by the model from computed facts only. The numbers stay in the
+// cited facts (written by code), shown under each sentence.
+export function ExplainRole({ profileId, roleId, scenario }: { profileId: string; roleId: string; scenario: Scenario }) {
+  const [data, setData] = useState<Explanation | null>(null)
+  const [busy, setBusy] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  async function load() {
+    setBusy(true)
+    setError(null)
+    try {
+      setData(await getJSON<Explanation>(`/api/profiles/${profileId}/roles/${roleId}/explain?scenario=${scenario}`))
+    } catch (reason) {
+      setError(reason instanceof Error ? reason.message : String(reason))
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  if (!data) {
+    return (
+      <div className="flex flex-wrap items-center gap-3">
+        <button type="button" className="btn" onClick={load} disabled={busy}>
+          {busy ? 'Writing…' : 'Explain this in plain words'}
+        </button>
+        {error && <span role="alert" className="text-xs text-amber-glow">{error}</span>}
+      </div>
+    )
+  }
+  return (
+    <div className="flex flex-col gap-2 rounded-lg bg-surface px-3.5 py-3">
+      <ul className="m-0 flex list-none flex-col gap-2 p-0 text-[13px]">
+        {data.sentences.map((s) => (
+          <li key={s.text}>
+            {s.text}
+            <details className="mt-0.5 text-[11px] text-stone">
+              <summary className="cursor-pointer">Based on {s.facts.length} computed fact{s.facts.length === 1 ? '' : 's'}</summary>
+              <ul className="mt-1 space-y-0.5 pl-4">
+                {s.facts.map((f) => <li key={f.id}>{f.text}</li>)}
+              </ul>
+            </details>
+          </li>
+        ))}
+      </ul>
+      <span className="font-mono text-[11px] text-slate-mid">
+        Written by {data.engine}{data.note ? ` · ${data.note}` : ''}. It only rephrases the computed facts and may word them loosely: the facts under each sentence are the record, and every number comes from code.
+      </span>
+    </div>
+  )
+}

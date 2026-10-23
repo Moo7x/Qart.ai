@@ -309,8 +309,7 @@ def explain_role(
     levels = data.levels()
     match = score_role(pack, role, levels, scenario, evidence)
     path = plan_pathway(pack, match, levels, data.weekly_hours, scenario, evidence)
-    outlook = role_outlook(pack, role, rows, occupation_signals(rows) + job_ad_signals(rows))
-    return explain(facts(match, path, outlook, SCENARIO_LABEL[scenario]), settings)
+    return explain(facts(match, path, SCENARIO_LABEL[scenario]), settings)
 
 
 @router.get("/profiles/{profile_id}/radar")

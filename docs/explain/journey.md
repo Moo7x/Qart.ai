@@ -33,6 +33,12 @@ with the scenario emphasis (assumption), the observed AI use behind it and Talen
 flag (expert) kept apart. Below it are the existing field signals for the person's current
 occupation (its DOSM major group, job ads, AI use), so two CVs get a different radar focus.
 
+**Plain-words explanation.** `src/match/explain.py` (Roles, on click) gives gpt-4o-mini the
+computed facts of one role result and asks for a few sentences, each citing the facts it uses.
+Code drops sentences with numbers (digits or words), forecast or promise words, or no valid
+citation; the cited facts, written by code, are shown under each sentence. No key, an error or no
+valid sentence gives a labelled template of the facts. Market evidence is not given to the model.
+
 `src/pathway/planner.py` visits essentials first, selects the shortest useful course, includes
 prerequisites once and schedules at the weekly-hours budget. Duration/level rules produce
 hypothetical gains, not measured learning outcomes. Some gaps have no verified free resource.

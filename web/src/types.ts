@@ -364,3 +364,11 @@ export type RadarResponse = {
   scenario: Scenario
   scenario_label: string
 }
+
+// ---- Role explanation (src/match/explain.py) ----
+
+export type Explanation = {
+  sentences: { text: string; facts: { id: string; text: string }[] }[]
+  engine: string
+  note: string
+}

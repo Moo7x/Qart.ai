@@ -46,8 +46,8 @@ def role_outlook(
                 {
                     "kind": "observed",
                     "text": (
-                        f"{signal.title} in Malaysia (the major group of ISCO-08 "
-                        f"{occupation.isco}): {signal.headline}; "
+                        f"{signal.title} in Malaysia (all occupations in the major group of "
+                        f"ISCO-08 {occupation.isco}, not only this role): {signal.headline}; "
                         f"{DIRECTION_TEXT[signal.direction]}. {signal.note}"
                     ),
                     "source": "DOSM, wages by occupation (OpenDOSM API)",
