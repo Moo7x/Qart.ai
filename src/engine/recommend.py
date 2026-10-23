@@ -11,7 +11,8 @@ For employee u, role r, scenario s (weights w from the requirement card, summing
                        · insufficient_evidence 0
   confidence = Σ_k w_k · [counted_events_k ≥ 2] / Σ_k w_k
   interest   = |interests ∩ role tags| / |interests|   (0 when no interests are given)
-  effort     = min(1, hours to close gaps / (weekly_hours × 12))          ← a PENALTY
+  effort     = min(1, hours to close gaps / (weekly_hours × H))            ← a PENALTY
+               H = 12 weeks, or the person's own timeframe in weeks when set (v2.2)
   score      = 0.55·coverage + 0.20·confidence + 0.10·interest − 0.15·effort
 The score is a suitability indicator, not a probability. Demographic fields are never read.
 """
@@ -109,6 +110,15 @@ def gap_hours(
     )
 
 
+def horizon_weeks(profile: Profile, default: int) -> int:
+    """The person's own timeframe in weeks when they gave one, otherwise `default`.
+
+    weeks = round(timeframe_months × 52/12). Used for the path budget and the effort horizon.
+    """
+    months = profile.preferences.timeframe_months
+    return round(months * params.WEEKS_PER_MONTH) if months else default
+
+
 def compute_factors(
     weights: dict[str, float],
     states: dict[str, SkillState],
@@ -125,7 +135,9 @@ def compute_factors(
     )
     interests = set(profile.interests)
     interest = len(interests & set(role.tags)) / len(interests) if interests else 0.0
-    effort_capacity = profile.weekly_learning_hours * params.EFFORT_HORIZON_WEEKS
+    effort_capacity = profile.weekly_learning_hours * horizon_weeks(
+        profile, params.EFFORT_HORIZON_WEEKS
+    )
     effort = min(params.EFFORT_CAP, gap_hours(weights, states, catalogue) / effort_capacity)
     return Factors(
         coverage=coverage, confidence=evidenced / total, interest=interest, effort=effort

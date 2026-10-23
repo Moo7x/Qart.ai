@@ -94,11 +94,17 @@ def test_profile_preferences_round_trip(client: TestClient) -> None:
     assert bad.status_code == 422
 
 
-def test_preferences_do_not_change_scores_yet(client: TestClient) -> None:
-    # Stored only until the engine is wired to use them; the UI says so.
+def test_unused_preferences_do_not_change_scores(client: TestClient) -> None:
+    # v2.2 uses timeframe, direction and AI comfort; the rest is stored only (the UI says so).
+    # Industry and education are never read: the recommender ignores demographic fields.
+    stored_only = {
+        k: v
+        for k, v in PREFERENCES.items()
+        if k not in ("timeframe_months", "direction", "ai_comfort")
+    }
     before = client.get("/api/recommendations/u_aina?scenario=assistive").json()
     profile = client.get("/api/profile/u_aina").json()
-    client.post("/api/profile", json={**profile, "preferences": PREFERENCES})
+    client.post("/api/profile", json={**profile, "preferences": stored_only})
     after = client.get("/api/recommendations/u_aina?scenario=assistive").json()
     assert [(r["role_id"], r["score"]) for r in after["roles"]] == [
         (r["role_id"], r["score"]) for r in before["roles"]

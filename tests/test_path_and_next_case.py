@@ -177,3 +177,28 @@ def test_real_grader_events_still_target_the_overconfident_skill_first() -> None
     )
     case_id, _ = next_after([first, second])
     assert case_id == "checkin_001"
+
+
+def test_timeframe_sets_the_path_budget() -> None:
+    # Planner budget = weekly_hours × horizon weeks (6 by default, the person's timeframe if set).
+    cat = default_catalogue()
+    states = states_after([])
+
+    def plan(weeks: int) -> PathPlan:
+        return plan_path(
+            "u_aina",
+            ROLE,
+            1.0,
+            states,
+            cat,
+            cat.assumptions_v1,
+            PLANNED_CASES,
+            set(),
+            horizon_weeks=weeks,
+        )
+
+    short, long = plan(13), plan(52)
+    assert short.total_hours <= 13 * 1.0
+    # More time closes more of the worst-case gap (13 vs 52 weeks at 1 h/week).
+    assert long.total_hours > short.total_hours
+    assert long.worst_case_gap < short.worst_case_gap

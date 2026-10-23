@@ -97,6 +97,18 @@ CHECKIN_HOURS: Final = 0.5
 # DECLARED: a planner step must reduce the worst-case gap by more than this to be worth adding.
 MIN_GAP_IMPROVEMENT: Final = 1e-9
 
+# --- Profile answers that shape the path (contract v2.2) -----------------------------------
+# DECLARED: the person's own timeframe (Profile.preferences.timeframe_months) replaces both
+# horizons above when set: weeks = months × 52/12, rounded (3 → 13, 6 → 26, 12 → 52). It is the
+# person's plan, not a forecast. Without it the fixed 6 (path) and 12 (effort) weeks apply.
+WEEKS_PER_MONTH: Final = 52 / 12
+# DECLARED: AI comfort (0..10, self-rated) at or below this puts an AI-intro course first in the
+# path when the planner already chose one; it never adds a course the planner did not choose.
+AI_COMFORT_LOW: Final = 3
+# DECLARED: courses that introduce AI tools from scratch (catalogue/courses.json, verified),
+# in no particular order; the shortest chosen one is placed first.
+AI_INTRO_COURSES: Final = ("course_25", "course_14", "course_15")
+
 # --- Course cost preference (brief: "free or low-cost resources") ---------------------------
 # DECLARED: the company funds training, so verified paid courses may appear in a path, but free
 # and low-cost ones are preferred. Tiers come from the course's cost label: a label starting with

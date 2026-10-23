@@ -27,6 +27,7 @@ from src.contract import (
     Snapshot,
     SnapshotDiff,
 )
+from src.engine import params
 from src.engine.catalogue import (
     Catalogue,
     SdgMap,
@@ -38,7 +39,7 @@ from src.engine.hr import HrSummary, hr_summary
 from src.engine.ingest import CSV_NAME, RAW_DIR, SNAPSHOT_DIR, run_ingest
 from src.engine.next_case import next_case
 from src.engine.planner import plan_path
-from src.engine.recommend import changed_since, recommend
+from src.engine.recommend import changed_since, horizon_weeks, recommend
 from src.engine.skills import derive_states
 from src.engine.snapshots import REPLAY_LABEL, diff_report, load_snapshots
 from src.store import Store, make_store, seed_demo
@@ -383,6 +384,7 @@ def get_path(
         current_assumptions(store),
         default_case_index(),
         {e.case_id for e in events},
+        horizon_weeks=horizon_weeks(profile, params.PLAN_HORIZON_WEEKS),
     )
 
 

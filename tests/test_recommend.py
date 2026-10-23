@@ -5,12 +5,13 @@ from pathlib import Path
 
 import pytest
 
-from src.contract import Profile, Scenario, SkillState
+from src.contract import Preferences, Profile, Scenario, SkillState
 from src.engine import params
 from src.engine.catalogue import default_catalogue
 from src.engine.recommend import (
     DEFAULT_WEIGHTS,
     changed_since,
+    horizon_weeks,
     recommend,
     score_role,
     top_role_under_sensitivity,
@@ -189,3 +190,31 @@ def test_close_match_flags_the_top_two_only_when_scores_are_near() -> None:
     assert [r.close_match for r in near.roles] == [True, True, False, False]
     apart = recommend(profile, states_for(profile, True), cat, cat.assumptions_v1, "agentic")
     assert not any(r.close_match for r in apart.roles)
+
+
+# --- profile answers (contract v2.2) --------------------------------------------------------
+def with_prefs(profile: Profile, **prefs: object) -> Profile:
+    return profile.model_copy(update={"preferences": Preferences.model_validate(prefs)})
+
+
+def test_timeframe_maps_months_to_weeks_and_defaults_without_one() -> None:
+    profile = aina()
+    assert horizon_weeks(profile, params.EFFORT_HORIZON_WEEKS) == params.EFFORT_HORIZON_WEEKS
+    weeks = {m: horizon_weeks(with_prefs(profile, timeframe_months=m), 0) for m in (3, 6, 12)}
+    assert weeks == {3: 13, 6: 26, 12: 52}
+
+
+def test_longer_timeframe_lowers_the_effort_penalty() -> None:
+    cat = default_catalogue()
+    profile = aina()
+    states = states_for(profile, False)
+    base = {
+        r.role_id: r for r in recommend(profile, states, cat, cat.assumptions_v1, "agentic").roles
+    }
+    year = with_prefs(profile, timeframe_months=12)
+    for role in recommend(year, states, cat, cat.assumptions_v1, "agentic").roles:
+        assert role.factors.effort <= base[role.role_id].factors.effort
+    assert any(
+        r.factors.effort < base[r.role_id].factors.effort
+        for r in recommend(year, states, cat, cat.assumptions_v1, "agentic").roles
+    )

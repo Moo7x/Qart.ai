@@ -2,7 +2,7 @@
 
 Model (PROJECT_PLAN §6; parameters in params.py):
   resources i: free courses, in-app practice bundles, confirmation check-ins; x_i ∈ {0, 1}
-  budget:      Σ hours_i·x_i ≤ weekly_hours × 6
+  budget:      Σ hours_i·x_i ≤ weekly_hours × H   (H = 6 weeks, or the person's timeframe, v2.2)
   prerequisites: a course is only chosen together with its prerequisites
   gap:         g_{sc,k} = max(0, 1 − credit(state_k) − Σ_i gain_{i,k}·x_i)
                gain = 0.3 per covering course or bundle (ASSUMPTION: coverage is not demonstrated
@@ -307,6 +307,7 @@ def plan_path(
     cases: Sequence[CaseInfo],
     seen_case_ids: set[str],
     selector: "Selector | None" = None,
+    horizon_weeks: int = params.PLAN_HORIZON_WEEKS,
 ) -> PathPlan:
     """The robust path for one employee and target role (contract PathPlan).
 
@@ -316,7 +317,7 @@ def plan_path(
     inputs = plan_inputs(role_id, by_skill, catalogue, assumptions)
     role_skills = [s.skill_id for s in catalogue.roles[role_id].skills]
     resources = build_resources(role_skills, by_skill, catalogue, cases, seen_case_ids)
-    budget = weekly_hours * params.PLAN_HORIZON_WEEKS
+    budget = weekly_hours * horizon_weeks
     chosen = order_steps(inputs, (selector or greedy_select)(inputs, resources, budget))
     total = sum(r.hours for r in chosen)
     return PathPlan(
