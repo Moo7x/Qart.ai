@@ -4,7 +4,7 @@ entrypoint = "src/app.py"
 
 [nix]
 channel = "stable-24_05"
-packages = ["glibcLocales", "libxcrypt", "postgresql"]
+packages = ["glibcLocales", "libxcrypt", "libyaml", "postgresql"]
 
 [[ports]]
 localPort = 8000
