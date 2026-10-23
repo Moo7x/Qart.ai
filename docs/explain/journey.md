@@ -27,6 +27,12 @@ of employees for the role's MASCO major group (reached through its ISCO-08 code)
 backtest result, the DOSM job-ad share where DOSM names the occupation, which of the role's skills
 TalentCorp lists as in demand, and whether MyCOL 2024/2025 lists the occupation as critical.
 
+**Radar.** `src/match/radar.py` (Overview) draws the person's chosen role, or best-fitting role
+until one is chosen: claimed level, needed level and level after the pathway (estimate) per skill,
+with the scenario emphasis (assumption), the observed AI use behind it and TalentCorp's in-demand
+flag (expert) kept apart. Below it are the existing field signals for the person's current
+occupation (its DOSM major group, job ads, AI use), so two CVs get a different radar focus.
+
 `src/pathway/planner.py` visits essentials first, selects the shortest useful course, includes
 prerequisites once and schedules at the weekly-hours budget. Duration/level rules produce
 hypothetical gains, not measured learning outcomes. Some gaps have no verified free resource.

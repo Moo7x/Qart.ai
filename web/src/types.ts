@@ -336,3 +336,31 @@ export type RoleTasksResponse = {
   unlinked_skills: string[]
   sources: { tasks: string; observed_use: string; exposure: string; expert: string }
 }
+
+// ---- Personal radar (src/match/radar.py) ----
+
+export type RadarAxis = {
+  skill: string
+  name: string
+  kind: SkillKind
+  essential: boolean
+  claimed: number | null
+  required: number
+  after: number
+  emphasis: 'rising' | 'weakening' | 'stable' | 'fixed'
+  weight_factor: number
+  reason: string
+  ai_use: { automation_share: number | null; basis: AutomationBasis; tasks_observed: number; tasks_linked: number } | null
+  in_demand: boolean | null
+}
+export type RadarResponse = {
+  role_id: string
+  title: string
+  chosen: boolean
+  fit: number
+  fit_after: number
+  axes: RadarAxis[]
+  field_signals: Signal[]
+  scenario: Scenario
+  scenario_label: string
+}

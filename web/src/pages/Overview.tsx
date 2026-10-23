@@ -2,9 +2,12 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { formatWhen, useApi } from '../api'
 import { EvidenceDrawer } from '../components/EvidenceDrawer'
+import { ScenarioSwitch } from '../components/journey'
 import { LineChart, Sparkline, type Series } from '../components/LineChart'
+import { SkillRadar } from '../components/SkillRadar'
 import { DIRECTION_LABEL, Empty, Loading, Problem } from '../components/ui'
-import type { Direction, Signal, SignalsResponse, SourceStatus } from '../types'
+import { useJourney } from '../state'
+import type { Direction, RadarAxis, RadarResponse, Signal, SignalsResponse, SourceStatus } from '../types'
 
 // Occupation groups drawn in the chart, with one colour each (dark-panel palette).
 const GROUP_COLOURS: Record<string, { label: string; color: string }> = {
@@ -89,6 +92,98 @@ function AiUseTable({ rows, onPick }: { rows: Signal[]; onPick: (s: Signal) => v
   )
 }
 
+const EMPHASIS: Record<RadarAxis['emphasis'], [string, string]> = {
+  rising: ['↑ more emphasis', 'text-rising'],
+  weakening: ['↓ less emphasis', 'text-weak'],
+  stable: ['→ no shift', 'text-graphite'],
+  fixed: ['■ essential, fixed', 'text-amber-glow'],
+}
+
+function AxisRow({ axis }: { axis: RadarAxis }) {
+  const [label, tone] = EMPHASIS[axis.emphasis]
+  const use = axis.ai_use
+  return (
+    <li className="flex flex-col gap-1 border-t border-surface py-2.5 text-[13px]" title={axis.reason}>
+      <span className="flex flex-wrap items-baseline justify-between gap-2">
+        <span className="font-semibold">{axis.name}</span>
+        <span className="font-mono text-[11px] text-stone">you {axis.claimed ?? '—'} · needs {axis.required} · after {axis.after}</span>
+      </span>
+      <span className="flex flex-wrap gap-x-3 gap-y-1 text-[11px]">
+        <span className={tone}>{label} <span className="text-slate-mid">(assumption)</span></span>
+        {use && use.automation_share !== null && (
+          <span className="text-stone">
+            {use.automation_share.toFixed(0)}% automation-style AI use{' '}
+            {use.basis === 'task' ? `on ${use.tasks_observed} of ${use.tasks_linked} tasks` : 'for the occupation'}{' '}
+            <span className="text-slate-mid">(observed)</span>
+          </span>
+        )}
+        {axis.in_demand && <span className="text-cyan">in demand, TalentCorp <span className="text-slate-mid">(expert)</span></span>}
+      </span>
+    </li>
+  )
+}
+
+function PersonalRadar({ onPick }: { onPick: (s: Signal) => void }) {
+  const { profileId, scenario } = useJourney()
+  const view = useApi<RadarResponse>(profileId ? `/api/profiles/${profileId}/radar?scenario=${scenario}` : null)
+  if (!profileId) {
+    return (
+      <section className="card-light flex flex-wrap items-center justify-between gap-3 px-6 py-4 text-[13px]">
+        <span>Tell us about yourself to see your own skills radar and the signals for your current job.</span>
+        <Link className="btn btn-v" to="/start">Start</Link>
+      </section>
+    )
+  }
+  if (view.loading) return <Loading what="your radar" />
+  if (view.error) return <Problem what="your radar" message={view.error} onRetry={view.reload} />
+  const data = view.data
+  if (!data) return null
+  return (
+    <section className="card-dark flex flex-col gap-4 p-6">
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div className="flex flex-col gap-1">
+          <span className="font-mono text-[11px] tracking-widest text-cyan">YOUR FUTURE SKILLS RADAR</span>
+          <h2 className="m-0 text-xl font-semibold tracking-tight">{data.title}</h2>
+          <span className="text-[13px] text-stone">
+            {data.chosen ? 'Your chosen destination' : 'Your best-fitting role so far'} · fit {Math.round(data.fit)} now,{' '}
+            {Math.round(data.fit_after)} after the pathway (estimate) · {data.scenario_label}
+          </span>
+        </div>
+        <ScenarioSwitch />
+      </div>
+      <div className="flex flex-wrap items-start gap-6">
+        <div className="flex min-w-0 flex-[1_1_300px] flex-col items-center gap-2">
+          <SkillRadar axes={data.axes} />
+          <div className="flex flex-wrap justify-center gap-4 font-mono text-[11px] text-stone">
+            <span className="flex items-center gap-1.5"><span aria-hidden="true" className="inline-block h-0.5 w-5 bg-violet-light" />you (claim)</span>
+            <span className="flex items-center gap-1.5"><span aria-hidden="true" className="inline-block h-0.5 w-5 border-t border-dashed border-amber-glow" />needed</span>
+            <span className="flex items-center gap-1.5"><span aria-hidden="true" className="inline-block h-0.5 w-5 bg-cyan" />after pathway (estimate)</span>
+          </div>
+        </div>
+        <ul className="m-0 min-w-0 flex-[1.3_1_320px] list-none p-0">
+          {data.axes.map((a) => <AxisRow key={a.skill} axis={a} />)}
+        </ul>
+      </div>
+      {data.field_signals.length > 0 && (
+        <div className="flex flex-col gap-2 border-t border-surface pt-3">
+          <span className="font-mono text-[11px] tracking-widest text-cyan">SIGNALS FOR YOUR CURRENT JOB</span>
+          <div className="flex flex-wrap gap-2">
+            {data.field_signals.map((s) => (
+              <button key={s.id} type="button" onClick={() => onPick(s)} className="cursor-pointer rounded-lg border-0 bg-surface px-3 py-2 text-left text-[12px] text-white hover:bg-[#383943]">
+                <span className="block font-semibold">{s.title}</span>
+                <span className="block text-stone">{s.headline} · {DIRECTION_LABEL[s.direction]}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+      <p className="m-0 text-xs text-stone">
+        Levels are your claims, never verified. Emphasis is the scenario rule applied to observed AI use; it is not a forecast of jobs.
+      </p>
+    </section>
+  )
+}
+
 export function Overview() {
   const signals = useApi<SignalsResponse>('/api/signals')
   const sources = useApi<SourceStatus[]>('/api/sources')
@@ -111,6 +206,8 @@ export function Overview() {
           needs enough comparable data, and expert views are kept apart from measured data.
         </p>
       </header>
+
+      <PersonalRadar onPick={setSelected} />
 
       {signals.loading && <Loading what="the evidence" />}
       {signals.error && <Problem what="the evidence" message={signals.error} onRetry={signals.reload} />}
