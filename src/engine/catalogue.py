@@ -5,7 +5,7 @@ and the version-1 company assumptions. Later assumption versions live in the sto
 """
 
 import json
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from functools import lru_cache
 from pathlib import Path
 from typing import Any
@@ -22,13 +22,31 @@ CASE_INDEX_PATH = REPO_ROOT / "data" / "case_index.json"  # planned fallback (Pe
 B_CASE_INDEX_PATH = REPO_ROOT / "cases" / "index.json"
 
 
+class LearnHours(BaseModel):
+    """ASSUMPTION (team estimates): hours from none to "use sometimes", then to "confident"."""
+
+    to_basic: float = Field(gt=0)
+    to_confident: float = Field(gt=0)
+
+
 class SkillInfo(BaseModel):
+    """One entry of the canonical skill vocabulary (catalogue/skills.json, QART_NEXT_STEPS §2)."""
+
     id: str
     name: str
     practised: bool
-    type: SkillType
-    description: str
-    type_reason: str
+    description: str = ""
+    # Execution vs oversight drives the old requirement-card weights; only evidence skills need it.
+    type: SkillType | None = None
+    type_reason: str = ""
+    category: str = ""
+    evidence_tracked: bool = True  # an evidence state is kept (cases, My skills, HR)
+    learn_hours: LearnHours | None = None
+    trend_tracked: bool = False  # has Hacker News patterns for the Skills Radar
+    patterns: list[str] = []
+    case_sensitive_patterns: list[str] = []
+    profile_tools: list[str] = []  # questionnaire tool chips that mean "I use this"
+    market_name: str | None = None  # label in the radar when it differs from `name`
 
 
 class SdgTarget(BaseModel):
@@ -74,14 +92,23 @@ class CaseInfo(BaseModel):
 
 @dataclass(frozen=True)
 class Catalogue:
-    skills: dict[str, SkillInfo]
+    skills: dict[str, SkillInfo]  # evidence-tracked skills only (states, cases, HR)
     roles: dict[str, Role]
     courses: dict[str, Course]
     sdg: SdgMap
     assumptions_v1: CompanyAssumptions
+    vocabulary: dict[str, SkillInfo] = field(default_factory=dict)  # every skill in the app
 
     def skill_type(self, skill_id: str) -> SkillType:
-        return self.skills[skill_id].type
+        skill_type = self.skills[skill_id].type
+        if skill_type is None:
+            raise ValueError(f"evidence skill {skill_id} has no execution/oversight type")
+        return skill_type
+
+    @property
+    def skill_types(self) -> dict[str, SkillType]:
+        """Execution/oversight per evidence skill, for the requirement-card weights."""
+        return {k: self.skill_type(k) for k in self.skills}
 
     @property
     def practised_skill_ids(self) -> list[str]:
@@ -94,11 +121,15 @@ def _read_json(path: Path) -> Any:
 
 def load_catalogue(directory: Path = CATALOGUE_DIR) -> Catalogue:
     """Read and validate every catalogue file in `directory`."""
-    skills = [SkillInfo.model_validate(s) for s in _read_json(directory / "skills.json")["skills"]]
+    vocabulary = [
+        SkillInfo.model_validate(s) for s in _read_json(directory / "skills.json")["skills"]
+    ]
+    skills = [s for s in vocabulary if s.evidence_tracked]
     roles = [Role.model_validate(r) for r in _read_json(directory / "roles.json")["roles"]]
     courses = [Course.model_validate(c) for c in _read_json(directory / "courses.json")["courses"]]
     return Catalogue(
         skills={s.id: s for s in skills},
+        vocabulary={s.id: s for s in vocabulary},
         roles={r.id: r for r in roles},
         courses={c.id: c for c in courses},
         sdg=SdgMap.model_validate(_read_json(directory / "sdg_map.json")),

@@ -1,53 +1,648 @@
 {
-  "_about": "Skill IDs from team/00_SHARED_CONTRACT.md §3. type drives the scenario shift rule: when the company's AI drafts or does a task, part of that task's EXECUTION-skill weight moves to OVERSIGHT skills (catalogue/company_assumptions.json). The classification is a team design choice (declared), documented per skill in type_reason.",
+  "_about": "Skill IDs from team/00_SHARED_CONTRACT.md §3. type drives the scenario shift rule: when the company's AI drafts or does a task, part of that task's EXECUTION-skill weight moves to OVERSIGHT skills (catalogue/company_assumptions.json). The classification is a team design choice (declared), documented per skill in type_reason. Single canonical skill vocabulary for the whole app (QART_NEXT_STEPS §2): practice skills, role skills and market skills. evidence_tracked = an evidence state is kept for it (practice cases, My skills, HR). trend_tracked = it has Hacker News match patterns for the Skills Radar. learn_hours are ASSUMPTIONS (team estimates, not data): hours from none to 'use sometimes' and from there to 'confident'.",
   "skills": [
-    {"id": "recon_to_source", "name": "Reconcile to source", "practised": true, "type": "execution",
-     "description": "Reconcile a balance back to source evidence (bank lines, documents).",
-     "type_reason": "Tracing and matching balances is the routine reconciliation work that an AI agent can draft."},
-    {"id": "duplicate_detection", "name": "Duplicate detection", "practised": true, "type": "execution",
-     "description": "Spot duplicate or double-counted entries.",
-     "type_reason": "Scanning entries for duplicates is part of routine matching, which AI can perform."},
-    {"id": "cutoff_timing", "name": "Cut-off and timing", "practised": true, "type": "execution",
-     "description": "Judge period cut-off and timing items (deposits in transit, uncleared cheques).",
-     "type_reason": "Classifying timing items follows rules applied during preparation, which AI can draft."},
-    {"id": "unsupported_adjustment", "name": "Challenge unsupported adjustments", "practised": true, "type": "oversight",
-     "description": "Challenge manual adjustments without support.",
-     "type_reason": "Questioning whether someone else's (or the AI's) adjustment has a supporting document is review judgment, not preparation."},
-    {"id": "fx_conversion", "name": "FX conversion check", "practised": true, "type": "execution",
-     "description": "Verify currency conversion and the rate used.",
-     "type_reason": "Applying and recomputing a conversion rate is a mechanical step AI can perform."},
-    {"id": "transposition_check", "name": "Transposition check", "practised": true, "type": "execution",
-     "description": "Catch keying/transposition errors (1,520 vs 1,250).",
-     "type_reason": "Comparing keyed amounts with documents is checking-as-preparation, which AI can do row by row."},
-    {"id": "escalation_judgment", "name": "Escalation judgment", "practised": true, "type": "oversight",
-     "description": "Decide to sign off, correct, or escalate.",
-     "type_reason": "Deciding and owning the outcome stays with a human in both scenarios (humans decide)."},
-    {"id": "ai_output_review", "name": "AI output review", "practised": true, "type": "oversight",
-     "description": "Ask for the evidence that would change the AI's conclusion, including when the AI raises a false alarm.",
-     "type_reason": "Reviewing AI output is the core oversight skill; it only exists because AI drafts the work."},
-    {"id": "variance_analysis", "name": "Variance analysis", "practised": false, "type": "execution",
-     "description": "Explain differences between budget, forecast and actual figures.",
-     "type_reason": "Computing and first-pass explanation of variances is analytical preparation that AI can draft."},
-    {"id": "data_quality", "name": "Data quality", "practised": false, "type": "oversight",
-     "description": "Check that data feeding reports and AI tools is complete, consistent and fit for use.",
-     "type_reason": "Judging whether inputs can be trusted is a review responsibility that grows when AI consumes the data."},
-    {"id": "controls_design", "name": "Controls design", "practised": false, "type": "oversight",
-     "description": "Design review and approval controls for finance processes, including AI-assisted steps.",
-     "type_reason": "Deciding where human checks sit in an AI-assisted process is oversight by definition."},
-    {"id": "process_automation", "name": "Process automation", "practised": false, "type": "execution",
-     "description": "Build simple automated flows for routine finance steps.",
-     "type_reason": "Building automations is hands-on technical work (doing), not review of output."},
-    {"id": "stakeholder_communication", "name": "Stakeholder communication", "practised": false, "type": "oversight",
-     "description": "Explain findings, exceptions and decisions to managers and other teams.",
-     "type_reason": "Explaining and owning conclusions stays human when AI prepares the numbers."},
-    {"id": "forecasting", "name": "Forecasting", "practised": false, "type": "execution",
-     "description": "Build and update forecasts from historical data and drivers.",
-     "type_reason": "Producing forecast numbers is model-driven preparation that AI can draft."},
-    {"id": "spreadsheet_modelling", "name": "Spreadsheet modelling", "practised": false, "type": "execution",
-     "description": "Build clear, checkable spreadsheet models and schedules.",
-     "type_reason": "Building schedules and formulas is preparation work that AI can draft."},
-    {"id": "sql_basics", "name": "SQL basics", "practised": false, "type": "execution",
-     "description": "Query ledger and transaction data with basic SQL.",
-     "type_reason": "Writing queries to extract data is hands-on preparation."}
+    {
+      "id": "recon_to_source",
+      "name": "Reconcile to source",
+      "practised": true,
+      "type": "execution",
+      "description": "Reconcile a balance back to source evidence (bank lines, documents).",
+      "type_reason": "Tracing and matching balances is the routine reconciliation work that an AI agent can draft.",
+      "category": "Finance practice",
+      "evidence_tracked": true,
+      "learn_hours": {
+        "to_basic": 12,
+        "to_confident": 20
+      },
+      "trend_tracked": false,
+      "patterns": [],
+      "case_sensitive_patterns": [],
+      "profile_tools": []
+    },
+    {
+      "id": "duplicate_detection",
+      "name": "Duplicate detection",
+      "practised": true,
+      "type": "execution",
+      "description": "Spot duplicate or double-counted entries.",
+      "type_reason": "Scanning entries for duplicates is part of routine matching, which AI can perform.",
+      "category": "Finance practice",
+      "evidence_tracked": true,
+      "learn_hours": {
+        "to_basic": 12,
+        "to_confident": 20
+      },
+      "trend_tracked": false,
+      "patterns": [],
+      "case_sensitive_patterns": [],
+      "profile_tools": []
+    },
+    {
+      "id": "cutoff_timing",
+      "name": "Cut-off and timing",
+      "practised": true,
+      "type": "execution",
+      "description": "Judge period cut-off and timing items (deposits in transit, uncleared cheques).",
+      "type_reason": "Classifying timing items follows rules applied during preparation, which AI can draft.",
+      "category": "Finance practice",
+      "evidence_tracked": true,
+      "learn_hours": {
+        "to_basic": 12,
+        "to_confident": 20
+      },
+      "trend_tracked": false,
+      "patterns": [],
+      "case_sensitive_patterns": [],
+      "profile_tools": []
+    },
+    {
+      "id": "unsupported_adjustment",
+      "name": "Challenge unsupported adjustments",
+      "practised": true,
+      "type": "oversight",
+      "description": "Challenge manual adjustments without support.",
+      "type_reason": "Questioning whether someone else's (or the AI's) adjustment has a supporting document is review judgment, not preparation.",
+      "category": "Finance practice",
+      "evidence_tracked": true,
+      "learn_hours": {
+        "to_basic": 12,
+        "to_confident": 20
+      },
+      "trend_tracked": false,
+      "patterns": [],
+      "case_sensitive_patterns": [],
+      "profile_tools": []
+    },
+    {
+      "id": "fx_conversion",
+      "name": "FX conversion check",
+      "practised": true,
+      "type": "execution",
+      "description": "Verify currency conversion and the rate used.",
+      "type_reason": "Applying and recomputing a conversion rate is a mechanical step AI can perform.",
+      "category": "Finance practice",
+      "evidence_tracked": true,
+      "learn_hours": {
+        "to_basic": 12,
+        "to_confident": 20
+      },
+      "trend_tracked": false,
+      "patterns": [],
+      "case_sensitive_patterns": [],
+      "profile_tools": []
+    },
+    {
+      "id": "transposition_check",
+      "name": "Transposition check",
+      "practised": true,
+      "type": "execution",
+      "description": "Catch keying/transposition errors (1,520 vs 1,250).",
+      "type_reason": "Comparing keyed amounts with documents is checking-as-preparation, which AI can do row by row.",
+      "category": "Finance practice",
+      "evidence_tracked": true,
+      "learn_hours": {
+        "to_basic": 12,
+        "to_confident": 20
+      },
+      "trend_tracked": false,
+      "patterns": [],
+      "case_sensitive_patterns": [],
+      "profile_tools": []
+    },
+    {
+      "id": "escalation_judgment",
+      "name": "Escalation judgment",
+      "practised": true,
+      "type": "oversight",
+      "description": "Decide to sign off, correct, or escalate.",
+      "type_reason": "Deciding and owning the outcome stays with a human in both scenarios (humans decide).",
+      "category": "Finance practice",
+      "evidence_tracked": true,
+      "learn_hours": {
+        "to_basic": 12,
+        "to_confident": 20
+      },
+      "trend_tracked": false,
+      "patterns": [],
+      "case_sensitive_patterns": [],
+      "profile_tools": []
+    },
+    {
+      "id": "ai_output_review",
+      "name": "AI output review",
+      "practised": true,
+      "type": "oversight",
+      "description": "Ask for the evidence that would change the AI's conclusion, including when the AI raises a false alarm.",
+      "type_reason": "Reviewing AI output is the core oversight skill; it only exists because AI drafts the work.",
+      "category": "Finance practice",
+      "evidence_tracked": true,
+      "learn_hours": {
+        "to_basic": 12,
+        "to_confident": 20
+      },
+      "trend_tracked": false,
+      "patterns": [],
+      "case_sensitive_patterns": [],
+      "profile_tools": []
+    },
+    {
+      "id": "variance_analysis",
+      "name": "Variance analysis",
+      "practised": false,
+      "type": "execution",
+      "description": "Explain differences between budget, forecast and actual figures.",
+      "type_reason": "Computing and first-pass explanation of variances is analytical preparation that AI can draft.",
+      "category": "Finance practice",
+      "evidence_tracked": true,
+      "learn_hours": {
+        "to_basic": 12,
+        "to_confident": 20
+      },
+      "trend_tracked": false,
+      "patterns": [],
+      "case_sensitive_patterns": [],
+      "profile_tools": []
+    },
+    {
+      "id": "data_quality",
+      "name": "Data quality",
+      "practised": false,
+      "type": "oversight",
+      "description": "Check that data feeding reports and AI tools is complete, consistent and fit for use.",
+      "type_reason": "Judging whether inputs can be trusted is a review responsibility that grows when AI consumes the data.",
+      "category": "Data",
+      "evidence_tracked": true,
+      "learn_hours": {
+        "to_basic": 10,
+        "to_confident": 20
+      },
+      "trend_tracked": true,
+      "patterns": [
+        "\\bdata quality\\b",
+        "\\bdata validation\\b",
+        "\\bdata governance\\b"
+      ],
+      "case_sensitive_patterns": [],
+      "profile_tools": []
+    },
+    {
+      "id": "controls_design",
+      "name": "Controls design",
+      "practised": false,
+      "type": "oversight",
+      "description": "Design review and approval controls for finance processes, including AI-assisted steps.",
+      "type_reason": "Deciding where human checks sit in an AI-assisted process is oversight by definition.",
+      "category": "Finance practice",
+      "evidence_tracked": true,
+      "learn_hours": {
+        "to_basic": 12,
+        "to_confident": 20
+      },
+      "trend_tracked": false,
+      "patterns": [],
+      "case_sensitive_patterns": [],
+      "profile_tools": []
+    },
+    {
+      "id": "process_automation",
+      "name": "Process automation",
+      "practised": false,
+      "type": "execution",
+      "description": "Build simple automated flows for routine finance steps.",
+      "type_reason": "Building automations is hands-on technical work (doing), not review of output.",
+      "category": "Finance tools",
+      "evidence_tracked": true,
+      "learn_hours": {
+        "to_basic": 15,
+        "to_confident": 30
+      },
+      "trend_tracked": true,
+      "patterns": [
+        "\\bRPA\\b",
+        "\\bUiPath\\b",
+        "robotic process automation",
+        "\\bworkflow automation\\b"
+      ],
+      "case_sensitive_patterns": [
+        "\\bRPA\\b"
+      ],
+      "profile_tools": [],
+      "market_name": "RPA / process automation"
+    },
+    {
+      "id": "stakeholder_communication",
+      "name": "Stakeholder communication",
+      "practised": false,
+      "type": "oversight",
+      "description": "Explain findings, exceptions and decisions to managers and other teams.",
+      "type_reason": "Explaining and owning conclusions stays human when AI prepares the numbers.",
+      "category": "Finance practice",
+      "evidence_tracked": true,
+      "learn_hours": {
+        "to_basic": 12,
+        "to_confident": 20
+      },
+      "trend_tracked": false,
+      "patterns": [],
+      "case_sensitive_patterns": [],
+      "profile_tools": []
+    },
+    {
+      "id": "forecasting",
+      "name": "Forecasting",
+      "practised": false,
+      "type": "execution",
+      "description": "Build and update forecasts from historical data and drivers.",
+      "type_reason": "Producing forecast numbers is model-driven preparation that AI can draft.",
+      "category": "Finance practice",
+      "evidence_tracked": true,
+      "learn_hours": {
+        "to_basic": 12,
+        "to_confident": 20
+      },
+      "trend_tracked": false,
+      "patterns": [],
+      "case_sensitive_patterns": [],
+      "profile_tools": []
+    },
+    {
+      "id": "spreadsheet_modelling",
+      "name": "Spreadsheet modelling",
+      "practised": false,
+      "type": "execution",
+      "description": "Build clear, checkable spreadsheet models and schedules.",
+      "type_reason": "Building schedules and formulas is preparation work that AI can draft.",
+      "category": "Finance tools",
+      "evidence_tracked": true,
+      "learn_hours": {
+        "to_basic": 10,
+        "to_confident": 20
+      },
+      "trend_tracked": true,
+      "patterns": [
+        "\\bExcel\\b(?! at)",
+        "\\bspreadsheets?\\b"
+      ],
+      "case_sensitive_patterns": [
+        "\\bExcel\\b(?! at)"
+      ],
+      "profile_tools": [
+        "Excel"
+      ],
+      "market_name": "Excel"
+    },
+    {
+      "id": "sql_basics",
+      "name": "SQL basics",
+      "practised": false,
+      "type": "execution",
+      "description": "Query ledger and transaction data with basic SQL.",
+      "type_reason": "Writing queries to extract data is hands-on preparation.",
+      "category": "Data",
+      "evidence_tracked": true,
+      "learn_hours": {
+        "to_basic": 15,
+        "to_confident": 25
+      },
+      "trend_tracked": true,
+      "patterns": [
+        "\\bSQL\\b",
+        "\\bPostgres(?:QL)?\\b",
+        "\\bMySQL\\b"
+      ],
+      "case_sensitive_patterns": [
+        "\\bSQL\\b"
+      ],
+      "profile_tools": [
+        "SQL"
+      ],
+      "market_name": "SQL"
+    },
+    {
+      "id": "python",
+      "name": "Python",
+      "practised": false,
+      "description": "",
+      "category": "Programming",
+      "evidence_tracked": false,
+      "learn_hours": {
+        "to_basic": 20,
+        "to_confident": 40
+      },
+      "trend_tracked": true,
+      "patterns": [
+        "\\bPython\\b"
+      ],
+      "case_sensitive_patterns": [],
+      "profile_tools": [
+        "Python"
+      ]
+    },
+    {
+      "id": "pytorch",
+      "name": "PyTorch",
+      "practised": false,
+      "description": "",
+      "category": "AI/ML",
+      "evidence_tracked": false,
+      "learn_hours": {
+        "to_basic": 30,
+        "to_confident": 50
+      },
+      "trend_tracked": true,
+      "patterns": [
+        "\\bPyTorch\\b"
+      ],
+      "case_sensitive_patterns": [],
+      "profile_tools": []
+    },
+    {
+      "id": "tensorflow",
+      "name": "TensorFlow",
+      "practised": false,
+      "description": "",
+      "category": "AI/ML",
+      "evidence_tracked": false,
+      "learn_hours": {
+        "to_basic": 30,
+        "to_confident": 50
+      },
+      "trend_tracked": true,
+      "patterns": [
+        "\\bTensorFlow\\b"
+      ],
+      "case_sensitive_patterns": [],
+      "profile_tools": []
+    },
+    {
+      "id": "llms",
+      "name": "LLMs",
+      "practised": false,
+      "description": "",
+      "category": "AI/ML",
+      "evidence_tracked": false,
+      "learn_hours": {
+        "to_basic": 10,
+        "to_confident": 25
+      },
+      "trend_tracked": true,
+      "patterns": [
+        "\\bLLMs?\\b",
+        "large language models?",
+        "\\bGPT-?[345]",
+        "\\bgenerative AI\\b",
+        "\\bGenAI\\b"
+      ],
+      "case_sensitive_patterns": [
+        "\\bLLMs?\\b"
+      ],
+      "profile_tools": [
+        "AI assistants"
+      ]
+    },
+    {
+      "id": "rag",
+      "name": "RAG",
+      "practised": false,
+      "description": "",
+      "category": "AI/ML",
+      "evidence_tracked": false,
+      "learn_hours": {
+        "to_basic": 15,
+        "to_confident": 30
+      },
+      "trend_tracked": true,
+      "patterns": [
+        "\\bRAG\\b",
+        "retrieval[- ]augmented"
+      ],
+      "case_sensitive_patterns": [
+        "\\bRAG\\b"
+      ],
+      "profile_tools": []
+    },
+    {
+      "id": "langchain",
+      "name": "LangChain",
+      "practised": false,
+      "description": "",
+      "category": "AI/ML",
+      "evidence_tracked": false,
+      "learn_hours": {
+        "to_basic": 10,
+        "to_confident": 20
+      },
+      "trend_tracked": true,
+      "patterns": [
+        "\\bLangChain\\b",
+        "\\bLangGraph\\b"
+      ],
+      "case_sensitive_patterns": [],
+      "profile_tools": []
+    },
+    {
+      "id": "ai_agents",
+      "name": "AI agents",
+      "practised": false,
+      "description": "",
+      "category": "AI/ML",
+      "evidence_tracked": false,
+      "learn_hours": {
+        "to_basic": 15,
+        "to_confident": 30
+      },
+      "trend_tracked": true,
+      "patterns": [
+        "\\bAI agents?\\b",
+        "\\bagentic\\b",
+        "\\bLLM agents?\\b"
+      ],
+      "case_sensitive_patterns": [],
+      "profile_tools": []
+    },
+    {
+      "id": "mlops",
+      "name": "MLOps",
+      "practised": false,
+      "description": "",
+      "category": "AI/ML",
+      "evidence_tracked": false,
+      "learn_hours": {
+        "to_basic": 25,
+        "to_confident": 45
+      },
+      "trend_tracked": true,
+      "patterns": [
+        "\\bMLOps\\b",
+        "\\bML ?Ops\\b"
+      ],
+      "case_sensitive_patterns": [],
+      "profile_tools": []
+    },
+    {
+      "id": "computer_vision",
+      "name": "Computer vision",
+      "practised": false,
+      "description": "",
+      "category": "AI/ML",
+      "evidence_tracked": false,
+      "learn_hours": {
+        "to_basic": 30,
+        "to_confident": 50
+      },
+      "trend_tracked": true,
+      "patterns": [
+        "\\bcomputer vision\\b"
+      ],
+      "case_sensitive_patterns": [],
+      "profile_tools": []
+    },
+    {
+      "id": "nlp",
+      "name": "NLP",
+      "practised": false,
+      "description": "",
+      "category": "AI/ML",
+      "evidence_tracked": false,
+      "learn_hours": {
+        "to_basic": 25,
+        "to_confident": 45
+      },
+      "trend_tracked": true,
+      "patterns": [
+        "\\bNLP\\b",
+        "natural language processing"
+      ],
+      "case_sensitive_patterns": [
+        "\\bNLP\\b"
+      ],
+      "profile_tools": []
+    },
+    {
+      "id": "kubernetes",
+      "name": "Kubernetes",
+      "practised": false,
+      "description": "",
+      "category": "Infrastructure",
+      "evidence_tracked": false,
+      "learn_hours": {
+        "to_basic": 20,
+        "to_confident": 40
+      },
+      "trend_tracked": true,
+      "patterns": [
+        "\\bKubernetes\\b",
+        "\\bk8s\\b"
+      ],
+      "case_sensitive_patterns": [],
+      "profile_tools": []
+    },
+    {
+      "id": "aws",
+      "name": "AWS",
+      "practised": false,
+      "description": "",
+      "category": "Infrastructure",
+      "evidence_tracked": false,
+      "learn_hours": {
+        "to_basic": 20,
+        "to_confident": 40
+      },
+      "trend_tracked": true,
+      "patterns": [
+        "\\bAWS\\b",
+        "\\bAmazon Web Services\\b"
+      ],
+      "case_sensitive_patterns": [
+        "\\bAWS\\b"
+      ],
+      "profile_tools": []
+    },
+    {
+      "id": "typescript",
+      "name": "TypeScript",
+      "practised": false,
+      "description": "",
+      "category": "Programming",
+      "evidence_tracked": false,
+      "learn_hours": {
+        "to_basic": 20,
+        "to_confident": 35
+      },
+      "trend_tracked": true,
+      "patterns": [
+        "\\bTypeScript\\b"
+      ],
+      "case_sensitive_patterns": [],
+      "profile_tools": []
+    },
+    {
+      "id": "react",
+      "name": "React",
+      "practised": false,
+      "description": "",
+      "category": "Programming",
+      "evidence_tracked": false,
+      "learn_hours": {
+        "to_basic": 20,
+        "to_confident": 35
+      },
+      "trend_tracked": true,
+      "patterns": [
+        "\\bReact(?:\\.js|JS)?\\b(?! Native)"
+      ],
+      "case_sensitive_patterns": [
+        "\\bReact(?:\\.js|JS)?\\b(?! Native)"
+      ],
+      "profile_tools": []
+    },
+    {
+      "id": "data_visualisation",
+      "name": "Data visualisation (Power BI / Tableau)",
+      "practised": false,
+      "description": "",
+      "category": "Finance tools",
+      "evidence_tracked": false,
+      "learn_hours": {
+        "to_basic": 12,
+        "to_confident": 25
+      },
+      "trend_tracked": true,
+      "patterns": [
+        "\\bPower ?BI\\b",
+        "\\bTableau\\b",
+        "\\bLooker\\b"
+      ],
+      "case_sensitive_patterns": [],
+      "profile_tools": [
+        "Power BI / Tableau"
+      ]
+    },
+    {
+      "id": "erp",
+      "name": "ERP (SAP / Oracle / NetSuite)",
+      "practised": false,
+      "description": "",
+      "category": "Finance tools",
+      "evidence_tracked": false,
+      "learn_hours": {
+        "to_basic": 15,
+        "to_confident": 30
+      },
+      "trend_tracked": true,
+      "patterns": [
+        "\\bERP\\b",
+        "\\bSAP\\b",
+        "\\bNetSuite\\b",
+        "\\bOracle (?:ERP|Fusion|Financials)\\b"
+      ],
+      "case_sensitive_patterns": [
+        "\\bERP\\b",
+        "\\bSAP\\b"
+      ],
+      "profile_tools": [
+        "ERP (SAP, Oracle)"
+      ]
+    }
   ]
 }

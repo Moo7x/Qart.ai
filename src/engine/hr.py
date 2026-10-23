@@ -81,7 +81,7 @@ def _suppress_count(value: int) -> int | None:
 def _role_weight_max(
     catalogue: Catalogue, assumptions: CompanyAssumptions, scenario: Scenario
 ) -> dict[str, float]:
-    skill_types = {k: s.type for k, s in catalogue.skills.items()}
+    skill_types = catalogue.skill_types
     best: dict[str, float] = {}
     for role in catalogue.roles.values():
         weights = scenario_weights(role, scenario, assumptions, skill_types).scenario

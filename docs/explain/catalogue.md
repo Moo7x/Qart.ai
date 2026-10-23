@@ -32,6 +32,13 @@ tags (sdg_map).
   coso.org is the free alternative (linked only; © COSO). `hours_source` marks estimates.
 - **sdg_map.json**: 4.4 (main), 8.2, 8.5 with one-line rationales for every role and skill.
 
+**One skill vocabulary (QART_NEXT_STEPS §2).** `skills.json` lists every skill the app uses:
+practice skills, role skills and market skills. `evidence_tracked` marks the 16 whose evidence
+state is kept (cases, My skills, HR). `trend_tracked` marks the 20 with Hacker News patterns for
+the Skills Radar. `learn_hours` gives team estimates (ASSUMPTION) for none → "use sometimes" →
+"confident". `tests/test_skill_vocabulary.py` fails on any unknown skill id in roles, courses,
+the SDG map or cases.
+
 ## 4. Where in the code
 `src/engine/catalogue.py::load_catalogue`, `default_catalogue` (cached). Integrity tests:
 `tests/test_catalogue.py` (no dangling ids, every role cited, every unverified course explained).

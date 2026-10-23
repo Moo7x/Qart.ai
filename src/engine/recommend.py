@@ -35,7 +35,6 @@ from src.contract import (
     RoleRecommendation,
     Scenario,
     SkillState,
-    SkillType,
     Snapshot,
     SourceLink,
     TimeToReady,
@@ -236,7 +235,7 @@ def score_role(
     weights: ScoreWeights = DEFAULT_WEIGHTS,
 ) -> tuple[RoleRecommendation, float]:
     """One role's recommendation (rank filled in by recommend) and its unclamped score."""
-    skill_types: dict[str, SkillType] = {k: s.type for k, s in catalogue.skills.items()}
+    skill_types = catalogue.skill_types
     skill_weights = scenario_weights(role, scenario, assumptions, skill_types).scenario
     factors = compute_factors(skill_weights, states, profile, role, catalogue)
     card = requirement_card(role, scenario, assumptions, skill_types, snapshot)

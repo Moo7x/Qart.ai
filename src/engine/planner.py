@@ -310,7 +310,7 @@ def plan_inputs(
     assumptions: CompanyAssumptions,
 ) -> PlanInputs:
     role = catalogue.roles[role_id]
-    skill_types = {k: s.type for k, s in catalogue.skills.items()}
+    skill_types = catalogue.skill_types
     weights = {
         sc: scenario_weights(role, sc, assumptions, skill_types).scenario for sc in SCENARIOS
     }

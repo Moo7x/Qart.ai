@@ -104,7 +104,7 @@ def next_case(
         role_id or recommend(profile, states, catalogue, assumptions, scenario).roles[0].role_id
     )
     role = catalogue.roles[target]
-    skill_types = {k: s.type for k, s in catalogue.skills.items()}
+    skill_types = catalogue.skill_types
     weights = scenario_weights(role, scenario, assumptions, skill_types).scenario
     seen = {e.case_id for e in events}
 

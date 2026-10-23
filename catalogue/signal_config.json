@@ -1,5 +1,5 @@
 {
-  "_about": "Future Skills Radar configuration (AI_SIGNAL_SPEC.md). Skills and match patterns, labelling parameters, chart events and source metadata. Parameters are DECLARED design choices, not fitted to data. The market signal comes only from the public sources below; no user data is ever sent to them.",
+  "_about": "Future Skills Radar configuration (AI_SIGNAL_SPEC.md). Skills and match patterns, labelling parameters, chart events and source metadata. Parameters are DECLARED design choices, not fitted to data. The market signal comes only from the public sources below; no user data is ever sent to them. Tracked skills and their match patterns live in catalogue/skills.json (trend_tracked: true).",
   "params": {
     "window_months": 36,
     "ma_short_months": 3,
@@ -42,30 +42,23 @@
     }
   },
   "events": [
-    {"month": "2022-11", "label": "ChatGPT launch", "url": "https://openai.com/index/chatgpt/", "verified": false},
-    {"month": "2023-03", "label": "GPT-4 release", "url": "https://openai.com/index/gpt-4-research/", "verified": false},
-    {"month": "2024-08", "label": "EU AI Act in force", "url": "https://commission.europa.eu/news/ai-act-enters-force-2024-08-01_en", "verified": true}
-  ],
-  "skills": [
-    {"id": "python", "name": "Python", "category": "Programming", "patterns": ["\\bPython\\b"], "case_sensitive_patterns": [], "profile_tools": ["Python"], "catalogue_skills": ["process_automation"]},
-    {"id": "sql", "name": "SQL", "category": "Data", "patterns": ["\\bSQL\\b", "\\bPostgres(?:QL)?\\b", "\\bMySQL\\b"], "case_sensitive_patterns": ["\\bSQL\\b"], "profile_tools": ["SQL"], "catalogue_skills": ["sql_basics"]},
-    {"id": "pytorch", "name": "PyTorch", "category": "AI/ML", "patterns": ["\\bPyTorch\\b"], "case_sensitive_patterns": [], "profile_tools": [], "catalogue_skills": []},
-    {"id": "tensorflow", "name": "TensorFlow", "category": "AI/ML", "patterns": ["\\bTensorFlow\\b"], "case_sensitive_patterns": [], "profile_tools": [], "catalogue_skills": []},
-    {"id": "llms", "name": "LLMs", "category": "AI/ML", "patterns": ["\\bLLMs?\\b", "large language models?", "\\bGPT-?[345]", "\\bgenerative AI\\b", "\\bGenAI\\b"], "case_sensitive_patterns": ["\\bLLMs?\\b"], "profile_tools": ["AI assistants"], "catalogue_skills": ["ai_output_review"]},
-    {"id": "rag", "name": "RAG", "category": "AI/ML", "patterns": ["\\bRAG\\b", "retrieval[- ]augmented"], "case_sensitive_patterns": ["\\bRAG\\b"], "profile_tools": [], "catalogue_skills": []},
-    {"id": "langchain", "name": "LangChain", "category": "AI/ML", "patterns": ["\\bLangChain\\b", "\\bLangGraph\\b"], "case_sensitive_patterns": [], "profile_tools": [], "catalogue_skills": []},
-    {"id": "ai_agents", "name": "AI agents", "category": "AI/ML", "patterns": ["\\bAI agents?\\b", "\\bagentic\\b", "\\bLLM agents?\\b"], "case_sensitive_patterns": [], "profile_tools": [], "catalogue_skills": ["ai_output_review"]},
-    {"id": "mlops", "name": "MLOps", "category": "AI/ML", "patterns": ["\\bMLOps\\b", "\\bML ?Ops\\b"], "case_sensitive_patterns": [], "profile_tools": [], "catalogue_skills": []},
-    {"id": "computer_vision", "name": "Computer vision", "category": "AI/ML", "patterns": ["\\bcomputer vision\\b"], "case_sensitive_patterns": [], "profile_tools": [], "catalogue_skills": []},
-    {"id": "nlp", "name": "NLP", "category": "AI/ML", "patterns": ["\\bNLP\\b", "natural language processing"], "case_sensitive_patterns": ["\\bNLP\\b"], "profile_tools": [], "catalogue_skills": []},
-    {"id": "kubernetes", "name": "Kubernetes", "category": "Infrastructure", "patterns": ["\\bKubernetes\\b", "\\bk8s\\b"], "case_sensitive_patterns": [], "profile_tools": [], "catalogue_skills": []},
-    {"id": "aws", "name": "AWS", "category": "Infrastructure", "patterns": ["\\bAWS\\b", "\\bAmazon Web Services\\b"], "case_sensitive_patterns": ["\\bAWS\\b"], "profile_tools": [], "catalogue_skills": []},
-    {"id": "typescript", "name": "TypeScript", "category": "Programming", "patterns": ["\\bTypeScript\\b"], "case_sensitive_patterns": [], "profile_tools": [], "catalogue_skills": []},
-    {"id": "react", "name": "React", "category": "Programming", "patterns": ["\\bReact(?:\\.js|JS)?\\b(?! Native)"], "case_sensitive_patterns": ["\\bReact(?:\\.js|JS)?\\b(?! Native)"], "profile_tools": [], "catalogue_skills": []},
-    {"id": "excel", "name": "Excel", "category": "Finance tools", "patterns": ["\\bExcel\\b(?! at)", "\\bspreadsheets?\\b"], "case_sensitive_patterns": ["\\bExcel\\b(?! at)"], "profile_tools": ["Excel"], "catalogue_skills": ["spreadsheet_modelling"]},
-    {"id": "bi_tools", "name": "Power BI / Tableau", "category": "Finance tools", "patterns": ["\\bPower ?BI\\b", "\\bTableau\\b", "\\bLooker\\b"], "case_sensitive_patterns": [], "profile_tools": ["Power BI / Tableau"], "catalogue_skills": ["variance_analysis"]},
-    {"id": "rpa", "name": "RPA / process automation", "category": "Finance tools", "patterns": ["\\bRPA\\b", "\\bUiPath\\b", "robotic process automation", "\\bworkflow automation\\b"], "case_sensitive_patterns": ["\\bRPA\\b"], "profile_tools": [], "catalogue_skills": ["process_automation"]},
-    {"id": "erp", "name": "ERP (SAP / Oracle / NetSuite)", "category": "Finance tools", "patterns": ["\\bERP\\b", "\\bSAP\\b", "\\bNetSuite\\b", "\\bOracle (?:ERP|Fusion|Financials)\\b"], "case_sensitive_patterns": ["\\bERP\\b", "\\bSAP\\b"], "profile_tools": ["ERP (SAP, Oracle)"], "catalogue_skills": []},
-    {"id": "data_quality", "name": "Data quality", "category": "Data", "patterns": ["\\bdata quality\\b", "\\bdata validation\\b", "\\bdata governance\\b"], "case_sensitive_patterns": [], "profile_tools": [], "catalogue_skills": ["data_quality"]}
+    {
+      "month": "2022-11",
+      "label": "ChatGPT launch",
+      "url": "https://openai.com/index/chatgpt/",
+      "verified": false
+    },
+    {
+      "month": "2023-03",
+      "label": "GPT-4 release",
+      "url": "https://openai.com/index/gpt-4-research/",
+      "verified": false
+    },
+    {
+      "month": "2024-08",
+      "label": "EU AI Act in force",
+      "url": "https://commission.europa.eu/news/ai-act-enters-force-2024-08-01_en",
+      "verified": true
+    }
   ]
 }

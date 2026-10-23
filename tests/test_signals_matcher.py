@@ -15,11 +15,11 @@ def found(text: str) -> set[str]:
 @pytest.mark.parametrize(
     ("skill", "positive", "negative"),
     [
-        ("sql", "Strong SQL and dbt", "We use NoSQL stores only"),
+        ("sql_basics", "Strong SQL and dbt", "We use NoSQL stores only"),
         ("rag", "Build RAG pipelines", "Drag-and-drop editor; a rag-tag team"),
         ("react", "React and TypeScript front end", "React Native mobile app; react to incidents"),
         (
-            "excel",
+            "spreadsheet_modelling",
             "Advanced Excel modelling",
             "You excel at ownership; Excel at scale; excellent pay",
         ),
@@ -28,9 +28,13 @@ def found(text: str) -> set[str]:
         ("llms", "Fine-tune LLMs for support", "llms written in lowercase"),
         ("ai_agents", "Ship AI agents for finance ops", "Real estate agent; user agent strings"),
         ("erp", "SAP S/4 and ERP migration", "Reply ASAP; sap and syrup"),
-        ("rpa", "UiPath RPA developer", "rpa lowercase acronym only"),
+        ("process_automation", "UiPath RPA developer", "rpa lowercase acronym only"),
         ("python", "Python, Django", "Pythonic is not a skill mention"),
-        ("bi_tools", "Dashboards in Power BI or Tableau", "Business intelligence in general"),
+        (
+            "data_visualisation",
+            "Dashboards in Power BI or Tableau",
+            "Business intelligence in general",
+        ),
         ("mlops", "MLOps on Kubeflow", "Ops team for ML research"),
     ],
 )
@@ -41,7 +45,7 @@ def test_ambiguous_skill_matches_and_rejects(skill: str, positive: str, negative
 
 def test_a_post_counts_once_per_skill_however_often_it_appears() -> None:
     hits = found("Python Python python! SQL, SQL and more SQL. Python again.")
-    assert hits >= {"python", "sql"}
+    assert hits >= {"python", "sql_basics"}
     assert len([h for h in hits if h == "python"]) == 1
 
 
