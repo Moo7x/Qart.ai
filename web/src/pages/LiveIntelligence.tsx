@@ -1,6 +1,6 @@
 import { Lock } from 'lucide-react'
 import { type FormEvent, useState } from 'react'
-import { formatWhen, parseUtc, postJSON, useApi } from '../api'
+import { formatWhen, parseUtc, sendJSON, useApi } from '../api'
 import { PipelineDiagram, type StepId } from '../components/PipelineDiagram'
 import { Empty, Loading, Problem } from '../components/ui'
 import type { BacktestEntry, Run, SourceStatus } from '../types'
@@ -15,9 +15,9 @@ const STEP_TEXT: Record<StepId, [string, string]> = {
   validate: ['VALIDATE', 'Release dates and quarters are checked; pages announced before their release day are skipped; a count that is not stated stays missing, never zero; a jump in total job ads is treated as a coverage break.'],
   measure: ['MEASURE', 'Shares and changes between comparable periods, at the precision each source publishes. The DOSM trend backtest below decides whether a trend may be projected.'],
   label: ['LABEL', 'Rising or weakening needs two independent sources, or one official series with at least eight comparable points; otherwise the signal is "not enough evidence yet".'],
-  forecast: ['FORECAST · NEXT', 'Moderate and fast AI-adoption scenarios will shift how much each role leans on each skill, citing this evidence. Built with the personal journey.'],
-  match: ['MATCH · NEXT', 'Every profile will be rescored when evidence changes, with the chain from evidence to score kept for "why".'],
-  notify: ['IN THE APP · NEXT', 'People will see what changed and why; a pathway change will wait for their OK.'],
+  forecast: ['SCENARIOS · DECLARED ASSUMPTIONS', 'Moderate and fast AI-adoption scenarios shift nonessential emphasis using observed occupation-level AI use. They are conditional estimates, not measured Malaysian adoption forecasts. Essentials stay fixed.'],
+  match: ['MATCH', 'The engine scores every destination against the person’s claimed skills. New evidence produces a stored comparison; the accepted journey stays fixed until the person chooses an update.'],
+  notify: ['IN-APP PROPOSALS', 'The scheduled pipeline publishes profile-specific evidence, score and pathway comparisons. What changed shows those proposals and a separate read-only historical replay. Telegram is deferred.'],
   telegram: ['TELEGRAM · LATER', 'Planned for the improvement phase: change notifications, then answers drawn only from the app, with sources.'],
 }
 
@@ -43,7 +43,7 @@ function RunNow({ onStarted }: { onStarted: () => void }) {
   async function submit(event: FormEvent) {
     event.preventDefault()
     try {
-      await postJSON('/api/pipeline/run', { 'X-Admin-Token': token })
+      await sendJSON('/api/pipeline/run', { headers: { 'X-Admin-Token': token } })
       setMessage('Run started. Progress appears below.')
       setOpen(false)
       onStarted()

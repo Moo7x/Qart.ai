@@ -51,10 +51,46 @@ class DestinationRole(BaseModel):
     requires: list[Requirement]
 
 
+class Course(BaseModel):
+    id: str
+    title: str
+    provider: str
+    url: str
+    minutes: int
+    level: Literal["beginner", "intermediate", "advanced"]
+    covers: list[str]
+    requires: list[str] = []  # courses to take first (prerequisites)
+
+
+class SdgTarget(BaseModel):
+    goal: int
+    title: str
+    text: str  # official UN wording
+
+
+class SdgLink(BaseModel):
+    target: str
+    how: str  # the mechanism shown to the user
+
+
+class SdgMap(BaseModel):
+    source: str
+    targets: dict[str, SdgTarget]
+    skill_kinds: dict[str, list[SdgLink]]
+    pathway: list[SdgLink]
+    destination: list[SdgLink]
+
+
 class Pack(BaseModel):
     skills: dict[str, Skill]
     current_roles: dict[str, CurrentRole]
     destination_roles: dict[str, DestinationRole]
+    courses: dict[str, Course]
+    courses_checked: str
+    sdg: SdgMap
+
+    def courses_for(self, skill_id: str) -> list[Course]:
+        return [c for c in self.courses.values() if skill_id in c.covers]
 
 
 class PackError(ValueError):
@@ -83,6 +119,31 @@ def _check(pack: Pack) -> None:
         ]
         if not any(r.essential for r in dest.requires):
             problems.append(f"{dest.id}: no essential requirement")
+    for course in pack.courses.values():
+        problems += [
+            f"{course.id}: unknown skill {s}" for s in course.covers if s not in pack.skills
+        ]
+        problems += [
+            f"{course.id}: unknown prerequisite {c}"
+            for c in course.requires
+            if c not in pack.courses
+        ]
+        if not course.url.startswith("https://"):
+            problems.append(f"{course.id}: url is not https")
+    links = [
+        *pack.sdg.pathway,
+        *pack.sdg.destination,
+        *(link for kind in pack.sdg.skill_kinds.values() for link in kind),
+    ]
+    problems += [
+        f"SDG link to unknown target {link.target}"
+        for link in links
+        if link.target not in pack.sdg.targets
+    ]
+    kinds = {s.kind for s in pack.skills.values()}
+    problems += [
+        f"skill kind {k} has no SDG mapping" for k in kinds if not pack.sdg.skill_kinds.get(k)
+    ]
     if problems:
         raise PackError("; ".join(problems))
 
@@ -91,12 +152,17 @@ def _check(pack: Pack) -> None:
 def load_pack() -> Pack:
     skills = yaml.safe_load((PACK_DIR / "skills.yaml").read_text(encoding="utf-8"))
     roles = yaml.safe_load((PACK_DIR / "roles.yaml").read_text(encoding="utf-8"))
+    courses = yaml.safe_load((PACK_DIR / "courses.yaml").read_text(encoding="utf-8"))
+    sdg = yaml.safe_load((PACK_DIR / "sdg.yaml").read_text(encoding="utf-8"))
     pack = Pack(
         skills={s["id"]: Skill.model_validate(s) for s in skills},
         current_roles={r["id"]: CurrentRole.model_validate(r) for r in roles["current_roles"]},
         destination_roles={
             r["id"]: DestinationRole.model_validate(r) for r in roles["destination_roles"]
         },
+        courses={c["id"]: Course.model_validate(c) for c in courses["courses"]},
+        courses_checked=str(courses["checked"]),
+        sdg=SdgMap.model_validate(sdg),
     )
     _check(pack)
     return pack

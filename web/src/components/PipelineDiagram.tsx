@@ -141,9 +141,9 @@ export function PipelineDiagram({ run, running, selected, onSelect }: {
         <Node x={320} y={300} w={180} h={64} icon={<ShieldCheck size={16} />} title="Validate" sub="dates, units, breaks" tone="violet" selected={selected === 'validate'} onClick={() => onSelect('validate')} />
         <Node x={320} y={428} w={180} h={64} icon={<BarChart3 size={16} />} title="Measure" sub="shares, changes, backtest" tone="violet" selected={selected === 'measure'} onClick={() => onSelect('measure')} />
         <Node x={650} y={428} w={180} h={64} icon={<ListChecks size={16} />} title="Label" sub="rules, not opinions" tone="mint" selected={selected === 'label'} onClick={() => onSelect('label')} />
-        <Node x={650} y={300} w={180} h={64} icon={<TrendingUp size={16} />} title="Forecast" sub="next: 2 scenarios" tone="planned" selected={selected === 'forecast'} onClick={() => onSelect('forecast')} />
-        <Node x={650} y={172} w={180} h={64} icon={<Target size={16} />} title="Match" sub="next: your roles" tone="planned" selected={selected === 'match'} onClick={() => onSelect('match')} />
-        <Node x={914} y={138} w={142} h={52} icon={<Bell size={16} />} title="In the app" sub="next: What changed" tone="planned" selected={selected === 'notify'} onClick={() => onSelect('notify')} />
+        <Node x={650} y={300} w={180} h={64} icon={<TrendingUp size={16} />} title="Scenarios" sub="declared assumptions" tone="amber" selected={selected === 'forecast'} onClick={() => onSelect('forecast')} />
+        <Node x={650} y={172} w={180} h={64} icon={<Target size={16} />} title="Match" sub="scores + explanations" tone="violet" selected={selected === 'match'} onClick={() => onSelect('match')} />
+        <Node x={914} y={138} w={142} h={52} icon={<Bell size={16} />} title="In the app" sub="review changes" tone="mint" selected={selected === 'notify'} onClick={() => onSelect('notify')} />
         <Node x={914} y={270} w={142} h={52} icon={<Send size={16} />} title="Telegram" sub="later" tone="planned" selected={selected === 'telegram'} onClick={() => onSelect('telegram')} />
       </div>
     </div>

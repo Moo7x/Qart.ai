@@ -42,3 +42,35 @@ MIN_POINTS_SINGLE_OFFICIAL_SERIES = 8
 # run. It backs up the scheduled job: DOSM publishes quarterly and the Economic Index irregularly,
 # so one check a day is enough to notice a new release on the day it appears.
 RUN_STALE_AFTER_HOURS = 24
+
+# --- Matching (src/match/engine.py) ------------------------------------------------------------
+# Bump when the formula/planning algorithm changes, even if its numeric parameters do not.
+# Used with pack/parameter fingerprints to invalidate proposals computed under different rules.
+CALCULATION_VERSION = "journey-1"
+# Proficiency scale used everywhere: 0 none · 1 aware · 2 working · 3 proficient · 4 expert.
+PROFICIENCY_LABELS = ("none", "aware", "working", "proficient", "expert")
+# Level a destination role needs, by requirement tier. Core skills are the role's defining work, so
+# they need "proficient"; skills TalentCorp names for the move (upskill) and supporting tools need
+# "working" level: enough to do the job while growing in it.
+ROLE_TIER_LEVEL = {"core": 3, "upskill": 2, "support": 2}
+# How much each tier counts in the fit score: defining work counts most, tools least.
+ROLE_TIER_WEIGHT = {"core": 3.0, "upskill": 2.0, "support": 1.0}
+# Scenario shift direction per skill's ai_role (data/packs/gbs_fa/skills.yaml): routine work loses
+# weight as automation-style AI use reaches it; AI-complementing work gains weight.
+AI_ROLE_DIRECTION = {"complement": 1, "routine": -1, "neutral": 0}
+# Scenario intensity within the 2-year horizon: the share of the observed automation-style AI use
+# assumed to reach these tasks. Moderate = half, fast = all of it. Declared, not estimated.
+SCENARIO_INTENSITY = {"moderate": 0.5, "fast": 1.0}
+SCENARIO_HORIZON_YEARS = 2
+# Roles whose fit differs by less than this are near-ties: the person's interests may order them.
+NEAR_TIE_POINTS = 3.0
+
+# --- Pathway (src/pathway/planner.py) ----------------------------------------------------------
+# Highest level a course's material can take a skill to, by its stated level.
+COURSE_LEVEL_REACH = {"beginner": 2, "intermediate": 3, "advanced": 3}
+# Most levels a single course can add to a skill, by its length. Short modules introduce a topic;
+# only longer material can move someone two levels. Several courses on one skill add up, capped by
+# each course's level reach. Declared to keep plans honest about what a few hours can do.
+COURSE_SHORT_MINUTES = 180
+COURSE_MAX_GAIN_SHORT = 1
+COURSE_MAX_GAIN_LONG = 2

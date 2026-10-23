@@ -1,0 +1,25 @@
+Muhammad Hafiz Bin Rahman
+Email: hafiz.sample@example.com
+Mobile: 011-2345 6789
+
+SYNTHETIC SAMPLE CV FOR THE QART.AI DEMO. THIS PERSON DOES NOT EXIST.
+
+Profile
+Fresh accounting graduate looking for a first role in a finance shared services centre.
+
+Education
+Bachelor of Accounting (Honours), public university in Malaysia, 2026
+- Final-year project: variance analysis of a manufacturing company's standard costs.
+- Courses in financial accounting, management accounting, auditing and taxation.
+- Learned SQL basics and built simple dashboards in Power BI for a class project.
+
+Internship
+Finance Intern, audit firm, Kuala Lumpur (3 months, 2025)
+- Helped prepare working papers and tested internal controls over purchases.
+- Matched supplier invoices to purchase orders and delivery notes.
+
+Skills
+Accounting principles, Excel, basic SQL, Power BI, English and Bahasa Malaysia.
+
+Interests
+Data analysis and sustainability reporting.

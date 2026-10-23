@@ -1,7 +1,8 @@
-import { Activity, Radar } from 'lucide-react'
-import { NavLink } from 'react-router-dom'
+import { Activity, ArrowRight, ListOrdered, Radar, Route as RouteIcon, UserRound } from 'lucide-react'
+import { Link, NavLink } from 'react-router-dom'
 import { formatWhen, useApi } from '../api'
-import type { Run } from '../types'
+import { useJourney } from '../state'
+import type { ChangesResponse, Run } from '../types'
 
 const RUNS_POLL_MS = 60_000
 
@@ -15,6 +16,8 @@ function navClass({ isActive }: { isActive: boolean }): string {
 export function Sidebar() {
   const runs = useApi<Run[]>('/api/pipeline/runs?limit=1', RUNS_POLL_MS)
   const latest = runs.data?.[0]
+  const { profileId, setProfileId } = useJourney()
+  const changes = useApi<ChangesResponse>(profileId ? `/api/profiles/${profileId}/changes` : null, RUNS_POLL_MS)
   return (
     <nav
       aria-label="Main"
@@ -33,6 +36,37 @@ export function Sidebar() {
         <Radar size={16} aria-hidden="true" />
         Overview
       </NavLink>
+      <NavLink to="/roles" className={navClass}>
+        <ListOrdered size={16} aria-hidden="true" />
+        Roles that fit
+      </NavLink>
+      <NavLink to="/pathway" className={navClass}>
+        <RouteIcon size={16} aria-hidden="true" />
+        Pathway
+      </NavLink>
+      <NavLink to="/future" className={navClass}>
+        <ArrowRight size={16} aria-hidden="true" />
+        Today → Future you
+      </NavLink>
+      <NavLink to="/changes" className={navClass}>
+        <Activity size={16} aria-hidden="true" />
+        What changed
+        {changes.data?.proposals.some((p) => p.actionable) && <span className="tag bg-violet text-white">New</span>}
+      </NavLink>
+      {profileId ? (
+        <button
+          type="button"
+          onClick={() => setProfileId(null)}
+          className="flex min-h-[38px] cursor-pointer items-center gap-2.5 rounded-md border-0 bg-transparent px-2.5 text-left text-sm text-stone hover:bg-obsidian hover:text-white"
+        >
+          <UserRound size={16} aria-hidden="true" />
+          Start again with a new profile
+        </button>
+      ) : (
+        <Link to="/start" className="mt-1 flex min-h-[38px] items-center justify-center rounded-md bg-violet text-sm font-medium text-white no-underline hover:bg-violet-hover">
+          Start · tell us about yourself
+        </Link>
+      )}
       <div className="mx-1.5 my-3 h-px bg-surface" />
       <NavLink to="/live" className={navClass}>
         <Activity size={16} aria-hidden="true" className="text-cyan" />

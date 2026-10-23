@@ -32,6 +32,29 @@ def test_every_destination_is_reachable_from_some_current_role() -> None:
     assert reachable == set(pack.destination_roles)
 
 
+def test_courses_are_free_sources_with_stated_length() -> None:
+    pack = load_pack()
+    assert len(pack.courses) >= 25
+    for course in pack.courses.values():
+        assert course.minutes > 0
+        assert course.provider.startswith(("Microsoft Learn", "OpenLearn"))
+
+
+def test_most_destination_skills_have_a_verified_course() -> None:
+    pack = load_pack()
+    needed = {r.skill for d in pack.destination_roles.values() for r in d.requires}
+    uncovered = sorted(s for s in needed if not pack.courses_for(s))
+    # Known gaps are shown as "no verified free course yet", never filled with guesses.
+    assert len(uncovered) <= len(needed) // 3, uncovered
+
+
+def test_every_target_has_its_official_text() -> None:
+    pack = load_pack()
+    assert set(pack.sdg.targets) >= {"4.3", "4.4", "8.2", "8.5"}
+    starts = ("By 2030", "Achieve", "Encourage")
+    assert all(t.text.startswith(starts) for t in pack.sdg.targets.values())
+
+
 def squash(text: str) -> str:
     return re.sub(r"[^a-z0-9]", "", text.lower())
 

@@ -23,8 +23,22 @@ export async function getJSON<T>(path: string): Promise<T> {
   return (await response.json()) as T
 }
 
-export async function postJSON<T>(path: string, headers: Record<string, string> = {}): Promise<T> {
-  const response = await fetch(path, { method: 'POST', headers })
+type SendOptions = { body?: unknown; headers?: Record<string, string>; method?: 'POST' | 'PUT' }
+
+export async function sendJSON<T>(path: string, { body, headers = {}, method = 'POST' }: SendOptions = {}): Promise<T> {
+  const response = await fetch(path, {
+    method,
+    headers: { ...(body === undefined ? {} : { 'Content-Type': 'application/json' }), ...headers },
+    body: body === undefined ? undefined : JSON.stringify(body),
+  })
+  if (!response.ok) throw new ApiError(response.status, await readError(response))
+  return (await response.json()) as T
+}
+
+export async function uploadFile<T>(path: string, file: File): Promise<T> {
+  const form = new FormData()
+  form.append('file', file)
+  const response = await fetch(path, { method: 'POST', body: form })
   if (!response.ok) throw new ApiError(response.status, await readError(response))
   return (await response.json()) as T
 }
@@ -36,17 +50,19 @@ export type Loadable<T> = {
   reload: () => void
 }
 
-/** Fetch `path` on mount (and every `pollMs` if given). */
-export function useApi<T>(path: string, pollMs?: number): Loadable<T> {
+/** Fetch `path` on mount (and every `pollMs` if given). A null path fetches nothing. */
+export function useApi<T>(path: string | null, pollMs?: number): Loadable<T> {
   const [data, setData] = useState<T | null>(null)
   const [error, setError] = useState<string | null>(null)
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(path !== null)
   const [tick, setTick] = useState(0)
 
   const reload = useCallback(() => setTick((t) => t + 1), [])
 
   useEffect(() => {
+    if (path === null) return
     let cancelled = false
+    setLoading(true)
     getJSON<T>(path)
       .then((value) => {
         if (!cancelled) {
@@ -66,10 +82,10 @@ export function useApi<T>(path: string, pollMs?: number): Loadable<T> {
   }, [path, tick])
 
   useEffect(() => {
-    if (!pollMs) return
+    if (!pollMs || path === null) return
     const id = window.setInterval(reload, pollMs)
     return () => window.clearInterval(id)
-  }, [pollMs, reload])
+  }, [pollMs, path, reload])
 
   return { data, error, loading, reload }
 }

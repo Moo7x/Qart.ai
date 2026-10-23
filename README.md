@@ -51,7 +51,21 @@ Working adults at risk of displacement, fresh graduates and students (also throu
 
 ### Status
 
-Built slice by slice to the design in [`docs/PLAN.md`](docs/PLAN.md). Working today (slice 1, evidence): four registered sources collected by a scheduled pipeline (OpenDOSM wages by occupation, DOSM Job Market Insights Q2 2023 – Q2 2026, Anthropic Economic Index, TalentCorp GBS study), an immutable evidence store, declared labelling rules and a reproducible backtest, shown on the **Overview** and **Live intelligence** pages with the cited row behind every number. Next: the personal journey (onboarding, matched roles, pathway, scenarios). How the evidence layer works: [`docs/explain/evidence.md`](docs/explain/evidence.md).
+Built slice by slice to [`docs/PLAN.md`](docs/PLAN.md). The local baseline now includes four
+collectors and an immutable evidence store, the evidence/radar pages, synthetic CV or questionnaire
+intake, nine scored destination roles, two declared scenarios, an ordered pathway from thirty
+linked free resources, SDG explanations and Today → Future you. **What changed** replays saved
+AEI/DOSM observation periods and shows source → emphasis → score → pathway differences. Scheduled
+ingestion publishes persistent proposals; the person accepts evidence updates without changing
+their skill claims or destination. Duplicate data and unchanged recommendations are valid outcomes.
+
+Scope limits: AI-use scenario shifts and course gains are assumptions, not trained adoption or
+learning-outcome forecasts. Ten destination-required skills have no verified free resource and
+are reported as uncovered. Research agent, HR, Telegram and what-if/robust planning are deferred;
+voice and on-screen agent are on hold. Cloud deployment and independent scheduled-run logs still
+need verification after the team's push. See [architecture](docs/explain/ARCHITECTURE.md),
+[journey](docs/explain/journey.md), [changes](docs/explain/changes.md) and
+[baseline validation](docs/BASELINE_CHECK.md).
 
 ### Tech Stack
 

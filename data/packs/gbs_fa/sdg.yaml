@@ -1,0 +1,46 @@
+# SDG targets used by the pack and the rules that link skills, steps and roles to them.
+# Target wording: United Nations, sdgs.un.org/goals (goals 4, 8 and 12), read on 2026-10-23.
+# Each mapping states its mechanism: how the work or the learning contributes to the target.
+source: "United Nations, Sustainable Development Goals, sdgs.un.org/goals (read 2026-10-23)"
+targets:
+  "4.3":
+    goal: 4
+    title: Affordable technical and vocational learning
+    text: "By 2030, ensure equal access for all women and men to affordable and quality technical, vocational and tertiary education, including university"
+  "4.4":
+    goal: 4
+    title: Relevant skills for decent jobs
+    text: "By 2030, substantially increase the number of youth and adults who have relevant skills, including technical and vocational skills, for employment, decent jobs and entrepreneurship"
+  "8.2":
+    goal: 8
+    title: Productivity through innovation
+    text: "Achieve higher levels of economic productivity through diversification, technological upgrading and innovation, including through a focus on high-value added and labour-intensive sectors"
+  "8.5":
+    goal: 8
+    title: Full and productive employment
+    text: "By 2030, achieve full and productive employment and decent work for all women and men, including for young people and persons with disabilities, and equal pay for work of equal value"
+  "12.6":
+    goal: 12
+    title: Sustainable practices and reporting in companies
+    text: "Encourage companies, especially large and transnational companies, to adopt sustainable practices and to integrate sustainability information into their reporting cycle"
+
+# Skill kind → targets, with the mechanism shown to the user.
+skill_kinds:
+  finance_core:
+    - {target: "4.4", how: "A finance skill named for Malaysian GBS roles keeps you employable as the work changes."}
+  business:
+    - {target: "4.4", how: "A business skill that destination roles in your field require."}
+  data_digital:
+    - {target: "4.4", how: "A digital skill employers in GBS name as in demand: a relevant technical skill for decent jobs."}
+    - {target: "8.2", how: "Using data and systems well raises the productivity of finance work through technological upgrading."}
+  green:
+    - {target: "4.4", how: "A green skill TalentCorp names for GBS roles."}
+    - {target: "12.6", how: "Finance teams that measure and report sustainability help companies adopt sustainable practices and report on them."}
+
+# Every pathway made of free, quality technical courses taken while working.
+pathway:
+  - {target: "4.3", how: "Every step is a free technical course, so the path is affordable lifelong learning while you work."}
+
+# Moving into a destination role.
+destination:
+  - {target: "8.5", how: "A move from a highly impacted role into a role TalentCorp lists as a transition keeps you in productive employment."}
