@@ -122,3 +122,15 @@ def test_unknown_profile_is_404_and_bad_input_is_422(client: TestClient) -> None
     bad = {**NUR, "skills": {"time_travel": {"level": 2}}}
     assert client.post("/api/profiles", json=bad).status_code == 422
     assert client.post("/api/profiles", json={**NUR, "weekly_hours": 0}).status_code == 422
+
+
+def test_role_tasks_keep_four_evidence_kinds_separate(client: TestClient) -> None:
+    pid = create(client)
+    body = client.get(f"/api/profiles/{pid}/roles/cost_accountant/tasks").json()
+    assert body["soc"] == "13-2011.00" and body["occupation"]["isco"] == "2411"
+    assert body["tasks"] and all(t["observed_use"] is None for t in body["tasks"])  # empty store
+    assert body["exposure"] is None and body["deployment"] is None  # missing, never zero
+    assert body["expert"]["impact"] == "medium"
+    assert "Energy Management and Audit" in body["unlinked_skills"]
+    assert "No source here reports organisations deploying AI" in body["summary"]
+    assert client.get(f"/api/profiles/{pid}/roles/nope/tasks").status_code == 404

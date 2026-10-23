@@ -23,6 +23,7 @@ from src.journey.store import (
 )
 from src.match.engine import Evidence, RoleMatch, Scenario, rank_roles, score_role
 from src.match.evidence import automation_evidence
+from src.match.tasks import task_view
 from src.pack import Pack, load_pack
 from src.pathway.planner import Pathway, plan_pathway
 
@@ -275,6 +276,20 @@ def pathway(
     out["courses_checked"] = pack.courses_checked
     out["scenario"] = scenario
     return out
+
+
+@router.get("/profiles/{profile_id}/roles/{role_id}/tasks")
+def role_tasks(
+    profile_id: str, role_id: str, engine: Engine = Depends(get_engine)
+) -> dict[str, Any]:
+    """The role's linked O*NET tasks with the four kinds of evidence, at the accepted cutoff."""
+    require_profile(engine, profile_id)
+    pack = load_pack()
+    role = pack.destination_roles.get(role_id)
+    if role is None:
+        raise HTTPException(status_code=404, detail="unknown destination role")
+    impact = f"TalentCorp rates it {IMPACT_MEANING[role.impact]}."
+    return task_view(pack, role, accepted_rows(engine, profile_id), impact)
 
 
 @router.get("/profiles/{profile_id}/future")
