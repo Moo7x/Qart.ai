@@ -22,7 +22,8 @@
       "sql_basics": "confident",
       "data_visualisation": "confident",
       "data_quality": "confident"
-    }
+    },
+    "wants_certificate": true
   },
   "expect": {
     "any_strong": [

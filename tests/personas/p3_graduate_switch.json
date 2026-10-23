@@ -15,7 +15,12 @@
     ],
     "direction": "switch",
     "timeframe_months": 6,
-    "weekly_learning_hours": 6
+    "weekly_learning_hours": 6,
+    "employment": "job_seeking",
+    "budget": "free_only",
+    "age_band": "18_30",
+    "malaysian": "yes",
+    "ai_comfort": 2
   },
   "expect": {
     "best_of_above_best_of": [

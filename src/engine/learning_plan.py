@@ -16,7 +16,7 @@ order; this decides HOW (which course), WHEN (which weeks) and AT WHAT COST.
   5. Schedule (§4.5): hours × (1 + practice buffer) packed into weeks at the person's weekly hours,
      a hands-on milestone after each core skill and at least every 4 weeks, and every step past
      the timeframe kept in a "Next phase", never cut.
-No I/O, no network, no randomness, no LLM: `plan_for_profile` (in api_plan) loads the inputs.
+No I/O, no network, no randomness, no LLM: `plan_for_profile` (below) loads the inputs.
 """
 
 import math
@@ -27,10 +27,11 @@ from pathlib import Path
 
 from pydantic import BaseModel
 
-from src.contract import Course
-from src.engine.catalogue import CATALOGUE_DIR, SkillInfo
-from src.engine.ranking import GapItem
-from src.engine.resources import Milestone, MilestoneCatalogue
+from src.contract import Course, Profile, SkillState
+from src.engine.catalogue import CATALOGUE_DIR, SkillInfo, default_catalogue
+from src.engine.questionnaire import Questionnaire, default_questionnaire
+from src.engine.ranking import GapItem, ScoringConfig, default_scoring, rank_for_profile
+from src.engine.resources import Milestone, MilestoneCatalogue, default_milestones, plan_courses
 
 PLAN_PATH = CATALOGUE_DIR / "plan.json"
 AI_LITERACY = "ai_literacy"
@@ -672,3 +673,54 @@ def build_learning_plan(
         hrd_claimable_steps=sum(1 for s in courses_only if s.hrd_claimable),
     )
     return LearningPlan(role_id, steps, summary, action_items, gaps_without, notes)
+
+
+# --- Loading the inputs (I/O lives here, outside the pure function) --------------------------
+
+
+def plan_answers_for(
+    profile: Profile, q: Questionnaire, scoring: ScoringConfig, cfg: PlanConfig
+) -> PlanAnswers:
+    prefs = profile.preferences
+    months = prefs.timeframe_months or scoring.default_timeframe_months
+    return PlanAnswers(
+        weekly_hours=profile.weekly_learning_hours,
+        timeframe_weeks=scoring.timeframe_weeks[str(months)],
+        timeframe_months=months,
+        ai_comfort=prefs.ai_comfort,
+        formats=tuple(cfg.formats[f] for f in prefs.formats if f in cfg.formats),
+        wants_certificate=bool(prefs.wants_certificate),
+        language=prefs.language,
+        employment=prefs.employment,
+        employer_hrd=prefs.employer_hrd,
+        budget=prefs.budget,
+        budget_limit_myr=q.funding.budget_limit_myr,
+        age_band=prefs.age_band,
+        malaysian=prefs.malaysian,
+    )
+
+
+def plan_for_profile(
+    profile: Profile,
+    role_id: str | None = None,
+    states: list[SkillState] | None = None,
+    snapshot: Mapping[str, object] | None = None,
+    scenario: str | None = None,
+    include_drafts: bool | None = None,
+) -> LearningPlan | None:
+    """The plan for `role_id` (default: the top-ranked role); None for an empty profile."""
+    ranking = rank_for_profile(profile, states, snapshot, scenario)
+    if ranking.empty_profile or not ranking.roles:
+        return None
+    role = next((r for r in ranking.roles if r.role_id == role_id), ranking.roles[0])
+    catalogue = default_catalogue()
+    cfg = default_plan_config()
+    return build_learning_plan(
+        role.role_id,
+        role.gap,
+        plan_answers_for(profile, default_questionnaire(), default_scoring(), cfg),
+        plan_courses(catalogue, include_drafts),
+        catalogue.vocabulary,
+        default_milestones(),
+        cfg,
+    )

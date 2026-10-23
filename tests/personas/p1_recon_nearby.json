@@ -16,7 +16,10 @@
     ],
     "direction": "adjacent",
     "timeframe_months": 6,
-    "weekly_learning_hours": 3
+    "weekly_learning_hours": 3,
+    "employment": "employed",
+    "employer_hrd": "yes",
+    "budget": "employer_pays"
   },
   "expect": {
     "top3_includes": [

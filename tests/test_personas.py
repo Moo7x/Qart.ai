@@ -43,6 +43,15 @@ def profile_for(persona: dict[str, Any]) -> Profile:
             "tasks",
             "direction",
             "timeframe_months",
+            "ai_comfort",
+            "formats",
+            "wants_certificate",
+            "language",
+            "employment",
+            "employer_hrd",
+            "budget",
+            "age_band",
+            "malaysian",
         )
         if k in a
     }
