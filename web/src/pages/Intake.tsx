@@ -41,6 +41,11 @@ function Chip({ on, onClick, children }: { on: boolean; onClick: () => void; chi
   )
 }
 
+/** Answers the engine uses for the pathway (contract v2.2). */
+function Shapes({ what }: { what: string }) {
+  return <Tag tone="action" title={what}>Shapes your pathway</Tag>
+}
+
 /** Answers kept in Profile.preferences: saved, but no engine factor reads them yet. */
 function NotScored() {
   return <Tag tone="linen" title="Stored in your profile. The ranking does not use it yet.">Saved · not used for ranking yet</Tag>
@@ -167,7 +172,7 @@ export default function Intake() {
         </Card>
 
         <Card data-reveal className="p-6 space-y-5">
-          <CardTitle aside={<NotScored />}>Where do you want to go next?</CardTitle>
+          <CardTitle aside={<Shapes what="Direction picks which role your pathway is built for; timeframe sets how much it can hold." />}>Where do you want to go next?</CardTitle>
           <div className="grid gap-3 sm:grid-cols-3">
             {DIRECTIONS.map(d => {
               const on = prefs.direction === d.value
@@ -189,6 +194,7 @@ export default function Intake() {
               {TIMEFRAMES.map(m => <Chip key={m} on={prefs.timeframe_months === m} onClick={() => setPref('timeframe_months', prefs.timeframe_months === m ? null : m)}>{m} months</Chip>)}
             </div>
           </fieldset>
+          <p className="text-xs text-graphite">Your direction picks the role your pathway is built for. Your timeframe sets how much the pathway can hold; without one it is planned for 6 weeks.</p>
         </Card>
 
         <Card data-reveal className="p-6 space-y-5">
@@ -201,10 +207,11 @@ export default function Intake() {
           </div>
           <div>
             <label htmlFor="ai-comfort" className="flex flex-wrap justify-between gap-2 text-sm font-medium text-ink">
-              <span className="inline-flex flex-wrap items-center gap-2">How comfortable are you using AI tools at work? <NotScored /></span>
+              <span className="inline-flex flex-wrap items-center gap-2">How comfortable are you using AI tools at work? <Shapes what="At 3/10 or below, an intro-to-AI course goes first in your pathway." /></span>
               <span className="tabular-nums text-action-ink">{prefs.ai_comfort == null ? 'not set' : `${prefs.ai_comfort}/10`}</span>
             </label>
             <input id="ai-comfort" type="range" min={0} max={10} step={1} value={prefs.ai_comfort ?? 5} onChange={e => setPref('ai_comfort', parseInt(e.target.value, 10))} className="mt-3 w-full" />
+            <p className="mt-1 text-xs text-graphite">At 3/10 or below, an intro-to-AI course goes first in your pathway.</p>
           </div>
           <fieldset>
             <legend className="flex flex-wrap items-center gap-2 text-sm font-medium text-ink mb-2">Preferred format <NotScored /></legend>

@@ -239,6 +239,7 @@ export interface RoleRecommendation {
   fit?: number;
   time_to_ready?: TimeToReady;
   close_match?: boolean;
+  matches_direction?: boolean | null; // v2.2: fits Profile.preferences.direction
   outlook?: RoleOutlook | null;
 }
 
@@ -262,6 +263,7 @@ export interface Recommendation {
   assumptions_version: number;
   roles: RoleRecommendation[];
   changed_since?: ChangedSince | null;
+  profile_inputs?: string[]; // v2.2: which profile answers shaped the ranking
 }
 
 export interface ChangedSince {
@@ -343,6 +345,8 @@ export interface PathPlan {
   total_hours: number;
   weeks: number;
   worst_case_gap: number;
+  horizon_weeks?: number | null; // v2.2: 6 by default, or the person's timeframe
+  profile_inputs?: string[]; // v2.2: which profile answers shaped the path
 }
 
 // GET /api/next-case/{user_id}: the case the engine picks next, and why.

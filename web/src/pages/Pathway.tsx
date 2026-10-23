@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
-import { ArrowRight, Check, Clock, ExternalLink, Search } from 'lucide-react'
+import { ArrowRight, Check, Clock, ExternalLink, Search, UserRound } from 'lucide-react'
 import { ResourceList } from '../components/ResourceList'
 import { getPath, getRoles, searchResources } from '../api'
 import { useReveal } from '../motion'
@@ -101,6 +101,8 @@ export default function Pathway() {
     )
   }
 
+  const inputs = path.profile_inputs ?? []
+  const fromDirection = !roleId && inputs.some(line => line.startsWith('Direction'))
   const paces = [...new Set([...PACES, path.weekly_hours])].sort((a, b) => a - b)
   const ranges = weekRanges(path.steps, path.weekly_hours)
   const free = path.steps.filter(s => s.cost === 'free').length
@@ -112,13 +114,25 @@ export default function Pathway() {
         <PageHeader
           title={<>Your <Highlight>pathway</Highlight></>}
           intro={<>To <strong className="font-medium text-ink">{roleTitle || 'your next role'}</strong>. Steps in order, each closing a gap from your match. Free resources come first; every course links to its source.</>}
-          aside={<Tag tone="linen">{roleId ? 'Role you chose' : 'Best role across both scenarios'}</Tag>}
+          aside={<Tag tone="linen">{roleId ? 'Role you chose' : fromDirection ? 'Role from your direction' : 'Best role across both scenarios'}</Tag>}
         />
       </div>
 
+      {inputs.length > 0 && (
+        <div data-reveal className="bg-action-tint rounded-lg p-5">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <span className="flex items-center gap-1.5 font-semibold text-action-ink"><UserRound size={16} aria-hidden="true" /> Planned from your profile</span>
+            <Link to="/start" className="text-sm text-action-ink hover:underline">Change my answers</Link>
+          </div>
+          <ul className="mt-2 space-y-1 text-sm text-ink list-disc pl-5">
+            {inputs.map(line => <li key={line}>{line}</li>)}
+          </ul>
+        </div>
+      )}
+
       <div data-reveal className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         <StatTile tone="action" icon={Clock} label="Total learning" value={`${path.total_hours} h`} />
-        <StatTile tone="marigold" label={`Weeks at ${path.weekly_hours} h/week`} value={path.weeks} />
+        <StatTile tone="marigold" label={`Weeks at ${path.weekly_hours} h/week (plan fits ${path.horizon_weeks ?? 6})`} value={path.weeks} />
         <StatTile tone="mocha" label="Free steps" value={`${free} of ${path.steps.length}`} />
         <StatTile tone="linen" icon={Check} label="Ticked (your checklist)" value={`${doneCount} of ${path.steps.length}`} />
       </div>

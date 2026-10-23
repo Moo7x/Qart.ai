@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { ArrowRight, BadgeCheck, ChevronDown, ChevronUp, Clock, ExternalLink } from 'lucide-react'
+import { ArrowRight, BadgeCheck, ChevronDown, ChevronUp, Clock, Compass, ExternalLink } from 'lucide-react'
 import { useReveal } from '../motion'
 import { getRecommendation, getRoles, getSnapshots } from '../api'
 import { SkillResources } from '../components/ResourceList'
@@ -58,6 +58,7 @@ function RoleCard({ role, info, expanded, onToggle }: {
             <div className="font-semibold text-ink flex items-center gap-2 flex-wrap">
               {role.title ?? role.role_id.replace(/_/g, ' ')}
               {role.close_match && <Tag tone="marigold">Close match</Tag>}
+              {role.matches_direction && <Tag tone="action" icon={Compass}>Fits your direction</Tag>}
               {role.outlook && (
                 <Tag tone={role.outlook.label === 'AI-era role' ? 'action' : role.outlook.label === 'stable' ? 'linen' : 'coral'} title={`${role.outlook.because} · ${role.outlook.basis}`}>
                   {role.outlook.label}
@@ -238,6 +239,14 @@ export default function MyFuture() {
         </div>
         {recommendation && <ProvenanceTag kind="assumption">company assumptions v{recommendation.assumptions_version}</ProvenanceTag>}
       </div>
+
+      {recommendation?.profile_inputs && recommendation.profile_inputs.length > 0 && (
+        <p data-reveal className="-mt-4 text-sm text-graphite">
+          <span className="font-medium text-ink">Using your profile: </span>
+          {recommendation.profile_inputs.join(' ')}{' '}
+          <Link to="/start" className="text-action-ink hover:underline">Change</Link>
+        </p>
+      )}
 
       {top && (
         <div data-reveal>
