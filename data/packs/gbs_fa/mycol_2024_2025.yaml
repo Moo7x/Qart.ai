@@ -1,0 +1,103 @@
+# Facts read by hand from the MyMahir Malaysia Critical Occupations List (MyCOL) 2024/2025
+# brochure (TalentCorp for the Ministry of Human Resources, 2 pages). Occupation names are facts
+# cited with their page; no other text is reproduced. tests/test_mycol.py checks every name
+# against its page when the PDF is present locally (gitignored data/raw/mycol/).
+version: mycol_2024_2025/1
+extracted: "2026-10-23"
+edition: "2024/2025"
+document: MyMahir-MyCOL-20242025-Brochure.pdf
+url: https://www.talentcorp.com.my/images/uploads/publication/205/MyMahir-MyCOL-20242025-Brochure-1773377416.pdf
+
+# "Critical Occupations at a Glance" numbered list of 66 occupations: PDF page 2.
+critical_occupations:
+  pdf_page: 2
+  names:
+    - Managing Directors and Chief Executives
+    - Finance Managers
+    - Human Resource Managers
+    - Policy and Planning Managers
+    - Business Services Managers
+    - Quality Managers
+    - Sales and Marketing Managers
+    - Agricultural, Forestry, and Livestock Production Managers
+    - Manufacturing Managers
+    - Supply, Distribution, and Related Managers
+    - Information and Communications Technology Managers
+    - Chemists
+    - Mathematicians, Actuaries, and Statisticians
+    - Industrial and Production Engineers
+    - Civil Engineers
+    - Mechanical Engineers
+    - Chemical Engineers
+    - Mining Engineers, Metallurgists, and Related Professionals
+    - Engineering Professionals (Excluding Electrotechnology) Not Elsewhere Classified
+    - Electrical Engineers
+    - Electronic Engineers
+    - Graphic and Multimedia Designers
+    - Ship Engineers
+    - Manufacturing Professionals
+    - Specialist Medical Practitioners
+    - Nursing Professionals
+    - Pharmacists
+    - Environmental and Occupational Health and Hygiene Professionals
+    - Physiotherapists
+    - University and Higher Education Teaching Professionals
+    - Accountants and Auditors
+    - Financial and Investment Advisers
+    - Financial Analysts
+    - Research and Development Professionals
+    - Advertising and Marketing Professionals
+    - Computer Systems Analysts
+    - Software Developers
+    - Application Programmers
+    - Software and Application Developers and Analysts Not Elsewhere Classified
+    - Database Designers and Administrators
+    - Information Technology System Administrators
+    - Computer Network Professionals
+    - Data Professionals
+    - Cyber Security Professionals
+    - Animation and Visual Effects Professionals
+    - Digital Games and E-Sport Professionals
+    - Creative Contents Designer Professionals
+    - Chemical and Physical Science Technicians
+    - Civil Engineering Technicians
+    - Electrical Engineering Technicians
+    - Electronics Engineering Technicians
+    - Mechanical Engineering Technicians
+    - Draughtspersons and Surveying Technicians
+    - Industrial and Production Technicians
+    - Manufacturing Supervisors
+    - Aircraft Technicians
+    - Welders and Flame Cutters
+    - Motor Vehicle Mechanics and Repairers
+    - Agricultural and Industrial Machinery Mechanics and Repairers
+    - Electrical Mechanics and Fitters
+    - Rubber Products Machine Operators
+    - Steam Engine and Boiler Operators
+    - Stationary Plant and Machine Operators Not Elsewhere Classified
+    - Heavy Truck and Lorry Drivers
+    - Mobile Farm and Forestry Plant Operators
+    - Crane, Hoist and Related Plant Operators
+
+# "Persistent Critical Occupations" (listed in all eight editions since 2015): PDF page 1.
+persistent:
+  pdf_page: 1
+  names:
+    - Finance Managers
+    - Business Services Managers
+    - Information and Communications Technology Managers
+    - Industrial and Production Engineers
+    - Mechanical Engineers
+    - Manufacturing Professionals
+    - Software Developers
+    - Information Technology System Administrators
+    - Mechanical Engineering Technicians
+
+# Which listed occupation is the field's ISCO-08 unit group (field.yaml `isco`): a declared title
+# match (MyCOL names follow MASCO 2020 unit groups, which are based on ISCO-08). Groups of the
+# field not named here are not on the list.
+field_links:
+  "1211": Finance Managers
+  "2411": Accountants and Auditors
+  "2413": Financial Analysts
+  "2511": Computer Systems Analysts

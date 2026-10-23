@@ -104,3 +104,20 @@
   shows: How much of each ISCO-08 occupation's tasks current generative AI could technically perform (0–1), and the ILO exposure gradient of the occupation
   does_not_show: Job losses, adoption in Malaysia, or whether employers use AI for these tasks; scores are model-assisted estimates of technical potential
   notes: ISCO-08 tasks differ from O*NET tasks, so exposure is shown at occupation level next to the O*NET tasks. Occupations are linked through the ESCO–O*NET crosswalk (field.yaml).
+
+- id: mycol_2024_2025
+  name: MyMahir · Malaysia Critical Occupations List (MyCOL) 2024/2025
+  publisher: Talent Corporation Malaysia (TalentCorp) for the Ministry of Human Resources
+  family: malaysian_shortage
+  url: https://www.talentcorp.com.my/our-initiatives/data-research/mycol/
+  docs_url: https://www.talentcorp.com.my/images/uploads/publication/205/MyMahir-MyCOL-20242025-Brochure-1773377416.pdf
+  terms: Public brochure; occupation names are cited with their page and no other text is reproduced
+  terms_url: https://www.talentcorp.com.my
+  terms_checked: "2026-10-23"
+  attribution: "TalentCorp, MyMahir Malaysia Critical Occupations List (MyCOL) 2024/2025."
+  tier: A
+  cadence: annual edition (versioned extraction)
+  collector: mycol
+  shows: The 66 occupations the Critical Skills Monitoring Committee lists as critical (hard to fill) in Malaysia for 2024/2025, and the 9 listed in every edition since 2015
+  does_not_show: How many vacancies, which job titles inside an occupation, or AI as a cause of shortage
+  notes: Extracted by hand into data/packs/gbs_fa/mycol_2024_2025.yaml; occupations are linked to the field's ISCO-08 groups by title (declared).
