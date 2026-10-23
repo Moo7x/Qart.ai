@@ -211,7 +211,7 @@ export default function Pathway() {
         </p>
       </section>
 
-      {market && (market.user_skills.length > 0 || market.rising_skills_not_in_profile.length > 0) && (
+      {market && (market.user_skills.length > 0 || market.rising_skills_not_held.length > 0) && (
         <section data-reveal>
           <SectionTitle aside={<Tag tone="linen">Signal, not a forecast</Tag>}>Market context</SectionTitle>
           <Card className="p-5 space-y-4">
@@ -227,11 +227,11 @@ export default function Pathway() {
                 </ul>
               </div>
             )}
-            {market.rising_skills_not_in_profile.length > 0 && (
+            {market.rising_skills_not_held.length > 0 && (
               <div>
                 <div className="text-sm font-medium text-ink mb-2">Rising skills you don't list yet</div>
                 <ul className="flex flex-wrap gap-2">
-                  {market.rising_skills_not_in_profile.map(s => (
+                  {market.rising_skills_not_held.map(s => (
                     <li key={s.id} className="inline-flex items-center gap-1.5 rounded-md border border-hairline px-2.5 py-1.5 text-sm text-ink">
                       {s.name} <SignalBadge label={s.label} />
                     </li>

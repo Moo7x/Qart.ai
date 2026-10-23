@@ -532,7 +532,7 @@ export interface UserSignals {
   stale: boolean;
   user_skills: UserSignalSkill[];
   user_skills_cooling: UserSignalSkill[];
-  rising_skills_not_in_profile: UserSignalSkill[];
+  rising_skills_not_held: UserSignalSkill[];
   no_market_data: string[];
   note: string;
 }

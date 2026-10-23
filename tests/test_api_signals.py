@@ -33,6 +33,6 @@ def test_for_user_links_profile_tools_and_says_it_changes_nothing(client: TestCl
     mine = {s["id"]: s for s in view["user_skills"]}
     assert {"python", "sql", "excel"} <= set(mine)
     assert mine["python"]["why"] == "you use Python"
-    assert all(s["id"] not in mine for s in view["rising_skills_not_in_profile"])
+    assert all(s["id"] not in mine for s in view["rising_skills_not_held"])
     assert "not a forecast" in view["note"] and view["no_market_data"] == []
     assert client.get("/api/path/u_aina").json()["steps"] == before["steps"]  # informational only

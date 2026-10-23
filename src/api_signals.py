@@ -104,7 +104,7 @@ def for_user(user_id: str, store: StoreDep) -> dict[str, Any]:
         "stale": snapshot["stale"],
         "user_skills": sorted(mine.values(), key=lambda s: s["name"]),
         "user_skills_cooling": [s for s in mine.values() if s["label"] == "cooling"],
-        "rising_skills_not_in_profile": [
+        "rising_skills_not_held": [
             _summary(s, "rising in the tech hiring signal")
             for s in snapshot["series"]
             if s["label"] == "rising" and s["id"] not in mine

@@ -1,5 +1,7 @@
 # AI Skills Signal — Build Spec for Qart.ai
 
+> **Amended by `QART_NEXT_STEPS.md` §1 (23 Oct 2026):** there is no CV upload in Qart.ai. User skills come from the questionnaire answers (role pre-fill, task mapping, tools chips, skill levels) plus skills shown in practice cases, mapped to canonical skill IDs. The Skills Radar highlights "the user's skills from onboarding". The pathway link returns `user_skills_cooling` and `rising_skills_not_held`. The rule that user data is never sent to external APIs stays. Where this file says "CV", read "questionnaire".
+
 > Feature spec for Claude Code. Read the whole file before writing code.
 > **First step:** inspect the existing repo (stack, folder layout, how the CV upload and skill extraction work) and adapt the paths and libraries below to fit it. Don't introduce a new framework if one already exists. If something here conflicts with the repo, follow the repo and note the deviation in the PR/summary.
 
