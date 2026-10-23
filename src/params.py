@@ -44,6 +44,9 @@ MIN_POINTS_SINGLE_OFFICIAL_SERIES = 8
 RUN_STALE_AFTER_HOURS = 24
 
 # --- Matching (src/match/engine.py) ------------------------------------------------------------
+# Bump when the formula/planning algorithm changes, even if its numeric parameters do not.
+# Used with pack/parameter fingerprints to invalidate proposals computed under different rules.
+CALCULATION_VERSION = "journey-1"
 # Proficiency scale used everywhere: 0 none · 1 aware · 2 working · 3 proficient · 4 expert.
 PROFICIENCY_LABELS = ("none", "aware", "working", "proficient", "expert")
 # Level a destination role needs, by requirement tier. Core skills are the role's defining work, so
