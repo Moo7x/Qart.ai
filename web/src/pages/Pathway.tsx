@@ -139,7 +139,7 @@ export default function Pathway() {
 
       <div data-reveal className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         <StatTile tone="action" icon={Clock} label="Total learning" value={`${path.total_hours} h`} />
-        <StatTile tone="marigold" label={`Weeks at ${path.weekly_hours} h/week (plan fits ${path.horizon_weeks ?? 6})`} value={path.weeks} />
+        <StatTile tone="marigold" label={`Weeks at ${path.weekly_hours} h/week${path.horizon_weeks ? ` (plan fits ${path.horizon_weeks})` : ''}`} value={path.weeks} />
         <StatTile tone="mocha" label="Free steps" value={`${free} of ${path.steps.length}`} />
         <StatTile tone="linen" icon={Check} label="Ticked (your checklist)" value={`${doneCount} of ${path.steps.length}`} />
       </div>

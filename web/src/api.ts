@@ -202,6 +202,36 @@ const MOCK_PATH: PathPlan = {
   worst_case_gap: 0.22,
 };
 
+// A small slice of catalogue/questionnaire.json (same shape as GET /api/questionnaire).
+const MOCK_QUESTIONNAIRE: Questionnaire = {
+  levels: [
+    { id: 'heard', label: 'Heard of it', value: 0.3 },
+    { id: 'sometimes', label: 'Use sometimes', value: 0.7 },
+    { id: 'confident', label: 'Confident', value: 1.0 },
+  ],
+  default_level: 'sometimes',
+  tools: [
+    { label: 'Excel', skills: ['spreadsheet_modelling'], exclusive: false },
+    { label: 'SQL', skills: ['sql_basics'], exclusive: false },
+    { label: 'None of these', skills: [], exclusive: true },
+  ],
+  current_roles: [
+    { id: 'reconciliation_associate', name: 'Reconciliation Associate', family: 'finance_ops', catalogue_role_id: 'recon_associate', typical_skills: ['spreadsheet_modelling', 'recon_to_source'] },
+  ],
+  tasks: [
+    { id: 'query_database', label: 'Pull data from a database', skills: ['sql_basics'], families: ['finance_ops'] },
+  ],
+  skills: [
+    { id: 'spreadsheet_modelling', name: 'Spreadsheet modelling', category: 'Finance tools' },
+    { id: 'recon_to_source', name: 'Reconcile to source', category: 'Finance practice' },
+    { id: 'sql_basics', name: 'SQL basics', category: 'Data' },
+  ],
+};
+
+// The signal snapshots have no mock: in mock mode these calls fail at once (no request) and the
+// pages show their "no signal data" state.
+const NO_MOCK_SIGNALS = () => Promise.reject(new Error('signal snapshots are not mocked'));
+
 const MOCK_PROFILE: Profile = {
   id: 'u_aina',
   display_name: 'Aina',
@@ -405,6 +435,7 @@ export async function getProfile(userId: string): Promise<Profile> {
 }
 
 export async function getQuestionnaire(): Promise<Questionnaire> {
+  if (USE_MOCKS) return MOCK_QUESTIONNAIRE;
   const { data } = await axios.get<Questionnaire>(`${BASE}/api/questionnaire`);
   return data;
 }
@@ -417,16 +448,19 @@ export async function getRoles(): Promise<Role[]> {
 
 // Future Skills Radar: the server reads saved snapshots only (works offline).
 export async function getSkillSignals(): Promise<SkillSignalsSnapshot> {
+  if (USE_MOCKS) return NO_MOCK_SIGNALS();
   const { data } = await axios.get<SkillSignalsSnapshot>(`${BASE}/api/signals/skills`);
   return data;
 }
 
 export async function getMarketPulse(): Promise<MarketPulseSnapshot> {
+  if (USE_MOCKS) return NO_MOCK_SIGNALS();
   const { data } = await axios.get<MarketPulseSnapshot>(`${BASE}/api/signals/market-pulse`);
   return data;
 }
 
 export async function getUserSignals(userId: string): Promise<UserSignals> {
+  if (USE_MOCKS) return NO_MOCK_SIGNALS();
   const { data } = await axios.get<UserSignals>(`${BASE}/api/signals/for-user/${userId}`);
   return data;
 }
