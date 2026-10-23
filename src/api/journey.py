@@ -22,6 +22,7 @@ from src.journey.store import (
     get_profile,
     update_profile,
 )
+from src.match.decision import fit_range, meters
 from src.match.engine import Evidence, RoleMatch, Scenario, rank_roles, score_role
 from src.match.evidence import automation_evidence
 from src.match.explain import explain, facts
@@ -175,6 +176,7 @@ def _card(
     path: Pathway,
     evidence: Evidence,
     demand: list[dict[str, str]],
+    scenario: Scenario,
 ) -> dict[str, Any]:
     role = pack.destination_roles[match.role_id]
     current = pack.current_roles.get(data.current_role)
@@ -200,6 +202,8 @@ def _card(
         **asdict(match),
         "impact": role.impact,
         "outlook": outlook + demand,
+        "meters": meters(match),
+        "fit_range": fit_range(pack, match, data.levels(), scenario, evidence),
         "listed_transition": bool(current and match.role_id in current.transitions),
         "effort_hours": path.total_hours,
         "effort_weeks": path.weeks,
@@ -229,6 +233,7 @@ def matches(
             plan_pathway(pack, m, levels, data.weekly_hours, scenario, evidence),
             evidence,
             role_outlook(pack, pack.destination_roles[m.role_id], rows, signals),
+            scenario,
         )
         for m in ranked
     ]

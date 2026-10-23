@@ -8,6 +8,7 @@ from fastapi import APIRouter, BackgroundTasks, Depends, Header, HTTPException, 
 from pydantic import BaseModel
 from sqlalchemy import Engine
 
+from src import params
 from src.config import Settings
 from src.evidence import measures
 from src.evidence.models import history
@@ -144,6 +145,19 @@ def backtest(engine: Engine = Depends(get_engine)) -> list[BacktestEntry]:
             )
         )
     return entries
+
+
+@router.get("/pipeline/forecast-check")
+def forecast_check(engine: Engine = Depends(get_engine)) -> list[dict[str, Any]]:
+    """Rolling-origin errors per occupation group and horizon, from all stored years."""
+    shares = measures.occupation_shares(
+        query_observations(engine, source_id="dosm_wages_occupation")
+    )
+    return [
+        {"group": group, **measures.rolling_backtest(series, horizon)}
+        for group, series in sorted(shares.items())
+        for horizon in params.ROLLING_HORIZONS
+    ]
 
 
 @router.get("/pipeline/models")
