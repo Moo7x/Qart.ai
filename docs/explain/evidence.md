@@ -1,0 +1,70 @@
+# Evidence layer and pipeline
+
+## What it does
+A scheduled pipeline collects dated facts from four registered public sources, stores each fact
+with the passage it came from, and turns them into labelled signals ("rising", "weakening", "not
+enough evidence yet", "expert view") that the Overview and Live intelligence pages show.
+
+## Why it exists
+Brief must-have 2: an updatable AI and job-market signal layer that shows its source and date
+(hard-coded lists do not count). Success test: the output changes when the trend data changes.
+Rule: never invent statistics; every number cites a source.
+
+## How it works
+1. **Registry** (`data/sources.yaml`): what each source shows and does not show, its terms and
+   cadence. Only registered sources are collected.
+2. **Collectors** (`src/collectors/`): OpenDOSM wages by occupation (API), DOSM Job Market
+   Insights (quarterly release pages), Anthropic Economic Index (Hugging Face release, streamed and
+   filtered), TalentCorp GBS study (hand extraction with page numbers). Each returns observations
+   and a note for the run log.
+3. **Store** (`src/evidence/store.py`): observations are immutable. A fact's identity is a hash of
+   its content, so a re-fetch of the same value is skipped and a revision becomes a new row.
+   Missing stays missing, never zero.
+4. **Pipeline** (`src/pipeline/run.py`): a lock stops overlapping runs; each source gets two
+   attempts; a failing source keeps its last good data; a run with nothing new is "no change".
+5. **Measures** (`src/evidence/measures.py`):
+   - share(group, year) = 100 × employees(group) ÷ employees(all), from 2011 (2010 is a
+     classification break);
+   - job-ad share = 100 × count ÷ total per quarter, split where the total jumps by more than 60%
+     (treated as a possible platform-coverage break);
+   - Economic Index change counts only if ≥ 0.02 points and ≥ 5%, compared at two decimals;
+   - backtest: fit to 2021, score 2022–2025 for no-change, straight line and damped trend.
+6. **Labels** (`src/evidence/signals.py`): rising/weakening needs two independent sources or one
+   official series with ≥ 8 comparable points; otherwise "not enough evidence yet" with an early
+   direction. TalentCorp is always an "expert view". All thresholds are in `src/params.py`.
+
+## Where in the code
+`src/collectors/*.py::collect` · `src/pipeline/run.py::run_pipeline` ·
+`src/evidence/measures.py::backtest` · `src/evidence/signals.py::build_signals` ·
+routes in `src/api/evidence.py` (`/api/signals`, `/api/sources`, `/api/pipeline/runs`,
+`/api/pipeline/backtest`, `POST /api/pipeline/run` with the admin token).
+
+## Example
+OpenDOSM: clerical support workers 1,108.6k of 7,634.0k employees in 2011 (14.52%) and 1,360.1k of
+10,381.6k in 2025 (13.10%): a fall of 1.42 points ≥ 0.5 over 15 comparable years → "weakening",
+noted as history. Backtest for clerical: no-change error 0.48 points, straight line 0.95 → the
+trend is not projected.
+
+## Limits and honesty
+- Occupation groups are broad (MASCO major groups); they do not show demand for one job title.
+- The job-ad series is short and jumped in Q3 2025 (a possible coverage change); DOSM says it does
+  not represent all job offerings.
+- The Economic Index shows AI use in sampled conversations, not hiring or job losses; only two
+  compatible months exist so far.
+- TalentCorp combines AI, digital and green drivers; it is one expert source from 2024.
+- Thresholds are declared choices, not estimated from data.
+
+## Likely judge questions
+- *Is this just a static list?* No: four collectors run on a schedule; the run log shows every run,
+  including "no change", and a new DOSM quarter is detected by probing the next release URL.
+- *Why not predict the trend?* We tested it: on 2022–2025, no-change beats a straight line for 7 of
+  9 groups, so projecting would add error. We show the backtest instead.
+- *How do you avoid invented numbers?* The language model is not used here at all; every value is
+  a stored row with its cited sentence or row and dates.
+- *What if a source is down?* Two attempts, then it is logged as failed and its last good data is
+  kept and marked.
+
+## Design choices considered
+- Scraping job boards (rejected: their terms forbid it; DOSM publishes aggregated job-ad data).
+- An LLM reading the sources (rejected for numbers: values are parsed by code and pinned in tests).
+- Merging all sources into one score (rejected: the four kinds of evidence stay separate).
