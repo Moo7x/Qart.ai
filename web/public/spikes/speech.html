@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Spike S2: agent speech</title>
+<style>
+  body { font: 15px/1.5 system-ui, sans-serif; max-width: 46rem; margin: 2rem auto; padding: 0 1rem; color: #1e293b; }
+  button { font: inherit; padding: .4rem .8rem; margin: .25rem .25rem .25rem 0; cursor: pointer; }
+  .card { border: 1px solid #cbd5e1; border-radius: 8px; padding: .75rem 1rem; margin: 1rem 0; }
+  #log li { font-family: ui-monospace, monospace; font-size: 13px; }
+  #heard { font-style: italic; }
+</style>
+</head>
+<body>
+<h1>Spike S2: can the agent speak, listen and stop when interrupted?</h1>
+<p>Uses the browser's Web Speech API (no server, no paid service). Results feed the agent's voice
+mode (docs/PLAN.md §4.9: voice off by default, text always available).</p>
+
+<div class="card">
+  <strong>Support</strong>
+  <ul id="support"></ul>
+</div>
+<div class="card">
+  <strong>1. Speak</strong> a long explanation (about 20 s)<br>
+  <button id="speak">Speak</button>
+</div>
+<div class="card">
+  <strong>2. Listen</strong> (asks for microphone permission)<br>
+  <button id="listen">Listen</button> <span id="heard"></span>
+</div>
+<div class="card">
+  <strong>3. Interrupt</strong>: start speaking and listening together, then talk over it.
+  Expected: speech stops as soon as the browser detects your voice.<br>
+  <button id="duplex">Speak + listen</button>
+</div>
+<div class="card">
+  <strong>4. Stop</strong>: cancels speech, listening and the queued agent actions.<br>
+  <button id="stop">Stop</button> queued actions: <span id="queue">0</span>
+</div>
+
+<h2>Results</h2>
+<ol id="log"></ol>
+<button id="copy">Copy results</button>
+
+<script>
+  const LONG_TEXT = 'Here are your top three roles. The first is a finance automation analyst. ' +
+    'Your fit is based on your reconciliation and spreadsheet skills, and the gap is mainly in ' +
+    'data analysis and AI tool review. I will now open the evidence for the first role, then the ' +
+    'pathway, so you can see each step, its hours and the SDG target it contributes to.';
+  const QUEUED_ACTIONS = 3;  // stands in for the agent's plan of actions
+  const synth = window.speechSynthesis;
+  const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const log = document.getElementById('log');
+  let recognition = null;
+  let queue = [];
+
+  function record(test, status, detail) {
+    const li = document.createElement('li');
+    li.textContent = `${new Date().toISOString()} · ${test} · ${status} · ${detail}`;
+    log.appendChild(li);
+  }
+
+  function showQueue() { document.getElementById('queue').textContent = String(queue.length); }
+
+  function support() {
+    const ul = document.getElementById('support');
+    const items = [
+      ['speechSynthesis (speak)', Boolean(synth)],
+      ['SpeechRecognition (listen)', Boolean(Recognition)],
+      ['voices available', synth ? synth.getVoices().length : 0],
+    ];
+    ul.innerHTML = '';
+    for (const [name, value] of items) {
+      const li = document.createElement('li');
+      li.textContent = `${name}: ${value}`;
+      ul.appendChild(li);
+    }
+  }
+
+  function speak(test) {
+    if (!synth) { record(test, 'failed', 'speechSynthesis not supported'); return; }
+    synth.cancel();
+    const utterance = new SpeechSynthesisUtterance(LONG_TEXT);
+    utterance.lang = 'en-GB';
+    utterance.onstart = () => record(test, 'speaking', 'speech started');
+    utterance.onend = () => record(test, 'done', 'speech ended');
+    utterance.onerror = (event) => record(test, 'event', `speech ${event.error}`);
+    synth.speak(utterance);
+  }
+
+  function listen(test, stopSpeechOnVoice) {
+    if (!Recognition) { record(test, 'failed', 'SpeechRecognition not supported'); return; }
+    if (recognition) recognition.abort();
+    recognition = new Recognition();
+    recognition.lang = 'en-GB';
+    recognition.interimResults = true;
+    recognition.onstart = () => record(test, 'listening', 'microphone on');
+    recognition.onspeechstart = () => {
+      record(test, 'heard', 'voice detected');
+      if (stopSpeechOnVoice && synth.speaking) {
+        synth.cancel();
+        record(test, 'done', 'agent speech stopped on interruption');
+      }
+    };
+    recognition.onresult = (event) => {
+      const text = [...event.results].map((r) => r[0].transcript).join(' ');
+      document.getElementById('heard').textContent = `"${text}"`;
+      if (event.results[event.results.length - 1].isFinal) record(test, 'done', `heard: ${text}`);
+    };
+    recognition.onerror = (event) => record(test, 'failed', `recognition ${event.error}`);
+    recognition.onend = () => record(test, 'event', 'microphone off');
+    recognition.start();
+  }
+
+  document.getElementById('speak').addEventListener('click', () => speak('1 speak'));
+  document.getElementById('listen').addEventListener('click', () => listen('2 listen', false));
+  document.getElementById('duplex').addEventListener('click', () => {
+    queue = Array.from({ length: QUEUED_ACTIONS }, (_, i) => `action_${i + 1}`);
+    showQueue();
+    speak('3 interrupt');
+    listen('3 interrupt', true);
+  });
+  document.getElementById('stop').addEventListener('click', () => {
+    const cancelled = queue.length;
+    queue = [];
+    showQueue();
+    if (synth) synth.cancel();
+    if (recognition) recognition.abort();
+    record('4 stop', 'done', `speech cancelled, microphone off, ${cancelled} queued actions cancelled`);
+  });
+  document.getElementById('copy').addEventListener('click', () => {
+    const text = `${navigator.userAgent}\n` + [...log.children].map((li) => li.textContent).join('\n');
+    navigator.clipboard.writeText(text).then(() => record('copy', 'done', 'results copied'));
+  });
+
+  support();
+  if (synth) synth.onvoiceschanged = support;
+</script>
+</body>
+</html>

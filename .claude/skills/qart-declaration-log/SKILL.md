@@ -1,6 +1,6 @@
 ---
 name: qart-declaration-log
-description: Keep docs/DECLARATION_LOG.md and docs/decision_log.md up to date for the SDC Technical & Tools Declaration and originality evidence. Use whenever a library, model, dataset, API, AI tool or sponsor resource is added, and whenever a feature is dropped, a spike fails, or the contract changes.
+description: Keep docs/DECLARATION_LOG.md and docs/decision_log.md up to date for the SDC Technical & Tools Declaration and originality evidence. Use whenever a library, model, dataset, API, AI tool or sponsor resource is added, and whenever a feature is dropped, a spike fails, or the design changes.
 ---
 
 # Qart.ai declaration and decision logs
@@ -18,7 +18,7 @@ Categories: `library` · `framework` · `external API` · `cloud/deployment` · 
 ## docs/decision_log.md (evidence that the idea and decisions are the team's)
 One dated entry per decision, in the team's own words:
 `YYYY-MM-DD HH:MM · who · decision · why · what we'll do instead`
-Examples: dropping the voice spike after its timebox; choosing finance ops; changing a contract field; the case reviewer's feedback (no personal data).
+Examples: the result of the browser-tab spike; choosing the GBS finance demo field; a parameter value and its reason; a source rejected for its terms.
 
 ## Rules
 - Write entries at the moment of the change, not at the end.

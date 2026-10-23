@@ -33,3 +33,20 @@
 | 2026-10-22 | library | openai 3.36.1 (Python SDK) | OpenAI-compatible LLM client used by the companion; provider and model set by LLM_BASE_URL / LLM_MODEL | Apache-2.0 | free / open source | Person A |
 | 2026-10-22 | AI model (called) | OpenAI gpt-4o-mini via API (LLM_API_KEY from the environment) | Companion replies, automatic diagnosis, the text-only baseline and the playbook optimiser's revisions | OpenAI API terms | paid API (team key) | Person A |
 | 2026-10-22 | AI model (called) | OpenAI gpt-4o via API, only when OPTIMIZER_MODEL is set (LLM_API_KEY) | Writes the playbook optimiser's revisions; all scoring still uses gpt-4o-mini | OpenAI API terms | paid API (team key) | Person A |
+| 2026-10-23 | library | SQLAlchemy 2.1.6 (Core only) | One database layer for SQLite (local) and PostgreSQL (Replit) | MIT | free / open source | team |
+| 2026-10-23 | library | PyYAML 6.0.3 | Reading data packs, field profiles and the source registry | MIT | free / open source | team |
+| 2026-10-23 | library (dev) | types-PyYAML 6.0.12.20260906 | Type stubs for mypy | Apache-2.0 | free / open source | team |
+| 2026-10-23 | removed | pandas, Google OR-Tools, runpod SDK (app side), old catalogue courses and O*NET extracts, Anthropic Economic Index snapshots of the previous product | Removed with the previous product on branch v3; anything reused later is re-added here with its new purpose | — | — | team |
+| 2026-10-23 | browser API | Web Speech API (speechSynthesis, SpeechRecognition) | Optional voice for the on-screen agent (spike S2); runs in the user's browser, no server call | Browser built-in (Chrome sends recognition audio to Google's service) | free | team |
+| 2026-10-23 | library (dev) | pypdf 5.4.0 | Test that checks each TalentCorp fact against its cited PDF page (skipped when the PDF is absent) | BSD-3-Clause | free / open source | team |
+| 2026-10-23 | dataset | OpenDOSM API, wages_occupation (https://api.data.gov.my/data-catalogue/?id=wages_occupation, fetched 2026-10-23) | Employees by occupation group per year (Malaysian labour evidence) | Malaysian Government Open Data Terms of Use 1.0 (attribution required), checked 2026-10-23 | free / public | team |
+| 2026-10-23 | dataset | DOSM "Big Data Analytics: Job Market Insights" quarterly release pages, Q2 2023 – Q2 2026 (dosm.gov.my/portal-main/release-content/…) | Online job offerings per quarter, total and Accountants and Auditors | Malaysian Government Open Data Terms of Use 1.0, checked 2026-10-23 | free / public | team |
+| 2026-10-23 | dataset | Anthropic Economic Index release_2026_06_26 (aei_claude_ai_2026-06-26.csv, Hugging Face) | Share of sampled conversations per finance occupation, global and Malaysia; automation vs augmentation split | Data CC-BY | free / public | team |
+| 2026-10-23 | dataset | TalentCorp (2024), Impact Study of AI, Digital and Green Economy on the Malaysian Workforce: GBS (PDF, local copy not committed) | Impact level of the 24 finance & accounting roles, 16 in-demand skills, 5 emerging roles (facts with page numbers) | All rights reserved: facts only, no text reproduced | free download | team |
+| 2026-10-23 | framework | React 19.3 + react-dom | Web app UI | MIT | free / open source | team |
+| 2026-10-23 | library | react-router-dom 7.18 | Page routing (Overview, Live intelligence) | MIT | free / open source | team |
+| 2026-10-23 | library | lucide-react 1.61 | Line icons in the pipeline diagram and menu | ISC | free / open source | team |
+| 2026-10-23 | library (dev) | Vite 8.3 + @vitejs/plugin-react, TypeScript 6.0, Tailwind CSS 4.3 (@tailwindcss/vite), oxlint 1.88 | Build, type checking, styling and linting of the web app | MIT / MIT / Apache-2.0 / MIT / MIT | free / open source | team |
+| 2026-10-23 | font | Geist and Geist Mono (Google Fonts) | Interface and data typography | SIL Open Font License 1.1 | free | team |
+| 2026-10-23 | design reference | Clerk website style (colour, type and radius principles only) | Inspiration for the UI direction; no brand assets or components copied | — | public website | team |
+| 2026-10-23 | removed | axios | Replaced by the browser's fetch | — | — | team |

@@ -1,27 +1,18 @@
-"""The FastAPI app starts, mounts the engine router, and serves the web app's pages."""
+"""The app starts offline and reports which parts run on fallbacks."""
 
-from pathlib import Path
-
-from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
-from src.main import SinglePageApp, app
 
-
-def test_health() -> None:
-    response = TestClient(app).get("/api/health")
+def test_health_reports_database_and_labelled_fallbacks(client: TestClient) -> None:
+    response = client.get("/api/health")
     assert response.status_code == 200
-    assert response.json() == {"status": "ok"}
+    assert response.json() == {
+        "status": "ok",
+        "database": "sqlite",
+        "llm": "not configured (fallbacks)",
+        "embeddings": "not configured (BM25)",
+    }
 
 
-def test_refreshing_a_web_page_serves_the_app_but_unknown_api_paths_stay_404(
-    tmp_path: Path,
-) -> None:
-    (tmp_path / "index.html").write_text("<html>qart</html>", encoding="utf-8")
-    (tmp_path / "app.js").write_text("console.log(1)", encoding="utf-8")
-    web = FastAPI()
-    web.mount("/", SinglePageApp(directory=tmp_path, html=True), name="web")
-    client = TestClient(web)
-    assert client.get("/skills").text == "<html>qart</html>"
-    assert client.get("/app.js").text == "console.log(1)"
-    assert client.get("/api/not-a-route").status_code == 404
+def test_unknown_api_path_is_404(client: TestClient) -> None:
+    assert client.get("/api/does-not-exist").status_code == 404

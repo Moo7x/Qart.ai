@@ -1,0 +1,242 @@
+[
+ {
+  "sex": "both",
+  "date": "2010-01-01",
+  "occupation": "overall",
+  "recipients": 7149.2,
+  "wages_mean": 1936,
+  "wages_median": 1500
+ },
+ {
+  "sex": "male",
+  "date": "2010-01-01",
+  "occupation": "overall",
+  "recipients": 4432.6,
+  "wages_mean": 2003,
+  "wages_median": 1500
+ },
+ {
+  "sex": "both",
+  "date": "2010-01-01",
+  "occupation": "professionals",
+  "recipients": 658.7,
+  "wages_mean": 3710,
+  "wages_median": 3274
+ },
+ {
+  "sex": "male",
+  "date": "2010-01-01",
+  "occupation": "professionals",
+  "recipients": 332.7,
+  "wages_mean": 4012,
+  "wages_median": 3500
+ },
+ {
+  "sex": "both",
+  "date": "2010-01-01",
+  "occupation": "clerical",
+  "recipients": 1098.8,
+  "wages_mean": 1589,
+  "wages_median": 1500
+ },
+ {
+  "sex": "male",
+  "date": "2010-01-01",
+  "occupation": "clerical",
+  "recipients": 334.5,
+  "wages_mean": 1720,
+  "wages_median": 1500
+ },
+ {
+  "sex": "both",
+  "date": "2011-01-01",
+  "occupation": "overall",
+  "recipients": 7634.0,
+  "wages_mean": 1959,
+  "wages_median": 1500
+ },
+ {
+  "sex": "male",
+  "date": "2011-01-01",
+  "occupation": "overall",
+  "recipients": 4680.1,
+  "wages_mean": 2035,
+  "wages_median": 1500
+ },
+ {
+  "sex": "both",
+  "date": "2011-01-01",
+  "occupation": "professionals",
+  "recipients": 1057.6,
+  "wages_mean": 3450,
+  "wages_median": 3115
+ },
+ {
+  "sex": "male",
+  "date": "2011-01-01",
+  "occupation": "professionals",
+  "recipients": 457.7,
+  "wages_mean": 3934,
+  "wages_median": 3500
+ },
+ {
+  "sex": "both",
+  "date": "2011-01-01",
+  "occupation": "clerical",
+  "recipients": 1108.6,
+  "wages_mean": 1672,
+  "wages_median": 1500
+ },
+ {
+  "sex": "male",
+  "date": "2011-01-01",
+  "occupation": "clerical",
+  "recipients": 322.8,
+  "wages_mean": 1877,
+  "wages_median": 1600
+ },
+ {
+  "sex": "both",
+  "date": "2021-01-01",
+  "occupation": "overall",
+  "recipients": 9769.0,
+  "wages_mean": 3049,
+  "wages_median": 2256
+ },
+ {
+  "sex": "male",
+  "date": "2021-01-01",
+  "occupation": "overall",
+  "recipients": 5769.1,
+  "wages_mean": 3114,
+  "wages_median": 2323
+ },
+ {
+  "sex": "both",
+  "date": "2021-01-01",
+  "occupation": "professionals",
+  "recipients": 1772.3,
+  "wages_mean": 5667,
+  "wages_median": 5383
+ },
+ {
+  "sex": "male",
+  "date": "2021-01-01",
+  "occupation": "professionals",
+  "recipients": 792.2,
+  "wages_mean": 6267,
+  "wages_median": 5855
+ },
+ {
+  "sex": "both",
+  "date": "2021-01-01",
+  "occupation": "clerical",
+  "recipients": 1226.8,
+  "wages_mean": 2389,
+  "wages_median": 2086
+ },
+ {
+  "sex": "male",
+  "date": "2021-01-01",
+  "occupation": "clerical",
+  "recipients": 370.4,
+  "wages_mean": 2736,
+  "wages_median": 2484
+ },
+ {
+  "sex": "both",
+  "date": "2022-01-01",
+  "occupation": "overall",
+  "recipients": 9996.4,
+  "wages_mean": 3219,
+  "wages_median": 2429
+ },
+ {
+  "sex": "male",
+  "date": "2022-01-01",
+  "occupation": "overall",
+  "recipients": 5892.9,
+  "wages_mean": 3288,
+  "wages_median": 2498
+ },
+ {
+  "sex": "both",
+  "date": "2022-01-01",
+  "occupation": "professionals",
+  "recipients": 1833.7,
+  "wages_mean": 5609,
+  "wages_median": 5486
+ },
+ {
+  "sex": "male",
+  "date": "2022-01-01",
+  "occupation": "professionals",
+  "recipients": 826.8,
+  "wages_mean": 6094,
+  "wages_median": 5909
+ },
+ {
+  "sex": "both",
+  "date": "2022-01-01",
+  "occupation": "clerical",
+  "recipients": 1292.2,
+  "wages_mean": 2617,
+  "wages_median": 2148
+ },
+ {
+  "sex": "male",
+  "date": "2022-01-01",
+  "occupation": "clerical",
+  "recipients": 377.7,
+  "wages_mean": 2983,
+  "wages_median": 2552
+ },
+ {
+  "sex": "both",
+  "date": "2025-01-01",
+  "occupation": "overall",
+  "recipients": 10381.6,
+  "wages_mean": 3803,
+  "wages_median": 2940
+ },
+ {
+  "sex": "male",
+  "date": "2025-01-01",
+  "occupation": "overall",
+  "recipients": 6084.6,
+  "wages_mean": 3921,
+  "wages_median": 3014
+ },
+ {
+  "sex": "both",
+  "date": "2025-01-01",
+  "occupation": "professionals",
+  "recipients": 1945.4,
+  "wages_mean": 6747,
+  "wages_median": 6124
+ },
+ {
+  "sex": "male",
+  "date": "2025-01-01",
+  "occupation": "professionals",
+  "recipients": 901.6,
+  "wages_mean": 7336,
+  "wages_median": 6702
+ },
+ {
+  "sex": "both",
+  "date": "2025-01-01",
+  "occupation": "clerical",
+  "recipients": 1360.1,
+  "wages_mean": 3029,
+  "wages_median": 2693
+ },
+ {
+  "sex": "male",
+  "date": "2025-01-01",
+  "occupation": "clerical",
+  "recipients": 398.6,
+  "wages_mean": 3536,
+  "wages_median": 3341
+ }
+]

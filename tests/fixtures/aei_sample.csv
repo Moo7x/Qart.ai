@@ -1,16 +1,18 @@
 date_start,date_end,geo_id,geo_level,category_name,hierarchy_level,metric_id,value,node_name,node_external_id
-2026-04-01,2026-05-01,GLOBAL,global,soc_occupation,0,pct,0.30,"Bookkeeping, Accounting, and Auditing Clerks",43-3031.00
-2026-05-01,2026-06-01,GLOBAL,global,soc_occupation,0,pct,0.32,"Bookkeeping, Accounting, and Auditing Clerks",43-3031.00
-2026-04-01,2026-05-01,MYS,country,soc_occupation,0,pct,0.28,"Bookkeeping, Accounting, and Auditing Clerks",43-3031.00
-2026-05-01,2026-06-01,MYS,country,soc_occupation,0,pct,0.30,"Bookkeeping, Accounting, and Auditing Clerks",43-3031.00
-2026-04-01,2026-05-01,GLOBAL,global,soc_occupation,0,pct,0.11,Accountants and Auditors,13-2011.00
-2026-05-01,2026-06-01,GLOBAL,global,soc_occupation,0,pct,0.12,Accountants and Auditors,13-2011.00
+2026-05-01,2026-06-01,GLOBAL,global,soc_occupation,0,ai_autonomy_mean,2.54,"Bookkeeping, Accounting, and Auditing Clerks",43-3031.00
+2026-05-01,2026-06-01,GLOBAL,global,soc_occupation,0,ai_autonomy_mean,2.94,Accountants and Auditors,13-2011.00
+2026-04-01,2026-05-01,GLOBAL,global,soc_occupation,0,pct,0.3,"Bookkeeping, Accounting, and Auditing Clerks",43-3031.00
+2026-04-01,2026-05-01,GLOBAL,global,soc_occupation,0,ai_autonomy_mean,2.52,"Bookkeeping, Accounting, and Auditing Clerks",43-3031.00
 2026-04-01,2026-05-01,GLOBAL,global,soc_occupation,0,collaboration_bucket_automation_pct,52.38,"Bookkeeping, Accounting, and Auditing Clerks",43-3031.00
-2026-05-01,2026-06-01,GLOBAL,global,soc_occupation,0,collaboration_bucket_automation_pct,51.90,"Bookkeeping, Accounting, and Auditing Clerks",43-3031.00
-2026-04-01,2026-05-01,GLOBAL,global,soc_occupation,0,pct,0.05,Regulatory Affairs Specialists,13-1041.07
-2026-04-01,2026-05-01,GLOBAL,global,soc_occupation,1,pct,9.99,Business and Financial Operations Occupations,13-0000
-2026-04-01,2026-05-01,GLOBAL,global,soc_occupation,0,pct,1.00,Software Developers,15-1252.00
-2026-04-01,2026-05-01,ZA-WC,subregion,soc_occupation,0,pct,0.50,"Bookkeeping, Accounting, and Auditing Clerks",43-3031.00
-2026-04-01,2026-05-01,MYS,country,overall,0,collaboration_bucket_automation_pct,48.42,Overall,
-2026-05-01,2026-06-01,MYS,country,overall,0,collaboration_bucket_automation_pct,47.20,Overall,
-2026-05-01,2026-06-01,MYS,country,overall,0,usage_pct,0.51,Overall,
+2026-04-01,2026-05-01,GLOBAL,global,soc_occupation,0,collaboration_bucket_automation_pct,44.75,Accountants and Auditors,13-2011.00
+2026-04-01,2026-05-01,GLOBAL,global,soc_occupation,0,ai_autonomy_mean,2.91,Accountants and Auditors,13-2011.00
+2026-04-01,2026-05-01,GLOBAL,global,soc_occupation,0,pct,0.11,Accountants and Auditors,13-2011.00
+2026-05-01,2026-06-01,GLOBAL,global,soc_occupation,0,collaboration_bucket_automation_pct,51.9,"Bookkeeping, Accounting, and Auditing Clerks",43-3031.00
+2026-05-01,2026-06-01,GLOBAL,global,soc_occupation,0,collaboration_bucket_automation_pct,45.02,Accountants and Auditors,13-2011.00
+2026-04-01,2026-05-01,GLOBAL,global,soc_occupation,0,pct,0.34,Software Developers,15-1252.00
+2026-04-01,2026-05-01,MYS,country,soc_occupation,0,pct,0.28,"Bookkeeping, Accounting, and Auditing Clerks",43-3031.00
+2026-05-01,2026-06-01,GLOBAL,global,soc_occupation,0,pct,0.32,"Bookkeeping, Accounting, and Auditing Clerks",43-3031.00
+2026-05-01,2026-06-01,MYS,country,soc_occupation,0,pct,0.3,"Bookkeeping, Accounting, and Auditing Clerks",43-3031.00
+2026-05-01,2026-06-01,MYS,country,soc_occupation,0,pct,0.15,Accountants and Auditors,13-2011.00
+2026-05-01,2026-06-01,GLOBAL,global,soc_occupation,0,pct,0.12,Accountants and Auditors,13-2011.00
+2026-05-01,2026-06-01,GLOBAL,global,soc_occupation,0,pct,0.35,Software Developers,15-1252.00

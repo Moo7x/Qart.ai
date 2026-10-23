@@ -1,6 +1,6 @@
 modules = ["python-3.12", "nodejs-22"]
 run = "bash replit_start.sh"
-entrypoint = "src/main.py"
+entrypoint = "src/app.py"
 
 [nix]
 channel = "stable-24_05"
