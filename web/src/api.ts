@@ -25,7 +25,7 @@ import type {
   Profile,
   Recommendation,
   SkillState,
-  Snapshot, Questionnaire } from './types';
+  Snapshot, Questionnaire, RankingResponse, ScenarioName } from './types';
 
 const USE_MOCKS = (import.meta.env.VITE_USE_MOCKS ?? 'false') === 'true';
 const BASE = import.meta.env.VITE_API_URL ?? '';
@@ -434,6 +434,13 @@ export async function postDecision(
 export async function getProfile(userId: string): Promise<Profile> {
   if (USE_MOCKS) return MOCK_PROFILE;
   const { data } = await axios.get<Profile>(`${BASE}/api/profile/${userId}`);
+  return data;
+}
+
+// Role ranking (pure function on the server). No mock: mock mode shows the "could not load" state.
+export async function getRanking(userId: string, scenario: ScenarioName): Promise<RankingResponse> {
+  if (USE_MOCKS) return Promise.reject(new Error('the ranking is not mocked'));
+  const { data } = await axios.get<RankingResponse>(`${BASE}/api/ranking/${userId}`, { params: { scenario } });
   return data;
 }
 

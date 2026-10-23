@@ -56,9 +56,14 @@ function Shapes({ what }: { what: string }) {
   return <Tag tone="action" title={what}>Shapes your pathway</Tag>
 }
 
-/** Answers that become the person's skills (held skills; contract v2.4). */
-function BuildsSkills() {
-  return <Tag tone="action" title="These become your skills, shown on the Signals page.">Builds your skills</Tag>
+/** Answers that become the person's skills, which the role ranking scores (QART_NEXT_STEPS §5). */
+function ShapesRanking({ what = 'These become your skills, which your role matches are scored on.' }: { what?: string }) {
+  return <Tag tone="action" title={what}>Shapes your ranking</Tag>
+}
+
+/** Saved answers the ranking only shows as a note, never scores. */
+function NoteOnly() {
+  return <Tag tone="linen" title="Saved. Shown as a note on roles that often ask for more; it never changes a score.">Saved · shown as a note</Tag>
 }
 
 /** Answers kept in Profile.preferences that nothing reads yet. */
@@ -211,14 +216,14 @@ export default function Intake() {
               </select>
             </label>
             <label className="flex flex-col gap-1.5 text-sm font-medium text-ink">
-              <span className="inline-flex flex-wrap items-center gap-2">Industry <SavedOnly /></span>
+              <span className="inline-flex flex-wrap items-center gap-2">Industry <ShapesRanking what="Roles common in your industry get a small bonus for direction fit." /></span>
               <select value={prefs.industry ?? ''} onChange={e => setPref('industry', e.target.value || null)} className={inputCls}>
                 <option value="">Select…</option>
                 {q?.industries.map(o => <option key={o}>{o}</option>)}
               </select>
             </label>
             <label className="flex flex-col gap-1.5 text-sm font-medium text-ink">
-              <span className="inline-flex flex-wrap items-center gap-2">Highest education <SavedOnly /></span>
+              <span className="inline-flex flex-wrap items-center gap-2">Highest education <NoteOnly /></span>
               <select value={prefs.education ?? ''} onChange={e => setPref('education', e.target.value || null)} className={inputCls}>
                 <option value="">Select…</option>
                 {q?.education.map(o => <option key={o.label}>{o.label}</option>)}
@@ -232,7 +237,7 @@ export default function Intake() {
             </div>
           </fieldset>
           <fieldset className="space-y-2">
-            <legend className="flex flex-wrap items-center gap-2 text-sm font-medium text-ink mb-2">Which of these do you do most weeks? <span className="font-normal text-graphite">pick any</span> <BuildsSkills /></legend>
+            <legend className="flex flex-wrap items-center gap-2 text-sm font-medium text-ink mb-2">Which of these do you do most weeks? <span className="font-normal text-graphite">pick any</span> <ShapesRanking /></legend>
             <div className="flex flex-wrap gap-2">
               {shownTasks.map(t => <Chip key={t.id} on={(prefs.tasks ?? []).includes(t.id)} onClick={() => toggleTask(t.id)}>{t.label}</Chip>)}
               {tasks.length > TASKS_SHOWN && (
@@ -243,13 +248,13 @@ export default function Intake() {
             </div>
           </fieldset>
           <fieldset className="space-y-2">
-            <legend className="flex flex-wrap items-center gap-2 text-sm font-medium text-ink mb-2">Tools you use today <span className="font-normal text-graphite">pick any</span> <BuildsSkills /></legend>
+            <legend className="flex flex-wrap items-center gap-2 text-sm font-medium text-ink mb-2">Tools you use today <span className="font-normal text-graphite">pick any</span> <ShapesRanking /></legend>
             <div className="flex flex-wrap gap-2">
               {q?.tools.map(t => <Chip key={t.label} on={(prefs.tools ?? []).includes(t.label)} onClick={() => toggleTool(t.label)}>{t.label}</Chip>)}
             </div>
           </fieldset>
           <fieldset className="space-y-2 min-w-0">
-            <legend className="flex flex-wrap items-center gap-2 text-sm font-medium text-ink mb-1">Your skills <BuildsSkills /></legend>
+            <legend className="flex flex-wrap items-center gap-2 text-sm font-medium text-ink mb-1">Your skills <ShapesRanking /></legend>
             <p className="text-sm text-graphite">
               {heldIds.length > 0
                 ? "We've added skills typical for your role and the tasks and tools you picked. Remove any you don't use, add any we missed, and tap a skill to change its level."
@@ -283,11 +288,11 @@ export default function Intake() {
             </div>
             <p className="text-xs text-graphite">Levels: {q?.levels.map(l => l.label).join(' · ')}. Skills you show in practice cases move up on their own.</p>
           </fieldset>
-          <p className="text-xs text-graphite">Industry and education are saved with your profile; nothing uses them yet.</p>
+          <p className="text-xs text-graphite">Your industry gives roles common in it a small bonus. Education is only shown as a note ("often asks for a degree") and never changes a score.</p>
         </Card>
 
         <Card data-reveal className="p-6 space-y-5">
-          <CardTitle aside={<Shapes what="Direction picks which role your pathway is built for; timeframe sets how much it can hold." />}>Where do you want to go next?</CardTitle>
+          <CardTitle aside={<span className="flex flex-wrap gap-1.5"><ShapesRanking what="Direction decides which roles count as a good fit; timeframe sets how many hours you have to close a gap." /><Shapes what="Direction picks which role your pathway is built for; timeframe sets how much it can hold." /></span>}>Where do you want to go next?</CardTitle>
           <div className="grid gap-3 sm:grid-cols-3">
             {DIRECTIONS.map(d => {
               const on = prefs.direction === d.value

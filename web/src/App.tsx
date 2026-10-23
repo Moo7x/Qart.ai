@@ -13,7 +13,7 @@ const Evidence = lazy(() => import('./pages/Evidence'))
 const HRSummary = lazy(() => import('./pages/HRSummary'))
 const Impact = lazy(() => import('./pages/Impact'))
 const Intake = lazy(() => import('./pages/Intake'))
-const MyFuture = lazy(() => import('./pages/MyFuture'))
+const Matches = lazy(() => import('./pages/Matches'))
 const MySkills = lazy(() => import('./pages/MySkills'))
 const Pathway = lazy(() => import('./pages/Pathway'))
 const Result = lazy(() => import('./pages/Result'))
@@ -165,7 +165,7 @@ export default function App() {
               <Route path="/skills" element={<Only role="employee"><MySkills /></Only>} />
               <Route path="/signals" element={<Only role="employee"><Signals /></Only>} />
               <Route path="/sources" element={<Sources />} />
-              <Route path="/matches" element={<Only role="employee"><MyFuture /></Only>} />
+              <Route path="/matches" element={<Only role="employee"><Matches /></Only>} />
               <Route path="/future" element={<Navigate to="/matches" replace />} />
               <Route path="/pathway" element={<Only role="employee"><Pathway /></Only>} />
               <Route path="/impact" element={<Only role="employee"><Impact /></Only>} />

@@ -552,3 +552,38 @@ export interface UserSignals {
   no_market_data: string[];
   note: string;
 }
+
+// GET /api/ranking/{user_id}?scenario= (role ranking, QART_NEXT_STEPS §5–6)
+export type ScenarioName = 'moderate' | 'fast';
+export type BandName = 'Strong match' | 'Good match' | 'Stretch';
+export interface RankingWeights { skill: number; momentum: number; direction: number; feasibility: number }
+export interface RankingScenarioScore {
+  scenario: ScenarioName; label: string; score: number; band: BandName; capped: boolean;
+  exact: number; weights: RankingWeights; exposure_points: number; note: string;
+}
+export interface RankingMatchedSkill { skill_id: string; name: string; user_level: number; required_level: number; is_core: boolean; has_it: boolean }
+export interface RankingGapItem {
+  skill_id: string; name: string; current_level: number; required_level: number; type: 'learn' | 'improve';
+  hours: number; momentum_label: 'rising' | 'stable' | 'cooling' | 'no_data'; is_core: boolean;
+  score_gain_per_hour: number; fits_timeframe: boolean; label: string;
+}
+export interface RankedRoleView {
+  role_id: string; name: string; family: string; family_name: string; score: number; band: BandName;
+  scenario: ScenarioName; scenarios: Record<ScenarioName, RankingScenarioScore>;
+  ai_exposure: number; exposed_core_skills: string[];
+  components: RankingWeights; weights_used: RankingWeights; relation: 'same' | 'adjacent' | 'far';
+  matched_skills: RankingMatchedSkill[]; core_coverage: number; capped: boolean;
+  gap_hours: number; available_hours: number; momentum_skills: Record<string, string>;
+  reasons: string[]; flags: string[]; gap: RankingGapItem[];
+  source_code: string; source_url: string | null; source_title: string | null; source_verified: boolean;
+  ai_use_evidence: { occupation: string; automation_pct: number; period: string; source: string; url: string } | null;
+}
+export interface RankingResponse {
+  user_id: string; scenario: ScenarioName;
+  scenarios: Record<ScenarioName, { label: string; description: string }>;
+  empty_profile: boolean; message: string | null; starter_roles: { role_id: string; name: string }[];
+  roles: RankedRoleView[]; levels: { id: SkillLevel; label: string; value: number }[];
+  bands: { strong: number; good: number };
+  trend: { source: string; data_as_of: string; source_url: string | null; age_days: number | null; stale: boolean };
+  note: string;
+}
