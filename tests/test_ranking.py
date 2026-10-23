@@ -278,3 +278,56 @@ def test_the_chosen_scenario_orders_the_ranking() -> None:
 
     assert order("moderate") == ["routine", "judgement"]
     assert order("fast") == ["judgement", "routine"]
+
+
+# --- Skills gap (QART_NEXT_STEPS §6) ---------------------------------------------------------
+
+
+def gap_for(r: TargetRole, levels: dict[str, float], answers: Answers = ANSWERS):  # type: ignore[no-untyped-def]
+    cat = RoleCatalogue(roles=[r], families=FAMILIES)
+    result = rank_roles(
+        levels, answers, Signals({"a": "rising", "b": "stable"}), cat, VOCAB, CFG, EDU
+    )
+    return result.roles[0].gap
+
+
+def test_gap_lists_only_missing_or_weak_skills_with_learn_or_strengthen() -> None:
+    r = role("r", "near", {"a": 3, "b": 3, "c": 3, "n": 1})
+    gap = {g.skill_id: g for g in gap_for(r, {"a": 0.7, "b": 0.3, "d": 0.7})}
+    assert set(gap) == {"b", "c", "n"}  # a is already at the required level
+    assert gap["b"].type == "improve" and gap["b"].label == "Strengthen B"
+    assert gap["c"].type == "learn" and gap["c"].label == "Learn C"
+    assert gap["b"].hours == pytest.approx(8) and gap["c"].hours == pytest.approx(14)
+    assert gap["c"].momentum_label == "no_data" and gap["n"].momentum_label == "no_data"
+
+
+def test_gap_order_is_core_first_then_score_gain_per_hour() -> None:
+    r = role("r", "near", {"a": 3, "b": 3, "c": 3, "n": 1})
+    gap = gap_for(r, {"a": 0.7, "b": 0.5, "d": 0.7})  # over half the core weight: not capped
+    assert [g.skill_id for g in gap][-1] == "n"  # nice-to-have last although it is cheap
+    core = [g for g in gap if g.is_core]
+    assert [g.score_gain_per_hour for g in core] == sorted(
+        (g.score_gain_per_hour for g in core), reverse=True
+    )
+    assert all(g.score_gain_per_hour > 0 for g in gap)
+
+
+def test_under_the_core_cap_only_core_skills_raise_the_score() -> None:
+    """Capped at the top of Stretch, a nice-to-have cannot lift the role; a core skill can."""
+    r = role("r", "near", {"a": 3, "b": 3, "c": 3, "n": 1})
+    gap = {g.skill_id: g for g in gap_for(r, {"a": 0.7, "b": 0.3, "d": 0.7})}
+    assert gap["n"].score_gain_per_hour == 0
+    assert gap["c"].score_gain_per_hour > 0
+
+
+def test_gap_marks_what_fits_the_timeframe_in_order() -> None:
+    r = role("r", "near", {"a": 3, "b": 3, "c": 3})
+    gap = gap_for(
+        r, {"d": 0.7, "n": 0.7, "a": 0.3}, replace(ANSWERS, weekly_hours=1.0)
+    )  # 13 h available
+    hours, fits = 0.0, []
+    for g in gap:
+        hours += g.hours
+        fits.append(hours <= 13)
+    assert [g.fits_timeframe for g in gap] == fits
+    assert fits[0] and not fits[-1]  # the divider falls inside the list

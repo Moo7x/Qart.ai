@@ -34,6 +34,16 @@ There are four components, each from 0 to 1:
 
 **Fairness:** education, age, years of experience and free text never enter a component. Education only adds a note ("Often asks for a bachelor's degree"). A test pins this.
 
+**Skills gap** (spec §6, the main product). For each role, every skill below the level it needs becomes a gap item:
+- labelled "Learn X" when the level is 0, otherwise "Strengthen X";
+- with its hours (from `learn_hours`) and its radar label;
+- with whether it is core;
+- with its **score gain per hour**: the role's score with that one skill at the required level, minus today's score, divided by its hours. The unrounded score is used, so small gains still count.
+
+Order: core first, then gain per hour. Walking that order, items are marked "fits your plan" until your available hours run out.
+
+Momentum is already inside the score, so it is not counted again. Under the core cap, a nice-to-have shows 0 gain: only core skills can lift a capped role.
+
 ## 4. Where in the code
 - `catalogue/scoring.json`: all weights and thresholds.
 - `src/engine/ranking.py`: `rank_roles` (pure), `score_role`, `hours_between`, plus `rank_for_profile`, which loads the inputs.

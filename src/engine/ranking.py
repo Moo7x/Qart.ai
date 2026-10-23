@@ -21,7 +21,7 @@ No I/O, no network, no randomness: `rank_for_profile` loads the inputs and calls
 """
 
 from collections.abc import Mapping
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from functools import lru_cache
 from pathlib import Path
 
@@ -132,6 +132,7 @@ class ScenarioScore:
     score: int
     band: str
     capped: bool
+    exact: float  # unrounded score after the cap (gap gains use it, so small gains are not lost)
     weights: Weights
     exposure_points: int  # points removed for AI exposure (0 in the moderate scenario)
     note: str
@@ -161,6 +162,24 @@ class RankedRole:
     flags: list[str]
     source_code: str
     source_url: str | None
+    gap: list["GapItem"] = field(default_factory=list)
+
+
+@dataclass(frozen=True)
+class GapItem:
+    """One skill to learn or strengthen for a role (QART_NEXT_STEPS §6)."""
+
+    skill_id: str
+    name: str
+    current_level: float
+    required_level: float
+    type: str  # "learn" (level 0) or "improve" (below the required level)
+    hours: float
+    momentum_label: str  # rising / stable / cooling / no_data
+    is_core: bool
+    score_gain_per_hour: float
+    fits_timeframe: bool
+    label: str  # "Learn SQL" / "Strengthen SQL"
 
 
 @dataclass(frozen=True)
@@ -303,6 +322,70 @@ def score_role(
     )
 
 
+def skills_gap(
+    role: TargetRole,
+    ranked: RankedRole,
+    levels: Mapping[str, float],
+    answers: Answers,
+    signals: Signals,
+    catalogue: RoleCatalogue,
+    vocabulary: Mapping[str, SkillInfo],
+    cfg: ScoringConfig,
+    education_order: list[str],
+) -> list[GapItem]:
+    """The role's missing and weak skills, in learning order (QART_NEXT_STEPS §6).
+
+    Core skills first, then by score gain per hour: the chosen scenario's (unrounded) score
+    with that one skill at its required level, minus today's, divided by its hours. Momentum is
+    already inside the score, so it is not multiplied in again. Walking that order, items are
+    marked as fitting the timeframe until the available hours run out.
+    """
+    now = ranked.scenarios[ranked.scenario].exact
+    items = []
+    for m in ranked.matched_skills:
+        if m.has_it:
+            continue
+        hours = hours_between(
+            m.user_level, m.required_level, vocabulary[m.skill_id], cfg.basic_level
+        )
+        better = score_role(
+            role,
+            {**levels, m.skill_id: m.required_level},
+            answers,
+            signals,
+            catalogue,
+            vocabulary,
+            cfg,
+            education_order,
+            ranked.scenario,
+        )
+        gain = better.scenarios[ranked.scenario].exact - now
+        label = signals.labels.get(m.skill_id, "no_data")
+        name = vocabulary[m.skill_id].name
+        learn = m.user_level == 0
+        items.append(
+            GapItem(
+                skill_id=m.skill_id,
+                name=name,
+                current_level=m.user_level,
+                required_level=m.required_level,
+                type="learn" if learn else "improve",
+                hours=round(hours, 1),
+                momentum_label=label if label in cfg.momentum_values else "no_data",
+                is_core=m.is_core,
+                score_gain_per_hour=round(gain / hours, 3) if hours else 0.0,
+                fits_timeframe=False,
+                label=f"{'Learn' if learn else 'Strengthen'} {name}",
+            )
+        )
+    items.sort(key=lambda g: (not g.is_core, -g.score_gain_per_hour, g.name))
+    used, ordered = 0.0, []
+    for g in items:
+        used += g.hours
+        ordered.append(replace(g, fits_timeframe=used <= ranked.available_hours))
+    return ordered
+
+
 def _scenario_score(
     name: str,
     scenario: Scenario,
@@ -315,19 +398,19 @@ def _scenario_score(
     cfg: ScoringConfig,
 ) -> ScenarioScore:
     w = scenario.weights[direction]
-    weighted = round(
-        100
-        * (
-            w.skill * c.skill
-            + w.momentum * c.momentum
-            + w.direction * c.direction
-            + w.feasibility * c.feasibility
-        )
+    weighted_exact = 100 * (
+        w.skill * c.skill
+        + w.momentum * c.momentum
+        + w.direction * c.direction
+        + w.feasibility * c.feasibility
     )
+    weighted = round(weighted_exact)
     points = round(scenario.exposure_penalty * exposure)
     raw = max(0, weighted - points)
     capped = core_coverage < cfg.core_coverage_min and raw >= cfg.bands.good
     score = cfg.bands.good - 1 if capped else raw
+    exact = max(0.0, weighted_exact - scenario.exposure_penalty * exposure)
+    exact = min(exact, cfg.bands.good - 1) if capped else exact
     if points and exposed:
         verb = "is" if len(exposed) == 1 else "are"
         note = (
@@ -341,7 +424,9 @@ def _scenario_score(
         )
     else:
         note = "No points taken off for AI exposure in this scenario."
-    return ScenarioScore(name, scenario.label, score, _band(score, cfg), capped, w, points, note)
+    return ScenarioScore(
+        name, scenario.label, score, _band(score, cfg), capped, exact, w, points, note
+    )
 
 
 def _reasons(
@@ -442,10 +527,15 @@ def rank_roles(
             signals_source=signals.source,
             signals_data_as_of=signals.data_as_of,
         )
-    ranked = [
-        score_role(r, held, answers, signals, catalogue, vocabulary, cfg, education_order, scenario)
-        for r in catalogue.roles
-    ]
+    ranked = []
+    for r in catalogue.roles:
+        scored = score_role(
+            r, held, answers, signals, catalogue, vocabulary, cfg, education_order, scenario
+        )
+        gap = skills_gap(
+            r, scored, held, answers, signals, catalogue, vocabulary, cfg, education_order
+        )
+        ranked.append(replace(scored, gap=gap))
     ranked.sort(key=lambda r: (-r.score, -r.components.momentum, r.name))
     return Ranking(
         roles=ranked,
