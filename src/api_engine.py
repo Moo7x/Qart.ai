@@ -39,7 +39,7 @@ from src.engine.hr import HrSummary, hr_summary
 from src.engine.ingest import CSV_NAME, RAW_DIR, SNAPSHOT_DIR, run_ingest
 from src.engine.next_case import next_case
 from src.engine.planner import plan_path
-from src.engine.recommend import changed_since, horizon_weeks, recommend
+from src.engine.recommend import changed_since, eligible_roles, horizon_weeks, recommend
 from src.engine.skills import derive_states
 from src.engine.snapshots import REPLAY_LABEL, diff_report, load_snapshots
 from src.store import Store, make_store, seed_demo
@@ -352,13 +352,16 @@ def get_recommendations(
 
 
 def robust_top_role(profile: Profile, states: list[SkillState], store: Store) -> str:
-    """The role with the best worst-case score across both scenarios."""
+    """The role with the best worst-case score across both scenarios, among the roles the
+    person's direction allows (all roles when no direction is set)."""
     catalogue = default_catalogue()
     assumptions = current_assumptions(store)
+    allowed = set(eligible_roles(profile, catalogue))
     worst: dict[str, float] = {}
     for scenario in ("assistive", "agentic"):
         for role in recommend(profile, states, catalogue, assumptions, scenario).roles:
-            worst[role.role_id] = min(worst.get(role.role_id, role.score), role.score)
+            if role.role_id in allowed:
+                worst[role.role_id] = min(worst.get(role.role_id, role.score), role.score)
     return max(sorted(worst), key=lambda r: worst[r])
 
 

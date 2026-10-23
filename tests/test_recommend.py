@@ -11,6 +11,7 @@ from src.engine.catalogue import default_catalogue
 from src.engine.recommend import (
     DEFAULT_WEIGHTS,
     changed_since,
+    eligible_roles,
     horizon_weeks,
     recommend,
     score_role,
@@ -218,3 +219,29 @@ def test_longer_timeframe_lowers_the_effort_penalty() -> None:
         r.factors.effort < base[r.role_id].factors.effort
         for r in recommend(year, states, cat, cat.assumptions_v1, "agentic").roles
     )
+
+
+def test_direction_decides_which_roles_a_path_may_target() -> None:
+    cat = default_catalogue()
+    profile = aina()
+    current = profile.current_role_id
+    assert eligible_roles(profile, cat) == sorted(cat.roles)
+    assert eligible_roles(with_prefs(profile, direction="grow"), cat) == [current]
+    for direction in ("adjacent", "switch"):
+        allowed = eligible_roles(with_prefs(profile, direction=direction), cat)
+        assert allowed and current not in allowed
+
+
+def test_direction_marks_roles_but_never_changes_score_or_rank() -> None:
+    cat = default_catalogue()
+    profile = aina()
+    states = states_for(profile, False)
+    base = recommend(profile, states, cat, cat.assumptions_v1, "assistive").roles
+    assert all(r.matches_direction is None for r in base)
+    grow = recommend(
+        with_prefs(profile, direction="grow"), states, cat, cat.assumptions_v1, "assistive"
+    ).roles
+    assert [(r.role_id, r.score, r.rank) for r in grow] == [
+        (r.role_id, r.score, r.rank) for r in base
+    ]
+    assert {r.role_id for r in grow if r.matches_direction} == {profile.current_role_id}

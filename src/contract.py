@@ -404,6 +404,9 @@ class RoleRecommendation(BaseModel):
     fit: float | None = None
     time_to_ready: TimeToReady | None = None
     close_match: bool = False
+    # Addition (optional, v2.2): whether the role fits Profile.preferences.direction; None when
+    # no direction is given. It never changes the score or the rank.
+    matches_direction: bool | None = None
 
 
 class RankChange(BaseModel):

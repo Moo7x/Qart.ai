@@ -322,3 +322,18 @@ def test_sdg_map_is_served_from_the_catalogue(client: TestClient) -> None:
         t for link in [*sdg["roles"].values(), *sdg["skills"].values()] for t in link["targets"]
     }
     assert tagged <= declared
+
+
+def test_direction_chooses_the_default_path_role(client: TestClient) -> None:
+    profile = client.get("/api/profile/u_aina").json()
+    current = profile["current_role_id"]
+
+    def path_role(direction: str) -> str:
+        prefs = {**profile.get("preferences", {}), "direction": direction}
+        client.post("/api/profile", json={**profile, "preferences": prefs})
+        role: str = client.get("/api/path/u_aina").json()["target_role_id"]
+        return role
+
+    assert path_role("grow") == current
+    assert path_role("adjacent") != current
+    assert path_role("switch") != current

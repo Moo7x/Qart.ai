@@ -110,6 +110,27 @@ def gap_hours(
     )
 
 
+def eligible_roles(profile: Profile, catalogue: Catalogue) -> list[str]:
+    """Roles the person's chosen direction allows for their path (all roles without one).
+
+    grow → the current role · adjacent → other roles sharing at least one skill with it ·
+    switch → every role except the current one (the catalogue holds finance-related roles
+    only). Falls back to all roles if the rule leaves none, so a path always exists.
+    """
+    every = sorted(catalogue.roles)
+    direction = profile.preferences.direction
+    current = profile.current_role_id
+    if direction is None or current not in catalogue.roles:
+        return every
+    if direction == "grow":
+        return [current]
+    others = [r for r in every if r != current]
+    if direction == "adjacent":
+        mine = {s.skill_id for s in catalogue.roles[current].skills}
+        others = [r for r in others if mine & {s.skill_id for s in catalogue.roles[r].skills}]
+    return others or every
+
+
 def horizon_weeks(profile: Profile, default: int) -> int:
     """The person's own timeframe in weeks when they gave one, otherwise `default`.
 
@@ -245,8 +266,16 @@ def recommend(
     ]
     ordered = sorted(scored, key=lambda pair: (-pair[1], pair[0].role_id))
     close = len(ordered) > 1 and ordered[0][1] - ordered[1][1] < params.CLOSE_MATCH_THRESHOLD
+    # Direction only marks roles; the score and the rank stay the formula's.
+    eligible = set(eligible_roles(profile, catalogue)) if profile.preferences.direction else None
     roles = [
-        r.model_copy(update={"rank": rank, "close_match": close and rank <= 2})
+        r.model_copy(
+            update={
+                "rank": rank,
+                "close_match": close and rank <= 2,
+                "matches_direction": None if eligible is None else r.role_id in eligible,
+            }
+        )
         for rank, (r, _) in enumerate(ordered, start=1)
     ]
     return Recommendation(
