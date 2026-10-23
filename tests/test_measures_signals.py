@@ -127,3 +127,14 @@ def test_expert_view_is_never_labelled_as_a_trend() -> None:
     expert = signals.expert_signals(rows)
     assert {s.direction for s in expert} == {"expert"}
     assert expert[0].headline.startswith("11 of 24")
+
+
+def test_rolling_backtest_scores_every_origin_without_looking_ahead() -> None:
+    from src.evidence.measures import rolling_backtest
+
+    series = [(str(y), 10.0 + 0.5 * (y - 2011)) for y in range(2011, 2026)]  # a straight line
+    one = rolling_backtest(series, 1)
+    assert one["origins"] == list(range(2015, 2025))
+    assert one["mae"]["linear"] < 1e-9 and one["mae"]["drift"] < 1e-9
+    assert one["mae"]["naive"] == 0.5 and one["best"] in {"linear", "drift"}
+    assert rolling_backtest(series, 2)["origins"][-1] == 2023

@@ -158,3 +158,50 @@ def aei_series(rows: list[Row], metric: str, geography: str) -> dict[str, list[P
         ):
             out[row["entity"]].append((row["period"], float(row["value"])))
     return {entity: sorted(points) for entity, points in out.items()}
+
+
+ROLLING_METHODS = ("naive", "drift", "linear", "damped", "smoothing")
+
+
+def _forecast(method: str, history: list[tuple[int, float]], steps: int) -> float:
+    """One forecast `steps` years after the last history point, by a named simple method."""
+    years = [float(y) for y, _ in history]
+    values = [v for _, v in history]
+    last = values[-1]
+    if method == "naive":
+        return last
+    if method == "drift":  # last value plus the average yearly change so far
+        return last + steps * (values[-1] - values[0]) / (len(values) - 1)
+    if method == "linear":
+        a, b = _ols(years, values)
+        return a + b * (years[-1] + steps)
+    if method == "damped":
+        recent = history[-params.DAMPED_TREND_FIT_YEARS :]
+        _, slope = _ols([float(y) for y, _ in recent], [v for _, v in recent])
+        return last + slope * sum(params.DAMPED_TREND_PHI**k for k in range(1, steps + 1))
+    level = values[0]  # simple exponential smoothing: a flat forecast at the smoothed level
+    for value in values[1:]:
+        level = params.SMOOTHING_ALPHA * value + (1 - params.SMOOTHING_ALPHA) * level
+    return level
+
+
+def rolling_backtest(series: list[Point], horizon: int) -> dict[str, Any]:
+    """Mean absolute error of each method over every forecast origin (time-series cross-validation).
+
+    Origins run from ROLLING_FIRST_ORIGIN; each method only sees years up to its origin and is
+    scored on the year `horizon` later. Retrospective on today's published series, not on the
+    values DOSM had published at each origin.
+    """
+    points = [(int(p), v) for p, v in series]
+    errors: dict[str, list[float]] = {m: [] for m in ROLLING_METHODS}
+    origins = []
+    for i, (year, _) in enumerate(points):
+        if year < params.ROLLING_FIRST_ORIGIN or i + horizon >= len(points):
+            continue
+        history, actual = points[: i + 1], points[i + horizon][1]
+        origins.append(year)
+        for method in ROLLING_METHODS:
+            errors[method].append(abs(_forecast(method, history, horizon) - actual))
+    mae = {m: round(statistics.fmean(e), 4) for m, e in errors.items() if e}
+    best = min(mae, key=lambda m: mae[m]) if mae else None
+    return {"horizon": horizon, "origins": origins, "mae": mae, "best": best}
