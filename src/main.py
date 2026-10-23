@@ -22,6 +22,7 @@ load_env_file()  # local .env (gitignored); must run before the routers read any
 from src.api_engine import router as engine_router  # noqa: E402
 from src.api_optimizer import router as optimizer_router  # noqa: E402
 from src.api_search import router as search_router  # noqa: E402
+from src.api_signals import router as signals_router  # noqa: E402
 
 logger = logging.getLogger(__name__)
 
@@ -55,6 +56,7 @@ app = FastAPI(
 app.include_router(engine_router)
 app.include_router(search_router)
 app.include_router(optimizer_router)
+app.include_router(signals_router)  # Future Skills Radar (reads snapshots only)
 
 
 # --- Person B: companion + cases routes (src/api_companion.py) ---------------------------------
