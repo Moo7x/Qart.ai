@@ -95,3 +95,17 @@ def test_run_is_skipped_while_another_holds_the_lock(
     summary = pipeline.run_pipeline(engine, "manual", offline, retry_pause=0)
     assert summary.status == "skipped: locked"
     assert list_runs(engine, 5) == []
+
+
+def test_an_unexpected_error_in_one_source_does_not_stop_the_others(
+    engine: Engine, offline: ClientFactory, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    def explodes(client: httpx.Client, state: SourceState) -> CollectorResult:
+        raise RuntimeError("database constraint")
+
+    collectors = all_fakes()
+    collectors["dosm_jmi"] = explodes
+    monkeypatch.setattr(pipeline, "COLLECTORS", collectors)
+    summary = pipeline.run_pipeline(engine, "manual", offline, retry_pause=0)
+    assert summary.status == "partial"
+    assert list_runs(engine, 1)[0]["status"] == "partial"  # the run record is closed

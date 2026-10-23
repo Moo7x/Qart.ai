@@ -10,7 +10,6 @@ rest. A run that finds nothing new is logged as "no change", which is a normal, 
 """
 
 import argparse
-import csv
 import logging
 import time
 import uuid
@@ -83,7 +82,9 @@ def _run_source(
                 "attempts": attempt,
                 "seconds": round(time.monotonic() - started, 1),
             }
-        except (httpx.HTTPError, OSError, csv.Error, ValueError, KeyError) as exc:
+        except Exception as exc:  # noqa: BLE001
+            # Isolation boundary: whatever one source raises (network, parsing, a database
+            # constraint), it is logged as that source's failure and the other sources still run.
             error = f"{type(exc).__name__}: {exc}"
             logger.warning("source %s attempt %d failed: %s", source_id, attempt, error)
             if attempt < MAX_ATTEMPTS:
@@ -119,29 +120,57 @@ def run_pipeline(
         return RunSummary(run_id=None, status="skipped: locked")
     try:
         run_id = start_run(engine, trigger)
-        factory = client_factory or (lambda: httpx.Client(timeout=HTTP_TIMEOUT))
-        results: list[dict[str, Any]] = []
-        with factory() as client:
-            for source in registry().values():
-                collect = COLLECTORS.get(source.collector)
-                if collect is None:
-                    results.append(
-                        {
-                            "source_id": source.id,
-                            "status": "failed",
-                            "fetched": 0,
-                            "new": 0,
-                            "error": f"no collector named {source.collector}",
-                        }
-                    )
-                    continue
-                results.append(_run_source(engine, client, source.id, collect, run_id, retry_pause))
-        status = overall_status(results)
-        new_total = sum(r["new"] for r in results)
-        finish_run(engine, run_id, status, new_total, results)
-        return RunSummary(run_id, status, new_total, results)
+        try:
+            return _run_all(engine, run_id, client_factory, retry_pause)
+        except Exception as exc:
+            # A run must never stay "running": record the failure, then let the error surface.
+            finish_run(
+                engine,
+                run_id,
+                "failed",
+                0,
+                [
+                    {
+                        "source_id": "pipeline",
+                        "status": "failed",
+                        "fetched": 0,
+                        "new": 0,
+                        "error": f"{type(exc).__name__}: {exc}"[:300],
+                    }
+                ],
+            )
+            raise
     finally:
         release_lock(engine, LOCK_NAME, holder)
+
+
+def _run_all(
+    engine: Engine,
+    run_id: int,
+    client_factory: Callable[[], httpx.Client] | None,
+    retry_pause: float,
+) -> RunSummary:
+    factory = client_factory or (lambda: httpx.Client(timeout=HTTP_TIMEOUT))
+    results: list[dict[str, Any]] = []
+    with factory() as client:
+        for source in registry().values():
+            collect = COLLECTORS.get(source.collector)
+            if collect is None:
+                results.append(
+                    {
+                        "source_id": source.id,
+                        "status": "failed",
+                        "fetched": 0,
+                        "new": 0,
+                        "error": f"no collector named {source.collector}",
+                    }
+                )
+                continue
+            results.append(_run_source(engine, client, source.id, collect, run_id, retry_pause))
+    status = overall_status(results)
+    new_total = sum(r["new"] for r in results)
+    finish_run(engine, run_id, status, new_total, results)
+    return RunSummary(run_id, status, new_total, results)
 
 
 def main() -> None:
