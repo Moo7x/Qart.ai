@@ -31,7 +31,7 @@ const TONE_CLASSES: Record<Tone, string> = {
 
 export function Tag({ tone = 'linen', icon: Icon, children, title }: { tone?: Tone; icon?: LucideIcon; children: ReactNode; title?: string }) {
   return (
-    <span title={title} className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium whitespace-nowrap ${TONE_CLASSES[tone]}`}>
+    <span title={title} className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium max-w-full whitespace-normal sm:whitespace-nowrap ${TONE_CLASSES[tone]}`}>
       {Icon && <Icon size={12} strokeWidth={2} aria-hidden="true" />}
       {children}
     </span>

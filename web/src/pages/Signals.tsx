@@ -1,9 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { ArrowDownRight, ArrowRight, ArrowUpRight, DatabaseZap, ExternalLink, Lightbulb } from 'lucide-react'
-import { getSnapshotDiff, getSnapshots, ingestNextSnapshot } from '../api'
+import { ArrowDownRight, ArrowRight, ArrowUpRight, DatabaseZap, ExternalLink, Lightbulb, TrendingDown, TrendingUp } from 'lucide-react'
+import { getMarketPulse, getSkillSignals, getSnapshotDiff, getSnapshots, getUserSignals, ingestNextSnapshot } from '../api'
+import MarketPulse from '../components/MarketPulse'
+import SkillsRadar from '../components/SkillsRadar'
+import { useUserId } from '../persona'
 import { useReveal } from '../motion'
-import type { Signal, Snapshot, SnapshotDiff } from '../types'
+import type { MarketPulseSnapshot, Signal, SkillSignalsSnapshot, Snapshot, SnapshotDiff, UserSignals } from '../types'
 import { btn, Card, EmptyState, Highlight, label, Loading, NextStepCard, PageHeader, ProvenanceTag, SectionTitle, StatTile, Tag } from '../ui'
 
 // AEI values are already percentages: usage_pct 0.30 = 0.30 % of the geography's conversations.
@@ -29,6 +32,10 @@ function byEntity(signals: Signal[]) {
 }
 
 export default function Signals() {
+  const userId = useUserId()
+  const [skills, setSkills] = useState<SkillSignalsSnapshot | null>(null)
+  const [pulse, setPulse] = useState<MarketPulseSnapshot | null>(null)
+  const [mine, setMine] = useState<UserSignals | null>(null)
   const [snapshots, setSnapshots] = useState<Snapshot[]>([])
   const [diff, setDiff] = useState<SnapshotDiff | null>(null)
   const [loading, setLoading] = useState(true)
@@ -44,6 +51,12 @@ export default function Signals() {
       setLoading(false)
     })
   useEffect(() => { load() }, [])
+  // Radar snapshots: read from the server's saved files; a missing one just hides its section.
+  useEffect(() => {
+    getSkillSignals().then(setSkills).catch(() => setSkills(null))
+    getMarketPulse().then(setPulse).catch(() => setPulse(null))
+    getUserSignals(userId).then(setMine).catch(() => setMine(null))
+  }, [userId])
 
   const ingest = async () => {
     setBusy(true)
@@ -66,21 +79,51 @@ export default function Signals() {
     <div ref={root} className="max-w-4xl mx-auto space-y-8">
       <div data-reveal>
         <PageHeader
-          title={<>What the AI-use data is <Highlight>saying</Highlight></>}
-          intro="Dated public evidence on how people use AI in work like yours. It informs the assumptions behind your role matches; it never changes them by itself."
-          aside={latest?.label ? <Tag tone="linen">{latest.label}</Tag> : undefined}
+          title={<>Is the market moving toward your <Highlight>skills</Highlight>?</>}
+          intro="Real, dated public signals: which skills tech job posts mention more or less, and how often job postings mention AI. Trend signals, never predictions; every chart shows its source and dates."
+          aside={<Link to="/sources" className="text-sm text-action-ink hover:underline">All data sources</Link>}
         />
+      </div>
+
+      {skills && (
+        <div data-reveal className="grid grid-cols-3 gap-3">
+          <StatTile tone="action" icon={TrendingUp} label="Rising skills" value={skills.series.filter(s => s.label === 'rising').length} />
+          <StatTile tone="coral" icon={TrendingDown} label="Cooling skills" value={skills.series.filter(s => s.label === 'cooling').length} />
+          <StatTile tone="linen" label="Your skills tracked" value={mine?.user_skills.length ?? 0} />
+        </div>
+      )}
+
+      <section data-reveal>
+        <SectionTitle aside={<Tag tone="linen">Tech hiring signal (Hacker News)</Tag>}>Future Skills Radar</SectionTitle>
+        <p className="-mt-1 mb-3 text-sm text-graphite">
+          Share of “Who is hiring?” job posts that mention each skill. Open a skill to see its trend.
+          {mine && mine.user_skills.length === 0 && <> Add the tools you use on your <Link to="/start" className="text-action-ink hover:underline">Profile</Link> to highlight your own skills.</>}
+        </p>
+        {skills
+          ? <SkillsRadar snapshot={skills} mine={Object.fromEntries((mine?.user_skills ?? []).map(s => [s.id, s.why]))} />
+          : <EmptyState title="No skill signals yet">Run python scripts/fetch_signals.py to build the snapshot.</EmptyState>}
+        {mine && mine.no_market_data.length > 0 && (
+          <p className="mt-2 text-xs text-graphite">No market data yet for: {mine.no_market_data.join(', ')}.</p>
+        )}
+      </section>
+
+      {pulse && (
+        <section data-reveal>
+          <SectionTitle>Market pulse</SectionTitle>
+          <MarketPulse snapshot={pulse} />
+        </section>
+      )}
+
+      <div data-reveal className="pt-2">
+        <h2 className="text-[22px] leading-[1.27] font-semibold tracking-[-0.01em] text-ink">AI use in work like yours</h2>
+        <p className="mt-1 text-sm text-graphite">Anthropic Economic Index by occupation. It informs the company assumptions behind your role matches; it never changes them by itself.</p>
+        {latest?.label && <div className="mt-2"><Tag tone="linen">{latest.label}</Tag></div>}
       </div>
 
       {snapshots.length === 0 ? (
         <EmptyState title="No evidence loaded yet">Load the first snapshot to see signals.</EmptyState>
       ) : (
         <>
-          <div data-reveal className="grid grid-cols-3 gap-3">
-            <StatTile tone="mocha" label="Snapshots loaded" value={snapshots.length} />
-            <StatTile tone="linen" label="Signals in latest" value={latest?.signals?.length ?? 0} />
-            <StatTile tone="action" label="Notable changes" value={significant.length} />
-          </div>
 
           <section data-reveal>
             <SectionTitle aside={
