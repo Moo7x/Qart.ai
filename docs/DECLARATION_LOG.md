@@ -50,3 +50,11 @@
 | 2026-10-23 | font | Geist and Geist Mono (Google Fonts) | Interface and data typography | SIL Open Font License 1.1 | free | team |
 | 2026-10-23 | design reference | Clerk website style (colour, type and radius principles only) | Inspiration for the UI direction; no brand assets or components copied | — | public website | team |
 | 2026-10-23 | removed | axios | Replaced by the browser's fetch | — | — | team |
+| 2026-10-23 | library | python-docx 1.2.0 | Read synthetic DOCX CVs in memory | MIT (installed package metadata) | free / open source | team |
+| 2026-10-23 | library | python-multipart 0.0.32 | Synthetic CV uploads to the intake API | Apache-2.0 (installed package metadata) | free / open source | team |
+| 2026-10-23 | library | pypdf 5.4.0 (current runtime use) | Extract synthetic PDF CV text; existing TalentCorp page checks retained | BSD-3-Clause | free / open source | team |
+| 2026-10-23 | external API / resource links | Microsoft Learn Catalog API and OpenLearn course pages | Current GBS pack: titles, provider-stated time/level and links; catalogue checked 2026-10-23; no course content hosted | Microsoft API/provider terms; Open University terms; metadata and links only | public / linked free resources | team |
+| 2026-10-23 | reference | UN SDG targets 4.3, 4.4, 8.2, 8.5, 12.6 | Target wording and contribution mechanisms in the current pack | UN terms of use; attribution in sdg.yaml | public reference | team |
+| 2026-10-23 | AI model (called) | OpenAI gpt-4o-mini (current intake) | Schema-constrained skill claims from scrubbed synthetic CV text; exact quoted evidence validated in code; labelled fallback | OpenAI API terms | existing API access | team |
+| 2026-10-23 | AI dev tool | Codex (major assistance) | Continued agreed MVP: journey verification, progress/revision fixes, What changed engine/API/UI, tests and documentation; no new product direction | OpenAI service terms | existing subscription | team |
+| 2026-10-23 | library (local verification only) | pgserver 0.1.4 (already installed) | Disposable local PostgreSQL check of revision proposals and replay; not an application runtime dependency | Apache-2.0 (installed LICENSE); bundled PostgreSQL licence also applies | free / local | team |
