@@ -25,8 +25,7 @@ import type {
   Profile,
   Recommendation,
   SkillState,
-  Snapshot,
-} from './types';
+  Snapshot, Questionnaire } from './types';
 
 const USE_MOCKS = (import.meta.env.VITE_USE_MOCKS ?? 'false') === 'true';
 const BASE = import.meta.env.VITE_API_URL ?? '';
@@ -402,6 +401,11 @@ export async function postDecision(
 export async function getProfile(userId: string): Promise<Profile> {
   if (USE_MOCKS) return MOCK_PROFILE;
   const { data } = await axios.get<Profile>(`${BASE}/api/profile/${userId}`);
+  return data;
+}
+
+export async function getQuestionnaire(): Promise<Questionnaire> {
+  const { data } = await axios.get<Questionnaire>(`${BASE}/api/questionnaire`);
   return data;
 }
 

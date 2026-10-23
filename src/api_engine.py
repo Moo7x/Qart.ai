@@ -204,10 +204,24 @@ def check_questionnaire_answers(profile: Profile, catalogue: Catalogue) -> None:
         raise HTTPException(status_code=422, detail="; ".join(problems))
 
 
+class VocabularySkill(BaseModel):
+    id: str
+    name: str
+    category: str
+
+
+class QuestionnaireOut(Questionnaire):
+    skills: list[VocabularySkill]  # the whole vocabulary, for chip names and "add a skill"
+
+
 @router.get("/questionnaire")
-def get_questionnaire() -> Questionnaire:
-    """Current roles (with typical skills), weekly tasks, tool chips and skill levels."""
-    return default_questionnaire()
+def get_questionnaire() -> QuestionnaireOut:
+    """Current roles (with typical skills), weekly tasks, tool chips, skill levels and names."""
+    vocabulary = default_catalogue().vocabulary.values()
+    return QuestionnaireOut(
+        **default_questionnaire().model_dump(),
+        skills=[VocabularySkill(id=s.id, name=s.name, category=s.category) for s in vocabulary],
+    )
 
 
 class HeldSkillOut(BaseModel):

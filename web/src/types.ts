@@ -145,6 +145,21 @@ export interface Preferences {
   formats?: string[];
   ai_comfort?: number | null;
   notes?: string | null;
+  // v2.4: questionnaire answers (ids from GET /api/questionnaire)
+  current_job?: string | null;
+  tasks?: string[];
+  skill_levels?: Record<string, SkillLevel>;
+}
+
+// GET /api/questionnaire (v2.4)
+export type SkillLevel = 'heard' | 'sometimes' | 'confident';
+export interface Questionnaire {
+  levels: { id: SkillLevel; label: string; value: number }[];
+  default_level: SkillLevel;
+  tools: { label: string; skills: string[]; exclusive: boolean }[];
+  current_roles: { id: string; name: string; family: string | null; catalogue_role_id: string | null; typical_skills: string[] }[];
+  tasks: { id: string; label: string; skills: string[]; families: string[] }[];
+  skills: { id: string; name: string; category: string }[];
 }
 
 // GET /api/roles

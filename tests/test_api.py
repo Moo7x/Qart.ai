@@ -111,6 +111,7 @@ def test_questionnaire_and_held_skills(client: TestClient) -> None:
     q = client.get("/api/questionnaire").json()
     assert [lv["value"] for lv in q["levels"]] == [0.3, 0.7, 1.0]
     assert any(t["exclusive"] for t in q["tools"])
+    assert {"python", "recon_to_source"} <= {s["id"] for s in q["skills"]}
     profile = client.get("/api/profile/u_aina").json()
     client.post("/api/profile", json={**profile, "preferences": PREFERENCES})
     held = {h["skill_id"]: h for h in client.get("/api/held-skills/u_aina").json()}
