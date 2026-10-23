@@ -7,11 +7,13 @@ shadowed by the static files.
 """
 
 import logging
+import threading
 from pathlib import Path
 
 from fastapi import APIRouter, FastAPI
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
+from sqlalchemy import Engine
 from starlette.exceptions import HTTPException
 from starlette.responses import Response
 from starlette.types import Scope
@@ -20,8 +22,12 @@ from src.envfile import load_env_file
 
 load_env_file()  # local .env (gitignored); must run before settings are read
 
+import src.evidence.store  # noqa: E402, F401  (registers the evidence tables before init_db)
+from src.api.evidence import router as evidence_router  # noqa: E402
 from src.config import Settings, load_settings  # noqa: E402
 from src.db import init_db, make_engine, ping  # noqa: E402
+from src.evidence.store import list_runs  # noqa: E402
+from src.pipeline.run import run_pipeline  # noqa: E402
 
 logger = logging.getLogger(__name__)
 
@@ -53,16 +59,28 @@ class Health(BaseModel):
     embeddings: str
 
 
-def create_app(settings: Settings | None = None) -> FastAPI:
+def start_first_run_if_empty(engine: Engine) -> None:
+    """A fresh deployment has no evidence yet: start one run in the background so pages fill in
+    without anyone waiting on it. Later runs come from the schedule or Run now."""
+    if list_runs(engine, 1):
+        return
+    threading.Thread(target=run_pipeline, args=(engine, "first start"), daemon=True).start()
+
+
+def create_app(settings: Settings | None = None, first_run: bool = True) -> FastAPI:
     settings = settings or load_settings()
     engine = make_engine(settings.database_url)
     init_db(engine)
+    if first_run:
+        start_first_run_if_empty(engine)
 
     application = FastAPI(
         title="Qart.ai",
         description="Evidence-based future-role matching and reskilling pathways for Malaysia.",
         version="0.3.0",
     )
+    application.state.engine = engine
+    application.state.settings = settings
     api = APIRouter(prefix="/api")
 
     @api.get("/health")
@@ -75,6 +93,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         )
 
     application.include_router(api)
+    application.include_router(evidence_router)
     if WEB_DIST.is_dir():
         application.mount("/", SinglePageApp(directory=WEB_DIST, html=True), name="web")
     else:

@@ -35,5 +35,5 @@ def settings(tmp_path: Path) -> Settings:
 
 @pytest.fixture
 def client(settings: Settings) -> Iterator[TestClient]:
-    with TestClient(create_app(settings)) as test_client:
+    with TestClient(create_app(settings, first_run=False)) as test_client:
         yield test_client
