@@ -23,6 +23,7 @@ import httpx
 from sqlalchemy import Engine
 
 from src import params
+from src.changes.service import refresh_proposals
 from src.collectors import aei, dosm_jmi, dosm_wages, talentcorp
 from src.collectors.base import Collect
 from src.evidence.registry import registry
@@ -31,6 +32,7 @@ from src.evidence.store import (
     acquire_lock,
     finish_run,
     insert_observations,
+    latest_observation_id,
     list_runs,
     release_lock,
     start_run,
@@ -153,6 +155,7 @@ def _run_all(
     client_factory: Callable[[], httpx.Client] | None,
     retry_pause: float,
 ) -> RunSummary:
+    previous_cutoff = latest_observation_id(engine)
     factory = client_factory or (lambda: httpx.Client(timeout=HTTP_TIMEOUT))
     results: list[dict[str, Any]] = []
     with factory() as client:
@@ -172,6 +175,8 @@ def _run_all(
             results.append(_run_source(engine, client, source.id, collect, run_id, retry_pause))
     status = overall_status(results)
     new_total = sum(r["new"] for r in results)
+    # Also retry publication after a previous run stored evidence but failed before publication.
+    refresh_proposals(engine, previous_cutoff, run_id)
     finish_run(engine, run_id, status, new_total, results)
     return RunSummary(run_id, status, new_total, results)
 

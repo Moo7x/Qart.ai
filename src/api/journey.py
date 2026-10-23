@@ -9,8 +9,8 @@ from sqlalchemy import Engine
 
 from src import params
 from src.api.evidence import get_engine, get_settings
+from src.changes.store import accepted_rows, baseline_cutoff
 from src.config import REPO_ROOT, Settings
-from src.evidence.store import query_observations
 from src.intake.extract import extract
 from src.intake.files import UnsupportedFileError, read_cv
 from src.intake.skill_search import search
@@ -51,8 +51,8 @@ class ProfileCreated(BaseModel):
     id: str
 
 
-def evidence_for(engine: Engine) -> Evidence:
-    return automation_evidence(query_observations(engine, source_id="anthropic_economic_index"))
+def evidence_for(engine: Engine, profile_id: str) -> Evidence:
+    return automation_evidence(accepted_rows(engine, profile_id))
 
 
 def require_profile(engine: Engine, profile_id: str) -> tuple[ProfileData, str | None]:
@@ -120,7 +120,9 @@ def skill_search(body: TextIn, settings: Settings = Depends(get_settings)) -> di
 @router.post("/profiles", status_code=201)
 def new_profile(data: ProfileData, engine: Engine = Depends(get_engine)) -> ProfileCreated:
     _check_profile(load_pack(), data)
-    return ProfileCreated(id=create_profile(engine, data))
+    profile_id = create_profile(engine, data)
+    baseline_cutoff(engine, profile_id)
+    return ProfileCreated(id=profile_id)
 
 
 @router.get("/profiles/{profile_id}")
@@ -179,7 +181,7 @@ def _card(
                 "kind": "observed",
                 "text": (
                     f"{match.automation_share:.0f}% of AI use for the matching occupation "
-                    f"({role.soc}) is automation-style; the rest is people working with AI."
+                    f"({role.soc}) is automation-style in the sampled Claude conversations."
                 ),
                 "source": f"{evidence.automation_source}, {evidence.automation_period}",
             }
@@ -204,7 +206,7 @@ def matches(
 ) -> dict[str, Any]:
     data, destination = require_profile(engine, profile_id)
     pack = load_pack()
-    evidence = evidence_for(engine)
+    evidence = evidence_for(engine, profile_id)
     levels = data.levels()
     ranked = rank_roles(pack, levels, scenario, evidence, set(data.interests) or None)
     cards = [
@@ -264,7 +266,7 @@ def pathway(
     data, destination = require_profile(engine, profile_id)
     chosen = _destination_or_query(destination, role_id)
     pack = load_pack()
-    evidence = evidence_for(engine)
+    evidence = evidence_for(engine, profile_id)
     match = score_role(pack, pack.destination_roles[chosen], data.levels(), scenario, evidence)
     path = plan_pathway(pack, match, data.levels(), data.weekly_hours, scenario, evidence)
     out = asdict(path)
@@ -284,7 +286,7 @@ def future(
     data, destination = require_profile(engine, profile_id)
     chosen = _destination_or_query(destination, role_id)
     pack = load_pack()
-    evidence = evidence_for(engine)
+    evidence = evidence_for(engine, profile_id)
     role = pack.destination_roles[chosen]
     levels = data.levels()
     by_scenario: dict[str, Any] = {}
