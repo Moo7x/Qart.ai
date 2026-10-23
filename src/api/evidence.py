@@ -15,6 +15,9 @@ from src.evidence.models import history
 from src.evidence.registry import registry
 from src.evidence.signals import Signal, build_signals
 from src.evidence.store import list_runs, query_observations
+from src.evidence.trends import trends
+from src.match.evidence import automation_evidence
+from src.pack import load_pack
 from src.pipeline.run import LOCK_NAME, run_pipeline, start_catch_up_if_stale
 
 router = APIRouter(prefix="/api")
@@ -145,6 +148,13 @@ def backtest(engine: Engine = Depends(get_engine)) -> list[BacktestEntry]:
             )
         )
     return entries
+
+
+@router.get("/trends")
+def trend_series(engine: Engine = Depends(get_engine)) -> dict[str, Any]:
+    """Rising and declining series for the Trends page, each labelled by kind in the UI."""
+    rows = query_observations(engine)
+    return trends(load_pack(), rows, automation_evidence(rows))
 
 
 @router.get("/pipeline/forecast-check")
