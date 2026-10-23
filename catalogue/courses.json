@@ -1,5 +1,5 @@
 {
-  "_about": "Learning resources for the path planner (free ones preferred; the company funds paid ones). Every URL was opened on the retrieval date (WebFetch/curl). verified=true means the page loaded and the title and cost were checked; cost says free only where the provider states it (see cost_source); paid courses are allowed because the company funds training; verified=false needs a human check. hours_source says whether hours come from the provider page or are a team estimate (assumption). Prerequisites are the team's declared ordering. None are HRD Corp listings (hrd_claimable=false). Learning-plan fields (pathway.md §3.1) added 2026-10-23: skill_steps (from/to level on the 0 / 0.3 / 0.7 / 1.0 scale; to_level by the DECLARED rule 'at least half the skill's to_basic hours reaches use sometimes, otherwise heard of it'), hours_basis, cost_myr / cost_type (free only where the provider says so; 'unknown' where no price is stated, which the plan never counts as free), hrd_claimable only with claim_evidence_url, eligibility, platform, format, delivery, certificate (null = not checked), language, tags, status (draft | verified; the demo shows verified only), last_verified, verified_by. The 26 courses checked on 2026-10-21 keep status verified (team decision 2026-10-23); their skills were re-mapped to the canonical vocabulary.",
+  "_about": "Learning resources for the path planner (free ones preferred; the company funds paid ones). Every URL was opened on the retrieval date (WebFetch/curl). verified=true means the page loaded and the title and cost were checked; cost says free only where the provider states it (see cost_source); paid courses are allowed because the company funds training; verified=false needs a human check. hours_source says whether hours come from the provider page or are a team estimate (assumption). Prerequisites are the team's declared ordering. None are HRD Corp listings (hrd_claimable=false). Learning-plan fields (pathway.md §3.1) added 2026-10-23: skill_steps (from/to level on the 0 / 0.3 / 0.7 / 1.0 scale; to_level by the DECLARED rule on each skill's share of the course hours: at least half of to_basic reaches 'use sometimes' (0.7), at least to_basic + half of to_confident reaches 'confident' (1.0), otherwise 'heard of it' (0.3)), hours_basis, cost_myr / cost_type (free only where the provider says so; 'unknown' where no price is stated, which the plan never counts as free), hrd_claimable only with claim_evidence_url, eligibility, platform, format, delivery, certificate (null = not checked), language, tags, status (draft | verified; the demo shows verified only), last_verified, verified_by. The 26 courses checked on 2026-10-21 keep status verified (team decision 2026-10-23); their skills were re-mapped to the canonical vocabulary.",
   "retrieved": "2026-10-21",
   "courses": [
     {
@@ -366,17 +366,17 @@
         {
           "id": "bookkeeping",
           "from_level": 0.0,
-          "to_level": 0.7
+          "to_level": 0.3
         },
         {
           "id": "recon_to_source",
           "from_level": 0.0,
-          "to_level": 0.7
+          "to_level": 0.3
         },
         {
           "id": "cutoff_timing",
           "from_level": 0.0,
-          "to_level": 0.7
+          "to_level": 0.3
         }
       ],
       "hours_basis": "provider_total",
@@ -423,7 +423,7 @@
         {
           "id": "stakeholder_communication",
           "from_level": 0.0,
-          "to_level": 0.7
+          "to_level": 1.0
         }
       ],
       "hours_basis": "provider_total",
@@ -668,7 +668,7 @@
         {
           "id": "ai_assistants",
           "from_level": 0.0,
-          "to_level": 0.7
+          "to_level": 0.3
         },
         {
           "id": "ai_output_review",
@@ -723,7 +723,7 @@
         {
           "id": "ai_assistants",
           "from_level": 0.0,
-          "to_level": 0.7
+          "to_level": 1.0
         },
         {
           "id": "ai_output_review",
@@ -1342,6 +1342,1728 @@
       "last_verified": "2026-10-21",
       "verified_by": "Person A check on 2026-10-21 (URL opened, title and cost checked)",
       "source_notes": "module page opened 2026-10-21"
+    },
+    {
+      "id": "course_27",
+      "title": "Digital Marketing Certification Course",
+      "provider": "HubSpot Academy",
+      "url": "https://academy.hubspot.com/courses/digital-marketing",
+      "hours": 3.4,
+      "cost": "free",
+      "skills": [
+        "digital_marketing"
+      ],
+      "prerequisites": [],
+      "retrieved": "2026-10-23",
+      "verified": false,
+      "hrd_claimable": false,
+      "hours_source": "page: 3 hours 24 minutes, 10 lessons",
+      "cost_source": "Page: 'FREE Certification Course' (2026-10-23)",
+      "skill_steps": [
+        {
+          "id": "digital_marketing",
+          "from_level": 0.0,
+          "to_level": 0.3
+        }
+      ],
+      "stated_duration": "3 h 24 min, 10 lessons",
+      "hours_basis": "provider_total",
+      "cost_myr": 0,
+      "cost_type": "free",
+      "cost_note": "Page: 'FREE Certification Course' (2026-10-23)",
+      "hrd_scheme": null,
+      "claim_evidence_url": null,
+      "eligibility": {},
+      "platform": "vendor",
+      "format": [
+        "videos"
+      ],
+      "delivery": "self_paced",
+      "next_dates": [],
+      "certificate": true,
+      "language": [
+        "en"
+      ],
+      "tags": [],
+      "status": "draft",
+      "last_verified": "2026-10-23",
+      "verified_by": "claude_code (draft: page opened 2026-10-23; needs a team review)",
+      "source_notes": "Also offered in German, Spanish, French and Japanese.",
+      "verification_note": "Draft from 2026-10-23 research: page opened and the facts above quoted from it, but a team member has not reviewed it yet (docs/resource_review.md)."
+    },
+    {
+      "id": "course_28",
+      "title": "Introduction to Cybersecurity",
+      "provider": "Cisco Networking Academy",
+      "url": "https://www.netacad.com/courses/introduction-to-cybersecurity",
+      "hours": 6,
+      "cost": "free",
+      "skills": [
+        "cybersecurity_basics"
+      ],
+      "prerequisites": [],
+      "retrieved": "2026-10-23",
+      "verified": false,
+      "hrd_claimable": false,
+      "hours_source": "course page (via search index): 6 hours, 7 labs, beginner, self-paced; older Cisco pages say 15 hours",
+      "cost_source": "Page title: 'Free Online Course' (2026-10-23)",
+      "skill_steps": [
+        {
+          "id": "cybersecurity_basics",
+          "from_level": 0.0,
+          "to_level": 0.3
+        }
+      ],
+      "stated_duration": null,
+      "hours_basis": "provider_total",
+      "cost_myr": 0,
+      "cost_type": "free",
+      "cost_note": "Page title: 'Free Online Course' (2026-10-23)",
+      "hrd_scheme": null,
+      "claim_evidence_url": null,
+      "eligibility": {},
+      "platform": "vendor",
+      "format": [
+        "videos",
+        "hands_on"
+      ],
+      "delivery": "self_paced",
+      "next_dates": [],
+      "certificate": true,
+      "language": [
+        "en"
+      ],
+      "tags": [],
+      "status": "draft",
+      "last_verified": "2026-10-23",
+      "verified_by": "claude_code (draft: page opened 2026-10-23; needs a team review)",
+      "source_notes": "Digital badge on completion. The page renders in the browser; hours and badge read from the search index, team to confirm on the page.",
+      "verification_note": "Draft from 2026-10-23 research: page opened and the facts above quoted from it, but a team member has not reviewed it yet (docs/resource_review.md)."
+    },
+    {
+      "id": "course_29",
+      "title": "Computer Hardware Basics",
+      "provider": "Cisco Networking Academy",
+      "url": "https://www.netacad.com/courses/computer-hardware-basics",
+      "hours": 6,
+      "cost": "free",
+      "skills": [
+        "it_support"
+      ],
+      "prerequisites": [],
+      "retrieved": "2026-10-23",
+      "verified": false,
+      "hrd_claimable": false,
+      "hours_source": "course page (via search index): 6 hours, 3 labs, beginner, self-paced",
+      "cost_source": "Page title: 'Free Course on Components' (2026-10-23)",
+      "skill_steps": [
+        {
+          "id": "it_support",
+          "from_level": 0.0,
+          "to_level": 0.3
+        }
+      ],
+      "stated_duration": null,
+      "hours_basis": "provider_total",
+      "cost_myr": 0,
+      "cost_type": "free",
+      "cost_note": "Page title: 'Free Course on Components' (2026-10-23)",
+      "hrd_scheme": null,
+      "claim_evidence_url": null,
+      "eligibility": {},
+      "platform": "vendor",
+      "format": [
+        "videos",
+        "hands_on"
+      ],
+      "delivery": "self_paced",
+      "next_dates": [],
+      "certificate": null,
+      "language": [
+        "en"
+      ],
+      "tags": [],
+      "status": "draft",
+      "last_verified": "2026-10-23",
+      "verified_by": "claude_code (draft: page opened 2026-10-23; needs a team review)",
+      "source_notes": "Hours read from the search index; team to confirm on the page.",
+      "verification_note": "Draft from 2026-10-23 research: page opened and the facts above quoted from it, but a team member has not reviewed it yet (docs/resource_review.md)."
+    },
+    {
+      "id": "course_30",
+      "title": "Google IT Support Professional Certificate",
+      "provider": "Google via Coursera",
+      "url": "https://www.coursera.org/professional-certificates/google-it-support",
+      "hours": 130,
+      "cost": "see cost_note",
+      "skills": [
+        "it_support"
+      ],
+      "prerequisites": [],
+      "retrieved": "2026-10-23",
+      "verified": false,
+      "hrd_claimable": false,
+      "hours_source": "page: '3 months at 10 hours a week' (13 weeks x 10 h)",
+      "cost_source": "Free for eligible Malaysians through Rakyat Digital's Coursera Global Learning Pass (3 months of access from 16 Sep 2026, limited licences, register with the Rakyat Digital email; rakyatdigital.gov.my/en/skills-hub). Otherwise a paid Coursera subscription; price not recorded. Eligibility (Malaysian citizens via MyDigital ID) is from news reports: the portal FAQ answers could not be read by script; team to confirm.",
+      "skill_steps": [
+        {
+          "id": "it_support",
+          "from_level": 0.0,
+          "to_level": 1.0
+        }
+      ],
+      "stated_duration": "3 months at 10 hours a week",
+      "hours_basis": "provider_pace",
+      "cost_myr": null,
+      "cost_type": "free_if_eligible",
+      "cost_note": "Free for eligible Malaysians through Rakyat Digital's Coursera Global Learning Pass (3 months of access from 16 Sep 2026, limited licences, register with the Rakyat Digital email; rakyatdigital.gov.my/en/skills-hub). Otherwise a paid Coursera subscription; price not recorded. Eligibility (Malaysian citizens via MyDigital ID) is from news reports: the portal FAQ answers could not be read by script; team to confirm.",
+      "hrd_scheme": null,
+      "claim_evidence_url": null,
+      "eligibility": {
+        "malaysian_only": true
+      },
+      "platform": "rakyat_digital",
+      "format": [
+        "videos",
+        "hands_on"
+      ],
+      "delivery": "self_paced",
+      "next_dates": [],
+      "certificate": true,
+      "language": [
+        "en"
+      ],
+      "tags": [],
+      "status": "draft",
+      "last_verified": "2026-10-23",
+      "verified_by": "claude_code (draft: page opened 2026-10-23; needs a team review)",
+      "source_notes": null,
+      "verification_note": "Draft from 2026-10-23 research: page opened and the facts above quoted from it, but a team member has not reviewed it yet (docs/resource_review.md)."
+    },
+    {
+      "id": "course_31",
+      "title": "Google Project Management Professional Certificate",
+      "provider": "Google via Coursera",
+      "url": "https://www.coursera.org/professional-certificates/google-project-management",
+      "hours": 142,
+      "cost": "see cost_note",
+      "skills": [
+        "project_management"
+      ],
+      "prerequisites": [],
+      "retrieved": "2026-10-23",
+      "verified": false,
+      "hrd_claimable": false,
+      "hours_source": "page: 'over 140 hours of instruction'; courses add up to about 142 h",
+      "cost_source": "Free for eligible Malaysians through Rakyat Digital's Coursera Global Learning Pass (3 months of access from 16 Sep 2026, limited licences, register with the Rakyat Digital email; rakyatdigital.gov.my/en/skills-hub). Otherwise a paid Coursera subscription; price not recorded. Eligibility (Malaysian citizens via MyDigital ID) is from news reports: the portal FAQ answers could not be read by script; team to confirm.",
+      "skill_steps": [
+        {
+          "id": "project_management",
+          "from_level": 0.0,
+          "to_level": 1.0
+        }
+      ],
+      "stated_duration": "6 months at 10 hours a week",
+      "hours_basis": "provider_total",
+      "cost_myr": null,
+      "cost_type": "free_if_eligible",
+      "cost_note": "Free for eligible Malaysians through Rakyat Digital's Coursera Global Learning Pass (3 months of access from 16 Sep 2026, limited licences, register with the Rakyat Digital email; rakyatdigital.gov.my/en/skills-hub). Otherwise a paid Coursera subscription; price not recorded. Eligibility (Malaysian citizens via MyDigital ID) is from news reports: the portal FAQ answers could not be read by script; team to confirm.",
+      "hrd_scheme": null,
+      "claim_evidence_url": null,
+      "eligibility": {
+        "malaysian_only": true
+      },
+      "platform": "rakyat_digital",
+      "format": [
+        "videos",
+        "hands_on"
+      ],
+      "delivery": "self_paced",
+      "next_dates": [],
+      "certificate": true,
+      "language": [
+        "en"
+      ],
+      "tags": [],
+      "status": "draft",
+      "last_verified": "2026-10-23",
+      "verified_by": "claude_code (draft: page opened 2026-10-23; needs a team review)",
+      "source_notes": null,
+      "verification_note": "Draft from 2026-10-23 research: page opened and the facts above quoted from it, but a team member has not reviewed it yet (docs/resource_review.md)."
+    },
+    {
+      "id": "course_32",
+      "title": "Google Cybersecurity Professional Certificate",
+      "provider": "Google via Coursera",
+      "url": "https://www.coursera.org/professional-certificates/google-cybersecurity",
+      "hours": 182,
+      "cost": "see cost_note",
+      "skills": [
+        "cybersecurity_basics"
+      ],
+      "prerequisites": [],
+      "retrieved": "2026-10-23",
+      "verified": false,
+      "hrd_claimable": false,
+      "hours_source": "page: '6 months at 7 hours a week' (26 weeks x 7 h)",
+      "cost_source": "Free for eligible Malaysians through Rakyat Digital's Coursera Global Learning Pass (3 months of access from 16 Sep 2026, limited licences, register with the Rakyat Digital email; rakyatdigital.gov.my/en/skills-hub). Otherwise a paid Coursera subscription; price not recorded. Eligibility (Malaysian citizens via MyDigital ID) is from news reports: the portal FAQ answers could not be read by script; team to confirm.",
+      "skill_steps": [
+        {
+          "id": "cybersecurity_basics",
+          "from_level": 0.0,
+          "to_level": 1.0
+        }
+      ],
+      "stated_duration": "6 months at 7 hours a week",
+      "hours_basis": "provider_pace",
+      "cost_myr": null,
+      "cost_type": "free_if_eligible",
+      "cost_note": "Free for eligible Malaysians through Rakyat Digital's Coursera Global Learning Pass (3 months of access from 16 Sep 2026, limited licences, register with the Rakyat Digital email; rakyatdigital.gov.my/en/skills-hub). Otherwise a paid Coursera subscription; price not recorded. Eligibility (Malaysian citizens via MyDigital ID) is from news reports: the portal FAQ answers could not be read by script; team to confirm.",
+      "hrd_scheme": null,
+      "claim_evidence_url": null,
+      "eligibility": {
+        "malaysian_only": true
+      },
+      "platform": "rakyat_digital",
+      "format": [
+        "videos",
+        "hands_on"
+      ],
+      "delivery": "self_paced",
+      "next_dates": [],
+      "certificate": true,
+      "language": [
+        "en"
+      ],
+      "tags": [],
+      "status": "draft",
+      "last_verified": "2026-10-23",
+      "verified_by": "claude_code (draft: page opened 2026-10-23; needs a team review)",
+      "source_notes": "Also uses Python, Linux and SQL hands-on.",
+      "verification_note": "Draft from 2026-10-23 research: page opened and the facts above quoted from it, but a team member has not reviewed it yet (docs/resource_review.md)."
+    },
+    {
+      "id": "course_33",
+      "title": "Google Data Analytics Professional Certificate",
+      "provider": "Google via Coursera",
+      "url": "https://www.coursera.org/professional-certificates/google-data-analytics",
+      "hours": 180,
+      "cost": "see cost_note",
+      "skills": [
+        "spreadsheet_modelling",
+        "sql_basics",
+        "data_visualisation"
+      ],
+      "prerequisites": [],
+      "retrieved": "2026-10-23",
+      "verified": false,
+      "hrd_claimable": false,
+      "hours_source": "page: 'over 180 hours of instruction' (course listings add up to about 152 h)",
+      "cost_source": "Free for eligible Malaysians through Rakyat Digital's Coursera Global Learning Pass (3 months of access from 16 Sep 2026, limited licences, register with the Rakyat Digital email; rakyatdigital.gov.my/en/skills-hub). Otherwise a paid Coursera subscription; price not recorded. Eligibility (Malaysian citizens via MyDigital ID) is from news reports: the portal FAQ answers could not be read by script; team to confirm.",
+      "skill_steps": [
+        {
+          "id": "spreadsheet_modelling",
+          "from_level": 0.0,
+          "to_level": 1.0
+        },
+        {
+          "id": "sql_basics",
+          "from_level": 0.0,
+          "to_level": 1.0
+        },
+        {
+          "id": "data_visualisation",
+          "from_level": 0.0,
+          "to_level": 1.0
+        }
+      ],
+      "stated_duration": "6 months at 10 hours a week",
+      "hours_basis": "provider_total",
+      "cost_myr": null,
+      "cost_type": "free_if_eligible",
+      "cost_note": "Free for eligible Malaysians through Rakyat Digital's Coursera Global Learning Pass (3 months of access from 16 Sep 2026, limited licences, register with the Rakyat Digital email; rakyatdigital.gov.my/en/skills-hub). Otherwise a paid Coursera subscription; price not recorded. Eligibility (Malaysian citizens via MyDigital ID) is from news reports: the portal FAQ answers could not be read by script; team to confirm.",
+      "hrd_scheme": null,
+      "claim_evidence_url": null,
+      "eligibility": {
+        "malaysian_only": true
+      },
+      "platform": "rakyat_digital",
+      "format": [
+        "videos",
+        "hands_on"
+      ],
+      "delivery": "self_paced",
+      "next_dates": [],
+      "certificate": true,
+      "language": [
+        "en"
+      ],
+      "tags": [],
+      "status": "draft",
+      "last_verified": "2026-10-23",
+      "verified_by": "claude_code (draft: page opened 2026-10-23; needs a team review)",
+      "source_notes": null,
+      "verification_note": "Draft from 2026-10-23 research: page opened and the facts above quoted from it, but a team member has not reviewed it yet (docs/resource_review.md)."
+    },
+    {
+      "id": "course_34",
+      "title": "Describe the concepts of cybersecurity",
+      "provider": "Microsoft Learn",
+      "url": "https://learn.microsoft.com/en-us/training/paths/describe-basic-concepts-of-cybersecurity/",
+      "hours": 2.3,
+      "cost": "free",
+      "skills": [
+        "cybersecurity_basics"
+      ],
+      "prerequisites": [],
+      "retrieved": "2026-10-23",
+      "verified": false,
+      "hrd_claimable": false,
+      "hours_source": "Microsoft Learn catalog: 137 min, beginner",
+      "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free' (checked 2026-10-21); duration from the Microsoft Learn catalog API (2026-10-23)",
+      "skill_steps": [
+        {
+          "id": "cybersecurity_basics",
+          "from_level": 0.0,
+          "to_level": 0.3
+        }
+      ],
+      "stated_duration": null,
+      "hours_basis": "provider_total",
+      "cost_myr": 0,
+      "cost_type": "free",
+      "cost_note": "Microsoft Learn FAQ: 'Microsoft Learn training is free' (checked 2026-10-21); duration from the Microsoft Learn catalog API (2026-10-23)",
+      "hrd_scheme": null,
+      "claim_evidence_url": null,
+      "eligibility": {},
+      "platform": "vendor",
+      "format": [
+        "reading",
+        "hands_on"
+      ],
+      "delivery": "self_paced",
+      "next_dates": [],
+      "certificate": null,
+      "language": [
+        "en"
+      ],
+      "tags": [],
+      "status": "draft",
+      "last_verified": "2026-10-23",
+      "verified_by": "claude_code (draft: page opened 2026-10-23; needs a team review)",
+      "source_notes": null,
+      "verification_note": "Draft from 2026-10-23 research: page opened and the facts above quoted from it, but a team member has not reviewed it yet (docs/resource_review.md)."
+    },
+    {
+      "id": "course_35",
+      "title": "Prepare and visualize data with Microsoft Power BI",
+      "provider": "Microsoft Learn",
+      "url": "https://learn.microsoft.com/en-us/training/paths/prepare-visualize-data-power-bi/",
+      "hours": 8.2,
+      "cost": "free",
+      "skills": [
+        "data_visualisation"
+      ],
+      "prerequisites": [],
+      "retrieved": "2026-10-23",
+      "verified": false,
+      "hrd_claimable": false,
+      "hours_source": "Microsoft Learn catalog: 492 min, beginner",
+      "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free' (checked 2026-10-21); duration from the Microsoft Learn catalog API (2026-10-23)",
+      "skill_steps": [
+        {
+          "id": "data_visualisation",
+          "from_level": 0.0,
+          "to_level": 0.7
+        }
+      ],
+      "stated_duration": null,
+      "hours_basis": "provider_total",
+      "cost_myr": 0,
+      "cost_type": "free",
+      "cost_note": "Microsoft Learn FAQ: 'Microsoft Learn training is free' (checked 2026-10-21); duration from the Microsoft Learn catalog API (2026-10-23)",
+      "hrd_scheme": null,
+      "claim_evidence_url": null,
+      "eligibility": {},
+      "platform": "vendor",
+      "format": [
+        "reading",
+        "hands_on"
+      ],
+      "delivery": "self_paced",
+      "next_dates": [],
+      "certificate": null,
+      "language": [
+        "en"
+      ],
+      "tags": [],
+      "status": "draft",
+      "last_verified": "2026-10-23",
+      "verified_by": "claude_code (draft: page opened 2026-10-23; needs a team review)",
+      "source_notes": null,
+      "verification_note": "Draft from 2026-10-23 research: page opened and the facts above quoted from it, but a team member has not reviewed it yet (docs/resource_review.md)."
+    },
+    {
+      "id": "course_36",
+      "title": "Get Started with Python Programming: Part 1 - Fundamentals",
+      "provider": "Microsoft Learn",
+      "url": "https://learn.microsoft.com/en-us/training/paths/get-started-with-python-fundamentals/",
+      "hours": 3.2,
+      "cost": "free",
+      "skills": [
+        "python"
+      ],
+      "prerequisites": [],
+      "retrieved": "2026-10-23",
+      "verified": false,
+      "hrd_claimable": false,
+      "hours_source": "Microsoft Learn catalog: 192 min, beginner",
+      "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free' (checked 2026-10-21); duration from the Microsoft Learn catalog API (2026-10-23)",
+      "skill_steps": [
+        {
+          "id": "python",
+          "from_level": 0.0,
+          "to_level": 0.3
+        }
+      ],
+      "stated_duration": null,
+      "hours_basis": "provider_total",
+      "cost_myr": 0,
+      "cost_type": "free",
+      "cost_note": "Microsoft Learn FAQ: 'Microsoft Learn training is free' (checked 2026-10-21); duration from the Microsoft Learn catalog API (2026-10-23)",
+      "hrd_scheme": null,
+      "claim_evidence_url": null,
+      "eligibility": {},
+      "platform": "vendor",
+      "format": [
+        "reading",
+        "hands_on"
+      ],
+      "delivery": "self_paced",
+      "next_dates": [],
+      "certificate": null,
+      "language": [
+        "en"
+      ],
+      "tags": [],
+      "status": "draft",
+      "last_verified": "2026-10-23",
+      "verified_by": "claude_code (draft: page opened 2026-10-23; needs a team review)",
+      "source_notes": null,
+      "verification_note": "Draft from 2026-10-23 research: page opened and the facts above quoted from it, but a team member has not reviewed it yet (docs/resource_review.md)."
+    },
+    {
+      "id": "course_37",
+      "title": "Automate a business process using Power Automate",
+      "provider": "Microsoft Learn",
+      "url": "https://learn.microsoft.com/en-us/training/paths/automate-process-power-automate/",
+      "hours": 4.6,
+      "cost": "free",
+      "skills": [
+        "process_automation"
+      ],
+      "prerequisites": [],
+      "retrieved": "2026-10-23",
+      "verified": false,
+      "hrd_claimable": false,
+      "hours_source": "Microsoft Learn catalog: 277 min, beginner",
+      "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free' (checked 2026-10-21); duration from the Microsoft Learn catalog API (2026-10-23)",
+      "skill_steps": [
+        {
+          "id": "process_automation",
+          "from_level": 0.0,
+          "to_level": 0.3
+        }
+      ],
+      "stated_duration": null,
+      "hours_basis": "provider_total",
+      "cost_myr": 0,
+      "cost_type": "free",
+      "cost_note": "Microsoft Learn FAQ: 'Microsoft Learn training is free' (checked 2026-10-21); duration from the Microsoft Learn catalog API (2026-10-23)",
+      "hrd_scheme": null,
+      "claim_evidence_url": null,
+      "eligibility": {},
+      "platform": "vendor",
+      "format": [
+        "reading",
+        "hands_on"
+      ],
+      "delivery": "self_paced",
+      "next_dates": [],
+      "certificate": null,
+      "language": [
+        "en"
+      ],
+      "tags": [],
+      "status": "draft",
+      "last_verified": "2026-10-23",
+      "verified_by": "claude_code (draft: page opened 2026-10-23; needs a team review)",
+      "source_notes": null,
+      "verification_note": "Draft from 2026-10-23 research: page opened and the facts above quoted from it, but a team member has not reviewed it yet (docs/resource_review.md)."
+    },
+    {
+      "id": "course_38",
+      "title": "Automate tasks with the Macro Recorder",
+      "provider": "Microsoft Support",
+      "url": "https://support.microsoft.com/en-us/office/automate-tasks-with-the-macro-recorder-974ef220-f716-4e01-b015-3ea70e64937b",
+      "hours": 1,
+      "cost": "see cost_note",
+      "skills": [
+        "excel_automation"
+      ],
+      "prerequisites": [],
+      "retrieved": "2026-10-23",
+      "verified": false,
+      "hrd_claimable": false,
+      "hours_source": "estimate: a single help article; the page states no duration",
+      "cost_source": "No price or paywall shown, but the page does not state that it is free (2026-10-23)",
+      "skill_steps": [
+        {
+          "id": "excel_automation",
+          "from_level": 0.0,
+          "to_level": 0.3
+        }
+      ],
+      "stated_duration": null,
+      "hours_basis": "team_estimate",
+      "cost_myr": null,
+      "cost_type": "unknown",
+      "cost_note": "No price or paywall shown, but the page does not state that it is free (2026-10-23)",
+      "hrd_scheme": null,
+      "claim_evidence_url": null,
+      "eligibility": {},
+      "platform": "vendor",
+      "format": [
+        "reading"
+      ],
+      "delivery": "self_paced",
+      "next_dates": [],
+      "certificate": null,
+      "language": [
+        "en"
+      ],
+      "tags": [],
+      "status": "draft",
+      "last_verified": "2026-10-23",
+      "verified_by": "claude_code (draft: page opened 2026-10-23; needs a team review)",
+      "source_notes": null,
+      "verification_note": "Draft from 2026-10-23 research: page opened and the facts above quoted from it, but a team member has not reviewed it yet (docs/resource_review.md)."
+    },
+    {
+      "id": "course_39",
+      "title": "Configure and use the general ledger in Dynamics 365 Finance",
+      "provider": "Microsoft Learn",
+      "url": "https://learn.microsoft.com/en-us/training/paths/configure-use-general-ledger-dyn365-finance/",
+      "hours": 14.1,
+      "cost": "free",
+      "skills": [
+        "erp"
+      ],
+      "prerequisites": [],
+      "retrieved": "2026-10-23",
+      "verified": false,
+      "hrd_claimable": false,
+      "hours_source": "Microsoft Learn catalog: 847 min",
+      "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free' (checked 2026-10-21); duration from the Microsoft Learn catalog API (2026-10-23)",
+      "skill_steps": [
+        {
+          "id": "erp",
+          "from_level": 0.0,
+          "to_level": 0.7
+        }
+      ],
+      "stated_duration": null,
+      "hours_basis": "provider_total",
+      "cost_myr": 0,
+      "cost_type": "free",
+      "cost_note": "Microsoft Learn FAQ: 'Microsoft Learn training is free' (checked 2026-10-21); duration from the Microsoft Learn catalog API (2026-10-23)",
+      "hrd_scheme": null,
+      "claim_evidence_url": null,
+      "eligibility": {},
+      "platform": "vendor",
+      "format": [
+        "reading",
+        "hands_on"
+      ],
+      "delivery": "self_paced",
+      "next_dates": [],
+      "certificate": null,
+      "language": [
+        "en"
+      ],
+      "tags": [],
+      "status": "draft",
+      "last_verified": "2026-10-23",
+      "verified_by": "claude_code (draft: page opened 2026-10-23; needs a team review)",
+      "source_notes": null,
+      "verification_note": "Draft from 2026-10-23 research: page opened and the facts above quoted from it, but a team member has not reviewed it yet (docs/resource_review.md)."
+    },
+    {
+      "id": "course_40",
+      "title": "Create financial reports in Microsoft Dynamics 365 Business Central",
+      "provider": "Microsoft Learn",
+      "url": "https://learn.microsoft.com/en-us/training/paths/create-financial-reports-dynamics-365-business-central/",
+      "hours": 2.9,
+      "cost": "free",
+      "skills": [
+        "financial_reporting",
+        "erp"
+      ],
+      "prerequisites": [],
+      "retrieved": "2026-10-23",
+      "verified": false,
+      "hrd_claimable": false,
+      "hours_source": "Microsoft Learn catalog: 176 min, intermediate",
+      "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free' (checked 2026-10-21); duration from the Microsoft Learn catalog API (2026-10-23)",
+      "skill_steps": [
+        {
+          "id": "financial_reporting",
+          "from_level": 0.0,
+          "to_level": 0.3
+        },
+        {
+          "id": "erp",
+          "from_level": 0.0,
+          "to_level": 0.3
+        }
+      ],
+      "stated_duration": null,
+      "hours_basis": "provider_total",
+      "cost_myr": 0,
+      "cost_type": "free",
+      "cost_note": "Microsoft Learn FAQ: 'Microsoft Learn training is free' (checked 2026-10-21); duration from the Microsoft Learn catalog API (2026-10-23)",
+      "hrd_scheme": null,
+      "claim_evidence_url": null,
+      "eligibility": {},
+      "platform": "vendor",
+      "format": [
+        "reading",
+        "hands_on"
+      ],
+      "delivery": "self_paced",
+      "next_dates": [],
+      "certificate": null,
+      "language": [
+        "en"
+      ],
+      "tags": [],
+      "status": "draft",
+      "last_verified": "2026-10-23",
+      "verified_by": "claude_code (draft: page opened 2026-10-23; needs a team review)",
+      "source_notes": null,
+      "verification_note": "Draft from 2026-10-23 research: page opened and the facts above quoted from it, but a team member has not reviewed it yet (docs/resource_review.md)."
+    },
+    {
+      "id": "course_41",
+      "title": "Build foundational generative AI skills",
+      "provider": "Microsoft Learn",
+      "url": "https://learn.microsoft.com/en-us/training/paths/explore-microsoft-365-copilot-business-chat/",
+      "hours": 2.3,
+      "cost": "free",
+      "skills": [
+        "ai_assistants",
+        "llms"
+      ],
+      "prerequisites": [],
+      "retrieved": "2026-10-23",
+      "verified": false,
+      "hrd_claimable": false,
+      "hours_source": "Microsoft Learn catalog: 140 min, beginner",
+      "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free' (checked 2026-10-21); duration from the Microsoft Learn catalog API (2026-10-23)",
+      "skill_steps": [
+        {
+          "id": "ai_assistants",
+          "from_level": 0.0,
+          "to_level": 0.3
+        },
+        {
+          "id": "llms",
+          "from_level": 0.0,
+          "to_level": 0.3
+        }
+      ],
+      "stated_duration": null,
+      "hours_basis": "provider_total",
+      "cost_myr": 0,
+      "cost_type": "free",
+      "cost_note": "Microsoft Learn FAQ: 'Microsoft Learn training is free' (checked 2026-10-21); duration from the Microsoft Learn catalog API (2026-10-23)",
+      "hrd_scheme": null,
+      "claim_evidence_url": null,
+      "eligibility": {},
+      "platform": "vendor",
+      "format": [
+        "reading",
+        "hands_on"
+      ],
+      "delivery": "self_paced",
+      "next_dates": [],
+      "certificate": null,
+      "language": [
+        "en"
+      ],
+      "tags": [
+        "ai_literacy"
+      ],
+      "status": "draft",
+      "last_verified": "2026-10-23",
+      "verified_by": "claude_code (draft: page opened 2026-10-23; needs a team review)",
+      "source_notes": null,
+      "verification_note": "Draft from 2026-10-23 research: page opened and the facts above quoted from it, but a team member has not reviewed it yet (docs/resource_review.md)."
+    },
+    {
+      "id": "course_42",
+      "title": "Work smarter with Copilot prompts for finance professionals",
+      "provider": "Microsoft Learn",
+      "url": "https://learn.microsoft.com/en-us/training/modules/work-smarter-copilot-finance/",
+      "hours": 0.5,
+      "cost": "free",
+      "skills": [
+        "ai_assistants"
+      ],
+      "prerequisites": [],
+      "retrieved": "2026-10-23",
+      "verified": false,
+      "hrd_claimable": false,
+      "hours_source": "Microsoft Learn catalog: 28 min, beginner",
+      "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free' (checked 2026-10-21); duration from the Microsoft Learn catalog API (2026-10-23)",
+      "skill_steps": [
+        {
+          "id": "ai_assistants",
+          "from_level": 0.0,
+          "to_level": 0.3
+        }
+      ],
+      "stated_duration": null,
+      "hours_basis": "provider_total",
+      "cost_myr": 0,
+      "cost_type": "free",
+      "cost_note": "Microsoft Learn FAQ: 'Microsoft Learn training is free' (checked 2026-10-21); duration from the Microsoft Learn catalog API (2026-10-23)",
+      "hrd_scheme": null,
+      "claim_evidence_url": null,
+      "eligibility": {},
+      "platform": "vendor",
+      "format": [
+        "reading",
+        "hands_on"
+      ],
+      "delivery": "self_paced",
+      "next_dates": [],
+      "certificate": null,
+      "language": [
+        "en"
+      ],
+      "tags": [
+        "ai_literacy"
+      ],
+      "status": "draft",
+      "last_verified": "2026-10-23",
+      "verified_by": "claude_code (draft: page opened 2026-10-23; needs a team review)",
+      "source_notes": null,
+      "verification_note": "Draft from 2026-10-23 research: page opened and the facts above quoted from it, but a team member has not reviewed it yet (docs/resource_review.md)."
+    },
+    {
+      "id": "course_43",
+      "title": "Business Analysis Fundamentals",
+      "provider": "Alison",
+      "url": "https://alison.com/course/business-analysis-fundamentals",
+      "hours": 3.5,
+      "cost": "free",
+      "skills": [
+        "business_analysis"
+      ],
+      "prerequisites": [],
+      "retrieved": "2026-10-23",
+      "verified": false,
+      "hrd_claimable": false,
+      "hours_source": "page: 3-4 hours (average), beginner",
+      "cost_source": "Page: 'this free online course' (2026-10-23); the certificate may be paid",
+      "skill_steps": [
+        {
+          "id": "business_analysis",
+          "from_level": 0.0,
+          "to_level": 0.3
+        }
+      ],
+      "stated_duration": null,
+      "hours_basis": "provider_total",
+      "cost_myr": 0,
+      "cost_type": "free",
+      "cost_note": "Page: 'this free online course' (2026-10-23); the certificate may be paid",
+      "hrd_scheme": null,
+      "claim_evidence_url": null,
+      "eligibility": {},
+      "platform": "mooc",
+      "format": [
+        "videos"
+      ],
+      "delivery": "self_paced",
+      "next_dates": [],
+      "certificate": null,
+      "language": [
+        "en"
+      ],
+      "tags": [],
+      "status": "draft",
+      "last_verified": "2026-10-23",
+      "verified_by": "claude_code (draft: page opened 2026-10-23; needs a team review)",
+      "source_notes": "Also in Spanish. Whether the certificate is free is not stated.",
+      "verification_note": "Draft from 2026-10-23 research: page opened and the facts above quoted from it, but a team member has not reviewed it yet (docs/resource_review.md)."
+    },
+    {
+      "id": "course_44",
+      "title": "Introduction to Statistics",
+      "provider": "Stanford Online via Coursera",
+      "url": "https://www.coursera.org/learn/stanford-statistics",
+      "hours": 13,
+      "cost": "see cost_note",
+      "skills": [
+        "statistics_basics"
+      ],
+      "prerequisites": [],
+      "retrieved": "2026-10-23",
+      "verified": false,
+      "hrd_claimable": false,
+      "hours_source": "page: module estimates add up to about 13 h (2 h + 11 x 1 h)",
+      "cost_source": "Free for eligible Malaysians through Rakyat Digital's Coursera Global Learning Pass (3 months of access from 16 Sep 2026, limited licences, register with the Rakyat Digital email; rakyatdigital.gov.my/en/skills-hub). Otherwise a paid Coursera subscription; price not recorded. Eligibility (Malaysian citizens via MyDigital ID) is from news reports: the portal FAQ answers could not be read by script; team to confirm.",
+      "skill_steps": [
+        {
+          "id": "statistics_basics",
+          "from_level": 0.0,
+          "to_level": 0.7
+        }
+      ],
+      "stated_duration": "1 week at 10 hours a week",
+      "hours_basis": "provider_total",
+      "cost_myr": null,
+      "cost_type": "free_if_eligible",
+      "cost_note": "Free for eligible Malaysians through Rakyat Digital's Coursera Global Learning Pass (3 months of access from 16 Sep 2026, limited licences, register with the Rakyat Digital email; rakyatdigital.gov.my/en/skills-hub). Otherwise a paid Coursera subscription; price not recorded. Eligibility (Malaysian citizens via MyDigital ID) is from news reports: the portal FAQ answers could not be read by script; team to confirm.",
+      "hrd_scheme": null,
+      "claim_evidence_url": null,
+      "eligibility": {
+        "malaysian_only": true
+      },
+      "platform": "rakyat_digital",
+      "format": [
+        "videos"
+      ],
+      "delivery": "self_paced",
+      "next_dates": [],
+      "certificate": true,
+      "language": [
+        "en"
+      ],
+      "tags": [],
+      "status": "draft",
+      "last_verified": "2026-10-23",
+      "verified_by": "claude_code (draft: page opened 2026-10-23; needs a team review)",
+      "source_notes": null,
+      "verification_note": "Draft from 2026-10-23 research: page opened and the facts above quoted from it, but a team member has not reviewed it yet (docs/resource_review.md)."
+    },
+    {
+      "id": "course_45",
+      "title": "Introduction to Neural Networks and PyTorch",
+      "provider": "IBM via Coursera",
+      "url": "https://www.coursera.org/learn/deep-neural-networks-with-pytorch",
+      "hours": 19,
+      "cost": "free",
+      "skills": [
+        "pytorch"
+      ],
+      "prerequisites": [],
+      "retrieved": "2026-10-23",
+      "verified": false,
+      "hrd_claimable": false,
+      "hours_source": "page: module estimates add up to about 19 h; '2 weeks at 10 hours a week'",
+      "cost_source": "Page: 'Enroll for free' and a 'Full Course, No Certificate' option; the certificate is paid (2026-10-23)",
+      "skill_steps": [
+        {
+          "id": "pytorch",
+          "from_level": 0.0,
+          "to_level": 0.7
+        }
+      ],
+      "stated_duration": null,
+      "hours_basis": "provider_total",
+      "cost_myr": 0,
+      "cost_type": "free",
+      "cost_note": "Page: 'Enroll for free' and a 'Full Course, No Certificate' option; the certificate is paid (2026-10-23)",
+      "hrd_scheme": null,
+      "claim_evidence_url": null,
+      "eligibility": {},
+      "platform": "mooc",
+      "format": [
+        "videos",
+        "hands_on"
+      ],
+      "delivery": "self_paced",
+      "next_dates": [],
+      "certificate": false,
+      "language": [
+        "en"
+      ],
+      "tags": [],
+      "status": "draft",
+      "last_verified": "2026-10-23",
+      "verified_by": "claude_code (draft: page opened 2026-10-23; needs a team review)",
+      "source_notes": "Intermediate; needs working Python and basic maths (matrices, gradients).",
+      "verification_note": "Draft from 2026-10-23 research: page opened and the facts above quoted from it, but a team member has not reviewed it yet (docs/resource_review.md)."
+    },
+    {
+      "id": "course_46",
+      "title": "Python for Everybody Specialization",
+      "provider": "University of Michigan via Coursera",
+      "url": "https://www.coursera.org/specializations/python",
+      "hours": 87,
+      "cost": "see cost_note",
+      "skills": [
+        "python"
+      ],
+      "prerequisites": [],
+      "retrieved": "2026-10-23",
+      "verified": false,
+      "hrd_claimable": false,
+      "hours_source": "page: '2 months at 10 hours a week' (about 8.7 weeks x 10 h)",
+      "cost_source": "Free for eligible Malaysians through Rakyat Digital's Coursera Global Learning Pass (3 months of access from 16 Sep 2026, limited licences, register with the Rakyat Digital email; rakyatdigital.gov.my/en/skills-hub). Otherwise a paid Coursera subscription; price not recorded. Eligibility (Malaysian citizens via MyDigital ID) is from news reports: the portal FAQ answers could not be read by script; team to confirm. Page FAQ: 'No, you cannot take this course for free.'",
+      "skill_steps": [
+        {
+          "id": "python",
+          "from_level": 0.0,
+          "to_level": 1.0
+        }
+      ],
+      "stated_duration": "2 months at 10 hours a week",
+      "hours_basis": "provider_pace",
+      "cost_myr": null,
+      "cost_type": "free_if_eligible",
+      "cost_note": "Free for eligible Malaysians through Rakyat Digital's Coursera Global Learning Pass (3 months of access from 16 Sep 2026, limited licences, register with the Rakyat Digital email; rakyatdigital.gov.my/en/skills-hub). Otherwise a paid Coursera subscription; price not recorded. Eligibility (Malaysian citizens via MyDigital ID) is from news reports: the portal FAQ answers could not be read by script; team to confirm. Page FAQ: 'No, you cannot take this course for free.'",
+      "hrd_scheme": null,
+      "claim_evidence_url": null,
+      "eligibility": {
+        "malaysian_only": true
+      },
+      "platform": "rakyat_digital",
+      "format": [
+        "videos",
+        "hands_on"
+      ],
+      "delivery": "self_paced",
+      "next_dates": [],
+      "certificate": true,
+      "language": [
+        "en"
+      ],
+      "tags": [],
+      "status": "draft",
+      "last_verified": "2026-10-23",
+      "verified_by": "claude_code (draft: page opened 2026-10-23; needs a team review)",
+      "source_notes": "The same material is free without a certificate at py4e.com (no duration stated there).",
+      "verification_note": "Draft from 2026-10-23 research: page opened and the facts above quoted from it, but a team member has not reviewed it yet (docs/resource_review.md)."
+    },
+    {
+      "id": "course_47",
+      "title": "Introduction to Financial Accounting",
+      "provider": "Wharton via Coursera",
+      "url": "https://www.coursera.org/learn/wharton-accounting",
+      "hours": 16,
+      "cost": "see cost_note",
+      "skills": [
+        "financial_reporting",
+        "bookkeeping"
+      ],
+      "prerequisites": [],
+      "retrieved": "2026-10-23",
+      "verified": false,
+      "hrd_claimable": false,
+      "hours_source": "page: module estimates 5 + 4 + 4 + 3 h",
+      "cost_source": "Free for eligible Malaysians through Rakyat Digital's Coursera Global Learning Pass (3 months of access from 16 Sep 2026, limited licences, register with the Rakyat Digital email; rakyatdigital.gov.my/en/skills-hub). Otherwise a paid Coursera subscription; price not recorded. Eligibility (Malaysian citizens via MyDigital ID) is from news reports: the portal FAQ answers could not be read by script; team to confirm.",
+      "skill_steps": [
+        {
+          "id": "financial_reporting",
+          "from_level": 0.0,
+          "to_level": 0.7
+        },
+        {
+          "id": "bookkeeping",
+          "from_level": 0.0,
+          "to_level": 0.7
+        }
+      ],
+      "stated_duration": "2 weeks at 10 hours a week",
+      "hours_basis": "provider_total",
+      "cost_myr": null,
+      "cost_type": "free_if_eligible",
+      "cost_note": "Free for eligible Malaysians through Rakyat Digital's Coursera Global Learning Pass (3 months of access from 16 Sep 2026, limited licences, register with the Rakyat Digital email; rakyatdigital.gov.my/en/skills-hub). Otherwise a paid Coursera subscription; price not recorded. Eligibility (Malaysian citizens via MyDigital ID) is from news reports: the portal FAQ answers could not be read by script; team to confirm.",
+      "hrd_scheme": null,
+      "claim_evidence_url": null,
+      "eligibility": {
+        "malaysian_only": true
+      },
+      "platform": "rakyat_digital",
+      "format": [
+        "videos"
+      ],
+      "delivery": "self_paced",
+      "next_dates": [],
+      "certificate": true,
+      "language": [
+        "en"
+      ],
+      "tags": [],
+      "status": "draft",
+      "last_verified": "2026-10-23",
+      "verified_by": "claude_code (draft: page opened 2026-10-23; needs a team review)",
+      "source_notes": null,
+      "verification_note": "Draft from 2026-10-23 research: page opened and the facts above quoted from it, but a team member has not reviewed it yet (docs/resource_review.md)."
+    },
+    {
+      "id": "course_48",
+      "title": "ChatGPT Prompt Engineering for Developers",
+      "provider": "DeepLearning.AI",
+      "url": "https://www.deeplearning.ai/short-courses/chatgpt-prompt-engineering-for-developers/",
+      "hours": 1.7,
+      "cost": "free",
+      "skills": [
+        "llms"
+      ],
+      "prerequisites": [],
+      "retrieved": "2026-10-23",
+      "verified": false,
+      "hrd_claimable": false,
+      "hours_source": "page: 1h40m, beginner",
+      "cost_source": "Page: 'Course access is free for a limited time during the DeepLearning.AI learning platform beta' (2026-10-23)",
+      "skill_steps": [
+        {
+          "id": "llms",
+          "from_level": 0.0,
+          "to_level": 0.3
+        }
+      ],
+      "stated_duration": null,
+      "hours_basis": "provider_total",
+      "cost_myr": 0,
+      "cost_type": "free",
+      "cost_note": "Page: 'Course access is free for a limited time during the DeepLearning.AI learning platform beta' (2026-10-23)",
+      "hrd_scheme": null,
+      "claim_evidence_url": null,
+      "eligibility": {},
+      "platform": "mooc",
+      "format": [
+        "videos",
+        "hands_on"
+      ],
+      "delivery": "self_paced",
+      "next_dates": [],
+      "certificate": false,
+      "language": [
+        "en"
+      ],
+      "tags": [],
+      "status": "draft",
+      "last_verified": "2026-10-23",
+      "verified_by": "claude_code (draft: page opened 2026-10-23; needs a team review)",
+      "source_notes": "Free only for a limited time; needs basic Python; the accomplishment needs PRO.",
+      "verification_note": "Draft from 2026-10-23 research: page opened and the facts above quoted from it, but a team member has not reviewed it yet (docs/resource_review.md)."
+    },
+    {
+      "id": "course_49",
+      "title": "AI Agents in LangGraph",
+      "provider": "DeepLearning.AI",
+      "url": "https://www.deeplearning.ai/short-courses/ai-agents-in-langgraph/",
+      "hours": 1.7,
+      "cost": "free",
+      "skills": [
+        "ai_agents",
+        "langchain"
+      ],
+      "prerequisites": [],
+      "retrieved": "2026-10-23",
+      "verified": false,
+      "hrd_claimable": false,
+      "hours_source": "page: 1h42m, intermediate",
+      "cost_source": "Page: 'Course access is free for a limited time during the DeepLearning.AI learning platform beta' (2026-10-23)",
+      "skill_steps": [
+        {
+          "id": "ai_agents",
+          "from_level": 0.0,
+          "to_level": 0.3
+        },
+        {
+          "id": "langchain",
+          "from_level": 0.0,
+          "to_level": 0.3
+        }
+      ],
+      "stated_duration": null,
+      "hours_basis": "provider_total",
+      "cost_myr": 0,
+      "cost_type": "free",
+      "cost_note": "Page: 'Course access is free for a limited time during the DeepLearning.AI learning platform beta' (2026-10-23)",
+      "hrd_scheme": null,
+      "claim_evidence_url": null,
+      "eligibility": {},
+      "platform": "mooc",
+      "format": [
+        "videos",
+        "hands_on"
+      ],
+      "delivery": "self_paced",
+      "next_dates": [],
+      "certificate": false,
+      "language": [
+        "en"
+      ],
+      "tags": [],
+      "status": "draft",
+      "last_verified": "2026-10-23",
+      "verified_by": "claude_code (draft: page opened 2026-10-23; needs a team review)",
+      "source_notes": "Free only for a limited time; needs intermediate Python.",
+      "verification_note": "Draft from 2026-10-23 research: page opened and the facts above quoted from it, but a team member has not reviewed it yet (docs/resource_review.md)."
+    },
+    {
+      "id": "course_50",
+      "title": "Hugging Face LLM Course",
+      "provider": "Hugging Face",
+      "url": "https://huggingface.co/learn/llm-course/chapter1/1",
+      "hours": 84,
+      "cost": "free",
+      "skills": [
+        "llms",
+        "nlp"
+      ],
+      "prerequisites": [],
+      "retrieved": "2026-10-23",
+      "verified": false,
+      "hrd_claimable": false,
+      "hours_source": "page: each chapter about 6-8 hours of work in a week; 12 chapters (12 x 7 h)",
+      "cost_source": "Page: 'It's completely free and without ads' (2026-10-23)",
+      "skill_steps": [
+        {
+          "id": "llms",
+          "from_level": 0.0,
+          "to_level": 1.0
+        },
+        {
+          "id": "nlp",
+          "from_level": 0.0,
+          "to_level": 0.7
+        }
+      ],
+      "stated_duration": null,
+      "hours_basis": "provider_pace",
+      "cost_myr": 0,
+      "cost_type": "free",
+      "cost_note": "Page: 'It's completely free and without ads' (2026-10-23)",
+      "hrd_scheme": null,
+      "claim_evidence_url": null,
+      "eligibility": {},
+      "platform": "mooc",
+      "format": [
+        "reading",
+        "hands_on"
+      ],
+      "delivery": "self_paced",
+      "next_dates": [],
+      "certificate": false,
+      "language": [
+        "en"
+      ],
+      "tags": [],
+      "status": "draft",
+      "last_verified": "2026-10-23",
+      "verified_by": "claude_code (draft: page opened 2026-10-23; needs a team review)",
+      "source_notes": "Needs good Python; better after an intro deep learning course. No certification yet.",
+      "verification_note": "Draft from 2026-10-23 research: page opened and the facts above quoted from it, but a team member has not reviewed it yet (docs/resource_review.md)."
+    },
+    {
+      "id": "course_51",
+      "title": "AI untuk Rakyat programme (6 modules)",
+      "provider": "Rakyat Digital (Ministry of Digital / MyDIGITAL)",
+      "url": "https://rakyatdigital.gov.my/en/literacy-hub",
+      "hours": 5,
+      "cost": "see cost_note",
+      "skills": [
+        "ai_assistants",
+        "ai_agents",
+        "cybersecurity_basics"
+      ],
+      "prerequisites": [],
+      "retrieved": "2026-10-23",
+      "verified": false,
+      "hrd_claimable": false,
+      "hours_source": "estimate: the hub lists 30 + 40 + 120 + 40 + 40 min for five modules; the sixth (AI Nation 2030) shows no time",
+      "cost_source": "Literacy hub: 'These courses are accessible to all and support at NO cost'; completing all 6 modules gives Malaysian citizens aged 18-30 a free 3-month subscription to selected AI tools (Ministry of Digital, 30 Aug 2026)",
+      "skill_steps": [
+        {
+          "id": "ai_assistants",
+          "from_level": 0.0,
+          "to_level": 0.3
+        },
+        {
+          "id": "ai_agents",
+          "from_level": 0.0,
+          "to_level": 0.3
+        },
+        {
+          "id": "cybersecurity_basics",
+          "from_level": 0.0,
+          "to_level": 0.3
+        }
+      ],
+      "stated_duration": null,
+      "hours_basis": "team_estimate",
+      "cost_myr": 0,
+      "cost_type": "free_if_eligible",
+      "cost_note": "Literacy hub: 'These courses are accessible to all and support at NO cost'; completing all 6 modules gives Malaysian citizens aged 18-30 a free 3-month subscription to selected AI tools (Ministry of Digital, 30 Aug 2026)",
+      "hrd_scheme": null,
+      "claim_evidence_url": null,
+      "eligibility": {
+        "min_age": 18,
+        "max_age": 30,
+        "malaysian_only": true
+      },
+      "platform": "rakyat_digital",
+      "format": [
+        "videos"
+      ],
+      "delivery": "self_paced",
+      "next_dates": [],
+      "certificate": null,
+      "language": [
+        "en",
+        "ms"
+      ],
+      "tags": [
+        "ai_literacy"
+      ],
+      "status": "draft",
+      "last_verified": "2026-10-23",
+      "verified_by": "claude_code (draft: page opened 2026-10-23; needs a team review)",
+      "source_notes": "Modules: AI Nation 2030: The MADANI Approach, CyberSAFE untuk Rakyat, Generative AI, AI Safety, Agentic AI for All, Cloud untuk Rakyat. Registration on rakyatdigital.gov.my. Module language not stated.",
+      "verification_note": "Draft from 2026-10-23 research: page opened and the facts above quoted from it, but a team member has not reviewed it yet (docs/resource_review.md)."
+    },
+    {
+      "id": "course_52",
+      "title": "Tips Ajaib Menggunakan MS Excel",
+      "provider": "e-LATiH (HRD Corp)",
+      "url": "https://elatih.hrdcorp.gov.my/courses-details/tips-ajaib-menggunakan-ms-excel",
+      "hours": 1.4,
+      "cost": "free",
+      "skills": [
+        "spreadsheet_modelling"
+      ],
+      "prerequisites": [],
+      "retrieved": "2026-10-23",
+      "verified": false,
+      "hrd_claimable": false,
+      "hours_source": "page: Duration 1 Hour 21 Min, beginner",
+      "cost_source": "e-LATiH course page: 'Free', 'Certificate of Completion' (2026-10-23)",
+      "skill_steps": [
+        {
+          "id": "spreadsheet_modelling",
+          "from_level": 0.0,
+          "to_level": 0.3
+        }
+      ],
+      "stated_duration": null,
+      "hours_basis": "provider_total",
+      "cost_myr": 0,
+      "cost_type": "free",
+      "cost_note": "e-LATiH course page: 'Free', 'Certificate of Completion' (2026-10-23)",
+      "hrd_scheme": null,
+      "claim_evidence_url": null,
+      "eligibility": {},
+      "platform": "e_latih",
+      "format": [
+        "videos"
+      ],
+      "delivery": "self_paced",
+      "next_dates": [],
+      "certificate": true,
+      "language": [
+        "ms"
+      ],
+      "tags": [],
+      "status": "draft",
+      "last_verified": "2026-10-23",
+      "verified_by": "claude_code (draft: page opened 2026-10-23; needs a team review)",
+      "source_notes": "Title and description in Bahasa Malaysia.",
+      "verification_note": "Draft from 2026-10-23 research: page opened and the facts above quoted from it, but a team member has not reviewed it yet (docs/resource_review.md)."
+    },
+    {
+      "id": "course_53",
+      "title": "Social Media Marketing",
+      "provider": "e-LATiH (HRD Corp)",
+      "url": "https://elatih.hrdcorp.gov.my/courses-details/social-media-marketing",
+      "hours": 1.2,
+      "cost": "free",
+      "skills": [
+        "digital_marketing"
+      ],
+      "prerequisites": [],
+      "retrieved": "2026-10-23",
+      "verified": false,
+      "hrd_claimable": false,
+      "hours_source": "page: Duration 1 Hour 9 Min, beginner",
+      "cost_source": "e-LATiH course page: 'Free', 'Certificate of Completion' (2026-10-23)",
+      "skill_steps": [
+        {
+          "id": "digital_marketing",
+          "from_level": 0.0,
+          "to_level": 0.3
+        }
+      ],
+      "stated_duration": null,
+      "hours_basis": "provider_total",
+      "cost_myr": 0,
+      "cost_type": "free",
+      "cost_note": "e-LATiH course page: 'Free', 'Certificate of Completion' (2026-10-23)",
+      "hrd_scheme": null,
+      "claim_evidence_url": null,
+      "eligibility": {},
+      "platform": "e_latih",
+      "format": [
+        "videos"
+      ],
+      "delivery": "self_paced",
+      "next_dates": [],
+      "certificate": true,
+      "language": [
+        "en"
+      ],
+      "tags": [],
+      "status": "draft",
+      "last_verified": "2026-10-23",
+      "verified_by": "claude_code (draft: page opened 2026-10-23; needs a team review)",
+      "source_notes": "Language not stated on the page; English title.",
+      "verification_note": "Draft from 2026-10-23 research: page opened and the facts above quoted from it, but a team member has not reviewed it yet (docs/resource_review.md)."
+    },
+    {
+      "id": "course_54",
+      "title": "Security Awareness Training: Protecting the Organization Begins With You",
+      "provider": "SCICOM Academy via e-LATiH",
+      "url": "https://elatih.hrdcorp.gov.my/courses-details/security-awareness-training-protecting-the-organization-begins-with-you",
+      "hours": 2,
+      "cost": "RM230",
+      "skills": [
+        "cybersecurity_basics"
+      ],
+      "prerequisites": [],
+      "retrieved": "2026-10-23",
+      "verified": false,
+      "hrd_claimable": false,
+      "hours_source": "page: Duration 2 Hours, beginner",
+      "cost_source": "e-LATiH course page: RM230.00 (2026-10-23)",
+      "skill_steps": [
+        {
+          "id": "cybersecurity_basics",
+          "from_level": 0.0,
+          "to_level": 0.3
+        }
+      ],
+      "stated_duration": null,
+      "hours_basis": "provider_total",
+      "cost_myr": 230,
+      "cost_type": "low_cost",
+      "cost_note": "e-LATiH course page: RM230.00 (2026-10-23)",
+      "hrd_scheme": null,
+      "claim_evidence_url": null,
+      "eligibility": {},
+      "platform": "e_latih",
+      "format": [
+        "videos",
+        "reading"
+      ],
+      "delivery": "self_paced",
+      "next_dates": [],
+      "certificate": true,
+      "language": [
+        "en"
+      ],
+      "tags": [],
+      "status": "draft",
+      "last_verified": "2026-10-23",
+      "verified_by": "claude_code (draft: page opened 2026-10-23; needs a team review)",
+      "source_notes": null,
+      "verification_note": "Draft from 2026-10-23 research: page opened and the facts above quoted from it, but a team member has not reviewed it yet (docs/resource_review.md)."
+    },
+    {
+      "id": "course_55",
+      "title": "Turning Data Into Action: An Introduction to Analytics for Manufacturers",
+      "provider": "Digirity via e-LATiH",
+      "url": "https://elatih.hrdcorp.gov.my/courses-details/turning-data-into-action-an-introduction-to-analytics-for-manufacturers",
+      "hours": 1.5,
+      "cost": "RM70",
+      "skills": [
+        "data_quality",
+        "data_visualisation"
+      ],
+      "prerequisites": [],
+      "retrieved": "2026-10-23",
+      "verified": false,
+      "hrd_claimable": false,
+      "hours_source": "page: Duration 1 Hour 30 Min, 12 lessons",
+      "cost_source": "e-LATiH course page: RM70.00 (2026-10-23)",
+      "skill_steps": [
+        {
+          "id": "data_quality",
+          "from_level": 0.0,
+          "to_level": 0.3
+        },
+        {
+          "id": "data_visualisation",
+          "from_level": 0.0,
+          "to_level": 0.3
+        }
+      ],
+      "stated_duration": null,
+      "hours_basis": "provider_total",
+      "cost_myr": 70,
+      "cost_type": "low_cost",
+      "cost_note": "e-LATiH course page: RM70.00 (2026-10-23)",
+      "hrd_scheme": null,
+      "claim_evidence_url": null,
+      "eligibility": {},
+      "platform": "e_latih",
+      "format": [
+        "videos"
+      ],
+      "delivery": "self_paced",
+      "next_dates": [],
+      "certificate": true,
+      "language": [
+        "en"
+      ],
+      "tags": [],
+      "status": "draft",
+      "last_verified": "2026-10-23",
+      "verified_by": "claude_code (draft: page opened 2026-10-23; needs a team review)",
+      "source_notes": null,
+      "verification_note": "Draft from 2026-10-23 research: page opened and the facts above quoted from it, but a team member has not reviewed it yet (docs/resource_review.md)."
+    },
+    {
+      "id": "course_56",
+      "title": "Using AI to Automate Repetitive Tasks and Save Time for Manufacturers",
+      "provider": "Digirity via e-LATiH",
+      "url": "https://elatih.hrdcorp.gov.my/courses-details/using-ai-to-automate-repetitive-tasks-and-save-time-for-manufacturers",
+      "hours": 1.6,
+      "cost": "RM70",
+      "skills": [
+        "process_automation",
+        "ai_assistants"
+      ],
+      "prerequisites": [],
+      "retrieved": "2026-10-23",
+      "verified": false,
+      "hrd_claimable": false,
+      "hours_source": "page: Duration 1 Hour 38 Min, 15 lessons",
+      "cost_source": "e-LATiH course page: RM70.00 (2026-10-23)",
+      "skill_steps": [
+        {
+          "id": "process_automation",
+          "from_level": 0.0,
+          "to_level": 0.3
+        },
+        {
+          "id": "ai_assistants",
+          "from_level": 0.0,
+          "to_level": 0.3
+        }
+      ],
+      "stated_duration": null,
+      "hours_basis": "provider_total",
+      "cost_myr": 70,
+      "cost_type": "low_cost",
+      "cost_note": "e-LATiH course page: RM70.00 (2026-10-23)",
+      "hrd_scheme": null,
+      "claim_evidence_url": null,
+      "eligibility": {},
+      "platform": "e_latih",
+      "format": [
+        "videos"
+      ],
+      "delivery": "self_paced",
+      "next_dates": [],
+      "certificate": true,
+      "language": [
+        "en"
+      ],
+      "tags": [],
+      "status": "draft",
+      "last_verified": "2026-10-23",
+      "verified_by": "claude_code (draft: page opened 2026-10-23; needs a team review)",
+      "source_notes": null,
+      "verification_note": "Draft from 2026-10-23 research: page opened and the facts above quoted from it, but a team member has not reviewed it yet (docs/resource_review.md)."
+    },
+    {
+      "id": "course_57",
+      "title": "Managing Difficult Customers",
+      "provider": "SCICOM Academy via e-LATiH",
+      "url": "https://elatih.hrdcorp.gov.my/courses-details/managing-difficult-customers",
+      "hours": 2,
+      "cost": "RM230",
+      "skills": [
+        "customer_service"
+      ],
+      "prerequisites": [],
+      "retrieved": "2026-10-23",
+      "verified": false,
+      "hrd_claimable": false,
+      "hours_source": "page: Duration 2 Hours, beginner",
+      "cost_source": "e-LATiH course page: RM230.00 (2026-10-23)",
+      "skill_steps": [
+        {
+          "id": "customer_service",
+          "from_level": 0.0,
+          "to_level": 0.3
+        }
+      ],
+      "stated_duration": null,
+      "hours_basis": "provider_total",
+      "cost_myr": 230,
+      "cost_type": "low_cost",
+      "cost_note": "e-LATiH course page: RM230.00 (2026-10-23)",
+      "hrd_scheme": null,
+      "claim_evidence_url": null,
+      "eligibility": {},
+      "platform": "e_latih",
+      "format": [
+        "videos",
+        "reading"
+      ],
+      "delivery": "self_paced",
+      "next_dates": [],
+      "certificate": true,
+      "language": [
+        "en"
+      ],
+      "tags": [],
+      "status": "draft",
+      "last_verified": "2026-10-23",
+      "verified_by": "claude_code (draft: page opened 2026-10-23; needs a team review)",
+      "source_notes": null,
+      "verification_note": "Draft from 2026-10-23 research: page opened and the facts above quoted from it, but a team member has not reviewed it yet (docs/resource_review.md)."
+    },
+    {
+      "id": "course_58",
+      "title": "Generative AI & Prompt Engineering Training",
+      "provider": "AITraining2U",
+      "url": "https://www.aitraining2u.com/generative-ai-prompt-engineering-malaysia.html",
+      "hours": 14,
+      "cost": "see cost_note",
+      "skills": [
+        "ai_assistants",
+        "llms",
+        "ai_output_review"
+      ],
+      "prerequisites": [],
+      "retrieved": "2026-10-23",
+      "verified": false,
+      "hrd_claimable": true,
+      "hours_source": "estimate: page says a hands-on 2-day workshop (2 x 7 h)",
+      "cost_source": "Price not stated on the page (2026-10-23)",
+      "skill_steps": [
+        {
+          "id": "ai_assistants",
+          "from_level": 0.0,
+          "to_level": 0.7
+        },
+        {
+          "id": "llms",
+          "from_level": 0.0,
+          "to_level": 0.3
+        },
+        {
+          "id": "ai_output_review",
+          "from_level": 0.0,
+          "to_level": 0.3
+        }
+      ],
+      "stated_duration": null,
+      "hours_basis": "team_estimate",
+      "cost_myr": null,
+      "cost_type": "hrd_claimable",
+      "cost_note": "Price not stated on the page (2026-10-23)",
+      "hrd_scheme": "HRD Corp Claimable Courses (SBL-KHAS)",
+      "claim_evidence_url": "https://www.aitraining2u.com/generative-ai-prompt-engineering-malaysia.html",
+      "eligibility": {},
+      "platform": "hrd_provider",
+      "format": [
+        "hands_on",
+        "mentor"
+      ],
+      "delivery": "scheduled",
+      "next_dates": [],
+      "certificate": null,
+      "language": [
+        "en"
+      ],
+      "tags": [],
+      "status": "draft",
+      "last_verified": "2026-10-23",
+      "verified_by": "claude_code (draft: page opened 2026-10-23; needs a team review)",
+      "source_notes": "Page: 'claimable under the SBL-Khas scheme for eligible Malaysian employers' (the provider's own statement, not an HRD Corp listing). Delivered in Kuala Lumpur or in-house; no dates published.",
+      "verification_note": "Draft from 2026-10-23 research: page opened and the facts above quoted from it, but a team member has not reviewed it yet (docs/resource_review.md)."
+    },
+    {
+      "id": "course_59",
+      "title": "AI Data Analytics Training (Power BI, Looker Studio, Python)",
+      "provider": "AITraining2U",
+      "url": "https://www.aitraining2u.com/aianalytics.html",
+      "hours": 14,
+      "cost": "RM3456",
+      "skills": [
+        "data_visualisation",
+        "python",
+        "sql_basics"
+      ],
+      "prerequisites": [],
+      "retrieved": "2026-10-23",
+      "verified": false,
+      "hrd_claimable": true,
+      "hours_source": "estimate: page says 2 days in person (2 x 7 h)",
+      "cost_source": "Page: self-funded RM3,200 + 8% SST (RM3,456); HRDC-claimable tier RM3,500 + 8% SST (2026-10-23)",
+      "skill_steps": [
+        {
+          "id": "data_visualisation",
+          "from_level": 0.0,
+          "to_level": 0.3
+        },
+        {
+          "id": "python",
+          "from_level": 0.0,
+          "to_level": 0.3
+        },
+        {
+          "id": "sql_basics",
+          "from_level": 0.0,
+          "to_level": 0.3
+        }
+      ],
+      "stated_duration": null,
+      "hours_basis": "team_estimate",
+      "cost_myr": 3456,
+      "cost_type": "hrd_claimable",
+      "cost_note": "Page: self-funded RM3,200 + 8% SST (RM3,456); HRDC-claimable tier RM3,500 + 8% SST (2026-10-23)",
+      "hrd_scheme": "HRD Corp Claimable Courses (SBL-KHAS)",
+      "claim_evidence_url": "https://www.aitraining2u.com/aianalytics.html",
+      "eligibility": {},
+      "platform": "hrd_provider",
+      "format": [
+        "hands_on",
+        "mentor"
+      ],
+      "delivery": "scheduled",
+      "next_dates": [],
+      "certificate": true,
+      "language": [
+        "en"
+      ],
+      "tags": [],
+      "status": "draft",
+      "last_verified": "2026-10-23",
+      "verified_by": "claude_code (draft: page opened 2026-10-23; needs a team review)",
+      "source_notes": "Page: '100% HRDC claimable under the SBL-KHAS scheme for eligible Malaysian companies' (the provider's own statement). In person at WORQ Subang; dates to be confirmed for the 2026 intake. Certificate listed for the self-funded tier.",
+      "verification_note": "Draft from 2026-10-23 research: page opened and the facts above quoted from it, but a team member has not reviewed it yet (docs/resource_review.md)."
     }
   ]
 }

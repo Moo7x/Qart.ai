@@ -35,8 +35,14 @@ def test_course_is_complete_and_honest(course: Course) -> None:
         assert course.hrd_scheme
     if course.cost_type == "free":
         assert course.cost_myr == 0 and course.cost_note  # free only where a source says so
-    if course.cost_myr is None:
-        assert course.cost_type in {"unknown", "hrd_claimable"}
+    if (
+        course.cost_myr is None
+    ):  # no listed price: never counted as free for anyone outside a scheme
+        assert course.cost_type in {"unknown", "hrd_claimable", "free_if_eligible"}
+    if course.cost_type == "free_if_eligible":
+        assert course.eligibility.malaysian_only or course.eligibility.max_age is not None
+    if course.status == "draft":
+        assert course.verified is False  # drafts are never in search or the demo plan
     assert course.format and course.language
     assert set(course.prerequisites) <= set(CAT.courses)
     if course.status == "verified":

@@ -31,4 +31,4 @@ Domain 1 must-have 4 asks for an ordered plan with time, using free or low-cost 
 
 ## 5. Limits
 - Most checked courses are short modules, so they only reach "heard of it".
-- 10 core skills have no verified course yet (the test warning lists them); B3 drafts them.
+- 10 core skills have no verified course yet (the test warning lists them). 33 drafts from 2026-10-23 cover them; they are listed for review in `docs/resource_review.md`.
