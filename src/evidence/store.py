@@ -72,6 +72,53 @@ lock_table = Table(
 )
 
 
+source_state_table = Table(
+    "source_state",
+    metadata,
+    Column("source_id", String(64), primary_key=True),
+    Column("key", String(64), primary_key=True),
+    Column("value", Text, nullable=False),
+)
+
+
+class DbSourceState:
+    """A collector's remembered values, written only when that source's run succeeds."""
+
+    def __init__(self, engine: Engine, source_id: str) -> None:
+        self.engine = engine
+        self.source_id = source_id
+        self.pending: dict[str, str] = {}
+
+    def get(self, key: str) -> str | None:
+        if key in self.pending:
+            return self.pending[key]
+        stmt = select(source_state_table.c.value).where(
+            source_state_table.c.source_id == self.source_id, source_state_table.c.key == key
+        )
+        with self.engine.connect() as conn:
+            value = conn.execute(stmt).scalar_one_or_none()
+        return None if value is None else str(value)
+
+    def set(self, key: str, value: str) -> None:
+        self.pending[key] = value
+
+    def commit(self) -> None:
+        with self.engine.begin() as conn:
+            for key, value in self.pending.items():
+                where = (
+                    source_state_table.c.source_id == self.source_id,
+                    source_state_table.c.key == key,
+                )
+                changed = conn.execute(update(source_state_table).where(*where).values(value=value))
+                if changed.rowcount == 0:
+                    conn.execute(
+                        insert(source_state_table).values(
+                            source_id=self.source_id, key=key, value=value
+                        )
+                    )
+        self.pending.clear()
+
+
 @dataclass(frozen=True)
 class Observation:
     """One dated fact from one source, with the passage it came from."""
