@@ -1,0 +1,86 @@
+# Facts read by hand from TalentCorp (2024), "Impact Study of AI, Digital and Green Economy on the
+# Malaysian Workforce: Global Business Services" (PDF, 63 pages of two-page spreads).
+# The study is "all rights reserved": we record facts with their pages and reproduce no text.
+# Each fact names the PDF page (1-based) and the printed page numbers on that spread.
+# tests/test_talentcorp.py checks every name against its page when the PDF is present locally.
+version: talentcorp_2024/1
+extracted: "2026-10-23"
+document: gbs_impact_study_vol2.pdf
+published: "2024"
+
+study_counts:  # PDF page 5, printed pp. 8–9 (executive summary)
+  pdf_page: 5
+  printed: "8–9"
+  roles_assessed: 80
+  high_impact: 18
+  medium_impact: 49
+  low_impact: 8
+  emerging_roles: 5
+  in_demand_skills: 16
+
+# Finance & Accounting job cluster: PDF page 22 (printed pp. 42–43) lists the 24 roles; impact
+# levels are from "Overview of Roles by Impact Level", PDF page 26 (printed pp. 50–51).
+finance_accounting_roles:
+  cluster_pdf_page: 22
+  impact_pdf_page: 26
+  high:
+    - Financial Analyst
+    - Accounts Payable (AP) Analyst
+    - Accounts Receivable (AR) Analyst
+    - Invoice Processing Administrator
+    - Vendor Master Data Administrator
+    - Payment Processing Analyst
+    - Order Management Analyst
+    - Billing Analyst
+    - Credit Analyst
+    - Cash Application Analyst
+    - Master Data Management Analyst
+  medium:
+    - Budget Analyst
+    - Cost Accountant
+    - Internal Auditor
+    - Accounting Manager
+    - Finance Manager
+    - Fixed Assets Accountant
+    - General Ledger (GL) Accountant
+    - Finance Systems Analyst
+    - PTP Reporting Analyst  # listed on p. 22 as "Procure-to-Pay (P2P) Reporting Analyst"
+    - Dispute Resolution Specialist
+    - O2C Reporting Analyst
+  low:
+    - Tax Analyst
+  emerging:
+    - Design Ethicist and Product Philosopher
+
+# "This impact study has identified 16 in-demand skills": PDF page 25 (printed pp. 48–49).
+# A later page lists a different set of 16 under a similar heading; we use this explicit list.
+in_demand_skills:
+  pdf_page: 25
+  ai_digital:
+    - Big Data Analytics
+    - Application Integration
+    - Data Management
+    - Vulnerability Assessment and Penetration Testing
+    - Data Validation
+    - Structured Query Language (SQL)
+    - System Performance Management
+    - Network and Systems Administration
+  green:
+    - Sustainable Business Practices
+    - Green IT Practices
+    - Green Procurement Policies and Standards
+    - Green Asset Management
+    - Environment, Health, and Safety
+    - Eco-Design Principles
+    - Green Auditing
+    - Life Cycle Assessment
+
+# "5 Emerging Roles Observed": PDF page 26 (printed pp. 50–51).
+emerging_roles:
+  pdf_page: 26
+  roles:
+    - AI and Machine Learning Specialist
+    - Bot Trainer
+    - Design Ethicist & Product Philosopher
+    - Prompt Injection Engineer
+    - Data Steward
