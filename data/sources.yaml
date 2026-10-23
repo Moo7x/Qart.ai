@@ -70,3 +70,20 @@
   shows: Expert-assessed impact level per GBS role, in-demand skills and emerging roles in Malaysia
   does_not_show: A live trend, vacancy counts, or impact caused by AI alone (the study combines AI, digital and green drivers)
   notes: Extracted once by hand into data/packs/gbs_fa/talentcorp_2024.yaml; each fact carries its page.
+
+- id: onet_database
+  name: O*NET Database · task statements and importance
+  publisher: U.S. Department of Labor, Employment and Training Administration (USDOL/ETA)
+  family: occupation_tasks
+  url: https://www.onetcenter.org/database.html
+  docs_url: https://www.onetcenter.org/database.html
+  terms: CC BY 4.0
+  terms_url: https://www.onetcenter.org/license_db.html
+  terms_checked: "2026-10-23"
+  attribution: "This page includes information from the O*NET 31.0 Database by the U.S. Department of Labor, Employment and Training Administration (USDOL/ETA). Used under the CC BY 4.0 license. O*NET® is a trademark of USDOL/ETA."
+  tier: A
+  cadence: about twice a year
+  collector: onet
+  shows: The tasks of a US occupation, worded by O*NET, with how important incumbents rate each task
+  does_not_show: Malaysian job content, how often a task is done in GBS centres, or whether AI performs it
+  notes: Only tasks linked in data/packs/gbs_fa/tasks.yaml are kept. The links are a declared mapping reviewed by the team.

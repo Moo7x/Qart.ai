@@ -59,6 +59,7 @@ def all_fakes() -> dict[str, Collect]:
         "dosm_jmi": fake("dosm_job_market_insights", 2.0),
         "aei": fake("anthropic_economic_index", 3.0),
         "talentcorp": fake("talentcorp_gbs_2024", 4.0),
+        "onet": fake("onet_database", 5.0),
     }
 
 
@@ -68,7 +69,7 @@ def test_second_identical_run_is_no_change(
     monkeypatch.setattr(pipeline, "COLLECTORS", all_fakes())
     first = pipeline.run_pipeline(engine, "manual", offline, retry_pause=0)
     second = pipeline.run_pipeline(engine, "schedule", offline, retry_pause=0)
-    assert (first.status, first.new_observations) == ("changed", 4)
+    assert (first.status, first.new_observations) == ("changed", 5)
     assert (second.status, second.new_observations) == ("no change", 0)
     assert [r["status"] for r in list_runs(engine, 5)] == ["no change", "changed"]
 
@@ -85,7 +86,7 @@ def test_failing_source_is_retried_logged_and_others_still_stored(
     assert failed["status"] == "failed"
     assert failed["attempts"] == pipeline.MAX_ATTEMPTS
     assert "ConnectError" in failed["error"]
-    assert len(query_observations(engine)) == 3
+    assert len(query_observations(engine)) == 4  # the other four sources
 
 
 def test_run_is_skipped_while_another_holds_the_lock(
