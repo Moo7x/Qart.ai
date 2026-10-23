@@ -26,6 +26,7 @@ from src import params
 from src.changes.service import refresh_proposals
 from src.collectors import aei, dosm_jmi, dosm_wages, ilo, mycol, onet, talentcorp
 from src.collectors.base import Collect
+from src.evidence.models import record_versions
 from src.evidence.registry import registry
 from src.evidence.store import (
     DbSourceState,
@@ -178,6 +179,19 @@ def _run_all(
             results.append(_run_source(engine, client, source.id, collect, run_id, retry_pause))
     status = overall_status(results)
     new_total = sum(r["new"] for r in results)
+    # Re-score the trend backtest on all data so far; logged in the run, never its status.
+    try:
+        results.append(record_versions(engine, run_id))
+    except Exception as exc:  # noqa: BLE001  a model step error must not lose the collected data
+        results.append(
+            {
+                "source_id": "trend_models",
+                "status": "failed",
+                "fetched": 0,
+                "new": 0,
+                "error": f"{type(exc).__name__}: {exc}"[:300],
+            }
+        )
     # Also retry publication after a previous run stored evidence but failed before publication.
     refresh_proposals(engine, previous_cutoff, run_id)
     finish_run(engine, run_id, status, new_total, results)

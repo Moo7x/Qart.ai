@@ -10,6 +10,7 @@ from sqlalchemy import Engine
 
 from src.config import Settings
 from src.evidence import measures
+from src.evidence.models import history
 from src.evidence.registry import registry
 from src.evidence.signals import Signal, build_signals
 from src.evidence.store import list_runs, query_observations
@@ -143,6 +144,12 @@ def backtest(engine: Engine = Depends(get_engine)) -> list[BacktestEntry]:
             )
         )
     return entries
+
+
+@router.get("/pipeline/models")
+def model_versions(engine: Engine = Depends(get_engine)) -> list[dict[str, Any]]:
+    """Every stored trend-model version with its backtest errors, oldest first per group."""
+    return history(engine)
 
 
 @router.post("/pipeline/run", status_code=202)
