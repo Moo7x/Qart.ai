@@ -4,16 +4,15 @@ import { useApi } from '../api'
 import { ScenarioSwitch, SdgTag } from '../components/journey'
 import { Loading, Problem } from '../components/ui'
 import { useJourney } from '../state'
-import type { PathwayResponse } from '../types'
+import type { PathwayResponse, Scenario } from '../types'
 import { NeedProfile } from './Roles'
 
 const MINUTES_PER_HOUR = 60
 // Progress is a convenience kept in this browser; it does not change scores.
-const DONE_KEY = 'qart.done'
-
-function readDone(): string[] {
+function readDone(key: string): string[] {
   try {
-    return JSON.parse(window.localStorage.getItem(DONE_KEY) ?? '[]') as string[]
+    const saved: unknown = JSON.parse(window.localStorage.getItem(key) ?? '[]')
+    return Array.isArray(saved) ? saved.filter((id): id is string => typeof id === 'string') : []
   } catch {
     return []
   }
@@ -21,15 +20,21 @@ function readDone(): string[] {
 
 export function Pathway() {
   const { profileId, scenario } = useJourney()
-  const path = useApi<PathwayResponse>(profileId ? `/api/profiles/${profileId}/pathway?scenario=${scenario}` : null)
-  const [done, setDone] = useState<string[]>(readDone)
   if (!profileId) return <NeedProfile />
+  return <ProfilePathway key={profileId} profileId={profileId} scenario={scenario} />
+}
+
+function ProfilePathway({ profileId, scenario }: { profileId: string; scenario: Scenario }) {
+  const path = useApi<PathwayResponse>(`/api/profiles/${profileId}/pathway?scenario=${scenario}`)
+  // Never reuse another person's checkboxes when switching synthetic demo profiles.
+  const doneKey = `qart.done.${profileId}`
+  const [done, setDone] = useState<string[]>(() => readDone(doneKey))
 
   function toggle(courseId: string) {
     const next = done.includes(courseId) ? done.filter((d) => d !== courseId) : [...done, courseId]
     setDone(next)
     try {
-      window.localStorage.setItem(DONE_KEY, JSON.stringify(next))
+      window.localStorage.setItem(doneKey, JSON.stringify(next))
     } catch {
       // Not stored: progress shows until the page is closed.
     }
@@ -92,7 +97,7 @@ export function Pathway() {
                       <span className="text-[13px] text-graphite">{step.course.provider}</span>
                       {step.gains.length > 0 ? (
                         <div className="flex flex-wrap gap-x-4 gap-y-1 text-[13px]">
-                          <span className="cap">Raises</span>
+                          <span className="cap">Projected levels · assumption</span>
                           {step.gains.map((g) => (
                             <span key={g.skill}>{g.skill_name} {g.before} → {g.after}</span>
                           ))}
