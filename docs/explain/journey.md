@@ -17,6 +17,14 @@ prerequisites once and schedules at the weekly-hours budget. Duration/level rule
 hypothetical gains, not measured learning outcomes. Some gaps have no verified free resource.
 `src/journey/store.py` persists claims and destination, not the full CV or contact fields.
 
+**Fairness.** `tests/test_fairness.py` runs three synthetic versions of one CV that differ only
+in name, gender, religion, race, date of birth, marital status and contact details. It checks
+that the scrubbed text, the exact messages the language model would receive, the keyword
+fallback and the ranked roles, gaps and pathways in both scenarios are identical. The profile
+has no protected fields, so none can reach matching later. Limit: only labelled lines and the
+name line are removed; a protected fact written inside a sentence ("as a mother of two") stays
+in the text the model reads.
+
 **Where.** `src/api/journey.py`: intake, pack, profile, matches, destination, pathway and future
 routes. `web/src/pages/{Onboarding,Roles,Pathway,Future}.tsx` consume the real API. Pathway
 checkboxes are self-reported completion scoped to one profile in this browser; they do not alter
