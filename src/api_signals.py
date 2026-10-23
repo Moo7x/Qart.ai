@@ -4,6 +4,8 @@ app works offline; refresh with scripts/fetch_signals.py.
 GET /api/signals/market-pulse          Indeed AI Tracker, monthly AI share of postings
 GET /api/signals/skills                HN "Who is hiring?" skill signals
 GET /api/signals/for-user/{user_id}    the person's own skills against those signals
+GET /api/signals/ai-trend               the AI trend chart: job boards or Indeed (one loader)
+GET /api/signals/hiring-now             latest week on the job boards: skills, families
 
 Every response carries the snapshot's source, licence, attribution, data_as_of, fetched_at,
 caveats, plus age_days and stale (data older than stale_after_days). These are trend signals,
@@ -23,6 +25,7 @@ from src.engine.catalogue import default_catalogue
 from src.engine.questionnaire import held_skills
 from src.signals.config import default_config
 from src.signals.pipeline import MARKET_PULSE, SKILL_SIGNALS, SNAPSHOT_DIR
+from src.signals.trends import load_ai_trend, load_hiring_now
 
 router = APIRouter(prefix="/api/signals", tags=["signals"])
 
@@ -50,6 +53,28 @@ def freshness(data_as_of: str, today: date | None = None) -> dict[str, Any]:
 @router.get("/market-pulse")
 def market_pulse() -> dict[str, Any]:
     return read_snapshot(MARKET_PULSE)
+
+
+@router.get("/ai-trend")
+def ai_trend(region: str | None = None, granularity: str = "week") -> dict[str, Any]:
+    """The AI trend chart's data: job boards for the region once there is enough history,
+    otherwise the Indeed tracker plus the latest job-board figure (src/signals/trends.py)."""
+    if granularity not in ("week", "month"):
+        raise HTTPException(status_code=422, detail="granularity must be week or month")
+    trend = load_ai_trend(region, granularity)
+    as_of = (trend.get("meta") or {}).get("data_as_of") or ""
+    return {**trend, **freshness(as_of)}
+
+
+@router.get("/hiring-now")
+def hiring_now(region: str = "malaysia_singapore") -> dict[str, Any]:
+    """Latest-week skill shares and AI share per role family on the job boards, for a region."""
+    view = load_hiring_now(region)
+    if view is None:
+        raise HTTPException(
+            status_code=404, detail="no job-board snapshot yet; run scripts/fetch_jobs.py"
+        )
+    return {**view, **freshness(view["meta"].get("data_as_of") or "")}
 
 
 @router.get("/skills")
