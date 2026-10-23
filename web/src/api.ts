@@ -25,7 +25,7 @@ import type {
   Profile,
   Recommendation,
   SkillState,
-  Snapshot, Questionnaire, RankingResponse, ScenarioName } from './types';
+  Snapshot, Questionnaire, RankingResponse, ScenarioName, AiTrend, HiringNow } from './types';
 
 const USE_MOCKS = (import.meta.env.VITE_USE_MOCKS ?? 'false') === 'true';
 const BASE = import.meta.env.VITE_API_URL ?? '';
@@ -475,6 +475,18 @@ export async function getSkillSignals(): Promise<SkillSignalsSnapshot> {
 export async function getMarketPulse(): Promise<MarketPulseSnapshot> {
   if (USE_MOCKS) return NO_MOCK_SIGNALS();
   const { data } = await axios.get<MarketPulseSnapshot>(`${BASE}/api/signals/market-pulse`);
+  return data;
+}
+
+export async function getAiTrend(region?: string, granularity: 'week' | 'month' = 'week'): Promise<AiTrend> {
+  if (USE_MOCKS) return NO_MOCK_SIGNALS();
+  const { data } = await axios.get<AiTrend>(`${BASE}/api/signals/ai-trend`, { params: { region, granularity } });
+  return data;
+}
+
+export async function getHiringNow(region = 'malaysia_singapore'): Promise<HiringNow> {
+  if (USE_MOCKS) return NO_MOCK_SIGNALS();
+  const { data } = await axios.get<HiringNow>(`${BASE}/api/signals/hiring-now`, { params: { region } });
   return data;
 }
 

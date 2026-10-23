@@ -1,12 +1,13 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowDownRight, ArrowRight, ArrowUpRight, DatabaseZap, ExternalLink, Lightbulb, TrendingDown, TrendingUp } from 'lucide-react'
-import { getMarketPulse, getSkillSignals, getSnapshotDiff, getSnapshots, getUserSignals, ingestNextSnapshot } from '../api'
+import { getSkillSignals, getSnapshotDiff, getSnapshots, getUserSignals, ingestNextSnapshot } from '../api'
+import HiringNow from '../components/HiringNow'
 import MarketPulse from '../components/MarketPulse'
 import SkillsRadar from '../components/SkillsRadar'
 import { useUserId } from '../persona'
 import { useReveal } from '../motion'
-import type { MarketPulseSnapshot, Signal, SkillSignalsSnapshot, Snapshot, SnapshotDiff, UserSignals } from '../types'
+import type { Signal, SkillSignalsSnapshot, Snapshot, SnapshotDiff, UserSignals } from '../types'
 import { btn, Card, EmptyState, Highlight, label, Loading, NextStepCard, PageHeader, ProvenanceTag, SectionTitle, StatTile, Tag } from '../ui'
 
 // AEI values are already percentages: usage_pct 0.30 = 0.30 % of the geography's conversations.
@@ -34,7 +35,6 @@ function byEntity(signals: Signal[]) {
 export default function Signals() {
   const userId = useUserId()
   const [skills, setSkills] = useState<SkillSignalsSnapshot | null>(null)
-  const [pulse, setPulse] = useState<MarketPulseSnapshot | null>(null)
   const [mine, setMine] = useState<UserSignals | null>(null)
   const [snapshots, setSnapshots] = useState<Snapshot[]>([])
   const [diff, setDiff] = useState<SnapshotDiff | null>(null)
@@ -54,7 +54,6 @@ export default function Signals() {
   // Radar snapshots: read from the server's saved files; a missing one just hides its section.
   useEffect(() => {
     getSkillSignals().then(setSkills).catch(() => setSkills(null))
-    getMarketPulse().then(setPulse).catch(() => setPulse(null))
     getUserSignals(userId).then(setMine).catch(() => setMine(null))
   }, [userId])
 
@@ -107,12 +106,11 @@ export default function Signals() {
         )}
       </section>
 
-      {pulse && (
-        <section data-reveal>
-          <SectionTitle>Market pulse</SectionTitle>
-          <MarketPulse snapshot={pulse} />
-        </section>
-      )}
+      <section data-reveal className="space-y-4">
+        <SectionTitle>Market pulse</SectionTitle>
+        <MarketPulse />
+        <HiringNow />
+      </section>
 
       <div data-reveal className="pt-2">
         <h2 className="text-[22px] leading-[1.27] font-semibold tracking-[-0.01em] text-ink">AI use in work like yours</h2>

@@ -39,16 +39,21 @@ export function formatChange(change: number | null): string {
 }
 
 /** "Source: … (licence) · data to … · refreshed … · link", the caveats, and a stale badge. */
-export function Provenance({ meta, extra }: { meta: SignalSnapshotMeta; extra?: string }) {
+export function Provenance({ meta, extra }: { meta: Omit<SignalSnapshotMeta, 'source_url' | 'age_days'> & { source_url?: string | null }; extra?: string }) {
   return (
     <div className="mt-3 space-y-1 text-xs text-graphite">
       <p className="flex flex-wrap items-center gap-x-1.5 gap-y-1">
         {meta.stale && <Tag tone="coral" icon={TriangleAlert}>Stale data</Tag>}
         <span>
-          Source: {meta.source} ({meta.license}) · data to {meta.data_as_of} · refreshed {meta.fetched_at.slice(0, 10)} ·{' '}
-          <a href={meta.source_url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-0.5 text-action-ink hover:underline">
-            link <ExternalLink size={10} aria-hidden="true" />
-          </a>
+          Source: {meta.source} ({meta.license}) · data to {meta.data_as_of} · refreshed {meta.fetched_at.slice(0, 10)}
+          {meta.source_url?.startsWith('http') && (
+            <>
+              {' · '}
+              <a href={meta.source_url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-0.5 text-action-ink hover:underline">
+                link <ExternalLink size={10} aria-hidden="true" />
+              </a>
+            </>
+          )}
         </span>
       </p>
       <p>{[...meta.caveats, extra].filter(Boolean).join(' ')}</p>

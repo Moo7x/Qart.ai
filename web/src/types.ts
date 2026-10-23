@@ -600,3 +600,29 @@ export interface RankingResponse {
   trend: { source: string; data_as_of: string; source_url: string | null; age_days: number | null; stale: boolean };
   note: string;
 }
+
+// GET /api/signals/ai-trend and /hiring-now (job boards + Indeed through one loader)
+export interface TrendMeta {
+  source: string; license: string; attribution: string; update_frequency: string;
+  data_as_of: string; fetched_at: string; caveats: string[];
+  first_snapshot?: string; coverage?: { companies: string[]; companies_failed: string[]; open_jobs_latest_run: number; jobs_ever_seen: number };
+  events?: { month: string; label: string; url: string; verified: boolean }[];
+}
+export interface AtsLatest { period: string; total: number; ai: number; share_pct: number | null; region: string; label: string; data_as_of: string }
+export interface AiTrend {
+  mode: 'ats' | 'indeed' | 'none';
+  region: string; region_label: string; granularity: 'week' | 'month';
+  points: { period: string; share_pct: number | null; total: number | null }[];
+  meta: TrendMeta | null;
+  ats_latest: AtsLatest | null;
+  fallback_reason: string | null;
+  options: { ats_regions: { id: string; label: string; periods_with_data: number }[]; indeed_countries: { id: string; label: string }[] };
+  age_days: number | null; stale: boolean;
+}
+export interface HiringNow {
+  region: string; region_label: string;
+  skills: { skill_id: string; name: string; mentions: number; total: number; share_pct: number | null }[];
+  families: { family: string; total: number; ai: number; share_pct: number | null }[];
+  meta: TrendMeta & { min_sample: number };
+  age_days: number | null; stale: boolean;
+}
