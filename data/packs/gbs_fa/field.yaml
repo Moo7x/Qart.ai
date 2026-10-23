@@ -18,6 +18,10 @@ soc_occupations:
   - {code: "43-3051.00", name: Payroll and Timekeeping Clerks}
   - {code: "43-3061.00", name: Procurement Clerks}
   - {code: "43-9021.00", name: Data Entry Keyers}
+  - {code: "43-4151.00", name: Order Clerks}
+  - {code: "15-1211.00", name: Computer Systems Analysts}
+  - {code: "13-1111.00", name: Management Analysts}
+  - {code: "13-1023.00", name: "Purchasing Agents, Except Wholesale, Retail, and Farm Products"}
 # DOSM job-ad releases name occupations in words; these are the ones followed for this field.
 dosm_job_ad_occupations:
   - Accountants and Auditors

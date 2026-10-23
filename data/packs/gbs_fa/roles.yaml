@@ -1,0 +1,224 @@
+# Roles in the GBS finance & accounting pack.
+#
+# Sources: TalentCorp (2024) GBS study. Impact levels: PDF p. 26. Career pathways for the highly
+# impacted roles: PDF pp. 38–47 (printed 74–93), which name "possible roles for transition within
+# the sector" and the skills that support them. Responsibility summaries are our own words.
+#
+# What is evidence and what is assumption:
+#   evidence   – role names, impact levels, transitions and skill-to-role links (page given)
+#   assumption – `core` skills of a destination role, chosen from its title and cluster;
+#                required levels and weights per tier (src/params.py, ROLE_TIER_*)
+#   crosswalk  – `soc` maps a role to the US SOC occupation the Economic Index reports on; a
+#                declared, reviewed choice, not a fact from either source
+#
+# Tiers in `requires`: core (the role's defining work), upskill (named by TalentCorp for this
+# destination), support (useful tools). `essential: true` marks requirements no scenario lowers.
+
+current_roles:
+  - id: financial_analyst
+    title: Financial Analyst
+    impact: high
+    page: 38
+    soc: "13-2051.00"
+    summary: Financial analysis and forecasting, financial reports, support for business decisions and compliance.
+    typical_skills: [financial_reporting, fpa, variance_analytics, erp, reporting]
+    transitions: [finance_systems_analyst, budget_analyst]
+    other_sectors: [Asset Investment Portfolio Engineer (Energy and Power), Market Research Senior Analyst (Wholesale and Retail Trade)]
+  - id: ap_analyst
+    title: Accounts Payable (AP) Analyst
+    impact: high
+    page: 39
+    soc: "43-3031.00"
+    summary: Processing invoices and expense reports, paying vendors on time, reconciling discrepancies.
+    typical_skills: [invoice_processing, reconciliation, erp, vendor_management, accounting_principles]
+    transitions: [cost_accountant, compliance_governance_specialist, fixed_assets_accountant]
+    other_sectors: []
+  - id: ar_analyst
+    title: Accounts Receivable (AR) Analyst
+    impact: high
+    page: 39
+    soc: "43-3031.00"
+    summary: Collecting customer payments, issuing invoices, applying payments and following up overdue accounts.
+    typical_skills: [credit_collections, cash_application, reconciliation, erp, stakeholder_management]
+    transitions: [cost_accountant, fixed_assets_accountant]
+    other_sectors: [Commercials & Billings Engineer (Energy and Power)]
+  - id: invoice_processing_administrator
+    title: Invoice Processing Administrator
+    impact: high
+    page: 40
+    soc: "43-3021.00"
+    summary: Entering, verifying and reconciling invoices and resolving discrepancies.
+    typical_skills: [invoice_processing, reconciliation, data_validation, erp]
+    transitions: [continuous_improvement_specialist, o2c_reporting_analyst]
+    other_sectors: [Commercials & Billings Engineer (Energy and Power)]
+  - id: vendor_master_data_administrator
+    title: Vendor Master Data Administrator
+    impact: high
+    page: 41
+    soc: "43-9021.00"
+    summary: Maintaining accurate vendor records in finance systems and resolving data discrepancies.
+    typical_skills: [data_management, data_validation, erp, vendor_management]
+    transitions: [finance_systems_analyst, procurement_analyst]
+    other_sectors: [Associate Database Support Engineer (ICT), Associate Data Centre Operations Engineer (ICT)]
+  - id: payment_processing_analyst
+    title: Payment Processing Analyst
+    impact: high
+    page: 42
+    soc: "43-3031.00"
+    summary: Executing payments on time, reconciling entries and keeping payment processes compliant and secure.
+    typical_skills: [reconciliation, invoice_processing, internal_controls, erp]
+    transitions: [p2p_reporting_analyst, compliance_governance_specialist]
+    other_sectors: [Commercials & Billings Engineer (Energy and Power)]
+  - id: order_management_analyst
+    title: Order Management Analyst
+    impact: high
+    page: 43
+    soc: "43-4151.00"
+    summary: Entering and managing customer orders, coordinating fulfilment and resolving order issues.
+    typical_skills: [erp, data_management, stakeholder_management, reporting]
+    transitions: [finance_systems_analyst, o2c_reporting_analyst]
+    other_sectors: [Logistics and Transportation Coordinator (Wholesale and Retail Trade), Sales Operations Assistant (Wholesale and Retail Trade)]
+  - id: billing_analyst
+    title: Billing Analyst
+    impact: high
+    page: 44
+    soc: "43-3021.00"
+    summary: Processing customer invoices, collecting payments, resolving billing discrepancies and analysing billing data.
+    typical_skills: [invoice_processing, credit_collections, reporting, erp]
+    transitions: [finance_systems_analyst, o2c_reporting_analyst]
+    other_sectors: [Commercials & Billings Engineer (Energy and Power)]
+  - id: credit_analyst
+    title: Credit Analyst
+    impact: high
+    page: 45
+    soc: "13-2041.00"
+    summary: Assessing customer creditworthiness, setting and monitoring credit limits and managing credit risk.
+    typical_skills: [credit_risk, financial_reporting, credit_collections, stakeholder_management]
+    transitions: [finance_systems_analyst, o2c_reporting_analyst]
+    other_sectors: [Commercials & Billings Engineer (Energy and Power), Market Research Senior Analyst (Wholesale and Retail Trade)]
+  - id: cash_application_analyst
+    title: Cash Application Analyst
+    impact: high
+    page: 46
+    soc: "43-3031.00"
+    summary: Applying incoming payments to customer accounts, reconciling cash receipts and keeping transaction records in the ERP.
+    typical_skills: [cash_application, reconciliation, credit_collections, erp]
+    transitions: [o2c_reporting_analyst, cost_accountant]
+    other_sectors: [Associate Business Analyst (ICT), Commercials & Billings Engineer (Energy and Power)]
+  - id: master_data_management_analyst
+    title: Master Data Management Analyst
+    impact: high
+    page: 47
+    soc: "15-2051.01"
+    summary: Keeping master data accurate across systems through data governance and data quality checks.
+    typical_skills: [data_management, data_validation, erp, stakeholder_management]
+    transitions: [finance_systems_analyst]
+    other_sectors: [Data Protection Executive (ICT), Associate Data Centre Operations Engineer (ICT)]
+
+destination_roles:
+  - id: o2c_reporting_analyst
+    title: Order-to-Cash (O2C) Reporting Analyst
+    impact: medium
+    soc: "15-2051.01"
+    requires:
+      - {skill: reporting, tier: core, essential: true}
+      - {skill: credit_collections, tier: core}
+      - {skill: big_data_analytics, tier: upskill, pages: [40, 46]}
+      - {skill: statistical_analytics, tier: upskill, pages: [40]}
+      - {skill: data_management, tier: upskill, pages: [43, 44]}
+      - {skill: systems_integration, tier: upskill, pages: [44]}
+      - {skill: business_environment_analytics, tier: upskill, pages: [45]}
+      - {skill: dashboards, tier: support}
+      - {skill: erp, tier: support}
+  - id: finance_systems_analyst
+    title: Finance Systems Analyst
+    impact: medium
+    soc: "15-1211.00"
+    requires:
+      - {skill: erp, tier: core, essential: true}
+      - {skill: accounting_principles, tier: core, essential: true}
+      - {skill: financial_systems, tier: upskill, pages: [38, 44]}
+      - {skill: advanced_technology_integration, tier: upskill, pages: [43, 45]}
+      - {skill: data_management, tier: upskill, pages: [43, 44]}
+      - {skill: system_performance, tier: upskill, pages: [41]}
+      - {skill: data_migration, tier: upskill, pages: [47]}
+      - {skill: digital_business_model, tier: upskill, pages: [38]}
+      - {skill: database_querying, tier: support}
+  - id: cost_accountant
+    title: Cost Accountant
+    impact: medium
+    soc: "13-2011.00"
+    requires:
+      - {skill: standard_costing, tier: core, essential: true}
+      - {skill: accounting_principles, tier: core, essential: true}
+      - {skill: variance_analytics, tier: core}
+      - {skill: big_data_analytics, tier: upskill, pages: [46]}
+      - {skill: energy_management, tier: upskill, pages: [39]}
+      - {skill: financial_reporting, tier: support}
+      - {skill: erp, tier: support}
+  - id: fixed_assets_accountant
+    title: Fixed Assets Accountant
+    impact: medium
+    soc: "13-2011.00"
+    requires:
+      - {skill: fixed_assets, tier: core, essential: true}
+      - {skill: accounting_principles, tier: core, essential: true}
+      - {skill: general_ledger, tier: core}
+      - {skill: green_asset_management, tier: upskill, pages: [39]}
+      - {skill: energy_management, tier: upskill, pages: [39]}
+      - {skill: reporting, tier: support}
+      - {skill: erp, tier: support}
+  - id: budget_analyst
+    title: Budget Analyst
+    impact: medium
+    soc: "13-2031.00"
+    requires:
+      - {skill: budget_management, tier: core, essential: true}
+      - {skill: fpa, tier: core, essential: true}
+      - {skill: variance_analytics, tier: core}
+      - {skill: esg, tier: upskill, pages: [38]}
+      - {skill: financial_reporting, tier: support}
+      - {skill: dashboards, tier: support}
+  - id: p2p_reporting_analyst
+    title: Procure-to-Pay (P2P) Reporting Analyst
+    impact: medium
+    soc: "15-2051.01"
+    requires:
+      - {skill: reporting, tier: core, essential: true}
+      - {skill: invoice_processing, tier: core}
+      - {skill: systems_integration, tier: upskill, pages: [42]}
+      - {skill: vendor_management, tier: support}
+      - {skill: dashboards, tier: support}
+      - {skill: erp, tier: support}
+  - id: compliance_governance_specialist
+    title: Compliance and Governance Specialist
+    impact: medium
+    soc: "13-2011.00"
+    requires:
+      - {skill: internal_controls, tier: core, essential: true}
+      - {skill: compliance_reporting, tier: core, essential: true}
+      - {skill: green_auditing, tier: upskill, pages: [39, 42]}
+      - {skill: ehs, tier: upskill, pages: [42]}
+      - {skill: stakeholder_management, tier: support}
+  - id: continuous_improvement_specialist
+    title: Continuous Improvement Specialist
+    impact: medium
+    soc: "13-1111.00"
+    requires:
+      - {skill: continuous_improvement, tier: core, essential: true}
+      - {skill: process_optimisation, tier: core}
+      - {skill: big_data_analytics, tier: upskill, pages: [40]}
+      - {skill: statistical_analytics, tier: upskill, pages: [40]}
+      - {skill: energy_management, tier: upskill, pages: [40]}
+      - {skill: process_automation, tier: support}
+      - {skill: stakeholder_management, tier: support}
+  - id: procurement_analyst
+    title: Procurement Analyst
+    impact: medium
+    soc: "13-1023.00"
+    requires:
+      - {skill: vendor_management, tier: core, essential: true}
+      - {skill: data_management, tier: core}
+      - {skill: green_procurement, tier: upskill, pages: [41]}
+      - {skill: reporting, tier: support}
+      - {skill: erp, tier: support}

@@ -1,0 +1,56 @@
+# Canonical skills for GBS finance & accounting.
+# Names follow TalentCorp (2024) "Skills Clusters and Skills", PDF p. 23 (printed 44–45) and
+# p. 24 (printed 46–47), or the career-pathway page that names the skill (PDF pp. 38–47).
+# kind: finance_core | data_digital | green | business
+# ai_role (declared assumption, see src/params.py SCENARIO_* for how it is used):
+#   routine    – transaction work where AI use is mostly automation-style (Economic Index shows
+#                ~45–52% automation-style conversations for the matching clerk occupations)
+#   complement – analysing, checking, integrating and governing data and systems: work that grows
+#                when routine steps are automated
+#   neutral    – neither
+- {id: reconciliation, name: Reconciliation Processes, kind: finance_core, ai_role: routine, page: 23}
+- {id: cash_application, name: Cash Application, kind: finance_core, ai_role: routine, page: 23}
+- {id: invoice_processing, name: Invoice Processing, kind: finance_core, ai_role: routine, page: 23}
+- {id: credit_collections, name: Credit and Collections Management, kind: finance_core, ai_role: routine, page: 23}
+- {id: general_ledger, name: General Ledger Accounting, kind: finance_core, ai_role: routine, page: 23}
+- {id: accounting_principles, name: Accounting Principles, kind: finance_core, ai_role: neutral, page: 23}
+- {id: financial_reporting, name: Financial Analysis and Reporting, kind: finance_core, ai_role: neutral, page: 23}
+- {id: fpa, name: "Financial Planning, Analysis and Forecasting", kind: finance_core, ai_role: complement, page: 23}
+- {id: variance_analytics, name: Variance Analytics, kind: finance_core, ai_role: complement, page: 23}
+- {id: standard_costing, name: Standard Costing, kind: finance_core, ai_role: neutral, page: 23}
+- {id: fixed_assets, name: Fixed Assets Management, kind: finance_core, ai_role: neutral, page: 23}
+- {id: financial_systems, name: Financial Systems Implementation, kind: data_digital, ai_role: complement, page: 23}
+- {id: budget_management, name: Budget Management, kind: business, ai_role: neutral, page: 23}
+- {id: erp, name: Enterprise Resource Planning (ERP), kind: data_digital, ai_role: neutral, page: 23}
+- {id: reporting, name: Reporting and Documentation, kind: business, ai_role: neutral, page: 23}
+- {id: dashboards, name: Dashboard Creation and Visualisation, kind: data_digital, ai_role: complement, page: 23}
+- {id: big_data_analytics, name: Big Data Analytics, kind: data_digital, ai_role: complement, page: 23}
+- {id: statistical_analytics, name: Statistical Analytics, kind: data_digital, ai_role: complement, page: 23}
+- {id: data_validation, name: Data Validation, kind: data_digital, ai_role: complement, page: 23}
+- {id: data_management, name: Data Management, kind: data_digital, ai_role: complement, page: 23}
+- {id: data_visualisation, name: Data Visualisation, kind: data_digital, ai_role: complement, page: 23}
+- {id: database_querying, name: Database Querying, kind: data_digital, ai_role: complement, page: 23}
+- {id: sql, name: Structured Query Language (SQL), kind: data_digital, ai_role: complement, page: 24}
+- {id: systems_integration, name: System Integration and Configuration, kind: data_digital, ai_role: complement, page: 24}
+- {id: system_performance, name: System Performance Management, kind: data_digital, ai_role: complement, page: 24}
+- {id: data_migration, name: Data Migration, kind: data_digital, ai_role: complement, page: 47}
+- {id: process_automation, name: Robotics and Automation Application, kind: data_digital, ai_role: complement, page: 23}
+- {id: prompt_engineering, name: Prompt Engineering, kind: data_digital, ai_role: complement, page: 23}
+- {id: continuous_improvement, name: Continuous Improvement, kind: business, ai_role: complement, page: 23}
+- {id: process_optimisation, name: Process Optimisation, kind: business, ai_role: complement, page: 24}
+- {id: internal_controls, name: Internal Controls Evaluation, kind: business, ai_role: complement, page: 24}
+- {id: credit_risk, name: Credit Risk Assessment, kind: finance_core, ai_role: complement, page: 24}
+- {id: compliance_reporting, name: Compliance Reporting, kind: business, ai_role: neutral, page: 24}
+- {id: stakeholder_management, name: Stakeholder Management, kind: business, ai_role: neutral, page: 23}
+- {id: vendor_management, name: Vendor Management, kind: business, ai_role: neutral, page: 23}
+- {id: business_environment_analytics, name: Business Environment Analytics, kind: data_digital, ai_role: complement, page: 45}
+- {id: advanced_technology_integration, name: Advanced Technology Integration, kind: data_digital, ai_role: complement, page: 43}
+- {id: digital_business_model, name: Digital Business Model Innovation, kind: data_digital, ai_role: complement, page: 38}
+- {id: it_asset_management, name: IT Asset Management, kind: data_digital, ai_role: neutral, page: 41}
+- {id: esg, name: Environment and Social Governance, kind: green, ai_role: neutral, page: 38}
+- {id: sustainable_business, name: Sustainable Business Practices, kind: green, ai_role: neutral, page: 23}
+- {id: green_asset_management, name: Green Asset Management, kind: green, ai_role: neutral, page: 23}
+- {id: green_auditing, name: Green Auditing, kind: green, ai_role: neutral, page: 24}
+- {id: energy_management, name: Energy Management and Audit, kind: green, ai_role: neutral, page: 39}
+- {id: green_procurement, name: Green Procurement Policies and Standards, kind: green, ai_role: neutral, page: 23}
+- {id: ehs, name: "Environment, Health and Safety", kind: green, ai_role: neutral, page: 23}
