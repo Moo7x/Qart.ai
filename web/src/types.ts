@@ -460,3 +460,79 @@ export interface PlaybookInfo {
   text: string;
   versions: string[];
 }
+
+// --- Future Skills Radar (GET /api/signals/*; snapshots only, trend signals, not forecasts) ---
+export interface SignalSnapshotMeta {
+  source: string;
+  source_url: string;
+  license: string;
+  attribution: string;
+  update_frequency: string;
+  data_as_of: string; // latest date in the data, never the fetch date
+  fetched_at: string;
+  caveats: string[];
+  age_days: number | null;
+  stale: boolean;
+}
+
+export type SignalLabel = 'rising' | 'stable' | 'cooling' | 'insufficient_data';
+
+export interface SignalPoint {
+  month: string;
+  mentions: number;
+  total_posts: number;
+  share: number;
+  index: number | null;
+  ma_short: number | null;
+  ma_long: number | null;
+}
+
+export interface SkillSignal {
+  id: string;
+  name: string;
+  category: string;
+  label: SignalLabel;
+  change_12m: number | null;
+  latest_sample_size: number;
+  latest_total_posts: number;
+  points: SignalPoint[];
+  profile_tools: string[];
+  catalogue_skills: string[];
+}
+
+export interface SkillSignalsSnapshot extends SignalSnapshotMeta {
+  months: string[];
+  params: { ma_short_months: number; ma_long_months: number; stale_after_days: number };
+  series: SkillSignal[];
+}
+
+export interface MarketPulseSnapshot extends SignalSnapshotMeta {
+  countries: string[];
+  default_country: string;
+  default_country_label: string;
+  covers_malaysia: boolean;
+  events: { month: string; label: string; url: string; verified: boolean }[];
+  series: { series: string; country: string; country_name: string; points: { month: string; share_pct: number }[] }[];
+}
+
+export interface UserSignalSkill {
+  id: string;
+  name: string;
+  label: SignalLabel;
+  change_12m: number | null;
+  latest_sample_size: number;
+  why: string;
+}
+
+export interface UserSignals {
+  user_id: string;
+  source: string;
+  attribution: string;
+  data_as_of: string;
+  stale: boolean;
+  user_skills: UserSignalSkill[];
+  user_skills_cooling: UserSignalSkill[];
+  rising_skills_not_in_profile: UserSignalSkill[];
+  no_market_data: string[];
+  note: string;
+}

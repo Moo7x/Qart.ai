@@ -5,8 +5,11 @@
 import axios from 'axios';
 import type {
   Case,
+  MarketPulseSnapshot,
   Role,
   SdgMap,
+  SkillSignalsSnapshot,
+  UserSignals,
   CompanionMessageResponse,
   CompanyAssumptions,
   DecisionResponse,
@@ -405,6 +408,22 @@ export async function getProfile(userId: string): Promise<Profile> {
 export async function getRoles(): Promise<Role[]> {
   if (USE_MOCKS) return [];
   const { data } = await axios.get<Role[]>(`${BASE}/api/roles`);
+  return data;
+}
+
+// Future Skills Radar: the server reads saved snapshots only (works offline).
+export async function getSkillSignals(): Promise<SkillSignalsSnapshot> {
+  const { data } = await axios.get<SkillSignalsSnapshot>(`${BASE}/api/signals/skills`);
+  return data;
+}
+
+export async function getMarketPulse(): Promise<MarketPulseSnapshot> {
+  const { data } = await axios.get<MarketPulseSnapshot>(`${BASE}/api/signals/market-pulse`);
+  return data;
+}
+
+export async function getUserSignals(userId: string): Promise<UserSignals> {
+  const { data } = await axios.get<UserSignals>(`${BASE}/api/signals/for-user/${userId}`);
   return data;
 }
 
