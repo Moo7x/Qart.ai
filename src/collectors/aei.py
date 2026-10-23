@@ -107,7 +107,10 @@ def collect(client: httpx.Client, state: SourceState) -> CollectorResult:
     if found is None:
         return CollectorResult([], note="no release in the monthly format was found")
     release, release_date, csv_path = found
-    if state.get(STATE_KEY) == release:
+    # Remember the release together with the occupations read from it: adding an occupation to
+    # the field profile must trigger a re-read of the same release.
+    seen_key = f"{release}|{','.join(sorted(field_profile().soc_codes()))}"
+    if state.get(STATE_KEY) == seen_key:
         return CollectorResult([], note=f"no new release since {release_date}")
     url = RESOLVE + csv_path
     local = local_copy(release, csv_path)
@@ -116,5 +119,5 @@ def collect(client: httpx.Client, state: SourceState) -> CollectorResult:
             observations = parse_rows(handle, release_date, url)
     else:
         observations = parse_rows(stream_lines(client, url), release_date, url)
-    state.set(STATE_KEY, release)
+    state.set(STATE_KEY, seen_key)
     return CollectorResult(observations, note=f"release {release_date}")

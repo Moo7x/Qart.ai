@@ -64,3 +64,16 @@ def test_collect_downloads_a_new_release_once(
     assert second.observations == []
     assert second.note == "no new release since 2026-06-26"
     assert len(downloads) == 1
+
+
+def test_new_occupations_in_the_field_trigger_a_re_read(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    monkeypatch.setattr(aei, "local_copy", lambda release, csv_path: tmp_path / "absent.csv")
+    downloads: list[str] = []
+    state = MemoryState()
+    with httpx.Client(transport=fake_hub(downloads)) as client:
+        aei.collect(client, state)
+        state.set(aei.STATE_KEY, "release_2026_06_26|13-2011.00")  # as if fewer codes were read
+        aei.collect(client, state)
+    assert len(downloads) == 2
