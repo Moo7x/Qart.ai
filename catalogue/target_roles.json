@@ -1,0 +1,773 @@
+{
+  "_about": "Role catalogue for the role ranking (QART_NEXT_STEPS §5.1). Team curation on public O*NET occupations: each role links to the O*NET occupation it is based on (codes checked on O*NET OnLine on the retrieved date). Where no O*NET occupation fits, code is TODO with candidates for the team to decide; codes are never invented. Skill weights: 3 = core, 1 = nice to have (DECLARED team judgement). required_level: the level that counts as 'has it' (0.7 = use sometimes). typical_industries use the questionnaire's industry labels. min_education is a soft flag only and never changes a score. Separate from roles.json, which the practice-evidence engine uses.",
+  "roles": [
+    {
+      "id": "finance_data_analyst",
+      "name": "Finance Data Analyst",
+      "family": "analytics",
+      "source": {
+        "dataset": "O*NET OnLine",
+        "code": "13-2051.00",
+        "title": "Financial and Investment Analysts",
+        "url": "https://www.onetonline.org/link/summary/13-2051.00",
+        "verified": true,
+        "retrieved": "2026-10-23"
+      },
+      "typical_industries": [
+        "Finance & accounting",
+        "Banking & insurance",
+        "Technology"
+      ],
+      "min_education": "bachelor",
+      "skills": [
+        {
+          "id": "spreadsheet_modelling",
+          "weight": 3
+        },
+        {
+          "id": "sql_basics",
+          "weight": 3
+        },
+        {
+          "id": "data_visualisation",
+          "weight": 3
+        },
+        {
+          "id": "financial_reporting",
+          "weight": 3
+        },
+        {
+          "id": "python",
+          "weight": 1
+        },
+        {
+          "id": "statistics_basics",
+          "weight": 1
+        },
+        {
+          "id": "variance_analysis",
+          "weight": 1
+        }
+      ],
+      "required_level": {
+        "default": 0.7
+      }
+    },
+    {
+      "id": "finance_automation_specialist",
+      "name": "Finance Automation (RPA) Specialist",
+      "family": "automation",
+      "source": {
+        "dataset": "O*NET OnLine",
+        "code": "TODO",
+        "title": null,
+        "url": null,
+        "verified": false,
+        "note": "O*NET has no RPA occupation; a keyword search for 'robotic process automation' returns only robotics trades.",
+        "candidates": [
+          "15-1211.00 Computer Systems Analysts"
+        ]
+      },
+      "typical_industries": [
+        "Finance & accounting",
+        "Banking & insurance",
+        "Technology"
+      ],
+      "min_education": "diploma",
+      "skills": [
+        {
+          "id": "process_automation",
+          "weight": 3
+        },
+        {
+          "id": "excel_automation",
+          "weight": 3
+        },
+        {
+          "id": "python",
+          "weight": 3
+        },
+        {
+          "id": "erp",
+          "weight": 3
+        },
+        {
+          "id": "sql_basics",
+          "weight": 1
+        },
+        {
+          "id": "ai_output_review",
+          "weight": 1
+        },
+        {
+          "id": "controls_design",
+          "weight": 1
+        }
+      ],
+      "required_level": {
+        "default": 0.7
+      }
+    },
+    {
+      "id": "fpa_analyst",
+      "name": "FP&A Analyst",
+      "family": "finance_ops",
+      "source": {
+        "dataset": "O*NET OnLine",
+        "code": "13-2031.00",
+        "title": "Budget Analysts",
+        "url": "https://www.onetonline.org/link/summary/13-2031.00",
+        "verified": true,
+        "retrieved": "2026-10-23"
+      },
+      "typical_industries": [
+        "Finance & accounting",
+        "Banking & insurance",
+        "Manufacturing & logistics",
+        "Retail & e-commerce"
+      ],
+      "min_education": "bachelor",
+      "skills": [
+        {
+          "id": "forecasting",
+          "weight": 3
+        },
+        {
+          "id": "variance_analysis",
+          "weight": 3
+        },
+        {
+          "id": "spreadsheet_modelling",
+          "weight": 3
+        },
+        {
+          "id": "financial_reporting",
+          "weight": 3
+        },
+        {
+          "id": "stakeholder_communication",
+          "weight": 1
+        },
+        {
+          "id": "data_visualisation",
+          "weight": 1
+        },
+        {
+          "id": "sql_basics",
+          "weight": 1
+        }
+      ],
+      "required_level": {
+        "default": 0.7
+      }
+    },
+    {
+      "id": "ai_accountant_controller",
+      "name": "AI-enabled Accountant / Controller",
+      "family": "finance_ops",
+      "source": {
+        "dataset": "O*NET OnLine",
+        "code": "13-2011.00",
+        "title": "Accountants and Auditors",
+        "url": "https://www.onetonline.org/link/summary/13-2011.00",
+        "verified": true,
+        "retrieved": "2026-10-23"
+      },
+      "typical_industries": [
+        "Finance & accounting",
+        "Banking & insurance",
+        "Retail & e-commerce",
+        "Manufacturing & logistics",
+        "Public sector"
+      ],
+      "min_education": "bachelor",
+      "skills": [
+        {
+          "id": "bookkeeping",
+          "weight": 3
+        },
+        {
+          "id": "financial_reporting",
+          "weight": 3
+        },
+        {
+          "id": "controls_design",
+          "weight": 3
+        },
+        {
+          "id": "ai_output_review",
+          "weight": 3
+        },
+        {
+          "id": "erp",
+          "weight": 1
+        },
+        {
+          "id": "ai_assistants",
+          "weight": 1
+        },
+        {
+          "id": "variance_analysis",
+          "weight": 1
+        }
+      ],
+      "required_level": {
+        "default": 0.7
+      }
+    },
+    {
+      "id": "risk_compliance_analyst",
+      "name": "Risk & Compliance Analyst (RegTech)",
+      "family": "risk_compliance",
+      "source": {
+        "dataset": "O*NET OnLine",
+        "code": "13-2054.00",
+        "title": "Financial Risk Specialists",
+        "url": "https://www.onetonline.org/link/summary/13-2054.00",
+        "verified": true,
+        "retrieved": "2026-10-23"
+      },
+      "typical_industries": [
+        "Banking & insurance",
+        "Finance & accounting",
+        "Healthcare",
+        "Public sector"
+      ],
+      "min_education": "bachelor",
+      "skills": [
+        {
+          "id": "controls_design",
+          "weight": 3
+        },
+        {
+          "id": "escalation_judgment",
+          "weight": 3
+        },
+        {
+          "id": "data_quality",
+          "weight": 3
+        },
+        {
+          "id": "financial_reporting",
+          "weight": 1
+        },
+        {
+          "id": "sql_basics",
+          "weight": 1
+        },
+        {
+          "id": "cybersecurity_basics",
+          "weight": 1
+        },
+        {
+          "id": "ai_output_review",
+          "weight": 1
+        }
+      ],
+      "required_level": {
+        "default": 0.7
+      }
+    },
+    {
+      "id": "business_analyst",
+      "name": "Business Analyst",
+      "family": "business",
+      "source": {
+        "dataset": "O*NET OnLine",
+        "code": "13-1111.00",
+        "title": "Management Analysts",
+        "url": "https://www.onetonline.org/link/summary/13-1111.00",
+        "verified": true,
+        "retrieved": "2026-10-23"
+      },
+      "typical_industries": [
+        "Finance & accounting",
+        "Banking & insurance",
+        "Technology",
+        "Retail & e-commerce",
+        "Public sector",
+        "Healthcare"
+      ],
+      "min_education": "bachelor",
+      "skills": [
+        {
+          "id": "business_analysis",
+          "weight": 3
+        },
+        {
+          "id": "stakeholder_communication",
+          "weight": 3
+        },
+        {
+          "id": "spreadsheet_modelling",
+          "weight": 3
+        },
+        {
+          "id": "data_visualisation",
+          "weight": 1
+        },
+        {
+          "id": "sql_basics",
+          "weight": 1
+        },
+        {
+          "id": "project_management",
+          "weight": 1
+        }
+      ],
+      "required_level": {
+        "default": 0.7
+      }
+    },
+    {
+      "id": "data_analyst",
+      "name": "Data Analyst",
+      "family": "analytics",
+      "source": {
+        "dataset": "O*NET OnLine",
+        "code": "15-2051.00",
+        "title": "Data Scientists",
+        "url": "https://www.onetonline.org/link/summary/15-2051.00",
+        "verified": true,
+        "retrieved": "2026-10-23"
+      },
+      "typical_industries": [
+        "Technology",
+        "Retail & e-commerce",
+        "Finance & accounting",
+        "Healthcare",
+        "Public sector"
+      ],
+      "min_education": "bachelor",
+      "skills": [
+        {
+          "id": "sql_basics",
+          "weight": 3
+        },
+        {
+          "id": "spreadsheet_modelling",
+          "weight": 3
+        },
+        {
+          "id": "data_visualisation",
+          "weight": 3
+        },
+        {
+          "id": "statistics_basics",
+          "weight": 3
+        },
+        {
+          "id": "python",
+          "weight": 1
+        },
+        {
+          "id": "data_quality",
+          "weight": 1
+        }
+      ],
+      "required_level": {
+        "default": 0.7
+      }
+    },
+    {
+      "id": "bi_developer",
+      "name": "BI Developer",
+      "family": "analytics",
+      "source": {
+        "dataset": "O*NET OnLine",
+        "code": "15-2051.01",
+        "title": "Business Intelligence Analysts",
+        "url": "https://www.onetonline.org/link/summary/15-2051.01",
+        "verified": true,
+        "retrieved": "2026-10-23"
+      },
+      "typical_industries": [
+        "Technology",
+        "Finance & accounting",
+        "Retail & e-commerce",
+        "Manufacturing & logistics"
+      ],
+      "min_education": "bachelor",
+      "skills": [
+        {
+          "id": "data_visualisation",
+          "weight": 3
+        },
+        {
+          "id": "sql_basics",
+          "weight": 3
+        },
+        {
+          "id": "data_quality",
+          "weight": 3
+        },
+        {
+          "id": "spreadsheet_modelling",
+          "weight": 1
+        },
+        {
+          "id": "python",
+          "weight": 1
+        },
+        {
+          "id": "business_analysis",
+          "weight": 1
+        }
+      ],
+      "required_level": {
+        "default": 0.7
+      }
+    },
+    {
+      "id": "data_engineer",
+      "name": "Data Engineer",
+      "family": "data_engineering",
+      "source": {
+        "dataset": "O*NET OnLine",
+        "code": "15-1243.01",
+        "title": "Data Warehousing Specialists",
+        "url": "https://www.onetonline.org/link/summary/15-1243.01",
+        "verified": true,
+        "retrieved": "2026-10-23"
+      },
+      "typical_industries": [
+        "Technology",
+        "Finance & accounting",
+        "Banking & insurance",
+        "Retail & e-commerce"
+      ],
+      "min_education": "bachelor",
+      "skills": [
+        {
+          "id": "sql_basics",
+          "weight": 3
+        },
+        {
+          "id": "python",
+          "weight": 3
+        },
+        {
+          "id": "data_quality",
+          "weight": 3
+        },
+        {
+          "id": "aws",
+          "weight": 1
+        },
+        {
+          "id": "kubernetes",
+          "weight": 1
+        },
+        {
+          "id": "process_automation",
+          "weight": 1
+        }
+      ],
+      "required_level": {
+        "default": 0.7
+      }
+    },
+    {
+      "id": "ml_engineer",
+      "name": "ML Engineer",
+      "family": "ml_ai",
+      "source": {
+        "dataset": "O*NET OnLine",
+        "code": "15-2051.00",
+        "title": "Data Scientists",
+        "url": "https://www.onetonline.org/link/summary/15-2051.00",
+        "verified": true,
+        "retrieved": "2026-10-23"
+      },
+      "typical_industries": [
+        "Technology",
+        "Finance & accounting",
+        "Healthcare"
+      ],
+      "min_education": "bachelor",
+      "skills": [
+        {
+          "id": "python",
+          "weight": 3
+        },
+        {
+          "id": "statistics_basics",
+          "weight": 3
+        },
+        {
+          "id": "pytorch",
+          "weight": 3
+        },
+        {
+          "id": "mlops",
+          "weight": 1
+        },
+        {
+          "id": "sql_basics",
+          "weight": 1
+        },
+        {
+          "id": "llms",
+          "weight": 1
+        }
+      ],
+      "required_level": {
+        "default": 0.7
+      }
+    },
+    {
+      "id": "ai_operations_specialist",
+      "name": "AI Operations / Prompt Specialist",
+      "family": "automation",
+      "source": {
+        "dataset": "O*NET OnLine",
+        "code": "TODO",
+        "title": null,
+        "url": null,
+        "verified": false,
+        "note": "O*NET has no prompt or AI-operations occupation; keyword searches return unrelated occupations.",
+        "candidates": [
+          "15-1299.08 Computer Systems Engineers/Architects",
+          "15-1211.00 Computer Systems Analysts"
+        ]
+      },
+      "typical_industries": [
+        "Technology",
+        "Finance & accounting",
+        "Banking & insurance",
+        "Retail & e-commerce"
+      ],
+      "min_education": "diploma",
+      "skills": [
+        {
+          "id": "llms",
+          "weight": 3
+        },
+        {
+          "id": "ai_output_review",
+          "weight": 3
+        },
+        {
+          "id": "ai_assistants",
+          "weight": 3
+        },
+        {
+          "id": "rag",
+          "weight": 1
+        },
+        {
+          "id": "process_automation",
+          "weight": 1
+        },
+        {
+          "id": "data_quality",
+          "weight": 1
+        }
+      ],
+      "required_level": {
+        "default": 0.7
+      }
+    },
+    {
+      "id": "ai_product_specialist",
+      "name": "AI Product Specialist",
+      "family": "business",
+      "source": {
+        "dataset": "O*NET OnLine",
+        "code": "TODO",
+        "title": null,
+        "url": null,
+        "verified": false,
+        "note": "O*NET has no AI product occupation; keyword searches return unrelated occupations.",
+        "candidates": [
+          "15-1299.09 Information Technology Project Managers",
+          "11-2021.00 Marketing Managers"
+        ]
+      },
+      "typical_industries": [
+        "Technology",
+        "Finance & accounting",
+        "Retail & e-commerce"
+      ],
+      "min_education": "bachelor",
+      "skills": [
+        {
+          "id": "business_analysis",
+          "weight": 3
+        },
+        {
+          "id": "llms",
+          "weight": 3
+        },
+        {
+          "id": "stakeholder_communication",
+          "weight": 3
+        },
+        {
+          "id": "project_management",
+          "weight": 1
+        },
+        {
+          "id": "ai_agents",
+          "weight": 1
+        },
+        {
+          "id": "data_visualisation",
+          "weight": 1
+        }
+      ],
+      "required_level": {
+        "default": 0.7
+      }
+    },
+    {
+      "id": "digital_marketing_analyst",
+      "name": "Digital Marketing Analyst",
+      "family": "marketing",
+      "source": {
+        "dataset": "O*NET OnLine",
+        "code": "13-1161.01",
+        "title": "Search Marketing Strategists",
+        "url": "https://www.onetonline.org/link/summary/13-1161.01",
+        "verified": true,
+        "retrieved": "2026-10-23"
+      },
+      "typical_industries": [
+        "Retail & e-commerce",
+        "Technology",
+        "Finance & accounting"
+      ],
+      "min_education": "bachelor",
+      "skills": [
+        {
+          "id": "digital_marketing",
+          "weight": 3
+        },
+        {
+          "id": "data_visualisation",
+          "weight": 3
+        },
+        {
+          "id": "spreadsheet_modelling",
+          "weight": 3
+        },
+        {
+          "id": "statistics_basics",
+          "weight": 1
+        },
+        {
+          "id": "sql_basics",
+          "weight": 1
+        },
+        {
+          "id": "ai_assistants",
+          "weight": 1
+        }
+      ],
+      "required_level": {
+        "default": 0.7
+      }
+    },
+    {
+      "id": "cybersecurity_analyst",
+      "name": "Cybersecurity Analyst",
+      "family": "security",
+      "source": {
+        "dataset": "O*NET OnLine",
+        "code": "15-1212.00",
+        "title": "Information Security Analysts",
+        "url": "https://www.onetonline.org/link/summary/15-1212.00",
+        "verified": true,
+        "retrieved": "2026-10-23"
+      },
+      "typical_industries": [
+        "Banking & insurance",
+        "Technology",
+        "Finance & accounting",
+        "Public sector",
+        "Healthcare"
+      ],
+      "min_education": "bachelor",
+      "skills": [
+        {
+          "id": "cybersecurity_basics",
+          "weight": 3
+        },
+        {
+          "id": "it_support",
+          "weight": 3
+        },
+        {
+          "id": "escalation_judgment",
+          "weight": 3
+        },
+        {
+          "id": "data_quality",
+          "weight": 1
+        },
+        {
+          "id": "python",
+          "weight": 1
+        },
+        {
+          "id": "aws",
+          "weight": 1
+        }
+      ],
+      "required_level": {
+        "default": 0.7
+      }
+    },
+    {
+      "id": "digital_transformation_pm",
+      "name": "Digital Transformation Project Manager",
+      "family": "project_management",
+      "source": {
+        "dataset": "O*NET OnLine",
+        "code": "15-1299.09",
+        "title": "Information Technology Project Managers",
+        "url": "https://www.onetonline.org/link/summary/15-1299.09",
+        "verified": true,
+        "retrieved": "2026-10-23"
+      },
+      "typical_industries": [
+        "Finance & accounting",
+        "Banking & insurance",
+        "Public sector",
+        "Manufacturing & logistics",
+        "Retail & e-commerce",
+        "Technology"
+      ],
+      "min_education": "bachelor",
+      "skills": [
+        {
+          "id": "project_management",
+          "weight": 3
+        },
+        {
+          "id": "stakeholder_communication",
+          "weight": 3
+        },
+        {
+          "id": "business_analysis",
+          "weight": 3
+        },
+        {
+          "id": "process_automation",
+          "weight": 1
+        },
+        {
+          "id": "ai_assistants",
+          "weight": 1
+        },
+        {
+          "id": "data_visualisation",
+          "weight": 1
+        }
+      ],
+      "required_level": {
+        "default": 0.7
+      }
+    }
+  ]
+}

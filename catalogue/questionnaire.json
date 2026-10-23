@@ -1,5 +1,44 @@
 {
-  "_about": "Onboarding questionnaire config (QART_NEXT_STEPS §3). Current roles pre-fill typical skills, tasks add the skills they use, tool chips map to skills; all at the default level, never downgrading a level the person set. Every skill id here must exist in catalogue/skills.json (tests/test_skill_vocabulary.py). Level values and mappings are DECLARED team choices, not data. Families are defined with the role catalogue.",
+  "_about": "Onboarding questionnaire config (QART_NEXT_STEPS §3). Current roles pre-fill typical skills, tasks add the skills they use, tool chips map to skills; all at the default level, never downgrading a level the person set. Every skill id here must exist in catalogue/skills.json (tests/test_skill_vocabulary.py). Level values and mappings are DECLARED team choices, not data. Industries are the labels role typical_industries use; education levels feed the soft min_education note only. Families are defined in families.json.",
+  "industries": [
+    "Finance & accounting",
+    "Banking & insurance",
+    "Retail & e-commerce",
+    "Manufacturing & logistics",
+    "Healthcare",
+    "Public sector",
+    "Technology",
+    "Other"
+  ],
+  "education": [
+    {
+      "label": "SPM / secondary school",
+      "level": "secondary"
+    },
+    {
+      "label": "Diploma",
+      "level": "diploma"
+    },
+    {
+      "label": "Bachelor's degree",
+      "level": "bachelor"
+    },
+    {
+      "label": "Master's or higher",
+      "level": "master"
+    },
+    {
+      "label": "Professional certification",
+      "level": "certification"
+    }
+  ],
+  "education_order": [
+    "secondary",
+    "certification",
+    "diploma",
+    "bachelor",
+    "master"
+  ],
   "levels": [
     {
       "id": "heard",

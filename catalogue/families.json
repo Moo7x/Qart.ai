@@ -1,0 +1,143 @@
+{
+  "_about": "Role families and which families are adjacent (QART_NEXT_STEPS §5.1), used for direction fit: same family, adjacent, or far. Adjacency is symmetric and is a DECLARED team judgement of which moves reuse most of what a person already does.",
+  "families": [
+    {
+      "id": "finance_ops",
+      "name": "Finance operations",
+      "adjacent": [
+        "admin",
+        "analytics",
+        "automation",
+        "business",
+        "risk_compliance"
+      ]
+    },
+    {
+      "id": "analytics",
+      "name": "Analytics",
+      "adjacent": [
+        "business",
+        "data_engineering",
+        "finance_ops",
+        "marketing",
+        "ml_ai"
+      ]
+    },
+    {
+      "id": "automation",
+      "name": "Automation",
+      "adjacent": [
+        "data_engineering",
+        "finance_ops",
+        "ml_ai",
+        "software"
+      ]
+    },
+    {
+      "id": "data_engineering",
+      "name": "Data engineering",
+      "adjacent": [
+        "analytics",
+        "automation",
+        "ml_ai",
+        "software"
+      ]
+    },
+    {
+      "id": "ml_ai",
+      "name": "Machine learning and AI",
+      "adjacent": [
+        "analytics",
+        "automation",
+        "data_engineering",
+        "software"
+      ]
+    },
+    {
+      "id": "risk_compliance",
+      "name": "Risk and compliance",
+      "adjacent": [
+        "business",
+        "finance_ops",
+        "security"
+      ]
+    },
+    {
+      "id": "business",
+      "name": "Business and product",
+      "adjacent": [
+        "analytics",
+        "customer_ops",
+        "finance_ops",
+        "marketing",
+        "project_management",
+        "risk_compliance"
+      ]
+    },
+    {
+      "id": "marketing",
+      "name": "Marketing",
+      "adjacent": [
+        "analytics",
+        "business",
+        "customer_ops"
+      ]
+    },
+    {
+      "id": "security",
+      "name": "Security",
+      "adjacent": [
+        "it_support",
+        "risk_compliance",
+        "software"
+      ]
+    },
+    {
+      "id": "project_management",
+      "name": "Project management",
+      "adjacent": [
+        "admin",
+        "business",
+        "it_support"
+      ]
+    },
+    {
+      "id": "customer_ops",
+      "name": "Customer operations",
+      "adjacent": [
+        "admin",
+        "business",
+        "marketing"
+      ]
+    },
+    {
+      "id": "admin",
+      "name": "Administration",
+      "adjacent": [
+        "customer_ops",
+        "finance_ops",
+        "project_management"
+      ]
+    },
+    {
+      "id": "it_support",
+      "name": "IT support",
+      "adjacent": [
+        "project_management",
+        "security",
+        "software"
+      ]
+    },
+    {
+      "id": "software",
+      "name": "Software",
+      "adjacent": [
+        "automation",
+        "data_engineering",
+        "it_support",
+        "ml_ai",
+        "security"
+      ]
+    }
+  ]
+}

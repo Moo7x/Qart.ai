@@ -17,8 +17,6 @@ const YEAR_BANDS = [
 ]
 const bandFor = (years: number) => YEAR_BANDS.reduce((best, b) => (Math.abs(b.value - years) < Math.abs(best.value - years) ? b : best)).label
 
-const INDUSTRIES = ['Finance & accounting', 'Banking & insurance', 'Retail & e-commerce', 'Manufacturing & logistics', 'Healthcare', 'Public sector', 'Technology', 'Other']
-const EDUCATION = ['SPM / secondary school', 'Diploma', "Bachelor's degree", "Master's or higher", 'Professional certification']
 const DIRECTIONS: { value: NonNullable<Preferences['direction']>; label: string; hint: string }[] = [
   { value: 'grow', label: 'Grow in my current role', hint: 'Add AI and automation skills to the job I do now' },
   { value: 'adjacent', label: 'Move to a nearby role', hint: 'Use what I know in a new role, e.g. finance → data analyst' },
@@ -216,14 +214,14 @@ export default function Intake() {
               <span className="inline-flex flex-wrap items-center gap-2">Industry <SavedOnly /></span>
               <select value={prefs.industry ?? ''} onChange={e => setPref('industry', e.target.value || null)} className={inputCls}>
                 <option value="">Select…</option>
-                {INDUSTRIES.map(o => <option key={o}>{o}</option>)}
+                {q?.industries.map(o => <option key={o}>{o}</option>)}
               </select>
             </label>
             <label className="flex flex-col gap-1.5 text-sm font-medium text-ink">
               <span className="inline-flex flex-wrap items-center gap-2">Highest education <SavedOnly /></span>
               <select value={prefs.education ?? ''} onChange={e => setPref('education', e.target.value || null)} className={inputCls}>
                 <option value="">Select…</option>
-                {EDUCATION.map(o => <option key={o}>{o}</option>)}
+                {q?.education.map(o => <option key={o.label}>{o.label}</option>)}
               </select>
             </label>
           </div>

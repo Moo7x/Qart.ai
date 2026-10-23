@@ -154,6 +154,9 @@ export interface Preferences {
 // GET /api/questionnaire (v2.4)
 export type SkillLevel = 'heard' | 'sometimes' | 'confident';
 export interface Questionnaire {
+  industries: string[];
+  education: { label: string; level: string }[];
+  education_order: string[];
   levels: { id: SkillLevel; label: string; value: number }[];
   default_level: SkillLevel;
   tools: { label: string; skills: string[]; exclusive: boolean }[];

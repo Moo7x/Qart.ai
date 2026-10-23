@@ -52,7 +52,15 @@ class Task(BaseModel):
     families: list[str] = []  # shown first for people in these role families
 
 
+class EducationOption(BaseModel):
+    label: str
+    level: str  # one of education_order; only the soft min_education note reads it
+
+
 class Questionnaire(BaseModel):
+    industries: list[str]
+    education: list[EducationOption]
+    education_order: list[str]  # lowest to highest
     levels: list[Level]
     default_level: SkillLevel
     tools: list[ToolChip]

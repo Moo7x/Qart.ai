@@ -204,6 +204,9 @@ const MOCK_PATH: PathPlan = {
 
 // A small slice of catalogue/questionnaire.json (same shape as GET /api/questionnaire).
 const MOCK_QUESTIONNAIRE: Questionnaire = {
+  industries: ['Finance & accounting', 'Other'],
+  education: [{ label: "Bachelor's degree", level: 'bachelor' }],
+  education_order: ['secondary', 'certification', 'diploma', 'bachelor', 'master'],
   levels: [
     { id: 'heard', label: 'Heard of it', value: 0.3 },
     { id: 'sometimes', label: 'Use sometimes', value: 0.7 },
