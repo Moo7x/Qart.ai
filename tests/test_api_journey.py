@@ -134,3 +134,15 @@ def test_role_tasks_keep_four_evidence_kinds_separate(client: TestClient) -> Non
     assert "Energy Management and Audit" in body["unlinked_skills"]
     assert "No source here reports organisations deploying AI" in body["summary"]
     assert client.get(f"/api/profiles/{pid}/roles/nope/tasks").status_code == 404
+
+
+def test_radar_follows_the_profile_and_labels_each_fact(client: TestClient) -> None:
+    pid = create(client)
+    body = client.get(f"/api/profiles/{pid}/radar", params={"scenario": "fast"}).json()
+    assert body["chosen"] is False and body["axes"]  # best-fitting role until one is chosen
+    first = body["axes"][0]
+    assert {"claimed", "required", "after", "emphasis", "ai_use", "in_demand"} <= set(first)
+    assert all(a["emphasis"] == "fixed" for a in body["axes"] if a["essential"])
+    client.post(f"/api/profiles/{pid}/destination", json={"role_id": "budget_analyst"})
+    chosen = client.get(f"/api/profiles/{pid}/radar").json()
+    assert (chosen["role_id"], chosen["chosen"]) == ("budget_analyst", True)

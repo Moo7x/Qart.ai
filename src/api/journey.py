@@ -11,7 +11,7 @@ from src import params
 from src.api.evidence import get_engine, get_settings
 from src.changes.store import accepted_rows, baseline_cutoff
 from src.config import REPO_ROOT, Settings
-from src.evidence.signals import job_ad_signals, occupation_signals
+from src.evidence.signals import build_signals, job_ad_signals, occupation_signals
 from src.intake.extract import extract
 from src.intake.files import UnsupportedFileError, read_cv
 from src.intake.skill_search import search
@@ -25,6 +25,7 @@ from src.journey.store import (
 from src.match.engine import Evidence, RoleMatch, Scenario, rank_roles, score_role
 from src.match.evidence import automation_evidence
 from src.match.outlook import role_outlook
+from src.match.radar import radar
 from src.match.tasks import task_view
 from src.pack import Pack, load_pack
 from src.pathway.planner import Pathway, plan_pathway
@@ -286,6 +287,27 @@ def pathway(
     out["courses_checked"] = pack.courses_checked
     out["scenario"] = scenario
     return out
+
+
+@router.get("/profiles/{profile_id}/radar")
+def personal_radar(
+    profile_id: str,
+    scenario: Scenario = Query(default="moderate"),
+    engine: Engine = Depends(get_engine),
+) -> dict[str, Any]:
+    """The chosen (or best-fitting) role's skills for this person, and their field's signals."""
+    data, destination = require_profile(engine, profile_id)
+    pack = load_pack()
+    rows = accepted_rows(engine, profile_id)
+    evidence = automation_evidence(rows)
+    levels = data.levels()
+    if destination:
+        match = score_role(pack, pack.destination_roles[destination], levels, scenario, evidence)
+    else:
+        match = rank_roles(pack, levels, scenario, evidence, set(data.interests) or None)[0]
+    path = plan_pathway(pack, match, levels, data.weekly_hours, scenario, evidence)
+    out = radar(pack, match, path, bool(destination), rows, build_signals(rows), data.current_role)
+    return {**out, "scenario": scenario, "scenario_label": SCENARIO_LABEL[scenario]}
 
 
 @router.get("/profiles/{profile_id}/roles/{role_id}/tasks")
