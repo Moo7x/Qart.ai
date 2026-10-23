@@ -1,0 +1,72 @@
+# Registered evidence sources (docs/PLAN.md §3). The pipeline collects only from sources listed here.
+# Each entry says what the source can and cannot show, its terms, and how often it changes.
+# tier: A = official statistics or primary data; B = reputable secondary; C = leading signal only.
+# terms_checked: date a person or the agent opened the terms page; null means not checked yet.
+
+- id: dosm_wages_occupation
+  name: OpenDOSM API · wages by occupation
+  publisher: Department of Statistics Malaysia (DOSM)
+  family: malaysian_labour
+  url: https://api.data.gov.my/data-catalogue/?id=wages_occupation
+  docs_url: https://api.data.gov.my/data-catalogue/?id=wages_occupation
+  terms: Malaysian Government Open Data Terms of Use 1.0
+  terms_url: https://www.dosm.gov.my/portal-main/article/term-of-use
+  terms_checked: "2026-10-23"
+  attribution: "Data and information are subject to the Malaysian Government Open Data Terms of Use 1.0. Source: DOSM."
+  tier: A
+  cadence: annual
+  collector: dosm_wages
+  shows: Employees (wage recipients) by major occupation group in Malaysia, per year
+  does_not_show: Demand for one job title or skill, or why a group grew or shrank
+  notes: 2010 is excluded from trends because the occupation classification changed in 2011.
+
+- id: dosm_job_market_insights
+  name: DOSM · Big Data Analytics, Job Market Insights
+  publisher: Department of Statistics Malaysia (DOSM)
+  family: malaysian_job_ads
+  url: https://www.dosm.gov.my/portal-main/release-content/big-data-analytics-job-market-insights-q22026
+  docs_url: https://www.dosm.gov.my/portal-main/release-archive/big-data-analytics-job-market-insights-q22026
+  terms: Malaysian Government Open Data Terms of Use 1.0
+  terms_url: https://www.dosm.gov.my/portal-main/article/term-of-use
+  terms_checked: "2026-10-23"
+  attribution: "Data and information are subject to the Malaysian Government Open Data Terms of Use 1.0. Source: DOSM."
+  tier: A
+  cadence: quarterly
+  collector: dosm_jmi
+  shows: Online job offerings by occupation per quarter, from major private recruitment platforms
+  does_not_show: A census of all vacancies, a long-run trend, or AI as the cause of a change
+  notes: DOSM states these figures do not represent all job offerings in Malaysia. Platform coverage changes are treated as series breaks.
+
+- id: anthropic_economic_index
+  name: Anthropic Economic Index
+  publisher: Anthropic
+  family: ai_task_use
+  url: https://huggingface.co/datasets/Anthropic/EconomicIndex
+  docs_url: https://huggingface.co/datasets/Anthropic/EconomicIndex
+  terms: Data CC-BY (code MIT)
+  terms_url: https://huggingface.co/datasets/Anthropic/EconomicIndex
+  terms_checked: "2026-10-21"
+  attribution: "Anthropic Economic Index, CC-BY."
+  tier: A
+  cadence: irregular releases
+  collector: aei
+  shows: Share of sampled Claude conversations linked to an occupation or task, global and by country
+  does_not_show: Hiring demand, job losses, or how widely AI is used at work in general
+  notes: Values are rounded to two decimals; small changes are rounding noise. Only compatible months are compared.
+
+- id: talentcorp_gbs_2024
+  name: TalentCorp · Impact Study of AI, Digital and Green Economy, Global Business Services
+  publisher: Talent Corporation Malaysia (TalentCorp)
+  family: malaysian_role_impact
+  url: https://www.talentcorp.com.my
+  docs_url: https://www.talentcorp.com.my
+  terms: All rights reserved; facts are cited with page numbers and no text is reproduced
+  terms_url: https://www.talentcorp.com.my
+  terms_checked: "2026-10-23"
+  attribution: "TalentCorp (2024), Impact Study of AI, Digital and Green Economy on the Malaysian Workforce: Global Business Services."
+  tier: A
+  cadence: one-off (versioned extraction)
+  collector: talentcorp
+  shows: Expert-assessed impact level per GBS role, in-demand skills and emerging roles in Malaysia
+  does_not_show: A live trend, vacancy counts, or impact caused by AI alone (the study combines AI, digital and green drivers)
+  notes: Extracted once by hand into data/packs/gbs_fa/talentcorp_2024.yaml; each fact carries its page.
