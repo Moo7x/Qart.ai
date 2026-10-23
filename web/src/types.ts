@@ -626,3 +626,31 @@ export interface HiringNow {
   meta: TrendMeta & { min_sample: number };
   age_days: number | null; stale: boolean;
 }
+
+// GET /api/learning-plan/{user_id} (pathway.md §4–5)
+export interface LearningPlanStep {
+  order: number; kind: 'course' | 'milestone' | 'no_resource';
+  skill_ids: string[]; resource_id: string | null; title: string; provider: string | null; url: string | null;
+  from_level: number | null; to_level: number | null; hours: number; start_week: number; end_week: number;
+  in_timeframe: boolean; cost_to_user_myr: number | null; cost_type: string | null; hrd_claimable: boolean;
+  certificate: boolean | null; formats: string[]; reasons: string[]; alternatives: string[];
+  last_verified: string | null; status: string | null; case_id: string | null; date_to_confirm: boolean;
+  sdg_targets: { id: string; title: string }[];
+}
+export interface LearningPlanResponse {
+  user_id: string; empty_profile: boolean; message?: string | null;
+  role?: { role_id: string; name: string; band: BandName; score: number; family_name: string; gap_hours: number };
+  other_roles?: { role_id: string; name: string; band: BandName; score: number }[];
+  plan: null | {
+    role_id: string; steps: LearningPlanStep[];
+    summary: { total_hours: number; weeks_needed: number; fits_timeframe: boolean; timeframe_weeks: number; cost_to_user_myr: number;
+      steps_with_unknown_cost: number; cost_possibly_covered_by_employer_myr: number; certificates: number; free_steps: number; hrd_claimable_steps: number };
+    action_items: string[]; gaps_without_resources: string[]; notes: string[];
+  };
+  alternatives?: Record<string, { title: string; provider: string; hours: number; cost_type: string | null; cost_myr: number | null; status: string }>;
+  answers?: { weekly_hours: number; timeframe_months: number; timeframe_weeks: number; budget: string | null; employment: string | null; employer_hrd: string | null; ai_comfort: number | null };
+  pins?: Record<string, string>;
+  catalogue: { verified: number; drafts: number; drafts_in_use: boolean; last_full_review: string | null };
+  funding_links: { label: string; url: string; note: string }[];
+  note?: string;
+}

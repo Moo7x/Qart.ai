@@ -61,9 +61,9 @@ function ShapesRanking({ what = 'These become your skills, which your role match
   return <Tag tone="action" title={what}>Shapes your ranking</Tag>
 }
 
-/** Funding and learning answers for the learning plan (pathway.md §2), which is built next. */
+/** Funding and learning answers the learning plan reads (pathway.md §2). */
 function ForPlan() {
-  return <Tag tone="linen" title="Saved for your learning plan: which courses fit your budget, format and language.">Saved · for your learning plan</Tag>
+  return <Tag tone="action" title="Your learning plan uses this to choose courses: budget, funding, format, certificate and language.">Shapes your learning plan</Tag>
 }
 
 /** Age band and citizenship: only for course eligibility, never for ranking. */

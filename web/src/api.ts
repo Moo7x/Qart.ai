@@ -25,7 +25,7 @@ import type {
   Profile,
   Recommendation,
   SkillState,
-  Snapshot, Questionnaire, RankingResponse, ScenarioName, AiTrend, HiringNow } from './types';
+  Snapshot, Questionnaire, RankingResponse, ScenarioName, AiTrend, HiringNow, LearningPlanResponse } from './types';
 
 const USE_MOCKS = (import.meta.env.VITE_USE_MOCKS ?? 'false') === 'true';
 const BASE = import.meta.env.VITE_API_URL ?? '';
@@ -450,6 +450,15 @@ export async function getProfile(userId: string): Promise<Profile> {
 export async function getRanking(userId: string, scenario: ScenarioName): Promise<RankingResponse> {
   if (USE_MOCKS) return Promise.reject(new Error('the ranking is not mocked'));
   const { data } = await axios.get<RankingResponse>(`${BASE}/api/ranking/${userId}`, { params: { scenario } });
+  return data;
+}
+
+export async function getLearningPlan(userId: string, roleId?: string | null, swaps: Record<string, string> = {}): Promise<LearningPlanResponse> {
+  if (USE_MOCKS) return Promise.reject(new Error('the learning plan is not mocked'));
+  const params = new URLSearchParams();
+  if (roleId) params.set('role_id', roleId);
+  Object.entries(swaps).forEach(([skill, course]) => params.append('swap', `${skill}:${course}`));
+  const { data } = await axios.get<LearningPlanResponse>(`${BASE}/api/learning-plan/${userId}`, { params });
   return data;
 }
 
