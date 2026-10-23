@@ -82,3 +82,24 @@ def test_questionnaire_skill_ids_exist() -> None:
     assert not unknown, f"questionnaire.json uses unknown skill ids: {unknown}"
     roles = default_catalogue().roles
     assert all(r.catalogue_role_id in roles for r in q.current_roles if r.catalogue_role_id)
+
+
+def test_skill_prerequisites_are_known_and_acyclic() -> None:
+    """A cycle would make a learning plan impossible to order (pathway.md §7.1)."""
+    graph = {k: s.prerequisites for k, s in VOCABULARY.items()}
+    for skill_id, prereqs in graph.items():
+        assert set(prereqs) <= set(graph), f"{skill_id} has unknown prerequisites"
+        assert skill_id not in prereqs
+    state: dict[str, str] = {}
+
+    def visit(node: str, path: tuple[str, ...]) -> None:
+        if state.get(node) == "done":
+            return
+        assert state.get(node) != "open", f"prerequisite cycle: {' -> '.join((*path, node))}"
+        state[node] = "open"
+        for nxt in graph[node]:
+            visit(nxt, (*path, node))
+        state[node] = "done"
+
+    for node in graph:
+        visit(node, ())

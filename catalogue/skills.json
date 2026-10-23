@@ -1,5 +1,5 @@
 {
-  "_about": "Skill IDs from team/00_SHARED_CONTRACT.md §3. type drives the scenario shift rule: when the company's AI drafts or does a task, part of that task's EXECUTION-skill weight moves to OVERSIGHT skills (catalogue/company_assumptions.json). The classification is a team design choice (declared), documented per skill in type_reason. Single canonical skill vocabulary for the whole app (QART_NEXT_STEPS §2): practice skills, role skills and market skills and questionnaire skills. evidence_tracked = an evidence state is kept for it (practice cases, My skills, HR). trend_tracked = it has Hacker News match patterns for the Skills Radar. learn_hours are ASSUMPTIONS (team estimates, not data): hours from none to 'use sometimes' and from there to 'confident'. ai_exposure (high / medium / low) is a DECLARED assumption for the fast-AI-disruption scenario: how much of the skill AI can increasingly do on its own (high = routine preparation AI already drafts; medium = AI drafts parts, a person still builds or checks; low = judgement, oversight, building AI systems or work with people). It is not data and never changes the moderate scenario.",
+  "_about": "Skill IDs from team/00_SHARED_CONTRACT.md §3. type drives the scenario shift rule: when the company's AI drafts or does a task, part of that task's EXECUTION-skill weight moves to OVERSIGHT skills (catalogue/company_assumptions.json). The classification is a team design choice (declared), documented per skill in type_reason. Single canonical skill vocabulary for the whole app (QART_NEXT_STEPS §2): practice skills, role skills and market skills and questionnaire skills. evidence_tracked = an evidence state is kept for it (practice cases, My skills, HR). trend_tracked = it has Hacker News match patterns for the Skills Radar. learn_hours are ASSUMPTIONS (team estimates, not data): hours from none to 'use sometimes' and from there to 'confident'. ai_exposure (high / medium / low) is a DECLARED assumption for the fast-AI-disruption scenario: how much of the skill AI can increasingly do on its own (high = routine preparation AI already drafts; medium = AI drafts parts, a person still builds or checks; low = judgement, oversight, building AI systems or work with people). It is not data and never changes the moderate scenario. prerequisites (DECLARED): skills that must come earlier in a learning plan; a prerequisite the person already holds is ignored. learn_hours_source: 'estimate' (hand-set, never overwritten) or 'derived' (scripts/derive_learn_hours.py may set it to the median hours of verified courses for that level step).",
   "skills": [
     {
       "id": "recon_to_source",
@@ -17,7 +17,9 @@
       "trend_tracked": false,
       "patterns": [],
       "case_sensitive_patterns": [],
-      "ai_exposure": "high"
+      "ai_exposure": "high",
+      "prerequisites": [],
+      "learn_hours_source": "estimate"
     },
     {
       "id": "duplicate_detection",
@@ -35,7 +37,9 @@
       "trend_tracked": false,
       "patterns": [],
       "case_sensitive_patterns": [],
-      "ai_exposure": "high"
+      "ai_exposure": "high",
+      "prerequisites": [],
+      "learn_hours_source": "estimate"
     },
     {
       "id": "cutoff_timing",
@@ -53,7 +57,9 @@
       "trend_tracked": false,
       "patterns": [],
       "case_sensitive_patterns": [],
-      "ai_exposure": "high"
+      "ai_exposure": "high",
+      "prerequisites": [],
+      "learn_hours_source": "estimate"
     },
     {
       "id": "unsupported_adjustment",
@@ -71,7 +77,9 @@
       "trend_tracked": false,
       "patterns": [],
       "case_sensitive_patterns": [],
-      "ai_exposure": "low"
+      "ai_exposure": "low",
+      "prerequisites": [],
+      "learn_hours_source": "estimate"
     },
     {
       "id": "fx_conversion",
@@ -89,7 +97,9 @@
       "trend_tracked": false,
       "patterns": [],
       "case_sensitive_patterns": [],
-      "ai_exposure": "high"
+      "ai_exposure": "high",
+      "prerequisites": [],
+      "learn_hours_source": "estimate"
     },
     {
       "id": "transposition_check",
@@ -107,7 +117,9 @@
       "trend_tracked": false,
       "patterns": [],
       "case_sensitive_patterns": [],
-      "ai_exposure": "high"
+      "ai_exposure": "high",
+      "prerequisites": [],
+      "learn_hours_source": "estimate"
     },
     {
       "id": "escalation_judgment",
@@ -125,7 +137,9 @@
       "trend_tracked": false,
       "patterns": [],
       "case_sensitive_patterns": [],
-      "ai_exposure": "low"
+      "ai_exposure": "low",
+      "prerequisites": [],
+      "learn_hours_source": "estimate"
     },
     {
       "id": "ai_output_review",
@@ -143,7 +157,9 @@
       "trend_tracked": false,
       "patterns": [],
       "case_sensitive_patterns": [],
-      "ai_exposure": "low"
+      "ai_exposure": "low",
+      "prerequisites": [],
+      "learn_hours_source": "estimate"
     },
     {
       "id": "variance_analysis",
@@ -161,7 +177,11 @@
       "trend_tracked": false,
       "patterns": [],
       "case_sensitive_patterns": [],
-      "ai_exposure": "high"
+      "ai_exposure": "high",
+      "prerequisites": [
+        "spreadsheet_modelling"
+      ],
+      "learn_hours_source": "estimate"
     },
     {
       "id": "data_quality",
@@ -183,7 +203,9 @@
         "\\bdata governance\\b"
       ],
       "case_sensitive_patterns": [],
-      "ai_exposure": "medium"
+      "ai_exposure": "medium",
+      "prerequisites": [],
+      "learn_hours_source": "estimate"
     },
     {
       "id": "controls_design",
@@ -201,7 +223,9 @@
       "trend_tracked": false,
       "patterns": [],
       "case_sensitive_patterns": [],
-      "ai_exposure": "low"
+      "ai_exposure": "low",
+      "prerequisites": [],
+      "learn_hours_source": "estimate"
     },
     {
       "id": "process_automation",
@@ -227,7 +251,9 @@
         "\\bRPA\\b"
       ],
       "market_name": "RPA / process automation",
-      "ai_exposure": "low"
+      "ai_exposure": "low",
+      "prerequisites": [],
+      "learn_hours_source": "estimate"
     },
     {
       "id": "stakeholder_communication",
@@ -245,7 +271,9 @@
       "trend_tracked": false,
       "patterns": [],
       "case_sensitive_patterns": [],
-      "ai_exposure": "low"
+      "ai_exposure": "low",
+      "prerequisites": [],
+      "learn_hours_source": "estimate"
     },
     {
       "id": "forecasting",
@@ -263,7 +291,11 @@
       "trend_tracked": false,
       "patterns": [],
       "case_sensitive_patterns": [],
-      "ai_exposure": "medium"
+      "ai_exposure": "medium",
+      "prerequisites": [
+        "spreadsheet_modelling"
+      ],
+      "learn_hours_source": "estimate"
     },
     {
       "id": "spreadsheet_modelling",
@@ -287,7 +319,9 @@
         "\\bExcel\\b(?! at)"
       ],
       "market_name": "Excel",
-      "ai_exposure": "high"
+      "ai_exposure": "high",
+      "prerequisites": [],
+      "learn_hours_source": "estimate"
     },
     {
       "id": "sql_basics",
@@ -312,7 +346,9 @@
         "\\bSQL\\b"
       ],
       "market_name": "SQL",
-      "ai_exposure": "medium"
+      "ai_exposure": "medium",
+      "prerequisites": [],
+      "learn_hours_source": "estimate"
     },
     {
       "id": "python",
@@ -330,7 +366,9 @@
         "\\bPython\\b"
       ],
       "case_sensitive_patterns": [],
-      "ai_exposure": "medium"
+      "ai_exposure": "medium",
+      "prerequisites": [],
+      "learn_hours_source": "estimate"
     },
     {
       "id": "pytorch",
@@ -348,7 +386,11 @@
         "\\bPyTorch\\b"
       ],
       "case_sensitive_patterns": [],
-      "ai_exposure": "low"
+      "ai_exposure": "low",
+      "prerequisites": [
+        "python"
+      ],
+      "learn_hours_source": "estimate"
     },
     {
       "id": "tensorflow",
@@ -366,7 +408,11 @@
         "\\bTensorFlow\\b"
       ],
       "case_sensitive_patterns": [],
-      "ai_exposure": "low"
+      "ai_exposure": "low",
+      "prerequisites": [
+        "python"
+      ],
+      "learn_hours_source": "estimate"
     },
     {
       "id": "llms",
@@ -390,7 +436,9 @@
       "case_sensitive_patterns": [
         "\\bLLMs?\\b"
       ],
-      "ai_exposure": "low"
+      "ai_exposure": "low",
+      "prerequisites": [],
+      "learn_hours_source": "estimate"
     },
     {
       "id": "rag",
@@ -411,7 +459,12 @@
       "case_sensitive_patterns": [
         "\\bRAG\\b"
       ],
-      "ai_exposure": "low"
+      "ai_exposure": "low",
+      "prerequisites": [
+        "llms",
+        "python"
+      ],
+      "learn_hours_source": "estimate"
     },
     {
       "id": "langchain",
@@ -430,7 +483,12 @@
         "\\bLangGraph\\b"
       ],
       "case_sensitive_patterns": [],
-      "ai_exposure": "low"
+      "ai_exposure": "low",
+      "prerequisites": [
+        "python",
+        "llms"
+      ],
+      "learn_hours_source": "estimate"
     },
     {
       "id": "ai_agents",
@@ -450,7 +508,11 @@
         "\\bLLM agents?\\b"
       ],
       "case_sensitive_patterns": [],
-      "ai_exposure": "low"
+      "ai_exposure": "low",
+      "prerequisites": [
+        "llms"
+      ],
+      "learn_hours_source": "estimate"
     },
     {
       "id": "mlops",
@@ -469,7 +531,12 @@
         "\\bML ?Ops\\b"
       ],
       "case_sensitive_patterns": [],
-      "ai_exposure": "low"
+      "ai_exposure": "low",
+      "prerequisites": [
+        "python",
+        "pytorch"
+      ],
+      "learn_hours_source": "estimate"
     },
     {
       "id": "computer_vision",
@@ -487,7 +554,11 @@
         "\\bcomputer vision\\b"
       ],
       "case_sensitive_patterns": [],
-      "ai_exposure": "low"
+      "ai_exposure": "low",
+      "prerequisites": [
+        "python"
+      ],
+      "learn_hours_source": "estimate"
     },
     {
       "id": "nlp",
@@ -508,7 +579,11 @@
       "case_sensitive_patterns": [
         "\\bNLP\\b"
       ],
-      "ai_exposure": "low"
+      "ai_exposure": "low",
+      "prerequisites": [
+        "python"
+      ],
+      "learn_hours_source": "estimate"
     },
     {
       "id": "kubernetes",
@@ -527,7 +602,11 @@
         "\\bk8s\\b"
       ],
       "case_sensitive_patterns": [],
-      "ai_exposure": "low"
+      "ai_exposure": "low",
+      "prerequisites": [
+        "aws"
+      ],
+      "learn_hours_source": "estimate"
     },
     {
       "id": "aws",
@@ -548,7 +627,9 @@
       "case_sensitive_patterns": [
         "\\bAWS\\b"
       ],
-      "ai_exposure": "low"
+      "ai_exposure": "low",
+      "prerequisites": [],
+      "learn_hours_source": "estimate"
     },
     {
       "id": "typescript",
@@ -566,7 +647,9 @@
         "\\bTypeScript\\b"
       ],
       "case_sensitive_patterns": [],
-      "ai_exposure": "medium"
+      "ai_exposure": "medium",
+      "prerequisites": [],
+      "learn_hours_source": "estimate"
     },
     {
       "id": "react",
@@ -586,7 +669,11 @@
       "case_sensitive_patterns": [
         "\\bReact(?:\\.js|JS)?\\b(?! Native)"
       ],
-      "ai_exposure": "medium"
+      "ai_exposure": "medium",
+      "prerequisites": [
+        "typescript"
+      ],
+      "learn_hours_source": "estimate"
     },
     {
       "id": "data_visualisation",
@@ -606,7 +693,11 @@
         "\\bLooker\\b"
       ],
       "case_sensitive_patterns": [],
-      "ai_exposure": "medium"
+      "ai_exposure": "medium",
+      "prerequisites": [
+        "spreadsheet_modelling"
+      ],
+      "learn_hours_source": "estimate"
     },
     {
       "id": "erp",
@@ -630,7 +721,9 @@
         "\\bERP\\b",
         "\\bSAP\\b"
       ],
-      "ai_exposure": "medium"
+      "ai_exposure": "medium",
+      "prerequisites": [],
+      "learn_hours_source": "estimate"
     },
     {
       "id": "financial_reporting",
@@ -646,7 +739,11 @@
       "trend_tracked": false,
       "patterns": [],
       "case_sensitive_patterns": [],
-      "ai_exposure": "high"
+      "ai_exposure": "high",
+      "prerequisites": [
+        "bookkeeping"
+      ],
+      "learn_hours_source": "estimate"
     },
     {
       "id": "bookkeeping",
@@ -662,7 +759,9 @@
       "trend_tracked": false,
       "patterns": [],
       "case_sensitive_patterns": [],
-      "ai_exposure": "high"
+      "ai_exposure": "high",
+      "prerequisites": [],
+      "learn_hours_source": "estimate"
     },
     {
       "id": "excel_automation",
@@ -678,7 +777,11 @@
       "trend_tracked": false,
       "patterns": [],
       "case_sensitive_patterns": [],
-      "ai_exposure": "medium"
+      "ai_exposure": "medium",
+      "prerequisites": [
+        "spreadsheet_modelling"
+      ],
+      "learn_hours_source": "estimate"
     },
     {
       "id": "statistics_basics",
@@ -694,7 +797,9 @@
       "trend_tracked": false,
       "patterns": [],
       "case_sensitive_patterns": [],
-      "ai_exposure": "medium"
+      "ai_exposure": "medium",
+      "prerequisites": [],
+      "learn_hours_source": "estimate"
     },
     {
       "id": "business_analysis",
@@ -710,7 +815,9 @@
       "trend_tracked": false,
       "patterns": [],
       "case_sensitive_patterns": [],
-      "ai_exposure": "low"
+      "ai_exposure": "low",
+      "prerequisites": [],
+      "learn_hours_source": "estimate"
     },
     {
       "id": "project_management",
@@ -726,7 +833,9 @@
       "trend_tracked": false,
       "patterns": [],
       "case_sensitive_patterns": [],
-      "ai_exposure": "low"
+      "ai_exposure": "low",
+      "prerequisites": [],
+      "learn_hours_source": "estimate"
     },
     {
       "id": "digital_marketing",
@@ -742,7 +851,9 @@
       "trend_tracked": false,
       "patterns": [],
       "case_sensitive_patterns": [],
-      "ai_exposure": "medium"
+      "ai_exposure": "medium",
+      "prerequisites": [],
+      "learn_hours_source": "estimate"
     },
     {
       "id": "customer_service",
@@ -758,7 +869,9 @@
       "trend_tracked": false,
       "patterns": [],
       "case_sensitive_patterns": [],
-      "ai_exposure": "high"
+      "ai_exposure": "high",
+      "prerequisites": [],
+      "learn_hours_source": "estimate"
     },
     {
       "id": "it_support",
@@ -774,7 +887,9 @@
       "trend_tracked": false,
       "patterns": [],
       "case_sensitive_patterns": [],
-      "ai_exposure": "medium"
+      "ai_exposure": "medium",
+      "prerequisites": [],
+      "learn_hours_source": "estimate"
     },
     {
       "id": "cybersecurity_basics",
@@ -790,7 +905,9 @@
       "trend_tracked": false,
       "patterns": [],
       "case_sensitive_patterns": [],
-      "ai_exposure": "low"
+      "ai_exposure": "low",
+      "prerequisites": [],
+      "learn_hours_source": "estimate"
     },
     {
       "id": "ai_assistants",
@@ -806,7 +923,9 @@
       "trend_tracked": false,
       "patterns": [],
       "case_sensitive_patterns": [],
-      "ai_exposure": "low"
+      "ai_exposure": "low",
+      "prerequisites": [],
+      "learn_hours_source": "estimate"
     }
   ]
 }

@@ -48,6 +48,8 @@ class SkillInfo(BaseModel):
     market_name: str | None = None  # label in the radar when it differs from `name`
     # DECLARED: how much of the skill AI can increasingly do on its own (fast scenario only).
     ai_exposure: Literal["high", "medium", "low"] | None = None
+    prerequisites: list[str] = []  # DECLARED: planned after these skills (pathway.md §4.4)
+    learn_hours_source: Literal["estimate", "derived"] = "estimate"
 
 
 class SdgTarget(BaseModel):
