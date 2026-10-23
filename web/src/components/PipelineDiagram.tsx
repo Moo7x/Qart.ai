@@ -101,9 +101,10 @@ export function PipelineDiagram({ run, running, selected, onSelect }: {
   selected: StepId
   onSelect: (step: StepId) => void
 }) {
-  const bySource = new Map((run?.sources ?? []).map((s) => [s.source_id, s]))
-  const ok = (run?.sources ?? []).filter((s) => s.status === 'ok').length
-  const total = run?.sources.length ?? 0
+  const collected = (run?.sources ?? []).filter((s) => s.source_id !== 'trend_models')  // a step, not a source
+  const bySource = new Map(collected.map((s) => [s.source_id, s]))
+  const ok = collected.filter((s) => s.status === 'ok').length
+  const total = collected.length
   return (
     <div className="overflow-x-auto">
       <div className="relative" style={{ width: W, height: H }}>

@@ -3,7 +3,7 @@ import { type FormEvent, useState } from 'react'
 import { formatWhen, parseUtc, sendJSON, useApi } from '../api'
 import { PipelineDiagram, type StepId } from '../components/PipelineDiagram'
 import { Empty, Loading, Problem } from '../components/ui'
-import type { BacktestEntry, Run, SourceStatus } from '../types'
+import type { BacktestEntry, ModelVersion, Run, SourceStatus } from '../types'
 
 const RUNS_POLL_MS = 5_000
 const SECONDS_PER_MINUTE = 60
@@ -81,10 +81,13 @@ function RunNow({ onStarted }: { onStarted: () => void }) {
   )
 }
 
+export const TREND_MODELS = 'trend_models'
+
 export function LiveIntelligence() {
   const runs = useApi<Run[]>('/api/pipeline/runs?limit=12', RUNS_POLL_MS)
   const sources = useApi<SourceStatus[]>('/api/sources')
   const backtest = useApi<BacktestEntry[]>('/api/pipeline/backtest')
+  const models = useApi<ModelVersion[]>('/api/pipeline/models')
   const [step, setStep] = useState<StepId>('validate')
   const [open, setOpen] = useState<number | null>(null)
 
@@ -180,6 +183,36 @@ export function LiveIntelligence() {
               </tbody>
             </table>
           )}
+          {models.data && models.data.length > 0 && (
+            <details className="text-[13px]">
+              <summary className="cursor-pointer text-graphite">
+                Model versions: re-scored each time new DOSM data arrives ({models.data.length} stored)
+              </summary>
+              <table className="mt-2 w-full border-collapse text-xs">
+                <thead>
+                  <tr className="cap text-left">
+                    <th className="py-1.5 pr-2 font-medium">Group · data to</th>
+                    <th className="px-2 py-1.5 font-medium">Scored on</th>
+                    <th className="px-2 py-1.5 text-right font-medium">No change</th>
+                    <th className="px-2 py-1.5 text-right font-medium">Line</th>
+                    <th className="py-1.5 pl-2 font-medium">Stored</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {models.data.map((v) => (
+                    <tr key={v.id} className="border-t border-mist">
+                      <td className="py-1.5 pr-2">{v.group_id.replace('_', ' & ')} · {v.last_year}</td>
+                      <td className="px-2 py-1.5 font-mono">{v.test_years}</td>
+                      <td className={`px-2 py-1.5 text-right font-mono ${v.best === 'naive' ? 'font-semibold text-rising' : ''}`}>{v.naive.toFixed(2)}</td>
+                      <td className={`px-2 py-1.5 text-right font-mono ${v.best === 'linear' ? 'font-semibold text-rising' : ''}`}>{v.linear.toFixed(2)}</td>
+                      <td className="py-1.5 pl-2 text-graphite">{formatWhen(v.created_at)}{v.run_id ? ` · run ${v.run_id}` : ''}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <p className="m-0 mt-1.5 text-xs text-graphite">A run with no new DOSM data stores no version; its log says the models are unchanged.</p>
+            </details>
+          )}
         </section>
       </div>
 
@@ -229,7 +262,9 @@ export function LiveIntelligence() {
 }
 
 function FragmentRow({ run, open, onToggle }: { run: Run; open: boolean; onToggle: () => void }) {
-  const ok = run.sources.filter((s) => s.status === 'ok').length
+  // The trend-model step is logged with the run but is not a source.
+  const collected = run.sources.filter((s) => s.source_id !== TREND_MODELS)
+  const ok = collected.filter((s) => s.status === 'ok').length
   return (
     <>
       <tr className="border-t border-mist">
@@ -239,7 +274,7 @@ function FragmentRow({ run, open, onToggle }: { run: Run; open: boolean; onToggl
           </button>
         </td>
         <td className="px-2 py-2.5">{run.trigger}</td>
-        <td className="px-2 py-2.5 font-mono">{run.status === 'running' ? '…' : `${ok}/${run.sources.length}`}</td>
+        <td className="px-2 py-2.5 font-mono">{run.status === 'running' ? '…' : `${ok}/${collected.length}`}</td>
         <td className="px-2 py-2.5 font-mono">{run.new_observations}</td>
         <td className="px-2 py-2.5 font-mono">{duration(run)}</td>
         <td className="py-2.5 pl-2"><span className={`tag ${RESULT_STYLE[run.status] ?? 'bg-mist text-graphite'}`}>{run.status}</span></td>

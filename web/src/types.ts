@@ -372,3 +372,21 @@ export type Explanation = {
   engine: string
   note: string
 }
+
+// ---- Trend model versions (src/evidence/models.py) ----
+
+export type ModelVersion = {
+  id: number
+  group_id: string
+  created_at: string
+  run_id: number | null
+  first_year: string
+  last_year: string
+  points: number
+  train_end: number
+  test_years: string
+  naive: number
+  linear: number
+  damped: number
+  best: 'naive' | 'linear' | 'damped'
+}

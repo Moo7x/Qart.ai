@@ -33,6 +33,10 @@ Rule: never invent statistics; every number cites a source.
      (treated as a possible platform-coverage break);
    - Economic Index change counts only if ≥ 0.02 points and ≥ 5%, compared at two decimals;
    - backtest: fit to 2021, score 2022–2025 for no-change, straight line and damped trend.
+   After every run the backtest is recomputed on all comparable years so far
+   (`src/evidence/models.py`); a new model version with its errors is stored only when a group's
+   data changed, and the run log says "trend models unchanged" otherwise. Live intelligence lists
+   the versions, so forecast error over time is visible.
 6. **Labels** (`src/evidence/signals.py`): rising/weakening needs two independent sources or one
    official series with ≥ 8 comparable points; otherwise "not enough evidence yet" with an early
    direction. TalentCorp is always an "expert view". All thresholds are in `src/params.py`.
