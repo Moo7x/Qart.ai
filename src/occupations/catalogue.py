@@ -22,6 +22,7 @@ from sqlalchemy import Column, DateTime, Engine, String, Table, Text, delete, in
 from src.collectors.onet import DOWNLOAD, latest_release
 from src.config import Settings
 from src.db import metadata
+from src.pack import load_pack
 from src.runpod_jobs import BACKGROUND_BUDGET_SECONDS, embed
 
 ESCO_CROSSWALK = (
@@ -56,11 +57,25 @@ vector_table = Table(
 )
 
 
+def gbs_titles() -> dict[str, list[str]]:
+    """Malaysian GBS role titles (TalentCorp, via the pack's role-to-occupation links) per SOC."""
+    out: dict[str, list[str]] = {}
+    pack = load_pack()
+    for soc, title in [
+        *((r.soc, r.title) for r in pack.current_roles.values()),
+        *((r.soc, r.title) for r in pack.destination_roles.values()),
+    ]:
+        out.setdefault(soc, []).append(title)
+    return out
+
+
 def search_text(row: dict[str, Any]) -> str:
     """What is embedded and keyword-searched for one occupation."""
     titles = json.loads(row["reported_titles"])
     also = f" Also called: {', '.join(titles)}." if titles else ""
-    return f"{row['title']}.{also} {row['description']}"
+    gbs = gbs_titles().get(row["soc"], [])
+    local = f" Malaysian GBS roles: {', '.join(gbs)}." if gbs else ""
+    return f"{row['title']}.{also}{local} {row['description']}"
 
 
 def _text_hash(text: str) -> str:
