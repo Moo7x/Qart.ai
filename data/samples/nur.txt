@@ -1,0 +1,32 @@
+Nur Aisyah Binti Kamal
+Email: nur.aisyah.sample@example.com
+Phone: +60 12-345 6789
+IC No: 900101-14-5678
+
+SYNTHETIC SAMPLE CV FOR THE QART.AI DEMO. THIS PERSON DOES NOT EXIST.
+
+Profile
+Cash Application Analyst with 6 years in a shared services centre in Kuala Lumpur, supporting
+customers in four countries. I want to move towards reporting and data work.
+
+Experience
+Cash Application Analyst, regional GBS centre, Kuala Lumpur (2019 – present)
+- Applied incoming customer receipts to open invoices in SAP for four entities, about 1,200 lines a month.
+- Reconciled daily bank statements to the cash ledger and cleared unapplied cash.
+- Investigated short-payments and disputes with customers and the sales team.
+- Built the daily cash position report in Excel for the AR manager.
+- Worked with the credit team on overdue accounts and collection follow-ups.
+
+Accounts Receivable Assistant, trading company, Petaling Jaya (2017 – 2019)
+- Issued customer invoices and posted receipts.
+- Prepared monthly ageing reports.
+
+Education
+Diploma in Accounting, 2017
+
+Skills
+SAP FI-AR, Microsoft Excel (pivot tables, VLOOKUP), bank reconciliation, customer communication.
+Completed an internal one-day workshop on using AI chat tools at work.
+
+Interests
+Working with data and dashboards; sustainability in business.
