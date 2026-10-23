@@ -466,3 +466,27 @@ export type TrendsResponse = {
   skills: { skill: string; name: string; ai_role: string; change: number; roles: number; basis: string[] }[]
   exposure: { isco: string; title: string; mean: number | null; gradient: string | null }[]
 }
+
+// ---- Occupations (src/occupations/) ----
+
+export type Detection = {
+  query: string
+  engine: string
+  note: string
+  matches: { soc: string; title: string; score: number; in_field: boolean }[]
+}
+export type OccupationPreview = {
+  soc: string
+  title: string
+  description: string
+  in_field: boolean
+  coverage: string
+  esco: { title: string | null; match: string | null; uri: string | null }
+  isco: string | null
+  isco_note: string
+  tasks: { task: string; text: string; importance: number | null }[]
+  ai_use: null | { share: number; share_local: number | null; automation: number | null; period: string; url: string }
+  exposure: null | { isco: string; title: string; mean: number | null; gradient: string | null; tasks: { text: string; score: number | null }[]; url: string }
+  employment: Signal | null
+  mycol: null | { listed: boolean; name: string | null; of: number }
+}

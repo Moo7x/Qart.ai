@@ -6,6 +6,7 @@ import { LiveIntelligence } from './pages/LiveIntelligence'
 import { Onboarding } from './pages/Onboarding'
 import { Overview } from './pages/Overview'
 import { Pathway } from './pages/Pathway'
+import { Occupations } from './pages/Occupations'
 import { Roles } from './pages/Roles'
 import { Trends } from './pages/Trends'
 import { JourneyProvider } from './state'
@@ -23,6 +24,7 @@ function Shell() {
         <Route path="/future" element={<Future />} />
         <Route path="/changes" element={<Changes />} />
         <Route path="/trends" element={<Trends />} />
+        <Route path="/occupations" element={<Occupations />} />
         <Route path="/live" element={<LiveIntelligence />} />
         <Route
           path="*"
