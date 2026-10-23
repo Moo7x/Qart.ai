@@ -2,7 +2,9 @@
 set -e
 
 echo "==> Installing Python dependencies..."
-pip install -r requirements.txt -q
+# Replit sets pip to user installs, but its Python is a virtual environment where those are off;
+# PIP_USER=0 installs into that environment. python -m keeps pip and uvicorn on one interpreter.
+PIP_USER=0 python -m pip install -r requirements.txt -q
 
 echo "==> Building web app..."
 # Vite 8 needs Node 20.19+ or 22.12+ (.replit selects the nodejs-22 module).
@@ -13,4 +15,4 @@ npm run build
 cd ..
 
 echo "==> Starting Qart.ai server on port 8000..."
-exec uvicorn src.app:app --host 0.0.0.0 --port 8000
+exec python -m uvicorn src.app:app --host 0.0.0.0 --port 8000
