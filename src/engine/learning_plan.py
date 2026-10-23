@@ -253,7 +253,9 @@ def _score(
     w, bits, score = cfg.score, [], 0.0
     if cost.to_user == 0:
         score += w.free
-        bits.append("free")
+        bits.append(
+            "free if you are eligible" if course.cost_type == "free_if_eligible" else "free"
+        )
     elif cost.to_user is not None and cost.to_user <= w.cheap_limit_myr:
         score += w.cheap
         bits.append(f"RM{cost.to_user:g}")
@@ -312,10 +314,16 @@ def _pick_order(p: _Pick) -> tuple[float, float, float, str]:
 
 
 def choose_for_skill(
-    item: GapItem, courses: Sequence[Course], a: PlanAnswers, cfg: PlanConfig, used: set[str]
+    item: GapItem,
+    courses: Sequence[Course],
+    a: PlanAnswers,
+    cfg: PlanConfig,
+    used: set[str],
+    pin: str | None = None,
 ) -> list[_Pick]:
     """Up to `max_courses_per_skill` courses taking the skill to the required level, in order.
-    A single course that reaches the level wins over a chain."""
+    A single course that reaches the level wins over a chain. `pin` (from "Swap") is a course the
+    person chose for this skill: it is used first when it passes the filters."""
     chain: list[_Pick] = []
     level = item.current_level
     for _ in range(cfg.max_courses_per_skill):
@@ -333,7 +341,10 @@ def choose_for_skill(
             break
         pool = fitting or cands
         reaching = [p for p in pool if p.to_level >= item.required_level]
-        best = reaching[0] if reaching else max(pool, key=lambda p: (p.to_level, p.score))
+        pinned = next((p for p in cands if p.course.id == pin), None) if not chain else None
+        best = pinned or (
+            reaching[0] if reaching else max(pool, key=lambda p: (p.to_level, p.score))
+        )
         others = [p.course.id for p in cands if p is not best][: cfg.alternatives]
         chain.append(
             _Pick(
@@ -559,8 +570,10 @@ def build_learning_plan(
     vocabulary: Mapping[str, SkillInfo],
     milestones: MilestoneCatalogue,
     cfg: PlanConfig,
+    pins: Mapping[str, str] | None = None,
 ) -> LearningPlan:
-    """The ordered, week-by-week plan for one role. Pure and deterministic."""
+    """The ordered, week-by-week plan for one role. Pure and deterministic.
+    `pins` maps a skill id to the course the person swapped in for it."""
     entries: list[_Entry] = []  # what to schedule, in order
     used: set[str] = set()
     notes: list[str] = []
@@ -572,7 +585,7 @@ def build_learning_plan(
         entries.append(_Entry("course", pick=intro, skills=[intro.skill_id], intro=True))
 
     for item in prerequisite_order(gap, vocabulary):
-        chain = choose_for_skill(item, courses, answers, cfg, used)
+        chain = choose_for_skill(item, courses, answers, cfg, used, (pins or {}).get(item.skill_id))
         if not chain:
             gaps_without.append(item.label)
             entries.append(_Entry("no_resource", item=item))
@@ -707,6 +720,7 @@ def plan_for_profile(
     snapshot: Mapping[str, object] | None = None,
     scenario: str | None = None,
     include_drafts: bool | None = None,
+    pins: Mapping[str, str] | None = None,
 ) -> LearningPlan | None:
     """The plan for `role_id` (default: the top-ranked role); None for an empty profile."""
     ranking = rank_for_profile(profile, states, snapshot, scenario)
@@ -723,4 +737,5 @@ def plan_for_profile(
         catalogue.vocabulary,
         default_milestones(),
         cfg,
+        pins,
     )

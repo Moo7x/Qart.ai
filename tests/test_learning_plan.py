@@ -355,3 +355,33 @@ def test_the_plan_is_deterministic() -> None:
     gaps = [gap("sql"), gap("viz", core=False)]
     answers = replace(A, ai_comfort=1)
     assert all(plan(gaps, courses, answers) == plan(gaps, courses, answers) for _ in range(3))
+
+
+def test_swap_pins_the_chosen_course_and_ignores_a_pin_that_fails_the_filters() -> None:
+    best, other = (
+        course("best", {"sql": (0, 0.7)}, hours=2),
+        course("other", {"sql": (0, 0.7)}, hours=8),
+    )
+    assert plan([gap("sql")], [best, other]).steps[0].resource_id == "best"
+    swapped = build_learning_plan(
+        "role", [gap("sql")], A, [best, other], VOCAB, MILESTONES, CFG, {"sql": "other"}
+    )
+    assert swapped.steps[0].resource_id == "other" and "best" in swapped.steps[0].alternatives
+    dear = course("dear", {"sql": (0, 0.7)}, cost_type="low_cost", cost_myr=900)
+    free_only = replace(A, budget="free_only")
+    kept = build_learning_plan(
+        "role", [gap("sql")], free_only, [best, dear], VOCAB, MILESTONES, CFG, {"sql": "dear"}
+    )
+    assert kept.steps[0].resource_id == "best"  # a pin never breaks the budget
+
+
+def test_a_free_if_eligible_course_is_never_described_as_plain_free() -> None:
+    gated = course(
+        "g",
+        {"sql": (0, 0.7)},
+        cost_type="free_if_eligible",
+        cost_myr=None,
+        eligibility=Eligibility(malaysian_only=True),
+    )
+    reason = plan([gap("sql")], [gated]).steps[0].reasons[0]
+    assert reason.startswith("Free if you are eligible")

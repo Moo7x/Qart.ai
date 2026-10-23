@@ -21,6 +21,7 @@ load_env_file()  # local .env (gitignored); must run before the routers read any
 
 from src.api_engine import router as engine_router  # noqa: E402
 from src.api_optimizer import router as optimizer_router  # noqa: E402
+from src.api_plan import router as plan_router  # noqa: E402
 from src.api_ranking import router as ranking_router  # noqa: E402
 from src.api_search import router as search_router  # noqa: E402
 from src.api_signals import router as signals_router  # noqa: E402
@@ -59,6 +60,7 @@ app.include_router(search_router)
 app.include_router(optimizer_router)
 app.include_router(signals_router)  # Future Skills Radar (reads snapshots only)
 app.include_router(ranking_router)  # role ranking + gap + scenarios (pure function)
+app.include_router(plan_router)  # learning plan for a role (pure function)
 
 
 # --- Person B: companion + cases routes (src/api_companion.py) ---------------------------------
