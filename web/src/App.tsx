@@ -19,6 +19,7 @@ const Pathway = lazy(() => import('./pages/Pathway'))
 const Result = lazy(() => import('./pages/Result'))
 const Scenarios = lazy(() => import('./pages/Scenarios'))
 const Signals = lazy(() => import('./pages/Signals'))
+const Sources = lazy(() => import('./pages/Sources'))
 const WorkQueue = lazy(() => import('./pages/WorkQueue'))
 const Workspace = lazy(() => import('./pages/Workspace'))
 
@@ -163,6 +164,7 @@ export default function App() {
               <Route path="/result/:caseId" element={<Only role="employee"><Result /></Only>} />
               <Route path="/skills" element={<Only role="employee"><MySkills /></Only>} />
               <Route path="/signals" element={<Only role="employee"><Signals /></Only>} />
+              <Route path="/sources" element={<Sources />} />
               <Route path="/matches" element={<Only role="employee"><MyFuture /></Only>} />
               <Route path="/future" element={<Navigate to="/matches" replace />} />
               <Route path="/pathway" element={<Only role="employee"><Pathway /></Only>} />
