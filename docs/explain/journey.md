@@ -22,6 +22,11 @@ of evidence kept apart: observed AI use per task (Economic Index), reported depl
 collected yet; shown as missing), potential exposure of the role's ISCO-08 occupation (ILO,
 an estimate) and expert impact (TalentCorp). It never states that a task is being automated.
 
+**Demand outlook.** `src/match/outlook.py` adds, next to fit but never inside it: the DOSM share
+of employees for the role's MASCO major group (reached through its ISCO-08 code) with the
+backtest result, the DOSM job-ad share where DOSM names the occupation, which of the role's skills
+TalentCorp lists as in demand, and whether MyCOL 2024/2025 lists the occupation as critical.
+
 `src/pathway/planner.py` visits essentials first, selects the shortest useful course, includes
 prerequisites once and schedules at the weekly-hours budget. Duration/level rules produce
 hypothetical gains, not measured learning outcomes. Some gaps have no verified free resource.
