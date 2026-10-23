@@ -12,6 +12,7 @@ known page and fetches each release once.
 import html
 import re
 from dataclasses import dataclass
+from datetime import UTC, date, datetime
 
 import httpx
 
@@ -29,6 +30,7 @@ SLUG_PATTERN = re.compile(
 QUARTER_WORDS = {"first": 1, "second": 2, "third": 3, "fourth": 4}
 QUARTERS_PER_YEAR = 4
 HTTP_OK = 200
+MAX_RELEASE_PAGES = 60  # about 15 years of quarters; stops a runaway crawl if links loop
 MONTHS = [
     "january",
     "february",
@@ -155,34 +157,73 @@ def fetch_page(client: httpx.Client, slug: str) -> str:
     return response.text
 
 
+def next_quarter(quarter: str) -> str:
+    year, q = int(quarter[:4]), int(quarter[-1])
+    return f"{year + 1}-Q1" if q == QUARTERS_PER_YEAR else f"{year}-Q{q + 1}"
+
+
 def next_quarter_slug(quarter: str) -> str:
     """Recent releases follow one URL pattern, so the next one can be tried before it is linked."""
-    year, q = int(quarter[:4]), int(quarter[-1])
-    year, q = (year + 1, 1) if q == QUARTERS_PER_YEAR else (year, q + 1)
-    return f"big-data-analytics-job-market-insights-q{q}{year}"
+    nxt = next_quarter(quarter)
+    return f"big-data-analytics-job-market-insights-q{nxt[-1]}{nxt[:4]}"
 
 
 def probe_next_release(client: httpx.Client, latest_quarter: str) -> Release | None:
-    slug = next_quarter_slug(latest_quarter)
-    response = client.get(BASE + slug, headers={"User-Agent": USER_AGENT})
-    if response.status_code != HTTP_OK or "Quarter" not in response.text:
-        return None  # not published yet
-    return parse_release(slug, response.text)
+    """The next quarter's release if its page exists (it may still be an announced placeholder)."""
+    response = client.get(
+        BASE + next_quarter_slug(latest_quarter), headers={"User-Agent": USER_AGENT}
+    )
+    if response.status_code != HTTP_OK:
+        return None
+    try:
+        release = parse_release(next_quarter_slug(latest_quarter), response.text)
+    except ValueError:
+        return None  # a generic page, not a release
+    # Accept the page only if it really is the quarter after the latest one we have.
+    return release if release.quarter == next_quarter(latest_quarter) else None
+
+
+def is_published(release: Release, today: date) -> bool:
+    """DOSM creates a page before the release day; it counts only once dated and filled in."""
+    return (
+        release.published is not None
+        and release.published <= today.isoformat()
+        and (release.total is not None)
+    )
 
 
 def collect(client: httpx.Client, state: SourceState) -> CollectorResult:
-    seed_html = fetch_page(client, SEED_SLUG)
-    pages = {SEED_SLUG: seed_html}
-    for slug in sorted(discover_slugs(seed_html) - {SEED_SLUG}):
-        pages[slug] = fetch_page(client, slug)
+    # Each release page links only some earlier releases, so follow links until none are new.
+    pages: dict[str, str] = {}
+    unreachable: set[str] = set()
+    to_visit = [SEED_SLUG]
+    while to_visit and len(pages) < MAX_RELEASE_PAGES:
+        slug = to_visit.pop()
+        if slug in pages or slug in unreachable:
+            continue
+        try:
+            pages[slug] = fetch_page(client, slug)
+        except httpx.HTTPStatusError:
+            if slug == SEED_SLUG:
+                raise  # without the latest release there is nothing to anchor on
+            unreachable.add(slug)  # one broken archive link must not stop the others
+            continue
+        to_visit.extend(sorted(discover_slugs(pages[slug]) - pages.keys() - unreachable))
     releases = [parse_release(slug, page_html) for slug, page_html in pages.items()]
     newer = probe_next_release(client, max(r.quarter for r in releases))
     if newer is not None:
         releases.append(newer)
-    observations = [obs for release in releases for obs in release_observations(release)]
-    quarters = sorted({r.quarter for r in releases})
+    today = datetime.now(UTC).date()
+    published = {r.quarter: r for r in releases if is_published(r, today)}
+    announced = sorted(r.quarter for r in releases if not is_published(r, today))
+    observations = [obs for r in published.values() for obs in release_observations(r)]
+    quarters = sorted(published)
     upcoming = max((r.next_release for r in releases if r.next_release), default=None)
     note = f"{len(quarters)} releases {quarters[0]}–{quarters[-1]}" if quarters else "no releases"
-    return CollectorResult(
-        observations, note=note + (f" · next release {upcoming}" if upcoming else "")
-    )
+    if announced:
+        note += f" · announced, not yet published: {', '.join(announced)}"
+    if unreachable:
+        note += f" · {len(unreachable)} archive link(s) unreachable"
+    if upcoming:
+        note += f" · next release {upcoming}"
+    return CollectorResult(observations, note=note)

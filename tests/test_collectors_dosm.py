@@ -1,6 +1,7 @@
 """DOSM collectors read the published numbers exactly and keep the passage they came from."""
 
 import json
+from datetime import date
 from pathlib import Path
 
 import httpx
@@ -76,5 +77,18 @@ def test_jmi_collect_discovers_linked_releases() -> None:
         return httpx.Response(200, text=pages[slug]) if slug in pages else httpx.Response(404)
 
     with httpx.Client(transport=httpx.MockTransport(handler)) as client:
-        observations = dosm_jmi.collect(client, MemoryState()).observations
-    assert {o.period for o in observations} == {"2026-Q1", "2024-Q1", "2023-Q2"}
+        result = dosm_jmi.collect(client, MemoryState())
+    assert {o.period for o in result.observations} == {"2026-Q1", "2024-Q1", "2023-Q2"}
+    assert "archive link(s) unreachable" in result.note  # fixture links lead nowhere
+
+
+def test_jmi_announced_placeholder_is_not_published_before_its_day() -> None:
+    placeholder = dosm_jmi.parse_release("q3-2026", jmi_page("q3_2026_placeholder"))
+    assert placeholder.quarter == "2026-Q3"
+    assert not dosm_jmi.is_published(placeholder, date(2026, 10, 23))
+    real = dosm_jmi.parse_release("q1-2026", jmi_page("q1_2026"))
+    assert dosm_jmi.is_published(real, date(2026, 10, 23))
+
+
+def test_next_quarter_slug_rolls_over_the_year() -> None:
+    assert dosm_jmi.next_quarter_slug("2026-Q4") == "big-data-analytics-job-market-insights-q12027"
