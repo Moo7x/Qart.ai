@@ -1,6 +1,7 @@
 import { Route, Routes, useLocation } from 'react-router-dom'
 import { Sidebar } from './components/Sidebar'
 import { Future } from './pages/Future'
+import { Changes } from './pages/Changes'
 import { LiveIntelligence } from './pages/LiveIntelligence'
 import { Onboarding } from './pages/Onboarding'
 import { Overview } from './pages/Overview'
@@ -19,6 +20,7 @@ function Shell() {
         <Route path="/roles" element={<Roles />} />
         <Route path="/pathway" element={<Pathway />} />
         <Route path="/future" element={<Future />} />
+        <Route path="/changes" element={<Changes />} />
         <Route path="/live" element={<LiveIntelligence />} />
         <Route
           path="*"

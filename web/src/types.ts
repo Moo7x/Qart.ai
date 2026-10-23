@@ -251,3 +251,38 @@ export type FutureResponse = {
   years_experience: number | null
   scenarios: Record<Scenario, FutureScenario>
 }
+
+export type EvidenceDelta = {
+  source_id: string; entity: string; metric: string; geography: string
+  before_period: string | null; after_period: string | null
+  before: number | null; after: number | null; unit: string; url: string
+  published: string | null; cited_span: string; comparable: boolean
+}
+export type WeightDelta = {
+  skill: string; name: string; before: number; after: number
+  points_before: number; points_after: number; essential: boolean; reason: string
+}
+export type RoleDelta = {
+  role_id: string; title: string; rank_before: number; rank_after: number
+  fit_before: number; fit_after: number; weights: WeightDelta[]
+}
+export type PathSummary = {
+  course_ids: string[]; courses: { id: string; title: string; url: string }[]
+  hours: number; weeks: number; essential_gaps: string[]
+}
+export type ChangeReport = {
+  mode: 'live' | 'replay'; scenario: Scenario; before_label: string; after_label: string
+  evidence: EvidenceDelta[]; roles: RoleDelta[]; recommendation_changed: boolean; notes: string[]
+  pathway: null | {
+    role_id: string; title: string; before: PathSummary; after: PathSummary
+    added: string[]; removed: string[]; reordered: boolean
+  }
+}
+export type Proposal = {
+  id: number; scenario: Scenario; status: string; actionable: boolean
+  created_at: string; run_id: number | null; report: ChangeReport
+}
+export type ChangesResponse = {
+  accepted_cutoff: number; latest_cutoff: number; proposals: Proposal[]
+  replay_sources: { source_id: string; periods: string[] }[]
+}

@@ -2,7 +2,7 @@ import { Activity, ArrowRight, ListOrdered, Radar, Route as RouteIcon, UserRound
 import { Link, NavLink } from 'react-router-dom'
 import { formatWhen, useApi } from '../api'
 import { useJourney } from '../state'
-import type { Run } from '../types'
+import type { ChangesResponse, Run } from '../types'
 
 const RUNS_POLL_MS = 60_000
 
@@ -17,6 +17,7 @@ export function Sidebar() {
   const runs = useApi<Run[]>('/api/pipeline/runs?limit=1', RUNS_POLL_MS)
   const latest = runs.data?.[0]
   const { profileId, setProfileId } = useJourney()
+  const changes = useApi<ChangesResponse>(profileId ? `/api/profiles/${profileId}/changes` : null, RUNS_POLL_MS)
   return (
     <nav
       aria-label="Main"
@@ -46,6 +47,11 @@ export function Sidebar() {
       <NavLink to="/future" className={navClass}>
         <ArrowRight size={16} aria-hidden="true" />
         Today → Future you
+      </NavLink>
+      <NavLink to="/changes" className={navClass}>
+        <Activity size={16} aria-hidden="true" />
+        What changed
+        {changes.data?.proposals.some((p) => p.actionable) && <span className="tag bg-violet text-white">New</span>}
       </NavLink>
       {profileId ? (
         <button
