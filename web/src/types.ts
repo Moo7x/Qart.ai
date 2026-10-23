@@ -298,3 +298,41 @@ export type ChangesResponse = {
   accepted_cutoff: number; latest_cutoff: number; proposals: Proposal[]
   replay_sources: { source_id: string; periods: string[] }[]
 }
+
+// ---- Role tasks (src/match/tasks.py) ----
+
+export type TaskUse = {
+  share: number | null
+  automation: number | null
+  augmentation: number | null
+  share_local: number | null
+  period: string
+  url: string
+}
+export type RoleTask = {
+  task: string
+  text: string
+  skills: string[]
+  observed_use: TaskUse | null
+  importance: { value: number | null; release: string; url: string } | null
+}
+export type RoleTasksResponse = {
+  role_id: string
+  soc: string
+  occupation: { code: string; name: string; isco: string | null; esco: string | null; esco_match: string | null; esco_uri: string | null } | null
+  tasks: RoleTask[]
+  exposure: null | {
+    isco: string
+    title: string
+    mean: number | null
+    gradient: string | null
+    url: string
+    published: string | null
+    tasks: { text: string; score: number | null }[]
+  }
+  expert: { impact: string; text: string }
+  deployment: null
+  summary: string
+  unlinked_skills: string[]
+  sources: { tasks: string; observed_use: string; exposure: string; expert: string }
+}

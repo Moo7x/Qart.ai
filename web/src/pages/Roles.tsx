@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { sendJSON, useApi } from '../api'
 import { Dots, ScenarioSwitch, SdgTag } from '../components/journey'
+import { RoleTasks } from '../components/RoleTasks'
 import { Loading, Problem } from '../components/ui'
 import { useJourney } from '../state'
 import type { GapColumn, MatchesResponse, RoleCard } from '../types'
@@ -229,6 +230,7 @@ export function Roles() {
                 ))}
               </div>
             </section>
+            <RoleTasks key={role.role_id} profileId={profileId} roleId={role.role_id} />
           </div>
         </div>
       )}
