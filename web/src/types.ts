@@ -192,6 +192,8 @@ export type RoleCard = {
   effort_weeks: number
   uncovered: string[]
   sdgs: SdgRef[]
+  meters: Meters
+  fit_range: { low: number; high: number }
 }
 export type MatchesResponse = {
   scenario: Scenario
@@ -389,4 +391,59 @@ export type ModelVersion = {
   linear: number
   damped: number
   best: 'naive' | 'linear' | 'damped'
+}
+
+// ---- Decision support (src/match/decision.py, src/pathway/optimise.py) ----
+
+export type Meters = {
+  coverage: number
+  essentials_ready: boolean
+  essentials_below: string[]
+  essentials_unstated: string[]
+  completeness: number
+  stated: number
+  requirements: number
+}
+export type Question = {
+  skill: string
+  skill_name: string
+  value: number
+  top_role_changes: boolean
+  essential_for: string[]
+  swing: number
+  effect: string
+}
+export type SensitivityResponse = {
+  intensities: number[]
+  roles: { role_id: string; title: string; ranks: number[]; stable: boolean }[]
+}
+export type WhatIfResponse = {
+  roles: { role_id: string; title: string; rank_now: number; rank_then: number; fit_now: number; fit_then: number }[]
+  pathway: null | { role_id: string; now: { hours: number; weeks: number }; then: { hours: number; weeks: number } }
+}
+export type PlanOption = {
+  course_ids: string[]
+  courses: { id: string; title: string; url: string; hours: number }[]
+  hours: number
+  fit_after: Record<Scenario, number>
+  essentials_reached: number
+  essentials_total: number
+}
+export type PlansResponse = {
+  role_id: string
+  scenario: Scenario
+  budget_hours: number
+  budget_weeks: number
+  fit_now: number
+  relevant_courses: number
+  exact: boolean
+  plans: { greedy: PlanOption; best?: PlanOption; robust?: PlanOption }
+  note: string
+}
+export type ForecastCheck = {
+  group: string
+  horizon: number
+  origins: number[]
+  mae: Record<string, number>
+  best: string | null
 }

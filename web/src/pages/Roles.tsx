@@ -2,11 +2,12 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { sendJSON, useApi } from '../api'
 import { Dots, ScenarioSwitch, SdgTag } from '../components/journey'
+import { BestQuestion, MeterRow, WhatIf } from '../components/Decision'
 import { ExplainRole } from '../components/ExplainRole'
 import { RoleTasks } from '../components/RoleTasks'
 import { Loading, Problem } from '../components/ui'
 import { useJourney } from '../state'
-import type { GapColumn, MatchesResponse, RoleCard } from '../types'
+import type { GapColumn, MatchesResponse, RoleCard, SensitivityResponse } from '../types'
 
 const GAP_TITLE: Record<GapColumn, [string, string]> = {
   ready: ['Ready now', 'text-rising'],
@@ -58,6 +59,7 @@ function Why({ role, onChoose, chosen, busy }: { role: RoleCard; onChoose: () =>
         <span style={{ width: `${ready}%` }} className="bg-mint" />
         <span style={{ width: `${partly}%` }} className="bg-violet-light" />
       </div>
+      <MeterRow meters={role.meters} range={role.fit_range} />
       <div className="rounded-lg bg-surface px-3.5 py-3">
         <p className="m-0 font-mono text-xs">fit = 100 × Σ w · min(your level ÷ needed level, 1) ÷ Σ w</p>
         <p className="m-0 mt-1.5 text-xs text-stone">
@@ -107,6 +109,7 @@ export function Roles() {
   const navigate = useNavigate()
   const current = useApi<MatchesResponse>(profileId ? `/api/profiles/${profileId}/matches?scenario=${scenario}` : null)
   const baseline = useApi<MatchesResponse>(profileId ? `/api/profiles/${profileId}/matches?scenario=moderate` : null)
+  const stability = useApi<SensitivityResponse>(profileId ? `/api/profiles/${profileId}/sensitivity?scenario=${scenario}` : null)
   const [selected, setSelected] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -167,6 +170,7 @@ export function Roles() {
               const was = moderateRank.indexOf(r.role_id)
               const moved = scenario === 'fast' && was >= 0 ? was - i : 0
               const b = bars(r)
+              const ranks = stability.data?.roles.find((x) => x.role_id === r.role_id)?.ranks
               return (
                 <button
                   key={r.role_id}
@@ -186,6 +190,9 @@ export function Roles() {
                       {r.listed_transition && <span className="tag bg-observed-bg text-observed">Route from your role</span>}
                       {r.longer_route && <span className="tag bg-weak-bg text-weak">Longer route</span>}
                       {moved !== 0 && <span className="tag bg-estimate-bg text-estimate">{moved > 0 ? `▲ ${moved}` : `▼ ${-moved}`} under Fast</span>}
+                      {ranks && (Math.min(...ranks) === Math.max(...ranks)
+                        ? <span className="tag bg-mist text-graphite" title="Same rank for every declared AI-adoption intensity">steady rank</span>
+                        : <span className="tag bg-estimate-bg text-estimate" title="Rank across AI-adoption intensities from none to stronger than fast">rank {Math.min(...ranks)}–{Math.max(...ranks)} by adoption</span>)}
                     </span>
                   </span>
                   <span className="text-right font-mono text-2xl tracking-tight">{Math.round(r.fit)}</span>
@@ -198,6 +205,7 @@ export function Roles() {
           </section>
 
           <div className="flex min-w-0 flex-[1.4_1_480px] flex-col gap-5">
+            <BestQuestion profileId={profileId} scenario={scenario} onAnswered={() => { current.reload(); baseline.reload(); stability.reload() }} />
             <Why role={role} chosen={data.destination === role.role_id} busy={busy} onChoose={() => choose(role.role_id)} />
             <section className="card-light flex flex-col gap-3.5 px-6 py-5">
               <h2 className="h2">Your skills gap for this role</h2>
@@ -233,6 +241,7 @@ export function Roles() {
                 ))}
               </div>
             </section>
+            <WhatIf key={`whatif-${role.role_id}`} profileId={profileId} scenario={scenario} role={role} />
             <RoleTasks key={role.role_id} profileId={profileId} roleId={role.role_id} />
           </div>
         </div>
