@@ -83,7 +83,7 @@ def course_documents(catalogue: Catalogue) -> list[Document]:
     for course in catalogue.courses.values():
         if not course.verified:
             continue
-        skills = [catalogue.skills[k] for k in course.skills]
+        skills = [catalogue.vocabulary[k] for k in course.skills]
         skill_text = " ".join(f"{s.name}. {s.description}" for s in skills)
         documents.append(
             Document(

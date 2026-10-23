@@ -127,9 +127,18 @@ def build_resources(
         k for k in skill_ids if credit(states.get(k)) >= 1 or needs_confirmation(states.get(k))
     }
     learnable = [k for k in skill_ids if k not in closed]
-    courses = [_course_resource(c, learnable) for c in catalogue.courses.values()]
-    resources.extend(prefer_cheaper([c for c in courses if c.gains]))
-    return [r for r in resources if r.gains]
+    courses = {c.id: _course_resource(c, learnable) for c in catalogue.courses.values()}
+    # A course's prerequisites stay candidates even when they teach none of the role's skills
+    # (e.g. Python before Pandas), so the prerequisite rule can always be met.
+    needed: set[str] = set()
+    stack = [p for c in courses.values() if c.gains for p in c.prerequisites]
+    while stack:
+        course_id = stack.pop()
+        if course_id in courses and course_id not in needed:
+            needed.add(course_id)
+            stack.extend(courses[course_id].prerequisites)
+    resources.extend(prefer_cheaper([c for c in courses.values() if c.gains or c.id in needed]))
+    return [r for r in resources if r.gains or r.id in needed]
 
 
 def cost_tier(cost_label: str) -> int:

@@ -1,5 +1,5 @@
 {
-  "_about": "Learning resources for the path planner (free ones preferred; the company funds paid ones). Every URL was opened on the retrieval date (WebFetch/curl). verified=true means the page loaded and the title and cost were checked; cost says free only where the provider states it (see cost_source); paid courses are allowed because the company funds training; verified=false needs a human check. hours_source says whether hours come from the provider page or are a team estimate (assumption). Prerequisites are the team's declared ordering. None are HRD Corp listings (hrd_claimable=false).",
+  "_about": "Learning resources for the path planner (free ones preferred; the company funds paid ones). Every URL was opened on the retrieval date (WebFetch/curl). verified=true means the page loaded and the title and cost were checked; cost says free only where the provider states it (see cost_source); paid courses are allowed because the company funds training; verified=false needs a human check. hours_source says whether hours come from the provider page or are a team estimate (assumption). Prerequisites are the team's declared ordering. None are HRD Corp listings (hrd_claimable=false). Learning-plan fields (pathway.md §3.1) added 2026-10-23: skill_steps (from/to level on the 0 / 0.3 / 0.7 / 1.0 scale; to_level by the DECLARED rule 'at least half the skill's to_basic hours reaches use sometimes, otherwise heard of it'), hours_basis, cost_myr / cost_type (free only where the provider says so; 'unknown' where no price is stated, which the plan never counts as free), hrd_claimable only with claim_evidence_url, eligibility, platform, format, delivery, certificate (null = not checked), language, tags, status (draft | verified; the demo shows verified only), last_verified, verified_by. The 26 courses checked on 2026-10-21 keep status verified (team decision 2026-10-23); their skills were re-mapped to the canonical vocabulary.",
   "retrieved": "2026-10-21",
   "courses": [
     {
@@ -10,14 +10,44 @@
       "hours": 5,
       "cost": "free",
       "skills": [
-        "process_automation"
+        "python"
       ],
       "prerequisites": [],
       "retrieved": "2026-10-21",
       "verified": true,
       "hrd_claimable": false,
       "hours_source": "estimate: Kaggle shows course length in its client-side listing, not captured in page text at retrieval; check",
-      "cost_source": "Kaggle Learn page description: 'no-cost courses' (kaggle.com/learn, 2026-10-21)"
+      "cost_source": "Kaggle Learn page description: 'no-cost courses' (kaggle.com/learn, 2026-10-21)",
+      "skill_steps": [
+        {
+          "id": "python",
+          "from_level": 0.0,
+          "to_level": 0.3
+        }
+      ],
+      "hours_basis": "team_estimate",
+      "stated_duration": null,
+      "cost_myr": 0,
+      "cost_type": "free",
+      "cost_note": "Kaggle Learn page description: 'no-cost courses' (kaggle.com/learn, 2026-10-21)",
+      "hrd_scheme": null,
+      "claim_evidence_url": null,
+      "eligibility": {},
+      "platform": "vendor",
+      "format": [
+        "hands_on"
+      ],
+      "delivery": "self_paced",
+      "next_dates": [],
+      "certificate": null,
+      "language": [
+        "en"
+      ],
+      "tags": [],
+      "status": "verified",
+      "last_verified": "2026-10-21",
+      "verified_by": "Person A check on 2026-10-21 (URL opened, title and cost checked)",
+      "source_notes": null
     },
     {
       "id": "course_02",
@@ -27,8 +57,8 @@
       "hours": 4,
       "cost": "free",
       "skills": [
-        "data_quality",
-        "spreadsheet_modelling"
+        "python",
+        "data_quality"
       ],
       "prerequisites": [
         "course_01"
@@ -37,7 +67,42 @@
       "verified": true,
       "hrd_claimable": false,
       "hours_source": "estimate: Kaggle shows course length in its client-side listing, not captured in page text at retrieval; check",
-      "cost_source": "Kaggle Learn page description: 'no-cost courses' (kaggle.com/learn, 2026-10-21)"
+      "cost_source": "Kaggle Learn page description: 'no-cost courses' (kaggle.com/learn, 2026-10-21)",
+      "skill_steps": [
+        {
+          "id": "python",
+          "from_level": 0.0,
+          "to_level": 0.3
+        },
+        {
+          "id": "data_quality",
+          "from_level": 0.0,
+          "to_level": 0.3
+        }
+      ],
+      "hours_basis": "team_estimate",
+      "stated_duration": null,
+      "cost_myr": 0,
+      "cost_type": "free",
+      "cost_note": "Kaggle Learn page description: 'no-cost courses' (kaggle.com/learn, 2026-10-21)",
+      "hrd_scheme": null,
+      "claim_evidence_url": null,
+      "eligibility": {},
+      "platform": "vendor",
+      "format": [
+        "hands_on"
+      ],
+      "delivery": "self_paced",
+      "next_dates": [],
+      "certificate": null,
+      "language": [
+        "en"
+      ],
+      "tags": [],
+      "status": "verified",
+      "last_verified": "2026-10-21",
+      "verified_by": "Person A check on 2026-10-21 (URL opened, title and cost checked)",
+      "source_notes": null
     },
     {
       "id": "course_03",
@@ -56,7 +121,37 @@
       "verified": true,
       "hrd_claimable": false,
       "hours_source": "estimate: Kaggle shows course length in its client-side listing, not captured in page text at retrieval; check",
-      "cost_source": "Kaggle Learn page description: 'no-cost courses' (kaggle.com/learn, 2026-10-21)"
+      "cost_source": "Kaggle Learn page description: 'no-cost courses' (kaggle.com/learn, 2026-10-21)",
+      "skill_steps": [
+        {
+          "id": "data_quality",
+          "from_level": 0.0,
+          "to_level": 0.3
+        }
+      ],
+      "hours_basis": "team_estimate",
+      "stated_duration": null,
+      "cost_myr": 0,
+      "cost_type": "free",
+      "cost_note": "Kaggle Learn page description: 'no-cost courses' (kaggle.com/learn, 2026-10-21)",
+      "hrd_scheme": null,
+      "claim_evidence_url": null,
+      "eligibility": {},
+      "platform": "vendor",
+      "format": [
+        "hands_on"
+      ],
+      "delivery": "self_paced",
+      "next_dates": [],
+      "certificate": null,
+      "language": [
+        "en"
+      ],
+      "tags": [],
+      "status": "verified",
+      "last_verified": "2026-10-21",
+      "verified_by": "Person A check on 2026-10-21 (URL opened, title and cost checked)",
+      "source_notes": null
     },
     {
       "id": "course_04",
@@ -73,7 +168,37 @@
       "verified": true,
       "hrd_claimable": false,
       "hours_source": "estimate: Kaggle shows course length in its client-side listing, not captured in page text at retrieval; check",
-      "cost_source": "Kaggle Learn page description: 'no-cost courses' (kaggle.com/learn, 2026-10-21)"
+      "cost_source": "Kaggle Learn page description: 'no-cost courses' (kaggle.com/learn, 2026-10-21)",
+      "skill_steps": [
+        {
+          "id": "sql_basics",
+          "from_level": 0.0,
+          "to_level": 0.3
+        }
+      ],
+      "hours_basis": "team_estimate",
+      "stated_duration": null,
+      "cost_myr": 0,
+      "cost_type": "free",
+      "cost_note": "Kaggle Learn page description: 'no-cost courses' (kaggle.com/learn, 2026-10-21)",
+      "hrd_scheme": null,
+      "claim_evidence_url": null,
+      "eligibility": {},
+      "platform": "vendor",
+      "format": [
+        "hands_on"
+      ],
+      "delivery": "self_paced",
+      "next_dates": [],
+      "certificate": null,
+      "language": [
+        "en"
+      ],
+      "tags": [],
+      "status": "verified",
+      "last_verified": "2026-10-21",
+      "verified_by": "Person A check on 2026-10-21 (URL opened, title and cost checked)",
+      "source_notes": null
     },
     {
       "id": "course_05",
@@ -83,7 +208,7 @@
       "hours": 4,
       "cost": "free",
       "skills": [
-        "stakeholder_communication"
+        "data_visualisation"
       ],
       "prerequisites": [
         "course_01"
@@ -92,7 +217,37 @@
       "verified": true,
       "hrd_claimable": false,
       "hours_source": "estimate: Kaggle shows course length in its client-side listing, not captured in page text at retrieval; check",
-      "cost_source": "Kaggle Learn page description: 'no-cost courses' (kaggle.com/learn, 2026-10-21)"
+      "cost_source": "Kaggle Learn page description: 'no-cost courses' (kaggle.com/learn, 2026-10-21)",
+      "skill_steps": [
+        {
+          "id": "data_visualisation",
+          "from_level": 0.0,
+          "to_level": 0.3
+        }
+      ],
+      "hours_basis": "team_estimate",
+      "stated_duration": null,
+      "cost_myr": 0,
+      "cost_type": "free",
+      "cost_note": "Kaggle Learn page description: 'no-cost courses' (kaggle.com/learn, 2026-10-21)",
+      "hrd_scheme": null,
+      "claim_evidence_url": null,
+      "eligibility": {},
+      "platform": "vendor",
+      "format": [
+        "hands_on"
+      ],
+      "delivery": "self_paced",
+      "next_dates": [],
+      "certificate": null,
+      "language": [
+        "en"
+      ],
+      "tags": [],
+      "status": "verified",
+      "last_verified": "2026-10-21",
+      "verified_by": "Person A check on 2026-10-21 (URL opened, title and cost checked)",
+      "source_notes": null
     },
     {
       "id": "course_06",
@@ -110,7 +265,37 @@
       "hrd_claimable": false,
       "hours_source": "assumption: duration not stated in page text at retrieval; team estimate",
       "verification_note": "URL opened; no price or paywall seen, but the page does not state 'free'",
-      "cost_source": "no price, paywall or sign-up shown, but the site does not state that it is free"
+      "cost_source": "no price, paywall or sign-up shown, but the site does not state that it is free",
+      "skill_steps": [
+        {
+          "id": "sql_basics",
+          "from_level": 0.0,
+          "to_level": 0.3
+        }
+      ],
+      "hours_basis": "provider_total",
+      "stated_duration": null,
+      "cost_myr": null,
+      "cost_type": "unknown",
+      "cost_note": "no price, paywall or sign-up shown, but the site does not state that it is free",
+      "hrd_scheme": null,
+      "claim_evidence_url": null,
+      "eligibility": {},
+      "platform": "other",
+      "format": [
+        "hands_on"
+      ],
+      "delivery": "self_paced",
+      "next_dates": [],
+      "certificate": null,
+      "language": [
+        "en"
+      ],
+      "tags": [],
+      "status": "verified",
+      "last_verified": "2026-10-21",
+      "verified_by": "Person A check on 2026-10-21 (URL opened, title and cost checked)",
+      "source_notes": "URL opened; no price or paywall seen, but the page does not state 'free'"
     },
     {
       "id": "course_07",
@@ -127,7 +312,37 @@
       "verified": true,
       "hrd_claimable": false,
       "hours_source": "assumption: duration not stated in page text at retrieval; team estimate (selected chapters)",
-      "cost_source": "book preface: 'free and online' (otexts.com/fpp3, 2026-10-21)"
+      "cost_source": "book preface: 'free and online' (otexts.com/fpp3, 2026-10-21)",
+      "skill_steps": [
+        {
+          "id": "forecasting",
+          "from_level": 0.0,
+          "to_level": 0.7
+        }
+      ],
+      "hours_basis": "provider_total",
+      "stated_duration": null,
+      "cost_myr": 0,
+      "cost_type": "free",
+      "cost_note": "book preface: 'free and online' (otexts.com/fpp3, 2026-10-21)",
+      "hrd_scheme": null,
+      "claim_evidence_url": null,
+      "eligibility": {},
+      "platform": "other",
+      "format": [
+        "reading"
+      ],
+      "delivery": "self_paced",
+      "next_dates": [],
+      "certificate": null,
+      "language": [
+        "en"
+      ],
+      "tags": [],
+      "status": "verified",
+      "last_verified": "2026-10-21",
+      "verified_by": "Person A check on 2026-10-21 (URL opened, title and cost checked)",
+      "source_notes": null
     },
     {
       "id": "course_08",
@@ -137,6 +352,7 @@
       "hours": 8,
       "cost": "free",
       "skills": [
+        "bookkeeping",
         "recon_to_source",
         "cutoff_timing"
       ],
@@ -145,7 +361,47 @@
       "verified": true,
       "hrd_claimable": false,
       "hours_source": "provider page: 8 hours",
-      "cost_source": "OpenLearn page: 'Free course' (2026-10-21)"
+      "cost_source": "OpenLearn page: 'Free course' (2026-10-21)",
+      "skill_steps": [
+        {
+          "id": "bookkeeping",
+          "from_level": 0.0,
+          "to_level": 0.7
+        },
+        {
+          "id": "recon_to_source",
+          "from_level": 0.0,
+          "to_level": 0.7
+        },
+        {
+          "id": "cutoff_timing",
+          "from_level": 0.0,
+          "to_level": 0.7
+        }
+      ],
+      "hours_basis": "provider_total",
+      "stated_duration": null,
+      "cost_myr": 0,
+      "cost_type": "free",
+      "cost_note": "OpenLearn page: 'Free course' (2026-10-21)",
+      "hrd_scheme": null,
+      "claim_evidence_url": null,
+      "eligibility": {},
+      "platform": "mooc",
+      "format": [
+        "reading"
+      ],
+      "delivery": "self_paced",
+      "next_dates": [],
+      "certificate": null,
+      "language": [
+        "en"
+      ],
+      "tags": [],
+      "status": "verified",
+      "last_verified": "2026-10-21",
+      "verified_by": "Person A check on 2026-10-21 (URL opened, title and cost checked)",
+      "source_notes": null
     },
     {
       "id": "course_09",
@@ -162,7 +418,37 @@
       "verified": true,
       "hrd_claimable": false,
       "hours_source": "provider page: 24 hours study",
-      "cost_source": "OpenLearn page: 'Free course' (2026-10-21)"
+      "cost_source": "OpenLearn page: 'Free course' (2026-10-21)",
+      "skill_steps": [
+        {
+          "id": "stakeholder_communication",
+          "from_level": 0.0,
+          "to_level": 0.7
+        }
+      ],
+      "hours_basis": "provider_total",
+      "stated_duration": null,
+      "cost_myr": 0,
+      "cost_type": "free",
+      "cost_note": "OpenLearn page: 'Free course' (2026-10-21)",
+      "hrd_scheme": null,
+      "claim_evidence_url": null,
+      "eligibility": {},
+      "platform": "mooc",
+      "format": [
+        "reading"
+      ],
+      "delivery": "self_paced",
+      "next_dates": [],
+      "certificate": null,
+      "language": [
+        "en"
+      ],
+      "tags": [],
+      "status": "verified",
+      "last_verified": "2026-10-21",
+      "verified_by": "Person A check on 2026-10-21 (URL opened, title and cost checked)",
+      "source_notes": null
     },
     {
       "id": "course_10",
@@ -180,7 +466,37 @@
       "hrd_claimable": false,
       "hours_source": "provider page: 3-4 hours (midpoint used)",
       "verification_note": "course is free; certificate is optional and may be paid",
-      "cost_source": "Alison page: 'Free Online Course'; optional certificate may be paid (2026-10-21)"
+      "cost_source": "Alison page: 'Free Online Course'; optional certificate may be paid (2026-10-21)",
+      "skill_steps": [
+        {
+          "id": "variance_analysis",
+          "from_level": 0.0,
+          "to_level": 0.3
+        }
+      ],
+      "hours_basis": "provider_total",
+      "stated_duration": null,
+      "cost_myr": 0,
+      "cost_type": "free",
+      "cost_note": "Alison page: 'Free Online Course'; optional certificate may be paid (2026-10-21)",
+      "hrd_scheme": null,
+      "claim_evidence_url": null,
+      "eligibility": {},
+      "platform": "mooc",
+      "format": [
+        "videos"
+      ],
+      "delivery": "self_paced",
+      "next_dates": [],
+      "certificate": null,
+      "language": [
+        "en"
+      ],
+      "tags": [],
+      "status": "verified",
+      "last_verified": "2026-10-21",
+      "verified_by": "Person A check on 2026-10-21 (URL opened, title and cost checked)",
+      "source_notes": "course is free; certificate is optional and may be paid"
     },
     {
       "id": "course_11",
@@ -190,7 +506,7 @@
       "hours": 3,
       "cost": "free",
       "skills": [
-        "variance_analysis",
+        "data_visualisation",
         "data_quality"
       ],
       "prerequisites": [],
@@ -198,7 +514,43 @@
       "verified": true,
       "hrd_claimable": false,
       "hours_source": "assumption: duration not stated in page text at retrieval; team estimate",
-      "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free' (2026-10-21)"
+      "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free' (2026-10-21)",
+      "skill_steps": [
+        {
+          "id": "data_visualisation",
+          "from_level": 0.0,
+          "to_level": 0.3
+        },
+        {
+          "id": "data_quality",
+          "from_level": 0.0,
+          "to_level": 0.3
+        }
+      ],
+      "hours_basis": "provider_total",
+      "stated_duration": null,
+      "cost_myr": 0,
+      "cost_type": "free",
+      "cost_note": "Microsoft Learn FAQ: 'Microsoft Learn training is free' (2026-10-21)",
+      "hrd_scheme": null,
+      "claim_evidence_url": null,
+      "eligibility": {},
+      "platform": "vendor",
+      "format": [
+        "reading",
+        "hands_on"
+      ],
+      "delivery": "self_paced",
+      "next_dates": [],
+      "certificate": null,
+      "language": [
+        "en"
+      ],
+      "tags": [],
+      "status": "verified",
+      "last_verified": "2026-10-21",
+      "verified_by": "Person A check on 2026-10-21 (URL opened, title and cost checked)",
+      "source_notes": null
     },
     {
       "id": "course_12",
@@ -215,7 +567,38 @@
       "verified": true,
       "hrd_claimable": false,
       "hours_source": "assumption: duration not stated in page text at retrieval; team estimate",
-      "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free' (2026-10-21)"
+      "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free' (2026-10-21)",
+      "skill_steps": [
+        {
+          "id": "process_automation",
+          "from_level": 0.0,
+          "to_level": 0.3
+        }
+      ],
+      "hours_basis": "provider_total",
+      "stated_duration": null,
+      "cost_myr": 0,
+      "cost_type": "free",
+      "cost_note": "Microsoft Learn FAQ: 'Microsoft Learn training is free' (2026-10-21)",
+      "hrd_scheme": null,
+      "claim_evidence_url": null,
+      "eligibility": {},
+      "platform": "vendor",
+      "format": [
+        "reading",
+        "hands_on"
+      ],
+      "delivery": "self_paced",
+      "next_dates": [],
+      "certificate": null,
+      "language": [
+        "en"
+      ],
+      "tags": [],
+      "status": "verified",
+      "last_verified": "2026-10-21",
+      "verified_by": "Person A check on 2026-10-21 (URL opened, title and cost checked)",
+      "source_notes": null
     },
     {
       "id": "course_13",
@@ -232,7 +615,37 @@
       "verified": true,
       "hrd_claimable": false,
       "hours_source": "assumption: duration not stated in page text at retrieval; team estimate",
-      "cost_source": "no price or paywall shown, but the page does not state that it is free"
+      "cost_source": "no price or paywall shown, but the page does not state that it is free",
+      "skill_steps": [
+        {
+          "id": "spreadsheet_modelling",
+          "from_level": 0.0,
+          "to_level": 0.3
+        }
+      ],
+      "hours_basis": "provider_total",
+      "stated_duration": null,
+      "cost_myr": null,
+      "cost_type": "unknown",
+      "cost_note": "no price or paywall shown, but the page does not state that it is free",
+      "hrd_scheme": null,
+      "claim_evidence_url": null,
+      "eligibility": {},
+      "platform": "vendor",
+      "format": [
+        "reading"
+      ],
+      "delivery": "self_paced",
+      "next_dates": [],
+      "certificate": null,
+      "language": [
+        "en"
+      ],
+      "tags": [],
+      "status": "verified",
+      "last_verified": "2026-10-21",
+      "verified_by": "Person A check on 2026-10-21 (URL opened, title and cost checked)",
+      "source_notes": null
     },
     {
       "id": "course_14",
@@ -242,6 +655,7 @@
       "hours": 4,
       "cost": "free",
       "skills": [
+        "ai_assistants",
         "ai_output_review"
       ],
       "prerequisites": [],
@@ -249,7 +663,44 @@
       "verified": true,
       "hrd_claimable": false,
       "hours_source": "assumption: duration not stated in page text at retrieval; team estimate",
-      "cost_source": "Anthropic Academy page: 'Register | FREE' (2026-10-21)"
+      "cost_source": "Anthropic Academy page: 'Register | FREE' (2026-10-21)",
+      "skill_steps": [
+        {
+          "id": "ai_assistants",
+          "from_level": 0.0,
+          "to_level": 0.7
+        },
+        {
+          "id": "ai_output_review",
+          "from_level": 0.0,
+          "to_level": 0.3
+        }
+      ],
+      "hours_basis": "provider_total",
+      "stated_duration": null,
+      "cost_myr": 0,
+      "cost_type": "free",
+      "cost_note": "Anthropic Academy page: 'Register | FREE' (2026-10-21)",
+      "hrd_scheme": null,
+      "claim_evidence_url": null,
+      "eligibility": {},
+      "platform": "vendor",
+      "format": [
+        "videos"
+      ],
+      "delivery": "self_paced",
+      "next_dates": [],
+      "certificate": null,
+      "language": [
+        "en"
+      ],
+      "tags": [
+        "ai_literacy"
+      ],
+      "status": "verified",
+      "last_verified": "2026-10-21",
+      "verified_by": "Person A check on 2026-10-21 (URL opened, title and cost checked)",
+      "source_notes": null
     },
     {
       "id": "course_15",
@@ -259,6 +710,7 @@
       "hours": 30,
       "cost": "free",
       "skills": [
+        "ai_assistants",
         "ai_output_review"
       ],
       "prerequisites": [],
@@ -266,7 +718,44 @@
       "verified": true,
       "hrd_claimable": false,
       "hours_source": "assumption: duration not stated in page text at retrieval; team estimate",
-      "cost_source": "Elements of AI page: free online course (2026-10-21)"
+      "cost_source": "Elements of AI page: free online course (2026-10-21)",
+      "skill_steps": [
+        {
+          "id": "ai_assistants",
+          "from_level": 0.0,
+          "to_level": 0.7
+        },
+        {
+          "id": "ai_output_review",
+          "from_level": 0.0,
+          "to_level": 0.7
+        }
+      ],
+      "hours_basis": "provider_total",
+      "stated_duration": null,
+      "cost_myr": 0,
+      "cost_type": "free",
+      "cost_note": "Elements of AI page: free online course (2026-10-21)",
+      "hrd_scheme": null,
+      "claim_evidence_url": null,
+      "eligibility": {},
+      "platform": "mooc",
+      "format": [
+        "reading"
+      ],
+      "delivery": "self_paced",
+      "next_dates": [],
+      "certificate": null,
+      "language": [
+        "en"
+      ],
+      "tags": [
+        "ai_literacy"
+      ],
+      "status": "verified",
+      "last_verified": "2026-10-21",
+      "verified_by": "Person A check on 2026-10-21 (URL opened, title and cost checked)",
+      "source_notes": null
     },
     {
       "id": "course_16",
@@ -284,7 +773,37 @@
       "hrd_claimable": false,
       "hours_source": "provider page: about 1 hour (4 modules, 60 minutes)",
       "verification_note": "checked by Person A on 2026-10-21: payment required on Coursera; course URL and title verified",
-      "cost_source": "checked by Person A on 2026-10-21: Coursera requires payment (subscription or per-course purchase); no free access"
+      "cost_source": "checked by Person A on 2026-10-21: Coursera requires payment (subscription or per-course purchase); no free access",
+      "skill_steps": [
+        {
+          "id": "controls_design",
+          "from_level": 0.0,
+          "to_level": 0.3
+        }
+      ],
+      "hours_basis": "provider_total",
+      "stated_duration": null,
+      "cost_myr": null,
+      "cost_type": "unknown",
+      "cost_note": "checked by Person A on 2026-10-21: Coursera requires payment (subscription or per-course purchase); no free access",
+      "hrd_scheme": null,
+      "claim_evidence_url": null,
+      "eligibility": {},
+      "platform": "other",
+      "format": [
+        "reading"
+      ],
+      "delivery": "self_paced",
+      "next_dates": [],
+      "certificate": null,
+      "language": [
+        "en"
+      ],
+      "tags": [],
+      "status": "verified",
+      "last_verified": "2026-10-21",
+      "verified_by": "Person A check on 2026-10-21 (URL opened, title and cost checked)",
+      "source_notes": "checked by Person A on 2026-10-21: payment required on Coursera; course URL and title verified"
     },
     {
       "id": "course_17",
@@ -302,7 +821,37 @@
       "hrd_claimable": false,
       "hours_source": "assumption: about 10 pages of text (components and 17 principles); team estimate of 1 hour reading",
       "cost_source": "free download linked as 'Integrated Framework Executive Summary' on https://www.coso.org/guidance-on-ic (official COSO site, 2026-10-21)",
-      "verification_note": "PDF opened 2026-10-21; official COSO publication, © 2013 all rights reserved, so we only link to it"
+      "verification_note": "PDF opened 2026-10-21; official COSO publication, © 2013 all rights reserved, so we only link to it",
+      "skill_steps": [
+        {
+          "id": "controls_design",
+          "from_level": 0.0,
+          "to_level": 0.3
+        }
+      ],
+      "hours_basis": "provider_total",
+      "stated_duration": null,
+      "cost_myr": 0,
+      "cost_type": "free",
+      "cost_note": "free download linked as 'Integrated Framework Executive Summary' on https://www.coso.org/guidance-on-ic (official COSO site, 2026-10-21)",
+      "hrd_scheme": null,
+      "claim_evidence_url": null,
+      "eligibility": {},
+      "platform": "other",
+      "format": [
+        "reading"
+      ],
+      "delivery": "self_paced",
+      "next_dates": [],
+      "certificate": null,
+      "language": [
+        "en"
+      ],
+      "tags": [],
+      "status": "verified",
+      "last_verified": "2026-10-21",
+      "verified_by": "Person A check on 2026-10-21 (URL opened, title and cost checked)",
+      "source_notes": "PDF opened 2026-10-21; official COSO publication, © 2013 all rights reserved, so we only link to it"
     },
     {
       "id": "course_18",
@@ -322,7 +871,47 @@
       "hrd_claimable": false,
       "hours_source": "assumption: about 12-15 minutes of reading (team estimate)",
       "cost_source": "page: 'free In-Depth Explanation', no login (2026-10-21)",
-      "verification_note": "page opened 2026-10-21: deposits in transit, outstanding checks, bank and book errors incl. transpositions, adjusting entries"
+      "verification_note": "page opened 2026-10-21: deposits in transit, outstanding checks, bank and book errors incl. transpositions, adjusting entries",
+      "skill_steps": [
+        {
+          "id": "recon_to_source",
+          "from_level": 0.0,
+          "to_level": 0.3
+        },
+        {
+          "id": "cutoff_timing",
+          "from_level": 0.0,
+          "to_level": 0.3
+        },
+        {
+          "id": "transposition_check",
+          "from_level": 0.0,
+          "to_level": 0.3
+        }
+      ],
+      "hours_basis": "provider_total",
+      "stated_duration": null,
+      "cost_myr": 0,
+      "cost_type": "free",
+      "cost_note": "page: 'free In-Depth Explanation', no login (2026-10-21)",
+      "hrd_scheme": null,
+      "claim_evidence_url": null,
+      "eligibility": {},
+      "platform": "other",
+      "format": [
+        "reading"
+      ],
+      "delivery": "self_paced",
+      "next_dates": [],
+      "certificate": null,
+      "language": [
+        "en"
+      ],
+      "tags": [],
+      "status": "verified",
+      "last_verified": "2026-10-21",
+      "verified_by": "Person A check on 2026-10-21 (URL opened, title and cost checked)",
+      "source_notes": "page opened 2026-10-21: deposits in transit, outstanding checks, bank and book errors incl. transpositions, adjusting entries"
     },
     {
       "id": "course_19",
@@ -340,7 +929,37 @@
       "hrd_claimable": false,
       "hours_source": "assumption: short summary page, about 10 minutes",
       "cost_source": "summary is readable without login, but the page does not state a price (2026-10-21)",
-      "verification_note": "official standard-setter page opened 2026-10-21: which exchange rates to apply to foreign currency transactions"
+      "verification_note": "official standard-setter page opened 2026-10-21: which exchange rates to apply to foreign currency transactions",
+      "skill_steps": [
+        {
+          "id": "fx_conversion",
+          "from_level": 0.0,
+          "to_level": 0.3
+        }
+      ],
+      "hours_basis": "provider_total",
+      "stated_duration": null,
+      "cost_myr": null,
+      "cost_type": "unknown",
+      "cost_note": "summary is readable without login, but the page does not state a price (2026-10-21)",
+      "hrd_scheme": null,
+      "claim_evidence_url": null,
+      "eligibility": {},
+      "platform": "other",
+      "format": [
+        "reading"
+      ],
+      "delivery": "self_paced",
+      "next_dates": [],
+      "certificate": null,
+      "language": [
+        "en"
+      ],
+      "tags": [],
+      "status": "verified",
+      "last_verified": "2026-10-21",
+      "verified_by": "Person A check on 2026-10-21 (URL opened, title and cost checked)",
+      "source_notes": "official standard-setter page opened 2026-10-21: which exchange rates to apply to foreign currency transactions"
     },
     {
       "id": "course_20",
@@ -359,7 +978,42 @@
       "hrd_claimable": false,
       "hours_source": "assumption: 6-page PDF, about 30 minutes",
       "cost_source": "PDF downloads without login, but the page does not state a price (2026-10-21)",
-      "verification_note": "IFAC page and PDF opened 2026-10-21: questioning mindset and critical evaluation of evidence (non-authoritative)"
+      "verification_note": "IFAC page and PDF opened 2026-10-21: questioning mindset and critical evaluation of evidence (non-authoritative)",
+      "skill_steps": [
+        {
+          "id": "unsupported_adjustment",
+          "from_level": 0.0,
+          "to_level": 0.3
+        },
+        {
+          "id": "escalation_judgment",
+          "from_level": 0.0,
+          "to_level": 0.3
+        }
+      ],
+      "hours_basis": "provider_total",
+      "stated_duration": null,
+      "cost_myr": null,
+      "cost_type": "unknown",
+      "cost_note": "PDF downloads without login, but the page does not state a price (2026-10-21)",
+      "hrd_scheme": null,
+      "claim_evidence_url": null,
+      "eligibility": {},
+      "platform": "other",
+      "format": [
+        "reading"
+      ],
+      "delivery": "self_paced",
+      "next_dates": [],
+      "certificate": null,
+      "language": [
+        "en"
+      ],
+      "tags": [],
+      "status": "verified",
+      "last_verified": "2026-10-21",
+      "verified_by": "Person A check on 2026-10-21 (URL opened, title and cost checked)",
+      "source_notes": "IFAC page and PDF opened 2026-10-21: questioning mindset and critical evaluation of evidence (non-authoritative)"
     },
     {
       "id": "course_21",
@@ -369,7 +1023,8 @@
       "hours": 0.3,
       "cost": "free",
       "skills": [
-        "spreadsheet_modelling"
+        "spreadsheet_modelling",
+        "ai_assistants"
       ],
       "prerequisites": [],
       "retrieved": "2026-10-21",
@@ -377,7 +1032,43 @@
       "hrd_claimable": false,
       "hours_source": "Microsoft Learn Catalog API duration_in_minutes (2026-10-21): 16 min",
       "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free' (2026-10-21)",
-      "verification_note": "module page opened 2026-10-21"
+      "verification_note": "module page opened 2026-10-21",
+      "skill_steps": [
+        {
+          "id": "spreadsheet_modelling",
+          "from_level": 0.0,
+          "to_level": 0.3
+        },
+        {
+          "id": "ai_assistants",
+          "from_level": 0.0,
+          "to_level": 0.3
+        }
+      ],
+      "hours_basis": "provider_total",
+      "stated_duration": null,
+      "cost_myr": 0,
+      "cost_type": "free",
+      "cost_note": "Microsoft Learn FAQ: 'Microsoft Learn training is free' (2026-10-21)",
+      "hrd_scheme": null,
+      "claim_evidence_url": null,
+      "eligibility": {},
+      "platform": "vendor",
+      "format": [
+        "reading",
+        "hands_on"
+      ],
+      "delivery": "self_paced",
+      "next_dates": [],
+      "certificate": null,
+      "language": [
+        "en"
+      ],
+      "tags": [],
+      "status": "verified",
+      "last_verified": "2026-10-21",
+      "verified_by": "Person A check on 2026-10-21 (URL opened, title and cost checked)",
+      "source_notes": "module page opened 2026-10-21"
     },
     {
       "id": "course_22",
@@ -387,7 +1078,7 @@
       "hours": 0.4,
       "cost": "free",
       "skills": [
-        "variance_analysis",
+        "data_visualisation",
         "stakeholder_communication"
       ],
       "prerequisites": [],
@@ -396,7 +1087,43 @@
       "hrd_claimable": false,
       "hours_source": "Microsoft Learn Catalog API duration_in_minutes (2026-10-21): 25 min",
       "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free' (2026-10-21)",
-      "verification_note": "module page opened 2026-10-21"
+      "verification_note": "module page opened 2026-10-21",
+      "skill_steps": [
+        {
+          "id": "data_visualisation",
+          "from_level": 0.0,
+          "to_level": 0.3
+        },
+        {
+          "id": "stakeholder_communication",
+          "from_level": 0.0,
+          "to_level": 0.3
+        }
+      ],
+      "hours_basis": "provider_total",
+      "stated_duration": null,
+      "cost_myr": 0,
+      "cost_type": "free",
+      "cost_note": "Microsoft Learn FAQ: 'Microsoft Learn training is free' (2026-10-21)",
+      "hrd_scheme": null,
+      "claim_evidence_url": null,
+      "eligibility": {},
+      "platform": "vendor",
+      "format": [
+        "reading",
+        "hands_on"
+      ],
+      "delivery": "self_paced",
+      "next_dates": [],
+      "certificate": null,
+      "language": [
+        "en"
+      ],
+      "tags": [],
+      "status": "verified",
+      "last_verified": "2026-10-21",
+      "verified_by": "Person A check on 2026-10-21 (URL opened, title and cost checked)",
+      "source_notes": "module page opened 2026-10-21"
     },
     {
       "id": "course_23",
@@ -414,7 +1141,38 @@
       "hrd_claimable": false,
       "hours_source": "Microsoft Learn Catalog API duration_in_minutes (2026-10-21): 35 min",
       "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free' (2026-10-21)",
-      "verification_note": "module page opened 2026-10-21"
+      "verification_note": "module page opened 2026-10-21",
+      "skill_steps": [
+        {
+          "id": "data_quality",
+          "from_level": 0.0,
+          "to_level": 0.3
+        }
+      ],
+      "hours_basis": "provider_total",
+      "stated_duration": null,
+      "cost_myr": 0,
+      "cost_type": "free",
+      "cost_note": "Microsoft Learn FAQ: 'Microsoft Learn training is free' (2026-10-21)",
+      "hrd_scheme": null,
+      "claim_evidence_url": null,
+      "eligibility": {},
+      "platform": "vendor",
+      "format": [
+        "reading",
+        "hands_on"
+      ],
+      "delivery": "self_paced",
+      "next_dates": [],
+      "certificate": null,
+      "language": [
+        "en"
+      ],
+      "tags": [],
+      "status": "verified",
+      "last_verified": "2026-10-21",
+      "verified_by": "Person A check on 2026-10-21 (URL opened, title and cost checked)",
+      "source_notes": "module page opened 2026-10-21"
     },
     {
       "id": "course_24",
@@ -433,7 +1191,43 @@
       "hrd_claimable": false,
       "hours_source": "Microsoft Learn Catalog API duration_in_minutes (2026-10-21): 44 min",
       "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free' (2026-10-21)",
-      "verification_note": "module page opened 2026-10-21"
+      "verification_note": "module page opened 2026-10-21",
+      "skill_steps": [
+        {
+          "id": "process_automation",
+          "from_level": 0.0,
+          "to_level": 0.3
+        },
+        {
+          "id": "controls_design",
+          "from_level": 0.0,
+          "to_level": 0.3
+        }
+      ],
+      "hours_basis": "provider_total",
+      "stated_duration": null,
+      "cost_myr": 0,
+      "cost_type": "free",
+      "cost_note": "Microsoft Learn FAQ: 'Microsoft Learn training is free' (2026-10-21)",
+      "hrd_scheme": null,
+      "claim_evidence_url": null,
+      "eligibility": {},
+      "platform": "vendor",
+      "format": [
+        "reading",
+        "hands_on"
+      ],
+      "delivery": "self_paced",
+      "next_dates": [],
+      "certificate": null,
+      "language": [
+        "en"
+      ],
+      "tags": [],
+      "status": "verified",
+      "last_verified": "2026-10-21",
+      "verified_by": "Person A check on 2026-10-21 (URL opened, title and cost checked)",
+      "source_notes": "module page opened 2026-10-21"
     },
     {
       "id": "course_25",
@@ -443,7 +1237,8 @@
       "hours": 0.4,
       "cost": "free",
       "skills": [
-        "ai_output_review"
+        "ai_assistants",
+        "llms"
       ],
       "prerequisites": [],
       "retrieved": "2026-10-21",
@@ -451,7 +1246,45 @@
       "hrd_claimable": false,
       "hours_source": "Microsoft Learn Catalog API duration_in_minutes (2026-10-21): 22 min",
       "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free' (2026-10-21)",
-      "verification_note": "module page opened 2026-10-21"
+      "verification_note": "module page opened 2026-10-21",
+      "skill_steps": [
+        {
+          "id": "ai_assistants",
+          "from_level": 0.0,
+          "to_level": 0.3
+        },
+        {
+          "id": "llms",
+          "from_level": 0.0,
+          "to_level": 0.3
+        }
+      ],
+      "hours_basis": "provider_total",
+      "stated_duration": null,
+      "cost_myr": 0,
+      "cost_type": "free",
+      "cost_note": "Microsoft Learn FAQ: 'Microsoft Learn training is free' (2026-10-21)",
+      "hrd_scheme": null,
+      "claim_evidence_url": null,
+      "eligibility": {},
+      "platform": "vendor",
+      "format": [
+        "reading",
+        "hands_on"
+      ],
+      "delivery": "self_paced",
+      "next_dates": [],
+      "certificate": null,
+      "language": [
+        "en"
+      ],
+      "tags": [
+        "ai_literacy"
+      ],
+      "status": "verified",
+      "last_verified": "2026-10-21",
+      "verified_by": "Person A check on 2026-10-21 (URL opened, title and cost checked)",
+      "source_notes": "module page opened 2026-10-21"
     },
     {
       "id": "course_26",
@@ -461,7 +1294,8 @@
       "hours": 1.0,
       "cost": "free",
       "skills": [
-        "ai_output_review"
+        "ai_output_review",
+        "ai_assistants"
       ],
       "prerequisites": [],
       "retrieved": "2026-10-21",
@@ -469,7 +1303,45 @@
       "hrd_claimable": false,
       "hours_source": "Microsoft Learn Catalog API duration_in_minutes (2026-10-21): 58 min",
       "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free' (2026-10-21)",
-      "verification_note": "module page opened 2026-10-21"
+      "verification_note": "module page opened 2026-10-21",
+      "skill_steps": [
+        {
+          "id": "ai_output_review",
+          "from_level": 0.0,
+          "to_level": 0.3
+        },
+        {
+          "id": "ai_assistants",
+          "from_level": 0.0,
+          "to_level": 0.3
+        }
+      ],
+      "hours_basis": "provider_total",
+      "stated_duration": null,
+      "cost_myr": 0,
+      "cost_type": "free",
+      "cost_note": "Microsoft Learn FAQ: 'Microsoft Learn training is free' (2026-10-21)",
+      "hrd_scheme": null,
+      "claim_evidence_url": null,
+      "eligibility": {},
+      "platform": "vendor",
+      "format": [
+        "reading",
+        "hands_on"
+      ],
+      "delivery": "self_paced",
+      "next_dates": [],
+      "certificate": null,
+      "language": [
+        "en"
+      ],
+      "tags": [
+        "ai_literacy"
+      ],
+      "status": "verified",
+      "last_verified": "2026-10-21",
+      "verified_by": "Person A check on 2026-10-21 (URL opened, title and cost checked)",
+      "source_notes": "module page opened 2026-10-21"
     }
   ]
 }

@@ -1,0 +1,134 @@
+{
+  "_about": "Hands-on milestones placed in the learning plan after each core skill or at least every 4 weeks (pathway.md §4.5). Tasks are synthetic practice suggestions written by the team; case_id links to a Qart practice case where one exists. Hours are team estimates.",
+  "milestones": [
+    {
+      "id": "ms_recon_review",
+      "title": "Review an AI-prepared bank reconciliation in Qart",
+      "skills": [
+        "recon_to_source",
+        "ai_output_review",
+        "transposition_check"
+      ],
+      "hours": 1,
+      "case_id": "case_003"
+    },
+    {
+      "id": "ms_duplicates",
+      "title": "Find a double-counted payment in a practice case",
+      "skills": [
+        "duplicate_detection"
+      ],
+      "hours": 0.5,
+      "case_id": "case_002"
+    },
+    {
+      "id": "ms_cutoff",
+      "title": "Decide whether an AI-flagged timing item is really a problem, in a practice case",
+      "skills": [
+        "cutoff_timing",
+        "escalation_judgment"
+      ],
+      "hours": 0.5,
+      "case_id": "case_007"
+    },
+    {
+      "id": "ms_fx",
+      "title": "Recompute one foreign-currency receipt at the documented rate and note the difference",
+      "skills": [
+        "fx_conversion"
+      ],
+      "hours": 0.5,
+      "case_id": null
+    },
+    {
+      "id": "ms_adjustment",
+      "title": "Challenge an unsupported adjustment in a practice case",
+      "skills": [
+        "unsupported_adjustment"
+      ],
+      "hours": 0.5,
+      "case_id": "case_006"
+    },
+    {
+      "id": "ms_sql_dashboard",
+      "title": "Pull one month of transactions with SQL and chart them in a small dashboard",
+      "skills": [
+        "sql_basics",
+        "data_visualisation"
+      ],
+      "hours": 3,
+      "case_id": null
+    },
+    {
+      "id": "ms_python_clean",
+      "title": "Clean a messy export with a short Python script and note what you changed",
+      "skills": [
+        "python",
+        "data_quality"
+      ],
+      "hours": 3,
+      "case_id": null
+    },
+    {
+      "id": "ms_automate",
+      "title": "Automate one repetitive step of a monthly task and write down the control that checks it",
+      "skills": [
+        "process_automation",
+        "excel_automation",
+        "controls_design"
+      ],
+      "hours": 3,
+      "case_id": null
+    },
+    {
+      "id": "ms_forecast",
+      "title": "Build a simple forecast for one cost line and explain the main variance",
+      "skills": [
+        "forecasting",
+        "variance_analysis"
+      ],
+      "hours": 2,
+      "case_id": null
+    },
+    {
+      "id": "ms_ai_review",
+      "title": "Use an AI assistant on a real work task and list what you had to correct",
+      "skills": [
+        "ai_assistants",
+        "ai_output_review",
+        "llms"
+      ],
+      "hours": 1,
+      "case_id": null
+    },
+    {
+      "id": "ms_requirements",
+      "title": "Write a one-page brief for a process change after interviewing two colleagues",
+      "skills": [
+        "business_analysis",
+        "stakeholder_communication",
+        "project_management"
+      ],
+      "hours": 2,
+      "case_id": null
+    },
+    {
+      "id": "ms_report",
+      "title": "Turn a month-end report into a one-page summary for a manager",
+      "skills": [
+        "financial_reporting",
+        "spreadsheet_modelling",
+        "bookkeeping"
+      ],
+      "hours": 2,
+      "case_id": null
+    }
+  ],
+  "default": {
+    "id": "ms_apply",
+    "title": "Apply what you learned to one task at work or in a personal project, and write three lines on what changed",
+    "skills": [],
+    "hours": 1,
+    "case_id": null
+  }
+}

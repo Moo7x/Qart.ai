@@ -22,6 +22,16 @@ Contract version: **v2** (21 Oct 2026). v2 aligns with `PROJECT_PLAN.md` v2:
 - New `PathPlan.horizon_weeks`, `PathPlan.profile_inputs`, `Recommendation.profile_inputs`: plain lines naming the answers used.
 - Still stored only: tools, formats (courses have no format field yet). Never read: industry, education (no demographic fields in scoring), notes.
 
+**v2.7 additions (23 Oct 2026, additive):** learning-plan fields on `Course` (pathway.md §3.1):
+- `skill_steps` (`{id, from_level, to_level}`, same ids as `skills`);
+- `hours_basis`, `stated_duration`;
+- `cost_myr`, `cost_type` (free / low_cost / hrd_claimable / free_if_eligible / **unknown**), `cost_note`;
+- `hrd_scheme`, `claim_evidence_url` (required when `hrd_claimable`);
+- `eligibility`, `platform`, `format`, `delivery`, `next_dates`, `certificate` (null = not checked), `language`, `tags`;
+- `status` (draft / verified), `last_verified`, `verified_by`, `source_notes`.
+
+The plan uses verified courses only unless `SHOW_DRAFT_RESOURCES=true`. New `catalogue/milestones.json`.
+
 **v2.6 additions (23 Oct 2026, additive):** funding and eligibility for the learning plan (pathway.md §2). `Profile.preferences` gains:
 - `employment` (employed / job_seeking / student / self_employed);
 - `employer_hrd` (yes / no / not_sure; only when employed);

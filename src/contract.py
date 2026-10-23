@@ -507,6 +507,28 @@ class PathPlan(BaseModel):
 
 
 # --- Course ---------------------------------------------------------------------------------
+HoursBasis = Literal["provider_total", "provider_pace", "team_estimate"]
+CostType = Literal["free", "low_cost", "hrd_claimable", "free_if_eligible", "unknown"]
+ResourceFormat = Literal["hands_on", "videos", "reading", "mentor"]
+
+
+class SkillStep(BaseModel):
+    """A course takes a skill from `from_level` to `to_level` (0 / 0.3 / 0.7 / 1.0 scale)."""
+
+    id: str
+    from_level: float = Field(ge=0, le=1)
+    to_level: float = Field(gt=0, le=1)
+
+
+class Eligibility(BaseModel):
+    """Who a course is open to; every field optional (omitted = open to all)."""
+
+    min_age: int | None = None
+    max_age: int | None = None
+    malaysian_only: bool = False
+    employment: list[str] | None = None
+
+
 class Course(BaseModel):
     id: str
     title: str
@@ -524,6 +546,28 @@ class Course(BaseModel):
     verification_note: str | None = None
     # Addition (optional): where the cost label was confirmed (never "free" without a source).
     cost_source: str | None = None
+    # Additions (optional, v2.7): learning-plan fields (pathway.md §3.1). `skills` stays the id
+    # list the old planner and search read; skill_steps carries the levels (same ids).
+    skill_steps: list[SkillStep] = []
+    stated_duration: str | None = None
+    hours_basis: HoursBasis | None = None
+    cost_myr: float | None = None  # None = no price stated; never treated as free
+    cost_type: CostType | None = None
+    cost_note: str | None = None
+    hrd_scheme: str | None = None
+    claim_evidence_url: str | None = None  # required when hrd_claimable
+    eligibility: Eligibility = Field(default_factory=lambda: Eligibility())
+    platform: str | None = None
+    format: list[ResourceFormat] = []
+    delivery: Literal["self_paced", "scheduled"] = "self_paced"
+    next_dates: list[str] = []
+    certificate: bool | None = None  # None = not checked
+    language: list[Literal["en", "ms"]] = ["en"]
+    tags: list[str] = []
+    status: Literal["draft", "verified"] = "draft"
+    last_verified: str | None = None
+    verified_by: str | None = None
+    source_notes: str | None = None
 
 
 # --- OptimizerProposal ----------------------------------------------------------------------

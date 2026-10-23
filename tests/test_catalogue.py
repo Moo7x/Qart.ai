@@ -76,7 +76,7 @@ def test_assumptions_allocate_every_task_in_both_scenarios() -> None:
 def test_courses_reference_known_skills_and_prerequisites() -> None:
     cat = default_catalogue()
     for course in cat.courses.values():
-        assert set(course.skills) <= set(cat.skills), course.id
+        assert set(course.skills) <= set(cat.vocabulary), course.id
         assert set(course.prerequisites) <= set(cat.courses), course.id
         assert course.url.startswith("https://")
         assert course.hours > 0
