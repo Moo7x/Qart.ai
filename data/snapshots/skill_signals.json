@@ -1,0 +1,6838 @@
+{
+ "source": "Hacker News “Ask HN: Who is hiring?” (via the Algolia HN Search API)",
+ "source_url": "https://hn.algolia.com/api",
+ "license": "Public API, no key; post text © its authors (only counts are stored)",
+ "attribution": "Source: Hacker News “Who is hiring?” threads",
+ "update_frequency": "one thread per month (first weekday of the month)",
+ "data_as_of": "2026-10-15",
+ "fetched_at": "2026-10-23T00:39:25+00:00",
+ "caveats": [
+  "Tech hiring signal (Hacker News), not the Malaysian job market.",
+  "Skewed toward tech start-ups and US or remote roles; a few hundred posts a month.",
+  "One post counts once per skill; mentions are matched by keyword patterns, not read by a person.",
+  "Latest month: 266 job posts in the thread (2026-10)."
+ ],
+ "months": [
+  "2023-11",
+  "2023-12",
+  "2024-01",
+  "2024-02",
+  "2024-03",
+  "2024-04",
+  "2024-05",
+  "2024-06",
+  "2024-07",
+  "2024-08",
+  "2024-09",
+  "2024-10",
+  "2024-11",
+  "2024-12",
+  "2025-01",
+  "2025-02",
+  "2025-03",
+  "2025-04",
+  "2025-05",
+  "2025-06",
+  "2025-07",
+  "2025-08",
+  "2025-09",
+  "2025-10",
+  "2025-11",
+  "2025-12",
+  "2026-01",
+  "2026-02",
+  "2026-03",
+  "2026-04",
+  "2026-05",
+  "2026-06",
+  "2026-07",
+  "2026-08",
+  "2026-09",
+  "2026-10"
+ ],
+ "params": {
+  "window_months": 36,
+  "ma_short_months": 3,
+  "ma_long_months": 12,
+  "rising_ma_ratio": 1.1,
+  "rising_change_12m": 0.15,
+  "cooling_ma_ratio": 0.9,
+  "cooling_change_12m": -0.15,
+  "min_mentions_per_month": 5.0,
+  "min_mentions_window_months": 6,
+  "index_base": 100.0,
+  "stale_after_days": 45,
+  "default_country": "AU",
+  "default_country_label": "Australia (closest covered market, not Malaysia)"
+ },
+ "series": [
+  {
+   "id": "python",
+   "name": "Python",
+   "category": "Programming",
+   "label": "stable",
+   "change_12m": -0.0087,
+   "latest_sample_size": 64,
+   "latest_total_posts": 266,
+   "points": [
+    {
+     "month": "2023-11",
+     "mentions": 75,
+     "total_posts": 362,
+     "share": 0.2072,
+     "index": 100.0,
+     "ma_short": null,
+     "ma_long": null
+    },
+    {
+     "month": "2023-12",
+     "mentions": 56,
+     "total_posts": 313,
+     "share": 0.1789,
+     "index": 86.36,
+     "ma_short": null,
+     "ma_long": null
+    },
+    {
+     "month": "2024-01",
+     "mentions": 65,
+     "total_posts": 278,
+     "share": 0.2338,
+     "index": 112.85,
+     "ma_short": 0.2066,
+     "ma_long": null
+    },
+    {
+     "month": "2024-02",
+     "mentions": 67,
+     "total_posts": 341,
+     "share": 0.1965,
+     "index": 94.83,
+     "ma_short": 0.2031,
+     "ma_long": null
+    },
+    {
+     "month": "2024-03",
+     "mentions": 65,
+     "total_posts": 300,
+     "share": 0.2167,
+     "index": 104.58,
+     "ma_short": 0.2157,
+     "ma_long": null
+    },
+    {
+     "month": "2024-04",
+     "mentions": 61,
+     "total_posts": 289,
+     "share": 0.2111,
+     "index": 101.88,
+     "ma_short": 0.2081,
+     "ma_long": null
+    },
+    {
+     "month": "2024-05",
+     "mentions": 80,
+     "total_posts": 396,
+     "share": 0.202,
+     "index": 97.51,
+     "ma_short": 0.2099,
+     "ma_long": null
+    },
+    {
+     "month": "2024-06",
+     "mentions": 60,
+     "total_posts": 339,
+     "share": 0.177,
+     "index": 85.43,
+     "ma_short": 0.1967,
+     "ma_long": null
+    },
+    {
+     "month": "2024-07",
+     "mentions": 89,
+     "total_posts": 379,
+     "share": 0.2348,
+     "index": 113.34,
+     "ma_short": 0.2046,
+     "ma_long": null
+    },
+    {
+     "month": "2024-08",
+     "mentions": 69,
+     "total_posts": 322,
+     "share": 0.2143,
+     "index": 103.43,
+     "ma_short": 0.2087,
+     "ma_long": null
+    },
+    {
+     "month": "2024-09",
+     "mentions": 78,
+     "total_posts": 303,
+     "share": 0.2574,
+     "index": 124.25,
+     "ma_short": 0.2355,
+     "ma_long": null
+    },
+    {
+     "month": "2024-10",
+     "mentions": 68,
+     "total_posts": 329,
+     "share": 0.2067,
+     "index": 99.76,
+     "ma_short": 0.2261,
+     "ma_long": 0.2114
+    },
+    {
+     "month": "2024-11",
+     "mentions": 67,
+     "total_posts": 317,
+     "share": 0.2114,
+     "index": 102.01,
+     "ma_short": 0.2252,
+     "ma_long": 0.2117
+    },
+    {
+     "month": "2024-12",
+     "mentions": 59,
+     "total_posts": 330,
+     "share": 0.1788,
+     "index": 86.29,
+     "ma_short": 0.1989,
+     "ma_long": 0.2117
+    },
+    {
+     "month": "2025-01",
+     "mentions": 62,
+     "total_posts": 276,
+     "share": 0.2246,
+     "index": 108.43,
+     "ma_short": 0.2049,
+     "ma_long": 0.2109
+    },
+    {
+     "month": "2025-02",
+     "mentions": 87,
+     "total_posts": 396,
+     "share": 0.2197,
+     "index": 106.04,
+     "ma_short": 0.2077,
+     "ma_long": 0.2129
+    },
+    {
+     "month": "2025-03",
+     "mentions": 78,
+     "total_posts": 354,
+     "share": 0.2203,
+     "index": 106.35,
+     "ma_short": 0.2216,
+     "ma_long": 0.2132
+    },
+    {
+     "month": "2025-04",
+     "mentions": 67,
+     "total_posts": 306,
+     "share": 0.219,
+     "index": 105.68,
+     "ma_short": 0.2197,
+     "ma_long": 0.2138
+    },
+    {
+     "month": "2025-05",
+     "mentions": 78,
+     "total_posts": 300,
+     "share": 0.26,
+     "index": 125.49,
+     "ma_short": 0.2331,
+     "ma_long": 0.2187
+    },
+    {
+     "month": "2025-06",
+     "mentions": 95,
+     "total_posts": 358,
+     "share": 0.2654,
+     "index": 128.08,
+     "ma_short": 0.2481,
+     "ma_long": 0.226
+    },
+    {
+     "month": "2025-07",
+     "mentions": 81,
+     "total_posts": 331,
+     "share": 0.2447,
+     "index": 118.11,
+     "ma_short": 0.2567,
+     "ma_long": 0.2269
+    },
+    {
+     "month": "2025-08",
+     "mentions": 91,
+     "total_posts": 305,
+     "share": 0.2984,
+     "index": 144.01,
+     "ma_short": 0.2695,
+     "ma_long": 0.2339
+    },
+    {
+     "month": "2025-09",
+     "mentions": 79,
+     "total_posts": 299,
+     "share": 0.2642,
+     "index": 127.53,
+     "ma_short": 0.2691,
+     "ma_long": 0.2344
+    },
+    {
+     "month": "2025-10",
+     "mentions": 79,
+     "total_posts": 341,
+     "share": 0.2317,
+     "index": 111.82,
+     "ma_short": 0.2647,
+     "ma_long": 0.2365
+    },
+    {
+     "month": "2025-11",
+     "mentions": 93,
+     "total_posts": 392,
+     "share": 0.2372,
+     "index": 114.51,
+     "ma_short": 0.2444,
+     "ma_long": 0.2387
+    },
+    {
+     "month": "2025-12",
+     "mentions": 92,
+     "total_posts": 377,
+     "share": 0.244,
+     "index": 117.79,
+     "ma_short": 0.2376,
+     "ma_long": 0.2441
+    },
+    {
+     "month": "2026-01",
+     "mentions": 60,
+     "total_posts": 256,
+     "share": 0.2344,
+     "index": 113.13,
+     "ma_short": 0.2386,
+     "ma_long": 0.2449
+    },
+    {
+     "month": "2026-02",
+     "mentions": 98,
+     "total_posts": 410,
+     "share": 0.239,
+     "index": 115.37,
+     "ma_short": 0.2391,
+     "ma_long": 0.2465
+    },
+    {
+     "month": "2026-03",
+     "mentions": 74,
+     "total_posts": 317,
+     "share": 0.2334,
+     "index": 112.67,
+     "ma_short": 0.2356,
+     "ma_long": 0.2476
+    },
+    {
+     "month": "2026-04",
+     "mentions": 91,
+     "total_posts": 329,
+     "share": 0.2766,
+     "index": 133.5,
+     "ma_short": 0.2497,
+     "ma_long": 0.2524
+    },
+    {
+     "month": "2026-05",
+     "mentions": 84,
+     "total_posts": 318,
+     "share": 0.2642,
+     "index": 127.5,
+     "ma_short": 0.2581,
+     "ma_long": 0.2528
+    },
+    {
+     "month": "2026-06",
+     "mentions": 82,
+     "total_posts": 313,
+     "share": 0.262,
+     "index": 126.45,
+     "ma_short": 0.2676,
+     "ma_long": 0.2525
+    },
+    {
+     "month": "2026-07",
+     "mentions": 57,
+     "total_posts": 259,
+     "share": 0.2201,
+     "index": 106.22,
+     "ma_short": 0.2487,
+     "ma_long": 0.2504
+    },
+    {
+     "month": "2026-08",
+     "mentions": 63,
+     "total_posts": 227,
+     "share": 0.2775,
+     "index": 133.96,
+     "ma_short": 0.2532,
+     "ma_long": 0.2487
+    },
+    {
+     "month": "2026-09",
+     "mentions": 67,
+     "total_posts": 249,
+     "share": 0.2691,
+     "index": 129.87,
+     "ma_short": 0.2556,
+     "ma_long": 0.2491
+    },
+    {
+     "month": "2026-10",
+     "mentions": 64,
+     "total_posts": 266,
+     "share": 0.2406,
+     "index": 116.13,
+     "ma_short": 0.2624,
+     "ma_long": 0.2498
+    }
+   ],
+   "profile_tools": [
+    "Python"
+   ],
+   "catalogue_skills": [
+    "process_automation"
+   ]
+  },
+  {
+   "id": "sql",
+   "name": "SQL",
+   "category": "Data",
+   "label": "stable",
+   "change_12m": 0.2188,
+   "latest_sample_size": 59,
+   "latest_total_posts": 266,
+   "points": [
+    {
+     "month": "2023-11",
+     "mentions": 60,
+     "total_posts": 362,
+     "share": 0.1657,
+     "index": 100.0,
+     "ma_short": null,
+     "ma_long": null
+    },
+    {
+     "month": "2023-12",
+     "mentions": 49,
+     "total_posts": 313,
+     "share": 0.1565,
+     "index": 94.45,
+     "ma_short": null,
+     "ma_long": null
+    },
+    {
+     "month": "2024-01",
+     "mentions": 47,
+     "total_posts": 278,
+     "share": 0.1691,
+     "index": 102.0,
+     "ma_short": 0.1638,
+     "ma_long": null
+    },
+    {
+     "month": "2024-02",
+     "mentions": 49,
+     "total_posts": 341,
+     "share": 0.1437,
+     "index": 86.7,
+     "ma_short": 0.1564,
+     "ma_long": null
+    },
+    {
+     "month": "2024-03",
+     "mentions": 53,
+     "total_posts": 300,
+     "share": 0.1767,
+     "index": 106.59,
+     "ma_short": 0.1631,
+     "ma_long": null
+    },
+    {
+     "month": "2024-04",
+     "mentions": 38,
+     "total_posts": 289,
+     "share": 0.1315,
+     "index": 79.33,
+     "ma_short": 0.1506,
+     "ma_long": null
+    },
+    {
+     "month": "2024-05",
+     "mentions": 52,
+     "total_posts": 396,
+     "share": 0.1313,
+     "index": 79.23,
+     "ma_short": 0.1465,
+     "ma_long": null
+    },
+    {
+     "month": "2024-06",
+     "mentions": 51,
+     "total_posts": 339,
+     "share": 0.1504,
+     "index": 90.77,
+     "ma_short": 0.1377,
+     "ma_long": null
+    },
+    {
+     "month": "2024-07",
+     "mentions": 66,
+     "total_posts": 379,
+     "share": 0.1741,
+     "index": 105.07,
+     "ma_short": 0.152,
+     "ma_long": null
+    },
+    {
+     "month": "2024-08",
+     "mentions": 54,
+     "total_posts": 322,
+     "share": 0.1677,
+     "index": 101.18,
+     "ma_short": 0.1641,
+     "ma_long": null
+    },
+    {
+     "month": "2024-09",
+     "mentions": 53,
+     "total_posts": 303,
+     "share": 0.1749,
+     "index": 105.53,
+     "ma_short": 0.1723,
+     "ma_long": null
+    },
+    {
+     "month": "2024-10",
+     "mentions": 57,
+     "total_posts": 329,
+     "share": 0.1733,
+     "index": 104.53,
+     "ma_short": 0.172,
+     "ma_long": 0.1596
+    },
+    {
+     "month": "2024-11",
+     "mentions": 59,
+     "total_posts": 317,
+     "share": 0.1861,
+     "index": 112.29,
+     "ma_short": 0.1781,
+     "ma_long": 0.1613
+    },
+    {
+     "month": "2024-12",
+     "mentions": 50,
+     "total_posts": 330,
+     "share": 0.1515,
+     "index": 91.41,
+     "ma_short": 0.1703,
+     "ma_long": 0.1609
+    },
+    {
+     "month": "2025-01",
+     "mentions": 54,
+     "total_posts": 276,
+     "share": 0.1957,
+     "index": 118.04,
+     "ma_short": 0.1778,
+     "ma_long": 0.1631
+    },
+    {
+     "month": "2025-02",
+     "mentions": 69,
+     "total_posts": 396,
+     "share": 0.1742,
+     "index": 105.13,
+     "ma_short": 0.1738,
+     "ma_long": 0.1656
+    },
+    {
+     "month": "2025-03",
+     "mentions": 62,
+     "total_posts": 354,
+     "share": 0.1751,
+     "index": 105.67,
+     "ma_short": 0.1817,
+     "ma_long": 0.1655
+    },
+    {
+     "month": "2025-04",
+     "mentions": 60,
+     "total_posts": 306,
+     "share": 0.1961,
+     "index": 118.3,
+     "ma_short": 0.1818,
+     "ma_long": 0.1709
+    },
+    {
+     "month": "2025-05",
+     "mentions": 46,
+     "total_posts": 300,
+     "share": 0.1533,
+     "index": 92.51,
+     "ma_short": 0.1749,
+     "ma_long": 0.1727
+    },
+    {
+     "month": "2025-06",
+     "mentions": 70,
+     "total_posts": 358,
+     "share": 0.1955,
+     "index": 117.97,
+     "ma_short": 0.1816,
+     "ma_long": 0.1765
+    },
+    {
+     "month": "2025-07",
+     "mentions": 62,
+     "total_posts": 331,
+     "share": 0.1873,
+     "index": 113.01,
+     "ma_short": 0.1787,
+     "ma_long": 0.1776
+    },
+    {
+     "month": "2025-08",
+     "mentions": 58,
+     "total_posts": 305,
+     "share": 0.1902,
+     "index": 114.73,
+     "ma_short": 0.191,
+     "ma_long": 0.1794
+    },
+    {
+     "month": "2025-09",
+     "mentions": 57,
+     "total_posts": 299,
+     "share": 0.1906,
+     "index": 115.02,
+     "ma_short": 0.1894,
+     "ma_long": 0.1807
+    },
+    {
+     "month": "2025-10",
+     "mentions": 60,
+     "total_posts": 341,
+     "share": 0.176,
+     "index": 106.16,
+     "ma_short": 0.1856,
+     "ma_long": 0.181
+    },
+    {
+     "month": "2025-11",
+     "mentions": 75,
+     "total_posts": 392,
+     "share": 0.1913,
+     "index": 115.43,
+     "ma_short": 0.186,
+     "ma_long": 0.1814
+    },
+    {
+     "month": "2025-12",
+     "mentions": 83,
+     "total_posts": 377,
+     "share": 0.2202,
+     "index": 132.83,
+     "ma_short": 0.1958,
+     "ma_long": 0.1871
+    },
+    {
+     "month": "2026-01",
+     "mentions": 53,
+     "total_posts": 256,
+     "share": 0.207,
+     "index": 124.91,
+     "ma_short": 0.2062,
+     "ma_long": 0.1881
+    },
+    {
+     "month": "2026-02",
+     "mentions": 99,
+     "total_posts": 410,
+     "share": 0.2415,
+     "index": 145.68,
+     "ma_short": 0.2229,
+     "ma_long": 0.1937
+    },
+    {
+     "month": "2026-03",
+     "mentions": 75,
+     "total_posts": 317,
+     "share": 0.2366,
+     "index": 142.74,
+     "ma_short": 0.2284,
+     "ma_long": 0.1988
+    },
+    {
+     "month": "2026-04",
+     "mentions": 76,
+     "total_posts": 329,
+     "share": 0.231,
+     "index": 139.37,
+     "ma_short": 0.2364,
+     "ma_long": 0.2017
+    },
+    {
+     "month": "2026-05",
+     "mentions": 62,
+     "total_posts": 318,
+     "share": 0.195,
+     "index": 117.63,
+     "ma_short": 0.2209,
+     "ma_long": 0.2052
+    },
+    {
+     "month": "2026-06",
+     "mentions": 63,
+     "total_posts": 313,
+     "share": 0.2013,
+     "index": 121.44,
+     "ma_short": 0.2091,
+     "ma_long": 0.2057
+    },
+    {
+     "month": "2026-07",
+     "mentions": 54,
+     "total_posts": 259,
+     "share": 0.2085,
+     "index": 125.79,
+     "ma_short": 0.2016,
+     "ma_long": 0.2074
+    },
+    {
+     "month": "2026-08",
+     "mentions": 59,
+     "total_posts": 227,
+     "share": 0.2599,
+     "index": 156.81,
+     "ma_short": 0.2232,
+     "ma_long": 0.2132
+    },
+    {
+     "month": "2026-09",
+     "mentions": 49,
+     "total_posts": 249,
+     "share": 0.1968,
+     "index": 118.73,
+     "ma_short": 0.2217,
+     "ma_long": 0.2137
+    },
+    {
+     "month": "2026-10",
+     "mentions": 59,
+     "total_posts": 266,
+     "share": 0.2218,
+     "index": 133.82,
+     "ma_short": 0.2262,
+     "ma_long": 0.2176
+    }
+   ],
+   "profile_tools": [
+    "SQL"
+   ],
+   "catalogue_skills": [
+    "sql_basics"
+   ]
+  },
+  {
+   "id": "pytorch",
+   "name": "PyTorch",
+   "category": "AI/ML",
+   "label": "stable",
+   "change_12m": -0.0114,
+   "latest_sample_size": 6,
+   "latest_total_posts": 266,
+   "points": [
+    {
+     "month": "2023-11",
+     "mentions": 3,
+     "total_posts": 362,
+     "share": 0.0083,
+     "index": 46.08,
+     "ma_short": null,
+     "ma_long": null
+    },
+    {
+     "month": "2023-12",
+     "mentions": 4,
+     "total_posts": 313,
+     "share": 0.0128,
+     "index": 71.05,
+     "ma_short": null,
+     "ma_long": null
+    },
+    {
+     "month": "2024-01",
+     "mentions": 5,
+     "total_posts": 278,
+     "share": 0.018,
+     "index": 100.0,
+     "ma_short": 0.013,
+     "ma_long": null
+    },
+    {
+     "month": "2024-02",
+     "mentions": 4,
+     "total_posts": 341,
+     "share": 0.0117,
+     "index": 65.22,
+     "ma_short": 0.0142,
+     "ma_long": null
+    },
+    {
+     "month": "2024-03",
+     "mentions": 4,
+     "total_posts": 300,
+     "share": 0.0133,
+     "index": 74.13,
+     "ma_short": 0.0143,
+     "ma_long": null
+    },
+    {
+     "month": "2024-04",
+     "mentions": 1,
+     "total_posts": 289,
+     "share": 0.0035,
+     "index": 19.24,
+     "ma_short": 0.0095,
+     "ma_long": null
+    },
+    {
+     "month": "2024-05",
+     "mentions": 4,
+     "total_posts": 396,
+     "share": 0.0101,
+     "index": 56.16,
+     "ma_short": 0.009,
+     "ma_long": null
+    },
+    {
+     "month": "2024-06",
+     "mentions": 3,
+     "total_posts": 339,
+     "share": 0.0088,
+     "index": 49.2,
+     "ma_short": 0.0075,
+     "ma_long": null
+    },
+    {
+     "month": "2024-07",
+     "mentions": 5,
+     "total_posts": 379,
+     "share": 0.0132,
+     "index": 73.35,
+     "ma_short": 0.0107,
+     "ma_long": null
+    },
+    {
+     "month": "2024-08",
+     "mentions": 6,
+     "total_posts": 322,
+     "share": 0.0186,
+     "index": 103.6,
+     "ma_short": 0.0136,
+     "ma_long": null
+    },
+    {
+     "month": "2024-09",
+     "mentions": 9,
+     "total_posts": 303,
+     "share": 0.0297,
+     "index": 165.15,
+     "ma_short": 0.0205,
+     "ma_long": null
+    },
+    {
+     "month": "2024-10",
+     "mentions": 9,
+     "total_posts": 329,
+     "share": 0.0274,
+     "index": 152.1,
+     "ma_short": 0.0252,
+     "ma_long": 0.0146
+    },
+    {
+     "month": "2024-11",
+     "mentions": 6,
+     "total_posts": 317,
+     "share": 0.0189,
+     "index": 105.24,
+     "ma_short": 0.0253,
+     "ma_long": 0.0155
+    },
+    {
+     "month": "2024-12",
+     "mentions": 3,
+     "total_posts": 330,
+     "share": 0.0091,
+     "index": 50.55,
+     "ma_short": 0.0185,
+     "ma_long": 0.0152
+    },
+    {
+     "month": "2025-01",
+     "mentions": 4,
+     "total_posts": 276,
+     "share": 0.0145,
+     "index": 80.58,
+     "ma_short": 0.0142,
+     "ma_long": 0.0149
+    },
+    {
+     "month": "2025-02",
+     "mentions": 6,
+     "total_posts": 396,
+     "share": 0.0152,
+     "index": 84.24,
+     "ma_short": 0.0129,
+     "ma_long": 0.0152
+    },
+    {
+     "month": "2025-03",
+     "mentions": 3,
+     "total_posts": 354,
+     "share": 0.0085,
+     "index": 47.12,
+     "ma_short": 0.0127,
+     "ma_long": 0.0148
+    },
+    {
+     "month": "2025-04",
+     "mentions": 4,
+     "total_posts": 306,
+     "share": 0.0131,
+     "index": 72.68,
+     "ma_short": 0.0122,
+     "ma_long": 0.0156
+    },
+    {
+     "month": "2025-05",
+     "mentions": 9,
+     "total_posts": 300,
+     "share": 0.03,
+     "index": 166.8,
+     "ma_short": 0.0172,
+     "ma_long": 0.0172
+    },
+    {
+     "month": "2025-06",
+     "mentions": 9,
+     "total_posts": 358,
+     "share": 0.0251,
+     "index": 139.78,
+     "ma_short": 0.0227,
+     "ma_long": 0.0186
+    },
+    {
+     "month": "2025-07",
+     "mentions": 9,
+     "total_posts": 331,
+     "share": 0.0272,
+     "index": 151.18,
+     "ma_short": 0.0274,
+     "ma_long": 0.0198
+    },
+    {
+     "month": "2025-08",
+     "mentions": 8,
+     "total_posts": 305,
+     "share": 0.0262,
+     "index": 145.84,
+     "ma_short": 0.0262,
+     "ma_long": 0.0204
+    },
+    {
+     "month": "2025-09",
+     "mentions": 7,
+     "total_posts": 299,
+     "share": 0.0234,
+     "index": 130.17,
+     "ma_short": 0.0256,
+     "ma_long": 0.0199
+    },
+    {
+     "month": "2025-10",
+     "mentions": 10,
+     "total_posts": 341,
+     "share": 0.0293,
+     "index": 163.05,
+     "ma_short": 0.0263,
+     "ma_long": 0.02
+    },
+    {
+     "month": "2025-11",
+     "mentions": 8,
+     "total_posts": 392,
+     "share": 0.0204,
+     "index": 113.47,
+     "ma_short": 0.0244,
+     "ma_long": 0.0202
+    },
+    {
+     "month": "2025-12",
+     "mentions": 9,
+     "total_posts": 377,
+     "share": 0.0239,
+     "index": 132.73,
+     "ma_short": 0.0245,
+     "ma_long": 0.0214
+    },
+    {
+     "month": "2026-01",
+     "mentions": 5,
+     "total_posts": 256,
+     "share": 0.0195,
+     "index": 108.59,
+     "ma_short": 0.0213,
+     "ma_long": 0.0218
+    },
+    {
+     "month": "2026-02",
+     "mentions": 8,
+     "total_posts": 410,
+     "share": 0.0195,
+     "index": 108.49,
+     "ma_short": 0.021,
+     "ma_long": 0.0222
+    },
+    {
+     "month": "2026-03",
+     "mentions": 8,
+     "total_posts": 317,
+     "share": 0.0252,
+     "index": 140.32,
+     "ma_short": 0.0214,
+     "ma_long": 0.0236
+    },
+    {
+     "month": "2026-04",
+     "mentions": 6,
+     "total_posts": 329,
+     "share": 0.0182,
+     "index": 101.4,
+     "ma_short": 0.021,
+     "ma_long": 0.024
+    },
+    {
+     "month": "2026-05",
+     "mentions": 9,
+     "total_posts": 318,
+     "share": 0.0283,
+     "index": 157.36,
+     "ma_short": 0.0239,
+     "ma_long": 0.0239
+    },
+    {
+     "month": "2026-06",
+     "mentions": 4,
+     "total_posts": 313,
+     "share": 0.0128,
+     "index": 71.05,
+     "ma_short": 0.0198,
+     "ma_long": 0.0228
+    },
+    {
+     "month": "2026-07",
+     "mentions": 3,
+     "total_posts": 259,
+     "share": 0.0116,
+     "index": 64.4,
+     "ma_short": 0.0176,
+     "ma_long": 0.0215
+    },
+    {
+     "month": "2026-08",
+     "mentions": 8,
+     "total_posts": 227,
+     "share": 0.0352,
+     "index": 195.95,
+     "ma_short": 0.0199,
+     "ma_long": 0.0223
+    },
+    {
+     "month": "2026-09",
+     "mentions": 5,
+     "total_posts": 249,
+     "share": 0.0201,
+     "index": 111.65,
+     "ma_short": 0.0223,
+     "ma_long": 0.022
+    },
+    {
+     "month": "2026-10",
+     "mentions": 6,
+     "total_posts": 266,
+     "share": 0.0226,
+     "index": 125.41,
+     "ma_short": 0.026,
+     "ma_long": 0.0214
+    }
+   ],
+   "profile_tools": [],
+   "catalogue_skills": []
+  },
+  {
+   "id": "tensorflow",
+   "name": "TensorFlow",
+   "category": "AI/ML",
+   "label": "insufficient_data",
+   "change_12m": 0.3725,
+   "latest_sample_size": 1,
+   "latest_total_posts": 266,
+   "points": [
+    {
+     "month": "2023-11",
+     "mentions": 2,
+     "total_posts": 362,
+     "share": 0.0055,
+     "index": 35.03,
+     "ma_short": null,
+     "ma_long": null
+    },
+    {
+     "month": "2023-12",
+     "mentions": 4,
+     "total_posts": 313,
+     "share": 0.0128,
+     "index": 81.02,
+     "ma_short": null,
+     "ma_long": null
+    },
+    {
+     "month": "2024-01",
+     "mentions": 2,
+     "total_posts": 278,
+     "share": 0.0072,
+     "index": 45.61,
+     "ma_short": 0.0085,
+     "ma_long": null
+    },
+    {
+     "month": "2024-02",
+     "mentions": 3,
+     "total_posts": 341,
+     "share": 0.0088,
+     "index": 55.78,
+     "ma_short": 0.0096,
+     "ma_long": null
+    },
+    {
+     "month": "2024-03",
+     "mentions": 2,
+     "total_posts": 300,
+     "share": 0.0067,
+     "index": 42.27,
+     "ma_short": 0.0076,
+     "ma_long": null
+    },
+    {
+     "month": "2024-04",
+     "mentions": 1,
+     "total_posts": 289,
+     "share": 0.0035,
+     "index": 21.94,
+     "ma_short": 0.0063,
+     "ma_long": null
+    },
+    {
+     "month": "2024-05",
+     "mentions": 4,
+     "total_posts": 396,
+     "share": 0.0101,
+     "index": 64.04,
+     "ma_short": 0.0067,
+     "ma_long": null
+    },
+    {
+     "month": "2024-06",
+     "mentions": 2,
+     "total_posts": 339,
+     "share": 0.0059,
+     "index": 37.4,
+     "ma_short": 0.0065,
+     "ma_long": null
+    },
+    {
+     "month": "2024-07",
+     "mentions": 2,
+     "total_posts": 379,
+     "share": 0.0053,
+     "index": 33.46,
+     "ma_short": 0.0071,
+     "ma_long": null
+    },
+    {
+     "month": "2024-08",
+     "mentions": 3,
+     "total_posts": 322,
+     "share": 0.0093,
+     "index": 59.07,
+     "ma_short": 0.0068,
+     "ma_long": null
+    },
+    {
+     "month": "2024-09",
+     "mentions": 1,
+     "total_posts": 303,
+     "share": 0.0033,
+     "index": 20.92,
+     "ma_short": 0.006,
+     "ma_long": null
+    },
+    {
+     "month": "2024-10",
+     "mentions": 3,
+     "total_posts": 329,
+     "share": 0.0091,
+     "index": 57.81,
+     "ma_short": 0.0072,
+     "ma_long": 0.0073
+    },
+    {
+     "month": "2024-11",
+     "mentions": 0,
+     "total_posts": 317,
+     "share": 0.0,
+     "index": 0.0,
+     "ma_short": 0.0041,
+     "ma_long": 0.0068
+    },
+    {
+     "month": "2024-12",
+     "mentions": 2,
+     "total_posts": 330,
+     "share": 0.0061,
+     "index": 38.42,
+     "ma_short": 0.0051,
+     "ma_long": 0.0063
+    },
+    {
+     "month": "2025-01",
+     "mentions": 2,
+     "total_posts": 276,
+     "share": 0.0072,
+     "index": 45.94,
+     "ma_short": 0.0044,
+     "ma_long": 0.0063
+    },
+    {
+     "month": "2025-02",
+     "mentions": 1,
+     "total_posts": 396,
+     "share": 0.0025,
+     "index": 16.01,
+     "ma_short": 0.0053,
+     "ma_long": 0.0057
+    },
+    {
+     "month": "2025-03",
+     "mentions": 1,
+     "total_posts": 354,
+     "share": 0.0028,
+     "index": 17.91,
+     "ma_short": 0.0042,
+     "ma_long": 0.0054
+    },
+    {
+     "month": "2025-04",
+     "mentions": 0,
+     "total_posts": 306,
+     "share": 0.0,
+     "index": 0.0,
+     "ma_short": 0.0018,
+     "ma_long": 0.0051
+    },
+    {
+     "month": "2025-05",
+     "mentions": 4,
+     "total_posts": 300,
+     "share": 0.0133,
+     "index": 84.53,
+     "ma_short": 0.0054,
+     "ma_long": 0.0054
+    },
+    {
+     "month": "2025-06",
+     "mentions": 1,
+     "total_posts": 358,
+     "share": 0.0028,
+     "index": 17.71,
+     "ma_short": 0.0054,
+     "ma_long": 0.0051
+    },
+    {
+     "month": "2025-07",
+     "mentions": 1,
+     "total_posts": 331,
+     "share": 0.003,
+     "index": 19.15,
+     "ma_short": 0.0064,
+     "ma_long": 0.005
+    },
+    {
+     "month": "2025-08",
+     "mentions": 1,
+     "total_posts": 305,
+     "share": 0.0033,
+     "index": 20.79,
+     "ma_short": 0.003,
+     "ma_long": 0.0045
+    },
+    {
+     "month": "2025-09",
+     "mentions": 1,
+     "total_posts": 299,
+     "share": 0.0033,
+     "index": 21.2,
+     "ma_short": 0.0032,
+     "ma_long": 0.0045
+    },
+    {
+     "month": "2025-10",
+     "mentions": 3,
+     "total_posts": 341,
+     "share": 0.0088,
+     "index": 55.78,
+     "ma_short": 0.0051,
+     "ma_long": 0.0044
+    },
+    {
+     "month": "2025-11",
+     "mentions": 1,
+     "total_posts": 392,
+     "share": 0.0026,
+     "index": 16.17,
+     "ma_short": 0.0049,
+     "ma_long": 0.0046
+    },
+    {
+     "month": "2025-12",
+     "mentions": 1,
+     "total_posts": 377,
+     "share": 0.0027,
+     "index": 16.82,
+     "ma_short": 0.0047,
+     "ma_long": 0.0044
+    },
+    {
+     "month": "2026-01",
+     "mentions": 1,
+     "total_posts": 256,
+     "share": 0.0039,
+     "index": 24.77,
+     "ma_short": 0.003,
+     "ma_long": 0.0041
+    },
+    {
+     "month": "2026-02",
+     "mentions": 2,
+     "total_posts": 410,
+     "share": 0.0049,
+     "index": 30.93,
+     "ma_short": 0.0038,
+     "ma_long": 0.0043
+    },
+    {
+     "month": "2026-03",
+     "mentions": 5,
+     "total_posts": 317,
+     "share": 0.0158,
+     "index": 100.0,
+     "ma_short": 0.0082,
+     "ma_long": 0.0054
+    },
+    {
+     "month": "2026-04",
+     "mentions": 2,
+     "total_posts": 329,
+     "share": 0.0061,
+     "index": 38.54,
+     "ma_short": 0.0089,
+     "ma_long": 0.0059
+    },
+    {
+     "month": "2026-05",
+     "mentions": 4,
+     "total_posts": 318,
+     "share": 0.0126,
+     "index": 79.75,
+     "ma_short": 0.0115,
+     "ma_long": 0.0058
+    },
+    {
+     "month": "2026-06",
+     "mentions": 1,
+     "total_posts": 313,
+     "share": 0.0032,
+     "index": 20.26,
+     "ma_short": 0.0073,
+     "ma_long": 0.0058
+    },
+    {
+     "month": "2026-07",
+     "mentions": 1,
+     "total_posts": 259,
+     "share": 0.0039,
+     "index": 24.48,
+     "ma_short": 0.0065,
+     "ma_long": 0.0059
+    },
+    {
+     "month": "2026-08",
+     "mentions": 3,
+     "total_posts": 227,
+     "share": 0.0132,
+     "index": 83.79,
+     "ma_short": 0.0068,
+     "ma_long": 0.0067
+    },
+    {
+     "month": "2026-09",
+     "mentions": 1,
+     "total_posts": 249,
+     "share": 0.004,
+     "index": 25.46,
+     "ma_short": 0.007,
+     "ma_long": 0.0068
+    },
+    {
+     "month": "2026-10",
+     "mentions": 1,
+     "total_posts": 266,
+     "share": 0.0038,
+     "index": 23.83,
+     "ma_short": 0.007,
+     "ma_long": 0.0064
+    }
+   ],
+   "profile_tools": [],
+   "catalogue_skills": []
+  },
+  {
+   "id": "llms",
+   "name": "LLMs",
+   "category": "AI/ML",
+   "label": "stable",
+   "change_12m": 0.068,
+   "latest_sample_size": 37,
+   "latest_total_posts": 266,
+   "points": [
+    {
+     "month": "2023-11",
+     "mentions": 34,
+     "total_posts": 362,
+     "share": 0.0939,
+     "index": 100.0,
+     "ma_short": null,
+     "ma_long": null
+    },
+    {
+     "month": "2023-12",
+     "mentions": 27,
+     "total_posts": 313,
+     "share": 0.0863,
+     "index": 91.84,
+     "ma_short": null,
+     "ma_long": null
+    },
+    {
+     "month": "2024-01",
+     "mentions": 26,
+     "total_posts": 278,
+     "share": 0.0935,
+     "index": 99.58,
+     "ma_short": 0.0912,
+     "ma_long": null
+    },
+    {
+     "month": "2024-02",
+     "mentions": 28,
+     "total_posts": 341,
+     "share": 0.0821,
+     "index": 87.42,
+     "ma_short": 0.0873,
+     "ma_long": null
+    },
+    {
+     "month": "2024-03",
+     "mentions": 22,
+     "total_posts": 300,
+     "share": 0.0733,
+     "index": 78.08,
+     "ma_short": 0.083,
+     "ma_long": null
+    },
+    {
+     "month": "2024-04",
+     "mentions": 30,
+     "total_posts": 289,
+     "share": 0.1038,
+     "index": 110.52,
+     "ma_short": 0.0864,
+     "ma_long": null
+    },
+    {
+     "month": "2024-05",
+     "mentions": 42,
+     "total_posts": 396,
+     "share": 0.1061,
+     "index": 112.92,
+     "ma_short": 0.0944,
+     "ma_long": null
+    },
+    {
+     "month": "2024-06",
+     "mentions": 33,
+     "total_posts": 339,
+     "share": 0.0973,
+     "index": 103.64,
+     "ma_short": 0.1024,
+     "ma_long": null
+    },
+    {
+     "month": "2024-07",
+     "mentions": 42,
+     "total_posts": 379,
+     "share": 0.1108,
+     "index": 117.99,
+     "ma_short": 0.1047,
+     "ma_long": null
+    },
+    {
+     "month": "2024-08",
+     "mentions": 46,
+     "total_posts": 322,
+     "share": 0.1429,
+     "index": 152.1,
+     "ma_short": 0.117,
+     "ma_long": null
+    },
+    {
+     "month": "2024-09",
+     "mentions": 40,
+     "total_posts": 303,
+     "share": 0.132,
+     "index": 140.56,
+     "ma_short": 0.1286,
+     "ma_long": null
+    },
+    {
+     "month": "2024-10",
+     "mentions": 28,
+     "total_posts": 329,
+     "share": 0.0851,
+     "index": 90.61,
+     "ma_short": 0.12,
+     "ma_long": 0.1006
+    },
+    {
+     "month": "2024-11",
+     "mentions": 39,
+     "total_posts": 317,
+     "share": 0.123,
+     "index": 130.99,
+     "ma_short": 0.1134,
+     "ma_long": 0.103
+    },
+    {
+     "month": "2024-12",
+     "mentions": 41,
+     "total_posts": 330,
+     "share": 0.1242,
+     "index": 132.28,
+     "ma_short": 0.1108,
+     "ma_long": 0.1062
+    },
+    {
+     "month": "2025-01",
+     "mentions": 31,
+     "total_posts": 276,
+     "share": 0.1123,
+     "index": 119.59,
+     "ma_short": 0.1199,
+     "ma_long": 0.1078
+    },
+    {
+     "month": "2025-02",
+     "mentions": 40,
+     "total_posts": 396,
+     "share": 0.101,
+     "index": 107.55,
+     "ma_short": 0.1125,
+     "ma_long": 0.1093
+    },
+    {
+     "month": "2025-03",
+     "mentions": 42,
+     "total_posts": 354,
+     "share": 0.1186,
+     "index": 126.32,
+     "ma_short": 0.1107,
+     "ma_long": 0.1131
+    },
+    {
+     "month": "2025-04",
+     "mentions": 45,
+     "total_posts": 306,
+     "share": 0.1471,
+     "index": 156.57,
+     "ma_short": 0.1222,
+     "ma_long": 0.1167
+    },
+    {
+     "month": "2025-05",
+     "mentions": 39,
+     "total_posts": 300,
+     "share": 0.13,
+     "index": 138.41,
+     "ma_short": 0.1319,
+     "ma_long": 0.1187
+    },
+    {
+     "month": "2025-06",
+     "mentions": 55,
+     "total_posts": 358,
+     "share": 0.1536,
+     "index": 163.57,
+     "ma_short": 0.1436,
+     "ma_long": 0.1234
+    },
+    {
+     "month": "2025-07",
+     "mentions": 58,
+     "total_posts": 331,
+     "share": 0.1752,
+     "index": 186.56,
+     "ma_short": 0.153,
+     "ma_long": 0.1288
+    },
+    {
+     "month": "2025-08",
+     "mentions": 46,
+     "total_posts": 305,
+     "share": 0.1508,
+     "index": 160.58,
+     "ma_short": 0.1599,
+     "ma_long": 0.1294
+    },
+    {
+     "month": "2025-09",
+     "mentions": 43,
+     "total_posts": 299,
+     "share": 0.1438,
+     "index": 153.12,
+     "ma_short": 0.1566,
+     "ma_long": 0.1304
+    },
+    {
+     "month": "2025-10",
+     "mentions": 50,
+     "total_posts": 341,
+     "share": 0.1466,
+     "index": 156.12,
+     "ma_short": 0.1471,
+     "ma_long": 0.1355
+    },
+    {
+     "month": "2025-11",
+     "mentions": 63,
+     "total_posts": 392,
+     "share": 0.1607,
+     "index": 171.11,
+     "ma_short": 0.1504,
+     "ma_long": 0.1387
+    },
+    {
+     "month": "2025-12",
+     "mentions": 48,
+     "total_posts": 377,
+     "share": 0.1273,
+     "index": 135.56,
+     "ma_short": 0.1449,
+     "ma_long": 0.1389
+    },
+    {
+     "month": "2026-01",
+     "mentions": 41,
+     "total_posts": 256,
+     "share": 0.1602,
+     "index": 170.52,
+     "ma_short": 0.1494,
+     "ma_long": 0.1429
+    },
+    {
+     "month": "2026-02",
+     "mentions": 58,
+     "total_posts": 410,
+     "share": 0.1415,
+     "index": 150.62,
+     "ma_short": 0.143,
+     "ma_long": 0.1463
+    },
+    {
+     "month": "2026-03",
+     "mentions": 36,
+     "total_posts": 317,
+     "share": 0.1136,
+     "index": 120.91,
+     "ma_short": 0.1384,
+     "ma_long": 0.1459
+    },
+    {
+     "month": "2026-04",
+     "mentions": 53,
+     "total_posts": 329,
+     "share": 0.1611,
+     "index": 171.52,
+     "ma_short": 0.1387,
+     "ma_long": 0.147
+    },
+    {
+     "month": "2026-05",
+     "mentions": 48,
+     "total_posts": 318,
+     "share": 0.1509,
+     "index": 160.71,
+     "ma_short": 0.1419,
+     "ma_long": 0.1488
+    },
+    {
+     "month": "2026-06",
+     "mentions": 48,
+     "total_posts": 313,
+     "share": 0.1534,
+     "index": 163.28,
+     "ma_short": 0.1551,
+     "ma_long": 0.1488
+    },
+    {
+     "month": "2026-07",
+     "mentions": 38,
+     "total_posts": 259,
+     "share": 0.1467,
+     "index": 156.21,
+     "ma_short": 0.1503,
+     "ma_long": 0.1464
+    },
+    {
+     "month": "2026-08",
+     "mentions": 38,
+     "total_posts": 227,
+     "share": 0.1674,
+     "index": 178.23,
+     "ma_short": 0.1558,
+     "ma_long": 0.1478
+    },
+    {
+     "month": "2026-09",
+     "mentions": 41,
+     "total_posts": 249,
+     "share": 0.1647,
+     "index": 175.31,
+     "ma_short": 0.1596,
+     "ma_long": 0.1495
+    },
+    {
+     "month": "2026-10",
+     "mentions": 37,
+     "total_posts": 266,
+     "share": 0.1391,
+     "index": 148.1,
+     "ma_short": 0.1571,
+     "ma_long": 0.1489
+    }
+   ],
+   "profile_tools": [
+    "AI assistants"
+   ],
+   "catalogue_skills": [
+    "ai_output_review"
+   ]
+  },
+  {
+   "id": "rag",
+   "name": "RAG",
+   "category": "AI/ML",
+   "label": "rising",
+   "change_12m": 0.4244,
+   "latest_sample_size": 11,
+   "latest_total_posts": 266,
+   "points": [
+    {
+     "month": "2023-11",
+     "mentions": 1,
+     "total_posts": 362,
+     "share": 0.0028,
+     "index": 20.94,
+     "ma_short": null,
+     "ma_long": null
+    },
+    {
+     "month": "2023-12",
+     "mentions": 1,
+     "total_posts": 313,
+     "share": 0.0032,
+     "index": 24.22,
+     "ma_short": null,
+     "ma_long": null
+    },
+    {
+     "month": "2024-01",
+     "mentions": 2,
+     "total_posts": 278,
+     "share": 0.0072,
+     "index": 54.53,
+     "ma_short": 0.0044,
+     "ma_long": null
+    },
+    {
+     "month": "2024-02",
+     "mentions": 3,
+     "total_posts": 341,
+     "share": 0.0088,
+     "index": 66.69,
+     "ma_short": 0.0064,
+     "ma_long": null
+    },
+    {
+     "month": "2024-03",
+     "mentions": 4,
+     "total_posts": 300,
+     "share": 0.0133,
+     "index": 101.07,
+     "ma_short": 0.0098,
+     "ma_long": null
+    },
+    {
+     "month": "2024-04",
+     "mentions": 3,
+     "total_posts": 289,
+     "share": 0.0104,
+     "index": 78.69,
+     "ma_short": 0.0108,
+     "ma_long": null
+    },
+    {
+     "month": "2024-05",
+     "mentions": 3,
+     "total_posts": 396,
+     "share": 0.0076,
+     "index": 57.42,
+     "ma_short": 0.0104,
+     "ma_long": null
+    },
+    {
+     "month": "2024-06",
+     "mentions": 4,
+     "total_posts": 339,
+     "share": 0.0118,
+     "index": 89.44,
+     "ma_short": 0.0099,
+     "ma_long": null
+    },
+    {
+     "month": "2024-07",
+     "mentions": 5,
+     "total_posts": 379,
+     "share": 0.0132,
+     "index": 100.0,
+     "ma_short": 0.0109,
+     "ma_long": null
+    },
+    {
+     "month": "2024-08",
+     "mentions": 4,
+     "total_posts": 322,
+     "share": 0.0124,
+     "index": 94.16,
+     "ma_short": 0.0125,
+     "ma_long": null
+    },
+    {
+     "month": "2024-09",
+     "mentions": 5,
+     "total_posts": 303,
+     "share": 0.0165,
+     "index": 125.08,
+     "ma_short": 0.014,
+     "ma_long": null
+    },
+    {
+     "month": "2024-10",
+     "mentions": 4,
+     "total_posts": 329,
+     "share": 0.0122,
+     "index": 92.16,
+     "ma_short": 0.0137,
+     "ma_long": 0.0099
+    },
+    {
+     "month": "2024-11",
+     "mentions": 4,
+     "total_posts": 317,
+     "share": 0.0126,
+     "index": 95.65,
+     "ma_short": 0.0138,
+     "ma_long": 0.0108
+    },
+    {
+     "month": "2024-12",
+     "mentions": 1,
+     "total_posts": 330,
+     "share": 0.003,
+     "index": 22.97,
+     "ma_short": 0.0093,
+     "ma_long": 0.0108
+    },
+    {
+     "month": "2025-01",
+     "mentions": 1,
+     "total_posts": 276,
+     "share": 0.0036,
+     "index": 27.46,
+     "ma_short": 0.0064,
+     "ma_long": 0.0105
+    },
+    {
+     "month": "2025-02",
+     "mentions": 1,
+     "total_posts": 396,
+     "share": 0.0025,
+     "index": 19.14,
+     "ma_short": 0.0031,
+     "ma_long": 0.0099
+    },
+    {
+     "month": "2025-03",
+     "mentions": 4,
+     "total_posts": 354,
+     "share": 0.0113,
+     "index": 85.65,
+     "ma_short": 0.0058,
+     "ma_long": 0.0098
+    },
+    {
+     "month": "2025-04",
+     "mentions": 3,
+     "total_posts": 306,
+     "share": 0.0098,
+     "index": 74.31,
+     "ma_short": 0.0079,
+     "ma_long": 0.0097
+    },
+    {
+     "month": "2025-05",
+     "mentions": 6,
+     "total_posts": 300,
+     "share": 0.02,
+     "index": 151.6,
+     "ma_short": 0.0137,
+     "ma_long": 0.0107
+    },
+    {
+     "month": "2025-06",
+     "mentions": 4,
+     "total_posts": 358,
+     "share": 0.0112,
+     "index": 84.69,
+     "ma_short": 0.0137,
+     "ma_long": 0.0107
+    },
+    {
+     "month": "2025-07",
+     "mentions": 9,
+     "total_posts": 331,
+     "share": 0.0272,
+     "index": 206.1,
+     "ma_short": 0.0195,
+     "ma_long": 0.0119
+    },
+    {
+     "month": "2025-08",
+     "mentions": 8,
+     "total_posts": 305,
+     "share": 0.0262,
+     "index": 198.82,
+     "ma_short": 0.0215,
+     "ma_long": 0.013
+    },
+    {
+     "month": "2025-09",
+     "mentions": 7,
+     "total_posts": 299,
+     "share": 0.0234,
+     "index": 177.46,
+     "ma_short": 0.0256,
+     "ma_long": 0.0136
+    },
+    {
+     "month": "2025-10",
+     "mentions": 4,
+     "total_posts": 341,
+     "share": 0.0117,
+     "index": 88.91,
+     "ma_short": 0.0205,
+     "ma_long": 0.0136
+    },
+    {
+     "month": "2025-11",
+     "mentions": 5,
+     "total_posts": 392,
+     "share": 0.0128,
+     "index": 96.68,
+     "ma_short": 0.016,
+     "ma_long": 0.0136
+    },
+    {
+     "month": "2025-12",
+     "mentions": 7,
+     "total_posts": 377,
+     "share": 0.0186,
+     "index": 140.74,
+     "ma_short": 0.0144,
+     "ma_long": 0.0149
+    },
+    {
+     "month": "2026-01",
+     "mentions": 10,
+     "total_posts": 256,
+     "share": 0.0391,
+     "index": 296.09,
+     "ma_short": 0.0235,
+     "ma_long": 0.0178
+    },
+    {
+     "month": "2026-02",
+     "mentions": 9,
+     "total_posts": 410,
+     "share": 0.022,
+     "index": 166.39,
+     "ma_short": 0.0265,
+     "ma_long": 0.0194
+    },
+    {
+     "month": "2026-03",
+     "mentions": 5,
+     "total_posts": 317,
+     "share": 0.0158,
+     "index": 119.56,
+     "ma_short": 0.0256,
+     "ma_long": 0.0198
+    },
+    {
+     "month": "2026-04",
+     "mentions": 9,
+     "total_posts": 329,
+     "share": 0.0274,
+     "index": 207.36,
+     "ma_short": 0.0217,
+     "ma_long": 0.0213
+    },
+    {
+     "month": "2026-05",
+     "mentions": 10,
+     "total_posts": 318,
+     "share": 0.0314,
+     "index": 238.36,
+     "ma_short": 0.0249,
+     "ma_long": 0.0222
+    },
+    {
+     "month": "2026-06",
+     "mentions": 7,
+     "total_posts": 313,
+     "share": 0.0224,
+     "index": 169.52,
+     "ma_short": 0.0271,
+     "ma_long": 0.0232
+    },
+    {
+     "month": "2026-07",
+     "mentions": 8,
+     "total_posts": 259,
+     "share": 0.0309,
+     "index": 234.13,
+     "ma_short": 0.0282,
+     "ma_long": 0.0235
+    },
+    {
+     "month": "2026-08",
+     "mentions": 5,
+     "total_posts": 227,
+     "share": 0.022,
+     "index": 166.96,
+     "ma_short": 0.0251,
+     "ma_long": 0.0231
+    },
+    {
+     "month": "2026-09",
+     "mentions": 6,
+     "total_posts": 249,
+     "share": 0.0241,
+     "index": 182.65,
+     "ma_short": 0.0257,
+     "ma_long": 0.0232
+    },
+    {
+     "month": "2026-10",
+     "mentions": 11,
+     "total_posts": 266,
+     "share": 0.0414,
+     "index": 313.46,
+     "ma_short": 0.0292,
+     "ma_long": 0.0256
+    }
+   ],
+   "profile_tools": [],
+   "catalogue_skills": []
+  },
+  {
+   "id": "langchain",
+   "name": "LangChain",
+   "category": "AI/ML",
+   "label": "insufficient_data",
+   "change_12m": 0.6167,
+   "latest_sample_size": 1,
+   "latest_total_posts": 266,
+   "points": [
+    {
+     "month": "2023-11",
+     "mentions": 2,
+     "total_posts": 362,
+     "share": 0.0055,
+     "index": 21.06,
+     "ma_short": null,
+     "ma_long": null
+    },
+    {
+     "month": "2023-12",
+     "mentions": 2,
+     "total_posts": 313,
+     "share": 0.0064,
+     "index": 24.36,
+     "ma_short": null,
+     "ma_long": null
+    },
+    {
+     "month": "2024-01",
+     "mentions": 1,
+     "total_posts": 278,
+     "share": 0.0036,
+     "index": 13.71,
+     "ma_short": 0.0052,
+     "ma_long": null
+    },
+    {
+     "month": "2024-02",
+     "mentions": 0,
+     "total_posts": 341,
+     "share": 0.0,
+     "index": 0.0,
+     "ma_short": 0.0033,
+     "ma_long": null
+    },
+    {
+     "month": "2024-03",
+     "mentions": 0,
+     "total_posts": 300,
+     "share": 0.0,
+     "index": 0.0,
+     "ma_short": 0.0012,
+     "ma_long": null
+    },
+    {
+     "month": "2024-04",
+     "mentions": 0,
+     "total_posts": 289,
+     "share": 0.0,
+     "index": 0.0,
+     "ma_short": 0.0,
+     "ma_long": null
+    },
+    {
+     "month": "2024-05",
+     "mentions": 0,
+     "total_posts": 396,
+     "share": 0.0,
+     "index": 0.0,
+     "ma_short": 0.0,
+     "ma_long": null
+    },
+    {
+     "month": "2024-06",
+     "mentions": 0,
+     "total_posts": 339,
+     "share": 0.0,
+     "index": 0.0,
+     "ma_short": 0.0,
+     "ma_long": null
+    },
+    {
+     "month": "2024-07",
+     "mentions": 1,
+     "total_posts": 379,
+     "share": 0.0026,
+     "index": 10.06,
+     "ma_short": 0.0009,
+     "ma_long": null
+    },
+    {
+     "month": "2024-08",
+     "mentions": 2,
+     "total_posts": 322,
+     "share": 0.0062,
+     "index": 23.68,
+     "ma_short": 0.0029,
+     "ma_long": null
+    },
+    {
+     "month": "2024-09",
+     "mentions": 3,
+     "total_posts": 303,
+     "share": 0.0099,
+     "index": 37.75,
+     "ma_short": 0.0063,
+     "ma_long": null
+    },
+    {
+     "month": "2024-10",
+     "mentions": 1,
+     "total_posts": 329,
+     "share": 0.003,
+     "index": 11.59,
+     "ma_short": 0.0064,
+     "ma_long": 0.0031
+    },
+    {
+     "month": "2024-11",
+     "mentions": 1,
+     "total_posts": 317,
+     "share": 0.0032,
+     "index": 12.03,
+     "ma_short": 0.0054,
+     "ma_long": 0.0029
+    },
+    {
+     "month": "2024-12",
+     "mentions": 1,
+     "total_posts": 330,
+     "share": 0.003,
+     "index": 11.55,
+     "ma_short": 0.0031,
+     "ma_long": 0.0026
+    },
+    {
+     "month": "2025-01",
+     "mentions": 1,
+     "total_posts": 276,
+     "share": 0.0036,
+     "index": 13.81,
+     "ma_short": 0.0033,
+     "ma_long": 0.0026
+    },
+    {
+     "month": "2025-02",
+     "mentions": 0,
+     "total_posts": 396,
+     "share": 0.0,
+     "index": 0.0,
+     "ma_short": 0.0022,
+     "ma_long": 0.0026
+    },
+    {
+     "month": "2025-03",
+     "mentions": 1,
+     "total_posts": 354,
+     "share": 0.0028,
+     "index": 10.77,
+     "ma_short": 0.0021,
+     "ma_long": 0.0029
+    },
+    {
+     "month": "2025-04",
+     "mentions": 2,
+     "total_posts": 306,
+     "share": 0.0065,
+     "index": 24.92,
+     "ma_short": 0.0031,
+     "ma_long": 0.0034
+    },
+    {
+     "month": "2025-05",
+     "mentions": 3,
+     "total_posts": 300,
+     "share": 0.01,
+     "index": 38.12,
+     "ma_short": 0.0065,
+     "ma_long": 0.0042
+    },
+    {
+     "month": "2025-06",
+     "mentions": 1,
+     "total_posts": 358,
+     "share": 0.0028,
+     "index": 10.65,
+     "ma_short": 0.0064,
+     "ma_long": 0.0045
+    },
+    {
+     "month": "2025-07",
+     "mentions": 2,
+     "total_posts": 331,
+     "share": 0.006,
+     "index": 23.04,
+     "ma_short": 0.0063,
+     "ma_long": 0.0048
+    },
+    {
+     "month": "2025-08",
+     "mentions": 8,
+     "total_posts": 305,
+     "share": 0.0262,
+     "index": 100.0,
+     "ma_short": 0.0117,
+     "ma_long": 0.0064
+    },
+    {
+     "month": "2025-09",
+     "mentions": 2,
+     "total_posts": 299,
+     "share": 0.0067,
+     "index": 25.5,
+     "ma_short": 0.013,
+     "ma_long": 0.0062
+    },
+    {
+     "month": "2025-10",
+     "mentions": 1,
+     "total_posts": 341,
+     "share": 0.0029,
+     "index": 11.18,
+     "ma_short": 0.012,
+     "ma_long": 0.0062
+    },
+    {
+     "month": "2025-11",
+     "mentions": 5,
+     "total_posts": 392,
+     "share": 0.0128,
+     "index": 48.63,
+     "ma_short": 0.0075,
+     "ma_long": 0.007
+    },
+    {
+     "month": "2025-12",
+     "mentions": 2,
+     "total_posts": 377,
+     "share": 0.0053,
+     "index": 20.23,
+     "ma_short": 0.007,
+     "ma_long": 0.0071
+    },
+    {
+     "month": "2026-01",
+     "mentions": 3,
+     "total_posts": 256,
+     "share": 0.0117,
+     "index": 44.68,
+     "ma_short": 0.0099,
+     "ma_long": 0.0078
+    },
+    {
+     "month": "2026-02",
+     "mentions": 8,
+     "total_posts": 410,
+     "share": 0.0195,
+     "index": 74.39,
+     "ma_short": 0.0122,
+     "ma_long": 0.0094
+    },
+    {
+     "month": "2026-03",
+     "mentions": 4,
+     "total_posts": 317,
+     "share": 0.0126,
+     "index": 48.11,
+     "ma_short": 0.0146,
+     "ma_long": 0.0103
+    },
+    {
+     "month": "2026-04",
+     "mentions": 7,
+     "total_posts": 329,
+     "share": 0.0213,
+     "index": 81.12,
+     "ma_short": 0.0178,
+     "ma_long": 0.0115
+    },
+    {
+     "month": "2026-05",
+     "mentions": 1,
+     "total_posts": 318,
+     "share": 0.0031,
+     "index": 11.99,
+     "ma_short": 0.0123,
+     "ma_long": 0.0109
+    },
+    {
+     "month": "2026-06",
+     "mentions": 3,
+     "total_posts": 313,
+     "share": 0.0096,
+     "index": 36.54,
+     "ma_short": 0.0113,
+     "ma_long": 0.0115
+    },
+    {
+     "month": "2026-07",
+     "mentions": 3,
+     "total_posts": 259,
+     "share": 0.0116,
+     "index": 44.16,
+     "ma_short": 0.0081,
+     "ma_long": 0.0119
+    },
+    {
+     "month": "2026-08",
+     "mentions": 6,
+     "total_posts": 227,
+     "share": 0.0264,
+     "index": 100.77,
+     "ma_short": 0.0159,
+     "ma_long": 0.012
+    },
+    {
+     "month": "2026-09",
+     "mentions": 7,
+     "total_posts": 249,
+     "share": 0.0281,
+     "index": 107.18,
+     "ma_short": 0.022,
+     "ma_long": 0.0137
+    },
+    {
+     "month": "2026-10",
+     "mentions": 1,
+     "total_posts": 266,
+     "share": 0.0038,
+     "index": 14.33,
+     "ma_short": 0.0194,
+     "ma_long": 0.0138
+    }
+   ],
+   "profile_tools": [],
+   "catalogue_skills": []
+  },
+  {
+   "id": "ai_agents",
+   "name": "AI agents",
+   "category": "AI/ML",
+   "label": "rising",
+   "change_12m": 0.54,
+   "latest_sample_size": 44,
+   "latest_total_posts": 266,
+   "points": [
+    {
+     "month": "2023-11",
+     "mentions": 3,
+     "total_posts": 362,
+     "share": 0.0083,
+     "index": 62.82,
+     "ma_short": null,
+     "ma_long": null
+    },
+    {
+     "month": "2023-12",
+     "mentions": 0,
+     "total_posts": 313,
+     "share": 0.0,
+     "index": 0.0,
+     "ma_short": null,
+     "ma_long": null
+    },
+    {
+     "month": "2024-01",
+     "mentions": 1,
+     "total_posts": 278,
+     "share": 0.0036,
+     "index": 27.27,
+     "ma_short": 0.004,
+     "ma_long": null
+    },
+    {
+     "month": "2024-02",
+     "mentions": 3,
+     "total_posts": 341,
+     "share": 0.0088,
+     "index": 66.69,
+     "ma_short": 0.0041,
+     "ma_long": null
+    },
+    {
+     "month": "2024-03",
+     "mentions": 3,
+     "total_posts": 300,
+     "share": 0.01,
+     "index": 75.8,
+     "ma_short": 0.0075,
+     "ma_long": null
+    },
+    {
+     "month": "2024-04",
+     "mentions": 2,
+     "total_posts": 289,
+     "share": 0.0069,
+     "index": 52.46,
+     "ma_short": 0.0086,
+     "ma_long": null
+    },
+    {
+     "month": "2024-05",
+     "mentions": 4,
+     "total_posts": 396,
+     "share": 0.0101,
+     "index": 76.57,
+     "ma_short": 0.009,
+     "ma_long": null
+    },
+    {
+     "month": "2024-06",
+     "mentions": 3,
+     "total_posts": 339,
+     "share": 0.0088,
+     "index": 67.08,
+     "ma_short": 0.0086,
+     "ma_long": null
+    },
+    {
+     "month": "2024-07",
+     "mentions": 5,
+     "total_posts": 379,
+     "share": 0.0132,
+     "index": 100.0,
+     "ma_short": 0.0107,
+     "ma_long": null
+    },
+    {
+     "month": "2024-08",
+     "mentions": 6,
+     "total_posts": 322,
+     "share": 0.0186,
+     "index": 141.24,
+     "ma_short": 0.0136,
+     "ma_long": null
+    },
+    {
+     "month": "2024-09",
+     "mentions": 10,
+     "total_posts": 303,
+     "share": 0.033,
+     "index": 250.17,
+     "ma_short": 0.0216,
+     "ma_long": null
+    },
+    {
+     "month": "2024-10",
+     "mentions": 3,
+     "total_posts": 329,
+     "share": 0.0091,
+     "index": 69.12,
+     "ma_short": 0.0203,
+     "ma_long": 0.0109
+    },
+    {
+     "month": "2024-11",
+     "mentions": 2,
+     "total_posts": 317,
+     "share": 0.0063,
+     "index": 47.82,
+     "ma_short": 0.0161,
+     "ma_long": 0.0107
+    },
+    {
+     "month": "2024-12",
+     "mentions": 10,
+     "total_posts": 330,
+     "share": 0.0303,
+     "index": 229.7,
+     "ma_short": 0.0152,
+     "ma_long": 0.0132
+    },
+    {
+     "month": "2025-01",
+     "mentions": 14,
+     "total_posts": 276,
+     "share": 0.0507,
+     "index": 384.49,
+     "ma_short": 0.0291,
+     "ma_long": 0.0172
+    },
+    {
+     "month": "2025-02",
+     "mentions": 19,
+     "total_posts": 396,
+     "share": 0.048,
+     "index": 363.69,
+     "ma_short": 0.043,
+     "ma_long": 0.0204
+    },
+    {
+     "month": "2025-03",
+     "mentions": 23,
+     "total_posts": 354,
+     "share": 0.065,
+     "index": 492.49,
+     "ma_short": 0.0546,
+     "ma_long": 0.025
+    },
+    {
+     "month": "2025-04",
+     "mentions": 24,
+     "total_posts": 306,
+     "share": 0.0784,
+     "index": 594.51,
+     "ma_short": 0.0638,
+     "ma_long": 0.031
+    },
+    {
+     "month": "2025-05",
+     "mentions": 21,
+     "total_posts": 300,
+     "share": 0.07,
+     "index": 530.6,
+     "ma_short": 0.0711,
+     "ma_long": 0.036
+    },
+    {
+     "month": "2025-06",
+     "mentions": 31,
+     "total_posts": 358,
+     "share": 0.0866,
+     "index": 656.37,
+     "ma_short": 0.0783,
+     "ma_long": 0.0424
+    },
+    {
+     "month": "2025-07",
+     "mentions": 35,
+     "total_posts": 331,
+     "share": 0.1057,
+     "index": 801.51,
+     "ma_short": 0.0874,
+     "ma_long": 0.0502
+    },
+    {
+     "month": "2025-08",
+     "mentions": 36,
+     "total_posts": 305,
+     "share": 0.118,
+     "index": 894.69,
+     "ma_short": 0.1035,
+     "ma_long": 0.0584
+    },
+    {
+     "month": "2025-09",
+     "mentions": 27,
+     "total_posts": 299,
+     "share": 0.0903,
+     "index": 684.48,
+     "ma_short": 0.1047,
+     "ma_long": 0.0632
+    },
+    {
+     "month": "2025-10",
+     "mentions": 35,
+     "total_posts": 341,
+     "share": 0.1026,
+     "index": 778.01,
+     "ma_short": 0.1037,
+     "ma_long": 0.071
+    },
+    {
+     "month": "2025-11",
+     "mentions": 50,
+     "total_posts": 392,
+     "share": 0.1276,
+     "index": 966.84,
+     "ma_short": 0.1068,
+     "ma_long": 0.0811
+    },
+    {
+     "month": "2025-12",
+     "mentions": 36,
+     "total_posts": 377,
+     "share": 0.0955,
+     "index": 723.82,
+     "ma_short": 0.1086,
+     "ma_long": 0.0865
+    },
+    {
+     "month": "2026-01",
+     "mentions": 33,
+     "total_posts": 256,
+     "share": 0.1289,
+     "index": 977.11,
+     "ma_short": 0.1173,
+     "ma_long": 0.0931
+    },
+    {
+     "month": "2026-02",
+     "mentions": 44,
+     "total_posts": 410,
+     "share": 0.1073,
+     "index": 813.46,
+     "ma_short": 0.1106,
+     "ma_long": 0.098
+    },
+    {
+     "month": "2026-03",
+     "mentions": 41,
+     "total_posts": 317,
+     "share": 0.1293,
+     "index": 980.38,
+     "ma_short": 0.1219,
+     "ma_long": 0.1034
+    },
+    {
+     "month": "2026-04",
+     "mentions": 49,
+     "total_posts": 329,
+     "share": 0.1489,
+     "index": 1128.94,
+     "ma_short": 0.1285,
+     "ma_long": 0.1092
+    },
+    {
+     "month": "2026-05",
+     "mentions": 43,
+     "total_posts": 318,
+     "share": 0.1352,
+     "index": 1024.97,
+     "ma_short": 0.1378,
+     "ma_long": 0.1147
+    },
+    {
+     "month": "2026-06",
+     "mentions": 45,
+     "total_posts": 313,
+     "share": 0.1438,
+     "index": 1089.78,
+     "ma_short": 0.1426,
+     "ma_long": 0.1194
+    },
+    {
+     "month": "2026-07",
+     "mentions": 34,
+     "total_posts": 259,
+     "share": 0.1313,
+     "index": 995.06,
+     "ma_short": 0.1368,
+     "ma_long": 0.1216
+    },
+    {
+     "month": "2026-08",
+     "mentions": 32,
+     "total_posts": 227,
+     "share": 0.141,
+     "index": 1068.55,
+     "ma_short": 0.1387,
+     "ma_long": 0.1235
+    },
+    {
+     "month": "2026-09",
+     "mentions": 43,
+     "total_posts": 249,
+     "share": 0.1727,
+     "index": 1309.0,
+     "ma_short": 0.1483,
+     "ma_long": 0.1303
+    },
+    {
+     "month": "2026-10",
+     "mentions": 44,
+     "total_posts": 266,
+     "share": 0.1654,
+     "index": 1253.83,
+     "ma_short": 0.1597,
+     "ma_long": 0.1356
+    }
+   ],
+   "profile_tools": [],
+   "catalogue_skills": [
+    "ai_output_review"
+   ]
+  },
+  {
+   "id": "mlops",
+   "name": "MLOps",
+   "category": "AI/ML",
+   "label": "insufficient_data",
+   "change_12m": 0.5,
+   "latest_sample_size": 3,
+   "latest_total_posts": 266,
+   "points": [
+    {
+     "month": "2023-11",
+     "mentions": 3,
+     "total_posts": 362,
+     "share": 0.0083,
+     "index": 46.08,
+     "ma_short": null,
+     "ma_long": null
+    },
+    {
+     "month": "2023-12",
+     "mentions": 3,
+     "total_posts": 313,
+     "share": 0.0096,
+     "index": 53.29,
+     "ma_short": null,
+     "ma_long": null
+    },
+    {
+     "month": "2024-01",
+     "mentions": 5,
+     "total_posts": 278,
+     "share": 0.018,
+     "index": 100.0,
+     "ma_short": 0.012,
+     "ma_long": null
+    },
+    {
+     "month": "2024-02",
+     "mentions": 4,
+     "total_posts": 341,
+     "share": 0.0117,
+     "index": 65.22,
+     "ma_short": 0.0131,
+     "ma_long": null
+    },
+    {
+     "month": "2024-03",
+     "mentions": 1,
+     "total_posts": 300,
+     "share": 0.0033,
+     "index": 18.53,
+     "ma_short": 0.011,
+     "ma_long": null
+    },
+    {
+     "month": "2024-04",
+     "mentions": 4,
+     "total_posts": 289,
+     "share": 0.0138,
+     "index": 76.96,
+     "ma_short": 0.0096,
+     "ma_long": null
+    },
+    {
+     "month": "2024-05",
+     "mentions": 3,
+     "total_posts": 396,
+     "share": 0.0076,
+     "index": 42.12,
+     "ma_short": 0.0082,
+     "ma_long": null
+    },
+    {
+     "month": "2024-06",
+     "mentions": 6,
+     "total_posts": 339,
+     "share": 0.0177,
+     "index": 98.41,
+     "ma_short": 0.013,
+     "ma_long": null
+    },
+    {
+     "month": "2024-07",
+     "mentions": 2,
+     "total_posts": 379,
+     "share": 0.0053,
+     "index": 29.34,
+     "ma_short": 0.0102,
+     "ma_long": null
+    },
+    {
+     "month": "2024-08",
+     "mentions": 2,
+     "total_posts": 322,
+     "share": 0.0062,
+     "index": 34.53,
+     "ma_short": 0.0097,
+     "ma_long": null
+    },
+    {
+     "month": "2024-09",
+     "mentions": 2,
+     "total_posts": 303,
+     "share": 0.0066,
+     "index": 36.7,
+     "ma_short": 0.006,
+     "ma_long": null
+    },
+    {
+     "month": "2024-10",
+     "mentions": 4,
+     "total_posts": 329,
+     "share": 0.0122,
+     "index": 67.6,
+     "ma_short": 0.0083,
+     "ma_long": 0.01
+    },
+    {
+     "month": "2024-11",
+     "mentions": 4,
+     "total_posts": 317,
+     "share": 0.0126,
+     "index": 70.16,
+     "ma_short": 0.0105,
+     "ma_long": 0.0104
+    },
+    {
+     "month": "2024-12",
+     "mentions": 2,
+     "total_posts": 330,
+     "share": 0.0061,
+     "index": 33.7,
+     "ma_short": 0.0103,
+     "ma_long": 0.0101
+    },
+    {
+     "month": "2025-01",
+     "mentions": 1,
+     "total_posts": 276,
+     "share": 0.0036,
+     "index": 20.14,
+     "ma_short": 0.0074,
+     "ma_long": 0.0089
+    },
+    {
+     "month": "2025-02",
+     "mentions": 4,
+     "total_posts": 396,
+     "share": 0.0101,
+     "index": 56.16,
+     "ma_short": 0.0066,
+     "ma_long": 0.0088
+    },
+    {
+     "month": "2025-03",
+     "mentions": 2,
+     "total_posts": 354,
+     "share": 0.0056,
+     "index": 31.41,
+     "ma_short": 0.0065,
+     "ma_long": 0.009
+    },
+    {
+     "month": "2025-04",
+     "mentions": 5,
+     "total_posts": 306,
+     "share": 0.0163,
+     "index": 90.85,
+     "ma_short": 0.0107,
+     "ma_long": 0.0092
+    },
+    {
+     "month": "2025-05",
+     "mentions": 3,
+     "total_posts": 300,
+     "share": 0.01,
+     "index": 55.6,
+     "ma_short": 0.0107,
+     "ma_long": 0.0094
+    },
+    {
+     "month": "2025-06",
+     "mentions": 2,
+     "total_posts": 358,
+     "share": 0.0056,
+     "index": 31.06,
+     "ma_short": 0.0106,
+     "ma_long": 0.0084
+    },
+    {
+     "month": "2025-07",
+     "mentions": 3,
+     "total_posts": 331,
+     "share": 0.0091,
+     "index": 50.39,
+     "ma_short": 0.0082,
+     "ma_long": 0.0087
+    },
+    {
+     "month": "2025-08",
+     "mentions": 4,
+     "total_posts": 305,
+     "share": 0.0131,
+     "index": 72.92,
+     "ma_short": 0.0093,
+     "ma_long": 0.0092
+    },
+    {
+     "month": "2025-09",
+     "mentions": 4,
+     "total_posts": 299,
+     "share": 0.0134,
+     "index": 74.38,
+     "ma_short": 0.0119,
+     "ma_long": 0.0098
+    },
+    {
+     "month": "2025-10",
+     "mentions": 3,
+     "total_posts": 341,
+     "share": 0.0088,
+     "index": 48.91,
+     "ma_short": 0.0118,
+     "ma_long": 0.0095
+    },
+    {
+     "month": "2025-11",
+     "mentions": 3,
+     "total_posts": 392,
+     "share": 0.0077,
+     "index": 42.55,
+     "ma_short": 0.0099,
+     "ma_long": 0.0091
+    },
+    {
+     "month": "2025-12",
+     "mentions": 4,
+     "total_posts": 377,
+     "share": 0.0106,
+     "index": 58.99,
+     "ma_short": 0.009,
+     "ma_long": 0.0095
+    },
+    {
+     "month": "2026-01",
+     "mentions": 3,
+     "total_posts": 256,
+     "share": 0.0117,
+     "index": 65.16,
+     "ma_short": 0.01,
+     "ma_long": 0.0102
+    },
+    {
+     "month": "2026-02",
+     "mentions": 5,
+     "total_posts": 410,
+     "share": 0.0122,
+     "index": 67.8,
+     "ma_short": 0.0115,
+     "ma_long": 0.0103
+    },
+    {
+     "month": "2026-03",
+     "mentions": 0,
+     "total_posts": 317,
+     "share": 0.0,
+     "index": 0.0,
+     "ma_short": 0.008,
+     "ma_long": 0.0099
+    },
+    {
+     "month": "2026-04",
+     "mentions": 0,
+     "total_posts": 329,
+     "share": 0.0,
+     "index": 0.0,
+     "ma_short": 0.0041,
+     "ma_long": 0.0085
+    },
+    {
+     "month": "2026-05",
+     "mentions": 3,
+     "total_posts": 318,
+     "share": 0.0094,
+     "index": 52.45,
+     "ma_short": 0.0031,
+     "ma_long": 0.0085
+    },
+    {
+     "month": "2026-06",
+     "mentions": 1,
+     "total_posts": 313,
+     "share": 0.0032,
+     "index": 17.76,
+     "ma_short": 0.0042,
+     "ma_long": 0.0083
+    },
+    {
+     "month": "2026-07",
+     "mentions": 1,
+     "total_posts": 259,
+     "share": 0.0039,
+     "index": 21.47,
+     "ma_short": 0.0055,
+     "ma_long": 0.0078
+    },
+    {
+     "month": "2026-08",
+     "mentions": 4,
+     "total_posts": 227,
+     "share": 0.0176,
+     "index": 97.97,
+     "ma_short": 0.0082,
+     "ma_long": 0.0082
+    },
+    {
+     "month": "2026-09",
+     "mentions": 6,
+     "total_posts": 249,
+     "share": 0.0241,
+     "index": 133.98,
+     "ma_short": 0.0152,
+     "ma_long": 0.0091
+    },
+    {
+     "month": "2026-10",
+     "mentions": 3,
+     "total_posts": 266,
+     "share": 0.0113,
+     "index": 62.71,
+     "ma_short": 0.0177,
+     "ma_long": 0.0093
+    }
+   ],
+   "profile_tools": [],
+   "catalogue_skills": []
+  },
+  {
+   "id": "computer_vision",
+   "name": "Computer vision",
+   "category": "AI/ML",
+   "label": "stable",
+   "change_12m": -0.1393,
+   "latest_sample_size": 6,
+   "latest_total_posts": 266,
+   "points": [
+    {
+     "month": "2023-11",
+     "mentions": 6,
+     "total_posts": 362,
+     "share": 0.0166,
+     "index": 100.0,
+     "ma_short": null,
+     "ma_long": null
+    },
+    {
+     "month": "2023-12",
+     "mentions": 8,
+     "total_posts": 313,
+     "share": 0.0256,
+     "index": 154.21,
+     "ma_short": null,
+     "ma_long": null
+    },
+    {
+     "month": "2024-01",
+     "mentions": 6,
+     "total_posts": 278,
+     "share": 0.0216,
+     "index": 130.22,
+     "ma_short": 0.0212,
+     "ma_long": null
+    },
+    {
+     "month": "2024-02",
+     "mentions": 9,
+     "total_posts": 341,
+     "share": 0.0264,
+     "index": 159.24,
+     "ma_short": 0.0245,
+     "ma_long": null
+    },
+    {
+     "month": "2024-03",
+     "mentions": 8,
+     "total_posts": 300,
+     "share": 0.0267,
+     "index": 160.89,
+     "ma_short": 0.0249,
+     "ma_long": null
+    },
+    {
+     "month": "2024-04",
+     "mentions": 9,
+     "total_posts": 289,
+     "share": 0.0311,
+     "index": 187.89,
+     "ma_short": 0.0281,
+     "ma_long": null
+    },
+    {
+     "month": "2024-05",
+     "mentions": 8,
+     "total_posts": 396,
+     "share": 0.0202,
+     "index": 121.89,
+     "ma_short": 0.026,
+     "ma_long": null
+    },
+    {
+     "month": "2024-06",
+     "mentions": 9,
+     "total_posts": 339,
+     "share": 0.0265,
+     "index": 160.18,
+     "ma_short": 0.026,
+     "ma_long": null
+    },
+    {
+     "month": "2024-07",
+     "mentions": 10,
+     "total_posts": 379,
+     "share": 0.0264,
+     "index": 159.19,
+     "ma_short": 0.0244,
+     "ma_long": null
+    },
+    {
+     "month": "2024-08",
+     "mentions": 6,
+     "total_posts": 322,
+     "share": 0.0186,
+     "index": 112.42,
+     "ma_short": 0.0239,
+     "ma_long": null
+    },
+    {
+     "month": "2024-09",
+     "mentions": 4,
+     "total_posts": 303,
+     "share": 0.0132,
+     "index": 79.65,
+     "ma_short": 0.0194,
+     "ma_long": null
+    },
+    {
+     "month": "2024-10",
+     "mentions": 4,
+     "total_posts": 329,
+     "share": 0.0122,
+     "index": 73.35,
+     "ma_short": 0.0147,
+     "ma_long": 0.0221
+    },
+    {
+     "month": "2024-11",
+     "mentions": 6,
+     "total_posts": 317,
+     "share": 0.0189,
+     "index": 114.2,
+     "ma_short": 0.0148,
+     "ma_long": 0.0223
+    },
+    {
+     "month": "2024-12",
+     "mentions": 4,
+     "total_posts": 330,
+     "share": 0.0121,
+     "index": 73.13,
+     "ma_short": 0.0144,
+     "ma_long": 0.0212
+    },
+    {
+     "month": "2025-01",
+     "mentions": 4,
+     "total_posts": 276,
+     "share": 0.0145,
+     "index": 87.44,
+     "ma_short": 0.0152,
+     "ma_long": 0.0206
+    },
+    {
+     "month": "2025-02",
+     "mentions": 4,
+     "total_posts": 396,
+     "share": 0.0101,
+     "index": 60.94,
+     "ma_short": 0.0122,
+     "ma_long": 0.0192
+    },
+    {
+     "month": "2025-03",
+     "mentions": 7,
+     "total_posts": 354,
+     "share": 0.0198,
+     "index": 119.3,
+     "ma_short": 0.0148,
+     "ma_long": 0.0186
+    },
+    {
+     "month": "2025-04",
+     "mentions": 4,
+     "total_posts": 306,
+     "share": 0.0131,
+     "index": 78.87,
+     "ma_short": 0.0143,
+     "ma_long": 0.0171
+    },
+    {
+     "month": "2025-05",
+     "mentions": 6,
+     "total_posts": 300,
+     "share": 0.02,
+     "index": 120.67,
+     "ma_short": 0.0176,
+     "ma_long": 0.0171
+    },
+    {
+     "month": "2025-06",
+     "mentions": 7,
+     "total_posts": 358,
+     "share": 0.0196,
+     "index": 117.97,
+     "ma_short": 0.0175,
+     "ma_long": 0.0165
+    },
+    {
+     "month": "2025-07",
+     "mentions": 9,
+     "total_posts": 331,
+     "share": 0.0272,
+     "index": 164.05,
+     "ma_short": 0.0222,
+     "ma_long": 0.0166
+    },
+    {
+     "month": "2025-08",
+     "mentions": 6,
+     "total_posts": 305,
+     "share": 0.0197,
+     "index": 118.69,
+     "ma_short": 0.0221,
+     "ma_long": 0.0167
+    },
+    {
+     "month": "2025-09",
+     "mentions": 6,
+     "total_posts": 299,
+     "share": 0.0201,
+     "index": 121.07,
+     "ma_short": 0.0223,
+     "ma_long": 0.0173
+    },
+    {
+     "month": "2025-10",
+     "mentions": 7,
+     "total_posts": 341,
+     "share": 0.0205,
+     "index": 123.85,
+     "ma_short": 0.0201,
+     "ma_long": 0.018
+    },
+    {
+     "month": "2025-11",
+     "mentions": 9,
+     "total_posts": 392,
+     "share": 0.023,
+     "index": 138.52,
+     "ma_short": 0.0212,
+     "ma_long": 0.0183
+    },
+    {
+     "month": "2025-12",
+     "mentions": 7,
+     "total_posts": 377,
+     "share": 0.0186,
+     "index": 112.02,
+     "ma_short": 0.0207,
+     "ma_long": 0.0188
+    },
+    {
+     "month": "2026-01",
+     "mentions": 6,
+     "total_posts": 256,
+     "share": 0.0234,
+     "index": 141.41,
+     "ma_short": 0.0217,
+     "ma_long": 0.0196
+    },
+    {
+     "month": "2026-02",
+     "mentions": 8,
+     "total_posts": 410,
+     "share": 0.0195,
+     "index": 117.72,
+     "ma_short": 0.0205,
+     "ma_long": 0.0204
+    },
+    {
+     "month": "2026-03",
+     "mentions": 7,
+     "total_posts": 317,
+     "share": 0.0221,
+     "index": 133.23,
+     "ma_short": 0.0217,
+     "ma_long": 0.0206
+    },
+    {
+     "month": "2026-04",
+     "mentions": 4,
+     "total_posts": 329,
+     "share": 0.0122,
+     "index": 73.35,
+     "ma_short": 0.0179,
+     "ma_long": 0.0205
+    },
+    {
+     "month": "2026-05",
+     "mentions": 8,
+     "total_posts": 318,
+     "share": 0.0252,
+     "index": 151.78,
+     "ma_short": 0.0198,
+     "ma_long": 0.0209
+    },
+    {
+     "month": "2026-06",
+     "mentions": 10,
+     "total_posts": 313,
+     "share": 0.0319,
+     "index": 192.76,
+     "ma_short": 0.0231,
+     "ma_long": 0.0219
+    },
+    {
+     "month": "2026-07",
+     "mentions": 6,
+     "total_posts": 259,
+     "share": 0.0232,
+     "index": 139.77,
+     "ma_short": 0.0268,
+     "ma_long": 0.0216
+    },
+    {
+     "month": "2026-08",
+     "mentions": 3,
+     "total_posts": 227,
+     "share": 0.0132,
+     "index": 79.74,
+     "ma_short": 0.0228,
+     "ma_long": 0.0211
+    },
+    {
+     "month": "2026-09",
+     "mentions": 4,
+     "total_posts": 249,
+     "share": 0.0161,
+     "index": 96.92,
+     "ma_short": 0.0175,
+     "ma_long": 0.0207
+    },
+    {
+     "month": "2026-10",
+     "mentions": 6,
+     "total_posts": 266,
+     "share": 0.0226,
+     "index": 136.09,
+     "ma_short": 0.0173,
+     "ma_long": 0.0209
+    }
+   ],
+   "profile_tools": [],
+   "catalogue_skills": []
+  },
+  {
+   "id": "nlp",
+   "name": "NLP",
+   "category": "AI/ML",
+   "label": "insufficient_data",
+   "change_12m": -0.5956,
+   "latest_sample_size": 1,
+   "latest_total_posts": 266,
+   "points": [
+    {
+     "month": "2023-11",
+     "mentions": 6,
+     "total_posts": 362,
+     "share": 0.0166,
+     "index": 100.0,
+     "ma_short": null,
+     "ma_long": null
+    },
+    {
+     "month": "2023-12",
+     "mentions": 2,
+     "total_posts": 313,
+     "share": 0.0064,
+     "index": 38.55,
+     "ma_short": null,
+     "ma_long": null
+    },
+    {
+     "month": "2024-01",
+     "mentions": 4,
+     "total_posts": 278,
+     "share": 0.0144,
+     "index": 86.81,
+     "ma_short": 0.0125,
+     "ma_long": null
+    },
+    {
+     "month": "2024-02",
+     "mentions": 3,
+     "total_posts": 341,
+     "share": 0.0088,
+     "index": 53.08,
+     "ma_short": 0.0099,
+     "ma_long": null
+    },
+    {
+     "month": "2024-03",
+     "mentions": 4,
+     "total_posts": 300,
+     "share": 0.0133,
+     "index": 80.44,
+     "ma_short": 0.0122,
+     "ma_long": null
+    },
+    {
+     "month": "2024-04",
+     "mentions": 2,
+     "total_posts": 289,
+     "share": 0.0069,
+     "index": 41.75,
+     "ma_short": 0.0097,
+     "ma_long": null
+    },
+    {
+     "month": "2024-05",
+     "mentions": 4,
+     "total_posts": 396,
+     "share": 0.0101,
+     "index": 60.94,
+     "ma_short": 0.0101,
+     "ma_long": null
+    },
+    {
+     "month": "2024-06",
+     "mentions": 3,
+     "total_posts": 339,
+     "share": 0.0088,
+     "index": 53.39,
+     "ma_short": 0.0086,
+     "ma_long": null
+    },
+    {
+     "month": "2024-07",
+     "mentions": 3,
+     "total_posts": 379,
+     "share": 0.0079,
+     "index": 47.76,
+     "ma_short": 0.009,
+     "ma_long": null
+    },
+    {
+     "month": "2024-08",
+     "mentions": 2,
+     "total_posts": 322,
+     "share": 0.0062,
+     "index": 37.47,
+     "ma_short": 0.0077,
+     "ma_long": null
+    },
+    {
+     "month": "2024-09",
+     "mentions": 1,
+     "total_posts": 303,
+     "share": 0.0033,
+     "index": 19.91,
+     "ma_short": 0.0058,
+     "ma_long": null
+    },
+    {
+     "month": "2024-10",
+     "mentions": 2,
+     "total_posts": 329,
+     "share": 0.0061,
+     "index": 36.68,
+     "ma_short": 0.0052,
+     "ma_long": 0.0091
+    },
+    {
+     "month": "2024-11",
+     "mentions": 4,
+     "total_posts": 317,
+     "share": 0.0126,
+     "index": 76.13,
+     "ma_short": 0.0073,
+     "ma_long": 0.0087
+    },
+    {
+     "month": "2024-12",
+     "mentions": 2,
+     "total_posts": 330,
+     "share": 0.0061,
+     "index": 36.57,
+     "ma_short": 0.0083,
+     "ma_long": 0.0087
+    },
+    {
+     "month": "2025-01",
+     "mentions": 5,
+     "total_posts": 276,
+     "share": 0.0181,
+     "index": 109.3,
+     "ma_short": 0.0123,
+     "ma_long": 0.009
+    },
+    {
+     "month": "2025-02",
+     "mentions": 2,
+     "total_posts": 396,
+     "share": 0.0051,
+     "index": 30.47,
+     "ma_short": 0.0097,
+     "ma_long": 0.0087
+    },
+    {
+     "month": "2025-03",
+     "mentions": 3,
+     "total_posts": 354,
+     "share": 0.0085,
+     "index": 51.13,
+     "ma_short": 0.0105,
+     "ma_long": 0.0083
+    },
+    {
+     "month": "2025-04",
+     "mentions": 3,
+     "total_posts": 306,
+     "share": 0.0098,
+     "index": 59.15,
+     "ma_short": 0.0078,
+     "ma_long": 0.0085
+    },
+    {
+     "month": "2025-05",
+     "mentions": 3,
+     "total_posts": 300,
+     "share": 0.01,
+     "index": 60.33,
+     "ma_short": 0.0094,
+     "ma_long": 0.0085
+    },
+    {
+     "month": "2025-06",
+     "mentions": 1,
+     "total_posts": 358,
+     "share": 0.0028,
+     "index": 16.85,
+     "ma_short": 0.0075,
+     "ma_long": 0.008
+    },
+    {
+     "month": "2025-07",
+     "mentions": 2,
+     "total_posts": 331,
+     "share": 0.006,
+     "index": 36.46,
+     "ma_short": 0.0063,
+     "ma_long": 0.0079
+    },
+    {
+     "month": "2025-08",
+     "mentions": 3,
+     "total_posts": 305,
+     "share": 0.0098,
+     "index": 59.34,
+     "ma_short": 0.0062,
+     "ma_long": 0.0082
+    },
+    {
+     "month": "2025-09",
+     "mentions": 4,
+     "total_posts": 299,
+     "share": 0.0134,
+     "index": 80.71,
+     "ma_short": 0.0098,
+     "ma_long": 0.009
+    },
+    {
+     "month": "2025-10",
+     "mentions": 6,
+     "total_posts": 341,
+     "share": 0.0176,
+     "index": 106.16,
+     "ma_short": 0.0136,
+     "ma_long": 0.01
+    },
+    {
+     "month": "2025-11",
+     "mentions": 5,
+     "total_posts": 392,
+     "share": 0.0128,
+     "index": 76.96,
+     "ma_short": 0.0146,
+     "ma_long": 0.01
+    },
+    {
+     "month": "2025-12",
+     "mentions": 2,
+     "total_posts": 377,
+     "share": 0.0053,
+     "index": 32.01,
+     "ma_short": 0.0119,
+     "ma_long": 0.0099
+    },
+    {
+     "month": "2026-01",
+     "mentions": 5,
+     "total_posts": 256,
+     "share": 0.0195,
+     "index": 117.84,
+     "ma_short": 0.0125,
+     "ma_long": 0.01
+    },
+    {
+     "month": "2026-02",
+     "mentions": 3,
+     "total_posts": 410,
+     "share": 0.0073,
+     "index": 44.15,
+     "ma_short": 0.0107,
+     "ma_long": 0.0102
+    },
+    {
+     "month": "2026-03",
+     "mentions": 3,
+     "total_posts": 317,
+     "share": 0.0095,
+     "index": 57.1,
+     "ma_short": 0.0121,
+     "ma_long": 0.0103
+    },
+    {
+     "month": "2026-04",
+     "mentions": 1,
+     "total_posts": 329,
+     "share": 0.003,
+     "index": 18.34,
+     "ma_short": 0.0066,
+     "ma_long": 0.0098
+    },
+    {
+     "month": "2026-05",
+     "mentions": 2,
+     "total_posts": 318,
+     "share": 0.0063,
+     "index": 37.95,
+     "ma_short": 0.0063,
+     "ma_long": 0.0094
+    },
+    {
+     "month": "2026-06",
+     "mentions": 2,
+     "total_posts": 313,
+     "share": 0.0064,
+     "index": 38.55,
+     "ma_short": 0.0052,
+     "ma_long": 0.0097
+    },
+    {
+     "month": "2026-07",
+     "mentions": 0,
+     "total_posts": 259,
+     "share": 0.0,
+     "index": 0.0,
+     "ma_short": 0.0042,
+     "ma_long": 0.0092
+    },
+    {
+     "month": "2026-08",
+     "mentions": 2,
+     "total_posts": 227,
+     "share": 0.0088,
+     "index": 53.16,
+     "ma_short": 0.0051,
+     "ma_long": 0.0092
+    },
+    {
+     "month": "2026-09",
+     "mentions": 1,
+     "total_posts": 249,
+     "share": 0.004,
+     "index": 24.23,
+     "ma_short": 0.0043,
+     "ma_long": 0.0084
+    },
+    {
+     "month": "2026-10",
+     "mentions": 1,
+     "total_posts": 266,
+     "share": 0.0038,
+     "index": 22.68,
+     "ma_short": 0.0055,
+     "ma_long": 0.0072
+    }
+   ],
+   "profile_tools": [],
+   "catalogue_skills": []
+  },
+  {
+   "id": "kubernetes",
+   "name": "Kubernetes",
+   "category": "Infrastructure",
+   "label": "rising",
+   "change_12m": 0.1898,
+   "latest_sample_size": 26,
+   "latest_total_posts": 266,
+   "points": [
+    {
+     "month": "2023-11",
+     "mentions": 26,
+     "total_posts": 362,
+     "share": 0.0718,
+     "index": 100.0,
+     "ma_short": null,
+     "ma_long": null
+    },
+    {
+     "month": "2023-12",
+     "mentions": 25,
+     "total_posts": 313,
+     "share": 0.0799,
+     "index": 111.21,
+     "ma_short": null,
+     "ma_long": null
+    },
+    {
+     "month": "2024-01",
+     "mentions": 21,
+     "total_posts": 278,
+     "share": 0.0755,
+     "index": 105.17,
+     "ma_short": 0.0757,
+     "ma_long": null
+    },
+    {
+     "month": "2024-02",
+     "mentions": 18,
+     "total_posts": 341,
+     "share": 0.0528,
+     "index": 73.49,
+     "ma_short": 0.0694,
+     "ma_long": null
+    },
+    {
+     "month": "2024-03",
+     "mentions": 36,
+     "total_posts": 300,
+     "share": 0.12,
+     "index": 167.08,
+     "ma_short": 0.0828,
+     "ma_long": null
+    },
+    {
+     "month": "2024-04",
+     "mentions": 21,
+     "total_posts": 289,
+     "share": 0.0727,
+     "index": 101.17,
+     "ma_short": 0.0818,
+     "ma_long": null
+    },
+    {
+     "month": "2024-05",
+     "mentions": 31,
+     "total_posts": 396,
+     "share": 0.0783,
+     "index": 108.99,
+     "ma_short": 0.0903,
+     "ma_long": null
+    },
+    {
+     "month": "2024-06",
+     "mentions": 32,
+     "total_posts": 339,
+     "share": 0.0944,
+     "index": 131.43,
+     "ma_short": 0.0818,
+     "ma_long": null
+    },
+    {
+     "month": "2024-07",
+     "mentions": 30,
+     "total_posts": 379,
+     "share": 0.0792,
+     "index": 110.21,
+     "ma_short": 0.0839,
+     "ma_long": null
+    },
+    {
+     "month": "2024-08",
+     "mentions": 25,
+     "total_posts": 322,
+     "share": 0.0776,
+     "index": 108.1,
+     "ma_short": 0.0837,
+     "ma_long": null
+    },
+    {
+     "month": "2024-09",
+     "mentions": 26,
+     "total_posts": 303,
+     "share": 0.0858,
+     "index": 119.47,
+     "ma_short": 0.0809,
+     "ma_long": null
+    },
+    {
+     "month": "2024-10",
+     "mentions": 28,
+     "total_posts": 329,
+     "share": 0.0851,
+     "index": 118.49,
+     "ma_short": 0.0829,
+     "ma_long": 0.0811
+    },
+    {
+     "month": "2024-11",
+     "mentions": 28,
+     "total_posts": 317,
+     "share": 0.0883,
+     "index": 122.98,
+     "ma_short": 0.0864,
+     "ma_long": 0.0825
+    },
+    {
+     "month": "2024-12",
+     "mentions": 24,
+     "total_posts": 330,
+     "share": 0.0727,
+     "index": 101.26,
+     "ma_short": 0.0821,
+     "ma_long": 0.0819
+    },
+    {
+     "month": "2025-01",
+     "mentions": 20,
+     "total_posts": 276,
+     "share": 0.0725,
+     "index": 100.89,
+     "ma_short": 0.0778,
+     "ma_long": 0.0816
+    },
+    {
+     "month": "2025-02",
+     "mentions": 37,
+     "total_posts": 396,
+     "share": 0.0934,
+     "index": 130.09,
+     "ma_short": 0.0795,
+     "ma_long": 0.085
+    },
+    {
+     "month": "2025-03",
+     "mentions": 31,
+     "total_posts": 354,
+     "share": 0.0876,
+     "index": 121.93,
+     "ma_short": 0.0845,
+     "ma_long": 0.0823
+    },
+    {
+     "month": "2025-04",
+     "mentions": 31,
+     "total_posts": 306,
+     "share": 0.1013,
+     "index": 141.05,
+     "ma_short": 0.0941,
+     "ma_long": 0.0847
+    },
+    {
+     "month": "2025-05",
+     "mentions": 35,
+     "total_posts": 300,
+     "share": 0.1167,
+     "index": 162.44,
+     "ma_short": 0.1018,
+     "ma_long": 0.0879
+    },
+    {
+     "month": "2025-06",
+     "mentions": 36,
+     "total_posts": 358,
+     "share": 0.1006,
+     "index": 140.01,
+     "ma_short": 0.1062,
+     "ma_long": 0.0884
+    },
+    {
+     "month": "2025-07",
+     "mentions": 39,
+     "total_posts": 331,
+     "share": 0.1178,
+     "index": 164.05,
+     "ma_short": 0.1117,
+     "ma_long": 0.0916
+    },
+    {
+     "month": "2025-08",
+     "mentions": 29,
+     "total_posts": 305,
+     "share": 0.0951,
+     "index": 132.38,
+     "ma_short": 0.1045,
+     "ma_long": 0.0931
+    },
+    {
+     "month": "2025-09",
+     "mentions": 27,
+     "total_posts": 299,
+     "share": 0.0903,
+     "index": 125.73,
+     "ma_short": 0.1011,
+     "ma_long": 0.0934
+    },
+    {
+     "month": "2025-10",
+     "mentions": 29,
+     "total_posts": 341,
+     "share": 0.085,
+     "index": 118.41,
+     "ma_short": 0.0901,
+     "ma_long": 0.0934
+    },
+    {
+     "month": "2025-11",
+     "mentions": 30,
+     "total_posts": 392,
+     "share": 0.0765,
+     "index": 106.55,
+     "ma_short": 0.084,
+     "ma_long": 0.0925
+    },
+    {
+     "month": "2025-12",
+     "mentions": 30,
+     "total_posts": 377,
+     "share": 0.0796,
+     "index": 110.79,
+     "ma_short": 0.0804,
+     "ma_long": 0.093
+    },
+    {
+     "month": "2026-01",
+     "mentions": 25,
+     "total_posts": 256,
+     "share": 0.0977,
+     "index": 135.97,
+     "ma_short": 0.0846,
+     "ma_long": 0.0951
+    },
+    {
+     "month": "2026-02",
+     "mentions": 47,
+     "total_posts": 410,
+     "share": 0.1146,
+     "index": 159.61,
+     "ma_short": 0.0973,
+     "ma_long": 0.0969
+    },
+    {
+     "month": "2026-03",
+     "mentions": 33,
+     "total_posts": 317,
+     "share": 0.1041,
+     "index": 144.94,
+     "ma_short": 0.1055,
+     "ma_long": 0.0983
+    },
+    {
+     "month": "2026-04",
+     "mentions": 30,
+     "total_posts": 329,
+     "share": 0.0912,
+     "index": 126.96,
+     "ma_short": 0.1033,
+     "ma_long": 0.0974
+    },
+    {
+     "month": "2026-05",
+     "mentions": 21,
+     "total_posts": 318,
+     "share": 0.066,
+     "index": 91.94,
+     "ma_short": 0.0871,
+     "ma_long": 0.0932
+    },
+    {
+     "month": "2026-06",
+     "mentions": 28,
+     "total_posts": 313,
+     "share": 0.0895,
+     "index": 124.55,
+     "ma_short": 0.0822,
+     "ma_long": 0.0923
+    },
+    {
+     "month": "2026-07",
+     "mentions": 18,
+     "total_posts": 259,
+     "share": 0.0695,
+     "index": 96.76,
+     "ma_short": 0.075,
+     "ma_long": 0.0883
+    },
+    {
+     "month": "2026-08",
+     "mentions": 28,
+     "total_posts": 227,
+     "share": 0.1233,
+     "index": 171.74,
+     "ma_short": 0.0941,
+     "ma_long": 0.0906
+    },
+    {
+     "month": "2026-09",
+     "mentions": 25,
+     "total_posts": 249,
+     "share": 0.1004,
+     "index": 139.79,
+     "ma_short": 0.0977,
+     "ma_long": 0.0915
+    },
+    {
+     "month": "2026-10",
+     "mentions": 26,
+     "total_posts": 266,
+     "share": 0.0977,
+     "index": 136.09,
+     "ma_short": 0.1072,
+     "ma_long": 0.0925
+    }
+   ],
+   "profile_tools": [],
+   "catalogue_skills": []
+  },
+  {
+   "id": "aws",
+   "name": "AWS",
+   "category": "Infrastructure",
+   "label": "stable",
+   "change_12m": -0.0321,
+   "latest_sample_size": 31,
+   "latest_total_posts": 266,
+   "points": [
+    {
+     "month": "2023-11",
+     "mentions": 40,
+     "total_posts": 362,
+     "share": 0.1105,
+     "index": 100.0,
+     "ma_short": null,
+     "ma_long": null
+    },
+    {
+     "month": "2023-12",
+     "mentions": 32,
+     "total_posts": 313,
+     "share": 0.1022,
+     "index": 92.52,
+     "ma_short": null,
+     "ma_long": null
+    },
+    {
+     "month": "2024-01",
+     "mentions": 39,
+     "total_posts": 278,
+     "share": 0.1403,
+     "index": 126.96,
+     "ma_short": 0.1177,
+     "ma_long": null
+    },
+    {
+     "month": "2024-02",
+     "mentions": 42,
+     "total_posts": 341,
+     "share": 0.1232,
+     "index": 111.47,
+     "ma_short": 0.1219,
+     "ma_long": null
+    },
+    {
+     "month": "2024-03",
+     "mentions": 39,
+     "total_posts": 300,
+     "share": 0.13,
+     "index": 117.65,
+     "ma_short": 0.1312,
+     "ma_long": null
+    },
+    {
+     "month": "2024-04",
+     "mentions": 40,
+     "total_posts": 289,
+     "share": 0.1384,
+     "index": 125.26,
+     "ma_short": 0.1305,
+     "ma_long": null
+    },
+    {
+     "month": "2024-05",
+     "mentions": 43,
+     "total_posts": 396,
+     "share": 0.1086,
+     "index": 98.27,
+     "ma_short": 0.1257,
+     "ma_long": null
+    },
+    {
+     "month": "2024-06",
+     "mentions": 34,
+     "total_posts": 339,
+     "share": 0.1003,
+     "index": 90.77,
+     "ma_short": 0.1158,
+     "ma_long": null
+    },
+    {
+     "month": "2024-07",
+     "mentions": 54,
+     "total_posts": 379,
+     "share": 0.1425,
+     "index": 128.94,
+     "ma_short": 0.1171,
+     "ma_long": null
+    },
+    {
+     "month": "2024-08",
+     "mentions": 42,
+     "total_posts": 322,
+     "share": 0.1304,
+     "index": 118.04,
+     "ma_short": 0.1244,
+     "ma_long": null
+    },
+    {
+     "month": "2024-09",
+     "mentions": 43,
+     "total_posts": 303,
+     "share": 0.1419,
+     "index": 128.43,
+     "ma_short": 0.1383,
+     "ma_long": null
+    },
+    {
+     "month": "2024-10",
+     "mentions": 53,
+     "total_posts": 329,
+     "share": 0.1611,
+     "index": 145.79,
+     "ma_short": 0.1445,
+     "ma_long": 0.1275
+    },
+    {
+     "month": "2024-11",
+     "mentions": 47,
+     "total_posts": 317,
+     "share": 0.1483,
+     "index": 134.18,
+     "ma_short": 0.1504,
+     "ma_long": 0.1306
+    },
+    {
+     "month": "2024-12",
+     "mentions": 43,
+     "total_posts": 330,
+     "share": 0.1303,
+     "index": 117.92,
+     "ma_short": 0.1466,
+     "ma_long": 0.1329
+    },
+    {
+     "month": "2025-01",
+     "mentions": 41,
+     "total_posts": 276,
+     "share": 0.1486,
+     "index": 134.44,
+     "ma_short": 0.1424,
+     "ma_long": 0.1336
+    },
+    {
+     "month": "2025-02",
+     "mentions": 60,
+     "total_posts": 396,
+     "share": 0.1515,
+     "index": 137.12,
+     "ma_short": 0.1435,
+     "ma_long": 0.136
+    },
+    {
+     "month": "2025-03",
+     "mentions": 47,
+     "total_posts": 354,
+     "share": 0.1328,
+     "index": 120.16,
+     "ma_short": 0.1443,
+     "ma_long": 0.1362
+    },
+    {
+     "month": "2025-04",
+     "mentions": 39,
+     "total_posts": 306,
+     "share": 0.1275,
+     "index": 115.34,
+     "ma_short": 0.1372,
+     "ma_long": 0.1353
+    },
+    {
+     "month": "2025-05",
+     "mentions": 40,
+     "total_posts": 300,
+     "share": 0.1333,
+     "index": 120.67,
+     "ma_short": 0.1312,
+     "ma_long": 0.1374
+    },
+    {
+     "month": "2025-06",
+     "mentions": 64,
+     "total_posts": 358,
+     "share": 0.1788,
+     "index": 161.79,
+     "ma_short": 0.1465,
+     "ma_long": 0.1439
+    },
+    {
+     "month": "2025-07",
+     "mentions": 55,
+     "total_posts": 331,
+     "share": 0.1662,
+     "index": 150.38,
+     "ma_short": 0.1594,
+     "ma_long": 0.1459
+    },
+    {
+     "month": "2025-08",
+     "mentions": 51,
+     "total_posts": 305,
+     "share": 0.1672,
+     "index": 151.33,
+     "ma_short": 0.1707,
+     "ma_long": 0.1489
+    },
+    {
+     "month": "2025-09",
+     "mentions": 40,
+     "total_posts": 299,
+     "share": 0.1338,
+     "index": 121.07,
+     "ma_short": 0.1557,
+     "ma_long": 0.1483
+    },
+    {
+     "month": "2025-10",
+     "mentions": 47,
+     "total_posts": 341,
+     "share": 0.1378,
+     "index": 124.74,
+     "ma_short": 0.1463,
+     "ma_long": 0.1463
+    },
+    {
+     "month": "2025-11",
+     "mentions": 62,
+     "total_posts": 392,
+     "share": 0.1582,
+     "index": 143.14,
+     "ma_short": 0.1433,
+     "ma_long": 0.1472
+    },
+    {
+     "month": "2025-12",
+     "mentions": 50,
+     "total_posts": 377,
+     "share": 0.1326,
+     "index": 120.03,
+     "ma_short": 0.1429,
+     "ma_long": 0.1473
+    },
+    {
+     "month": "2026-01",
+     "mentions": 39,
+     "total_posts": 256,
+     "share": 0.1523,
+     "index": 137.87,
+     "ma_short": 0.1477,
+     "ma_long": 0.1477
+    },
+    {
+     "month": "2026-02",
+     "mentions": 75,
+     "total_posts": 410,
+     "share": 0.1829,
+     "index": 165.55,
+     "ma_short": 0.156,
+     "ma_long": 0.1503
+    },
+    {
+     "month": "2026-03",
+     "mentions": 52,
+     "total_posts": 317,
+     "share": 0.164,
+     "index": 148.45,
+     "ma_short": 0.1664,
+     "ma_long": 0.1529
+    },
+    {
+     "month": "2026-04",
+     "mentions": 55,
+     "total_posts": 329,
+     "share": 0.1672,
+     "index": 151.29,
+     "ma_short": 0.1714,
+     "ma_long": 0.1562
+    },
+    {
+     "month": "2026-05",
+     "mentions": 56,
+     "total_posts": 318,
+     "share": 0.1761,
+     "index": 159.37,
+     "ma_short": 0.1691,
+     "ma_long": 0.1598
+    },
+    {
+     "month": "2026-06",
+     "mentions": 43,
+     "total_posts": 313,
+     "share": 0.1374,
+     "index": 124.33,
+     "ma_short": 0.1602,
+     "ma_long": 0.1563
+    },
+    {
+     "month": "2026-07",
+     "mentions": 37,
+     "total_posts": 259,
+     "share": 0.1429,
+     "index": 129.29,
+     "ma_short": 0.1521,
+     "ma_long": 0.1544
+    },
+    {
+     "month": "2026-08",
+     "mentions": 39,
+     "total_posts": 227,
+     "share": 0.1718,
+     "index": 155.48,
+     "ma_short": 0.1507,
+     "ma_long": 0.1548
+    },
+    {
+     "month": "2026-09",
+     "mentions": 34,
+     "total_posts": 249,
+     "share": 0.1365,
+     "index": 123.57,
+     "ma_short": 0.1504,
+     "ma_long": 0.155
+    },
+    {
+     "month": "2026-10",
+     "mentions": 31,
+     "total_posts": 266,
+     "share": 0.1165,
+     "index": 105.47,
+     "ma_short": 0.1416,
+     "ma_long": 0.1532
+    }
+   ],
+   "profile_tools": [],
+   "catalogue_skills": []
+  },
+  {
+   "id": "typescript",
+   "name": "TypeScript",
+   "category": "Programming",
+   "label": "stable",
+   "change_12m": -0.1042,
+   "latest_sample_size": 59,
+   "latest_total_posts": 266,
+   "points": [
+    {
+     "month": "2023-11",
+     "mentions": 72,
+     "total_posts": 362,
+     "share": 0.1989,
+     "index": 100.0,
+     "ma_short": null,
+     "ma_long": null
+    },
+    {
+     "month": "2023-12",
+     "mentions": 43,
+     "total_posts": 313,
+     "share": 0.1374,
+     "index": 69.07,
+     "ma_short": null,
+     "ma_long": null
+    },
+    {
+     "month": "2024-01",
+     "mentions": 44,
+     "total_posts": 278,
+     "share": 0.1583,
+     "index": 79.58,
+     "ma_short": 0.1648,
+     "ma_long": null
+    },
+    {
+     "month": "2024-02",
+     "mentions": 49,
+     "total_posts": 341,
+     "share": 0.1437,
+     "index": 72.25,
+     "ma_short": 0.1464,
+     "ma_long": null
+    },
+    {
+     "month": "2024-03",
+     "mentions": 57,
+     "total_posts": 300,
+     "share": 0.19,
+     "index": 95.53,
+     "ma_short": 0.164,
+     "ma_long": null
+    },
+    {
+     "month": "2024-04",
+     "mentions": 52,
+     "total_posts": 289,
+     "share": 0.1799,
+     "index": 90.47,
+     "ma_short": 0.1712,
+     "ma_long": null
+    },
+    {
+     "month": "2024-05",
+     "mentions": 71,
+     "total_posts": 396,
+     "share": 0.1793,
+     "index": 90.14,
+     "ma_short": 0.1831,
+     "ma_long": null
+    },
+    {
+     "month": "2024-06",
+     "mentions": 63,
+     "total_posts": 339,
+     "share": 0.1858,
+     "index": 93.44,
+     "ma_short": 0.1817,
+     "ma_long": null
+    },
+    {
+     "month": "2024-07",
+     "mentions": 72,
+     "total_posts": 379,
+     "share": 0.19,
+     "index": 95.51,
+     "ma_short": 0.185,
+     "ma_long": null
+    },
+    {
+     "month": "2024-08",
+     "mentions": 62,
+     "total_posts": 322,
+     "share": 0.1925,
+     "index": 96.81,
+     "ma_short": 0.1895,
+     "ma_long": null
+    },
+    {
+     "month": "2024-09",
+     "mentions": 64,
+     "total_posts": 303,
+     "share": 0.2112,
+     "index": 106.2,
+     "ma_short": 0.1979,
+     "ma_long": null
+    },
+    {
+     "month": "2024-10",
+     "mentions": 81,
+     "total_posts": 329,
+     "share": 0.2462,
+     "index": 123.78,
+     "ma_short": 0.2167,
+     "ma_long": 0.1844
+    },
+    {
+     "month": "2024-11",
+     "mentions": 71,
+     "total_posts": 317,
+     "share": 0.224,
+     "index": 112.61,
+     "ma_short": 0.2271,
+     "ma_long": 0.1865
+    },
+    {
+     "month": "2024-12",
+     "mentions": 55,
+     "total_posts": 330,
+     "share": 0.1667,
+     "index": 83.8,
+     "ma_short": 0.2123,
+     "ma_long": 0.189
+    },
+    {
+     "month": "2025-01",
+     "mentions": 48,
+     "total_posts": 276,
+     "share": 0.1739,
+     "index": 87.44,
+     "ma_short": 0.1882,
+     "ma_long": 0.1903
+    },
+    {
+     "month": "2025-02",
+     "mentions": 75,
+     "total_posts": 396,
+     "share": 0.1894,
+     "index": 95.22,
+     "ma_short": 0.1767,
+     "ma_long": 0.1941
+    },
+    {
+     "month": "2025-03",
+     "mentions": 76,
+     "total_posts": 354,
+     "share": 0.2147,
+     "index": 107.94,
+     "ma_short": 0.1927,
+     "ma_long": 0.1961
+    },
+    {
+     "month": "2025-04",
+     "mentions": 64,
+     "total_posts": 306,
+     "share": 0.2092,
+     "index": 105.16,
+     "ma_short": 0.2044,
+     "ma_long": 0.1986
+    },
+    {
+     "month": "2025-05",
+     "mentions": 80,
+     "total_posts": 300,
+     "share": 0.2667,
+     "index": 134.07,
+     "ma_short": 0.2302,
+     "ma_long": 0.2059
+    },
+    {
+     "month": "2025-06",
+     "mentions": 80,
+     "total_posts": 358,
+     "share": 0.2235,
+     "index": 112.35,
+     "ma_short": 0.2331,
+     "ma_long": 0.209
+    },
+    {
+     "month": "2025-07",
+     "mentions": 83,
+     "total_posts": 331,
+     "share": 0.2508,
+     "index": 126.07,
+     "ma_short": 0.247,
+     "ma_long": 0.2141
+    },
+    {
+     "month": "2025-08",
+     "mentions": 72,
+     "total_posts": 305,
+     "share": 0.2361,
+     "index": 118.69,
+     "ma_short": 0.2368,
+     "ma_long": 0.2177
+    },
+    {
+     "month": "2025-09",
+     "mentions": 84,
+     "total_posts": 299,
+     "share": 0.2809,
+     "index": 141.25,
+     "ma_short": 0.2559,
+     "ma_long": 0.2235
+    },
+    {
+     "month": "2025-10",
+     "mentions": 75,
+     "total_posts": 341,
+     "share": 0.2199,
+     "index": 110.58,
+     "ma_short": 0.2456,
+     "ma_long": 0.2213
+    },
+    {
+     "month": "2025-11",
+     "mentions": 100,
+     "total_posts": 392,
+     "share": 0.2551,
+     "index": 128.26,
+     "ma_short": 0.252,
+     "ma_long": 0.2239
+    },
+    {
+     "month": "2025-12",
+     "mentions": 91,
+     "total_posts": 377,
+     "share": 0.2414,
+     "index": 121.36,
+     "ma_short": 0.2388,
+     "ma_long": 0.2301
+    },
+    {
+     "month": "2026-01",
+     "mentions": 62,
+     "total_posts": 256,
+     "share": 0.2422,
+     "index": 121.77,
+     "ma_short": 0.2462,
+     "ma_long": 0.2358
+    },
+    {
+     "month": "2026-02",
+     "mentions": 113,
+     "total_posts": 410,
+     "share": 0.2756,
+     "index": 138.57,
+     "ma_short": 0.2531,
+     "ma_long": 0.243
+    },
+    {
+     "month": "2026-03",
+     "mentions": 77,
+     "total_posts": 317,
+     "share": 0.2429,
+     "index": 122.13,
+     "ma_short": 0.2536,
+     "ma_long": 0.2453
+    },
+    {
+     "month": "2026-04",
+     "mentions": 78,
+     "total_posts": 329,
+     "share": 0.2371,
+     "index": 119.2,
+     "ma_short": 0.2519,
+     "ma_long": 0.2477
+    },
+    {
+     "month": "2026-05",
+     "mentions": 68,
+     "total_posts": 318,
+     "share": 0.2138,
+     "index": 107.51,
+     "ma_short": 0.2313,
+     "ma_long": 0.2433
+    },
+    {
+     "month": "2026-06",
+     "mentions": 68,
+     "total_posts": 313,
+     "share": 0.2173,
+     "index": 109.23,
+     "ma_short": 0.2227,
+     "ma_long": 0.2428
+    },
+    {
+     "month": "2026-07",
+     "mentions": 62,
+     "total_posts": 259,
+     "share": 0.2394,
+     "index": 120.36,
+     "ma_short": 0.2235,
+     "ma_long": 0.2418
+    },
+    {
+     "month": "2026-08",
+     "mentions": 53,
+     "total_posts": 227,
+     "share": 0.2335,
+     "index": 117.39,
+     "ma_short": 0.23,
+     "ma_long": 0.2416
+    },
+    {
+     "month": "2026-09",
+     "mentions": 51,
+     "total_posts": 249,
+     "share": 0.2048,
+     "index": 102.98,
+     "ma_short": 0.2259,
+     "ma_long": 0.2352
+    },
+    {
+     "month": "2026-10",
+     "mentions": 59,
+     "total_posts": 266,
+     "share": 0.2218,
+     "index": 111.52,
+     "ma_short": 0.22,
+     "ma_long": 0.2354
+    }
+   ],
+   "profile_tools": [],
+   "catalogue_skills": []
+  },
+  {
+   "id": "react",
+   "name": "React",
+   "category": "Programming",
+   "label": "stable",
+   "change_12m": -0.1167,
+   "latest_sample_size": 57,
+   "latest_total_posts": 266,
+   "points": [
+    {
+     "month": "2023-11",
+     "mentions": 78,
+     "total_posts": 362,
+     "share": 0.2155,
+     "index": 100.0,
+     "ma_short": null,
+     "ma_long": null
+    },
+    {
+     "month": "2023-12",
+     "mentions": 63,
+     "total_posts": 313,
+     "share": 0.2013,
+     "index": 93.41,
+     "ma_short": null,
+     "ma_long": null
+    },
+    {
+     "month": "2024-01",
+     "mentions": 67,
+     "total_posts": 278,
+     "share": 0.241,
+     "index": 111.85,
+     "ma_short": 0.2193,
+     "ma_long": null
+    },
+    {
+     "month": "2024-02",
+     "mentions": 63,
+     "total_posts": 341,
+     "share": 0.1848,
+     "index": 85.74,
+     "ma_short": 0.209,
+     "ma_long": null
+    },
+    {
+     "month": "2024-03",
+     "mentions": 66,
+     "total_posts": 300,
+     "share": 0.22,
+     "index": 102.1,
+     "ma_short": 0.2153,
+     "ma_long": null
+    },
+    {
+     "month": "2024-04",
+     "mentions": 55,
+     "total_posts": 289,
+     "share": 0.1903,
+     "index": 88.32,
+     "ma_short": 0.1984,
+     "ma_long": null
+    },
+    {
+     "month": "2024-05",
+     "mentions": 75,
+     "total_posts": 396,
+     "share": 0.1894,
+     "index": 87.9,
+     "ma_short": 0.1999,
+     "ma_long": null
+    },
+    {
+     "month": "2024-06",
+     "mentions": 56,
+     "total_posts": 339,
+     "share": 0.1652,
+     "index": 76.67,
+     "ma_short": 0.1816,
+     "ma_long": null
+    },
+    {
+     "month": "2024-07",
+     "mentions": 71,
+     "total_posts": 379,
+     "share": 0.1873,
+     "index": 86.94,
+     "ma_short": 0.1806,
+     "ma_long": null
+    },
+    {
+     "month": "2024-08",
+     "mentions": 66,
+     "total_posts": 322,
+     "share": 0.205,
+     "index": 95.13,
+     "ma_short": 0.1858,
+     "ma_long": null
+    },
+    {
+     "month": "2024-09",
+     "mentions": 70,
+     "total_posts": 303,
+     "share": 0.231,
+     "index": 107.22,
+     "ma_short": 0.2078,
+     "ma_long": null
+    },
+    {
+     "month": "2024-10",
+     "mentions": 70,
+     "total_posts": 329,
+     "share": 0.2128,
+     "index": 98.75,
+     "ma_short": 0.2163,
+     "ma_long": 0.2036
+    },
+    {
+     "month": "2024-11",
+     "mentions": 68,
+     "total_posts": 317,
+     "share": 0.2145,
+     "index": 99.56,
+     "ma_short": 0.2194,
+     "ma_long": 0.2035
+    },
+    {
+     "month": "2024-12",
+     "mentions": 54,
+     "total_posts": 330,
+     "share": 0.1636,
+     "index": 75.94,
+     "ma_short": 0.197,
+     "ma_long": 0.2004
+    },
+    {
+     "month": "2025-01",
+     "mentions": 48,
+     "total_posts": 276,
+     "share": 0.1739,
+     "index": 80.71,
+     "ma_short": 0.184,
+     "ma_long": 0.1948
+    },
+    {
+     "month": "2025-02",
+     "mentions": 83,
+     "total_posts": 396,
+     "share": 0.2096,
+     "index": 97.27,
+     "ma_short": 0.1824,
+     "ma_long": 0.1969
+    },
+    {
+     "month": "2025-03",
+     "mentions": 62,
+     "total_posts": 354,
+     "share": 0.1751,
+     "index": 81.28,
+     "ma_short": 0.1862,
+     "ma_long": 0.1931
+    },
+    {
+     "month": "2025-04",
+     "mentions": 72,
+     "total_posts": 306,
+     "share": 0.2353,
+     "index": 109.2,
+     "ma_short": 0.2067,
+     "ma_long": 0.1969
+    },
+    {
+     "month": "2025-05",
+     "mentions": 70,
+     "total_posts": 300,
+     "share": 0.2333,
+     "index": 108.29,
+     "ma_short": 0.2146,
+     "ma_long": 0.2006
+    },
+    {
+     "month": "2025-06",
+     "mentions": 78,
+     "total_posts": 358,
+     "share": 0.2179,
+     "index": 101.12,
+     "ma_short": 0.2288,
+     "ma_long": 0.2049
+    },
+    {
+     "month": "2025-07",
+     "mentions": 71,
+     "total_posts": 331,
+     "share": 0.2145,
+     "index": 99.55,
+     "ma_short": 0.2219,
+     "ma_long": 0.2072
+    },
+    {
+     "month": "2025-08",
+     "mentions": 71,
+     "total_posts": 305,
+     "share": 0.2328,
+     "index": 108.04,
+     "ma_short": 0.2217,
+     "ma_long": 0.2095
+    },
+    {
+     "month": "2025-09",
+     "mentions": 73,
+     "total_posts": 299,
+     "share": 0.2441,
+     "index": 113.31,
+     "ma_short": 0.2305,
+     "ma_long": 0.2106
+    },
+    {
+     "month": "2025-10",
+     "mentions": 68,
+     "total_posts": 341,
+     "share": 0.1994,
+     "index": 92.55,
+     "ma_short": 0.2254,
+     "ma_long": 0.2095
+    },
+    {
+     "month": "2025-11",
+     "mentions": 94,
+     "total_posts": 392,
+     "share": 0.2398,
+     "index": 111.29,
+     "ma_short": 0.2278,
+     "ma_long": 0.2116
+    },
+    {
+     "month": "2025-12",
+     "mentions": 90,
+     "total_posts": 377,
+     "share": 0.2387,
+     "index": 110.79,
+     "ma_short": 0.226,
+     "ma_long": 0.2179
+    },
+    {
+     "month": "2026-01",
+     "mentions": 68,
+     "total_posts": 256,
+     "share": 0.2656,
+     "index": 123.28,
+     "ma_short": 0.248,
+     "ma_long": 0.2255
+    },
+    {
+     "month": "2026-02",
+     "mentions": 97,
+     "total_posts": 410,
+     "share": 0.2366,
+     "index": 109.8,
+     "ma_short": 0.247,
+     "ma_long": 0.2278
+    },
+    {
+     "month": "2026-03",
+     "mentions": 73,
+     "total_posts": 317,
+     "share": 0.2303,
+     "index": 106.88,
+     "ma_short": 0.2442,
+     "ma_long": 0.2324
+    },
+    {
+     "month": "2026-04",
+     "mentions": 75,
+     "total_posts": 329,
+     "share": 0.228,
+     "index": 105.8,
+     "ma_short": 0.2316,
+     "ma_long": 0.2318
+    },
+    {
+     "month": "2026-05",
+     "mentions": 63,
+     "total_posts": 318,
+     "share": 0.1981,
+     "index": 91.94,
+     "ma_short": 0.2188,
+     "ma_long": 0.2288
+    },
+    {
+     "month": "2026-06",
+     "mentions": 66,
+     "total_posts": 313,
+     "share": 0.2109,
+     "index": 97.86,
+     "ma_short": 0.2123,
+     "ma_long": 0.2282
+    },
+    {
+     "month": "2026-07",
+     "mentions": 54,
+     "total_posts": 259,
+     "share": 0.2085,
+     "index": 96.76,
+     "ma_short": 0.2058,
+     "ma_long": 0.2277
+    },
+    {
+     "month": "2026-08",
+     "mentions": 45,
+     "total_posts": 227,
+     "share": 0.1982,
+     "index": 92.0,
+     "ma_short": 0.2059,
+     "ma_long": 0.2249
+    },
+    {
+     "month": "2026-09",
+     "mentions": 46,
+     "total_posts": 249,
+     "share": 0.1847,
+     "index": 85.74,
+     "ma_short": 0.1972,
+     "ma_long": 0.2199
+    },
+    {
+     "month": "2026-10",
+     "mentions": 57,
+     "total_posts": 266,
+     "share": 0.2143,
+     "index": 99.45,
+     "ma_short": 0.1991,
+     "ma_long": 0.2211
+    }
+   ],
+   "profile_tools": [],
+   "catalogue_skills": []
+  },
+  {
+   "id": "excel",
+   "name": "Excel",
+   "category": "Finance tools",
+   "label": "insufficient_data",
+   "change_12m": 0.1875,
+   "latest_sample_size": 2,
+   "latest_total_posts": 266,
+   "points": [
+    {
+     "month": "2023-11",
+     "mentions": 1,
+     "total_posts": 362,
+     "share": 0.0028,
+     "index": 17.29,
+     "ma_short": null,
+     "ma_long": null
+    },
+    {
+     "month": "2023-12",
+     "mentions": 5,
+     "total_posts": 313,
+     "share": 0.016,
+     "index": 100.0,
+     "ma_short": null,
+     "ma_long": null
+    },
+    {
+     "month": "2024-01",
+     "mentions": 2,
+     "total_posts": 278,
+     "share": 0.0072,
+     "index": 45.04,
+     "ma_short": 0.0086,
+     "ma_long": null
+    },
+    {
+     "month": "2024-02",
+     "mentions": 1,
+     "total_posts": 341,
+     "share": 0.0029,
+     "index": 18.36,
+     "ma_short": 0.0087,
+     "ma_long": null
+    },
+    {
+     "month": "2024-03",
+     "mentions": 3,
+     "total_posts": 300,
+     "share": 0.01,
+     "index": 62.6,
+     "ma_short": 0.0067,
+     "ma_long": null
+    },
+    {
+     "month": "2024-04",
+     "mentions": 2,
+     "total_posts": 289,
+     "share": 0.0069,
+     "index": 43.32,
+     "ma_short": 0.0066,
+     "ma_long": null
+    },
+    {
+     "month": "2024-05",
+     "mentions": 2,
+     "total_posts": 396,
+     "share": 0.0051,
+     "index": 31.62,
+     "ma_short": 0.0073,
+     "ma_long": null
+    },
+    {
+     "month": "2024-06",
+     "mentions": 2,
+     "total_posts": 339,
+     "share": 0.0059,
+     "index": 36.93,
+     "ma_short": 0.006,
+     "ma_long": null
+    },
+    {
+     "month": "2024-07",
+     "mentions": 2,
+     "total_posts": 379,
+     "share": 0.0053,
+     "index": 33.03,
+     "ma_short": 0.0054,
+     "ma_long": null
+    },
+    {
+     "month": "2024-08",
+     "mentions": 2,
+     "total_posts": 322,
+     "share": 0.0062,
+     "index": 38.88,
+     "ma_short": 0.0058,
+     "ma_long": null
+    },
+    {
+     "month": "2024-09",
+     "mentions": 1,
+     "total_posts": 303,
+     "share": 0.0033,
+     "index": 20.66,
+     "ma_short": 0.0049,
+     "ma_long": null
+    },
+    {
+     "month": "2024-10",
+     "mentions": 1,
+     "total_posts": 329,
+     "share": 0.003,
+     "index": 19.03,
+     "ma_short": 0.0042,
+     "ma_long": 0.0062
+    },
+    {
+     "month": "2024-11",
+     "mentions": 1,
+     "total_posts": 317,
+     "share": 0.0032,
+     "index": 19.75,
+     "ma_short": 0.0032,
+     "ma_long": 0.0062
+    },
+    {
+     "month": "2024-12",
+     "mentions": 7,
+     "total_posts": 330,
+     "share": 0.0212,
+     "index": 132.79,
+     "ma_short": 0.0091,
+     "ma_long": 0.0067
+    },
+    {
+     "month": "2025-01",
+     "mentions": 2,
+     "total_posts": 276,
+     "share": 0.0072,
+     "index": 45.36,
+     "ma_short": 0.0105,
+     "ma_long": 0.0067
+    },
+    {
+     "month": "2025-02",
+     "mentions": 3,
+     "total_posts": 396,
+     "share": 0.0076,
+     "index": 47.42,
+     "ma_short": 0.012,
+     "ma_long": 0.0071
+    },
+    {
+     "month": "2025-03",
+     "mentions": 4,
+     "total_posts": 354,
+     "share": 0.0113,
+     "index": 70.73,
+     "ma_short": 0.0087,
+     "ma_long": 0.0072
+    },
+    {
+     "month": "2025-04",
+     "mentions": 2,
+     "total_posts": 306,
+     "share": 0.0065,
+     "index": 40.92,
+     "ma_short": 0.0085,
+     "ma_long": 0.0072
+    },
+    {
+     "month": "2025-05",
+     "mentions": 3,
+     "total_posts": 300,
+     "share": 0.01,
+     "index": 62.6,
+     "ma_short": 0.0093,
+     "ma_long": 0.0076
+    },
+    {
+     "month": "2025-06",
+     "mentions": 3,
+     "total_posts": 358,
+     "share": 0.0084,
+     "index": 52.46,
+     "ma_short": 0.0083,
+     "ma_long": 0.0078
+    },
+    {
+     "month": "2025-07",
+     "mentions": 1,
+     "total_posts": 331,
+     "share": 0.003,
+     "index": 18.91,
+     "ma_short": 0.0071,
+     "ma_long": 0.0076
+    },
+    {
+     "month": "2025-08",
+     "mentions": 3,
+     "total_posts": 305,
+     "share": 0.0098,
+     "index": 61.57,
+     "ma_short": 0.0071,
+     "ma_long": 0.0079
+    },
+    {
+     "month": "2025-09",
+     "mentions": 5,
+     "total_posts": 299,
+     "share": 0.0167,
+     "index": 104.68,
+     "ma_short": 0.0099,
+     "ma_long": 0.009
+    },
+    {
+     "month": "2025-10",
+     "mentions": 4,
+     "total_posts": 341,
+     "share": 0.0117,
+     "index": 73.43,
+     "ma_short": 0.0128,
+     "ma_long": 0.0097
+    },
+    {
+     "month": "2025-11",
+     "mentions": 2,
+     "total_posts": 392,
+     "share": 0.0051,
+     "index": 31.94,
+     "ma_short": 0.0112,
+     "ma_long": 0.0099
+    },
+    {
+     "month": "2025-12",
+     "mentions": 5,
+     "total_posts": 377,
+     "share": 0.0133,
+     "index": 83.02,
+     "ma_short": 0.01,
+     "ma_long": 0.0092
+    },
+    {
+     "month": "2026-01",
+     "mentions": 3,
+     "total_posts": 256,
+     "share": 0.0117,
+     "index": 73.36,
+     "ma_short": 0.01,
+     "ma_long": 0.0096
+    },
+    {
+     "month": "2026-02",
+     "mentions": 3,
+     "total_posts": 410,
+     "share": 0.0073,
+     "index": 45.8,
+     "ma_short": 0.0108,
+     "ma_long": 0.0096
+    },
+    {
+     "month": "2026-03",
+     "mentions": 8,
+     "total_posts": 317,
+     "share": 0.0252,
+     "index": 157.98,
+     "ma_short": 0.0148,
+     "ma_long": 0.0107
+    },
+    {
+     "month": "2026-04",
+     "mentions": 5,
+     "total_posts": 329,
+     "share": 0.0152,
+     "index": 95.14,
+     "ma_short": 0.0159,
+     "ma_long": 0.0115
+    },
+    {
+     "month": "2026-05",
+     "mentions": 6,
+     "total_posts": 318,
+     "share": 0.0189,
+     "index": 118.11,
+     "ma_short": 0.0198,
+     "ma_long": 0.0122
+    },
+    {
+     "month": "2026-06",
+     "mentions": 4,
+     "total_posts": 313,
+     "share": 0.0128,
+     "index": 80.0,
+     "ma_short": 0.0156,
+     "ma_long": 0.0126
+    },
+    {
+     "month": "2026-07",
+     "mentions": 5,
+     "total_posts": 259,
+     "share": 0.0193,
+     "index": 120.85,
+     "ma_short": 0.017,
+     "ma_long": 0.0139
+    },
+    {
+     "month": "2026-08",
+     "mentions": 5,
+     "total_posts": 227,
+     "share": 0.022,
+     "index": 137.89,
+     "ma_short": 0.018,
+     "ma_long": 0.0149
+    },
+    {
+     "month": "2026-09",
+     "mentions": 4,
+     "total_posts": 249,
+     "share": 0.0161,
+     "index": 100.56,
+     "ma_short": 0.0191,
+     "ma_long": 0.0149
+    },
+    {
+     "month": "2026-10",
+     "mentions": 2,
+     "total_posts": 266,
+     "share": 0.0075,
+     "index": 47.07,
+     "ma_short": 0.0152,
+     "ma_long": 0.0145
+    }
+   ],
+   "profile_tools": [
+    "Excel"
+   ],
+   "catalogue_skills": [
+    "spreadsheet_modelling"
+   ]
+  },
+  {
+   "id": "bi_tools",
+   "name": "Power BI / Tableau",
+   "category": "Finance tools",
+   "label": "insufficient_data",
+   "change_12m": -0.4528,
+   "latest_sample_size": 0,
+   "latest_total_posts": 266,
+   "points": [
+    {
+     "month": "2023-11",
+     "mentions": 2,
+     "total_posts": 362,
+     "share": 0.0055,
+     "index": null,
+     "ma_short": null,
+     "ma_long": null
+    },
+    {
+     "month": "2023-12",
+     "mentions": 3,
+     "total_posts": 313,
+     "share": 0.0096,
+     "index": null,
+     "ma_short": null,
+     "ma_long": null
+    },
+    {
+     "month": "2024-01",
+     "mentions": 2,
+     "total_posts": 278,
+     "share": 0.0072,
+     "index": null,
+     "ma_short": 0.0074,
+     "ma_long": null
+    },
+    {
+     "month": "2024-02",
+     "mentions": 4,
+     "total_posts": 341,
+     "share": 0.0117,
+     "index": null,
+     "ma_short": 0.0095,
+     "ma_long": null
+    },
+    {
+     "month": "2024-03",
+     "mentions": 1,
+     "total_posts": 300,
+     "share": 0.0033,
+     "index": null,
+     "ma_short": 0.0074,
+     "ma_long": null
+    },
+    {
+     "month": "2024-04",
+     "mentions": 0,
+     "total_posts": 289,
+     "share": 0.0,
+     "index": null,
+     "ma_short": 0.005,
+     "ma_long": null
+    },
+    {
+     "month": "2024-05",
+     "mentions": 1,
+     "total_posts": 396,
+     "share": 0.0025,
+     "index": null,
+     "ma_short": 0.002,
+     "ma_long": null
+    },
+    {
+     "month": "2024-06",
+     "mentions": 0,
+     "total_posts": 339,
+     "share": 0.0,
+     "index": null,
+     "ma_short": 0.0008,
+     "ma_long": null
+    },
+    {
+     "month": "2024-07",
+     "mentions": 1,
+     "total_posts": 379,
+     "share": 0.0026,
+     "index": null,
+     "ma_short": 0.0017,
+     "ma_long": null
+    },
+    {
+     "month": "2024-08",
+     "mentions": 1,
+     "total_posts": 322,
+     "share": 0.0031,
+     "index": null,
+     "ma_short": 0.0019,
+     "ma_long": null
+    },
+    {
+     "month": "2024-09",
+     "mentions": 2,
+     "total_posts": 303,
+     "share": 0.0066,
+     "index": null,
+     "ma_short": 0.0041,
+     "ma_long": null
+    },
+    {
+     "month": "2024-10",
+     "mentions": 1,
+     "total_posts": 329,
+     "share": 0.003,
+     "index": null,
+     "ma_short": 0.0042,
+     "ma_long": 0.0046
+    },
+    {
+     "month": "2024-11",
+     "mentions": 2,
+     "total_posts": 317,
+     "share": 0.0063,
+     "index": null,
+     "ma_short": 0.0053,
+     "ma_long": 0.0047
+    },
+    {
+     "month": "2024-12",
+     "mentions": 2,
+     "total_posts": 330,
+     "share": 0.0061,
+     "index": null,
+     "ma_short": 0.0051,
+     "ma_long": 0.0044
+    },
+    {
+     "month": "2025-01",
+     "mentions": 2,
+     "total_posts": 276,
+     "share": 0.0072,
+     "index": null,
+     "ma_short": 0.0065,
+     "ma_long": 0.0044
+    },
+    {
+     "month": "2025-02",
+     "mentions": 2,
+     "total_posts": 396,
+     "share": 0.0051,
+     "index": null,
+     "ma_short": 0.0061,
+     "ma_long": 0.0038
+    },
+    {
+     "month": "2025-03",
+     "mentions": 1,
+     "total_posts": 354,
+     "share": 0.0028,
+     "index": null,
+     "ma_short": 0.005,
+     "ma_long": 0.0038
+    },
+    {
+     "month": "2025-04",
+     "mentions": 1,
+     "total_posts": 306,
+     "share": 0.0033,
+     "index": null,
+     "ma_short": 0.0037,
+     "ma_long": 0.0041
+    },
+    {
+     "month": "2025-05",
+     "mentions": 2,
+     "total_posts": 300,
+     "share": 0.0067,
+     "index": null,
+     "ma_short": 0.0043,
+     "ma_long": 0.0044
+    },
+    {
+     "month": "2025-06",
+     "mentions": 3,
+     "total_posts": 358,
+     "share": 0.0084,
+     "index": null,
+     "ma_short": 0.0061,
+     "ma_long": 0.0051
+    },
+    {
+     "month": "2025-07",
+     "mentions": 0,
+     "total_posts": 331,
+     "share": 0.0,
+     "index": null,
+     "ma_short": 0.005,
+     "ma_long": 0.0049
+    },
+    {
+     "month": "2025-08",
+     "mentions": 1,
+     "total_posts": 305,
+     "share": 0.0033,
+     "index": null,
+     "ma_short": 0.0039,
+     "ma_long": 0.0049
+    },
+    {
+     "month": "2025-09",
+     "mentions": 2,
+     "total_posts": 299,
+     "share": 0.0067,
+     "index": null,
+     "ma_short": 0.0033,
+     "ma_long": 0.0049
+    },
+    {
+     "month": "2025-10",
+     "mentions": 2,
+     "total_posts": 341,
+     "share": 0.0059,
+     "index": null,
+     "ma_short": 0.0053,
+     "ma_long": 0.0051
+    },
+    {
+     "month": "2025-11",
+     "mentions": 2,
+     "total_posts": 392,
+     "share": 0.0051,
+     "index": null,
+     "ma_short": 0.0059,
+     "ma_long": 0.005
+    },
+    {
+     "month": "2025-12",
+     "mentions": 0,
+     "total_posts": 377,
+     "share": 0.0,
+     "index": null,
+     "ma_short": 0.0037,
+     "ma_long": 0.0045
+    },
+    {
+     "month": "2026-01",
+     "mentions": 0,
+     "total_posts": 256,
+     "share": 0.0,
+     "index": null,
+     "ma_short": 0.0017,
+     "ma_long": 0.0039
+    },
+    {
+     "month": "2026-02",
+     "mentions": 1,
+     "total_posts": 410,
+     "share": 0.0024,
+     "index": null,
+     "ma_short": 0.0008,
+     "ma_long": 0.0037
+    },
+    {
+     "month": "2026-03",
+     "mentions": 0,
+     "total_posts": 317,
+     "share": 0.0,
+     "index": null,
+     "ma_short": 0.0008,
+     "ma_long": 0.0035
+    },
+    {
+     "month": "2026-04",
+     "mentions": 1,
+     "total_posts": 329,
+     "share": 0.003,
+     "index": null,
+     "ma_short": 0.0018,
+     "ma_long": 0.0035
+    },
+    {
+     "month": "2026-05",
+     "mentions": 1,
+     "total_posts": 318,
+     "share": 0.0031,
+     "index": null,
+     "ma_short": 0.0021,
+     "ma_long": 0.0032
+    },
+    {
+     "month": "2026-06",
+     "mentions": 0,
+     "total_posts": 313,
+     "share": 0.0,
+     "index": null,
+     "ma_short": 0.0021,
+     "ma_long": 0.0025
+    },
+    {
+     "month": "2026-07",
+     "mentions": 1,
+     "total_posts": 259,
+     "share": 0.0039,
+     "index": null,
+     "ma_short": 0.0023,
+     "ma_long": 0.0028
+    },
+    {
+     "month": "2026-08",
+     "mentions": 2,
+     "total_posts": 227,
+     "share": 0.0088,
+     "index": null,
+     "ma_short": 0.0042,
+     "ma_long": 0.0032
+    },
+    {
+     "month": "2026-09",
+     "mentions": 0,
+     "total_posts": 249,
+     "share": 0.0,
+     "index": null,
+     "ma_short": 0.0042,
+     "ma_long": 0.0027
+    },
+    {
+     "month": "2026-10",
+     "mentions": 0,
+     "total_posts": 266,
+     "share": 0.0,
+     "index": null,
+     "ma_short": 0.0029,
+     "ma_long": 0.0022
+    }
+   ],
+   "profile_tools": [
+    "Power BI / Tableau"
+   ],
+   "catalogue_skills": [
+    "variance_analysis"
+   ]
+  },
+  {
+   "id": "rpa",
+   "name": "RPA / process automation",
+   "category": "Finance tools",
+   "label": "insufficient_data",
+   "change_12m": -0.2024,
+   "latest_sample_size": 2,
+   "latest_total_posts": 266,
+   "points": [
+    {
+     "month": "2023-11",
+     "mentions": 0,
+     "total_posts": 362,
+     "share": 0.0,
+     "index": 0.0,
+     "ma_short": null,
+     "ma_long": null
+    },
+    {
+     "month": "2023-12",
+     "mentions": 0,
+     "total_posts": 313,
+     "share": 0.0,
+     "index": 0.0,
+     "ma_short": null,
+     "ma_long": null
+    },
+    {
+     "month": "2024-01",
+     "mentions": 0,
+     "total_posts": 278,
+     "share": 0.0,
+     "index": 0.0,
+     "ma_short": 0.0,
+     "ma_long": null
+    },
+    {
+     "month": "2024-02",
+     "mentions": 0,
+     "total_posts": 341,
+     "share": 0.0,
+     "index": 0.0,
+     "ma_short": 0.0,
+     "ma_long": null
+    },
+    {
+     "month": "2024-03",
+     "mentions": 0,
+     "total_posts": 300,
+     "share": 0.0,
+     "index": 0.0,
+     "ma_short": 0.0,
+     "ma_long": null
+    },
+    {
+     "month": "2024-04",
+     "mentions": 2,
+     "total_posts": 289,
+     "share": 0.0069,
+     "index": 35.43,
+     "ma_short": 0.0023,
+     "ma_long": null
+    },
+    {
+     "month": "2024-05",
+     "mentions": 1,
+     "total_posts": 396,
+     "share": 0.0025,
+     "index": 12.93,
+     "ma_short": 0.0031,
+     "ma_long": null
+    },
+    {
+     "month": "2024-06",
+     "mentions": 0,
+     "total_posts": 339,
+     "share": 0.0,
+     "index": 0.0,
+     "ma_short": 0.0031,
+     "ma_long": null
+    },
+    {
+     "month": "2024-07",
+     "mentions": 1,
+     "total_posts": 379,
+     "share": 0.0026,
+     "index": 13.51,
+     "ma_short": 0.0017,
+     "ma_long": null
+    },
+    {
+     "month": "2024-08",
+     "mentions": 0,
+     "total_posts": 322,
+     "share": 0.0,
+     "index": 0.0,
+     "ma_short": 0.0009,
+     "ma_long": null
+    },
+    {
+     "month": "2024-09",
+     "mentions": 0,
+     "total_posts": 303,
+     "share": 0.0,
+     "index": 0.0,
+     "ma_short": 0.0009,
+     "ma_long": null
+    },
+    {
+     "month": "2024-10",
+     "mentions": 1,
+     "total_posts": 329,
+     "share": 0.003,
+     "index": 15.56,
+     "ma_short": 0.001,
+     "ma_long": 0.0013
+    },
+    {
+     "month": "2024-11",
+     "mentions": 3,
+     "total_posts": 317,
+     "share": 0.0095,
+     "index": 48.45,
+     "ma_short": 0.0042,
+     "ma_long": 0.002
+    },
+    {
+     "month": "2024-12",
+     "mentions": 2,
+     "total_posts": 330,
+     "share": 0.0061,
+     "index": 31.03,
+     "ma_short": 0.0062,
+     "ma_long": 0.0026
+    },
+    {
+     "month": "2025-01",
+     "mentions": 2,
+     "total_posts": 276,
+     "share": 0.0072,
+     "index": 37.1,
+     "ma_short": 0.0076,
+     "ma_long": 0.0032
+    },
+    {
+     "month": "2025-02",
+     "mentions": 0,
+     "total_posts": 396,
+     "share": 0.0,
+     "index": 0.0,
+     "ma_short": 0.0044,
+     "ma_long": 0.0032
+    },
+    {
+     "month": "2025-03",
+     "mentions": 1,
+     "total_posts": 354,
+     "share": 0.0028,
+     "index": 14.46,
+     "ma_short": 0.0034,
+     "ma_long": 0.0034
+    },
+    {
+     "month": "2025-04",
+     "mentions": 1,
+     "total_posts": 306,
+     "share": 0.0033,
+     "index": 16.73,
+     "ma_short": 0.002,
+     "ma_long": 0.0031
+    },
+    {
+     "month": "2025-05",
+     "mentions": 3,
+     "total_posts": 300,
+     "share": 0.01,
+     "index": 51.2,
+     "ma_short": 0.0054,
+     "ma_long": 0.0037
+    },
+    {
+     "month": "2025-06",
+     "mentions": 1,
+     "total_posts": 358,
+     "share": 0.0028,
+     "index": 14.3,
+     "ma_short": 0.0054,
+     "ma_long": 0.0039
+    },
+    {
+     "month": "2025-07",
+     "mentions": 2,
+     "total_posts": 331,
+     "share": 0.006,
+     "index": 30.94,
+     "ma_short": 0.0063,
+     "ma_long": 0.0042
+    },
+    {
+     "month": "2025-08",
+     "mentions": 4,
+     "total_posts": 305,
+     "share": 0.0131,
+     "index": 67.15,
+     "ma_short": 0.0073,
+     "ma_long": 0.0053
+    },
+    {
+     "month": "2025-09",
+     "mentions": 1,
+     "total_posts": 299,
+     "share": 0.0033,
+     "index": 17.12,
+     "ma_short": 0.0075,
+     "ma_long": 0.0056
+    },
+    {
+     "month": "2025-10",
+     "mentions": 3,
+     "total_posts": 341,
+     "share": 0.0088,
+     "index": 45.04,
+     "ma_short": 0.0084,
+     "ma_long": 0.0061
+    },
+    {
+     "month": "2025-11",
+     "mentions": 3,
+     "total_posts": 392,
+     "share": 0.0077,
+     "index": 39.18,
+     "ma_short": 0.0066,
+     "ma_long": 0.0059
+    },
+    {
+     "month": "2025-12",
+     "mentions": 3,
+     "total_posts": 377,
+     "share": 0.008,
+     "index": 40.74,
+     "ma_short": 0.0081,
+     "ma_long": 0.0061
+    },
+    {
+     "month": "2026-01",
+     "mentions": 5,
+     "total_posts": 256,
+     "share": 0.0195,
+     "index": 100.0,
+     "ma_short": 0.0117,
+     "ma_long": 0.0071
+    },
+    {
+     "month": "2026-02",
+     "mentions": 4,
+     "total_posts": 410,
+     "share": 0.0098,
+     "index": 49.95,
+     "ma_short": 0.0124,
+     "ma_long": 0.0079
+    },
+    {
+     "month": "2026-03",
+     "mentions": 3,
+     "total_posts": 317,
+     "share": 0.0095,
+     "index": 48.45,
+     "ma_short": 0.0129,
+     "ma_long": 0.0085
+    },
+    {
+     "month": "2026-04",
+     "mentions": 1,
+     "total_posts": 329,
+     "share": 0.003,
+     "index": 15.56,
+     "ma_short": 0.0074,
+     "ma_long": 0.0085
+    },
+    {
+     "month": "2026-05",
+     "mentions": 1,
+     "total_posts": 318,
+     "share": 0.0031,
+     "index": 16.1,
+     "ma_short": 0.0052,
+     "ma_long": 0.0079
+    },
+    {
+     "month": "2026-06",
+     "mentions": 3,
+     "total_posts": 313,
+     "share": 0.0096,
+     "index": 49.07,
+     "ma_short": 0.0053,
+     "ma_long": 0.0085
+    },
+    {
+     "month": "2026-07",
+     "mentions": 1,
+     "total_posts": 259,
+     "share": 0.0039,
+     "index": 19.77,
+     "ma_short": 0.0055,
+     "ma_long": 0.0083
+    },
+    {
+     "month": "2026-08",
+     "mentions": 1,
+     "total_posts": 227,
+     "share": 0.0044,
+     "index": 22.56,
+     "ma_short": 0.006,
+     "ma_long": 0.0075
+    },
+    {
+     "month": "2026-09",
+     "mentions": 2,
+     "total_posts": 249,
+     "share": 0.008,
+     "index": 41.12,
+     "ma_short": 0.0054,
+     "ma_long": 0.0079
+    },
+    {
+     "month": "2026-10",
+     "mentions": 2,
+     "total_posts": 266,
+     "share": 0.0075,
+     "index": 38.5,
+     "ma_short": 0.0067,
+     "ma_long": 0.0078
+    }
+   ],
+   "profile_tools": [],
+   "catalogue_skills": [
+    "process_automation"
+   ]
+  },
+  {
+   "id": "erp",
+   "name": "ERP (SAP / Oracle / NetSuite)",
+   "category": "Finance tools",
+   "label": "insufficient_data",
+   "change_12m": 3.2857,
+   "latest_sample_size": 2,
+   "latest_total_posts": 266,
+   "points": [
+    {
+     "month": "2023-11",
+     "mentions": 0,
+     "total_posts": 362,
+     "share": 0.0,
+     "index": 0.0,
+     "ma_short": null,
+     "ma_long": null
+    },
+    {
+     "month": "2023-12",
+     "mentions": 0,
+     "total_posts": 313,
+     "share": 0.0,
+     "index": 0.0,
+     "ma_short": null,
+     "ma_long": null
+    },
+    {
+     "month": "2024-01",
+     "mentions": 1,
+     "total_posts": 278,
+     "share": 0.0036,
+     "index": 28.2,
+     "ma_short": 0.0012,
+     "ma_long": null
+    },
+    {
+     "month": "2024-02",
+     "mentions": 1,
+     "total_posts": 341,
+     "share": 0.0029,
+     "index": 22.99,
+     "ma_short": 0.0022,
+     "ma_long": null
+    },
+    {
+     "month": "2024-03",
+     "mentions": 0,
+     "total_posts": 300,
+     "share": 0.0,
+     "index": 0.0,
+     "ma_short": 0.0022,
+     "ma_long": null
+    },
+    {
+     "month": "2024-04",
+     "mentions": 0,
+     "total_posts": 289,
+     "share": 0.0,
+     "index": 0.0,
+     "ma_short": 0.001,
+     "ma_long": null
+    },
+    {
+     "month": "2024-05",
+     "mentions": 2,
+     "total_posts": 396,
+     "share": 0.0051,
+     "index": 39.6,
+     "ma_short": 0.0017,
+     "ma_long": null
+    },
+    {
+     "month": "2024-06",
+     "mentions": 1,
+     "total_posts": 339,
+     "share": 0.0029,
+     "index": 23.13,
+     "ma_short": 0.0027,
+     "ma_long": null
+    },
+    {
+     "month": "2024-07",
+     "mentions": 3,
+     "total_posts": 379,
+     "share": 0.0079,
+     "index": 62.06,
+     "ma_short": 0.0053,
+     "ma_long": null
+    },
+    {
+     "month": "2024-08",
+     "mentions": 1,
+     "total_posts": 322,
+     "share": 0.0031,
+     "index": 24.35,
+     "ma_short": 0.0047,
+     "ma_long": null
+    },
+    {
+     "month": "2024-09",
+     "mentions": 1,
+     "total_posts": 303,
+     "share": 0.0033,
+     "index": 25.87,
+     "ma_short": 0.0048,
+     "ma_long": null
+    },
+    {
+     "month": "2024-10",
+     "mentions": 0,
+     "total_posts": 329,
+     "share": 0.0,
+     "index": 0.0,
+     "ma_short": 0.0021,
+     "ma_long": 0.0024
+    },
+    {
+     "month": "2024-11",
+     "mentions": 3,
+     "total_posts": 317,
+     "share": 0.0095,
+     "index": 74.2,
+     "ma_short": 0.0043,
+     "ma_long": 0.0032
+    },
+    {
+     "month": "2024-12",
+     "mentions": 2,
+     "total_posts": 330,
+     "share": 0.0061,
+     "index": 47.52,
+     "ma_short": 0.0052,
+     "ma_long": 0.0037
+    },
+    {
+     "month": "2025-01",
+     "mentions": 1,
+     "total_posts": 276,
+     "share": 0.0036,
+     "index": 28.41,
+     "ma_short": 0.0064,
+     "ma_long": 0.0037
+    },
+    {
+     "month": "2025-02",
+     "mentions": 0,
+     "total_posts": 396,
+     "share": 0.0,
+     "index": 0.0,
+     "ma_short": 0.0032,
+     "ma_long": 0.0035
+    },
+    {
+     "month": "2025-03",
+     "mentions": 1,
+     "total_posts": 354,
+     "share": 0.0028,
+     "index": 22.15,
+     "ma_short": 0.0021,
+     "ma_long": 0.0037
+    },
+    {
+     "month": "2025-04",
+     "mentions": 0,
+     "total_posts": 306,
+     "share": 0.0,
+     "index": 0.0,
+     "ma_short": 0.0009,
+     "ma_long": 0.0037
+    },
+    {
+     "month": "2025-05",
+     "mentions": 1,
+     "total_posts": 300,
+     "share": 0.0033,
+     "index": 26.13,
+     "ma_short": 0.0021,
+     "ma_long": 0.0035
+    },
+    {
+     "month": "2025-06",
+     "mentions": 0,
+     "total_posts": 358,
+     "share": 0.0,
+     "index": 0.0,
+     "ma_short": 0.0011,
+     "ma_long": 0.0033
+    },
+    {
+     "month": "2025-07",
+     "mentions": 2,
+     "total_posts": 331,
+     "share": 0.006,
+     "index": 47.37,
+     "ma_short": 0.0031,
+     "ma_long": 0.0031
+    },
+    {
+     "month": "2025-08",
+     "mentions": 0,
+     "total_posts": 305,
+     "share": 0.0,
+     "index": 0.0,
+     "ma_short": 0.002,
+     "ma_long": 0.0029
+    },
+    {
+     "month": "2025-09",
+     "mentions": 2,
+     "total_posts": 299,
+     "share": 0.0067,
+     "index": 52.44,
+     "ma_short": 0.0042,
+     "ma_long": 0.0032
+    },
+    {
+     "month": "2025-10",
+     "mentions": 2,
+     "total_posts": 341,
+     "share": 0.0059,
+     "index": 45.98,
+     "ma_short": 0.0042,
+     "ma_long": 0.0037
+    },
+    {
+     "month": "2025-11",
+     "mentions": 5,
+     "total_posts": 392,
+     "share": 0.0128,
+     "index": 100.0,
+     "ma_short": 0.0084,
+     "ma_long": 0.0039
+    },
+    {
+     "month": "2025-12",
+     "mentions": 4,
+     "total_posts": 377,
+     "share": 0.0106,
+     "index": 83.18,
+     "ma_short": 0.0097,
+     "ma_long": 0.0043
+    },
+    {
+     "month": "2026-01",
+     "mentions": 3,
+     "total_posts": 256,
+     "share": 0.0117,
+     "index": 91.88,
+     "ma_short": 0.0117,
+     "ma_long": 0.005
+    },
+    {
+     "month": "2026-02",
+     "mentions": 4,
+     "total_posts": 410,
+     "share": 0.0098,
+     "index": 76.49,
+     "ma_short": 0.0107,
+     "ma_long": 0.0058
+    },
+    {
+     "month": "2026-03",
+     "mentions": 3,
+     "total_posts": 317,
+     "share": 0.0095,
+     "index": 74.2,
+     "ma_short": 0.0103,
+     "ma_long": 0.0064
+    },
+    {
+     "month": "2026-04",
+     "mentions": 1,
+     "total_posts": 329,
+     "share": 0.003,
+     "index": 23.83,
+     "ma_short": 0.0074,
+     "ma_long": 0.0066
+    },
+    {
+     "month": "2026-05",
+     "mentions": 3,
+     "total_posts": 318,
+     "share": 0.0094,
+     "index": 73.96,
+     "ma_short": 0.0073,
+     "ma_long": 0.0071
+    },
+    {
+     "month": "2026-06",
+     "mentions": 2,
+     "total_posts": 313,
+     "share": 0.0064,
+     "index": 50.1,
+     "ma_short": 0.0063,
+     "ma_long": 0.0076
+    },
+    {
+     "month": "2026-07",
+     "mentions": 5,
+     "total_posts": 259,
+     "share": 0.0193,
+     "index": 151.35,
+     "ma_short": 0.0117,
+     "ma_long": 0.0088
+    },
+    {
+     "month": "2026-08",
+     "mentions": 6,
+     "total_posts": 227,
+     "share": 0.0264,
+     "index": 207.22,
+     "ma_short": 0.0174,
+     "ma_long": 0.011
+    },
+    {
+     "month": "2026-09",
+     "mentions": 5,
+     "total_posts": 249,
+     "share": 0.0201,
+     "index": 157.43,
+     "ma_short": 0.0219,
+     "ma_long": 0.0121
+    },
+    {
+     "month": "2026-10",
+     "mentions": 2,
+     "total_posts": 266,
+     "share": 0.0075,
+     "index": 58.95,
+     "ma_short": 0.018,
+     "ma_long": 0.0122
+    }
+   ],
+   "profile_tools": [
+    "ERP (SAP, Oracle)"
+   ],
+   "catalogue_skills": []
+  },
+  {
+   "id": "data_quality",
+   "name": "Data quality",
+   "category": "Data",
+   "label": "insufficient_data",
+   "change_12m": -0.3333,
+   "latest_sample_size": 0,
+   "latest_total_posts": 266,
+   "points": [
+    {
+     "month": "2023-11",
+     "mentions": 0,
+     "total_posts": 362,
+     "share": 0.0,
+     "index": null,
+     "ma_short": null,
+     "ma_long": null
+    },
+    {
+     "month": "2023-12",
+     "mentions": 1,
+     "total_posts": 313,
+     "share": 0.0032,
+     "index": null,
+     "ma_short": null,
+     "ma_long": null
+    },
+    {
+     "month": "2024-01",
+     "mentions": 1,
+     "total_posts": 278,
+     "share": 0.0036,
+     "index": null,
+     "ma_short": 0.0023,
+     "ma_long": null
+    },
+    {
+     "month": "2024-02",
+     "mentions": 0,
+     "total_posts": 341,
+     "share": 0.0,
+     "index": null,
+     "ma_short": 0.0023,
+     "ma_long": null
+    },
+    {
+     "month": "2024-03",
+     "mentions": 2,
+     "total_posts": 300,
+     "share": 0.0067,
+     "index": null,
+     "ma_short": 0.0034,
+     "ma_long": null
+    },
+    {
+     "month": "2024-04",
+     "mentions": 0,
+     "total_posts": 289,
+     "share": 0.0,
+     "index": null,
+     "ma_short": 0.0022,
+     "ma_long": null
+    },
+    {
+     "month": "2024-05",
+     "mentions": 1,
+     "total_posts": 396,
+     "share": 0.0025,
+     "index": null,
+     "ma_short": 0.0031,
+     "ma_long": null
+    },
+    {
+     "month": "2024-06",
+     "mentions": 3,
+     "total_posts": 339,
+     "share": 0.0088,
+     "index": null,
+     "ma_short": 0.0038,
+     "ma_long": null
+    },
+    {
+     "month": "2024-07",
+     "mentions": 2,
+     "total_posts": 379,
+     "share": 0.0053,
+     "index": null,
+     "ma_short": 0.0056,
+     "ma_long": null
+    },
+    {
+     "month": "2024-08",
+     "mentions": 1,
+     "total_posts": 322,
+     "share": 0.0031,
+     "index": null,
+     "ma_short": 0.0057,
+     "ma_long": null
+    },
+    {
+     "month": "2024-09",
+     "mentions": 0,
+     "total_posts": 303,
+     "share": 0.0,
+     "index": null,
+     "ma_short": 0.0028,
+     "ma_long": null
+    },
+    {
+     "month": "2024-10",
+     "mentions": 0,
+     "total_posts": 329,
+     "share": 0.0,
+     "index": null,
+     "ma_short": 0.001,
+     "ma_long": 0.0028
+    },
+    {
+     "month": "2024-11",
+     "mentions": 0,
+     "total_posts": 317,
+     "share": 0.0,
+     "index": null,
+     "ma_short": 0.0,
+     "ma_long": 0.0028
+    },
+    {
+     "month": "2024-12",
+     "mentions": 2,
+     "total_posts": 330,
+     "share": 0.0061,
+     "index": null,
+     "ma_short": 0.002,
+     "ma_long": 0.003
+    },
+    {
+     "month": "2025-01",
+     "mentions": 0,
+     "total_posts": 276,
+     "share": 0.0,
+     "index": null,
+     "ma_short": 0.002,
+     "ma_long": 0.0027
+    },
+    {
+     "month": "2025-02",
+     "mentions": 2,
+     "total_posts": 396,
+     "share": 0.0051,
+     "index": null,
+     "ma_short": 0.0037,
+     "ma_long": 0.0031
+    },
+    {
+     "month": "2025-03",
+     "mentions": 1,
+     "total_posts": 354,
+     "share": 0.0028,
+     "index": null,
+     "ma_short": 0.0026,
+     "ma_long": 0.0028
+    },
+    {
+     "month": "2025-04",
+     "mentions": 1,
+     "total_posts": 306,
+     "share": 0.0033,
+     "index": null,
+     "ma_short": 0.0037,
+     "ma_long": 0.0031
+    },
+    {
+     "month": "2025-05",
+     "mentions": 1,
+     "total_posts": 300,
+     "share": 0.0033,
+     "index": null,
+     "ma_short": 0.0031,
+     "ma_long": 0.0031
+    },
+    {
+     "month": "2025-06",
+     "mentions": 0,
+     "total_posts": 358,
+     "share": 0.0,
+     "index": null,
+     "ma_short": 0.0022,
+     "ma_long": 0.0024
+    },
+    {
+     "month": "2025-07",
+     "mentions": 2,
+     "total_posts": 331,
+     "share": 0.006,
+     "index": null,
+     "ma_short": 0.0031,
+     "ma_long": 0.0025
+    },
+    {
+     "month": "2025-08",
+     "mentions": 1,
+     "total_posts": 305,
+     "share": 0.0033,
+     "index": null,
+     "ma_short": 0.0031,
+     "ma_long": 0.0025
+    },
+    {
+     "month": "2025-09",
+     "mentions": 1,
+     "total_posts": 299,
+     "share": 0.0033,
+     "index": null,
+     "ma_short": 0.0042,
+     "ma_long": 0.0028
+    },
+    {
+     "month": "2025-10",
+     "mentions": 2,
+     "total_posts": 341,
+     "share": 0.0059,
+     "index": null,
+     "ma_short": 0.0042,
+     "ma_long": 0.0033
+    },
+    {
+     "month": "2025-11",
+     "mentions": 1,
+     "total_posts": 392,
+     "share": 0.0026,
+     "index": null,
+     "ma_short": 0.0039,
+     "ma_long": 0.0035
+    },
+    {
+     "month": "2025-12",
+     "mentions": 1,
+     "total_posts": 377,
+     "share": 0.0027,
+     "index": null,
+     "ma_short": 0.0037,
+     "ma_long": 0.0032
+    },
+    {
+     "month": "2026-01",
+     "mentions": 0,
+     "total_posts": 256,
+     "share": 0.0,
+     "index": null,
+     "ma_short": 0.0017,
+     "ma_long": 0.0032
+    },
+    {
+     "month": "2026-02",
+     "mentions": 0,
+     "total_posts": 410,
+     "share": 0.0,
+     "index": null,
+     "ma_short": 0.0009,
+     "ma_long": 0.0028
+    },
+    {
+     "month": "2026-03",
+     "mentions": 0,
+     "total_posts": 317,
+     "share": 0.0,
+     "index": null,
+     "ma_short": 0.0,
+     "ma_long": 0.0025
+    },
+    {
+     "month": "2026-04",
+     "mentions": 2,
+     "total_posts": 329,
+     "share": 0.0061,
+     "index": null,
+     "ma_short": 0.002,
+     "ma_long": 0.0028
+    },
+    {
+     "month": "2026-05",
+     "mentions": 2,
+     "total_posts": 318,
+     "share": 0.0063,
+     "index": null,
+     "ma_short": 0.0041,
+     "ma_long": 0.003
+    },
+    {
+     "month": "2026-06",
+     "mentions": 3,
+     "total_posts": 313,
+     "share": 0.0096,
+     "index": null,
+     "ma_short": 0.0073,
+     "ma_long": 0.0038
+    },
+    {
+     "month": "2026-07",
+     "mentions": 3,
+     "total_posts": 259,
+     "share": 0.0116,
+     "index": null,
+     "ma_short": 0.0092,
+     "ma_long": 0.0043
+    },
+    {
+     "month": "2026-08",
+     "mentions": 1,
+     "total_posts": 227,
+     "share": 0.0044,
+     "index": null,
+     "ma_short": 0.0085,
+     "ma_long": 0.0044
+    },
+    {
+     "month": "2026-09",
+     "mentions": 1,
+     "total_posts": 249,
+     "share": 0.004,
+     "index": null,
+     "ma_short": 0.0067,
+     "ma_long": 0.0044
+    },
+    {
+     "month": "2026-10",
+     "mentions": 0,
+     "total_posts": 266,
+     "share": 0.0,
+     "index": null,
+     "ma_short": 0.0028,
+     "ma_long": 0.0039
+    }
+   ],
+   "profile_tools": [],
+   "catalogue_skills": [
+    "data_quality"
+   ]
+  }
+ ]
+}
