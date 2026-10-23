@@ -1,24 +1,66 @@
 {
-  "_about": "Role-ranking weights and thresholds (QART_NEXT_STEPS §5.3–5.5). Every value is a DECLARED design choice from the spec, not fitted to data; tune only until the persona tests pass, and flag a persona expectation that seems wrong instead of bending the formula.",
+  "_about": "Role-ranking weights and thresholds (QART_NEXT_STEPS §5.3–5.5). Every value is a DECLARED design choice from the spec, not fitted to data; tune only until the persona tests pass, and flag a persona expectation that seems wrong instead of bending the formula. Changed 2026-10-23 (team decision on persona p1): a different role in the same family counts as a nearby move, adjacent.same 0.6 -> 0.9.",
   "weights": {
-    "grow": {"skill": 0.5, "momentum": 0.2, "direction": 0.2, "feasibility": 0.1},
-    "adjacent": {"skill": 0.5, "momentum": 0.2, "direction": 0.2, "feasibility": 0.1},
-    "switch": {"skill": 0.35, "momentum": 0.3, "direction": 0.2, "feasibility": 0.15}
+    "grow": {
+      "skill": 0.5,
+      "momentum": 0.2,
+      "direction": 0.2,
+      "feasibility": 0.1
+    },
+    "adjacent": {
+      "skill": 0.5,
+      "momentum": 0.2,
+      "direction": 0.2,
+      "feasibility": 0.1
+    },
+    "switch": {
+      "skill": 0.35,
+      "momentum": 0.3,
+      "direction": 0.2,
+      "feasibility": 0.15
+    }
   },
   "default_direction": "adjacent",
   "direction_fit": {
-    "grow": {"same": 1.0, "adjacent": 0.4, "far": 0.0},
-    "adjacent": {"same": 0.6, "adjacent": 1.0, "far": 0.2},
-    "switch": {"same": 0.2, "adjacent": 0.7, "far": 1.0}
+    "grow": {
+      "same": 1.0,
+      "adjacent": 0.4,
+      "far": 0.0
+    },
+    "adjacent": {
+      "same": 0.9,
+      "adjacent": 1.0,
+      "far": 0.2
+    },
+    "switch": {
+      "same": 0.2,
+      "adjacent": 0.7,
+      "far": 1.0
+    }
   },
   "industry_bonus": 0.1,
-  "momentum_values": {"rising": 1.0, "stable": 0.5, "cooling": 0.0},
+  "momentum_values": {
+    "rising": 1.0,
+    "stable": 0.5,
+    "cooling": 0.0
+  },
   "momentum_neutral": 0.5,
-  "bands": {"strong": 75, "good": 55},
+  "bands": {
+    "strong": 75,
+    "good": 55
+  },
   "core_coverage_min": 0.5,
   "min_skills_for_ranking": 3,
-  "timeframe_weeks": {"3": 13, "6": 26, "12": 52},
+  "timeframe_weeks": {
+    "3": 13,
+    "6": 26,
+    "12": 52
+  },
   "default_timeframe_months": 3,
   "basic_level": 0.7,
-  "starter_roles": ["data_analyst", "business_analyst", "ai_operations_specialist"]
+  "starter_roles": [
+    "data_analyst",
+    "business_analyst",
+    "ai_operations_specialist"
+  ]
 }

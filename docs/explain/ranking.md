@@ -10,7 +10,7 @@ Domain 1 must-have 3: "rank suitable future roles with an explainable match scor
 There are four components, each from 0 to 1:
 - **Skill.** How much of the role's weighted skills you have. Your level is divided by the level the role needs (0.7, "use sometimes"), capped at 1, and core skills count three times as much as nice-to-haves.
 - **Momentum.** The radar labels of the role's tracked core skills: Rising 1, Stable 0.5, Cooling 0. With no tracked core skill it is a neutral 0.5, and a reason says so. **This is where the trend data feeds the ranking:** a new snapshot changes it.
-- **Direction.** Your answer (grow / nearby / switch) against the role's family: same family, adjacent family, or far. Matching your industry adds 0.1.
+- **Direction.** Your answer (grow / nearby / switch) against the role's family: same family, adjacent family, or far. Matching your industry adds 0.1. For a nearby move, a different role in your own family scores 0.9 (team decision on persona p1; the spec had 0.6).
 - **Feasibility.** Your weekly hours × weeks in your timeframe (3, 6 or 12 months = 13, 26 or 52 weeks), divided by the hours to close the gap, capped at 1.
 
 **Score:** 100 × the weighted sum.
@@ -31,7 +31,7 @@ There are four components, each from 0 to 1:
 - `src/engine/ranking.py`: `rank_roles` (pure), `score_role`, `hours_between`, plus `rank_for_profile`, which loads the inputs.
 - Tests:
   - `tests/test_ranking.py`: hand-calculated components, the cap, ties, the empty profile, the trend swap, fairness.
-  - `tests/test_personas.py` and `tests/personas/`: the six personas, run against pinned radar labels.
+  - `tests/test_personas.py` and `tests/personas/`: the six personas, run against pinned radar labels. All six pass.
 
 ## 5. Example
 Persona p1 is a Reconciliation Associate making a nearby move, 6 months at 3 h/week. Finance Data Analyst scores **70 (Good match)**:
