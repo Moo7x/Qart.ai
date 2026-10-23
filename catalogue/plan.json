@@ -1,0 +1,44 @@
+{
+  "_about": "Learning-plan settings (pathway.md §4). Every value is a DECLARED design choice from the spec, not fitted to data. Budget limit and timeframe weeks come from questionnaire.json and scoring.json so they exist once. max_overshoot: a course longer than this multiple of the gap's estimated hours is chosen only when no shorter course covers the skill (it stays a Swap alternative).",
+  "level_slack": 0.3,
+  "max_courses_per_skill": 2,
+  "alternatives": 2,
+  "max_overshoot": 3.0,
+  "score": {
+    "free": 3.0,
+    "cheap": 1.5,
+    "cheap_limit_myr": 50,
+    "format_match": 2.0,
+    "certificate": 1.0,
+    "language_match": 1.0,
+    "self_paced": 0.5,
+    "shorter_max": 1.0
+  },
+  "practice_buffer": 0.2,
+  "milestone_every_weeks": 4,
+  "ai_comfort_low": 3,
+  "formats": {
+    "Hands-on cases": "hands_on",
+    "Short videos": "videos",
+    "Reading": "reading",
+    "Mentor sessions": "mentor"
+  },
+  "age_bands": {
+    "under_18": [
+      0,
+      17
+    ],
+    "18_30": [
+      18,
+      30
+    ],
+    "31_45": [
+      31,
+      45
+    ],
+    "46_plus": [
+      46,
+      130
+    ]
+  }
+}

@@ -44,6 +44,8 @@ def test_course_is_complete_and_honest(course: Course) -> None:
     if course.status == "draft":
         assert course.verified is False  # drafts are never in search or the demo plan
     assert course.format and course.language
+    if course.hours_basis == "provider_pace":  # hours = pace x length: keep the stated pace (§3.2)
+        assert course.stated_duration
     assert set(course.prerequisites) <= set(CAT.courses)
     if course.status == "verified":
         assert course.last_verified and course.verified_by
