@@ -37,6 +37,10 @@ Rule: never invent statistics; every number cites a source.
    (`src/evidence/models.py`); a new model version with its errors is stored only when a group's
    data changed, and the run log says "trend models unchanged" otherwise. Live intelligence lists
    the versions, so forecast error over time is visible.
+   A rolling-origin check (`measures.rolling_backtest`) scores no change, drift, straight line,
+   damped trend and simple smoothing at every origin from 2015, one and two years ahead. No
+   trend method beats no change in any followed group, so no trend is projected. It uses today's
+   published series, not the values available at each origin.
 6. **Labels** (`src/evidence/signals.py`): rising/weakening needs two independent sources or one
    official series with ≥ 8 comparable points; otherwise "not enough evidence yet" with an early
    direction. TalentCorp is always an "expert view". All thresholds are in `src/params.py`.

@@ -39,6 +39,19 @@ Code drops sentences with numbers (digits or words), forecast or promise words, 
 citation; the cited facts, written by code, are shown under each sentence. No key, an error or no
 valid sentence gives a labelled template of the facts. Market evidence is not given to the model.
 
+**Decision support.** `src/match/decision.py`: meters keep coverage (the fit), essential readiness
+(below level versus not stated) and profile completeness apart; the fit range recomputes with
+unstated skills at proficient (assumption-based, not a statistical interval); the most valuable
+question answers each unstated skill both ways and ranks them (essential of the person's goal,
+then a change of best-fitting role, then the largest fit swing; weights in `src/params.py`);
+sensitivity re-ranks under adoption intensities 0–1.5; what-if recomputes without saving. An
+answer is saved as a self-rated claim. `src/pathway/optimise.py` compares, within weekly hours ×
+12 weeks, the planner's own order cut at the budget, the exhaustive best set (most essentials,
+then projected fit, then fewest hours) and the set whose lower scenario fit is highest. Example:
+at one hour a week, a finance-systems goal reaches projected fit 50.0 with the best set versus
+22.9 for the simple plan. The best sets favour many short modules because each may add one level
+under the declared gain rule; that rule is an assumption, not measured learning.
+
 `src/pathway/planner.py` visits essentials first, selects the shortest useful course, includes
 prerequisites once and schedules at the weekly-hours budget. Duration/level rules produce
 hypothetical gains, not measured learning outcomes. Some gaps have no verified free resource.
