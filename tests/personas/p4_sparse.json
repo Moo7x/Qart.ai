@@ -1,0 +1,19 @@
+{
+  "id": "p4_sparse",
+  "label": "Administrative assistant, no tools, no tasks (sparse profile)",
+  "answers": {
+    "current_job": "admin_assistant",
+    "years_experience": 3,
+    "tools": [
+      "None of these"
+    ],
+    "tasks": [],
+    "direction": "adjacent",
+    "timeframe_months": 3,
+    "weekly_learning_hours": 3
+  },
+  "expect": {
+    "empty_profile": true
+  },
+  "_about": "Synthetic persona (QART_NEXT_STEPS §8). Expectations are the team's career-counsellor view; assert top-3 membership and bands, never exact order or scores. If one looks wrong, flag it for the team instead of bending the formula."
+}

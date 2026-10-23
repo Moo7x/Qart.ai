@@ -1,0 +1,29 @@
+{
+  "id": "p1_recon_nearby",
+  "label": "Reconciliation Associate, 10+ years, wants a nearby move",
+  "answers": {
+    "current_job": "reconciliation_associate",
+    "years_experience": 12,
+    "industry": "Finance & accounting",
+    "tools": [
+      "Excel",
+      "ERP (SAP, Oracle)"
+    ],
+    "tasks": [
+      "reconcile_accounts",
+      "build_monthly_reports",
+      "record_macros"
+    ],
+    "direction": "adjacent",
+    "timeframe_months": 6,
+    "weekly_learning_hours": 3
+  },
+  "expect": {
+    "top3_includes": [
+      "finance_data_analyst",
+      "finance_automation_specialist",
+      "fpa_analyst"
+    ]
+  },
+  "_about": "Synthetic persona (QART_NEXT_STEPS §8). Expectations are the team's career-counsellor view; assert top-3 membership and bands, never exact order or scores. If one looks wrong, flag it for the team instead of bending the formula."
+}

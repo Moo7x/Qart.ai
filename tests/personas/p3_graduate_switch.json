@@ -1,0 +1,35 @@
+{
+  "id": "p3_graduate_switch",
+  "label": "Fresh graduate, Python and SQL, wants a new field",
+  "answers": {
+    "current_job": "graduate",
+    "years_experience": 1,
+    "education": "Bachelor's degree",
+    "tools": [
+      "Python",
+      "SQL"
+    ],
+    "tasks": [
+      "query_database"
+    ],
+    "direction": "switch",
+    "timeframe_months": 6,
+    "weekly_learning_hours": 6
+  },
+  "expect": {
+    "best_of_above_best_of": [
+      [
+        "data_analyst",
+        "ml_engineer",
+        "data_engineer",
+        "bi_developer"
+      ],
+      [
+        "fpa_analyst",
+        "ai_accountant_controller",
+        "risk_compliance_analyst"
+      ]
+    ]
+  },
+  "_about": "Synthetic persona (QART_NEXT_STEPS §8). Expectations are the team's career-counsellor view; assert top-3 membership and bands, never exact order or scores. If one looks wrong, flag it for the team instead of bending the formula."
+}

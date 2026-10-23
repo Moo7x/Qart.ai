@@ -1,0 +1,38 @@
+{
+  "id": "p5_strong_data",
+  "label": "Strong data profile, 12 months at 8 h/week",
+  "answers": {
+    "current_job": "junior_developer",
+    "years_experience": 4,
+    "tools": [
+      "Python",
+      "SQL",
+      "Power BI / Tableau"
+    ],
+    "tasks": [
+      "query_database",
+      "build_dashboards",
+      "clean_data"
+    ],
+    "direction": "adjacent",
+    "timeframe_months": 12,
+    "weekly_learning_hours": 8,
+    "skill_edits": {
+      "python": "confident",
+      "sql_basics": "confident",
+      "data_visualisation": "confident",
+      "data_quality": "confident"
+    }
+  },
+  "expect": {
+    "any_strong": [
+      "data_engineer",
+      "bi_developer"
+    ],
+    "feasibility_at_least": {
+      "data_engineer": 0.95,
+      "bi_developer": 0.95
+    }
+  },
+  "_about": "Synthetic persona (QART_NEXT_STEPS §8). Expectations are the team's career-counsellor view; assert top-3 membership and bands, never exact order or scores. If one looks wrong, flag it for the team instead of bending the formula."
+}

@@ -1,0 +1,30 @@
+{
+  "id": "p6_accountant_switch",
+  "label": "Accountant at risk of displacement, switching field",
+  "answers": {
+    "current_job": "accountant",
+    "years_experience": 8,
+    "industry": "Finance & accounting",
+    "tools": [
+      "Excel",
+      "AI assistants"
+    ],
+    "tasks": [
+      "process_invoices",
+      "build_monthly_reports",
+      "use_ai_assistant"
+    ],
+    "direction": "switch",
+    "timeframe_months": 12,
+    "weekly_learning_hours": 5,
+    "skill_edits": {
+      "python": "heard"
+    }
+  },
+  "expect": {
+    "top3_families_exclude": [
+      "finance_ops"
+    ]
+  },
+  "_about": "Synthetic persona (QART_NEXT_STEPS §8). Expectations are the team's career-counsellor view; assert top-3 membership and bands, never exact order or scores. If one looks wrong, flag it for the team instead of bending the formula."
+}

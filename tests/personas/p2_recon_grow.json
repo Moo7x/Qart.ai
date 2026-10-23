@@ -1,0 +1,33 @@
+{
+  "id": "p2_recon_grow",
+  "label": "Same person, wants to grow in the current role",
+  "answers": {
+    "current_job": "reconciliation_associate",
+    "years_experience": 12,
+    "industry": "Finance & accounting",
+    "tools": [
+      "Excel",
+      "ERP (SAP, Oracle)"
+    ],
+    "tasks": [
+      "reconcile_accounts",
+      "build_monthly_reports",
+      "record_macros"
+    ],
+    "direction": "grow",
+    "timeframe_months": 6,
+    "weekly_learning_hours": 3
+  },
+  "expect": {
+    "top3_includes": [
+      "ai_accountant_controller"
+    ],
+    "top3_families_within": [
+      "finance_ops",
+      "automation",
+      "analytics",
+      "risk_compliance"
+    ]
+  },
+  "_about": "Synthetic persona (QART_NEXT_STEPS §8). Expectations are the team's career-counsellor view; assert top-3 membership and bands, never exact order or scores. If one looks wrong, flag it for the team instead of bending the formula."
+}
