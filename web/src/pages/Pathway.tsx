@@ -2,12 +2,13 @@ import { useEffect, useRef, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { ArrowRight, Check, Clock, ExternalLink, Search, UserRound } from 'lucide-react'
 import { ResourceList } from '../components/ResourceList'
-import { getPath, getRoles, searchResources } from '../api'
+import { getPath, getRoles, getUserSignals, searchResources } from '../api'
+import { SignalBadge } from '../components/SignalParts'
 import { useReveal } from '../motion'
 import { useUserId } from '../persona'
 import { SCENARIO_LABEL } from '../scenarios'
 import { skillName } from '../skillNames'
-import type { PathPlan, PathStep, SearchResponse } from '../types'
+import type { PathPlan, PathStep, SearchResponse, UserSignals } from '../types'
 import { btn, Card, EmptyState, Highlight, input as inputCls, Loading, NextStepCard, PageHeader, SectionTitle, StatTile, Tag, type Tone } from '../ui'
 
 const PACES = [3, 5, 8, 10] // hours per week offered as chips; the planner re-plans for each
@@ -58,6 +59,7 @@ export default function Pathway() {
   const [query, setQuery] = useState('')
   const [found, setFound] = useState<SearchResponse | null>(null)
   const [searching, setSearching] = useState(false)
+  const [market, setMarket] = useState<UserSignals | null>(null)
   const root = useRef<HTMLDivElement>(null)
   useReveal(root, [loading])
   const checklist = useChecklist(`qart.pathway.done.${userId}.${path?.target_role_id ?? roleId ?? 'best'}`)
@@ -72,6 +74,11 @@ export default function Pathway() {
       .catch(() => setFailed(true))
       .finally(() => setLoading(false))
   }, [userId, roleId, pace])
+
+  // Market context is informational only: it never changes a step, an hour or a score.
+  useEffect(() => {
+    getUserSignals(userId).then(setMarket).catch(() => setMarket(null))
+  }, [userId])
 
   const runSearch = async (text: string) => {
     if (text.trim().length < 2) return
@@ -203,6 +210,42 @@ export default function Pathway() {
           Gap left after this path in the harder scenario: {path.worst_case_gap.toFixed(2)} (weighted, 0 = none).
         </p>
       </section>
+
+      {market && (market.user_skills.length > 0 || market.rising_skills_not_in_profile.length > 0) && (
+        <section data-reveal>
+          <SectionTitle aside={<Tag tone="linen">Signal, not a forecast</Tag>}>Market context</SectionTitle>
+          <Card className="p-5 space-y-4">
+            {market.user_skills.length > 0 && (
+              <div>
+                <div className="text-sm font-medium text-ink mb-2">Your skills in tech job posts</div>
+                <ul className="flex flex-wrap gap-2">
+                  {market.user_skills.map(s => (
+                    <li key={s.id} className="inline-flex items-center gap-1.5 rounded-md border border-hairline px-2.5 py-1.5 text-sm text-ink">
+                      {s.name} <SignalBadge label={s.label} />
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            {market.rising_skills_not_in_profile.length > 0 && (
+              <div>
+                <div className="text-sm font-medium text-ink mb-2">Rising skills you don't list yet</div>
+                <ul className="flex flex-wrap gap-2">
+                  {market.rising_skills_not_in_profile.map(s => (
+                    <li key={s.id} className="inline-flex items-center gap-1.5 rounded-md border border-hairline px-2.5 py-1.5 text-sm text-ink">
+                      {s.name} <SignalBadge label={s.label} />
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            <p className="text-xs text-graphite">
+              {market.note} {market.attribution} · data to {market.data_as_of}.{' '}
+              <Link to="/signals" className="text-action-ink hover:underline">See the radar</Link>
+            </p>
+          </Card>
+        </section>
+      )}
 
       <section data-reveal>
         <SectionTitle>Search learning resources and work evidence</SectionTitle>
