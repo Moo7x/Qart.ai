@@ -184,7 +184,8 @@ def job_ad_signals(rows: list[dict[str, Any]]) -> list[Signal]:
         if latest.starts_after_break:
             note += (
                 f" Comparable only from {first_p}: total online job offerings roughly "
-                f"doubled the quarter before, a change in platform coverage."
+                f"doubled the quarter before, so we treat it as a possible change in which "
+                f"platforms are covered rather than demand."
             )
         if missing:
             note += f" Count not stated for {', '.join(missing)} (missing, not zero)."

@@ -20,7 +20,8 @@ DAMPED_TREND_FIT_YEARS = 5  # slope fitted on the last five training years
 
 # --- DOSM job-ad releases --------------------------------------------------------------------
 # A quarter-on-quarter change in the *total* number of online job offerings larger than this is
-# treated as a change in platform coverage (a series break), not as demand. Q3 2025 rose 108.8%.
+# treated as a possible change in platform coverage (a series break), not as demand: DOSM does
+# not explain such jumps, and the series covers only major private platforms. Q3 2025 rose 108.8%.
 JOB_AD_BREAK_RATIO = 0.6
 
 # --- Anthropic Economic Index ----------------------------------------------------------------
