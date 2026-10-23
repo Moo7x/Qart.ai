@@ -1,5 +1,5 @@
 {
-  "_about": "Settings for the ATS job-board signal. Every rule is DECLARED and transparent (keyword patterns, not a model). Region rules are matched on the location text (case-insensitive); a posting can be in several regions. 'remote' also uses the source's own remote / workplaceType fields. Role families use families.json ids, matched on the job title in order (first match wins). AI terms flag whether a posting mentions AI at all; skills use the canonical patterns in skills.json.",
+  "_about": "Settings for the ATS job-board signal. Every rule is DECLARED and transparent (keyword patterns, not a model). Region rules are matched on the location text (case-insensitive); a posting can be in several regions. 'remote' also uses the source's own remote / workplaceType fields. Role families use families.json ids, matched on the job title in order (first match wins). AI terms flag whether a posting mentions AI at all; skills use the canonical patterns in skills.json. boilerplate: before AI terms and skills are matched, a company's boilerplate is removed: any run of shingle_words consecutive words that appears in at least min_share (30 %) of that company's postings in the same run (companies with at least min_postings), so a company 'About us' paragraph that mentions AI does not make every posting an AI posting.",
   "http": {
     "user_agent": "Qart.ai job-trend signal (SDC hackathon; public ATS job-board APIs only; github.com/Moo7x/Qart.ai)",
     "timeout_s": 30,
@@ -54,6 +54,11 @@
     "\\bRAG\\b",
     "\\bGPT\\b"
   ],
+  "boilerplate": {
+    "min_share": 0.3,
+    "min_postings": 5,
+    "shingle_words": 8
+  },
   "role_families": [
     [
       "security",

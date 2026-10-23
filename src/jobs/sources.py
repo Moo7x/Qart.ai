@@ -48,6 +48,10 @@ class Fetcher(Protocol):
         """(raw response for the snapshot, normalised postings)."""
         ...
 
+    def normalise(self, job: dict[str, Any], company: str) -> Posting:
+        """One raw job from this source in the common schema."""
+        ...
+
 
 def strip_html(text: str | None) -> str:
     """Plain text from HTML or entity-escaped HTML (Greenhouse escapes its content)."""
@@ -76,7 +80,8 @@ class GreenhouseFetcher:
         )
         return raw, [self.normalise(j, company) for j in raw.get("jobs", [])]
 
-    def normalise(self, j: dict[str, Any], company: str) -> Posting:
+    def normalise(self, job: dict[str, Any], company: str) -> Posting:
+        j = job
         location = (j.get("location") or {}).get("name") or ""
         employment = next(
             (
@@ -121,7 +126,8 @@ class LeverFetcher:
             skip += self.page_size
         return raw, [self.normalise(j, company) for j in raw]
 
-    def normalise(self, j: dict[str, Any], company: str) -> Posting:
+    def normalise(self, job: dict[str, Any], company: str) -> Posting:
+        j = job
         cat = j.get("categories") or {}
         locations = [cat.get("location") or "", *(cat.get("allLocations") or [])]
         location = " / ".join(dict.fromkeys(x for x in locations if x))
@@ -153,7 +159,8 @@ class AshbyFetcher:
         jobs = [j for j in raw.get("jobs", []) if j.get("isListed", True)]
         return raw, [self.normalise(j, company) for j in jobs]
 
-    def normalise(self, j: dict[str, Any], company: str) -> Posting:
+    def normalise(self, job: dict[str, Any], company: str) -> Posting:
+        j = job
         secondary = [s.get("location", "") for s in j.get("secondaryLocations") or []]
         location = " / ".join(x for x in [j.get("location") or "", *secondary] if x)
         workplace = str(j.get("workplaceType") or "").lower()

@@ -1,0 +1,1720 @@
+{
+ "source": "Public ATS job boards (Greenhouse, Lever, Ashby)",
+ "source_url": "catalogue/ats_companies.json",
+ "endpoints": {
+  "greenhouse": "https://boards-api.greenhouse.io/v1/boards/{token}/jobs?content=true",
+  "lever": "https://api.lever.co/v0/postings/{token}?mode=json",
+  "ashby": "https://api.ashbyhq.com/posting-api/job-board/{token}?includeCompensation=true"
+ },
+ "license": "Public job-board APIs (no key); posting text © each employer; only counts are stored here",
+ "attribution": "Source: public job boards of the companies listed (Greenhouse, Lever, Ashby)",
+ "update_frequency": "daily snapshot (GitHub Actions)",
+ "data_as_of": "2026-10-23",
+ "first_snapshot": "2026-10-23",
+ "snapshots": 1,
+ "fetched_at": "2026-10-23T09:58:05+00:00",
+ "caveats": [
+  "Open postings from the public job boards of the companies listed (Greenhouse, Lever, Ashby): a sample biased toward tech and fast-growing firms that use these systems, not the whole market.",
+  "The boards list only jobs open today, so history starts with the first snapshot and is built by recording when each job first and last appeared.",
+  "AI mentions and skills are matched by declared keyword patterns, not read by a person.",
+  "Shares from fewer than 20 postings are shown as insufficient data."
+ ],
+ "min_sample": 20,
+ "min_periods_for_chart": 4,
+ "regions": [
+  {
+   "id": "global",
+   "label": "All covered companies"
+  },
+  {
+   "id": "malaysia",
+   "label": "Malaysia"
+  },
+  {
+   "id": "singapore",
+   "label": "Singapore"
+  },
+  {
+   "id": "malaysia_singapore",
+   "label": "Malaysia + Singapore"
+  },
+  {
+   "id": "apac",
+   "label": "Asia-Pacific"
+  },
+  {
+   "id": "remote",
+   "label": "Remote"
+  }
+ ],
+ "coverage": {
+  "companies": [
+   "Agoda",
+   "Airbnb",
+   "Airwallex",
+   "Anthropic",
+   "Appier",
+   "Binance",
+   "Cohere",
+   "Coinbase",
+   "Databricks",
+   "Datadog",
+   "Elastic",
+   "GitLab",
+   "Lalamove",
+   "Linear",
+   "MongoDB",
+   "Ninja Van",
+   "Nium",
+   "Notion",
+   "Okta",
+   "OpenAI",
+   "Palantir",
+   "Pinterest",
+   "Replit",
+   "Rubrik",
+   "Spotify",
+   "Stripe",
+   "Thoughtworks",
+   "Twilio"
+  ],
+  "companies_failed": [],
+  "open_jobs_latest_run": 7797,
+  "jobs_ever_seen": 7797
+ },
+ "series": [
+  {
+   "region": "global",
+   "granularity": "week",
+   "points": [
+    {
+     "period": "2026-W43",
+     "total": 7797,
+     "ai": 4691,
+     "share_pct": 60.2
+    }
+   ]
+  },
+  {
+   "region": "malaysia",
+   "granularity": "week",
+   "points": [
+    {
+     "period": "2026-W43",
+     "total": 118,
+     "ai": 4,
+     "share_pct": 3.4
+    }
+   ]
+  },
+  {
+   "region": "singapore",
+   "granularity": "week",
+   "points": [
+    {
+     "period": "2026-W43",
+     "total": 404,
+     "ai": 203,
+     "share_pct": 50.2
+    }
+   ]
+  },
+  {
+   "region": "malaysia_singapore",
+   "granularity": "week",
+   "points": [
+    {
+     "period": "2026-W43",
+     "total": 520,
+     "ai": 206,
+     "share_pct": 39.6
+    }
+   ]
+  },
+  {
+   "region": "apac",
+   "granularity": "week",
+   "points": [
+    {
+     "period": "2026-W43",
+     "total": 1889,
+     "ai": 824,
+     "share_pct": 43.6
+    }
+   ]
+  },
+  {
+   "region": "remote",
+   "granularity": "week",
+   "points": [
+    {
+     "period": "2026-W43",
+     "total": 1979,
+     "ai": 1341,
+     "share_pct": 67.8
+    }
+   ]
+  },
+  {
+   "region": "global",
+   "granularity": "month",
+   "points": [
+    {
+     "period": "2026-10",
+     "total": 7797,
+     "ai": 4691,
+     "share_pct": 60.2
+    }
+   ]
+  },
+  {
+   "region": "malaysia",
+   "granularity": "month",
+   "points": [
+    {
+     "period": "2026-10",
+     "total": 118,
+     "ai": 4,
+     "share_pct": 3.4
+    }
+   ]
+  },
+  {
+   "region": "singapore",
+   "granularity": "month",
+   "points": [
+    {
+     "period": "2026-10",
+     "total": 404,
+     "ai": 203,
+     "share_pct": 50.2
+    }
+   ]
+  },
+  {
+   "region": "malaysia_singapore",
+   "granularity": "month",
+   "points": [
+    {
+     "period": "2026-10",
+     "total": 520,
+     "ai": 206,
+     "share_pct": 39.6
+    }
+   ]
+  },
+  {
+   "region": "apac",
+   "granularity": "month",
+   "points": [
+    {
+     "period": "2026-10",
+     "total": 1889,
+     "ai": 824,
+     "share_pct": 43.6
+    }
+   ]
+  },
+  {
+   "region": "remote",
+   "granularity": "month",
+   "points": [
+    {
+     "period": "2026-10",
+     "total": 1979,
+     "ai": 1341,
+     "share_pct": 67.8
+    }
+   ]
+  }
+ ],
+ "skills_latest_week": [
+  {
+   "region": "global",
+   "skill_id": "data_quality",
+   "name": "Data quality",
+   "mentions": 373,
+   "total": 7797,
+   "share_pct": 4.8
+  },
+  {
+   "region": "global",
+   "skill_id": "process_automation",
+   "name": "RPA / process automation",
+   "mentions": 99,
+   "total": 7797,
+   "share_pct": 1.3
+  },
+  {
+   "region": "global",
+   "skill_id": "spreadsheet_modelling",
+   "name": "Excel",
+   "mentions": 332,
+   "total": 7797,
+   "share_pct": 4.3
+  },
+  {
+   "region": "global",
+   "skill_id": "sql_basics",
+   "name": "SQL",
+   "mentions": 1301,
+   "total": 7797,
+   "share_pct": 16.7
+  },
+  {
+   "region": "global",
+   "skill_id": "python",
+   "name": "Python",
+   "mentions": 1652,
+   "total": 7797,
+   "share_pct": 21.2
+  },
+  {
+   "region": "global",
+   "skill_id": "pytorch",
+   "name": "PyTorch",
+   "mentions": 116,
+   "total": 7797,
+   "share_pct": 1.5
+  },
+  {
+   "region": "global",
+   "skill_id": "tensorflow",
+   "name": "TensorFlow",
+   "mentions": 62,
+   "total": 7797,
+   "share_pct": 0.8
+  },
+  {
+   "region": "global",
+   "skill_id": "llms",
+   "name": "LLMs",
+   "mentions": 1115,
+   "total": 7797,
+   "share_pct": 14.3
+  },
+  {
+   "region": "global",
+   "skill_id": "rag",
+   "name": "RAG",
+   "mentions": 201,
+   "total": 7797,
+   "share_pct": 2.6
+  },
+  {
+   "region": "global",
+   "skill_id": "langchain",
+   "name": "LangChain",
+   "mentions": 79,
+   "total": 7797,
+   "share_pct": 1.0
+  },
+  {
+   "region": "global",
+   "skill_id": "ai_agents",
+   "name": "AI agents",
+   "mentions": 971,
+   "total": 7797,
+   "share_pct": 12.5
+  },
+  {
+   "region": "global",
+   "skill_id": "mlops",
+   "name": "MLOps",
+   "mentions": 121,
+   "total": 7797,
+   "share_pct": 1.6
+  },
+  {
+   "region": "global",
+   "skill_id": "computer_vision",
+   "name": "Computer vision",
+   "mentions": 22,
+   "total": 7797,
+   "share_pct": 0.3
+  },
+  {
+   "region": "global",
+   "skill_id": "nlp",
+   "name": "NLP",
+   "mentions": 81,
+   "total": 7797,
+   "share_pct": 1.0
+  },
+  {
+   "region": "global",
+   "skill_id": "kubernetes",
+   "name": "Kubernetes",
+   "mentions": 689,
+   "total": 7797,
+   "share_pct": 8.8
+  },
+  {
+   "region": "global",
+   "skill_id": "aws",
+   "name": "AWS",
+   "mentions": 1074,
+   "total": 7797,
+   "share_pct": 13.8
+  },
+  {
+   "region": "global",
+   "skill_id": "typescript",
+   "name": "TypeScript",
+   "mentions": 420,
+   "total": 7797,
+   "share_pct": 5.4
+  },
+  {
+   "region": "global",
+   "skill_id": "react",
+   "name": "React",
+   "mentions": 272,
+   "total": 7797,
+   "share_pct": 3.5
+  },
+  {
+   "region": "global",
+   "skill_id": "data_visualisation",
+   "name": "Data visualisation (Power BI / Tableau)",
+   "mentions": 290,
+   "total": 7797,
+   "share_pct": 3.7
+  },
+  {
+   "region": "global",
+   "skill_id": "erp",
+   "name": "ERP (SAP / Oracle / NetSuite)",
+   "mentions": 220,
+   "total": 7797,
+   "share_pct": 2.8
+  },
+  {
+   "region": "malaysia",
+   "skill_id": "data_quality",
+   "name": "Data quality",
+   "mentions": 2,
+   "total": 118,
+   "share_pct": 1.7
+  },
+  {
+   "region": "malaysia",
+   "skill_id": "process_automation",
+   "name": "RPA / process automation",
+   "mentions": 0,
+   "total": 118,
+   "share_pct": 0.0
+  },
+  {
+   "region": "malaysia",
+   "skill_id": "spreadsheet_modelling",
+   "name": "Excel",
+   "mentions": 7,
+   "total": 118,
+   "share_pct": 5.9
+  },
+  {
+   "region": "malaysia",
+   "skill_id": "sql_basics",
+   "name": "SQL",
+   "mentions": 9,
+   "total": 118,
+   "share_pct": 7.6
+  },
+  {
+   "region": "malaysia",
+   "skill_id": "python",
+   "name": "Python",
+   "mentions": 3,
+   "total": 118,
+   "share_pct": 2.5
+  },
+  {
+   "region": "malaysia",
+   "skill_id": "pytorch",
+   "name": "PyTorch",
+   "mentions": 0,
+   "total": 118,
+   "share_pct": 0.0
+  },
+  {
+   "region": "malaysia",
+   "skill_id": "tensorflow",
+   "name": "TensorFlow",
+   "mentions": 0,
+   "total": 118,
+   "share_pct": 0.0
+  },
+  {
+   "region": "malaysia",
+   "skill_id": "llms",
+   "name": "LLMs",
+   "mentions": 0,
+   "total": 118,
+   "share_pct": 0.0
+  },
+  {
+   "region": "malaysia",
+   "skill_id": "rag",
+   "name": "RAG",
+   "mentions": 0,
+   "total": 118,
+   "share_pct": 0.0
+  },
+  {
+   "region": "malaysia",
+   "skill_id": "langchain",
+   "name": "LangChain",
+   "mentions": 0,
+   "total": 118,
+   "share_pct": 0.0
+  },
+  {
+   "region": "malaysia",
+   "skill_id": "ai_agents",
+   "name": "AI agents",
+   "mentions": 0,
+   "total": 118,
+   "share_pct": 0.0
+  },
+  {
+   "region": "malaysia",
+   "skill_id": "mlops",
+   "name": "MLOps",
+   "mentions": 0,
+   "total": 118,
+   "share_pct": 0.0
+  },
+  {
+   "region": "malaysia",
+   "skill_id": "computer_vision",
+   "name": "Computer vision",
+   "mentions": 0,
+   "total": 118,
+   "share_pct": 0.0
+  },
+  {
+   "region": "malaysia",
+   "skill_id": "nlp",
+   "name": "NLP",
+   "mentions": 0,
+   "total": 118,
+   "share_pct": 0.0
+  },
+  {
+   "region": "malaysia",
+   "skill_id": "kubernetes",
+   "name": "Kubernetes",
+   "mentions": 0,
+   "total": 118,
+   "share_pct": 0.0
+  },
+  {
+   "region": "malaysia",
+   "skill_id": "aws",
+   "name": "AWS",
+   "mentions": 0,
+   "total": 118,
+   "share_pct": 0.0
+  },
+  {
+   "region": "malaysia",
+   "skill_id": "typescript",
+   "name": "TypeScript",
+   "mentions": 0,
+   "total": 118,
+   "share_pct": 0.0
+  },
+  {
+   "region": "malaysia",
+   "skill_id": "react",
+   "name": "React",
+   "mentions": 0,
+   "total": 118,
+   "share_pct": 0.0
+  },
+  {
+   "region": "malaysia",
+   "skill_id": "data_visualisation",
+   "name": "Data visualisation (Power BI / Tableau)",
+   "mentions": 4,
+   "total": 118,
+   "share_pct": 3.4
+  },
+  {
+   "region": "malaysia",
+   "skill_id": "erp",
+   "name": "ERP (SAP / Oracle / NetSuite)",
+   "mentions": 1,
+   "total": 118,
+   "share_pct": 0.8
+  },
+  {
+   "region": "singapore",
+   "skill_id": "data_quality",
+   "name": "Data quality",
+   "mentions": 17,
+   "total": 404,
+   "share_pct": 4.2
+  },
+  {
+   "region": "singapore",
+   "skill_id": "process_automation",
+   "name": "RPA / process automation",
+   "mentions": 4,
+   "total": 404,
+   "share_pct": 1.0
+  },
+  {
+   "region": "singapore",
+   "skill_id": "spreadsheet_modelling",
+   "name": "Excel",
+   "mentions": 15,
+   "total": 404,
+   "share_pct": 3.7
+  },
+  {
+   "region": "singapore",
+   "skill_id": "sql_basics",
+   "name": "SQL",
+   "mentions": 70,
+   "total": 404,
+   "share_pct": 17.3
+  },
+  {
+   "region": "singapore",
+   "skill_id": "python",
+   "name": "Python",
+   "mentions": 84,
+   "total": 404,
+   "share_pct": 20.8
+  },
+  {
+   "region": "singapore",
+   "skill_id": "pytorch",
+   "name": "PyTorch",
+   "mentions": 4,
+   "total": 404,
+   "share_pct": 1.0
+  },
+  {
+   "region": "singapore",
+   "skill_id": "tensorflow",
+   "name": "TensorFlow",
+   "mentions": 2,
+   "total": 404,
+   "share_pct": 0.5
+  },
+  {
+   "region": "singapore",
+   "skill_id": "llms",
+   "name": "LLMs",
+   "mentions": 43,
+   "total": 404,
+   "share_pct": 10.6
+  },
+  {
+   "region": "singapore",
+   "skill_id": "rag",
+   "name": "RAG",
+   "mentions": 15,
+   "total": 404,
+   "share_pct": 3.7
+  },
+  {
+   "region": "singapore",
+   "skill_id": "langchain",
+   "name": "LangChain",
+   "mentions": 5,
+   "total": 404,
+   "share_pct": 1.2
+  },
+  {
+   "region": "singapore",
+   "skill_id": "ai_agents",
+   "name": "AI agents",
+   "mentions": 44,
+   "total": 404,
+   "share_pct": 10.9
+  },
+  {
+   "region": "singapore",
+   "skill_id": "mlops",
+   "name": "MLOps",
+   "mentions": 7,
+   "total": 404,
+   "share_pct": 1.7
+  },
+  {
+   "region": "singapore",
+   "skill_id": "computer_vision",
+   "name": "Computer vision",
+   "mentions": 0,
+   "total": 404,
+   "share_pct": 0.0
+  },
+  {
+   "region": "singapore",
+   "skill_id": "nlp",
+   "name": "NLP",
+   "mentions": 6,
+   "total": 404,
+   "share_pct": 1.5
+  },
+  {
+   "region": "singapore",
+   "skill_id": "kubernetes",
+   "name": "Kubernetes",
+   "mentions": 36,
+   "total": 404,
+   "share_pct": 8.9
+  },
+  {
+   "region": "singapore",
+   "skill_id": "aws",
+   "name": "AWS",
+   "mentions": 44,
+   "total": 404,
+   "share_pct": 10.9
+  },
+  {
+   "region": "singapore",
+   "skill_id": "typescript",
+   "name": "TypeScript",
+   "mentions": 13,
+   "total": 404,
+   "share_pct": 3.2
+  },
+  {
+   "region": "singapore",
+   "skill_id": "react",
+   "name": "React",
+   "mentions": 7,
+   "total": 404,
+   "share_pct": 1.7
+  },
+  {
+   "region": "singapore",
+   "skill_id": "data_visualisation",
+   "name": "Data visualisation (Power BI / Tableau)",
+   "mentions": 11,
+   "total": 404,
+   "share_pct": 2.7
+  },
+  {
+   "region": "singapore",
+   "skill_id": "erp",
+   "name": "ERP (SAP / Oracle / NetSuite)",
+   "mentions": 6,
+   "total": 404,
+   "share_pct": 1.5
+  },
+  {
+   "region": "malaysia_singapore",
+   "skill_id": "data_quality",
+   "name": "Data quality",
+   "mentions": 19,
+   "total": 520,
+   "share_pct": 3.7
+  },
+  {
+   "region": "malaysia_singapore",
+   "skill_id": "process_automation",
+   "name": "RPA / process automation",
+   "mentions": 4,
+   "total": 520,
+   "share_pct": 0.8
+  },
+  {
+   "region": "malaysia_singapore",
+   "skill_id": "spreadsheet_modelling",
+   "name": "Excel",
+   "mentions": 22,
+   "total": 520,
+   "share_pct": 4.2
+  },
+  {
+   "region": "malaysia_singapore",
+   "skill_id": "sql_basics",
+   "name": "SQL",
+   "mentions": 79,
+   "total": 520,
+   "share_pct": 15.2
+  },
+  {
+   "region": "malaysia_singapore",
+   "skill_id": "python",
+   "name": "Python",
+   "mentions": 87,
+   "total": 520,
+   "share_pct": 16.7
+  },
+  {
+   "region": "malaysia_singapore",
+   "skill_id": "pytorch",
+   "name": "PyTorch",
+   "mentions": 4,
+   "total": 520,
+   "share_pct": 0.8
+  },
+  {
+   "region": "malaysia_singapore",
+   "skill_id": "tensorflow",
+   "name": "TensorFlow",
+   "mentions": 2,
+   "total": 520,
+   "share_pct": 0.4
+  },
+  {
+   "region": "malaysia_singapore",
+   "skill_id": "llms",
+   "name": "LLMs",
+   "mentions": 43,
+   "total": 520,
+   "share_pct": 8.3
+  },
+  {
+   "region": "malaysia_singapore",
+   "skill_id": "rag",
+   "name": "RAG",
+   "mentions": 15,
+   "total": 520,
+   "share_pct": 2.9
+  },
+  {
+   "region": "malaysia_singapore",
+   "skill_id": "langchain",
+   "name": "LangChain",
+   "mentions": 5,
+   "total": 520,
+   "share_pct": 1.0
+  },
+  {
+   "region": "malaysia_singapore",
+   "skill_id": "ai_agents",
+   "name": "AI agents",
+   "mentions": 44,
+   "total": 520,
+   "share_pct": 8.5
+  },
+  {
+   "region": "malaysia_singapore",
+   "skill_id": "mlops",
+   "name": "MLOps",
+   "mentions": 7,
+   "total": 520,
+   "share_pct": 1.3
+  },
+  {
+   "region": "malaysia_singapore",
+   "skill_id": "computer_vision",
+   "name": "Computer vision",
+   "mentions": 0,
+   "total": 520,
+   "share_pct": 0.0
+  },
+  {
+   "region": "malaysia_singapore",
+   "skill_id": "nlp",
+   "name": "NLP",
+   "mentions": 6,
+   "total": 520,
+   "share_pct": 1.2
+  },
+  {
+   "region": "malaysia_singapore",
+   "skill_id": "kubernetes",
+   "name": "Kubernetes",
+   "mentions": 36,
+   "total": 520,
+   "share_pct": 6.9
+  },
+  {
+   "region": "malaysia_singapore",
+   "skill_id": "aws",
+   "name": "AWS",
+   "mentions": 44,
+   "total": 520,
+   "share_pct": 8.5
+  },
+  {
+   "region": "malaysia_singapore",
+   "skill_id": "typescript",
+   "name": "TypeScript",
+   "mentions": 13,
+   "total": 520,
+   "share_pct": 2.5
+  },
+  {
+   "region": "malaysia_singapore",
+   "skill_id": "react",
+   "name": "React",
+   "mentions": 7,
+   "total": 520,
+   "share_pct": 1.3
+  },
+  {
+   "region": "malaysia_singapore",
+   "skill_id": "data_visualisation",
+   "name": "Data visualisation (Power BI / Tableau)",
+   "mentions": 15,
+   "total": 520,
+   "share_pct": 2.9
+  },
+  {
+   "region": "malaysia_singapore",
+   "skill_id": "erp",
+   "name": "ERP (SAP / Oracle / NetSuite)",
+   "mentions": 7,
+   "total": 520,
+   "share_pct": 1.3
+  },
+  {
+   "region": "apac",
+   "skill_id": "data_quality",
+   "name": "Data quality",
+   "mentions": 74,
+   "total": 1889,
+   "share_pct": 3.9
+  },
+  {
+   "region": "apac",
+   "skill_id": "process_automation",
+   "name": "RPA / process automation",
+   "mentions": 23,
+   "total": 1889,
+   "share_pct": 1.2
+  },
+  {
+   "region": "apac",
+   "skill_id": "spreadsheet_modelling",
+   "name": "Excel",
+   "mentions": 145,
+   "total": 1889,
+   "share_pct": 7.7
+  },
+  {
+   "region": "apac",
+   "skill_id": "sql_basics",
+   "name": "SQL",
+   "mentions": 378,
+   "total": 1889,
+   "share_pct": 20.0
+  },
+  {
+   "region": "apac",
+   "skill_id": "python",
+   "name": "Python",
+   "mentions": 379,
+   "total": 1889,
+   "share_pct": 20.1
+  },
+  {
+   "region": "apac",
+   "skill_id": "pytorch",
+   "name": "PyTorch",
+   "mentions": 16,
+   "total": 1889,
+   "share_pct": 0.8
+  },
+  {
+   "region": "apac",
+   "skill_id": "tensorflow",
+   "name": "TensorFlow",
+   "mentions": 10,
+   "total": 1889,
+   "share_pct": 0.5
+  },
+  {
+   "region": "apac",
+   "skill_id": "llms",
+   "name": "LLMs",
+   "mentions": 202,
+   "total": 1889,
+   "share_pct": 10.7
+  },
+  {
+   "region": "apac",
+   "skill_id": "rag",
+   "name": "RAG",
+   "mentions": 59,
+   "total": 1889,
+   "share_pct": 3.1
+  },
+  {
+   "region": "apac",
+   "skill_id": "langchain",
+   "name": "LangChain",
+   "mentions": 22,
+   "total": 1889,
+   "share_pct": 1.2
+  },
+  {
+   "region": "apac",
+   "skill_id": "ai_agents",
+   "name": "AI agents",
+   "mentions": 161,
+   "total": 1889,
+   "share_pct": 8.5
+  },
+  {
+   "region": "apac",
+   "skill_id": "mlops",
+   "name": "MLOps",
+   "mentions": 23,
+   "total": 1889,
+   "share_pct": 1.2
+  },
+  {
+   "region": "apac",
+   "skill_id": "computer_vision",
+   "name": "Computer vision",
+   "mentions": 2,
+   "total": 1889,
+   "share_pct": 0.1
+  },
+  {
+   "region": "apac",
+   "skill_id": "nlp",
+   "name": "NLP",
+   "mentions": 17,
+   "total": 1889,
+   "share_pct": 0.9
+  },
+  {
+   "region": "apac",
+   "skill_id": "kubernetes",
+   "name": "Kubernetes",
+   "mentions": 164,
+   "total": 1889,
+   "share_pct": 8.7
+  },
+  {
+   "region": "apac",
+   "skill_id": "aws",
+   "name": "AWS",
+   "mentions": 261,
+   "total": 1889,
+   "share_pct": 13.8
+  },
+  {
+   "region": "apac",
+   "skill_id": "typescript",
+   "name": "TypeScript",
+   "mentions": 74,
+   "total": 1889,
+   "share_pct": 3.9
+  },
+  {
+   "region": "apac",
+   "skill_id": "react",
+   "name": "React",
+   "mentions": 49,
+   "total": 1889,
+   "share_pct": 2.6
+  },
+  {
+   "region": "apac",
+   "skill_id": "data_visualisation",
+   "name": "Data visualisation (Power BI / Tableau)",
+   "mentions": 135,
+   "total": 1889,
+   "share_pct": 7.1
+  },
+  {
+   "region": "apac",
+   "skill_id": "erp",
+   "name": "ERP (SAP / Oracle / NetSuite)",
+   "mentions": 51,
+   "total": 1889,
+   "share_pct": 2.7
+  },
+  {
+   "region": "remote",
+   "skill_id": "data_quality",
+   "name": "Data quality",
+   "mentions": 125,
+   "total": 1979,
+   "share_pct": 6.3
+  },
+  {
+   "region": "remote",
+   "skill_id": "process_automation",
+   "name": "RPA / process automation",
+   "mentions": 26,
+   "total": 1979,
+   "share_pct": 1.3
+  },
+  {
+   "region": "remote",
+   "skill_id": "spreadsheet_modelling",
+   "name": "Excel",
+   "mentions": 55,
+   "total": 1979,
+   "share_pct": 2.8
+  },
+  {
+   "region": "remote",
+   "skill_id": "sql_basics",
+   "name": "SQL",
+   "mentions": 274,
+   "total": 1979,
+   "share_pct": 13.8
+  },
+  {
+   "region": "remote",
+   "skill_id": "python",
+   "name": "Python",
+   "mentions": 462,
+   "total": 1979,
+   "share_pct": 23.3
+  },
+  {
+   "region": "remote",
+   "skill_id": "pytorch",
+   "name": "PyTorch",
+   "mentions": 39,
+   "total": 1979,
+   "share_pct": 2.0
+  },
+  {
+   "region": "remote",
+   "skill_id": "tensorflow",
+   "name": "TensorFlow",
+   "mentions": 24,
+   "total": 1979,
+   "share_pct": 1.2
+  },
+  {
+   "region": "remote",
+   "skill_id": "llms",
+   "name": "LLMs",
+   "mentions": 322,
+   "total": 1979,
+   "share_pct": 16.3
+  },
+  {
+   "region": "remote",
+   "skill_id": "rag",
+   "name": "RAG",
+   "mentions": 39,
+   "total": 1979,
+   "share_pct": 2.0
+  },
+  {
+   "region": "remote",
+   "skill_id": "langchain",
+   "name": "LangChain",
+   "mentions": 15,
+   "total": 1979,
+   "share_pct": 0.8
+  },
+  {
+   "region": "remote",
+   "skill_id": "ai_agents",
+   "name": "AI agents",
+   "mentions": 313,
+   "total": 1979,
+   "share_pct": 15.8
+  },
+  {
+   "region": "remote",
+   "skill_id": "mlops",
+   "name": "MLOps",
+   "mentions": 20,
+   "total": 1979,
+   "share_pct": 1.0
+  },
+  {
+   "region": "remote",
+   "skill_id": "computer_vision",
+   "name": "Computer vision",
+   "mentions": 11,
+   "total": 1979,
+   "share_pct": 0.6
+  },
+  {
+   "region": "remote",
+   "skill_id": "nlp",
+   "name": "NLP",
+   "mentions": 39,
+   "total": 1979,
+   "share_pct": 2.0
+  },
+  {
+   "region": "remote",
+   "skill_id": "kubernetes",
+   "name": "Kubernetes",
+   "mentions": 169,
+   "total": 1979,
+   "share_pct": 8.5
+  },
+  {
+   "region": "remote",
+   "skill_id": "aws",
+   "name": "AWS",
+   "mentions": 218,
+   "total": 1979,
+   "share_pct": 11.0
+  },
+  {
+   "region": "remote",
+   "skill_id": "typescript",
+   "name": "TypeScript",
+   "mentions": 117,
+   "total": 1979,
+   "share_pct": 5.9
+  },
+  {
+   "region": "remote",
+   "skill_id": "react",
+   "name": "React",
+   "mentions": 76,
+   "total": 1979,
+   "share_pct": 3.8
+  },
+  {
+   "region": "remote",
+   "skill_id": "data_visualisation",
+   "name": "Data visualisation (Power BI / Tableau)",
+   "mentions": 57,
+   "total": 1979,
+   "share_pct": 2.9
+  },
+  {
+   "region": "remote",
+   "skill_id": "erp",
+   "name": "ERP (SAP / Oracle / NetSuite)",
+   "mentions": 55,
+   "total": 1979,
+   "share_pct": 2.8
+  }
+ ],
+ "families_latest_week": [
+  {
+   "region": "global",
+   "family": "admin",
+   "total": 63,
+   "ai": 11,
+   "share_pct": 17.5
+  },
+  {
+   "region": "global",
+   "family": "analytics",
+   "total": 155,
+   "ai": 113,
+   "share_pct": 72.9
+  },
+  {
+   "region": "global",
+   "family": "automation",
+   "total": 19,
+   "ai": 13,
+   "share_pct": null
+  },
+  {
+   "region": "global",
+   "family": "business",
+   "total": 392,
+   "ai": 214,
+   "share_pct": 54.6
+  },
+  {
+   "region": "global",
+   "family": "customer_ops",
+   "total": 408,
+   "ai": 180,
+   "share_pct": 44.1
+  },
+  {
+   "region": "global",
+   "family": "data_engineering",
+   "total": 90,
+   "ai": 73,
+   "share_pct": 81.1
+  },
+  {
+   "region": "global",
+   "family": "finance_ops",
+   "total": 382,
+   "ai": 204,
+   "share_pct": 53.4
+  },
+  {
+   "region": "global",
+   "family": "it_support",
+   "total": 3,
+   "ai": 0,
+   "share_pct": null
+  },
+  {
+   "region": "global",
+   "family": "marketing",
+   "total": 470,
+   "ai": 249,
+   "share_pct": 53.0
+  },
+  {
+   "region": "global",
+   "family": "ml_ai",
+   "total": 586,
+   "ai": 581,
+   "share_pct": 99.1
+  },
+  {
+   "region": "global",
+   "family": "project_management",
+   "total": 154,
+   "ai": 103,
+   "share_pct": 66.9
+  },
+  {
+   "region": "global",
+   "family": "risk_compliance",
+   "total": 202,
+   "ai": 98,
+   "share_pct": 48.5
+  },
+  {
+   "region": "global",
+   "family": "security",
+   "total": 394,
+   "ai": 281,
+   "share_pct": 71.3
+  },
+  {
+   "region": "global",
+   "family": "software",
+   "total": 1832,
+   "ai": 1264,
+   "share_pct": 69.0
+  },
+  {
+   "region": "malaysia",
+   "family": "admin",
+   "total": 17,
+   "ai": 0,
+   "share_pct": null
+  },
+  {
+   "region": "malaysia",
+   "family": "analytics",
+   "total": 1,
+   "ai": 0,
+   "share_pct": null
+  },
+  {
+   "region": "malaysia",
+   "family": "automation",
+   "total": 2,
+   "ai": 0,
+   "share_pct": null
+  },
+  {
+   "region": "malaysia",
+   "family": "business",
+   "total": 1,
+   "ai": 1,
+   "share_pct": null
+  },
+  {
+   "region": "malaysia",
+   "family": "customer_ops",
+   "total": 11,
+   "ai": 1,
+   "share_pct": null
+  },
+  {
+   "region": "malaysia",
+   "family": "finance_ops",
+   "total": 5,
+   "ai": 1,
+   "share_pct": null
+  },
+  {
+   "region": "malaysia",
+   "family": "marketing",
+   "total": 10,
+   "ai": 1,
+   "share_pct": null
+  },
+  {
+   "region": "malaysia",
+   "family": "ml_ai",
+   "total": 2,
+   "ai": 0,
+   "share_pct": null
+  },
+  {
+   "region": "malaysia",
+   "family": "risk_compliance",
+   "total": 1,
+   "ai": 0,
+   "share_pct": null
+  },
+  {
+   "region": "singapore",
+   "family": "admin",
+   "total": 5,
+   "ai": 0,
+   "share_pct": null
+  },
+  {
+   "region": "singapore",
+   "family": "analytics",
+   "total": 17,
+   "ai": 13,
+   "share_pct": null
+  },
+  {
+   "region": "singapore",
+   "family": "business",
+   "total": 21,
+   "ai": 6,
+   "share_pct": 28.6
+  },
+  {
+   "region": "singapore",
+   "family": "customer_ops",
+   "total": 26,
+   "ai": 7,
+   "share_pct": 26.9
+  },
+  {
+   "region": "singapore",
+   "family": "data_engineering",
+   "total": 5,
+   "ai": 4,
+   "share_pct": null
+  },
+  {
+   "region": "singapore",
+   "family": "finance_ops",
+   "total": 27,
+   "ai": 12,
+   "share_pct": 44.4
+  },
+  {
+   "region": "singapore",
+   "family": "marketing",
+   "total": 21,
+   "ai": 9,
+   "share_pct": 42.9
+  },
+  {
+   "region": "singapore",
+   "family": "ml_ai",
+   "total": 25,
+   "ai": 25,
+   "share_pct": 100.0
+  },
+  {
+   "region": "singapore",
+   "family": "project_management",
+   "total": 1,
+   "ai": 0,
+   "share_pct": null
+  },
+  {
+   "region": "singapore",
+   "family": "risk_compliance",
+   "total": 17,
+   "ai": 10,
+   "share_pct": null
+  },
+  {
+   "region": "singapore",
+   "family": "security",
+   "total": 12,
+   "ai": 3,
+   "share_pct": null
+  },
+  {
+   "region": "singapore",
+   "family": "software",
+   "total": 61,
+   "ai": 34,
+   "share_pct": 55.7
+  },
+  {
+   "region": "malaysia_singapore",
+   "family": "admin",
+   "total": 22,
+   "ai": 0,
+   "share_pct": 0.0
+  },
+  {
+   "region": "malaysia_singapore",
+   "family": "analytics",
+   "total": 18,
+   "ai": 13,
+   "share_pct": null
+  },
+  {
+   "region": "malaysia_singapore",
+   "family": "automation",
+   "total": 2,
+   "ai": 0,
+   "share_pct": null
+  },
+  {
+   "region": "malaysia_singapore",
+   "family": "business",
+   "total": 22,
+   "ai": 7,
+   "share_pct": 31.8
+  },
+  {
+   "region": "malaysia_singapore",
+   "family": "customer_ops",
+   "total": 37,
+   "ai": 8,
+   "share_pct": 21.6
+  },
+  {
+   "region": "malaysia_singapore",
+   "family": "data_engineering",
+   "total": 5,
+   "ai": 4,
+   "share_pct": null
+  },
+  {
+   "region": "malaysia_singapore",
+   "family": "finance_ops",
+   "total": 31,
+   "ai": 12,
+   "share_pct": 38.7
+  },
+  {
+   "region": "malaysia_singapore",
+   "family": "marketing",
+   "total": 31,
+   "ai": 10,
+   "share_pct": 32.3
+  },
+  {
+   "region": "malaysia_singapore",
+   "family": "ml_ai",
+   "total": 27,
+   "ai": 25,
+   "share_pct": 92.6
+  },
+  {
+   "region": "malaysia_singapore",
+   "family": "project_management",
+   "total": 1,
+   "ai": 0,
+   "share_pct": null
+  },
+  {
+   "region": "malaysia_singapore",
+   "family": "risk_compliance",
+   "total": 18,
+   "ai": 10,
+   "share_pct": null
+  },
+  {
+   "region": "malaysia_singapore",
+   "family": "security",
+   "total": 12,
+   "ai": 3,
+   "share_pct": null
+  },
+  {
+   "region": "malaysia_singapore",
+   "family": "software",
+   "total": 61,
+   "ai": 34,
+   "share_pct": 55.7
+  },
+  {
+   "region": "apac",
+   "family": "admin",
+   "total": 35,
+   "ai": 4,
+   "share_pct": 11.4
+  },
+  {
+   "region": "apac",
+   "family": "analytics",
+   "total": 61,
+   "ai": 35,
+   "share_pct": 57.4
+  },
+  {
+   "region": "apac",
+   "family": "automation",
+   "total": 6,
+   "ai": 1,
+   "share_pct": null
+  },
+  {
+   "region": "apac",
+   "family": "business",
+   "total": 85,
+   "ai": 19,
+   "share_pct": 22.4
+  },
+  {
+   "region": "apac",
+   "family": "customer_ops",
+   "total": 124,
+   "ai": 40,
+   "share_pct": 32.3
+  },
+  {
+   "region": "apac",
+   "family": "data_engineering",
+   "total": 16,
+   "ai": 12,
+   "share_pct": null
+  },
+  {
+   "region": "apac",
+   "family": "finance_ops",
+   "total": 85,
+   "ai": 29,
+   "share_pct": 34.1
+  },
+  {
+   "region": "apac",
+   "family": "it_support",
+   "total": 2,
+   "ai": 0,
+   "share_pct": null
+  },
+  {
+   "region": "apac",
+   "family": "marketing",
+   "total": 149,
+   "ai": 38,
+   "share_pct": 25.5
+  },
+  {
+   "region": "apac",
+   "family": "ml_ai",
+   "total": 112,
+   "ai": 107,
+   "share_pct": 95.5
+  },
+  {
+   "region": "apac",
+   "family": "project_management",
+   "total": 14,
+   "ai": 7,
+   "share_pct": null
+  },
+  {
+   "region": "apac",
+   "family": "risk_compliance",
+   "total": 57,
+   "ai": 22,
+   "share_pct": 38.6
+  },
+  {
+   "region": "apac",
+   "family": "security",
+   "total": 47,
+   "ai": 18,
+   "share_pct": 38.3
+  },
+  {
+   "region": "apac",
+   "family": "software",
+   "total": 334,
+   "ai": 195,
+   "share_pct": 58.4
+  },
+  {
+   "region": "remote",
+   "family": "admin",
+   "total": 3,
+   "ai": 1,
+   "share_pct": null
+  },
+  {
+   "region": "remote",
+   "family": "analytics",
+   "total": 31,
+   "ai": 26,
+   "share_pct": 83.9
+  },
+  {
+   "region": "remote",
+   "family": "automation",
+   "total": 6,
+   "ai": 5,
+   "share_pct": null
+  },
+  {
+   "region": "remote",
+   "family": "business",
+   "total": 106,
+   "ai": 56,
+   "share_pct": 52.8
+  },
+  {
+   "region": "remote",
+   "family": "customer_ops",
+   "total": 90,
+   "ai": 46,
+   "share_pct": 51.1
+  },
+  {
+   "region": "remote",
+   "family": "data_engineering",
+   "total": 28,
+   "ai": 23,
+   "share_pct": 82.1
+  },
+  {
+   "region": "remote",
+   "family": "finance_ops",
+   "total": 99,
+   "ai": 53,
+   "share_pct": 53.5
+  },
+  {
+   "region": "remote",
+   "family": "marketing",
+   "total": 142,
+   "ai": 97,
+   "share_pct": 68.3
+  },
+  {
+   "region": "remote",
+   "family": "ml_ai",
+   "total": 185,
+   "ai": 185,
+   "share_pct": 100.0
+  },
+  {
+   "region": "remote",
+   "family": "project_management",
+   "total": 42,
+   "ai": 29,
+   "share_pct": 69.0
+  },
+  {
+   "region": "remote",
+   "family": "risk_compliance",
+   "total": 67,
+   "ai": 37,
+   "share_pct": 55.2
+  },
+  {
+   "region": "remote",
+   "family": "security",
+   "total": 123,
+   "ai": 91,
+   "share_pct": 74.0
+  },
+  {
+   "region": "remote",
+   "family": "software",
+   "total": 428,
+   "ai": 303,
+   "share_pct": 70.8
+  }
+ ]
+}

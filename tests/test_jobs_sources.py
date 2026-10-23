@@ -181,3 +181,26 @@ def test_company_config_has_three_sources_and_verified_tokens() -> None:
     assert set(companies) == {"greenhouse", "lever", "ashby"}
     assert all(c.checked for cs in companies.values() for c in cs)
     assert sum(len(c) for c in companies.values()) >= 20
+
+
+def test_company_boilerplate_is_removed_before_ai_matching() -> None:
+    from src.jobs.tagging import strip_boilerplate
+
+    about = "About us: the leading platform for the AI era, trusted by teams worldwide."
+    tasks = [
+        "reconcile the bank ledger",
+        "pay supplier invoices",
+        "close the month",
+        "audit expense claims",
+        "prepare VAT returns",
+        "review payroll",
+    ]
+    jobs = [
+        posting(job_id=str(i), description=f"You will {t}. {about}") for i, t in enumerate(tasks)
+    ]
+    jobs.append(posting(job_id="ai", description=f"Build LLM evaluations in Python. {about}"))
+    cleaned = strip_boilerplate(jobs, min_share=0.3, min_postings=5, n=8)
+    assert sum(TAGGER.mentions_ai(p) for p in jobs) == 7  # before: all "mention AI"
+    assert [p.job_id for p in cleaned if TAGGER.mentions_ai(p)] == ["ai"]  # after: the real one
+    assert cleaned[0].description == "You will reconcile the bank ledger."  # role text kept
+    assert strip_boilerplate(jobs[:3], 0.3, 5, 8) == jobs[:3]  # too few postings to tell

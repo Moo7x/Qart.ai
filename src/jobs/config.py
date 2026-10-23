@@ -33,12 +33,19 @@ class HttpSettings(BaseModel):
         return Politeness(self.timeout_s, self.retries, self.backoff_s, self.pause_s)
 
 
+class Boilerplate(BaseModel):
+    min_share: float  # a sentence in at least this share of a company's postings is boilerplate
+    min_postings: int  # only for companies with at least this many postings in the run
+    shingle_words: int  # a run of this many consecutive words is the unit of repetition
+
+
 class AtsConfig(BaseModel):
     http: HttpSettings
     regions: dict[str, str]  # region id -> case-insensitive pattern on the location text
     region_labels: dict[str, str]
     ai_terms: list[str]
     ai_terms_case_sensitive: list[str]
+    boilerplate: Boilerplate
     role_families: list[tuple[str, str]]  # (family id, title pattern), first match wins
     min_sample: int
     min_periods_for_chart: int
