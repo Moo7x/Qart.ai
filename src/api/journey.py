@@ -11,6 +11,7 @@ from src import params
 from src.api.evidence import get_engine, get_settings
 from src.changes.store import accepted_rows, baseline_cutoff
 from src.config import REPO_ROOT, Settings
+from src.evidence.signals import job_ad_signals, occupation_signals
 from src.intake.extract import extract
 from src.intake.files import UnsupportedFileError, read_cv
 from src.intake.skill_search import search
@@ -23,6 +24,7 @@ from src.journey.store import (
 )
 from src.match.engine import Evidence, RoleMatch, Scenario, rank_roles, score_role
 from src.match.evidence import automation_evidence
+from src.match.outlook import role_outlook
 from src.match.tasks import task_view
 from src.pack import Pack, load_pack
 from src.pathway.planner import Pathway, plan_pathway
@@ -165,7 +167,12 @@ def _role_sdgs(pack: Pack, match: RoleMatch) -> list[dict[str, str]]:
 
 
 def _card(
-    pack: Pack, match: RoleMatch, data: ProfileData, path: Pathway, evidence: Evidence
+    pack: Pack,
+    match: RoleMatch,
+    data: ProfileData,
+    path: Pathway,
+    evidence: Evidence,
+    demand: list[dict[str, str]],
 ) -> dict[str, Any]:
     role = pack.destination_roles[match.role_id]
     current = pack.current_roles.get(data.current_role)
@@ -190,7 +197,7 @@ def _card(
     return {
         **asdict(match),
         "impact": role.impact,
-        "outlook": outlook,
+        "outlook": outlook + demand,
         "listed_transition": bool(current and match.role_id in current.transitions),
         "effort_hours": path.total_hours,
         "effort_weeks": path.weeks,
@@ -207,7 +214,9 @@ def matches(
 ) -> dict[str, Any]:
     data, destination = require_profile(engine, profile_id)
     pack = load_pack()
-    evidence = evidence_for(engine, profile_id)
+    rows = accepted_rows(engine, profile_id)
+    evidence = automation_evidence(rows)
+    signals = occupation_signals(rows) + job_ad_signals(rows)
     levels = data.levels()
     ranked = rank_roles(pack, levels, scenario, evidence, set(data.interests) or None)
     cards = [
@@ -217,6 +226,7 @@ def matches(
             data,
             plan_pathway(pack, m, levels, data.weekly_hours, scenario, evidence),
             evidence,
+            role_outlook(pack, pack.destination_roles[m.role_id], rows, signals),
         )
         for m in ranked
     ]
