@@ -1,0 +1,156 @@
+{
+ "apiVersion": "1",
+ "jobs": [
+  {
+   "id": "6e975468-e033-4f50-95fe-0f4351457003",
+   "title": "Senior Data Platform Engineer, Knowledge Platform & AI Enablement",
+   "department": "Engineering",
+   "team": "Knowledge Platform",
+   "employmentType": "FullTime",
+   "location": "SG - Singapore",
+   "shouldDisplayCompensationOnJobPostings": false,
+   "secondaryLocations": [],
+   "publishedAt": "2026-03-06T04:01:10.215+00:00",
+   "isListed": true,
+   "isRemote": false,
+   "workplaceType": "OnSite",
+   "address": {
+    "postalAddress": {
+     "addressRegion": "Singapore",
+     "addressCountry": "Singapore",
+     "addressLocality": "Singapore"
+    }
+   },
+   "jobUrl": "https://jobs.ashbyhq.com/airwallex/6e975468-e033-4f50-95fe-0f4351457003",
+   "applyUrl": "https://jobs.ashbyhq.com/airwallex/6e975468-e033-4f50-95fe-0f4351457003/application",
+   "descriptionHtml": "<h2><strong>About Airwallex</strong></h2><p style=\"min-height:1.5em\">Airwallex is the AI-native financial operating system for a real-time, intelligent economy. More than 675,000 businesses, including McLaren Racing, Qantas, SHEIN, and TikTok, use us, directly or through our platform partners, to run their financial operations or build and monetize financial products of their own.</p><p style=\"min",
+   "descriptionPlain": "ABOUT AIRWALLEX\n\nAirwallex is the AI-native financial operating system for a real-time, intelligent economy. More than 675,000 businesses, including McLaren Racing, Qantas, SHEIN, and TikTok, use us, directly or through our platform partners, to run their financial operations or build and monetize financial products of their own.\n\nWe started in Melbourne in 2015 to build the infrastructure global ",
+   "compensation": {
+    "compensationTierSummary": null,
+    "scrapeableCompensationSalarySummary": null,
+    "compensationTiers": [],
+    "summaryComponents": []
+   }
+  },
+  {
+   "id": "2e2b7832-9e48-45da-ab0e-030708f0a45b",
+   "title": "Staff Product Designer",
+   "department": "Design",
+   "team": "Product Design",
+   "employmentType": "FullTime",
+   "location": "SG - Singapore",
+   "shouldDisplayCompensationOnJobPostings": false,
+   "secondaryLocations": [],
+   "publishedAt": "2026-03-01T22:23:01.677+00:00",
+   "isListed": true,
+   "isRemote": false,
+   "workplaceType": "OnSite",
+   "address": {
+    "postalAddress": {
+     "addressRegion": "Singapore",
+     "addressCountry": "Singapore",
+     "addressLocality": "Singapore"
+    }
+   },
+   "jobUrl": "https://jobs.ashbyhq.com/airwallex/2e2b7832-9e48-45da-ab0e-030708f0a45b",
+   "applyUrl": "https://jobs.ashbyhq.com/airwallex/2e2b7832-9e48-45da-ab0e-030708f0a45b/application",
+   "descriptionHtml": "<h2><strong>About Airwallex</strong></h2><p style=\"min-height:1.5em\">Airwallex is the AI-native financial operating system for a real-time, intelligent economy. More than 675,000 businesses, including McLaren Racing, Qantas, SHEIN, and TikTok, use us, directly or through our platform partners, to run their financial operations or build and monetize financial products of their own.</p><p style=\"min",
+   "descriptionPlain": "ABOUT AIRWALLEX\n\nAirwallex is the AI-native financial operating system for a real-time, intelligent economy. More than 675,000 businesses, including McLaren Racing, Qantas, SHEIN, and TikTok, use us, directly or through our platform partners, to run their financial operations or build and monetize financial products of their own.\n\nWe started in Melbourne in 2015 to build the infrastructure global ",
+   "compensation": {
+    "compensationTierSummary": null,
+    "scrapeableCompensationSalarySummary": null,
+    "compensationTiers": [],
+    "summaryComponents": []
+   }
+  },
+  {
+   "id": "46586b3a-ab75-4f41-b51a-5cf34a7d598b",
+   "title": "Head of SME & Growth, Canada",
+   "department": "SME & Growth Business",
+   "team": "SME & Growth Business",
+   "employmentType": "FullTime",
+   "location": "CA - Toronto",
+   "shouldDisplayCompensationOnJobPostings": true,
+   "secondaryLocations": [],
+   "publishedAt": "2026-09-08T21:53:44.314+00:00",
+   "isListed": true,
+   "isRemote": true,
+   "workplaceType": "Hybrid",
+   "address": {
+    "postalAddress": {
+     "addressRegion": "Ontario",
+     "addressCountry": "Canada",
+     "addressLocality": "Toronto"
+    }
+   },
+   "jobUrl": "https://jobs.ashbyhq.com/airwallex/46586b3a-ab75-4f41-b51a-5cf34a7d598b",
+   "applyUrl": "https://jobs.ashbyhq.com/airwallex/46586b3a-ab75-4f41-b51a-5cf34a7d598b/application",
+   "descriptionHtml": "<h2><strong>About Airwallex</strong></h2><p style=\"min-height:1.5em\">Airwallex is the AI-native financial operating system for a real-time, intelligent economy. More than 675,000 businesses, including McLaren Racing, Qantas, SHEIN, and TikTok, use us, directly or through our platform partners, to run their financial operations or build and monetize financial products of their own.</p><p style=\"min",
+   "descriptionPlain": "ABOUT AIRWALLEX\n\nAirwallex is the AI-native financial operating system for a real-time, intelligent economy. More than 675,000 businesses, including McLaren Racing, Qantas, SHEIN, and TikTok, use us, directly or through our platform partners, to run their financial operations or build and monetize financial products of their own.\n\nWe started in Melbourne in 2015 to build the infrastructure global ",
+   "compensation": {
+    "compensationTierSummary": "CA$400K – CA$500K • Offers Equity • Offers Commission",
+    "scrapeableCompensationSalarySummary": "CA$400K - CA$500K",
+    "compensationTiers": [
+     {
+      "id": "f244c616-6107-4683-a822-b080fde311ad",
+      "tierSummary": "OTE CA$400K – CA$500K • Offers Equity • Offers Commission",
+      "title": null,
+      "additionalInformation": null,
+      "components": [
+       {
+        "id": "ea2a6234-d1bb-41f6-a0f4-c5dbe7bdb72d",
+        "summary": "OTE CA$400K – CA$500K",
+        "compensationType": "Salary",
+        "interval": "1 YEAR",
+        "currencyCode": "CAD",
+        "minValue": 400000,
+        "maxValue": 500000
+       },
+       {
+        "id": "37f4e561-e127-4d59-b198-70369b548f32",
+        "summary": "Offers Equity",
+        "compensationType": "EquityPercentage",
+        "interval": "NONE",
+        "currencyCode": null,
+        "minValue": null,
+        "maxValue": null
+       },
+       {
+        "id": "e349752b-3205-401b-bf15-f1ecac1e06b7",
+        "summary": "Offers Commission",
+        "compensationType": "Commission",
+        "interval": "1 YEAR",
+        "currencyCode": "CAD",
+        "minValue": null,
+        "maxValue": null
+       }
+      ]
+     }
+    ],
+    "summaryComponents": [
+     {
+      "compensationType": "Salary",
+      "interval": "1 YEAR",
+      "currencyCode": "CAD",
+      "minValue": 400000,
+      "maxValue": 500000
+     },
+     {
+      "compensationType": "EquityPercentage",
+      "interval": "NONE",
+      "currencyCode": null,
+      "minValue": null,
+      "maxValue": null
+     },
+     {
+      "compensationType": "Commission",
+      "interval": "1 YEAR",
+      "currencyCode": "CAD",
+      "minValue": null,
+      "maxValue": null
+     }
+    ]
+   }
+  }
+ ]
+}

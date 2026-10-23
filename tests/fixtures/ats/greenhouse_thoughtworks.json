@@ -1,0 +1,283 @@
+{
+ "jobs": [
+  {
+   "absolute_url": "https://www.thoughtworks.com/careers/jobs/8138525?gh_jid=8138525",
+   "data_compliance": [
+    {
+     "type": "gdpr",
+     "requires_consent": false,
+     "requires_processing_consent": false,
+     "requires_retention_consent": false,
+     "retention_period": null,
+     "demographic_data_consent_applies": false
+    }
+   ],
+   "internal_job_id": 3522321,
+   "location": {
+    "name": "Singapore, Singapore"
+   },
+   "metadata": [
+    {
+     "id": 17181,
+     "name": "Employment Type",
+     "value": "Employee",
+     "value_type": "single_select"
+    },
+    {
+     "id": 25173,
+     "name": "Job Role",
+     "value": "Technology Advisor",
+     "value_type": "single_select"
+    },
+    {
+     "id": 61790,
+     "name": "Job Grade",
+     "value": "Director",
+     "value_type": "single_select"
+    },
+    {
+     "id": 25172,
+     "name": "Country",
+     "value": "Singapore",
+     "value_type": "single_select"
+    },
+    {
+     "id": 38057280,
+     "name": "Job Category",
+     "value": "Technology",
+     "value_type": "single_select"
+    },
+    {
+     "id": 15975856,
+     "name": "Function",
+     "value": [
+      "Business Transformation"
+     ],
+     "value_type": "multi_select"
+    },
+    {
+     "id": 53682232,
+     "name": "No. of days in office",
+     "value": "Hybrid – 3 days on-site/week",
+     "value_type": "single_select"
+    }
+   ],
+   "id": 8138525,
+   "updated_at": "2026-10-23T02:56:29-04:00",
+   "requisition_id": "R14377",
+   "title": "Engagement Lead ",
+   "company_name": "Thoughtworks",
+   "first_published": "2026-08-19T02:09:24-04:00",
+   "language": "en",
+   "application_deadline": null,
+   "content": "&lt;div&gt;\n&lt;div class=&quot;description content&quot;&gt;\n&lt;p&gt;The Engagement Lead is the primary delivery, solution, and strategic leader for AI-native advisory engagements. Operating as a trusted advisor to C-suite executives (CTO, CIO, CDO), you lead building high-level technology strategies that define execution clarity and deliver measurable business outcomes. You sit at the absolute ",
+   "departments": [
+    {
+     "id": 327320,
+     "name": "11_TWSGP PS - Tech Advisory Service Development",
+     "child_ids": [],
+     "parent_id": null
+    }
+   ],
+   "offices": [
+    {
+     "id": 11314,
+     "name": "Singapore",
+     "location": "Singapore",
+     "child_ids": [],
+     "parent_id": null
+    }
+   ],
+   "ai_disclaimer": null,
+   "include_ai_disclaimer": null,
+   "ai_opt_out_request_url": null
+  },
+  {
+   "absolute_url": "https://www.thoughtworks.com/careers/jobs/8305353?gh_jid=8305353",
+   "data_compliance": [
+    {
+     "type": "gdpr",
+     "requires_consent": false,
+     "requires_processing_consent": false,
+     "requires_retention_consent": false,
+     "retention_period": null,
+     "demographic_data_consent_applies": false
+    }
+   ],
+   "internal_job_id": 3590963,
+   "location": {
+    "name": "Singapore, Singapore"
+   },
+   "metadata": [
+    {
+     "id": 17181,
+     "name": "Employment Type",
+     "value": "Employee",
+     "value_type": "single_select"
+    },
+    {
+     "id": 25173,
+     "name": "Job Role",
+     "value": "Systems Support Engineer",
+     "value_type": "single_select"
+    },
+    {
+     "id": 61790,
+     "name": "Job Grade",
+     "value": "Associate",
+     "value_type": "single_select"
+    },
+    {
+     "id": 25172,
+     "name": "Country",
+     "value": "Singapore",
+     "value_type": "single_select"
+    },
+    {
+     "id": 38057280,
+     "name": "Job Category",
+     "value": "Technology",
+     "value_type": "single_select"
+    },
+    {
+     "id": 15975856,
+     "name": "Function",
+     "value": [
+      "Technology"
+     ],
+     "value_type": "multi_select"
+    },
+    {
+     "id": 53682232,
+     "name": "No. of days in office",
+     "value": "Hybrid – 3 days on-site/week",
+     "value_type": "single_select"
+    }
+   ],
+   "id": 8305353,
+   "updated_at": "2026-10-23T03:47:57-04:00",
+   "requisition_id": "R14965",
+   "title": "Graduate Systems Support Engineer",
+   "company_name": "Thoughtworks",
+   "first_published": "2026-10-22T23:00:08-04:00",
+   "language": "en",
+   "application_deadline": null,
+   "content": "&lt;div&gt;\n&lt;div class=&quot;description content&quot;&gt;\n&lt;p&gt;&lt;strong&gt;Due to the nature of the projects and specific client security clearance , this role requires the successful candidate to be a Singapore Citizen.&lt;/strong&gt;&lt;/p&gt;\n&lt;p&gt;As a systems support engineer you will play a vital role in supporting the day-to-day operations of application systems. This role invo",
+   "departments": [
+    {
+     "id": 314889,
+     "name": "1Z_TWSGP SL DAMO",
+     "child_ids": [],
+     "parent_id": null
+    }
+   ],
+   "offices": [
+    {
+     "id": 11314,
+     "name": "Singapore",
+     "location": "Singapore",
+     "child_ids": [],
+     "parent_id": null
+    }
+   ],
+   "ai_disclaimer": null,
+   "include_ai_disclaimer": null,
+   "ai_opt_out_request_url": null
+  },
+  {
+   "absolute_url": "https://www.thoughtworks.com/careers/jobs/8263978?gh_jid=8263978",
+   "data_compliance": [
+    {
+     "type": "gdpr",
+     "requires_consent": false,
+     "requires_processing_consent": false,
+     "requires_retention_consent": false,
+     "retention_period": null,
+     "demographic_data_consent_applies": false
+    }
+   ],
+   "internal_job_id": 3575700,
+   "location": {
+    "name": "London, United Kingdom"
+   },
+   "metadata": [
+    {
+     "id": 17181,
+     "name": "Employment Type",
+     "value": "Employee",
+     "value_type": "single_select"
+    },
+    {
+     "id": 25173,
+     "name": "Job Role",
+     "value": "AI Engineer",
+     "value_type": "single_select"
+    },
+    {
+     "id": 61790,
+     "name": "Job Grade",
+     "value": "Principal",
+     "value_type": "single_select"
+    },
+    {
+     "id": 25172,
+     "name": "Country",
+     "value": "United Kingdom",
+     "value_type": "single_select"
+    },
+    {
+     "id": 38057280,
+     "name": "Job Category",
+     "value": "Technology",
+     "value_type": "single_select"
+    },
+    {
+     "id": 15975856,
+     "name": "Function",
+     "value": [
+      "Technology"
+     ],
+     "value_type": "multi_select"
+    },
+    {
+     "id": 53682232,
+     "name": "No. of days in office",
+     "value": "Hybrid – 3 days on-site/week",
+     "value_type": "single_select"
+    }
+   ],
+   "id": 8263978,
+   "updated_at": "2026-10-23T02:56:29-04:00",
+   "requisition_id": "R14811",
+   "title": "Agentic AI Principal",
+   "company_name": "Thoughtworks",
+   "first_published": "2026-10-19T09:03:08-04:00",
+   "language": "en",
+   "application_deadline": null,
+   "content": "&lt;div class=&quot;description content&quot;&gt;\n&lt;p&gt;We are looking for an &lt;strong&gt;Agentic AI Principal&lt;/strong&gt; to act as a senior technical authority and trusted client advisor for complex agentic AI transformation in the UK and Ireland.&lt;/p&gt;\n&lt;p&gt;Operating at Principal level, you will shape enterprise AI strategy, define agentic architecture blueprints, lead high-valu",
+   "departments": [
+    {
+     "id": 314789,
+     "name": "1Y_UKSTH SL DATA",
+     "child_ids": [],
+     "parent_id": null
+    }
+   ],
+   "offices": [
+    {
+     "id": 9862,
+     "name": "London",
+     "location": "London, United Kingdom",
+     "child_ids": [],
+     "parent_id": null
+    }
+   ],
+   "ai_disclaimer": null,
+   "include_ai_disclaimer": null,
+   "ai_opt_out_request_url": null
+  }
+ ],
+ "meta": {
+  "total": 3
+ }
+}
