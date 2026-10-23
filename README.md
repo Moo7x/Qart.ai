@@ -51,7 +51,7 @@ Working adults at risk of displacement, fresh graduates and students (also throu
 
 ### Status
 
-This branch is being rebuilt slice by slice to the design in [`docs/PLAN.md`](docs/PLAN.md). What works today: the app skeleton (`/api/health`) and two browser spikes (`/spikes/tabs.html`, `/spikes/speech.html`). Each slice adds a working, tested part of the journey.
+Built slice by slice to the design in [`docs/PLAN.md`](docs/PLAN.md). Working today (slice 1, evidence): four registered sources collected by a scheduled pipeline (OpenDOSM wages by occupation, DOSM Job Market Insights Q2 2023 – Q2 2026, Anthropic Economic Index, TalentCorp GBS study), an immutable evidence store, declared labelling rules and a reproducible backtest, shown on the **Overview** and **Live intelligence** pages with the cited row behind every number. Next: the personal journey (onboarding, matched roles, pathway, scenarios). How the evidence layer works: [`docs/explain/evidence.md`](docs/explain/evidence.md).
 
 ### Tech Stack
 
@@ -76,8 +76,16 @@ All libraries, datasets and models, with licences, are listed in [`docs/DECLARAT
 │   ├── DECLARATION_LOG.md   # Tools, data, models and licences
 │   └── decision_log.md      # Decisions and scope changes
 ├── runpod/                  # RunPod serverless worker (handler.py, Dockerfile)
+├── data/
+│   ├── sources.yaml         # Registered evidence sources: terms, limits, cadence
+│   └── packs/gbs_fa/        # GBS finance field profile and the TalentCorp extraction
 ├── src/
 │   ├── app.py               # FastAPI app: API routes + built web app
+│   ├── api/                 # HTTP routes (evidence, pipeline)
+│   ├── collectors/          # One collector per registered source
+│   ├── evidence/            # Store, measures, labelled signals, registry
+│   ├── pipeline/run.py      # The scheduled run: python -m src.pipeline.run
+│   ├── params.py            # Declared thresholds, each with its reason
 │   ├── config.py            # Settings from environment variables
 │   └── db.py                # One database layer for SQLite and PostgreSQL
 ├── submission/              # Required submission documents
@@ -131,7 +139,7 @@ The tests never call paid services. Code checks: `ruff check .` and `mypy src te
 
 - **Hosting:** the FastAPI app and the built React frontend run as one Replit app.
 - **Database:** Replit PostgreSQL (`DATABASE_URL`); local runs use SQLite.
-- **Scheduled pipeline:** a Replit Scheduled Deployment runs the evidence pipeline so run history accumulates (from slice 1).
+- **Scheduled pipeline:** a Replit Scheduled Deployment runs `python -m src.pipeline.run --trigger schedule` daily against the same database, so run history accumulates even when nobody uses the app.
 - **Secrets:** keys are stored in Replit Secrets, never in the code.
 
 📄 Proof of use: [`submission/REPLIT PROOF OF USE.pdf`](submission/REPLIT%20PROOF%20OF%20USE.pdf)
