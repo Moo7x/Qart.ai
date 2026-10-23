@@ -24,6 +24,7 @@ from src.journey.store import (
 )
 from src.match.engine import Evidence, RoleMatch, Scenario, rank_roles, score_role
 from src.match.evidence import automation_evidence
+from src.match.explain import explain, facts
 from src.match.outlook import role_outlook
 from src.match.radar import radar
 from src.match.tasks import task_view
@@ -287,6 +288,29 @@ def pathway(
     out["courses_checked"] = pack.courses_checked
     out["scenario"] = scenario
     return out
+
+
+@router.get("/profiles/{profile_id}/roles/{role_id}/explain")
+def explain_role(
+    profile_id: str,
+    role_id: str,
+    scenario: Scenario = Query(default="moderate"),
+    engine: Engine = Depends(get_engine),
+    settings: Settings = Depends(get_settings),
+) -> dict[str, Any]:
+    """Plain-language sentences about one computed role result, each tied to the facts it uses."""
+    data, _ = require_profile(engine, profile_id)
+    pack = load_pack()
+    role = pack.destination_roles.get(role_id)
+    if role is None:
+        raise HTTPException(status_code=404, detail="unknown destination role")
+    rows = accepted_rows(engine, profile_id)
+    evidence = automation_evidence(rows)
+    levels = data.levels()
+    match = score_role(pack, role, levels, scenario, evidence)
+    path = plan_pathway(pack, match, levels, data.weekly_hours, scenario, evidence)
+    outlook = role_outlook(pack, role, rows, occupation_signals(rows) + job_ad_signals(rows))
+    return explain(facts(match, path, outlook, SCENARIO_LABEL[scenario]), settings)
 
 
 @router.get("/profiles/{profile_id}/radar")
