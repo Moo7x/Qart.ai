@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { ArrowDownRight, ArrowUpRight, CircleCheck, DatabaseZap, Lightbulb } from 'lucide-react'
 import { getAssumptions, getSnapshotDiff, getSnapshots, ingestNextSnapshot, putAssumptions } from '../api'
-import type { Allocation, CompanyAssumptions, Scenario, Snapshot, SnapshotDiff } from '../types'
+import type { Allocation, CompanyAssumptions, Scenario, Signal, Snapshot, SnapshotDiff } from '../types'
 import { btn, Card, Highlight, input as inputCls, label, PageHeader, ProvenanceTag, SectionTitle, Tag } from '../ui'
 
 const ALLOCATIONS: { value: Allocation; label: string }[] = [
@@ -18,8 +18,22 @@ const METRICS: Record<string, string> = {
   augmentation_pct: 'augmentation share',
 }
 
-function pct(value: number | null): string {
-  return value === null ? '–' : `${value.toFixed(2)}%`
+const METRIC_ORDER = ['usage_pct', 'automation_pct', 'augmentation_pct']
+
+function pct(value: number | null | undefined): string {
+  return value === null || value === undefined ? '–' : `${value.toFixed(2)}%`
+}
+
+/** One row per occupation and geography, with its AEI metrics side by side. */
+function byEntity(signals: Signal[]) {
+  const rows = new Map<string, { entity: string; geo: string | null; values: Record<string, number> }>()
+  for (const s of signals) {
+    const key = `${s.entity}|${s.geo ?? ''}`
+    const row = rows.get(key) ?? { entity: s.entity, geo: s.geo ?? null, values: {} }
+    row.values[s.metric] = s.value
+    rows.set(key, row)
+  }
+  return [...rows.values()]
 }
 
 export default function Evidence() {
@@ -153,6 +167,31 @@ export default function Evidence() {
                 </div>
               )}
               <p className="text-xs text-graphite">{diff.note}</p>
+            </div>
+          )}
+
+          {snapshots.length > 0 && byEntity(snapshots[snapshots.length - 1].signals ?? []).length > 0 && (
+            <div className="space-y-2 border-t border-hairline pt-4">
+              <div className={label}>AI use by occupation · {snapshots[snapshots.length - 1].source} · period {snapshots[snapshots.length - 1].period}</div>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="text-left text-xs text-graphite">
+                      <th scope="col" className="py-2 pr-3 font-medium">Occupation</th>
+                      {METRIC_ORDER.map(m => <th key={m} scope="col" className="py-2 px-3 font-medium text-right first-letter:uppercase">{METRICS[m]}</th>)}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {byEntity(snapshots[snapshots.length - 1].signals ?? []).map(r => (
+                      <tr key={`${r.entity}|${r.geo}`} className="border-t border-hairline">
+                        <th scope="row" className="py-2 pr-3 text-left font-normal text-ink">{r.entity}{r.geo ? <span className="text-graphite"> · {r.geo}</span> : null}</th>
+                        {METRIC_ORDER.map(m => <td key={m} className="py-2 px-3 text-right tabular-nums text-ink">{pct(r.values[m])}</td>)}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <p className="text-xs text-graphite">AI usage share is not proof that tasks are replaced. Automation = AI does the task; augmentation = AI helps a person do it.</p>
             </div>
           )}
         </Card>
