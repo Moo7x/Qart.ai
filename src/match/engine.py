@@ -128,6 +128,7 @@ def scenario_weight(
     scenario: Scenario,
     automation_share: float | None,
     basis: str = "AI use for this occupation",
+    intensity: float | None = None,
 ) -> tuple[float, str]:
     """Weight of one requirement under a scenario, and the sentence that explains it.
 
@@ -151,7 +152,9 @@ def scenario_weight(
             else "No shift: no observed AI-use data for this skill or its occupation."
         )
         return base, reason
-    intensity = params.SCENARIO_INTENSITY[scenario]
+    # `intensity` overrides the scenario's declared value only for sensitivity checks.
+    if intensity is None:
+        intensity = params.SCENARIO_INTENSITY[scenario]
     factor = 1 + direction * intensity * automation_share / 100
     verb = "up" if direction > 0 else "down"
     return base * factor, (
@@ -176,6 +179,7 @@ def score_role(
     levels: Mapping[str, int | None],
     scenario: Scenario,
     evidence: Evidence,
+    intensity: float | None = None,
 ) -> RoleMatch:
     share = evidence.automation_share.get(role.soc)
     scored = []
@@ -184,7 +188,9 @@ def score_role(
         r = required_level(req)
         c = levels.get(req.skill)
         a, basis, tasks = requirement_automation(pack, role, req.skill, evidence)
-        weight, reason = scenario_weight(req, skill.ai_role, scenario, a, _basis_text(basis, tasks))
+        weight, reason = scenario_weight(
+            req, skill.ai_role, scenario, a, _basis_text(basis, tasks), intensity
+        )
         scored.append((req, skill.name, r, c, weight, reason, a, basis, tasks))
     total_weight = sum(item[4] for item in scored)
     results = []
@@ -236,10 +242,11 @@ def rank_roles(
     scenario: Scenario,
     evidence: Evidence,
     interests: set[str] | None = None,
+    intensity: float | None = None,
 ) -> list[RoleMatch]:
     """Every destination role, best fit first. Interests only re-order near-ties."""
     matches = [
-        score_role(pack, role, levels, scenario, evidence)
+        score_role(pack, role, levels, scenario, evidence, intensity)
         for role in pack.destination_roles.values()
     ]
     matches.sort(key=lambda m: -m.fit)

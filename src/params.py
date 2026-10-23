@@ -17,6 +17,12 @@ BACKTEST_TRAIN_END = 2021
 # Damping factor for the damped-trend model in the backtest (0 = no trend, 1 = straight line).
 DAMPED_TREND_PHI = 0.7
 DAMPED_TREND_FIT_YEARS = 5  # slope fitted on the last five training years
+# Rolling-origin check (time-series cross-validation): first forecast origin and the horizons a
+# forecast would be used for (the app's two-year scenario horizon and one year).
+ROLLING_FIRST_ORIGIN = 2015
+ROLLING_HORIZONS = (1, 2)
+# Weight of the newest year in simple exponential smoothing; a common middle value, declared.
+SMOOTHING_ALPHA = 0.5
 
 # --- DOSM job-ad releases --------------------------------------------------------------------
 # A quarter-on-quarter change in the *total* number of online job offerings larger than this is
@@ -65,6 +71,23 @@ SCENARIO_HORIZON_YEARS = 2
 # Roles whose fit differs by less than this are near-ties: the person's interests may order them.
 NEAR_TIE_POINTS = 3.0
 
+# --- Decision support (src/match/decision.py) ----------------------------------------------------
+# Level an unstated skill is assumed to have at the top of the fit range: "proficient", the
+# highest level any requirement needs, so the range shows the most an answer could add. The bottom
+# of the range is 0 (not stated counts as none, as in the fit itself).
+UNSTATED_HIGH_LEVEL = 3
+# Answers compared when choosing the most valuable question: none (0) versus proficient (3).
+QUESTION_ANSWERS = (0, 3)
+QUESTIONS_SHOWN = 3
+# Ranking of questions: an essential of the person's chosen (else best-fitting) role matters most,
+# because it decides whether their own goal is a longer route; next, an answer that would change
+# their best-fitting role; then the largest fit swing (in points) as a tie-break.
+QUESTION_WEIGHT_GOAL_ESSENTIAL = 150.0
+QUESTION_WEIGHT_TOP_CHANGE = 100.0
+# Adoption intensities for the sensitivity check: no AI shift, the two declared scenarios, and a
+# stronger-than-fast case, so the person sees which ranks depend on that assumption.
+SENSITIVITY_INTENSITIES = (0.0, 0.25, 0.5, 0.75, 1.0, 1.5)
+
 # --- Pathway (src/pathway/planner.py) ----------------------------------------------------------
 # Highest level a course's material can take a skill to, by its stated level.
 COURSE_LEVEL_REACH = {"beginner": 2, "intermediate": 3, "advanced": 3}
@@ -74,3 +97,9 @@ COURSE_LEVEL_REACH = {"beginner": 2, "intermediate": 3, "advanced": 3}
 COURSE_SHORT_MINUTES = 180
 COURSE_MAX_GAIN_SHORT = 1
 COURSE_MAX_GAIN_LONG = 2
+# Plan comparison (src/pathway/optimise.py): the time budget is the person's weekly hours over
+# this many weeks, about one quarter; plans are compared within the same budget.
+PLAN_BUDGET_WEEKS = 12
+# Exact search enumerates every subset of the relevant courses; above this many it would be slow
+# (2^16 = 65,536 subsets), so the comparison says it fell back to the greedy plan only.
+PLAN_MAX_EXACT_COURSES = 16
