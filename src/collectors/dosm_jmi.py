@@ -15,6 +15,7 @@ from dataclasses import dataclass
 
 import httpx
 
+from src.collectors.base import CollectorResult, SourceState
 from src.evidence.store import Observation
 
 SOURCE_ID = "dosm_job_market_insights"
@@ -26,6 +27,8 @@ SLUG_PATTERN = re.compile(
     r"/portal-main/release-content/(big-data-analytics-job-market-insights[\w-]*)"
 )
 QUARTER_WORDS = {"first": 1, "second": 2, "third": 3, "fourth": 4}
+QUARTERS_PER_YEAR = 4
+HTTP_OK = 200
 MONTHS = [
     "january",
     "february",
@@ -152,12 +155,34 @@ def fetch_page(client: httpx.Client, slug: str) -> str:
     return response.text
 
 
-def collect(client: httpx.Client) -> list[Observation]:
+def next_quarter_slug(quarter: str) -> str:
+    """Recent releases follow one URL pattern, so the next one can be tried before it is linked."""
+    year, q = int(quarter[:4]), int(quarter[-1])
+    year, q = (year + 1, 1) if q == QUARTERS_PER_YEAR else (year, q + 1)
+    return f"big-data-analytics-job-market-insights-q{q}{year}"
+
+
+def probe_next_release(client: httpx.Client, latest_quarter: str) -> Release | None:
+    slug = next_quarter_slug(latest_quarter)
+    response = client.get(BASE + slug, headers={"User-Agent": USER_AGENT})
+    if response.status_code != HTTP_OK or "Quarter" not in response.text:
+        return None  # not published yet
+    return parse_release(slug, response.text)
+
+
+def collect(client: httpx.Client, state: SourceState) -> CollectorResult:
     seed_html = fetch_page(client, SEED_SLUG)
     pages = {SEED_SLUG: seed_html}
     for slug in sorted(discover_slugs(seed_html) - {SEED_SLUG}):
         pages[slug] = fetch_page(client, slug)
-    observations = []
-    for slug, page_html in pages.items():
-        observations.extend(release_observations(parse_release(slug, page_html)))
-    return observations
+    releases = [parse_release(slug, page_html) for slug, page_html in pages.items()]
+    newer = probe_next_release(client, max(r.quarter for r in releases))
+    if newer is not None:
+        releases.append(newer)
+    observations = [obs for release in releases for obs in release_observations(release)]
+    quarters = sorted({r.quarter for r in releases})
+    upcoming = max((r.next_release for r in releases if r.next_release), default=None)
+    note = f"{len(quarters)} releases {quarters[0]}–{quarters[-1]}" if quarters else "no releases"
+    return CollectorResult(
+        observations, note=note + (f" · next release {upcoming}" if upcoming else "")
+    )

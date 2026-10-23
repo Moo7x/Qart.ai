@@ -8,6 +8,7 @@ from typing import Any
 
 import httpx
 
+from src.collectors.base import CollectorResult, SourceState
 from src.evidence.registry import registry
 from src.evidence.store import Observation
 
@@ -58,5 +59,7 @@ def parse(rows: list[dict[str, Any]]) -> list[Observation]:
     return observations
 
 
-def collect(client: httpx.Client) -> list[Observation]:
-    return parse(fetch(client))
+def collect(client: httpx.Client, state: SourceState) -> CollectorResult:
+    observations = parse(fetch(client))
+    years = sorted({o.period for o in observations})
+    return CollectorResult(observations, note=f"years {years[0]}–{years[-1]}" if years else "")

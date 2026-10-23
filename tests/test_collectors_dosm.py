@@ -6,6 +6,7 @@ from pathlib import Path
 import httpx
 
 from src.collectors import dosm_jmi, dosm_wages
+from src.collectors.base import MemoryState
 
 FIXTURES = Path(__file__).parent / "fixtures"
 
@@ -31,7 +32,7 @@ def test_wages_collect_calls_the_open_api() -> None:
         return httpx.Response(200, json=rows)
 
     with httpx.Client(transport=httpx.MockTransport(handler)) as client:
-        assert len(dosm_wages.collect(client)) == 15
+        assert len(dosm_wages.collect(client, MemoryState()).observations) == 15
 
 
 def test_jmi_reads_quarter_dates_total_and_accountants() -> None:
@@ -75,5 +76,5 @@ def test_jmi_collect_discovers_linked_releases() -> None:
         return httpx.Response(200, text=pages[slug]) if slug in pages else httpx.Response(404)
 
     with httpx.Client(transport=httpx.MockTransport(handler)) as client:
-        observations = dosm_jmi.collect(client)
+        observations = dosm_jmi.collect(client, MemoryState()).observations
     assert {o.period for o in observations} == {"2026-Q1", "2024-Q1", "2023-Q2"}
