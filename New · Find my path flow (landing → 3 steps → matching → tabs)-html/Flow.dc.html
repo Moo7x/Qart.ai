@@ -1,0 +1,481 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Qart.ai — Find my path</title>
+<script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Source+Serif+4:wght@400;500&amp;display=swap">
+<style>
+body{margin:0;background:#F5F4F1}
+a{color:#2B66D1}a:hover{color:#1E4FA8}
+input[type=range]{accent-color:#2B66D1}
+input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-visible,a:focus-visible{outline:2px solid #2B66D1;outline-offset:2px}
+@keyframes qspin{to{transform:rotate(360deg)}}
+.qspin{animation:qspin 0.9s linear infinite}
+@media (prefers-reduced-motion: reduce){.qspin{animation:none}}
+</style>
+</helmet>
+<div style="min-height: 100vh; background: #F5F4F1; color: #1F1E1C; font-family: Inter, system-ui, sans-serif; box-sizing: border-box; padding: 40px 16px 96px">
+<div style="max-width: 920px; margin: 0 auto; display: flex; flex-direction: column; gap: 32px">
+
+<header style="display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap">
+<span style="font-weight: 800; font-size: 20px; letter-spacing: -0.02em">Qart<span style="color: #2B66D1">.ai</span></span>
+<span style="display: inline-block; background: #EAE7E1; color: #4A4742; font-size: 13px; padding: 6px 12px; border-radius: 999px">Synthetic · demo data only</span>
+</header>
+
+<!-- ================= LANDING ================= -->
+<sc-if value="{{onLanding}}" hint-placeholder-val="{{ true }}">
+<section style="min-height: 560px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 24px">
+<h1 style="margin: 0; font-size: clamp(40px, 7vw, 68px); line-height: 1.05; letter-spacing: -0.035em; font-weight: 800; max-width: 760px">Where does your career go next?</h1>
+<p style="margin: 0; font-family: 'Source Serif 4', Georgia, serif; font-size: 22px; line-height: 1.45; color: #5F5C57; max-width: 600px">Answer three short sets of questions. We match you to future-proof roles and build your reskilling pathway.</p>
+<button type="button" onClick="{{start}}" style="font: inherit; font-size: 20px; font-weight: 700; color: #FFFFFF; background: #2B66D1; border: 0; border-radius: 999px; padding: 0 44px; min-height: 64px; cursor: pointer; margin-top: 8px">Find my path</button>
+<span style="font-size: 14px; color: #5F5C57">About 3 minutes · no CV needed</span>
+<button type="button" onClick="{{explore}}" style="font: inherit; font-size: 15px; font-weight: 600; color: #2B66D1; background: none; border: 0; min-height: 44px; padding: 0 12px; cursor: pointer">Look around first →</button>
+</section>
+</sc-if>
+
+<!-- ================= QUESTIONS ================= -->
+<sc-if value="{{onQuestions}}" hint-placeholder-val="{{ false }}">
+<section style="display: flex; flex-direction: column; gap: 24px">
+<div style="display: flex; flex-direction: column; gap: 12px">
+<span style="font-size: 14px; font-weight: 600; color: #5F5C57">Step {{step}} of 3</span>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px" aria-hidden="true">
+<sc-for list="{{bars}}" as="b" hint-placeholder-count="3">
+<span style="display: block; height: 6px; border-radius: 3px; background: {{b.color}}"></span>
+</sc-for>
+</div>
+</div>
+
+<!-- Step 1 -->
+<sc-if value="{{onStep1}}" hint-placeholder-val="{{ true }}">
+<div style="background: #FFFFFF; border: 1px solid #E2DFD9; border-radius: 20px; padding: 32px 40px; display: flex; flex-direction: column; gap: 22px">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<h1 style="margin: 0; font-size: 28px; font-weight: 800; letter-spacing: -0.02em">Where you are now</h1>
+<p style="margin: 0; font-size: 16px; color: #5F5C57">Your current work tells us which skills you already have.</p>
+</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px">
+<label style="display: flex; flex-direction: column; gap: 8px; font-size: 15px; font-weight: 600">Your name
+<input type="text" value="{{name}}" onChange="{{setName}}" placeholder="e.g. Siti" style="font: inherit; font-weight: 400; font-size: 16px; padding: 12px 14px; border: 1px solid #D5D1CA; border-radius: 10px; min-height: 44px; box-sizing: border-box">
+</label>
+<label style="display: flex; flex-direction: column; gap: 8px; font-size: 15px; font-weight: 600">Current role *
+<input type="text" value="{{role}}" onChange="{{setRole}}" placeholder="e.g. Accounts executive" style="font: inherit; font-weight: 400; font-size: 16px; padding: 12px 14px; border: 1px solid #D5D1CA; border-radius: 10px; min-height: 44px; box-sizing: border-box">
+</label>
+<label style="display: flex; flex-direction: column; gap: 8px; font-size: 15px; font-weight: 600">Industry
+<select value="{{industry}}" onChange="{{setIndustry}}" style="font: inherit; font-weight: 400; font-size: 16px; padding: 12px 14px; border: 1px solid #D5D1CA; border-radius: 10px; min-height: 44px; background: #FFFFFF; box-sizing: border-box">
+<option value="">Select…</option>
+<option>Finance &amp; accounting</option>
+<option>Banking &amp; insurance</option>
+<option>Retail &amp; e-commerce</option>
+<option>Manufacturing &amp; logistics</option>
+<option>Healthcare</option>
+<option>Public sector</option>
+<option>Technology</option>
+<option>Other</option>
+</select>
+</label>
+<label style="display: flex; flex-direction: column; gap: 8px; font-size: 15px; font-weight: 600">Highest education
+<select value="{{edu}}" onChange="{{setEdu}}" style="font: inherit; font-weight: 400; font-size: 16px; padding: 12px 14px; border: 1px solid #D5D1CA; border-radius: 10px; min-height: 44px; background: #FFFFFF; box-sizing: border-box">
+<option value="">Select…</option>
+<option>SPM / secondary school</option>
+<option>Diploma</option>
+<option>Bachelor's degree</option>
+<option>Master's or higher</option>
+<option>Professional certification</option>
+</select>
+</label>
+</div>
+<div style="display: flex; flex-direction: column; gap: 10px">
+<span style="font-size: 15px; font-weight: 600">Years of experience *</span>
+<div style="display: flex; flex-wrap: wrap; gap: 10px">
+<sc-for list="{{years}}" as="o" hint-placeholder-count="4">
+<button type="button" aria-pressed="{{o.pressed}}" onClick="{{o.pick}}" style="font: inherit; font-size: 16px; border-radius: 999px; padding: 10px 20px; min-height: 44px; cursor: pointer; {{o.css}}">{{o.mark}}{{o.label}}</button>
+</sc-for>
+</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 10px">
+<span style="font-size: 15px; font-weight: 600">Tools you use today <span style="font-weight: 400; color: #5F5C57">— pick any</span></span>
+<div style="display: flex; flex-wrap: wrap; gap: 10px">
+<sc-for list="{{tools}}" as="o" hint-placeholder-count="7">
+<button type="button" aria-pressed="{{o.pressed}}" onClick="{{o.pick}}" style="font: inherit; font-size: 16px; border-radius: 999px; padding: 10px 20px; min-height: 44px; cursor: pointer; {{o.css}}">{{o.mark}}{{o.label}}</button>
+</sc-for>
+</div>
+</div>
+</div>
+</sc-if>
+
+<!-- Step 2 -->
+<sc-if value="{{onStep2}}" hint-placeholder-val="{{ false }}">
+<div style="background: #FFFFFF; border: 1px solid #E2DFD9; border-radius: 20px; padding: 32px 40px; display: flex; flex-direction: column; gap: 26px">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<h1 style="margin: 0; font-size: 28px; font-weight: 800; letter-spacing: -0.02em">What you enjoy and where you're heading</h1>
+<p style="margin: 0; font-size: 16px; color: #5F5C57">These help us rank future roles for you.</p>
+</div>
+<div style="display: flex; flex-direction: column; gap: 10px">
+<span style="font-size: 15px; font-weight: 600">What do you enjoy? <span style="font-weight: 400; color: #5F5C57">— pick any</span></span>
+<div style="display: flex; flex-wrap: wrap; gap: 10px">
+<sc-for list="{{interests}}" as="o" hint-placeholder-count="8">
+<button type="button" aria-pressed="{{o.pressed}}" onClick="{{o.pick}}" style="font: inherit; font-size: 16px; border-radius: 999px; padding: 10px 20px; min-height: 44px; cursor: pointer; {{o.css}}">{{o.mark}}{{o.label}}</button>
+</sc-for>
+</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 10px">
+<span style="font-size: 15px; font-weight: 600">Where do you want to go next? *</span>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px">
+<sc-for list="{{goals}}" as="o" hint-placeholder-count="3">
+<button type="button" aria-pressed="{{o.pressed}}" onClick="{{o.pick}}" style="font: inherit; text-align: left; display: flex; flex-direction: column; gap: 6px; border-radius: 14px; padding: 18px 20px; min-height: 44px; cursor: pointer; {{o.cardCss}}">
+<span style="font-size: 16px; font-weight: 700">{{o.label}}</span>
+<span style="font-size: 14px; color: #5F5C57">{{o.hint}}</span>
+</button>
+</sc-for>
+</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 10px">
+<span style="font-size: 15px; font-weight: 600">Timeframe</span>
+<div style="display: flex; flex-wrap: wrap; gap: 10px">
+<sc-for list="{{horizons}}" as="o" hint-placeholder-count="3">
+<button type="button" aria-pressed="{{o.pressed}}" onClick="{{o.pick}}" style="font: inherit; font-size: 16px; border-radius: 999px; padding: 10px 20px; min-height: 44px; cursor: pointer; {{o.css}}">{{o.mark}}{{o.label}}</button>
+</sc-for>
+</div>
+</div>
+</div>
+</sc-if>
+
+<!-- Step 3 -->
+<sc-if value="{{onStep3}}" hint-placeholder-val="{{ false }}">
+<div style="background: #FFFFFF; border: 1px solid #E2DFD9; border-radius: 20px; padding: 32px 40px; display: flex; flex-direction: column; gap: 22px">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<h1 style="margin: 0; font-size: 28px; font-weight: 800; letter-spacing: -0.02em">How you learn</h1>
+<p style="margin: 0; font-size: 16px; color: #5F5C57">So your pathway fits your week, not the other way round.</p>
+</div>
+<label style="display: flex; flex-direction: column; gap: 10px; font-size: 15px; font-weight: 600">
+<span style="display: flex; justify-content: space-between; gap: 12px">Time for learning each week <span style="color: #2B66D1">{{hours}} h</span></span>
+<input type="range" min="1" max="20" step="1" value="{{hours}}" onChange="{{setHours}}" style="width: 100%; min-height: 44px">
+</label>
+<label style="display: flex; flex-direction: column; gap: 10px; font-size: 15px; font-weight: 600">
+<span style="display: flex; justify-content: space-between; gap: 12px">How comfortable are you using AI tools at work? <span style="color: #2B66D1">{{aiComfort}}/10</span></span>
+<input type="range" min="0" max="10" step="1" value="{{aiComfort}}" onChange="{{setAi}}" style="width: 100%; min-height: 44px">
+</label>
+<div style="display: flex; flex-direction: column; gap: 10px">
+<span style="font-size: 15px; font-weight: 600">Preferred format</span>
+<div style="display: flex; flex-wrap: wrap; gap: 10px">
+<sc-for list="{{styles}}" as="o" hint-placeholder-count="4">
+<button type="button" aria-pressed="{{o.pressed}}" onClick="{{o.pick}}" style="font: inherit; font-size: 16px; border-radius: 999px; padding: 10px 20px; min-height: 44px; cursor: pointer; {{o.css}}">{{o.mark}}{{o.label}}</button>
+</sc-for>
+</div>
+</div>
+<label style="display: flex; flex-direction: column; gap: 8px; font-size: 15px; font-weight: 600">Anything else we should know? <span style="font-weight: 400; color: #5F5C57">(optional)</span>
+<textarea rows="3" value="{{notes}}" onChange="{{setNotes}}" placeholder="e.g. I want to stay in Kuala Lumpur, I can only study on weekends" style="font: inherit; font-weight: 400; font-size: 16px; padding: 12px 14px; border: 1px solid #D5D1CA; border-radius: 10px; resize: vertical"></textarea>
+</label>
+</div>
+</sc-if>
+
+<!-- Nav -->
+<div style="display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap">
+<button type="button" onClick="{{back}}" style="font: inherit; font-size: 16px; font-weight: 600; color: #3F3C38; background: none; border: 0; min-height: 44px; padding: 0 8px; cursor: pointer">← Back</button>
+<div style="display: flex; align-items: center; gap: 16px; flex-wrap: wrap; justify-content: flex-end">
+<sc-if value="{{blocked}}" hint-placeholder-val="{{ false }}">
+<span style="font-size: 14px; color: #5F5C57">{{blockedHint}}</span>
+<button type="button" aria-disabled="true" style="font: inherit; font-size: 17px; font-weight: 600; color: #6B6760; background: #E2DFD9; border: 0; border-radius: 999px; padding: 0 32px; min-height: 52px; cursor: not-allowed">{{nextLabel}}</button>
+</sc-if>
+<sc-if value="{{ready}}" hint-placeholder-val="{{ true }}">
+<button type="button" onClick="{{next}}" style="font: inherit; font-size: 17px; font-weight: 600; color: #FFFFFF; background: #2B66D1; border: 0; border-radius: 999px; padding: 0 32px; min-height: 52px; cursor: pointer">{{nextLabel}}</button>
+</sc-if>
+</div>
+</div>
+</section>
+</sc-if>
+
+<!-- ================= MATCHING ================= -->
+<sc-if value="{{onMatching}}" hint-placeholder-val="{{ false }}">
+<section style="display: flex; flex-direction: column; gap: 28px; max-width: 760px; width: 100%; margin: 0 auto">
+<div style="display: flex; flex-direction: column; gap: 12px; text-align: center; align-items: center">
+<h1 style="margin: 0; font-size: clamp(34px, 6vw, 52px); line-height: 1.08; letter-spacing: -0.03em; font-weight: 800">{{matchTitle}}</h1>
+<p style="margin: 0; font-family: 'Source Serif 4', Georgia, serif; font-size: 20px; line-height: 1.45; color: #5F5C57; max-width: 560px">{{matchSub}}</p>
+</div>
+<ol aria-live="polite" style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px">
+<sc-for list="{{tasks}}" as="t" hint-placeholder-count="5">
+<li style="background: {{t.bg}}; border: 1px solid #E2DFD9; border-radius: 16px; padding: 18px 24px; display: flex; align-items: center; gap: 16px">
+<sc-if value="{{t.done}}" hint-placeholder-val="{{ false }}">
+<span style="width: 36px; height: 36px; border-radius: 50%; background: #E7F4EA; display: inline-flex; align-items: center; justify-content: center; flex: none"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#166534" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span>
+</sc-if>
+<sc-if value="{{t.active}}" hint-placeholder-val="{{ false }}">
+<span style="width: 36px; height: 36px; border-radius: 50%; background: #E8F0FC; display: inline-flex; align-items: center; justify-content: center; flex: none"><svg class="qspin" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2B66D1" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M12 3a9 9 0 1 0 9 9"></path></svg></span>
+</sc-if>
+<sc-if value="{{t.pending}}" hint-placeholder-val="{{ true }}">
+<span style="width: 36px; height: 36px; border-radius: 50%; border: 2px dashed #CFCAC2; box-sizing: border-box; flex: none" aria-hidden="true"></span>
+</sc-if>
+<div style="flex: 1 1 auto; display: flex; flex-direction: column; gap: 2px; min-width: 0">
+<span style="font-size: 17px; font-weight: 700">{{t.title}}</span>
+<span style="font-size: 14px; color: #5F5C57">{{t.detail}}</span>
+</div>
+<span style="font-size: 15px; font-weight: 500; color: {{t.statusColor}}; flex: none">{{t.status}}</span>
+</li>
+</sc-for>
+</ol>
+<sc-if value="{{matchDone}}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; justify-content: center">
+<button type="button" onClick="{{seeMatches}}" style="font: inherit; font-size: 18px; font-weight: 700; color: #FFFFFF; background: #2B66D1; border: 0; border-radius: 999px; padding: 0 36px; min-height: 56px; cursor: pointer">See my matches →</button>
+</div>
+</sc-if>
+</section>
+</sc-if>
+
+<!-- ================= APP ================= -->
+<sc-if value="{{onApp}}" hint-placeholder-val="{{ false }}">
+<section style="display: flex; flex-direction: column; gap: 24px">
+<nav aria-label="Qart.ai sections" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 10px">
+<sc-for list="{{tabs}}" as="t" hint-placeholder-count="4">
+<button type="button" aria-current="{{t.current}}" onClick="{{t.pick}}" style="font: inherit; font-size: 16px; font-weight: 600; display: inline-flex; align-items: center; justify-content: center; gap: 8px; border-radius: 14px; padding: 0 16px; min-height: 52px; cursor: pointer; {{t.css}}">
+<sc-if value="{{t.locked}}" hint-placeholder-val="{{ false }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-label="Locked" role="img"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg></sc-if>
+{{t.label}}</button>
+</sc-for>
+</nav>
+
+<!-- Find my path tab -->
+<sc-if value="{{tabPath}}" hint-placeholder-val="{{ true }}">
+<div style="display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<h1 style="margin: 0; font-size: 32px; font-weight: 800; letter-spacing: -0.02em">Find my path</h1>
+<p style="margin: 0; font-size: 16px; color: #5F5C57">{{pathSub}}</p>
+</div>
+<button type="button" onClick="{{start}}" style="font: inherit; font-size: 16px; font-weight: 600; color: #2B66D1; background: #FFFFFF; border: 1px solid #C7D8F5; border-radius: 999px; padding: 0 20px; min-height: 44px; cursor: pointer">{{pathCta}}</button>
+</div>
+<sc-for list="{{sections}}" as="s" hint-placeholder-count="3">
+<div style="background: #FFFFFF; border: 1px solid #E2DFD9; border-radius: 16px; padding: 18px 24px; display: flex; align-items: center; gap: 16px">
+<sc-if value="{{s.done}}" hint-placeholder-val="{{ true }}">
+<span style="width: 36px; height: 36px; border-radius: 50%; background: #E7F4EA; display: inline-flex; align-items: center; justify-content: center; flex: none"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#166534" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span>
+</sc-if>
+<sc-if value="{{s.todo}}" hint-placeholder-val="{{ false }}">
+<span style="width: 36px; height: 36px; border-radius: 50%; border: 2px dashed #CFCAC2; box-sizing: border-box; flex: none" aria-hidden="true"></span>
+</sc-if>
+<div style="flex: 1 1 auto; display: flex; flex-direction: column; gap: 2px; min-width: 0">
+<span style="font-size: 17px; font-weight: 700">{{s.title}}</span>
+<span style="font-size: 14px; color: #5F5C57">{{s.summary}}</span>
+</div>
+<span style="font-size: 15px; color: #6B6760; flex: none">{{s.status}}</span>
+</div>
+</sc-for>
+</div>
+</sc-if>
+
+<!-- Future skills tab -->
+<sc-if value="{{tabSkills}}" hint-placeholder-val="{{ false }}">
+<div style="background: #FFFFFF; border: 1px solid #E2DFD9; border-radius: 20px; padding: 32px 40px; display: flex; flex-direction: column; gap: 16px">
+<h1 style="margin: 0; font-size: 32px; font-weight: 800; letter-spacing: -0.02em">Future skills</h1>
+<p style="margin: 0; font-family: 'Source Serif 4', Georgia, serif; font-size: 20px; line-height: 1.5; color: #5F5C57; max-width: 640px">See which skills are rising and which are fading, tracked from public job postings. Open to everyone — no questions needed.</p>
+<div><a href="Signals.dc.html" style="display: inline-flex; align-items: center; font-size: 16px; font-weight: 600; color: #FFFFFF; background: #2B66D1; border-radius: 999px; padding: 0 26px; min-height: 48px; text-decoration: none">Open the Future skills radar →</a></div>
+</div>
+</sc-if>
+
+<!-- Locked panel -->
+<sc-if value="{{tabLocked}}" hint-placeholder-val="{{ false }}">
+<div style="background: #FFFFFF; border: 1px dashed #CFCAC2; border-radius: 20px; padding: 48px 40px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 16px">
+<span style="width: 56px; height: 56px; border-radius: 50%; background: #F3F1EE; display: inline-flex; align-items: center; justify-content: center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4A4742" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg></span>
+<h1 style="margin: 0; font-size: 26px; font-weight: 800">{{lockedTitle}} unlocks after Find my path</h1>
+<p style="margin: 0; font-size: 16px; color: #5F5C57; max-width: 520px; line-height: 1.5">We need your answers to score roles and plan your learning. It takes about 3 minutes.</p>
+<button type="button" onClick="{{start}}" style="font: inherit; font-size: 17px; font-weight: 600; color: #FFFFFF; background: #2B66D1; border: 0; border-radius: 999px; padding: 0 30px; min-height: 52px; cursor: pointer">Answer the questions</button>
+</div>
+</sc-if>
+
+<!-- Get matched tab -->
+<sc-if value="{{tabMatch}}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<h1 style="margin: 0; font-size: 32px; font-weight: 800; letter-spacing: -0.02em">Your top matches, {{displayName}}</h1>
+<p style="margin: 0; font-size: 16px; color: #5F5C57">Ranked by skills overlap, interests, market demand and time to transition.</p>
+</div>
+<sc-for list="{{topRoles}}" as="r" hint-placeholder-count="3">
+<div style="background: #FFFFFF; border: 1px solid #E2DFD9; border-radius: 16px; padding: 20px 24px; display: flex; align-items: center; gap: 18px; flex-wrap: wrap">
+<span style="width: 40px; height: 40px; border-radius: 50%; background: #F3F1EE; display: inline-flex; align-items: center; justify-content: center; font-weight: 800; flex: none">{{r.rank}}</span>
+<div style="flex: 1 1 240px; display: flex; flex-direction: column; gap: 2px; min-width: 0">
+<span style="font-size: 18px; font-weight: 700">{{r.title}}</span>
+<span style="font-size: 14px; color: #5F5C57">{{r.blurb}}</span>
+</div>
+<span style="font-size: 32px; font-weight: 800; color: #1E4FA8; font-variant-numeric: tabular-nums; flex: none">{{r.score}}<span style="font-size: 15px; font-weight: 600; color: #5F5C57">/100</span></span>
+</div>
+</sc-for>
+<div style="display: flex; gap: 12px; flex-wrap: wrap">
+<a href="Matches.dc.html" style="display: inline-flex; align-items: center; font-size: 16px; font-weight: 600; color: #FFFFFF; background: #2B66D1; border-radius: 999px; padding: 0 26px; min-height: 48px; text-decoration: none">See score breakdown and skills gap →</a>
+</div>
+</div>
+</sc-if>
+
+<!-- Generate pathway tab -->
+<sc-if value="{{tabPathway}}" hint-placeholder-val="{{ false }}">
+<div style="background: #FFFFFF; border: 1px solid #E2DFD9; border-radius: 20px; padding: 32px 40px; display: flex; flex-direction: column; gap: 16px">
+<h1 style="margin: 0; font-size: 32px; font-weight: 800; letter-spacing: -0.02em">Generate pathway</h1>
+<p style="margin: 0; font-family: 'Source Serif 4', Georgia, serif; font-size: 20px; line-height: 1.5; color: #5F5C57; max-width: 640px">A step-by-step learning plan towards <strong style="color: #1F1E1C">Finance automation analyst</strong>, sized to your {{hours}} hours a week.</p>
+<div><a href="Pathway.dc.html" style="display: inline-flex; align-items: center; font-size: 16px; font-weight: 600; color: #FFFFFF; background: #2B66D1; border-radius: 999px; padding: 0 26px; min-height: 48px; text-decoration: none">Generate my pathway →</a></div>
+</div>
+</sc-if>
+</section>
+</sc-if>
+
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":1100}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = {
+      screen: 'landing', step: 1, progress: 0, submitted: false, tab: 'path',
+      name: '', role: '', industry: '', edu: '', years: '', tools: [],
+      interests: [], goal: '', horizon: '',
+      hours: 5, aiComfort: 5, styles: [], notes: ''
+    };
+    this.timer = null;
+  }
+  componentWillUnmount() { if (this.timer) clearInterval(this.timer); }
+  chip(on) {
+    return {
+      pressed: on ? 'true' : 'false', mark: on ? '✓ ' : '',
+      css: on ? 'font-weight: 600; color: #1E4FA8; background: #E8F0FC; border: 1px solid #E8F0FC' : 'font-weight: 400; color: #3F3C38; background: #FFFFFF; border: 1px solid #D5D1CA'
+    };
+  }
+  single(key, options) {
+    var self = this;
+    return options.map(function (o) {
+      var label = typeof o === 'string' ? o : o.label;
+      var on = self.state[key] === label;
+      var item = self.chip(on);
+      item.label = label;
+      item.hint = o.hint || '';
+      item.cardCss = on ? 'color: #1E4FA8; background: #EEF3FC; border: 2px solid #2B66D1' : 'color: #1F1E1C; background: #FFFFFF; border: 2px solid #E2DFD9';
+      item.pick = function () { var p = {}; p[key] = label; self.setState(p); };
+      return item;
+    });
+  }
+  multi(key, options) {
+    var self = this;
+    return options.map(function (label) {
+      var on = self.state[key].indexOf(label) !== -1;
+      var item = self.chip(on);
+      item.label = label;
+      item.pick = function () {
+        var cur = self.state[key];
+        var p = {}; p[key] = on ? cur.filter(function (x) { return x !== label; }) : cur.concat([label]);
+        self.setState(p);
+      };
+      return item;
+    });
+  }
+  field(key) {
+    var self = this;
+    return function (e) { var p = {}; p[key] = e.target.value; self.setState(p); };
+  }
+  runMatching() {
+    var self = this;
+    if (this.timer) clearInterval(this.timer);
+    this.setState({ screen: 'matching', progress: 0 });
+    this.timer = setInterval(function () {
+      var n = self.state.progress + 1;
+      if (n >= 5) { clearInterval(self.timer); self.timer = null; self.setState({ progress: 5, submitted: true }); }
+      else self.setState({ progress: n });
+    }, 1100);
+  }
+  renderVals() {
+    var s = this.state;
+    var self = this;
+    var step1ok = s.role.trim() !== '' && s.years !== '';
+    var step2ok = s.goal !== '';
+    var ok = s.step === 1 ? step1ok : s.step === 2 ? step2ok : true;
+    var hints = { 1: 'Add your current role and years of experience to continue.', 2: 'Choose where you want to go next to continue.', 3: '' };
+    var displayName = s.name.trim() || 'there';
+
+    var taskDefs = [
+      ['Reading your answers', 'Turning your three sections into a skills profile'],
+      ['Mapping your skills', 'Matching what you do to standard skill IDs'],
+      ['Scanning the job market', 'Checking demand trends from public job postings'],
+      ['Ranking future roles', 'Scoring each role on skills, interests, demand and time'],
+      ['Building your skills gap', 'Listing what you have and what to learn next']
+    ];
+    var tasks = taskDefs.map(function (d, i) {
+      var done = i < s.progress, active = i === s.progress && s.progress < 5;
+      return {
+        title: d[0], detail: d[1], done: done, active: active, pending: !done && !active,
+        status: done ? 'Complete' : active ? 'In progress' : 'Waiting',
+        statusColor: done ? '#166534' : active ? '#1E4FA8' : '#6B6760',
+        bg: active ? '#FFFFFF' : done ? '#FFFFFF' : '#FAF9F7'
+      };
+    });
+
+    var tabDefs = [['path', 'Find my path', false], ['skills', 'Future skills', false], ['match', 'Get matched', true], ['pathway', 'Generate pathway', true]];
+    var tabs = tabDefs.map(function (t) {
+      var on = s.tab === t[0];
+      var locked = t[2] && !s.submitted;
+      return {
+        label: t[1], locked: locked, current: on ? 'page' : 'false',
+        css: on ? 'color: #FFFFFF; background: #2B66D1; border: 1px solid #2B66D1' : locked ? 'color: #6B6760; background: #F3F1EE; border: 1px dashed #CFCAC2' : 'color: #1F1E1C; background: #FFFFFF; border: 1px solid #E2DFD9',
+        pick: function () { self.setState({ tab: t[0] }); }
+      };
+    });
+    var gated = (s.tab === 'match' || s.tab === 'pathway') && !s.submitted;
+
+    var join = function (arr) { return arr.length ? arr.join(', ') : 'none picked'; };
+    var sections = [
+      { title: 'Where you are now', summary: s.submitted ? [s.role || 'Role not set', s.years, s.industry].filter(Boolean).join(' · ') : 'Role, industry, education, experience, tools' },
+      { title: 'What you enjoy and where you’re heading', summary: s.submitted ? [s.goal, s.horizon].filter(Boolean).join(' · ') + ' · enjoys ' + join(s.interests) : 'Interests, direction, timeframe' },
+      { title: 'How you learn', summary: s.submitted ? s.hours + ' h a week · AI comfort ' + s.aiComfort + '/10' : 'Weekly time, AI comfort, preferred format' }
+    ].map(function (x) { x.done = s.submitted; x.todo = !s.submitted; x.status = s.submitted ? 'Complete' : 'Not started'; return x; });
+
+    return {
+      onLanding: s.screen === 'landing', onQuestions: s.screen === 'q', onMatching: s.screen === 'matching', onApp: s.screen === 'app',
+      start: function () { self.setState({ screen: 'q', step: 1 }); },
+      explore: function () { self.setState({ screen: 'app', tab: 'skills' }); },
+      step: s.step,
+      bars: [1, 2, 3].map(function (n) { return { color: n <= s.step ? '#2B66D1' : '#E2DFD9' }; }),
+      onStep1: s.step === 1, onStep2: s.step === 2, onStep3: s.step === 3,
+      ready: ok, blocked: !ok, blockedHint: hints[s.step],
+      nextLabel: s.step === 3 ? 'Find pathway' : 'Next →',
+      next: function () { if (s.step < 3) self.setState({ step: s.step + 1 }); else self.runMatching(); },
+      back: function () { if (s.step > 1) self.setState({ step: s.step - 1 }); else self.setState({ screen: 'landing' }); },
+
+      name: s.name, role: s.role, industry: s.industry, edu: s.edu, notes: s.notes,
+      setName: this.field('name'), setRole: this.field('role'), setIndustry: this.field('industry'), setEdu: this.field('edu'), setNotes: this.field('notes'),
+      hours: s.hours, aiComfort: s.aiComfort,
+      setHours: function (e) { self.setState({ hours: Number(e.target.value) }); },
+      setAi: function (e) { self.setState({ aiComfort: Number(e.target.value) }); },
+      years: this.single('years', ['Under 2 years', '2–5 years', '5–10 years', '10+ years']),
+      tools: this.multi('tools', ['Excel', 'SQL', 'Python', 'Power BI / Tableau', 'ERP (SAP, Oracle)', 'AI assistants', 'None of these']),
+      interests: this.multi('interests', ['analysis', 'automation', 'reporting', 'controls', 'data quality', 'forecasting', 'working with people', 'building tools']),
+      goals: this.single('goal', [
+        { label: 'Grow in my current role', hint: 'Add AI and automation skills to the job I do now' },
+        { label: 'Move to a nearby role', hint: 'Use what I know in a new role, e.g. finance → data analyst' },
+        { label: 'Switch to a new field', hint: 'Start fresh in a different area' }
+      ]),
+      horizons: this.single('horizon', ['3 months', '6 months', '12 months']),
+      styles: this.multi('styles', ['Hands-on cases', 'Short videos', 'Reading', 'Mentor sessions']),
+
+      matchTitle: s.progress < 5 ? 'We are looking for the best match' : 'Your matches are ready',
+      matchSub: s.progress < 5 ? 'Hang on, ' + displayName + ' — this takes a few seconds.' : 'We found 4 future roles that fit you. Here are the top ones.',
+      tasks: tasks, matchDone: s.progress >= 5,
+      seeMatches: function () { self.setState({ screen: 'app', tab: 'match' }); },
+
+      tabs: tabs,
+      tabPath: s.tab === 'path', tabSkills: s.tab === 'skills',
+      tabMatch: s.tab === 'match' && s.submitted, tabPathway: s.tab === 'pathway' && s.submitted,
+      tabLocked: gated, lockedTitle: s.tab === 'match' ? 'Get matched' : 'Generate pathway',
+      pathSub: s.submitted ? 'All three sections done. Edit any time and we re-rank your roles.' : 'Three short sections. Get matched and Generate pathway open once they’re done.',
+      pathCta: s.submitted ? 'Edit answers' : 'Start questions',
+      sections: sections,
+      displayName: displayName,
+      topRoles: [
+        { rank: 1, title: 'Finance automation analyst', blurb: 'Redesign month-end work so software does the repetitive parts.', score: 83 },
+        { rank: 2, title: 'ESG reporting analyst', blurb: 'Collect, check and report sustainability data.', score: 73 },
+        { rank: 3, title: 'AI audit & controls specialist', blurb: 'Test whether AI outputs in finance are accurate and well controlled.', score: 72 }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>
