@@ -13,9 +13,10 @@ const SOURCE_NODES = [
   { id: 'talentcorp_gbs_2024', label: 'TalentCorp study', sub: 'GBS roles · 2024', icon: FileText },
   { id: 'onet_database', label: 'O*NET database', sub: 'tasks + importance', icon: Database },
   { id: 'ilo_genai_exposure_2025', label: 'ILO exposure index', sub: 'potential · 2025', icon: FileText },
+  { id: 'mycol_2024_2025', label: 'MyCOL list', sub: 'critical jobs · 2024/25', icon: FileText },
 ]
-const SOURCE_TOP = [124, 182, 240, 298, 356, 414]
-const SOURCE_H = 48
+const SOURCE_TOP = [118, 170, 222, 274, 326, 378, 430]
+const SOURCE_H = 44
 
 export type StepId = 'schedule' | 'sources' | 'fetch' | 'validate' | 'measure' | 'label' | 'forecast' | 'match' | 'notify' | 'telegram'
 
