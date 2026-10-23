@@ -1,7 +1,7 @@
-"""RunPod serverless worker for Qart.ai retrieval (PERSON_A Task A7).
+"""RunPod serverless worker for Qart.ai: embeddings that map free text to skills.
 
 Serves two models on one GPU endpoint:
-- BAAI/bge-m3 (MIT): dense text embeddings, normalised, for the hybrid retriever;
+- BAAI/bge-m3 (MIT): dense text embeddings, normalised, for skill mapping;
 - BAAI/bge-reranker-v2-m3 (Apache-2.0): cross-encoder relevance scores for reranking.
 
 Job input → output:
