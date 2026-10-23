@@ -87,3 +87,20 @@
   shows: The tasks of a US occupation, worded by O*NET, with how important incumbents rate each task
   does_not_show: Malaysian job content, how often a task is done in GBS centres, or whether AI performs it
   notes: Only tasks linked in data/packs/gbs_fa/tasks.yaml are kept. The links are a declared mapping reviewed by the team.
+
+- id: ilo_genai_exposure_2025
+  name: ILO · Generative AI and Jobs, refined global index of occupational exposure
+  publisher: International Labour Organization (ILO), with NASK
+  family: potential_exposure
+  url: https://github.com/pgmyrek/2025_GenAI_scores_ISCO08
+  docs_url: https://doi.org/10.54394/HETP0387
+  terms: CC BY 4.0
+  terms_url: https://github.com/pgmyrek/2025_GenAI_scores_ISCO08/blob/main/LICENSE
+  terms_checked: "2026-10-23"
+  attribution: "Gmyrek, P., Berg, J., Kamiński, K., Konopczyński, F., Ładna, A., Nafradi, B., Rosłaniec, K., Troszyński, M. 2025. Generative AI and Jobs: A Refined Global Index of Occupational Exposure. ILO Working Paper 140. © ILO. CC BY 4.0. This is an adaptation of a copyrighted work of the ILO; it has not been prepared, reviewed or endorsed by the ILO."
+  tier: A
+  cadence: one-off index (re-read if the score file changes)
+  collector: ilo
+  shows: How much of each ISCO-08 occupation's tasks current generative AI could technically perform (0–1), and the ILO exposure gradient of the occupation
+  does_not_show: Job losses, adoption in Malaysia, or whether employers use AI for these tasks; scores are model-assisted estimates of technical potential
+  notes: ISCO-08 tasks differ from O*NET tasks, so exposure is shown at occupation level next to the O*NET tasks. Occupations are linked through the ESCO–O*NET crosswalk (field.yaml).

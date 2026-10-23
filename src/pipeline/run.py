@@ -24,7 +24,7 @@ from sqlalchemy import Engine
 
 from src import params
 from src.changes.service import refresh_proposals
-from src.collectors import aei, dosm_jmi, dosm_wages, onet, talentcorp
+from src.collectors import aei, dosm_jmi, dosm_wages, ilo, onet, talentcorp
 from src.collectors.base import Collect
 from src.evidence.registry import registry
 from src.evidence.store import (
@@ -52,6 +52,7 @@ COLLECTORS: Mapping[str, Collect] = {
     "aei": aei.collect,
     "talentcorp": talentcorp.collect,
     "onet": onet.collect,
+    "ilo": ilo.collect,
 }
 
 
