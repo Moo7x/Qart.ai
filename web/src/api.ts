@@ -25,7 +25,7 @@ import type {
   Profile,
   Recommendation,
   SkillState,
-  Snapshot, Questionnaire, RankingResponse, ScenarioName, AiTrend, HiringNow, LearningPlanResponse } from './types';
+  Snapshot, Questionnaire, RankingResponse, ScenarioName, AiTrend, HiringNow, LearningPlanResponse, HeldSkill } from './types';
 
 const USE_MOCKS = (import.meta.env.VITE_USE_MOCKS ?? 'false') === 'true';
 const BASE = import.meta.env.VITE_API_URL ?? '';
@@ -459,6 +459,13 @@ export async function getLearningPlan(userId: string, roleId?: string | null, sw
   if (roleId) params.set('role_id', roleId);
   Object.entries(swaps).forEach(([skill, course]) => params.append('swap', `${skill}:${course}`));
   const { data } = await axios.get<LearningPlanResponse>(`${BASE}/api/learning-plan/${userId}`, { params });
+  return data;
+}
+
+// The person's skills from the questionnaire, raised by practice evidence (contract v2.4).
+export async function getHeldSkills(userId: string): Promise<HeldSkill[]> {
+  if (USE_MOCKS) return [];
+  const { data } = await axios.get<HeldSkill[]>(`${BASE}/api/held-skills/${userId}`);
   return data;
 }
 

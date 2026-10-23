@@ -654,3 +654,6 @@ export interface LearningPlanResponse {
   funding_links: { label: string; url: string; note: string }[];
   note?: string;
 }
+
+// GET /api/held-skills/{user_id} (contract v2.4)
+export interface HeldSkill { skill_id: string; name: string; level: SkillLevel; value: number; source: string }
