@@ -10,6 +10,7 @@ known page and fetches each release once.
 """
 
 import html
+import json
 import re
 from dataclasses import dataclass
 from datetime import UTC, date, datetime
@@ -30,6 +31,7 @@ SLUG_PATTERN = re.compile(
 QUARTER_WORDS = {"first": 1, "second": 2, "third": 3, "fourth": 4}
 QUARTERS_PER_YEAR = 4
 HTTP_OK = 200
+STATE_KEY = "read_releases"
 MAX_RELEASE_PAGES = 60  # about 15 years of quarters; stops a runaway crawl if links loop
 MONTHS = [
     "january",
@@ -193,13 +195,16 @@ def is_published(release: Release, today: date) -> bool:
 
 
 def collect(client: httpx.Client, state: SourceState) -> CollectorResult:
-    # Each release page links only some earlier releases, so follow links until none are new.
+    # A published release never changes, so pages read in earlier runs are not fetched again
+    # (DOSM's site is slow: re-reading all 13 pages took about 90 s). The latest page is always
+    # read, because it carries the links to anything new.
+    already: dict[str, str] = json.loads(state.get(STATE_KEY) or "{}")  # slug -> quarter
     pages: dict[str, str] = {}
     unreachable: set[str] = set()
     to_visit = [SEED_SLUG]
     while to_visit and len(pages) < MAX_RELEASE_PAGES:
         slug = to_visit.pop()
-        if slug in pages or slug in unreachable:
+        if slug in pages or slug in unreachable or (slug in already and slug != SEED_SLUG):
             continue
         try:
             pages[slug] = fetch_page(client, slug)
@@ -210,16 +215,19 @@ def collect(client: httpx.Client, state: SourceState) -> CollectorResult:
             continue
         to_visit.extend(sorted(discover_slugs(pages[slug]) - pages.keys() - unreachable))
     releases = [parse_release(slug, page_html) for slug, page_html in pages.items()]
-    newer = probe_next_release(client, max(r.quarter for r in releases))
+    known_quarters = [r.quarter for r in releases] + list(already.values())
+    newer = probe_next_release(client, max(known_quarters))
     if newer is not None:
         releases.append(newer)
     today = datetime.now(UTC).date()
     published = {r.quarter: r for r in releases if is_published(r, today)}
     announced = sorted(r.quarter for r in releases if not is_published(r, today))
     observations = [obs for r in published.values() for obs in release_observations(r)]
-    quarters = sorted(published)
+    state.set(STATE_KEY, json.dumps({**already, **{r.slug: r.quarter for r in published.values()}}))
+    quarters = sorted(set(already.values()) | set(published))
     upcoming = max((r.next_release for r in releases if r.next_release), default=None)
     note = f"{len(quarters)} releases {quarters[0]}–{quarters[-1]}" if quarters else "no releases"
+    note += f" · {len(pages)} page(s) read"
     if announced:
         note += f" · announced, not yet published: {', '.join(announced)}"
     if unreachable:

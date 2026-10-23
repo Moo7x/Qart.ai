@@ -92,3 +92,26 @@ def test_jmi_announced_placeholder_is_not_published_before_its_day() -> None:
 
 def test_next_quarter_slug_rolls_over_the_year() -> None:
     assert dosm_jmi.next_quarter_slug("2026-Q4") == "big-data-analytics-job-market-insights-q12027"
+
+
+def test_jmi_does_not_refetch_releases_read_before() -> None:
+    requested: list[str] = []
+    pages = {
+        dosm_jmi.SEED_SLUG: jmi_page("q1_2026"),
+        "big-data-analytics-job-market-insights-and-my-job-profile-first-q12025": jmi_page(
+            "q1_2024"
+        ),
+    }
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        slug = request.url.path.rsplit("/", 1)[-1]
+        requested.append(slug)
+        return httpx.Response(200, text=pages[slug]) if slug in pages else httpx.Response(404)
+
+    state = MemoryState()
+    with httpx.Client(transport=httpx.MockTransport(handler)) as client:
+        dosm_jmi.collect(client, state)
+        requested.clear()
+        second = dosm_jmi.collect(client, state)
+    assert "big-data-analytics-job-market-insights-and-my-job-profile-first-q12025" not in requested
+    assert "2024-Q1" in second.note  # still counted as a known release
