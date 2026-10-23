@@ -22,6 +22,8 @@ Contract version: **v2** (21 Oct 2026). v2 aligns with `PROJECT_PLAN.md` v2:
 - New `PathPlan.horizon_weeks`, `PathPlan.profile_inputs`, `Recommendation.profile_inputs`: plain lines naming the answers used.
 - Still stored only: tools, formats (courses have no format field yet). Never read: industry, education (no demographic fields in scoring), notes.
 
+**v2.4 additions (23 Oct 2026, additive):** onboarding questionnaire (QART_NEXT_STEPS §3). `Profile.preferences` gains `current_job` (an id from `catalogue/questionnaire.json`, any job, not only catalogue roles), `tasks` (task ids) and `skill_levels` (`{skill_id: "heard"|"sometimes"|"confident"}`, the final skill chips). `POST /api/profile` returns 422 for unknown ids. Held skills = `skill_levels`, raised (never lowered) by evidence: observed with help → "sometimes", demonstrated independently → "confident". The old evidence recommender does not read these fields; the Skills Radar's "your skills" does.
+
 **v2.3 additions (23 Oct 2026, additive):** Future Skills Radar (AI_SIGNAL_SPEC.md). Three read-only `/api/signals/*` endpoints serve snapshots written by `scripts/fetch_signals.py` (`data/snapshots/market_pulse.json`, `skill_signals.json`; spec schema with `data_as_of` = latest data date). They are trend signals for display only: no ranking, path or weight reads them. Profile tools are matched to signal skills server-side; nothing about users is sent to the sources.
 
 ---
@@ -215,6 +217,7 @@ Results are **counts on synthetic variants**. The acceptance set and its criteri
 | `GET /api/snapshots` · `GET /api/snapshots/diff?from=&to=` | A | Snapshot[] / diff |
 | `GET /api/roles` | A | Role[] |
 | `GET /api/sdg` *(v2.1)* | A | SDG targets (title, UN link, rationale) + role/skill tags from the catalogue |
+| `GET /api/questionnaire` · `GET /api/held-skills/{user_id}` *(v2.4)* | B | Questionnaire config (current roles + typical skills, weekly tasks → skills, tool chips → skills, levels 0.3/0.7/1.0); the person's held skills = questionnaire levels raised by practice evidence |
 | `GET /api/signals/market-pulse` · `GET /api/signals/skills` · `GET /api/signals/for-user/{user_id}` *(v2.3)* | B | Future Skills Radar snapshots (Indeed AI Tracker, HN "Who is hiring?") with provenance, `age_days`, `stale`; for-user = the person's skills vs the signals (informational) |
 | `GET /api/recommendations/{user_id}?scenario=&snapshot=` | A | Recommendation |
 | `GET /api/path/{user_id}?role_id=&weekly_hours=` | A | PathPlan |

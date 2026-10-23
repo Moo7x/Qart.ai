@@ -496,8 +496,6 @@ export interface SkillSignal {
   latest_sample_size: number;
   latest_total_posts: number;
   points: SignalPoint[];
-  profile_tools: string[];
-  catalogue_skills: string[];
 }
 
 export interface SkillSignalsSnapshot extends SignalSnapshotMeta {

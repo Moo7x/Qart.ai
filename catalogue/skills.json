@@ -1,5 +1,5 @@
 {
-  "_about": "Skill IDs from team/00_SHARED_CONTRACT.md §3. type drives the scenario shift rule: when the company's AI drafts or does a task, part of that task's EXECUTION-skill weight moves to OVERSIGHT skills (catalogue/company_assumptions.json). The classification is a team design choice (declared), documented per skill in type_reason. Single canonical skill vocabulary for the whole app (QART_NEXT_STEPS §2): practice skills, role skills and market skills. evidence_tracked = an evidence state is kept for it (practice cases, My skills, HR). trend_tracked = it has Hacker News match patterns for the Skills Radar. learn_hours are ASSUMPTIONS (team estimates, not data): hours from none to 'use sometimes' and from there to 'confident'.",
+  "_about": "Skill IDs from team/00_SHARED_CONTRACT.md §3. type drives the scenario shift rule: when the company's AI drafts or does a task, part of that task's EXECUTION-skill weight moves to OVERSIGHT skills (catalogue/company_assumptions.json). The classification is a team design choice (declared), documented per skill in type_reason. Single canonical skill vocabulary for the whole app (QART_NEXT_STEPS §2): practice skills, role skills and market skills and questionnaire skills. evidence_tracked = an evidence state is kept for it (practice cases, My skills, HR). trend_tracked = it has Hacker News match patterns for the Skills Radar. learn_hours are ASSUMPTIONS (team estimates, not data): hours from none to 'use sometimes' and from there to 'confident'.",
   "skills": [
     {
       "id": "recon_to_source",
@@ -16,8 +16,7 @@
       },
       "trend_tracked": false,
       "patterns": [],
-      "case_sensitive_patterns": [],
-      "profile_tools": []
+      "case_sensitive_patterns": []
     },
     {
       "id": "duplicate_detection",
@@ -34,8 +33,7 @@
       },
       "trend_tracked": false,
       "patterns": [],
-      "case_sensitive_patterns": [],
-      "profile_tools": []
+      "case_sensitive_patterns": []
     },
     {
       "id": "cutoff_timing",
@@ -52,8 +50,7 @@
       },
       "trend_tracked": false,
       "patterns": [],
-      "case_sensitive_patterns": [],
-      "profile_tools": []
+      "case_sensitive_patterns": []
     },
     {
       "id": "unsupported_adjustment",
@@ -70,8 +67,7 @@
       },
       "trend_tracked": false,
       "patterns": [],
-      "case_sensitive_patterns": [],
-      "profile_tools": []
+      "case_sensitive_patterns": []
     },
     {
       "id": "fx_conversion",
@@ -88,8 +84,7 @@
       },
       "trend_tracked": false,
       "patterns": [],
-      "case_sensitive_patterns": [],
-      "profile_tools": []
+      "case_sensitive_patterns": []
     },
     {
       "id": "transposition_check",
@@ -106,8 +101,7 @@
       },
       "trend_tracked": false,
       "patterns": [],
-      "case_sensitive_patterns": [],
-      "profile_tools": []
+      "case_sensitive_patterns": []
     },
     {
       "id": "escalation_judgment",
@@ -124,8 +118,7 @@
       },
       "trend_tracked": false,
       "patterns": [],
-      "case_sensitive_patterns": [],
-      "profile_tools": []
+      "case_sensitive_patterns": []
     },
     {
       "id": "ai_output_review",
@@ -142,8 +135,7 @@
       },
       "trend_tracked": false,
       "patterns": [],
-      "case_sensitive_patterns": [],
-      "profile_tools": []
+      "case_sensitive_patterns": []
     },
     {
       "id": "variance_analysis",
@@ -160,8 +152,7 @@
       },
       "trend_tracked": false,
       "patterns": [],
-      "case_sensitive_patterns": [],
-      "profile_tools": []
+      "case_sensitive_patterns": []
     },
     {
       "id": "data_quality",
@@ -182,8 +173,7 @@
         "\\bdata validation\\b",
         "\\bdata governance\\b"
       ],
-      "case_sensitive_patterns": [],
-      "profile_tools": []
+      "case_sensitive_patterns": []
     },
     {
       "id": "controls_design",
@@ -200,8 +190,7 @@
       },
       "trend_tracked": false,
       "patterns": [],
-      "case_sensitive_patterns": [],
-      "profile_tools": []
+      "case_sensitive_patterns": []
     },
     {
       "id": "process_automation",
@@ -226,7 +215,6 @@
       "case_sensitive_patterns": [
         "\\bRPA\\b"
       ],
-      "profile_tools": [],
       "market_name": "RPA / process automation"
     },
     {
@@ -244,8 +232,7 @@
       },
       "trend_tracked": false,
       "patterns": [],
-      "case_sensitive_patterns": [],
-      "profile_tools": []
+      "case_sensitive_patterns": []
     },
     {
       "id": "forecasting",
@@ -262,8 +249,7 @@
       },
       "trend_tracked": false,
       "patterns": [],
-      "case_sensitive_patterns": [],
-      "profile_tools": []
+      "case_sensitive_patterns": []
     },
     {
       "id": "spreadsheet_modelling",
@@ -285,9 +271,6 @@
       ],
       "case_sensitive_patterns": [
         "\\bExcel\\b(?! at)"
-      ],
-      "profile_tools": [
-        "Excel"
       ],
       "market_name": "Excel"
     },
@@ -313,9 +296,6 @@
       "case_sensitive_patterns": [
         "\\bSQL\\b"
       ],
-      "profile_tools": [
-        "SQL"
-      ],
       "market_name": "SQL"
     },
     {
@@ -333,10 +313,7 @@
       "patterns": [
         "\\bPython\\b"
       ],
-      "case_sensitive_patterns": [],
-      "profile_tools": [
-        "Python"
-      ]
+      "case_sensitive_patterns": []
     },
     {
       "id": "pytorch",
@@ -353,8 +330,7 @@
       "patterns": [
         "\\bPyTorch\\b"
       ],
-      "case_sensitive_patterns": [],
-      "profile_tools": []
+      "case_sensitive_patterns": []
     },
     {
       "id": "tensorflow",
@@ -371,8 +347,7 @@
       "patterns": [
         "\\bTensorFlow\\b"
       ],
-      "case_sensitive_patterns": [],
-      "profile_tools": []
+      "case_sensitive_patterns": []
     },
     {
       "id": "llms",
@@ -395,9 +370,6 @@
       ],
       "case_sensitive_patterns": [
         "\\bLLMs?\\b"
-      ],
-      "profile_tools": [
-        "AI assistants"
       ]
     },
     {
@@ -418,8 +390,7 @@
       ],
       "case_sensitive_patterns": [
         "\\bRAG\\b"
-      ],
-      "profile_tools": []
+      ]
     },
     {
       "id": "langchain",
@@ -437,8 +408,7 @@
         "\\bLangChain\\b",
         "\\bLangGraph\\b"
       ],
-      "case_sensitive_patterns": [],
-      "profile_tools": []
+      "case_sensitive_patterns": []
     },
     {
       "id": "ai_agents",
@@ -457,8 +427,7 @@
         "\\bagentic\\b",
         "\\bLLM agents?\\b"
       ],
-      "case_sensitive_patterns": [],
-      "profile_tools": []
+      "case_sensitive_patterns": []
     },
     {
       "id": "mlops",
@@ -476,8 +445,7 @@
         "\\bMLOps\\b",
         "\\bML ?Ops\\b"
       ],
-      "case_sensitive_patterns": [],
-      "profile_tools": []
+      "case_sensitive_patterns": []
     },
     {
       "id": "computer_vision",
@@ -494,8 +462,7 @@
       "patterns": [
         "\\bcomputer vision\\b"
       ],
-      "case_sensitive_patterns": [],
-      "profile_tools": []
+      "case_sensitive_patterns": []
     },
     {
       "id": "nlp",
@@ -515,8 +482,7 @@
       ],
       "case_sensitive_patterns": [
         "\\bNLP\\b"
-      ],
-      "profile_tools": []
+      ]
     },
     {
       "id": "kubernetes",
@@ -534,8 +500,7 @@
         "\\bKubernetes\\b",
         "\\bk8s\\b"
       ],
-      "case_sensitive_patterns": [],
-      "profile_tools": []
+      "case_sensitive_patterns": []
     },
     {
       "id": "aws",
@@ -555,8 +520,7 @@
       ],
       "case_sensitive_patterns": [
         "\\bAWS\\b"
-      ],
-      "profile_tools": []
+      ]
     },
     {
       "id": "typescript",
@@ -573,8 +537,7 @@
       "patterns": [
         "\\bTypeScript\\b"
       ],
-      "case_sensitive_patterns": [],
-      "profile_tools": []
+      "case_sensitive_patterns": []
     },
     {
       "id": "react",
@@ -593,8 +556,7 @@
       ],
       "case_sensitive_patterns": [
         "\\bReact(?:\\.js|JS)?\\b(?! Native)"
-      ],
-      "profile_tools": []
+      ]
     },
     {
       "id": "data_visualisation",
@@ -613,10 +575,7 @@
         "\\bTableau\\b",
         "\\bLooker\\b"
       ],
-      "case_sensitive_patterns": [],
-      "profile_tools": [
-        "Power BI / Tableau"
-      ]
+      "case_sensitive_patterns": []
     },
     {
       "id": "erp",
@@ -639,10 +598,172 @@
       "case_sensitive_patterns": [
         "\\bERP\\b",
         "\\bSAP\\b"
-      ],
-      "profile_tools": [
-        "ERP (SAP, Oracle)"
       ]
+    },
+    {
+      "id": "financial_reporting",
+      "name": "Financial reporting",
+      "practised": false,
+      "description": "Prepare month-end and management reports from the ledger.",
+      "category": "Finance practice",
+      "evidence_tracked": false,
+      "learn_hours": {
+        "to_basic": 12,
+        "to_confident": 25
+      },
+      "trend_tracked": false,
+      "patterns": [],
+      "case_sensitive_patterns": []
+    },
+    {
+      "id": "bookkeeping",
+      "name": "Bookkeeping",
+      "practised": false,
+      "description": "Record invoices, payments and journals accurately.",
+      "category": "Finance practice",
+      "evidence_tracked": false,
+      "learn_hours": {
+        "to_basic": 10,
+        "to_confident": 20
+      },
+      "trend_tracked": false,
+      "patterns": [],
+      "case_sensitive_patterns": []
+    },
+    {
+      "id": "excel_automation",
+      "name": "Excel automation (macros)",
+      "practised": false,
+      "description": "Record or edit macros and repeatable spreadsheet steps.",
+      "category": "Finance tools",
+      "evidence_tracked": false,
+      "learn_hours": {
+        "to_basic": 10,
+        "to_confident": 20
+      },
+      "trend_tracked": false,
+      "patterns": [],
+      "case_sensitive_patterns": []
+    },
+    {
+      "id": "statistics_basics",
+      "name": "Statistics basics",
+      "practised": false,
+      "description": "Averages, spread, sampling and simple tests on data.",
+      "category": "Data",
+      "evidence_tracked": false,
+      "learn_hours": {
+        "to_basic": 15,
+        "to_confident": 30
+      },
+      "trend_tracked": false,
+      "patterns": [],
+      "case_sensitive_patterns": []
+    },
+    {
+      "id": "business_analysis",
+      "name": "Business analysis",
+      "practised": false,
+      "description": "Turn colleagues' needs into clear requirements and process maps.",
+      "category": "Business",
+      "evidence_tracked": false,
+      "learn_hours": {
+        "to_basic": 15,
+        "to_confident": 30
+      },
+      "trend_tracked": false,
+      "patterns": [],
+      "case_sensitive_patterns": []
+    },
+    {
+      "id": "project_management",
+      "name": "Project management",
+      "practised": false,
+      "description": "Plan work, track a schedule and manage risks with a team.",
+      "category": "Business",
+      "evidence_tracked": false,
+      "learn_hours": {
+        "to_basic": 15,
+        "to_confident": 30
+      },
+      "trend_tracked": false,
+      "patterns": [],
+      "case_sensitive_patterns": []
+    },
+    {
+      "id": "digital_marketing",
+      "name": "Digital marketing",
+      "practised": false,
+      "description": "Run and measure online campaigns (search, social, email).",
+      "category": "Marketing",
+      "evidence_tracked": false,
+      "learn_hours": {
+        "to_basic": 15,
+        "to_confident": 30
+      },
+      "trend_tracked": false,
+      "patterns": [],
+      "case_sensitive_patterns": []
+    },
+    {
+      "id": "customer_service",
+      "name": "Customer service",
+      "practised": false,
+      "description": "Answer customer questions and resolve complaints.",
+      "category": "Customer operations",
+      "evidence_tracked": false,
+      "learn_hours": {
+        "to_basic": 8,
+        "to_confident": 15
+      },
+      "trend_tracked": false,
+      "patterns": [],
+      "case_sensitive_patterns": []
+    },
+    {
+      "id": "it_support",
+      "name": "IT support",
+      "practised": false,
+      "description": "Fix device, account and access issues for colleagues.",
+      "category": "IT",
+      "evidence_tracked": false,
+      "learn_hours": {
+        "to_basic": 15,
+        "to_confident": 30
+      },
+      "trend_tracked": false,
+      "patterns": [],
+      "case_sensitive_patterns": []
+    },
+    {
+      "id": "cybersecurity_basics",
+      "name": "Cybersecurity basics",
+      "practised": false,
+      "description": "Spot phishing, manage access and follow security controls.",
+      "category": "IT",
+      "evidence_tracked": false,
+      "learn_hours": {
+        "to_basic": 20,
+        "to_confident": 40
+      },
+      "trend_tracked": false,
+      "patterns": [],
+      "case_sensitive_patterns": []
+    },
+    {
+      "id": "ai_assistants",
+      "name": "Using AI assistants",
+      "practised": false,
+      "description": "Draft and check everyday work with an AI assistant.",
+      "category": "AI/ML",
+      "evidence_tracked": false,
+      "learn_hours": {
+        "to_basic": 5,
+        "to_confident": 15
+      },
+      "trend_tracked": false,
+      "patterns": [],
+      "case_sensitive_patterns": []
     }
   ]
 }

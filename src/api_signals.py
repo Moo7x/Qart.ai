@@ -20,14 +20,11 @@ from fastapi import APIRouter, HTTPException
 
 from src.api_engine import StoreDep, require_profile, states_for
 from src.engine.catalogue import default_catalogue
+from src.engine.questionnaire import held_skills
 from src.signals.config import default_config
 from src.signals.pipeline import MARKET_PULSE, SKILL_SIGNALS, SNAPSHOT_DIR
 
 router = APIRouter(prefix="/api/signals", tags=["signals"])
-
-# Evidence states that count as "you have this" for linking catalogue skills to market skills;
-# a self-reported claim alone does not.
-EVIDENCED_STATES = {"demonstrated_independently", "observed_with_help"}
 
 
 def read_snapshot(name: str, directory: Path = SNAPSHOT_DIR) -> dict[str, Any]:
@@ -75,27 +72,19 @@ def _summary(s: dict[str, Any], why: str) -> dict[str, Any]:
 def for_user(user_id: str, store: StoreDep) -> dict[str, Any]:
     """The person's skills as the radar sees them, for the pathway (informational only).
 
-    "Your skills" = market skills matching the Profile tools, plus market skills linked to
-    catalogue skills the person has case evidence for. No ranking or path uses this.
+    "Your skills" = the skills from onboarding (questionnaire levels), raised by practice-case
+    evidence, that the radar tracks. Same vocabulary ids, so no mapping is needed.
     """
     snapshot = read_snapshot(SKILL_SIGNALS)
     profile = require_profile(store, user_id)
     catalogue = default_catalogue()
-    states = states_for(profile, store.events_for(user_id), catalogue)
-    tools = set(profile.preferences.tools)
-    evidenced = {s.skill_id for s in states if s.state in EVIDENCED_STATES}
-    mine: dict[str, dict[str, Any]] = {}
-    for s in snapshot["series"]:
-        used = sorted(tools & set(s["profile_tools"]))
-        shown = sorted(evidenced & set(s["catalogue_skills"]))
-        if used or shown:
-            why = (
-                f"you use {', '.join(used)}"
-                if used
-                else f"your case evidence in {', '.join(catalogue.skills[k].name for k in shown)}"
-            )
-            mine[s["id"]] = _summary(s, why)
-    mapped_tools = {t for s in snapshot["series"] for t in s["profile_tools"]}
+    held = held_skills(profile, states_for(profile, store.events_for(user_id), catalogue))
+    mine = {
+        s["id"]: _summary(s, f"from your {held[s['id']].source}")
+        for s in snapshot["series"]
+        if s["id"] in held
+    }
+    tracked = {s["id"] for s in snapshot["series"]}
     return {
         "user_id": user_id,
         "source": snapshot["source"],
@@ -109,7 +98,7 @@ def for_user(user_id: str, store: StoreDep) -> dict[str, Any]:
             for s in snapshot["series"]
             if s["label"] == "rising" and s["id"] not in mine
         ],
-        "no_market_data": sorted(tools - mapped_tools - {"None of these"}),
+        "no_market_data": sorted(catalogue.vocabulary[k].name for k in held if k not in tracked),
         "note": "Trend signal from tech hiring posts (Hacker News), not a forecast. It does not "
         "change your matches or your pathway.",
     }

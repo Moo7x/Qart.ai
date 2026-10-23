@@ -44,15 +44,19 @@ class SelfReportedSkill(BaseModel):
 
 Direction = Literal["grow", "adjacent", "switch"]
 TimeframeMonths = Literal[3, 6, 12]
+# Addition (v2.4): the three self-rated levels of the questionnaire (values in questionnaire.json).
+SkillLevel = Literal["heard", "sometimes", "confident"]
 AI_COMFORT_MAX = 10  # intake slider 0..10, the person's own rating
 NOTES_MAX_CHARS = 500  # free text is synthetic demo data; capped so it stays a short note
 
 
 class Preferences(BaseModel):
-    """Intake answers from the six-screen flow (addition, v2.1). All optional.
+    """Intake answers from the onboarding questionnaire (addition, v2.1; v2.4 fields). Optional.
 
-    Stored and returned only: none of these change scores or the path yet, so the UI labels
-    them "saved; not used for ranking yet". `notes` is never logged or sent to an LLM.
+    v2.2: direction, timeframe and ai_comfort shape the ranking and the path. v2.4:
+    current_job, tasks and skill_levels (canonical skill ids) record the person's skills; ids
+    are checked against catalogue/questionnaire.json and catalogue/skills.json. `notes` is
+    never logged or sent to an LLM.
     """
 
     industry: str | None = None
@@ -63,6 +67,10 @@ class Preferences(BaseModel):
     formats: list[str] = []
     ai_comfort: int | None = Field(default=None, ge=0, le=AI_COMFORT_MAX)
     notes: str | None = Field(default=None, max_length=NOTES_MAX_CHARS)
+    current_job: str | None = None  # questionnaire current role (any job, not only catalogue roles)
+    tasks: list[str] = []
+    # Final state of the skill chips (role pre-fill + tasks + tools, as the person edited them).
+    skill_levels: dict[str, SkillLevel] = {}
 
 
 class Profile(BaseModel):

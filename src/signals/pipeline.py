@@ -94,7 +94,6 @@ def build_skill_signals(
     fetched_at: str,
 ) -> dict[str, Any]:
     signals = skill_signals(posts_by_month, cfg.skills, cfg.params)
-    specs = {s.id: s for s in cfg.skills}
     months = sorted(posts_by_month)[-cfg.params.window_months :]
     latest_total = len(posts_by_month[months[-1]]) if months else 0
     envelope = _envelope("hn", cfg, latest_post_date, fetched_at)
@@ -105,14 +104,7 @@ def build_skill_signals(
         **envelope,
         "months": months,
         "params": cfg.params.model_dump(),
-        "series": [
-            {
-                **asdict(s),
-                "profile_tools": specs[s.id].profile_tools,
-                "catalogue_skills": specs[s.id].catalogue_skills,
-            }
-            for s in signals
-        ],
+        "series": [asdict(s) for s in signals],
     }
 
 

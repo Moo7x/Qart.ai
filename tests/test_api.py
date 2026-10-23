@@ -78,6 +78,9 @@ PREFERENCES = {
     "formats": ["Hands-on cases"],
     "ai_comfort": 4,
     "notes": "Weekends only (synthetic)",
+    "current_job": "reconciliation_associate",
+    "tasks": ["reconcile_accounts", "record_macros"],
+    "skill_levels": {"spreadsheet_modelling": "confident", "excel_automation": "sometimes"},
 }
 
 
@@ -92,6 +95,30 @@ def test_profile_preferences_round_trip(client: TestClient) -> None:
     unknown_direction = {**PREFERENCES, "direction": "sideways"}
     bad = client.post("/api/profile", json={**profile, "preferences": unknown_direction})
     assert bad.status_code == 422
+    for field, value in [
+        ("current_job", "astronaut"),
+        ("tasks", ["juggle"]),
+        ("skill_levels", {"made_up_skill": "confident"}),
+        ("skill_levels", {"python": "expert"}),
+    ]:
+        bad = client.post(
+            "/api/profile", json={**profile, "preferences": {**PREFERENCES, field: value}}
+        )
+        assert bad.status_code == 422, field
+
+
+def test_questionnaire_and_held_skills(client: TestClient) -> None:
+    q = client.get("/api/questionnaire").json()
+    assert [lv["value"] for lv in q["levels"]] == [0.3, 0.7, 1.0]
+    assert any(t["exclusive"] for t in q["tools"])
+    profile = client.get("/api/profile/u_aina").json()
+    client.post("/api/profile", json={**profile, "preferences": PREFERENCES})
+    held = {h["skill_id"]: h for h in client.get("/api/held-skills/u_aina").json()}
+    assert held["spreadsheet_modelling"]["level"] == "confident"
+    assert (
+        held["excel_automation"]["value"] == 0.7
+        and held["excel_automation"]["source"] == "questionnaire"
+    )
 
 
 def test_unused_preferences_do_not_change_scores(client: TestClient) -> None:

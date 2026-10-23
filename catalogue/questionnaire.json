@@ -1,0 +1,438 @@
+{
+  "_about": "Onboarding questionnaire config (QART_NEXT_STEPS §3). Current roles pre-fill typical skills, tasks add the skills they use, tool chips map to skills; all at the default level, never downgrading a level the person set. Every skill id here must exist in catalogue/skills.json (tests/test_skill_vocabulary.py). Level values and mappings are DECLARED team choices, not data. Families are defined with the role catalogue.",
+  "levels": [
+    {
+      "id": "heard",
+      "label": "Heard of it",
+      "value": 0.3
+    },
+    {
+      "id": "sometimes",
+      "label": "Use sometimes",
+      "value": 0.7
+    },
+    {
+      "id": "confident",
+      "label": "Confident",
+      "value": 1.0
+    }
+  ],
+  "default_level": "sometimes",
+  "tools": [
+    {
+      "label": "Excel",
+      "skills": [
+        "spreadsheet_modelling"
+      ]
+    },
+    {
+      "label": "SQL",
+      "skills": [
+        "sql_basics"
+      ]
+    },
+    {
+      "label": "Python",
+      "skills": [
+        "python"
+      ]
+    },
+    {
+      "label": "Power BI / Tableau",
+      "skills": [
+        "data_visualisation"
+      ]
+    },
+    {
+      "label": "ERP (SAP, Oracle)",
+      "skills": [
+        "erp"
+      ]
+    },
+    {
+      "label": "AI assistants",
+      "skills": [
+        "ai_assistants"
+      ]
+    },
+    {
+      "label": "None of these",
+      "skills": [],
+      "exclusive": true
+    }
+  ],
+  "current_roles": [
+    {
+      "id": "reconciliation_associate",
+      "name": "Reconciliation Associate",
+      "family": "finance_ops",
+      "catalogue_role_id": "recon_associate",
+      "typical_skills": [
+        "spreadsheet_modelling",
+        "recon_to_source",
+        "erp",
+        "duplicate_detection",
+        "financial_reporting"
+      ]
+    },
+    {
+      "id": "accounts_officer",
+      "name": "Accounts Payable / Receivable Officer",
+      "family": "finance_ops",
+      "typical_skills": [
+        "bookkeeping",
+        "spreadsheet_modelling",
+        "erp",
+        "recon_to_source",
+        "stakeholder_communication"
+      ]
+    },
+    {
+      "id": "accountant",
+      "name": "Accountant",
+      "family": "finance_ops",
+      "typical_skills": [
+        "bookkeeping",
+        "financial_reporting",
+        "spreadsheet_modelling",
+        "erp",
+        "variance_analysis"
+      ]
+    },
+    {
+      "id": "fpa_analyst",
+      "name": "FP&A Analyst",
+      "family": "finance_ops",
+      "catalogue_role_id": "fpa_analyst",
+      "typical_skills": [
+        "forecasting",
+        "variance_analysis",
+        "spreadsheet_modelling",
+        "financial_reporting",
+        "stakeholder_communication"
+      ]
+    },
+    {
+      "id": "controls_analyst",
+      "name": "Controls & Assurance Analyst",
+      "family": "finance_ops",
+      "catalogue_role_id": "controls_assurance_analyst",
+      "typical_skills": [
+        "controls_design",
+        "escalation_judgment",
+        "data_quality",
+        "spreadsheet_modelling",
+        "financial_reporting"
+      ]
+    },
+    {
+      "id": "ai_finops_analyst",
+      "name": "AI Finance Operations Analyst",
+      "family": "automation",
+      "catalogue_role_id": "ai_finops_analyst",
+      "typical_skills": [
+        "ai_output_review",
+        "process_automation",
+        "recon_to_source",
+        "spreadsheet_modelling",
+        "data_quality"
+      ]
+    },
+    {
+      "id": "bank_operations_officer",
+      "name": "Bank Operations Officer",
+      "family": "finance_ops",
+      "typical_skills": [
+        "recon_to_source",
+        "customer_service",
+        "spreadsheet_modelling",
+        "data_quality"
+      ]
+    },
+    {
+      "id": "customer_service_rep",
+      "name": "Customer Service Representative",
+      "family": "customer_ops",
+      "typical_skills": [
+        "customer_service",
+        "stakeholder_communication",
+        "spreadsheet_modelling"
+      ]
+    },
+    {
+      "id": "marketing_executive",
+      "name": "Marketing Executive",
+      "family": "marketing",
+      "typical_skills": [
+        "digital_marketing",
+        "spreadsheet_modelling",
+        "data_visualisation",
+        "stakeholder_communication"
+      ]
+    },
+    {
+      "id": "admin_assistant",
+      "name": "Administrative Assistant",
+      "family": "admin",
+      "typical_skills": [
+        "spreadsheet_modelling",
+        "stakeholder_communication"
+      ]
+    },
+    {
+      "id": "it_support_technician",
+      "name": "IT Support Technician",
+      "family": "it_support",
+      "typical_skills": [
+        "it_support",
+        "cybersecurity_basics",
+        "stakeholder_communication"
+      ]
+    },
+    {
+      "id": "junior_developer",
+      "name": "Junior Software Developer",
+      "family": "software",
+      "typical_skills": [
+        "python",
+        "typescript",
+        "react",
+        "sql_basics"
+      ]
+    },
+    {
+      "id": "graduate",
+      "name": "Recent graduate or student",
+      "family": null,
+      "typical_skills": []
+    }
+  ],
+  "tasks": [
+    {
+      "id": "reconcile_accounts",
+      "label": "Reconcile accounts or bank statements",
+      "skills": [
+        "recon_to_source",
+        "spreadsheet_modelling"
+      ],
+      "families": [
+        "finance_ops",
+        "automation"
+      ]
+    },
+    {
+      "id": "build_monthly_reports",
+      "label": "Build monthly reports",
+      "skills": [
+        "spreadsheet_modelling",
+        "financial_reporting",
+        "data_visualisation"
+      ],
+      "families": [
+        "finance_ops",
+        "analytics",
+        "admin"
+      ]
+    },
+    {
+      "id": "record_macros",
+      "label": "Record or edit Excel macros",
+      "skills": [
+        "excel_automation"
+      ],
+      "families": [
+        "finance_ops",
+        "admin",
+        "automation"
+      ]
+    },
+    {
+      "id": "query_database",
+      "label": "Pull data from a database",
+      "skills": [
+        "sql_basics"
+      ],
+      "families": [
+        "analytics",
+        "software",
+        "data_engineering",
+        "finance_ops"
+      ]
+    },
+    {
+      "id": "process_invoices",
+      "label": "Process invoices or payments",
+      "skills": [
+        "bookkeeping",
+        "erp"
+      ],
+      "families": [
+        "finance_ops",
+        "admin"
+      ]
+    },
+    {
+      "id": "budgets_forecasts",
+      "label": "Prepare budgets or forecasts",
+      "skills": [
+        "forecasting",
+        "variance_analysis"
+      ],
+      "families": [
+        "finance_ops",
+        "analytics"
+      ]
+    },
+    {
+      "id": "check_controls",
+      "label": "Check controls or audit evidence",
+      "skills": [
+        "controls_design",
+        "escalation_judgment"
+      ],
+      "families": [
+        "finance_ops",
+        "security"
+      ]
+    },
+    {
+      "id": "clean_data",
+      "label": "Clean or check data quality",
+      "skills": [
+        "data_quality"
+      ],
+      "families": [
+        "analytics",
+        "data_engineering",
+        "finance_ops",
+        "automation"
+      ]
+    },
+    {
+      "id": "build_dashboards",
+      "label": "Build dashboards",
+      "skills": [
+        "data_visualisation"
+      ],
+      "families": [
+        "analytics",
+        "marketing",
+        "finance_ops"
+      ]
+    },
+    {
+      "id": "use_ai_assistant",
+      "label": "Draft or check work with an AI assistant",
+      "skills": [
+        "ai_assistants",
+        "ai_output_review"
+      ],
+      "families": [
+        "automation",
+        "finance_ops",
+        "marketing",
+        "admin",
+        "customer_ops"
+      ]
+    },
+    {
+      "id": "write_scripts",
+      "label": "Write scripts to automate tasks",
+      "skills": [
+        "python",
+        "process_automation"
+      ],
+      "families": [
+        "automation",
+        "software",
+        "data_engineering",
+        "it_support"
+      ]
+    },
+    {
+      "id": "answer_customers",
+      "label": "Answer customer questions",
+      "skills": [
+        "customer_service",
+        "stakeholder_communication"
+      ],
+      "families": [
+        "customer_ops",
+        "finance_ops",
+        "it_support"
+      ]
+    },
+    {
+      "id": "run_campaigns",
+      "label": "Run marketing campaigns",
+      "skills": [
+        "digital_marketing"
+      ],
+      "families": [
+        "marketing"
+      ]
+    },
+    {
+      "id": "coordinate_projects",
+      "label": "Coordinate projects or schedules",
+      "skills": [
+        "project_management"
+      ],
+      "families": [
+        "admin",
+        "business",
+        "marketing",
+        "it_support"
+      ]
+    },
+    {
+      "id": "gather_requirements",
+      "label": "Gather requirements from colleagues",
+      "skills": [
+        "business_analysis",
+        "stakeholder_communication"
+      ],
+      "families": [
+        "business",
+        "analytics",
+        "software"
+      ]
+    },
+    {
+      "id": "fix_it_issues",
+      "label": "Fix computer or access issues",
+      "skills": [
+        "it_support",
+        "cybersecurity_basics"
+      ],
+      "families": [
+        "it_support",
+        "security"
+      ]
+    },
+    {
+      "id": "build_web_features",
+      "label": "Build web app features",
+      "skills": [
+        "typescript",
+        "react"
+      ],
+      "families": [
+        "software"
+      ]
+    },
+    {
+      "id": "analyse_statistics",
+      "label": "Analyse data with statistics",
+      "skills": [
+        "statistics_basics",
+        "python"
+      ],
+      "families": [
+        "analytics",
+        "ml_ai",
+        "data_engineering"
+      ]
+    }
+  ]
+}

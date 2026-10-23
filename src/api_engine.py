@@ -39,6 +39,7 @@ from src.engine.hr import HrSummary, hr_summary
 from src.engine.ingest import CSV_NAME, RAW_DIR, SNAPSHOT_DIR, run_ingest
 from src.engine.next_case import next_case
 from src.engine.planner import path_inputs, plan_path
+from src.engine.questionnaire import Questionnaire, default_questionnaire, held_skills
 from src.engine.recommend import changed_since, eligible_roles, horizon_weeks, recommend
 from src.engine.skills import derive_states
 from src.engine.snapshots import REPLAY_LABEL, diff_report, load_snapshots
@@ -182,9 +183,57 @@ def create_profile(profile: Profile, store: StoreDep) -> ProfileResponse:
         raise HTTPException(status_code=422, detail=f"unknown skill ids: {sorted(unknown)}")
     if profile.current_role_id not in catalogue.roles:
         raise HTTPException(status_code=422, detail=f"unknown role {profile.current_role_id}")
+    check_questionnaire_answers(profile, catalogue)
     store.upsert_profile(profile)
     events = store.events_for(profile.id)
     return ProfileResponse(profile=profile, skills=states_for(profile, events, catalogue))
+
+
+def check_questionnaire_answers(profile: Profile, catalogue: Catalogue) -> None:
+    """Reject questionnaire answers that name an unknown role, task, tool or skill id."""
+    q = default_questionnaire()
+    prefs = profile.preferences
+    problems = []
+    if prefs.current_job is not None and prefs.current_job not in {r.id for r in q.current_roles}:
+        problems.append(f"unknown current_job {prefs.current_job}")
+    if unknown := sorted(set(prefs.tasks) - {t.id for t in q.tasks}):
+        problems.append(f"unknown tasks {unknown}")
+    if unknown := sorted(set(prefs.skill_levels) - set(catalogue.vocabulary)):
+        problems.append(f"unknown skill ids {unknown}")
+    if problems:
+        raise HTTPException(status_code=422, detail="; ".join(problems))
+
+
+@router.get("/questionnaire")
+def get_questionnaire() -> Questionnaire:
+    """Current roles (with typical skills), weekly tasks, tool chips and skill levels."""
+    return default_questionnaire()
+
+
+class HeldSkillOut(BaseModel):
+    skill_id: str
+    name: str
+    level: str
+    value: float
+    source: str
+
+
+@router.get("/held-skills/{user_id}")
+def get_held_skills(user_id: str, store: StoreDep) -> list[HeldSkillOut]:
+    """The person's skills from the questionnaire, raised by practice evidence (v2.4)."""
+    profile = require_profile(store, user_id)
+    catalogue = default_catalogue()
+    held = held_skills(profile, states_for(profile, store.events_for(user_id), catalogue))
+    return [
+        HeldSkillOut(
+            skill_id=h.skill_id,
+            name=catalogue.vocabulary[h.skill_id].name,
+            level=h.level,
+            value=h.value,
+            source=h.source,
+        )
+        for h in sorted(held.values(), key=lambda h: catalogue.vocabulary[h.skill_id].name)
+    ]
 
 
 @router.get("/profile/{user_id}")

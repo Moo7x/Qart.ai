@@ -24,15 +24,16 @@ def test_staleness_uses_the_data_date() -> None:
     assert freshness("not a date")["stale"] is True
 
 
-def test_for_user_links_profile_tools_and_says_it_changes_nothing(client: TestClient) -> None:
+def test_for_user_uses_onboarding_skills_and_says_it_changes_nothing(client: TestClient) -> None:
     profile = client.get("/api/profile/u_aina").json()
     before = client.get("/api/path/u_aina").json()
-    prefs = {**profile.get("preferences", {}), "tools": ["Python", "SQL", "Excel", "None of these"]}
+    levels = {"python": "sometimes", "sql_basics": "heard", "bookkeeping": "confident"}
+    prefs = {**profile.get("preferences", {}), "skill_levels": levels}
     client.post("/api/profile", json={**profile, "preferences": prefs})
     view = client.get("/api/signals/for-user/u_aina").json()
     mine = {s["id"]: s for s in view["user_skills"]}
-    assert {"python", "sql_basics", "spreadsheet_modelling"} <= set(mine)
-    assert mine["python"]["why"] == "you use Python"
+    assert {"python", "sql_basics"} <= set(mine)
+    assert mine["python"]["why"] == "from your questionnaire"
     assert all(s["id"] not in mine for s in view["rising_skills_not_held"])
-    assert "not a forecast" in view["note"] and view["no_market_data"] == []
+    assert "not a forecast" in view["note"] and view["no_market_data"] == ["Bookkeeping"]
     assert client.get("/api/path/u_aina").json()["steps"] == before["steps"]  # informational only

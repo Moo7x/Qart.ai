@@ -52,8 +52,6 @@ class SkillSpec(BaseModel):
     category: str
     patterns: list[str]
     case_sensitive_patterns: list[str] = []
-    profile_tools: list[str] = []  # Profile.preferences.tools values that mean "I use this"
-    catalogue_skills: list[str] = []  # catalogue skill ids this market skill relates to
 
 
 class SignalConfig(BaseModel):
@@ -76,9 +74,6 @@ def tracked_skills(skills_path: Path = SKILLS_PATH) -> list[SkillSpec]:
             category=s.get("category", ""),
             patterns=s.get("patterns", []),
             case_sensitive_patterns=s.get("case_sensitive_patterns", []),
-            profile_tools=s.get("profile_tools", []),
-            # One vocabulary: an evidence state exists under the same id when it is tracked.
-            catalogue_skills=[s["id"]] if s.get("evidence_tracked", True) else [],
         )
         for s in vocabulary
         if s.get("trend_tracked")

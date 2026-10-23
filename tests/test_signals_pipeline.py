@@ -99,7 +99,7 @@ def test_run_writes_both_snapshots_with_their_own_data_dates(tmp_path: Path) -> 
     signals = json.loads((tmp_path / "out" / SKILL_SIGNALS).read_text(encoding="utf-8"))
     assert signals["data_as_of"] == "2026-10-07"  # newest post, not the fetch date
     python = next(s for s in signals["series"] if s["id"] == "python")
-    assert python["points"][-1]["mentions"] == 1 and python["profile_tools"] == ["Python"]
+    assert python["points"][-1]["mentions"] == 1 and python["name"] == "Python"
     pulse = json.loads((tmp_path / "out" / MARKET_PULSE).read_text(encoding="utf-8"))
     assert pulse["data_as_of"] == "2026-09-30"
 

@@ -1,6 +1,6 @@
 """One canonical skill vocabulary (QART_NEXT_STEPS §2): every skill id used anywhere must exist
 in catalogue/skills.json. Fails on any unknown id. Questionnaire files (current roles, tasks,
-tool chips) join this test when they are added."""
+tool chips) are checked too."""
 
 import json
 from pathlib import Path
@@ -9,6 +9,7 @@ from typing import Any
 import pytest
 
 from src.engine.catalogue import default_catalogue
+from src.engine.questionnaire import load_questionnaire
 from src.signals.config import default_config
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -72,3 +73,11 @@ def test_vocabulary_ids_are_unique_and_complete() -> None:
 def test_radar_tracks_exactly_the_trend_tracked_vocabulary_skills() -> None:
     tracked = {s.id for s in VOCABULARY.values() if s.trend_tracked}
     assert {s.id for s in default_config().skills} == tracked
+
+
+def test_questionnaire_skill_ids_exist() -> None:
+    q = load_questionnaire()
+    unknown = sorted(q.referenced_skill_ids() - set(VOCABULARY))
+    assert not unknown, f"questionnaire.json uses unknown skill ids: {unknown}"
+    roles = default_catalogue().roles
+    assert all(r.catalogue_role_id in roles for r in q.current_roles if r.catalogue_role_id)

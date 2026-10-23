@@ -45,7 +45,6 @@ class SkillInfo(BaseModel):
     trend_tracked: bool = False  # has Hacker News patterns for the Skills Radar
     patterns: list[str] = []
     case_sensitive_patterns: list[str] = []
-    profile_tools: list[str] = []  # questionnaire tool chips that mean "I use this"
     market_name: str | None = None  # label in the radar when it differs from `name`
 
 

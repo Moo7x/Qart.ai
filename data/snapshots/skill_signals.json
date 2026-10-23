@@ -5,7 +5,7 @@
  "attribution": "Source: Hacker News “Who is hiring?” threads",
  "update_frequency": "one thread per month (first weekday of the month)",
  "data_as_of": "2026-10-15",
- "fetched_at": "2026-10-23T01:05:03+00:00",
+ "fetched_at": "2026-10-23T01:11:44+00:00",
  "caveats": [
   "Tech hiring signal (Hacker News), not the Malaysian job market.",
   "Skewed toward tech start-ups and US or remote roles; a few hundred posts a month.",
@@ -399,10 +399,6 @@
      "ma_short": 0.0028,
      "ma_long": 0.0039
     }
-   ],
-   "profile_tools": [],
-   "catalogue_skills": [
-    "data_quality"
    ]
   },
   {
@@ -738,10 +734,6 @@
      "ma_short": 0.0067,
      "ma_long": 0.0078
     }
-   ],
-   "profile_tools": [],
-   "catalogue_skills": [
-    "process_automation"
    ]
   },
   {
@@ -1077,12 +1069,6 @@
      "ma_short": 0.0152,
      "ma_long": 0.0145
     }
-   ],
-   "profile_tools": [
-    "Excel"
-   ],
-   "catalogue_skills": [
-    "spreadsheet_modelling"
    ]
   },
   {
@@ -1418,12 +1404,6 @@
      "ma_short": 0.2262,
      "ma_long": 0.2176
     }
-   ],
-   "profile_tools": [
-    "SQL"
-   ],
-   "catalogue_skills": [
-    "sql_basics"
    ]
   },
   {
@@ -1759,11 +1739,7 @@
      "ma_short": 0.2624,
      "ma_long": 0.2498
     }
-   ],
-   "profile_tools": [
-    "Python"
-   ],
-   "catalogue_skills": []
+   ]
   },
   {
    "id": "pytorch",
@@ -2098,9 +2074,7 @@
      "ma_short": 0.026,
      "ma_long": 0.0214
     }
-   ],
-   "profile_tools": [],
-   "catalogue_skills": []
+   ]
   },
   {
    "id": "tensorflow",
@@ -2435,9 +2409,7 @@
      "ma_short": 0.007,
      "ma_long": 0.0064
     }
-   ],
-   "profile_tools": [],
-   "catalogue_skills": []
+   ]
   },
   {
    "id": "llms",
@@ -2772,11 +2744,7 @@
      "ma_short": 0.1571,
      "ma_long": 0.1489
     }
-   ],
-   "profile_tools": [
-    "AI assistants"
-   ],
-   "catalogue_skills": []
+   ]
   },
   {
    "id": "rag",
@@ -3111,9 +3079,7 @@
      "ma_short": 0.0292,
      "ma_long": 0.0256
     }
-   ],
-   "profile_tools": [],
-   "catalogue_skills": []
+   ]
   },
   {
    "id": "langchain",
@@ -3448,9 +3414,7 @@
      "ma_short": 0.0194,
      "ma_long": 0.0138
     }
-   ],
-   "profile_tools": [],
-   "catalogue_skills": []
+   ]
   },
   {
    "id": "ai_agents",
@@ -3785,9 +3749,7 @@
      "ma_short": 0.1597,
      "ma_long": 0.1356
     }
-   ],
-   "profile_tools": [],
-   "catalogue_skills": []
+   ]
   },
   {
    "id": "mlops",
@@ -4122,9 +4084,7 @@
      "ma_short": 0.0177,
      "ma_long": 0.0093
     }
-   ],
-   "profile_tools": [],
-   "catalogue_skills": []
+   ]
   },
   {
    "id": "computer_vision",
@@ -4459,9 +4419,7 @@
      "ma_short": 0.0173,
      "ma_long": 0.0209
     }
-   ],
-   "profile_tools": [],
-   "catalogue_skills": []
+   ]
   },
   {
    "id": "nlp",
@@ -4796,9 +4754,7 @@
      "ma_short": 0.0055,
      "ma_long": 0.0072
     }
-   ],
-   "profile_tools": [],
-   "catalogue_skills": []
+   ]
   },
   {
    "id": "kubernetes",
@@ -5133,9 +5089,7 @@
      "ma_short": 0.1072,
      "ma_long": 0.0925
     }
-   ],
-   "profile_tools": [],
-   "catalogue_skills": []
+   ]
   },
   {
    "id": "aws",
@@ -5470,9 +5424,7 @@
      "ma_short": 0.1416,
      "ma_long": 0.1532
     }
-   ],
-   "profile_tools": [],
-   "catalogue_skills": []
+   ]
   },
   {
    "id": "typescript",
@@ -5807,9 +5759,7 @@
      "ma_short": 0.22,
      "ma_long": 0.2354
     }
-   ],
-   "profile_tools": [],
-   "catalogue_skills": []
+   ]
   },
   {
    "id": "react",
@@ -6144,9 +6094,7 @@
      "ma_short": 0.1991,
      "ma_long": 0.2211
     }
-   ],
-   "profile_tools": [],
-   "catalogue_skills": []
+   ]
   },
   {
    "id": "data_visualisation",
@@ -6481,11 +6429,7 @@
      "ma_short": 0.0029,
      "ma_long": 0.0022
     }
-   ],
-   "profile_tools": [
-    "Power BI / Tableau"
-   ],
-   "catalogue_skills": []
+   ]
   },
   {
    "id": "erp",
@@ -6820,11 +6764,7 @@
      "ma_short": 0.018,
      "ma_long": 0.0122
     }
-   ],
-   "profile_tools": [
-    "ERP (SAP, Oracle)"
-   ],
-   "catalogue_skills": []
+   ]
   }
  ]
 }
