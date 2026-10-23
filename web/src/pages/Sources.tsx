@@ -75,7 +75,7 @@ export default function Sources() {
   return (
     <div ref={root} className="max-w-3xl mx-auto space-y-6">
       <div data-reveal>
-        <Link to="/signals" className="inline-flex items-center gap-1 text-sm text-action-ink hover:underline mb-4"><ArrowLeft size={14} aria-hidden="true" /> Back to Signals</Link>
+        <Link to="/app/skills" className="inline-flex items-center gap-1 text-sm text-action-ink hover:underline mb-4"><ArrowLeft size={14} aria-hidden="true" /> Back to Signals</Link>
         <PageHeader
           title={<>Where the numbers come <Highlight>from</Highlight></>}
           intro="Every external feed the app shows. The app reads saved snapshots of these, so it works offline; a scheduled job refreshes them. Profiles and cases are synthetic demo data and are never sent to any of these sources."

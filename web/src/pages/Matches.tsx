@@ -258,7 +258,7 @@ function RoleDetail({ role, data, hiring }: { role: RankedRoleView; data: Rankin
         {fits(role) ? <CircleCheck size={20} className="shrink-0 text-action-ink" aria-hidden="true" /> : <TriangleAlert size={20} className="shrink-0 text-marigold-ink" aria-hidden="true" />}
         <p className="text-sm font-medium text-ink">{fits(role) ? 'The skills gap fits the time in your plan.' : 'The skills gap needs more time than your plan has; a longer timeframe would fit it.'}</p>
       </div>
-      <Link to={`/pathway?role=${role.role_id}`} className={`${btn.primary} w-full sm:w-auto`}>Build my learning plan for this role <ArrowRight size={16} aria-hidden="true" /></Link>
+      <Link to={`/app/pathway?role=${role.role_id}`} className={`${btn.primary} w-full sm:w-auto`}>Build my learning plan for this role <ArrowRight size={16} aria-hidden="true" /></Link>
 
       <section className="rounded-xl border border-hairline p-5 space-y-3">
         <h3 className="text-lg font-semibold text-ink">Why this role</h3>
@@ -345,7 +345,7 @@ export default function Matches() {
           <SectionTitle>Not enough to rank yet</SectionTitle>
           <p className="text-sm text-graphite">{data.message} Meanwhile, these roles are common first steps:</p>
           <ul className="flex flex-wrap gap-2">{data.starter_roles.map(r => <li key={r.role_id}><Tag tone="linen">{r.name}</Tag></li>)}</ul>
-          <Link to="/start" className={btn.primary}>Add skills on your profile <ArrowRight size={16} aria-hidden="true" /></Link>
+          <Link to="/onboarding/1" className={btn.primary}>Add skills in Find my path <ArrowRight size={16} aria-hidden="true" /></Link>
         </Card>
       ) : (
         <>

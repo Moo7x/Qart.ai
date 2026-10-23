@@ -168,7 +168,7 @@ export default function Pathway() {
     return (
       <div className="max-w-3xl mx-auto space-y-4">
         <EmptyState title="Not enough to plan yet">{data.message}</EmptyState>
-        <Link to="/start" className={btn.primary}>Add skills on your profile <ArrowRight size={16} aria-hidden="true" /></Link>
+        <Link to="/onboarding/1" className={btn.primary}>Add skills in Find my path <ArrowRight size={16} aria-hidden="true" /></Link>
       </div>
     )
   }
@@ -233,7 +233,7 @@ export default function Pathway() {
       </div>
 
       <section data-reveal>
-        <SectionTitle aside={<Link to="/start" className="text-sm text-action-ink hover:underline">Change my answers</Link>}>Week by week</SectionTitle>
+        <SectionTitle aside={<Link to="/onboarding/1" className="text-sm text-action-ink hover:underline">Change my answers</Link>}>Week by week</SectionTitle>
         {list(inPlan)}
         {nextPhase.length > 0 && (
           <>
@@ -292,7 +292,7 @@ export default function Pathway() {
               </div>
             )}
             <p className="text-xs text-graphite">
-              {market.note} {market.attribution} · data to {market.data_as_of}. <Link to="/signals" className="text-action-ink hover:underline">See the radar</Link>
+              {market.note} {market.attribution} · data to {market.data_as_of}. <Link to="/app/skills" className="text-action-ink hover:underline">See the radar</Link>
             </p>
           </Card>
         </section>

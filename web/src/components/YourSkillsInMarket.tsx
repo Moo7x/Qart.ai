@@ -13,7 +13,7 @@ export default function YourSkillsInMarket({ mine, hiring }: { mine: UserSignals
     <div className="rounded-lg border border-hairline bg-surface p-5 sm:p-6 space-y-5">
       {mine.user_skills.length === 0 ? (
         <p className="text-sm text-graphite">
-          None of your skills is tracked yet. Add your tools and tasks on your <Link to="/start" className="text-action-ink hover:underline">Profile</Link> to see them here.
+          None of your skills is tracked yet. Add your tools and tasks in <Link to="/onboarding/1" className="text-action-ink hover:underline">Find my path</Link> to see them here.
         </p>
       ) : (
         <div>

@@ -5,6 +5,8 @@ import { RotateCcw } from 'lucide-react'
 import { resetDemo } from './api'
 import { PERSONAS, PersonaProvider, usePersona } from './persona'
 import type { PersonaRole } from './persona'
+import { AnswersProvider, clearSavedAnswers } from './onboarding/answers'
+import { AppPage, Gated } from './onboarding/AppShell'
 import { EmptyState, Loading, ProvenanceTag } from './ui'
 
 // Pages load on first visit, so the first screen does not download all of them.
@@ -12,7 +14,10 @@ const CompanionUpdates = lazy(() => import('./pages/CompanionUpdates'))
 const Evidence = lazy(() => import('./pages/Evidence'))
 const HRSummary = lazy(() => import('./pages/HRSummary'))
 const Impact = lazy(() => import('./pages/Impact'))
-const Intake = lazy(() => import('./pages/Intake'))
+const FindMyPath = lazy(() => import('./pages/FindMyPath'))
+const Landing = lazy(() => import('./pages/Landing'))
+const Matching = lazy(() => import('./pages/Matching'))
+const Onboarding = lazy(() => import('./pages/Onboarding'))
 const Matches = lazy(() => import('./pages/Matches'))
 const MySkills = lazy(() => import('./pages/MySkills'))
 const Pathway = lazy(() => import('./pages/Pathway'))
@@ -24,17 +29,9 @@ const WorkQueue = lazy(() => import('./pages/WorkQueue'))
 const Workspace = lazy(() => import('./pages/Workspace'))
 
 const LINKS: Record<PersonaRole, { to: string; label: string }[]> = {
-  // The reskilling flow in order, then the practice loop.
-  employee: [
-    { to: '/start', label: 'Profile' },
-    { to: '/signals', label: 'Signals' },
-    { to: '/matches', label: 'Matches' },
-    { to: '/pathway', label: 'Pathway' },
-    { to: '/impact', label: 'SDG impact' },
-    { to: '/scenarios', label: 'Scenarios' },
-    { to: '/queue', label: 'Work queue' },
-    { to: '/skills', label: 'My skills' },
-  ],
+  // Employees navigate with the app's tab bar (Find my path · Future skills · Get matched ·
+  // Generate pathway · More), so the header has no link row for them.
+  employee: [],
   senior: [{ to: '/improve', label: 'Companion updates' }],
   hr: [
     { to: '/hr', label: 'HR summary' },
@@ -42,8 +39,8 @@ const LINKS: Record<PersonaRole, { to: string; label: string }[]> = {
   ],
 }
 
-// Employees land on their Profile, the first step of the reskilling flow.
-const HOME: Record<PersonaRole, string> = { employee: '/start', senior: '/improve', hr: '/hr' }
+// Employees land on the "Find my path" landing page.
+const HOME: Record<PersonaRole, string> = { employee: '/', senior: '/improve', hr: '/hr' }
 
 function Nav() {
   const navigate = useNavigate()
@@ -63,6 +60,7 @@ function Nav() {
     setResetting(true)
     try {
       await resetDemo()
+      clearSavedAnswers() // answers drafts and "profile complete" live in this browser
       navigate(HOME[persona.role])
       window.location.reload()
     } finally {
@@ -106,7 +104,8 @@ function Nav() {
           </button>
         </div>
       </div>
-      {/* Links get their own row: eight employee screens do not fit beside the controls. */}
+      {/* HR and senior links get their own row; employees use the tab bar on each page. */}
+      {LINKS[persona.role].length > 0 && (
         <nav ref={navRef} aria-label="Main" className="max-w-6xl mx-auto px-4 flex gap-1 overflow-x-auto pb-2 -mt-1">
           {LINKS[persona.role].map(l => (
             <NavLink
@@ -120,6 +119,7 @@ function Nav() {
             </NavLink>
           ))}
         </nav>
+      )}
     </header>
   )
 }
@@ -140,7 +140,24 @@ function Only({ role, children }: { role: PersonaRole; children: ReactNode }) {
 
 function Home() {
   const { persona } = usePersona()
-  return <Navigate to={HOME[persona.role]} replace />
+  return persona.role === 'employee' ? <Landing /> : <Navigate to={HOME[persona.role]} replace />
+}
+
+/** Old URLs keep working: they forward to the new route with their query (e.g. ?role=). */
+function Forward({ to }: { to: string }) {
+  const { search } = useLocation()
+  return <Navigate to={`${to}${search}`} replace />
+}
+
+/** An employee page inside the app shell (tab bar on top). */
+function Employee({ children }: { children: ReactNode }) {
+  return <Only role="employee"><AppPage>{children}</AppPage></Only>
+}
+
+/** Data sources are open to every persona; employees see it inside their app shell. */
+function SourcesPage() {
+  const { persona } = usePersona()
+  return persona.role === 'employee' ? <AppPage><Sources /></AppPage> : <Sources />
 }
 
 // The workspace needs the full width so two tables fit without truncating descriptions.
@@ -153,29 +170,38 @@ export default function App() {
   return (
     <PersonaProvider>
       <BrowserRouter>
+        <AnswersProvider>
         <Nav />
         <Main>
           <Suspense fallback={<Loading what="page" />}>
             <Routes>
               <Route path="/" element={<Home />} />
-              <Route path="/start" element={<Only role="employee"><Intake /></Only>} />
-              <Route path="/queue" element={<Only role="employee"><WorkQueue /></Only>} />
-              <Route path="/workspace/:caseId" element={<Only role="employee"><Workspace /></Only>} />
-              <Route path="/result/:caseId" element={<Only role="employee"><Result /></Only>} />
-              <Route path="/skills" element={<Only role="employee"><MySkills /></Only>} />
-              <Route path="/signals" element={<Only role="employee"><Signals /></Only>} />
-              <Route path="/sources" element={<Sources />} />
-              <Route path="/matches" element={<Only role="employee"><Matches /></Only>} />
-              <Route path="/future" element={<Navigate to="/matches" replace />} />
-              <Route path="/pathway" element={<Only role="employee"><Pathway /></Only>} />
-              <Route path="/impact" element={<Only role="employee"><Impact /></Only>} />
-              <Route path="/scenarios" element={<Only role="employee"><Scenarios /></Only>} />
+              <Route path="/onboarding/:step" element={<Only role="employee"><Onboarding /></Only>} />
+              <Route path="/matching" element={<Only role="employee"><Matching /></Only>} />
+              <Route path="/app" element={<Navigate to="/app/path" replace />} />
+              <Route path="/app/path" element={<Employee><FindMyPath /></Employee>} />
+              <Route path="/app/skills" element={<Employee><Signals /></Employee>} />
+              <Route path="/app/match" element={<Employee><Gated tab="Get matched"><Matches /></Gated></Employee>} />
+              <Route path="/app/pathway" element={<Employee><Gated tab="Generate pathway"><Pathway /></Gated></Employee>} />
+              <Route path="/impact" element={<Employee><Impact /></Employee>} />
+              <Route path="/scenarios" element={<Employee><Scenarios /></Employee>} />
+              <Route path="/queue" element={<Employee><WorkQueue /></Employee>} />
+              <Route path="/workspace/:caseId" element={<Employee><Workspace /></Employee>} />
+              <Route path="/result/:caseId" element={<Employee><Result /></Employee>} />
+              <Route path="/skills" element={<Employee><MySkills /></Employee>} />
+              <Route path="/sources" element={<SourcesPage />} />
+              <Route path="/start" element={<Forward to="/onboarding/1" />} />
+              <Route path="/signals" element={<Forward to="/app/skills" />} />
+              <Route path="/matches" element={<Forward to="/app/match" />} />
+              <Route path="/future" element={<Forward to="/app/match" />} />
+              <Route path="/pathway" element={<Forward to="/app/pathway" />} />
               <Route path="/hr" element={<Only role="hr"><HRSummary /></Only>} />
               <Route path="/evidence" element={<Only role="hr"><Evidence /></Only>} />
               <Route path="/improve" element={<Only role="senior"><CompanionUpdates /></Only>} />
             </Routes>
           </Suspense>
         </Main>
+        </AnswersProvider>
       </BrowserRouter>
     </PersonaProvider>
   )

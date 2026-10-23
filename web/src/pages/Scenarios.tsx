@@ -188,7 +188,7 @@ export default function Scenarios() {
         <NextStepCard
           eyebrow="Ready?"
           title="Start step 1 of your pathway"
-          action={<Link to={`/pathway?role=${encodeURIComponent(both.assistive.roles[0]?.role_id ?? '')}`} className={`${btn.primary} whitespace-nowrap`}>Open my pathway <ArrowRight size={16} aria-hidden="true" /></Link>}
+          action={<Link to={`/app/pathway?role=${encodeURIComponent(both.assistive.roles[0]?.role_id ?? '')}`} className={`${btn.primary} whitespace-nowrap`}>Open my pathway <ArrowRight size={16} aria-hidden="true" /></Link>}
         >
           Your pathway is planned to work in both scenarios.
         </NextStepCard>

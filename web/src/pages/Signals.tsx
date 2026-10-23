@@ -73,7 +73,7 @@ export default function Signals() {
         <NextStepCard
           eyebrow="Next"
           title="See which roles fit you"
-          action={<Link to="/matches" className={`${btn.primary} whitespace-nowrap`}>See my role matches <ArrowRight size={16} aria-hidden="true" /></Link>}
+          action={<Link to="/app/match" className={`${btn.primary} whitespace-nowrap`}>See my role matches <ArrowRight size={16} aria-hidden="true" /></Link>}
         >
           Your matches use these trends as market momentum, next to your skills, your direction and your time.
         </NextStepCard>
