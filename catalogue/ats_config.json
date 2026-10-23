@@ -1,0 +1,118 @@
+{
+  "_about": "Settings for the ATS job-board signal. Every rule is DECLARED and transparent (keyword patterns, not a model). Region rules are matched on the location text (case-insensitive); a posting can be in several regions. 'remote' also uses the source's own remote / workplaceType fields. Role families use families.json ids, matched on the job title in order (first match wins). AI terms flag whether a posting mentions AI at all; skills use the canonical patterns in skills.json.",
+  "http": {
+    "user_agent": "Qart.ai job-trend signal (SDC hackathon; public ATS job-board APIs only; github.com/Moo7x/Qart.ai)",
+    "timeout_s": 30,
+    "retries": 3,
+    "backoff_s": 2.0,
+    "pause_s": 1.0,
+    "lever_page_size": 100
+  },
+  "regions": {
+    "malaysia": "\\b(malaysia|kuala lumpur|petaling jaya|penang|cyberjaya|johor|selangor|\\bKL\\b)",
+    "singapore": "\\bsingapore\\b",
+    "apac": "\\b(malaysia|kuala lumpur|penang|cyberjaya|singapore|indonesia|jakarta|thailand|bangkok|philippines|manila|vietnam|ho chi minh|hanoi|apac|asia[ -]pacific|australia|sydney|melbourne|new zealand|auckland|japan|tokyo|korea|seoul|india|bangalore|bengaluru|hyderabad|mumbai|pune|delhi|gurgaon|hong kong|taiwan|taipei|china|shanghai|beijing|shenzhen)\\b"
+  },
+  "region_labels": {
+    "global": "All covered companies",
+    "malaysia": "Malaysia",
+    "singapore": "Singapore",
+    "malaysia_singapore": "Malaysia + Singapore",
+    "apac": "Asia-Pacific",
+    "remote": "Remote"
+  },
+  "ai_terms": [
+    "\\bAI\\b",
+    "artificial intelligence",
+    "machine learning",
+    "\\bML\\b",
+    "deep learning",
+    "\\bLLMs?\\b",
+    "large language model",
+    "generative AI",
+    "\\bGenAI\\b",
+    "prompt engineering",
+    "\\bNLP\\b",
+    "natural language processing",
+    "computer vision",
+    "\\bMLOps\\b",
+    "\\bRAG\\b",
+    "AI agents?",
+    "agentic",
+    "neural network",
+    "foundation models?",
+    "\\bGPT\\b",
+    "\\bCopilot\\b"
+  ],
+  "ai_terms_case_sensitive": [
+    "\\bAI\\b",
+    "\\bML\\b",
+    "\\bLLMs?\\b",
+    "\\bGenAI\\b",
+    "\\bNLP\\b",
+    "\\bMLOps\\b",
+    "\\bRAG\\b",
+    "\\bGPT\\b"
+  ],
+  "role_families": [
+    [
+      "security",
+      "secur|cyber|soc analyst|threat|identity"
+    ],
+    [
+      "ml_ai",
+      "machine learning|\\bml\\b|\\bai\\b|research scientist|applied scientist|deep learning|llm|nlp|computer vision"
+    ],
+    [
+      "data_engineering",
+      "data engineer|analytics engineer|data platform|etl|database"
+    ],
+    [
+      "analytics",
+      "data analyst|business intelligence|\\bbi\\b|analytics|data scientist|insights"
+    ],
+    [
+      "finance_ops",
+      "accountant|accounting|finance|financial|controller|payroll|treasury|tax|audit|billing|reconcil|fp&a|payable|receivable"
+    ],
+    [
+      "risk_compliance",
+      "compliance|risk|regulatory|aml|kyc|legal"
+    ],
+    [
+      "automation",
+      "automation|rpa|process improvement|operations engineer"
+    ],
+    [
+      "project_management",
+      "project manager|program manager|programme manager|scrum|delivery manager|pmo"
+    ],
+    [
+      "business",
+      "product manager|business analyst|strategy|business operations|partnerships|chief of staff"
+    ],
+    [
+      "marketing",
+      "marketing|growth|seo|content|brand|social media|communications"
+    ],
+    [
+      "customer_ops",
+      "customer|support|success|service|onboarding"
+    ],
+    [
+      "it_support",
+      "it support|helpdesk|help desk|desktop support|it technician|systems administrator"
+    ],
+    [
+      "admin",
+      "administrat|assistant|office manager|receptionist|executive assistant"
+    ],
+    [
+      "software",
+      "engineer|developer|software|frontend|backend|full[- ]stack|sre|devops|mobile|ios|android"
+    ]
+  ],
+  "min_sample": 20,
+  "min_periods_for_chart": 4,
+  "snapshot_name": "ats_signals.json"
+}

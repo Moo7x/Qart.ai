@@ -1,0 +1,241 @@
+{
+  "_about": "Companies whose public ATS job boards are fetched (QART_NEXT_STEPS job signal). Each token was verified by calling its public endpoint on the 'checked' date; counts are what the board showed then (Malaysia/Singapore and APAC by location text). Prioritised for Malaysia, Singapore and remote-APAC hiring. Only public, documented, unauthenticated GET endpoints are used.",
+  "sources": {
+    "greenhouse": [
+      {
+        "token": "stripe",
+        "name": "Stripe",
+        "checked": "2026-10-23",
+        "open_jobs_when_checked": 726,
+        "malaysia_singapore_jobs_when_checked": 51,
+        "apac_jobs_when_checked": 119
+      },
+      {
+        "token": "databricks",
+        "name": "Databricks",
+        "checked": "2026-10-23",
+        "open_jobs_when_checked": 898,
+        "malaysia_singapore_jobs_when_checked": 28,
+        "apac_jobs_when_checked": 180
+      },
+      {
+        "token": "datadog",
+        "name": "Datadog",
+        "checked": "2026-10-23",
+        "open_jobs_when_checked": 439,
+        "malaysia_singapore_jobs_when_checked": 20,
+        "apac_jobs_when_checked": 87
+      },
+      {
+        "token": "mongodb",
+        "name": "MongoDB",
+        "checked": "2026-10-23",
+        "open_jobs_when_checked": 387,
+        "malaysia_singapore_jobs_when_checked": 10,
+        "apac_jobs_when_checked": 52
+      },
+      {
+        "token": "gitlab",
+        "name": "GitLab",
+        "checked": "2026-10-23",
+        "open_jobs_when_checked": 231,
+        "malaysia_singapore_jobs_when_checked": 8,
+        "apac_jobs_when_checked": 47
+      },
+      {
+        "token": "okta",
+        "name": "Okta",
+        "checked": "2026-10-23",
+        "open_jobs_when_checked": 392,
+        "malaysia_singapore_jobs_when_checked": 6,
+        "apac_jobs_when_checked": 124
+      },
+      {
+        "token": "anthropic",
+        "name": "Anthropic",
+        "checked": "2026-10-23",
+        "open_jobs_when_checked": 683,
+        "malaysia_singapore_jobs_when_checked": 11,
+        "apac_jobs_when_checked": 57
+      },
+      {
+        "token": "agoda",
+        "name": "Agoda",
+        "checked": "2026-10-23",
+        "open_jobs_when_checked": 316,
+        "malaysia_singapore_jobs_when_checked": 24,
+        "apac_jobs_when_checked": 279
+      },
+      {
+        "token": "thoughtworks",
+        "name": "Thoughtworks",
+        "checked": "2026-10-23",
+        "open_jobs_when_checked": 41,
+        "malaysia_singapore_jobs_when_checked": 17,
+        "apac_jobs_when_checked": 22
+      },
+      {
+        "token": "elastic",
+        "name": "Elastic",
+        "checked": "2026-10-23",
+        "open_jobs_when_checked": 393,
+        "malaysia_singapore_jobs_when_checked": 5,
+        "apac_jobs_when_checked": 33
+      },
+      {
+        "token": "pinterest",
+        "name": "Pinterest",
+        "checked": "2026-10-23",
+        "open_jobs_when_checked": 162,
+        "malaysia_singapore_jobs_when_checked": 12,
+        "apac_jobs_when_checked": 14
+      },
+      {
+        "token": "appier",
+        "name": "Appier",
+        "checked": "2026-10-23",
+        "open_jobs_when_checked": 66,
+        "malaysia_singapore_jobs_when_checked": 1,
+        "apac_jobs_when_checked": 64
+      },
+      {
+        "token": "rubrik",
+        "name": "Rubrik",
+        "checked": "2026-10-23",
+        "open_jobs_when_checked": 148,
+        "malaysia_singapore_jobs_when_checked": 1,
+        "apac_jobs_when_checked": 44
+      },
+      {
+        "token": "airbnb",
+        "name": "Airbnb",
+        "checked": "2026-10-23",
+        "open_jobs_when_checked": 193,
+        "malaysia_singapore_jobs_when_checked": 5,
+        "apac_jobs_when_checked": 28
+      },
+      {
+        "token": "coinbase",
+        "name": "Coinbase",
+        "checked": "2026-10-23",
+        "open_jobs_when_checked": 223,
+        "malaysia_singapore_jobs_when_checked": 6,
+        "apac_jobs_when_checked": 18
+      },
+      {
+        "token": "twilio",
+        "name": "Twilio",
+        "checked": "2026-10-23",
+        "open_jobs_when_checked": 131,
+        "malaysia_singapore_jobs_when_checked": 6,
+        "apac_jobs_when_checked": 19
+      }
+    ],
+    "lever": [
+      {
+        "token": "ninjavan",
+        "name": "Ninja Van",
+        "checked": "2026-10-23",
+        "open_jobs_when_checked": 139,
+        "malaysia_singapore_jobs_when_checked": 98,
+        "apac_jobs_when_checked": 123
+      },
+      {
+        "token": "lalamove",
+        "name": "Lalamove",
+        "checked": "2026-10-23",
+        "open_jobs_when_checked": 157,
+        "malaysia_singapore_jobs_when_checked": 18,
+        "apac_jobs_when_checked": 109
+      },
+      {
+        "token": "palantir",
+        "name": "Palantir",
+        "checked": "2026-10-23",
+        "open_jobs_when_checked": 307,
+        "malaysia_singapore_jobs_when_checked": 4,
+        "apac_jobs_when_checked": 13
+      },
+      {
+        "token": "nium",
+        "name": "Nium",
+        "checked": "2026-10-23",
+        "open_jobs_when_checked": 19,
+        "malaysia_singapore_jobs_when_checked": 5,
+        "apac_jobs_when_checked": 9
+      },
+      {
+        "token": "binance",
+        "name": "Binance",
+        "checked": "2026-10-23",
+        "open_jobs_when_checked": 17,
+        "malaysia_singapore_jobs_when_checked": 0,
+        "apac_jobs_when_checked": 12
+      },
+      {
+        "token": "spotify",
+        "name": "Spotify",
+        "checked": "2026-10-23",
+        "open_jobs_when_checked": 80,
+        "malaysia_singapore_jobs_when_checked": 0,
+        "apac_jobs_when_checked": 7
+      }
+    ],
+    "ashby": [
+      {
+        "token": "airwallex",
+        "name": "Airwallex",
+        "checked": "2026-10-23",
+        "open_jobs_when_checked": 508,
+        "malaysia_singapore_jobs_when_checked": 138,
+        "apac_jobs_when_checked": 242
+      },
+      {
+        "token": "openai",
+        "name": "OpenAI",
+        "checked": "2026-10-23",
+        "open_jobs_when_checked": 802,
+        "malaysia_singapore_jobs_when_checked": 37,
+        "apac_jobs_when_checked": 93
+      },
+      {
+        "token": "linear",
+        "name": "Linear",
+        "checked": "2026-10-23",
+        "open_jobs_when_checked": 34,
+        "malaysia_singapore_jobs_when_checked": 6,
+        "apac_jobs_when_checked": 6
+      },
+      {
+        "token": "cohere",
+        "name": "Cohere",
+        "checked": "2026-10-23",
+        "open_jobs_when_checked": 114,
+        "malaysia_singapore_jobs_when_checked": 2,
+        "apac_jobs_when_checked": 7
+      },
+      {
+        "token": "notion",
+        "name": "Notion",
+        "checked": "2026-10-23",
+        "open_jobs_when_checked": 139,
+        "malaysia_singapore_jobs_when_checked": 0,
+        "apac_jobs_when_checked": 27
+      },
+      {
+        "token": "replit",
+        "name": "Replit",
+        "checked": "2026-10-23",
+        "open_jobs_when_checked": 52,
+        "malaysia_singapore_jobs_when_checked": 1,
+        "apac_jobs_when_checked": 4
+      }
+    ]
+  },
+  "ADD_YOUR_OWN": {
+    "_how": "Add companies here in the same shape, under greenhouse / lever / ashby. Find the token in the company's job-board URL: boards.greenhouse.io/{token}, jobs.lever.co/{token}, jobs.ashbyhq.com/{token}. Run `python scripts/fetch_jobs.py --check` to verify new tokens before committing.",
+    "greenhouse": [],
+    "lever": [],
+    "ashby": []
+  }
+}

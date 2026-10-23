@@ -20,6 +20,7 @@ from typing import Any
 import httpx
 
 from src.signals.config import REPO_ROOT
+from src.signals.http import Politeness, get_json
 
 logger = logging.getLogger(__name__)
 
@@ -36,6 +37,7 @@ PAUSE_S = 0.5  # pause between requests
 RETRIES = 3
 BACKOFF_S = 2.0  # first retry wait; doubles each time
 TIMEOUT_S = 30.0
+HN_POLITENESS = Politeness(TIMEOUT_S, RETRIES, BACKOFF_S, PAUSE_S)
 MAX_SEARCH_PAGES = 10  # 100 stories a page; plenty for 36 months of threads
 
 MONTHS = {
@@ -87,20 +89,7 @@ def _get(
     params: dict[str, Any] | None = None,
     sleep: Callable[[float], None] = time.sleep,
 ) -> Any:
-    wait = BACKOFF_S
-    for attempt in range(1, RETRIES + 1):
-        try:
-            response = client.get(f"{API}{path}", params=params, timeout=TIMEOUT_S)
-            response.raise_for_status()
-            sleep(PAUSE_S)
-            return response.json()
-        except httpx.HTTPError as exc:
-            if attempt == RETRIES:
-                raise
-            logger.warning("HN API %s failed (%s); retrying in %.0f s", path, exc, wait)
-            sleep(wait)
-            wait *= 2
-    raise RuntimeError("unreachable")
+    return get_json(client, f"{API}{path}", params, HN_POLITENESS, sleep)
 
 
 def discover_threads(
