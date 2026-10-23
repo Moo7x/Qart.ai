@@ -19,16 +19,17 @@ number is illustrative.
 ## 2. Added (contract v2.1, additive, with tests)
 
 1. **`Profile.preferences`**: industry, education, tools, direction, timeframe_months, formats, ai_comfort, notes.
-   - **Stored only.** No engine factor reads them yet. A test pins that scores don't change, and the UI says "saved; not used for ranking yet".
-   - If the team wants them to count, these are the natural uses (each is a Person A change that would move rankings and golden-journey numbers, so it needs a joint decision):
+   - **v2.2: three of them are used** (each is explainable, tested, and does nothing when unset):
 
-     | Field | Possible use | Where |
+     | Field | Use | Where |
      |---|---|---|
-     | `timeframe_months` | planner horizon: weeks budget = months × 4.3 × weekly hours | `src/engine/planner.py` |
-     | `direction` | role filter: grow = current role; adjacent = roles sharing ≥1 skill; switch = all | `src/engine/recommend.py` |
-     | `formats` | course tie-break by format, once courses carry a format field | `catalogue/courses.json`, planner |
-     | `tools`, `ai_comfort` | could pre-fill self-reports, but **self-report is not evidence**, so keep separate | — |
-     | `industry`, `education` | context only; no factor | — |
+     | `timeframe_months` | horizon = round(months × 52/12) weeks: the path budget (weekly hours × horizon) and the effort penalty's horizon | `planner.py::plan_path`, `recommend.py::horizon_weeks` |
+     | `direction` | the roles a default path may target (grow / adjacent / switch); `matches_direction` marks roles; scores unchanged | `recommend.py::eligible_roles`, `api_engine.py::robust_top_role` |
+     | `ai_comfort` | at ≤ 3, the shortest chosen AI-intro course goes first (reorder only) | `planner.py::ai_intro_first` |
+     | `formats` | **stored only**: courses need a verified format label first | `catalogue/courses.json`, planner (later) |
+     | `tools` | **stored only**: self-report is not evidence | — |
+     | `industry`, `education` | **never read**: the recommender uses no demographic fields | — |
+   - The API says what it used: `PathPlan.profile_inputs`, `Recommendation.profile_inputs`, `PathPlan.horizon_weeks`.
    - `notes` is synthetic demo text, capped at 500 characters, never logged and never sent to an LLM.
 2. **`GET /api/sdg`**: target titles, UN links and rationales from `catalogue/sdg_map.json`. Only 4.4, 8.2 and 8.5 exist. The mockup's goals 9, 12, 13 and 16 are not shown, because the catalogue doesn't declare them.
 3. **Fix**: a walk-back corrected without help (help 0) returned 500 (`KeyError` in `HELP_PHRASE`). It's now explained as "on a second look, without help".

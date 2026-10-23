@@ -29,6 +29,12 @@ top two roles when their unclamped scores differ by < 0.03 (*declared*: halfway 
 gap that flipped under ±20% in `eval/SENSITIVITY.md` and the smallest that stayed stable; re-derived
 after the course update).
 
+**Profile answers (v2.2).** If the person gave a timeframe, the effort penalty uses it as the
+horizon instead of 12 weeks (months × 52/12, e.g. 3 months = 13 weeks), so more time means a
+smaller penalty. Direction never changes a score: it only marks roles (`matches_direction`) and
+decides which roles a default path may target (`eligible_roles`). `profile_inputs` lists, in
+plain words, which answers were used.
+
 ## 4. Where in the code
 `recommend()`, `score_role()`, `compute_factors()`, `gap_list()`, `changed_since()`,
 `top_role_under_sensitivity()`. Tests: `tests/test_recommend.py`. Report: `eval/SENSITIVITY.md`

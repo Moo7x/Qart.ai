@@ -15,6 +15,13 @@ Contract version: **v2** (21 Oct 2026). v2 aligns with `PROJECT_PLAN.md` v2:
 - `GET /api/sdg`: read-only SDG map from `catalogue/sdg_map.json` (targets with titles, UN links, rationales; role and skill tags; `about` = "declared judgment, not external evidence").
 - Fix: a walk-back corrected without help (`missed_then_found`, help 0) is now explained ("on a second look, without help") instead of returning 500. Evidence rules unchanged.
 
+**v2.2 additions (23 Oct 2026, additive; with empty preferences every ranking and path is unchanged, checked against saved output):** three profile answers are now used.
+- `timeframe_months` → horizon weeks = round(months × 52/12) (13/26/52). It replaces the path budget's 6 weeks and the effort penalty's 12 weeks.
+- `direction` → the roles a default path may target (grow: current role; adjacent: roles sharing a skill; switch: any other role). New `RoleRecommendation.matches_direction`; scores and ranks are untouched.
+- `ai_comfort ≤ 3` → the shortest chosen AI-intro course (course_25/14/15) moves to the front. It only reorders.
+- New `PathPlan.horizon_weeks`, `PathPlan.profile_inputs`, `Recommendation.profile_inputs`: plain lines naming the answers used.
+- Still stored only: tools, formats (courses have no format field yet). Never read: industry, education (no demographic fields in scoring), notes.
+
 ---
 
 ## 1. Repo layout (who owns what)

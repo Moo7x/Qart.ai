@@ -25,6 +25,12 @@ path visibly changes when evidence arrives.
 - Greedy: repeatedly add the affordable item that cuts the worst-case gap most per hour (tie: total
   gap cut per hour, then id). Order: prerequisites first, then standalone gap cut per hour.
 
+**Profile answers (v2.2).** The budget is weekly hours × the person's timeframe in weeks
+(3/6/12 months = 13/26/52), or × 6 weeks without one. The default role comes from their
+direction: grow keeps the current role; nearby or switch picks the best other role. With AI
+comfort at 3/10 or below, the shortest chosen AI-intro course moves to the front (a reorder
+only: same steps, hours and gap). `profile_inputs` explains each of these in the response.
+
 ## 4. Where in the code
 `plan_path()`, `build_resources()`, `greedy_select()`, `worst_case_gap()`, `order_steps()`.
 Exact version: `src/engine/planner_cpsat.py::cpsat_select` (OR-Tools CP-SAT, same model, values
