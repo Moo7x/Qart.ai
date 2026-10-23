@@ -1,6 +1,6 @@
 import { Lock } from 'lucide-react'
 import { type FormEvent, useState } from 'react'
-import { formatWhen, parseUtc, postJSON, useApi } from '../api'
+import { formatWhen, parseUtc, sendJSON, useApi } from '../api'
 import { PipelineDiagram, type StepId } from '../components/PipelineDiagram'
 import { Empty, Loading, Problem } from '../components/ui'
 import type { BacktestEntry, Run, SourceStatus } from '../types'
@@ -43,7 +43,7 @@ function RunNow({ onStarted }: { onStarted: () => void }) {
   async function submit(event: FormEvent) {
     event.preventDefault()
     try {
-      await postJSON('/api/pipeline/run', { 'X-Admin-Token': token })
+      await sendJSON('/api/pipeline/run', { headers: { 'X-Admin-Token': token } })
       setMessage('Run started. Progress appears below.')
       setOpen(false)
       onStarted()

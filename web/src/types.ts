@@ -95,3 +95,159 @@ export type BacktestEntry = {
   damped: number
   best: string
 }
+
+// ---- Journey (src/api/journey.py) ----
+
+export type Scenario = 'moderate' | 'fast'
+export type Situation = 'working' | 'student' | 'switcher'
+export type SkillKind = 'finance_core' | 'data_digital' | 'green' | 'business'
+
+export type PackSkill = { id: string; name: string; kind: SkillKind; ai_role: string; page: number }
+export type CurrentRole = {
+  id: string
+  title: string
+  impact: string
+  page: number
+  soc: string
+  summary: string
+  typical_skills: string[]
+  transitions: string[]
+  other_sectors: string[]
+}
+export type PackInfo = {
+  field: string
+  skills: PackSkill[]
+  current_roles: CurrentRole[]
+  destination_roles: { id: string; title: string }[]
+  samples: { id: string; label: string }[]
+  proficiency: string[]
+  courses_checked: string
+}
+
+export type ClaimedSkill = { skill: string; name: string; level: number | null; evidence: string }
+export type Extraction = {
+  current_role: string
+  years_experience: number | null
+  skills: ClaimedSkill[]
+  interests: SkillKind[]
+  engine: string
+  note: string
+  removed: Record<string, number>
+  rejected: { skill: string; reason: string }[]
+}
+
+export type SkillClaim = { level: number | null; evidence: string; source: 'cv' | 'self' | 'keyword' }
+export type ProfileData = {
+  situation: Situation
+  current_role: string
+  years_experience: number | null
+  weekly_hours: number
+  budget: 'free' | 'free_hrd' | 'up_to_500'
+  interests: SkillKind[]
+  sdg_priorities: string[]
+  skills: Record<string, SkillClaim>
+  extraction_engine: string
+}
+
+export type GapColumn = 'ready' | 'bridgeable' | 'missing' | 'not_stated'
+export type RequirementScore = {
+  skill: string
+  skill_name: string
+  tier: 'core' | 'upskill' | 'support'
+  essential: boolean
+  required: number
+  claimed: number | null
+  base_weight: number
+  weight: number
+  shift_reason: string
+  contribution: number
+  column: GapColumn
+  evidence_pages: number[]
+}
+export type SdgRef = { target: string; title: string; how: string }
+export type RoleCard = {
+  role_id: string
+  title: string
+  fit: number
+  longer_route: boolean
+  essential_gaps: string[]
+  requirements: RequirementScore[]
+  automation_share: number | null
+  soc: string
+  gap: Record<GapColumn, string[]>
+  impact: string
+  outlook: { kind: 'observed' | 'expert'; text: string; source: string }[]
+  listed_transition: boolean
+  effort_hours: number
+  effort_weeks: number
+  uncovered: string[]
+  sdgs: SdgRef[]
+}
+export type MatchesResponse = {
+  scenario: Scenario
+  scenario_label: string
+  horizon_years: number
+  intensity: number
+  evidence: { source: string; period: string; occupations: number }
+  current_role: CurrentRole | null
+  current_impact: string | null
+  destination: string | null
+  roles: RoleCard[]
+}
+
+export type Course = {
+  id: string
+  title: string
+  provider: string
+  url: string
+  minutes: number
+  level: string
+  covers: string[]
+  requires: string[]
+}
+export type PathwayStep = {
+  order: number
+  course: Course
+  hours: number
+  week_start: number
+  week_end: number
+  gains: { skill: string; skill_name: string; before: number; after: number }[]
+  sdgs: SdgRef[]
+  prerequisite_for: string[]
+}
+export type PathwayResponse = {
+  role_id: string
+  role_title: string
+  weekly_hours: number
+  steps: PathwayStep[]
+  total_hours: number
+  weeks: number
+  uncovered: string[]
+  partly_covered: string[]
+  essentials_unmet: string[]
+  fit_before: number
+  fit_after: number
+  sdg_summary: Record<string, string[]>
+  pathway_sdgs: { target: string; how: string }[]
+  sdg_targets: Record<string, { goal: number; title: string; text: string }>
+  sdg_source: string
+  courses_checked: string
+  scenario: Scenario
+}
+
+export type FutureScenario = {
+  fit_now: number
+  fit_after: number
+  hours: number
+  weeks: number
+  skills: { skill: string; name: string; required: number; now: number | null; after: number; essential: boolean }[]
+  sdg_targets: string[]
+  uncovered: string[]
+}
+export type FutureResponse = {
+  destination: { id: string; title: string }
+  current_role: string | null
+  situation: Situation
+  years_experience: number | null
+  scenarios: Record<Scenario, FutureScenario>
+}
