@@ -81,7 +81,8 @@ function RunNow({ onStarted }: { onStarted: () => void }) {
   )
 }
 
-export const TREND_MODELS = 'trend_models'
+// Steps logged with a run that are not sources.
+export const STEPS = ['trend_models', 'occupation_index']
 
 export function LiveIntelligence() {
   const runs = useApi<Run[]>('/api/pipeline/runs?limit=12', RUNS_POLL_MS)
@@ -290,7 +291,7 @@ export function LiveIntelligence() {
 
 function FragmentRow({ run, open, onToggle }: { run: Run; open: boolean; onToggle: () => void }) {
   // The trend-model step is logged with the run but is not a source.
-  const collected = run.sources.filter((s) => s.source_id !== TREND_MODELS)
+  const collected = run.sources.filter((s) => !STEPS.includes(s.source_id))
   const ok = collected.filter((s) => s.status === 'ok').length
   return (
     <>

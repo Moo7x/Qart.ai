@@ -23,6 +23,7 @@ load_env_file()  # local .env (gitignored); must run before settings are read
 import src.evidence.models  # noqa: E402, F401  (registers the model-version table)
 import src.evidence.store  # noqa: E402, F401  (registers the evidence tables before init_db)
 import src.journey.store  # noqa: E402, F401  (registers the profile table)
+import src.occupations.catalogue  # noqa: E402, F401  (registers the occupation tables)
 from src.api.changes import router as changes_router  # noqa: E402
 from src.api.decision import router as decision_router  # noqa: E402
 from src.api.evidence import router as evidence_router  # noqa: E402

@@ -101,7 +101,7 @@ export function PipelineDiagram({ run, running, selected, onSelect }: {
   selected: StepId
   onSelect: (step: StepId) => void
 }) {
-  const collected = (run?.sources ?? []).filter((s) => s.source_id !== 'trend_models')  // a step, not a source
+  const collected = (run?.sources ?? []).filter((s) => !['trend_models', 'occupation_index'].includes(s.source_id))  // steps, not sources
   const bySource = new Map(collected.map((s) => [s.source_id, s]))
   const ok = collected.filter((s) => s.status === 'ok').length
   const total = collected.length
