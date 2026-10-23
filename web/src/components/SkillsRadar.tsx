@@ -102,14 +102,17 @@ function DetailChart({ skill }: { skill: SkillSignal }) {
   )
 }
 
-function SkillRow({ skill, why }: { skill: SkillSignal; why?: string }) {
+/** Share of open job-board postings in Malaysia + Singapore that mention a skill this week. */
+type NowShare = Record<string, number | null>
+
+function SkillRow({ skill, why, now }: { skill: SkillSignal; why?: string; now?: number | null }) {
   const [open, setOpen] = useState(false)
   const id = `signal-${skill.id}`
   return (
     <li className="border-t border-hairline first:border-t-0">
       <button
         type="button" onClick={() => setOpen(o => !o)} aria-expanded={open} aria-controls={id}
-        className="w-full text-left grid grid-cols-[1fr_auto] md:grid-cols-[minmax(0,1.6fr)_9rem_5rem_6.5rem_5.5rem_1.5rem] items-center gap-x-4 gap-y-2 px-4 py-3 hover:bg-canvas transition-colors duration-200"
+        className="w-full text-left grid grid-cols-[1fr_auto] md:grid-cols-[minmax(0,1.6fr)_9rem_5rem_6.5rem_5.5rem_5rem_1.5rem] items-center gap-x-4 gap-y-2 px-4 py-3 hover:bg-canvas transition-colors duration-200"
       >
         <span className="min-w-0">
           <span className="font-medium text-ink">{skill.name}</span>
@@ -119,6 +122,7 @@ function SkillRow({ skill, why }: { skill: SkillSignal; why?: string }) {
         <span className="text-sm tabular-nums text-ink md:text-right"><span className="md:hidden text-xs text-graphite">12-month change </span>{skill.label === 'insufficient_data' ? <span title="Too few mentions for a reliable change">–</span> : formatChange(skill.change_12m)}</span>
         <span className="justify-self-end md:justify-self-start"><Sparkline values={skill.points.map(p => p.ma_short ?? p.share).filter((v): v is number => v !== null)} label={`${skill.name} trend over ${skill.points.length} months`} /></span>
         <span className="text-xs tabular-nums text-graphite md:text-right">{skill.latest_sample_size} of {skill.latest_total_posts}<span className="md:hidden"> posts last month</span></span>
+        <span className="text-xs tabular-nums text-ink md:text-right">{now == null ? <span className="text-graphite">–</span> : `${now.toFixed(1)}%`}<span className="md:hidden text-graphite"> of MY+SG postings now</span></span>
         <span className="hidden md:block text-graphite" aria-hidden="true">{open ? <ChevronUp size={16} /> : <ChevronDown size={16} />}</span>
       </button>
       {open && <div id={id} className="px-4 pb-4"><DetailChart skill={skill} /></div>}
@@ -126,27 +130,28 @@ function SkillRow({ skill, why }: { skill: SkillSignal; why?: string }) {
   )
 }
 
-function Group({ title, skills, why }: { title: string; skills: SkillSignal[]; why: Record<string, string> }) {
+function Group({ title, skills, why, now }: { title: string; skills: SkillSignal[]; why: Record<string, string>; now: NowShare }) {
   if (skills.length === 0) return null
   return (
     <div>
       <div className={`${labelCls} px-4 pt-4 pb-2`}>{title}</div>
-      <div className="hidden md:grid grid-cols-[minmax(0,1.6fr)_9rem_5rem_6.5rem_5.5rem_1.5rem] gap-x-4 px-4 pb-1 text-xs text-graphite">
-        <span>Skill</span><span>Signal</span><span className="text-right">12-month change</span><span>Trend</span><span className="text-right">Last month</span><span />
+      <div className="hidden md:grid grid-cols-[minmax(0,1.6fr)_9rem_5rem_6.5rem_5.5rem_5rem_1.5rem] gap-x-4 px-4 pb-1 text-xs text-graphite">
+        <span>Skill</span><span>Signal (HN)</span><span className="text-right">12-month change</span><span>Trend</span><span className="text-right">Last month</span><span className="text-right" title="Share of open postings in Malaysia + Singapore on public job boards this week">MY+SG now</span><span />
       </div>
-      <ul>{skills.map(s => <SkillRow key={s.id} skill={s} why={why[s.id]} />)}</ul>
+      <ul>{skills.map(s => <SkillRow key={s.id} skill={s} why={why[s.id]} now={now[s.id]} />)}</ul>
     </div>
   )
 }
 
-/** Skills ranked by momentum; the person's own skills first, then "Skills to watch". */
-export default function SkillsRadar({ snapshot, mine }: { snapshot: SkillSignalsSnapshot; mine: Record<string, string> }) {
+/** Every tracked skill in one list, ranked by momentum; the person's own skills keep their "why" line. */
+export default function SkillsRadar({ snapshot, mine, nowShare = {} }: {
+  snapshot: SkillSignalsSnapshot; mine: Record<string, string>; nowShare?: NowShare
+}) {
   const ranked = [...snapshot.series].sort(byMomentum)
   return (
     <div>
       <div className="rounded-lg border border-hairline bg-surface overflow-hidden">
-        <Group title="Your skills" skills={ranked.filter(s => mine[s.id])} why={mine} />
-        <Group title="Skills to watch" skills={ranked.filter(s => !mine[s.id])} why={{}} />
+        <Group title="All tracked skills, by momentum" skills={ranked} why={mine} now={nowShare} />
       </div>
       <Provenance meta={snapshot} extra={`Labels compare the ${snapshot.params.ma_short_months}-month and ${snapshot.params.ma_long_months}-month averages and the 12-month change. Trend signals, not predictions.`} />
     </div>

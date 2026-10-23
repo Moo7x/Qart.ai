@@ -1,9 +1,6 @@
-import { useEffect, useState } from 'react'
-import { getHiringNow } from '../api'
-import type { HiringNow as HiringNowData } from '../types'
+import type { HiringNow } from '../types'
 import { Provenance } from './SignalParts'
 
-const SHOWN = 8
 const FAMILY_NAMES: Record<string, string> = {
   finance_ops: 'Finance operations', analytics: 'Analytics', automation: 'Automation', data_engineering: 'Data engineering',
   ml_ai: 'Machine learning and AI', risk_compliance: 'Risk and compliance', business: 'Business and product',
@@ -11,44 +8,24 @@ const FAMILY_NAMES: Record<string, string> = {
   admin: 'Administration', it_support: 'IT support', software: 'Software',
 }
 
-/** This week on the public job boards for a region: the skills open postings mention most, and
- * how often postings in each type of work mention AI. Counts are shown; small groups are hidden. */
-export default function HiringNow() {
-  const [data, setData] = useState<HiringNowData | null>(null)
-  useEffect(() => { getHiringNow().then(setData).catch(() => setData(null)) }, [])
-  if (!data) return null
-  const skills = data.skills.filter(s => s.share_pct !== null).slice(0, SHOWN)
+/** How often this week's open postings mention AI, by type of work (public job boards). Groups
+ * under the minimum sample are hidden; counts are shown next to every share. */
+export default function AiByWorkType({ data }: { data: HiringNow }) {
   const families = data.families.filter(f => f.share_pct !== null).sort((a, b) => (b.share_pct ?? 0) - (a.share_pct ?? 0))
-  const total = data.skills[0]?.total ?? 0
+  if (families.length === 0) return null
   return (
     <div className="rounded-lg border border-hairline bg-surface p-5 sm:p-6">
-      <div className="font-semibold text-ink">Hiring now · {data.region_label}</div>
-      <p className="text-sm text-graphite tabular-nums">{total} open postings this week from {data.meta.coverage?.companies.length ?? 0} companies' public job boards</p>
-      <div className="mt-4 grid gap-6 sm:grid-cols-2">
-        <div>
-          <h3 className="text-xs font-medium text-graphite mb-2">Skills postings mention most</h3>
-          <ul className="space-y-1.5 text-sm">
-            {skills.map(s => (
-              <li key={s.skill_id} className="flex items-center justify-between gap-3">
-                <span className="text-ink">{s.name}</span>
-                <span className="tabular-nums text-graphite">{s.share_pct?.toFixed(1)}% <span className="text-xs">({s.mentions})</span></span>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div>
-          <h3 className="text-xs font-medium text-graphite mb-2">Postings that mention AI, by type of work</h3>
-          <ul className="space-y-1.5 text-sm">
-            {families.map(f => (
-              <li key={f.family} className="flex items-center justify-between gap-3">
-                <span className="text-ink">{FAMILY_NAMES[f.family] ?? f.family}</span>
-                <span className="tabular-nums text-graphite">{f.share_pct?.toFixed(0)}% <span className="text-xs">of {f.total}</span></span>
-              </li>
-            ))}
-          </ul>
-          <p className="mt-2 text-xs text-graphite">Groups with fewer than {data.meta.min_sample} postings are not shown.</p>
-        </div>
-      </div>
+      <div className="font-semibold text-ink">Postings that mention AI, by type of work · {data.region_label}</div>
+      <p className="text-sm text-graphite">This week's open postings on {data.meta.coverage?.companies.length ?? 0} companies' public job boards.</p>
+      <ul className="mt-4 grid gap-x-8 gap-y-2 sm:grid-cols-2 text-sm">
+        {families.map(f => (
+          <li key={f.family} className="flex items-center justify-between gap-3">
+            <span className="text-ink">{FAMILY_NAMES[f.family] ?? f.family}</span>
+            <span className="tabular-nums text-graphite">{f.share_pct?.toFixed(0)}% <span className="text-xs">of {f.total}</span></span>
+          </li>
+        ))}
+      </ul>
+      <p className="mt-2 text-xs text-graphite">Groups with fewer than {data.meta.min_sample} postings are not shown.</p>
       <Provenance meta={{ ...data.meta, stale: data.stale }} />
     </div>
   )
