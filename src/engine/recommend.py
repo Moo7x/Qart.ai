@@ -131,6 +131,25 @@ def eligible_roles(profile: Profile, catalogue: Catalogue) -> list[str]:
     return others or every
 
 
+DIRECTION_LABEL = {
+    "grow": "grow in my current role",
+    "adjacent": "move to a nearby role",
+    "switch": "switch to a new field",
+}
+
+
+def ranking_inputs(profile: Profile, catalogue: Catalogue) -> list[str]:
+    """Plain-language lines naming the profile answers the ranking used (empty if none)."""
+    lines = []
+    if (months := profile.preferences.timeframe_months) is not None:
+        weeks = horizon_weeks(profile, params.EFFORT_HORIZON_WEEKS)
+        lines.append(f"Timeframe {months} months: effort is counted over {weeks} weeks.")
+    if (direction := profile.preferences.direction) is not None:
+        fits = len(eligible_roles(profile, catalogue))
+        lines.append(f"Direction: {DIRECTION_LABEL[direction]}. {fits} role(s) fit it.")
+    return lines
+
+
 def horizon_weeks(profile: Profile, default: int) -> int:
     """The person's own timeframe in weeks when they gave one, otherwise `default`.
 
@@ -284,6 +303,7 @@ def recommend(
         snapshot_id=snapshot.id if snapshot else None,
         assumptions_version=assumptions.version,
         roles=roles,
+        profile_inputs=ranking_inputs(profile, catalogue),
     )
 
 

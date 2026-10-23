@@ -337,3 +337,20 @@ def test_direction_chooses_the_default_path_role(client: TestClient) -> None:
     assert path_role("grow") == current
     assert path_role("adjacent") != current
     assert path_role("switch") != current
+
+
+def test_path_and_ranking_say_which_profile_answers_they_used(client: TestClient) -> None:
+    empty_path = client.get("/api/path/u_aina").json()
+    assert empty_path["profile_inputs"] == [] and empty_path["horizon_weeks"] == 6
+    assert client.get("/api/recommendations/u_aina").json()["profile_inputs"] == []
+    profile = client.get("/api/profile/u_aina").json()
+    prefs = {"timeframe_months": 3, "direction": "adjacent", "ai_comfort": 2}
+    client.post("/api/profile", json={**profile, "preferences": prefs})
+    path = client.get("/api/path/u_aina").json()
+    assert path["horizon_weeks"] == 13
+    joined = " ".join(path["profile_inputs"])
+    assert "3 months" in joined and "nearby role" in joined and "AI comfort 2/10" in joined
+    chosen = client.get("/api/path/u_aina?role_id=fpa_analyst").json()["profile_inputs"]
+    assert not any("Direction" in line for line in chosen)  # the person picked the role
+    ranking = client.get("/api/recommendations/u_aina").json()["profile_inputs"]
+    assert any("13 weeks" in line for line in ranking)

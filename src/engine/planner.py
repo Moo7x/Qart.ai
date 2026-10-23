@@ -26,12 +26,13 @@ from src.contract import (
     PathPlan,
     PathStep,
     PathStepType,
+    Profile,
     Scenario,
     SkillState,
 )
 from src.engine import params
 from src.engine.catalogue import CaseInfo, Catalogue
-from src.engine.recommend import credit
+from src.engine.recommend import DIRECTION_LABEL, credit
 from src.engine.requirements import scenario_weights
 
 PRACTICE_COST = "free"  # in-app synthetic practice cases
@@ -282,6 +283,26 @@ def ai_intro_first(ordered: Sequence[Resource], ai_comfort: int | None) -> list[
     return result
 
 
+def path_inputs(
+    profile: Profile, plan: PathPlan, catalogue: Catalogue, role_from_direction: bool
+) -> list[str]:
+    """Plain-language lines naming the profile answers that shaped this path (empty if none)."""
+    prefs = profile.preferences
+    lines = []
+    if prefs.timeframe_months is not None:
+        lines.append(
+            f"Timeframe {prefs.timeframe_months} months: planned within {plan.horizon_weeks} "
+            f"weeks at {plan.weekly_hours:g} h/week."
+        )
+    if prefs.direction is not None and role_from_direction:
+        title = catalogue.roles[plan.target_role_id].title
+        lines.append(f"Direction: {DIRECTION_LABEL[prefs.direction]}, so the path is for {title}.")
+    moved = plan.steps and plan.steps[0].ref in params.AI_INTRO_COURSES
+    if moved and prefs.ai_comfort is not None and prefs.ai_comfort <= params.AI_COMFORT_LOW:
+        lines.append(f"AI comfort {prefs.ai_comfort}/10: an AI-intro course comes first.")
+    return lines
+
+
 def plan_inputs(
     role_id: str,
     states: dict[str, SkillState],
@@ -354,4 +375,5 @@ def plan_path(
         total_hours=round(total, params.SCORE_DECIMALS),
         weeks=math.ceil(total / weekly_hours) if total else 0,
         worst_case_gap=round(worst_case_gap(inputs, chosen)[0], params.SCORE_DECIMALS),
+        horizon_weeks=horizon_weeks,
     )

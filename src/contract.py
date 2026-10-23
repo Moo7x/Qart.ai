@@ -444,6 +444,8 @@ class Recommendation(BaseModel):
     assumptions_version: int
     roles: list[RoleRecommendation]
     changed_since: ChangedSince | None = None
+    # Addition (optional, v2.2): which profile answers shaped this result, in plain words.
+    profile_inputs: list[str] = []
 
 
 # --- PathPlan -------------------------------------------------------------------------------
@@ -474,6 +476,10 @@ class PathPlan(BaseModel):
     total_hours: float
     weeks: int
     worst_case_gap: float
+    # Additions (optional, v2.2): the planning horizon in weeks (6 by default, or the person's
+    # timeframe) and which profile answers shaped the path, in plain words.
+    horizon_weeks: int | None = None
+    profile_inputs: list[str] = []
 
 
 # --- Course ---------------------------------------------------------------------------------

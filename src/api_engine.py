@@ -38,7 +38,7 @@ from src.engine.catalogue import (
 from src.engine.hr import HrSummary, hr_summary
 from src.engine.ingest import CSV_NAME, RAW_DIR, SNAPSHOT_DIR, run_ingest
 from src.engine.next_case import next_case
-from src.engine.planner import plan_path
+from src.engine.planner import path_inputs, plan_path
 from src.engine.recommend import changed_since, eligible_roles, horizon_weeks, recommend
 from src.engine.skills import derive_states
 from src.engine.snapshots import REPLAY_LABEL, diff_report, load_snapshots
@@ -378,7 +378,7 @@ def get_path(
     states = states_for(profile, events, catalogue)
     if role_id is not None and role_id not in catalogue.roles:
         raise HTTPException(status_code=404, detail=f"unknown role {role_id}")
-    return plan_path(
+    plan = plan_path(
         user_id,
         role_id or robust_top_role(profile, states, store),
         weekly_hours or profile.weekly_learning_hours,
@@ -390,6 +390,9 @@ def get_path(
         horizon_weeks=horizon_weeks(profile, params.PLAN_HORIZON_WEEKS),
         ai_comfort=profile.preferences.ai_comfort,
     )
+    # The direction picked the role only when the person did not choose one themselves.
+    lines = path_inputs(profile, plan, catalogue, role_from_direction=role_id is None)
+    return plan.model_copy(update={"profile_inputs": lines})
 
 
 @router.get("/next-case/{user_id}")

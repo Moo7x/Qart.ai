@@ -54,7 +54,8 @@
           "label": "AEI release 2026-06-26 (CC-BY)",
           "url": "…"
         }
-      ]
+      ],
+      "matches_direction": null
     }
   ],
   "changed_since": {
@@ -67,5 +68,8 @@
         "because": "…"
       }
     ]
-  }
+  },
+  "profile_inputs": [
+    "Timeframe 6 months: effort is counted over 26 weeks."
+  ]
 }
