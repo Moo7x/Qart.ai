@@ -1,0 +1,23 @@
+# Field profile: Malaysian Global Business Services (GBS), finance & accounting.
+# Lists the occupations the evidence layer follows for this field. Codes are US SOC / O*NET
+# (O*NET 31.0, CC BY 4.0), the classification the Anthropic Economic Index uses.
+# Role-level detail (TalentCorp roles, tasks, skills) lives in the other files of this pack.
+id: gbs_fa
+name: GBS finance & accounting
+country: MYS
+soc_occupations:
+  - {code: "13-2011.00", name: Accountants and Auditors}
+  - {code: "13-2031.00", name: Budget Analysts}
+  - {code: "13-2041.00", name: Credit Analysts}
+  - {code: "13-2051.00", name: Financial and Investment Analysts}
+  - {code: "11-3031.01", name: Treasurers and Controllers}
+  - {code: "15-2051.01", name: Business Intelligence Analysts}
+  - {code: "43-3011.00", name: Bill and Account Collectors}
+  - {code: "43-3021.00", name: Billing and Posting Clerks}
+  - {code: "43-3031.00", name: "Bookkeeping, Accounting, and Auditing Clerks"}
+  - {code: "43-3051.00", name: Payroll and Timekeeping Clerks}
+  - {code: "43-3061.00", name: Procurement Clerks}
+  - {code: "43-9021.00", name: Data Entry Keyers}
+# DOSM job-ad releases name occupations in words; these are the ones followed for this field.
+dosm_job_ad_occupations:
+  - Accountants and Auditors
