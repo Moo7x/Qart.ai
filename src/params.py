@@ -65,3 +65,9 @@ NEAR_TIE_POINTS = 3.0
 # --- Pathway (src/pathway/planner.py) ----------------------------------------------------------
 # Highest level a course's material can take a skill to, by its stated level.
 COURSE_LEVEL_REACH = {"beginner": 2, "intermediate": 3, "advanced": 3}
+# Most levels a single course can add to a skill, by its length. Short modules introduce a topic;
+# only longer material can move someone two levels. Several courses on one skill add up, capped by
+# each course's level reach. Declared to keep plans honest about what a few hours can do.
+COURSE_SHORT_MINUTES = 180
+COURSE_MAX_GAIN_SHORT = 1
+COURSE_MAX_GAIN_LONG = 2
