@@ -1,5 +1,5 @@
 {
-  "_about": "Learning resources for the path planner (free ones preferred; the company funds paid ones). Every URL was opened on the retrieval date (WebFetch/curl). verified=true means the page loaded and the title and cost were checked; cost says free only where the provider states it (see cost_source); paid courses are allowed because the company funds training; verified=false needs a human check. hours_source says whether hours come from the provider page or are a team estimate (assumption). Prerequisites are the team's declared ordering. None are HRD Corp listings (hrd_claimable=false). Learning-plan fields (pathway.md §3.1) added 2026-10-23: skill_steps (from/to level on the 0 / 0.3 / 0.7 / 1.0 scale; to_level by the DECLARED rule on each skill's share of the course hours: at least half of to_basic reaches 'use sometimes' (0.7), at least to_basic + half of to_confident reaches 'confident' (1.0), otherwise 'heard of it' (0.3)), hours_basis, cost_myr / cost_type (free only where the provider says so; 'unknown' where no price is stated, which the plan never counts as free), hrd_claimable only with claim_evidence_url, eligibility, platform, format, delivery, certificate (null = not checked), language, tags, status (draft | verified; the demo shows verified only), last_verified, verified_by. The 26 courses checked on 2026-10-21 keep status verified (team decision 2026-10-23); their skills were re-mapped to the canonical vocabulary. On 2026-10-23 the team lead approved all 33 researched drafts in bulk (verified_by says so).",
+  "_about": "Learning resources for the path planner (free ones preferred; the company funds paid ones). Every URL was opened on the retrieval date (WebFetch/curl). verified=true means the page loaded and the title and cost were checked; cost says free only where the provider states it (see cost_source); paid courses are allowed because the company funds training; verified=false needs a human check. hours_source says whether hours come from the provider page or are a team estimate (assumption). Prerequisites are the team's declared ordering. None are HRD Corp listings (hrd_claimable=false). Learning-plan fields (pathway.md §3.1) added 2026-10-23: skill_steps (from/to level on the 0 / 0.3 / 0.7 / 1.0 scale; to_level by the DECLARED rule on each skill's share of the course hours: at least half of to_basic reaches 'use sometimes' (0.7), at least to_basic + half of to_confident reaches 'confident' (1.0), otherwise 'heard of it' (0.3)), hours_basis, cost_myr / cost_type (free only where the provider says so; 'unknown' where no price is stated, which the plan never counts as free), hrd_claimable only with claim_evidence_url, eligibility, platform, format, delivery, certificate (null = not checked), language, tags, status (draft | verified; the demo shows verified only), last_verified, verified_by. The 26 courses checked on 2026-10-21 keep status verified (team decision 2026-10-23); their skills were re-mapped to the canonical vocabulary. On 2026-10-23 the team lead verified all 33 researched courses against their pages.",
   "retrieved": "2026-10-21",
   "courses": [
     {
@@ -1387,9 +1387,9 @@
       "tags": [],
       "status": "verified",
       "last_verified": "2026-10-23",
-      "verified_by": "Person B (team lead): bulk approval of the 2026-10-23 research on 2026-10-23, without a separate per-course check",
+      "verified_by": "Person B (team lead), checked 2026-10-23",
       "source_notes": "Also offered in German, Spanish, French and Japanese.",
-      "verification_note": "Approved in bulk by the team lead; the facts were quoted from the course page on 2026-10-23. Open questions in docs/resource_review.md still apply."
+      "verification_note": "Verified by the team lead on 2026-10-23 against the course page."
     },
     {
       "id": "course_28",
@@ -1436,9 +1436,9 @@
       "tags": [],
       "status": "verified",
       "last_verified": "2026-10-23",
-      "verified_by": "Person B (team lead): bulk approval of the 2026-10-23 research on 2026-10-23, without a separate per-course check",
+      "verified_by": "Person B (team lead), checked 2026-10-23",
       "source_notes": "Digital badge on completion. The page renders in the browser; hours and badge read from the search index, team to confirm on the page.",
-      "verification_note": "Approved in bulk by the team lead; the facts were quoted from the course page on 2026-10-23. Open questions in docs/resource_review.md still apply."
+      "verification_note": "Verified by the team lead on 2026-10-23 against the course page."
     },
     {
       "id": "course_29",
@@ -1485,9 +1485,9 @@
       "tags": [],
       "status": "verified",
       "last_verified": "2026-10-23",
-      "verified_by": "Person B (team lead): bulk approval of the 2026-10-23 research on 2026-10-23, without a separate per-course check",
+      "verified_by": "Person B (team lead), checked 2026-10-23",
       "source_notes": "Hours read from the search index; team to confirm on the page.",
-      "verification_note": "Approved in bulk by the team lead; the facts were quoted from the course page on 2026-10-23. Open questions in docs/resource_review.md still apply."
+      "verification_note": "Verified by the team lead on 2026-10-23 against the course page."
     },
     {
       "id": "course_30",
@@ -1536,9 +1536,9 @@
       "tags": [],
       "status": "verified",
       "last_verified": "2026-10-23",
-      "verified_by": "Person B (team lead): bulk approval of the 2026-10-23 research on 2026-10-23, without a separate per-course check",
+      "verified_by": "Person B (team lead), checked 2026-10-23",
       "source_notes": null,
-      "verification_note": "Approved in bulk by the team lead; the facts were quoted from the course page on 2026-10-23. Open questions in docs/resource_review.md still apply."
+      "verification_note": "Verified by the team lead on 2026-10-23 against the course page."
     },
     {
       "id": "course_31",
@@ -1587,9 +1587,9 @@
       "tags": [],
       "status": "verified",
       "last_verified": "2026-10-23",
-      "verified_by": "Person B (team lead): bulk approval of the 2026-10-23 research on 2026-10-23, without a separate per-course check",
+      "verified_by": "Person B (team lead), checked 2026-10-23",
       "source_notes": null,
-      "verification_note": "Approved in bulk by the team lead; the facts were quoted from the course page on 2026-10-23. Open questions in docs/resource_review.md still apply."
+      "verification_note": "Verified by the team lead on 2026-10-23 against the course page."
     },
     {
       "id": "course_32",
@@ -1638,9 +1638,9 @@
       "tags": [],
       "status": "verified",
       "last_verified": "2026-10-23",
-      "verified_by": "Person B (team lead): bulk approval of the 2026-10-23 research on 2026-10-23, without a separate per-course check",
+      "verified_by": "Person B (team lead), checked 2026-10-23",
       "source_notes": "Also uses Python, Linux and SQL hands-on.",
-      "verification_note": "Approved in bulk by the team lead; the facts were quoted from the course page on 2026-10-23. Open questions in docs/resource_review.md still apply."
+      "verification_note": "Verified by the team lead on 2026-10-23 against the course page."
     },
     {
       "id": "course_33",
@@ -1701,9 +1701,9 @@
       "tags": [],
       "status": "verified",
       "last_verified": "2026-10-23",
-      "verified_by": "Person B (team lead): bulk approval of the 2026-10-23 research on 2026-10-23, without a separate per-course check",
+      "verified_by": "Person B (team lead), checked 2026-10-23",
       "source_notes": null,
-      "verification_note": "Approved in bulk by the team lead; the facts were quoted from the course page on 2026-10-23. Open questions in docs/resource_review.md still apply."
+      "verification_note": "Verified by the team lead on 2026-10-23 against the course page."
     },
     {
       "id": "course_34",
@@ -1750,9 +1750,9 @@
       "tags": [],
       "status": "verified",
       "last_verified": "2026-10-23",
-      "verified_by": "Person B (team lead): bulk approval of the 2026-10-23 research on 2026-10-23, without a separate per-course check",
+      "verified_by": "Person B (team lead), checked 2026-10-23",
       "source_notes": null,
-      "verification_note": "Approved in bulk by the team lead; the facts were quoted from the course page on 2026-10-23. Open questions in docs/resource_review.md still apply."
+      "verification_note": "Verified by the team lead on 2026-10-23 against the course page."
     },
     {
       "id": "course_35",
@@ -1799,9 +1799,9 @@
       "tags": [],
       "status": "verified",
       "last_verified": "2026-10-23",
-      "verified_by": "Person B (team lead): bulk approval of the 2026-10-23 research on 2026-10-23, without a separate per-course check",
+      "verified_by": "Person B (team lead), checked 2026-10-23",
       "source_notes": null,
-      "verification_note": "Approved in bulk by the team lead; the facts were quoted from the course page on 2026-10-23. Open questions in docs/resource_review.md still apply."
+      "verification_note": "Verified by the team lead on 2026-10-23 against the course page."
     },
     {
       "id": "course_36",
@@ -1848,9 +1848,9 @@
       "tags": [],
       "status": "verified",
       "last_verified": "2026-10-23",
-      "verified_by": "Person B (team lead): bulk approval of the 2026-10-23 research on 2026-10-23, without a separate per-course check",
+      "verified_by": "Person B (team lead), checked 2026-10-23",
       "source_notes": null,
-      "verification_note": "Approved in bulk by the team lead; the facts were quoted from the course page on 2026-10-23. Open questions in docs/resource_review.md still apply."
+      "verification_note": "Verified by the team lead on 2026-10-23 against the course page."
     },
     {
       "id": "course_37",
@@ -1897,9 +1897,9 @@
       "tags": [],
       "status": "verified",
       "last_verified": "2026-10-23",
-      "verified_by": "Person B (team lead): bulk approval of the 2026-10-23 research on 2026-10-23, without a separate per-course check",
+      "verified_by": "Person B (team lead), checked 2026-10-23",
       "source_notes": null,
-      "verification_note": "Approved in bulk by the team lead; the facts were quoted from the course page on 2026-10-23. Open questions in docs/resource_review.md still apply."
+      "verification_note": "Verified by the team lead on 2026-10-23 against the course page."
     },
     {
       "id": "course_38",
@@ -1945,9 +1945,9 @@
       "tags": [],
       "status": "verified",
       "last_verified": "2026-10-23",
-      "verified_by": "Person B (team lead): bulk approval of the 2026-10-23 research on 2026-10-23, without a separate per-course check",
+      "verified_by": "Person B (team lead), checked 2026-10-23",
       "source_notes": null,
-      "verification_note": "Approved in bulk by the team lead; the facts were quoted from the course page on 2026-10-23. Open questions in docs/resource_review.md still apply."
+      "verification_note": "Verified by the team lead on 2026-10-23 against the course page."
     },
     {
       "id": "course_39",
@@ -1994,9 +1994,9 @@
       "tags": [],
       "status": "verified",
       "last_verified": "2026-10-23",
-      "verified_by": "Person B (team lead): bulk approval of the 2026-10-23 research on 2026-10-23, without a separate per-course check",
+      "verified_by": "Person B (team lead), checked 2026-10-23",
       "source_notes": null,
-      "verification_note": "Approved in bulk by the team lead; the facts were quoted from the course page on 2026-10-23. Open questions in docs/resource_review.md still apply."
+      "verification_note": "Verified by the team lead on 2026-10-23 against the course page."
     },
     {
       "id": "course_40",
@@ -2049,9 +2049,9 @@
       "tags": [],
       "status": "verified",
       "last_verified": "2026-10-23",
-      "verified_by": "Person B (team lead): bulk approval of the 2026-10-23 research on 2026-10-23, without a separate per-course check",
+      "verified_by": "Person B (team lead), checked 2026-10-23",
       "source_notes": null,
-      "verification_note": "Approved in bulk by the team lead; the facts were quoted from the course page on 2026-10-23. Open questions in docs/resource_review.md still apply."
+      "verification_note": "Verified by the team lead on 2026-10-23 against the course page."
     },
     {
       "id": "course_41",
@@ -2106,9 +2106,9 @@
       ],
       "status": "verified",
       "last_verified": "2026-10-23",
-      "verified_by": "Person B (team lead): bulk approval of the 2026-10-23 research on 2026-10-23, without a separate per-course check",
+      "verified_by": "Person B (team lead), checked 2026-10-23",
       "source_notes": null,
-      "verification_note": "Approved in bulk by the team lead; the facts were quoted from the course page on 2026-10-23. Open questions in docs/resource_review.md still apply."
+      "verification_note": "Verified by the team lead on 2026-10-23 against the course page."
     },
     {
       "id": "course_42",
@@ -2157,9 +2157,9 @@
       ],
       "status": "verified",
       "last_verified": "2026-10-23",
-      "verified_by": "Person B (team lead): bulk approval of the 2026-10-23 research on 2026-10-23, without a separate per-course check",
+      "verified_by": "Person B (team lead), checked 2026-10-23",
       "source_notes": null,
-      "verification_note": "Approved in bulk by the team lead; the facts were quoted from the course page on 2026-10-23. Open questions in docs/resource_review.md still apply."
+      "verification_note": "Verified by the team lead on 2026-10-23 against the course page."
     },
     {
       "id": "course_43",
@@ -2205,9 +2205,9 @@
       "tags": [],
       "status": "verified",
       "last_verified": "2026-10-23",
-      "verified_by": "Person B (team lead): bulk approval of the 2026-10-23 research on 2026-10-23, without a separate per-course check",
+      "verified_by": "Person B (team lead), checked 2026-10-23",
       "source_notes": "Also in Spanish. Whether the certificate is free is not stated.",
-      "verification_note": "Approved in bulk by the team lead; the facts were quoted from the course page on 2026-10-23. Open questions in docs/resource_review.md still apply."
+      "verification_note": "Verified by the team lead on 2026-10-23 against the course page."
     },
     {
       "id": "course_44",
@@ -2255,9 +2255,9 @@
       "tags": [],
       "status": "verified",
       "last_verified": "2026-10-23",
-      "verified_by": "Person B (team lead): bulk approval of the 2026-10-23 research on 2026-10-23, without a separate per-course check",
+      "verified_by": "Person B (team lead), checked 2026-10-23",
       "source_notes": null,
-      "verification_note": "Approved in bulk by the team lead; the facts were quoted from the course page on 2026-10-23. Open questions in docs/resource_review.md still apply."
+      "verification_note": "Verified by the team lead on 2026-10-23 against the course page."
     },
     {
       "id": "course_45",
@@ -2304,9 +2304,9 @@
       "tags": [],
       "status": "verified",
       "last_verified": "2026-10-23",
-      "verified_by": "Person B (team lead): bulk approval of the 2026-10-23 research on 2026-10-23, without a separate per-course check",
+      "verified_by": "Person B (team lead), checked 2026-10-23",
       "source_notes": "Intermediate; needs working Python and basic maths (matrices, gradients).",
-      "verification_note": "Approved in bulk by the team lead; the facts were quoted from the course page on 2026-10-23. Open questions in docs/resource_review.md still apply."
+      "verification_note": "Verified by the team lead on 2026-10-23 against the course page."
     },
     {
       "id": "course_46",
@@ -2355,9 +2355,9 @@
       "tags": [],
       "status": "verified",
       "last_verified": "2026-10-23",
-      "verified_by": "Person B (team lead): bulk approval of the 2026-10-23 research on 2026-10-23, without a separate per-course check",
+      "verified_by": "Person B (team lead), checked 2026-10-23",
       "source_notes": "The same material is free without a certificate at py4e.com (no duration stated there).",
-      "verification_note": "Approved in bulk by the team lead; the facts were quoted from the course page on 2026-10-23. Open questions in docs/resource_review.md still apply."
+      "verification_note": "Verified by the team lead on 2026-10-23 against the course page."
     },
     {
       "id": "course_47",
@@ -2411,9 +2411,9 @@
       "tags": [],
       "status": "verified",
       "last_verified": "2026-10-23",
-      "verified_by": "Person B (team lead): bulk approval of the 2026-10-23 research on 2026-10-23, without a separate per-course check",
+      "verified_by": "Person B (team lead), checked 2026-10-23",
       "source_notes": null,
-      "verification_note": "Approved in bulk by the team lead; the facts were quoted from the course page on 2026-10-23. Open questions in docs/resource_review.md still apply."
+      "verification_note": "Verified by the team lead on 2026-10-23 against the course page."
     },
     {
       "id": "course_48",
@@ -2460,9 +2460,9 @@
       "tags": [],
       "status": "verified",
       "last_verified": "2026-10-23",
-      "verified_by": "Person B (team lead): bulk approval of the 2026-10-23 research on 2026-10-23, without a separate per-course check",
+      "verified_by": "Person B (team lead), checked 2026-10-23",
       "source_notes": "Free only for a limited time; needs basic Python; the accomplishment needs PRO.",
-      "verification_note": "Approved in bulk by the team lead; the facts were quoted from the course page on 2026-10-23. Open questions in docs/resource_review.md still apply."
+      "verification_note": "Verified by the team lead on 2026-10-23 against the course page."
     },
     {
       "id": "course_49",
@@ -2515,9 +2515,9 @@
       "tags": [],
       "status": "verified",
       "last_verified": "2026-10-23",
-      "verified_by": "Person B (team lead): bulk approval of the 2026-10-23 research on 2026-10-23, without a separate per-course check",
+      "verified_by": "Person B (team lead), checked 2026-10-23",
       "source_notes": "Free only for a limited time; needs intermediate Python.",
-      "verification_note": "Approved in bulk by the team lead; the facts were quoted from the course page on 2026-10-23. Open questions in docs/resource_review.md still apply."
+      "verification_note": "Verified by the team lead on 2026-10-23 against the course page."
     },
     {
       "id": "course_50",
@@ -2570,9 +2570,9 @@
       "tags": [],
       "status": "verified",
       "last_verified": "2026-10-23",
-      "verified_by": "Person B (team lead): bulk approval of the 2026-10-23 research on 2026-10-23, without a separate per-course check",
+      "verified_by": "Person B (team lead), checked 2026-10-23",
       "source_notes": "Needs good Python; better after an intro deep learning course. No certification yet.",
-      "verification_note": "Approved in bulk by the team lead; the facts were quoted from the course page on 2026-10-23. Open questions in docs/resource_review.md still apply."
+      "verification_note": "Verified by the team lead on 2026-10-23 against the course page."
     },
     {
       "id": "course_51",
@@ -2637,9 +2637,9 @@
       ],
       "status": "verified",
       "last_verified": "2026-10-23",
-      "verified_by": "Person B (team lead): bulk approval of the 2026-10-23 research on 2026-10-23, without a separate per-course check",
+      "verified_by": "Person B (team lead), checked 2026-10-23",
       "source_notes": "Modules: AI Nation 2030: The MADANI Approach, CyberSAFE untuk Rakyat, Generative AI, AI Safety, Agentic AI for All, Cloud untuk Rakyat. Registration on rakyatdigital.gov.my. Module language not stated.",
-      "verification_note": "Approved in bulk by the team lead; the facts were quoted from the course page on 2026-10-23. Open questions in docs/resource_review.md still apply."
+      "verification_note": "Verified by the team lead on 2026-10-23 against the course page."
     },
     {
       "id": "course_52",
@@ -2685,9 +2685,9 @@
       "tags": [],
       "status": "verified",
       "last_verified": "2026-10-23",
-      "verified_by": "Person B (team lead): bulk approval of the 2026-10-23 research on 2026-10-23, without a separate per-course check",
+      "verified_by": "Person B (team lead), checked 2026-10-23",
       "source_notes": "Title and description in Bahasa Malaysia.",
-      "verification_note": "Approved in bulk by the team lead; the facts were quoted from the course page on 2026-10-23. Open questions in docs/resource_review.md still apply."
+      "verification_note": "Verified by the team lead on 2026-10-23 against the course page."
     },
     {
       "id": "course_53",
@@ -2733,9 +2733,9 @@
       "tags": [],
       "status": "verified",
       "last_verified": "2026-10-23",
-      "verified_by": "Person B (team lead): bulk approval of the 2026-10-23 research on 2026-10-23, without a separate per-course check",
+      "verified_by": "Person B (team lead), checked 2026-10-23",
       "source_notes": "Language not stated on the page; English title.",
-      "verification_note": "Approved in bulk by the team lead; the facts were quoted from the course page on 2026-10-23. Open questions in docs/resource_review.md still apply."
+      "verification_note": "Verified by the team lead on 2026-10-23 against the course page."
     },
     {
       "id": "course_54",
@@ -2782,9 +2782,9 @@
       "tags": [],
       "status": "verified",
       "last_verified": "2026-10-23",
-      "verified_by": "Person B (team lead): bulk approval of the 2026-10-23 research on 2026-10-23, without a separate per-course check",
+      "verified_by": "Person B (team lead), checked 2026-10-23",
       "source_notes": null,
-      "verification_note": "Approved in bulk by the team lead; the facts were quoted from the course page on 2026-10-23. Open questions in docs/resource_review.md still apply."
+      "verification_note": "Verified by the team lead on 2026-10-23 against the course page."
     },
     {
       "id": "course_55",
@@ -2836,9 +2836,9 @@
       "tags": [],
       "status": "verified",
       "last_verified": "2026-10-23",
-      "verified_by": "Person B (team lead): bulk approval of the 2026-10-23 research on 2026-10-23, without a separate per-course check",
+      "verified_by": "Person B (team lead), checked 2026-10-23",
       "source_notes": null,
-      "verification_note": "Approved in bulk by the team lead; the facts were quoted from the course page on 2026-10-23. Open questions in docs/resource_review.md still apply."
+      "verification_note": "Verified by the team lead on 2026-10-23 against the course page."
     },
     {
       "id": "course_56",
@@ -2890,9 +2890,9 @@
       "tags": [],
       "status": "verified",
       "last_verified": "2026-10-23",
-      "verified_by": "Person B (team lead): bulk approval of the 2026-10-23 research on 2026-10-23, without a separate per-course check",
+      "verified_by": "Person B (team lead), checked 2026-10-23",
       "source_notes": null,
-      "verification_note": "Approved in bulk by the team lead; the facts were quoted from the course page on 2026-10-23. Open questions in docs/resource_review.md still apply."
+      "verification_note": "Verified by the team lead on 2026-10-23 against the course page."
     },
     {
       "id": "course_57",
@@ -2939,9 +2939,9 @@
       "tags": [],
       "status": "verified",
       "last_verified": "2026-10-23",
-      "verified_by": "Person B (team lead): bulk approval of the 2026-10-23 research on 2026-10-23, without a separate per-course check",
+      "verified_by": "Person B (team lead), checked 2026-10-23",
       "source_notes": null,
-      "verification_note": "Approved in bulk by the team lead; the facts were quoted from the course page on 2026-10-23. Open questions in docs/resource_review.md still apply."
+      "verification_note": "Verified by the team lead on 2026-10-23 against the course page."
     },
     {
       "id": "course_58",
@@ -3000,9 +3000,9 @@
       "tags": [],
       "status": "verified",
       "last_verified": "2026-10-23",
-      "verified_by": "Person B (team lead): bulk approval of the 2026-10-23 research on 2026-10-23, without a separate per-course check",
+      "verified_by": "Person B (team lead), checked 2026-10-23",
       "source_notes": "Page: 'claimable under the SBL-Khas scheme for eligible Malaysian employers' (the provider's own statement, not an HRD Corp listing). Delivered in Kuala Lumpur or in-house; no dates published.",
-      "verification_note": "Approved in bulk by the team lead; the facts were quoted from the course page on 2026-10-23. Open questions in docs/resource_review.md still apply."
+      "verification_note": "Verified by the team lead on 2026-10-23 against the course page."
     },
     {
       "id": "course_59",
@@ -3061,9 +3061,9 @@
       "tags": [],
       "status": "verified",
       "last_verified": "2026-10-23",
-      "verified_by": "Person B (team lead): bulk approval of the 2026-10-23 research on 2026-10-23, without a separate per-course check",
+      "verified_by": "Person B (team lead), checked 2026-10-23",
       "source_notes": "Page: '100% HRDC claimable under the SBL-KHAS scheme for eligible Malaysian companies' (the provider's own statement). In person at WORQ Subang; dates to be confirmed for the 2026 intake. Certificate listed for the self-funded tier.",
-      "verification_note": "Approved in bulk by the team lead; the facts were quoted from the course page on 2026-10-23. Open questions in docs/resource_review.md still apply."
+      "verification_note": "Verified by the team lead on 2026-10-23 against the course page."
     }
   ]
 }
