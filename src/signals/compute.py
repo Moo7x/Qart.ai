@@ -10,6 +10,9 @@ Label, checked in this order:
   rising             ma_short > ma_long × 1.10 and change_12m > +15 %
   cooling            ma_short < ma_long × 0.90 and change_12m < −15 %
   stable             anything else
+Months are calendar months: a month with no thread is kept as a gap (total_posts 0, share
+None), so lags and averages never slide onto the wrong months; any average or change whose window
+touches a gap is None, which makes the label insufficient_data.
 These are trend signals from one tech-hiring source, never predictions.
 """
 
@@ -30,7 +33,7 @@ class MonthPoint:
     month: str
     mentions: int
     total_posts: int
-    share: float
+    share: float | None  # None for a month with no thread
     index: float | None
     ma_short: float | None
     ma_long: float | None
@@ -48,22 +51,33 @@ class SkillSignal:
     points: list[MonthPoint]
 
 
-def _trailing_mean(values: Sequence[float], end: int, k: int) -> float | None:
+def _trailing_mean(values: Sequence[float | None], end: int, k: int) -> float | None:
     if end + 1 < k:
         return None
     window = values[end + 1 - k : end + 1]
-    return sum(window) / k
+    if any(v is None for v in window):
+        return None  # the window touches a month with no data
+    return sum(v for v in window if v is not None) / k
+
+
+def calendar_months(first: str, last: str) -> list[str]:
+    """Every YYYY-MM from `first` to `last` inclusive."""
+    start = int(first[:4]) * 12 + int(first[5:7]) - 1
+    end = int(last[:4]) * 12 + int(last[5:7]) - 1
+    return [f"{i // 12}-{i % 12 + 1:02d}" for i in range(start, end + 1)]
 
 
 def build_points(
     months: Sequence[str], mentions: Sequence[int], totals: Sequence[int], params: SignalParams
 ) -> list[MonthPoint]:
-    shares = [m / t if t else 0.0 for m, t in zip(mentions, totals, strict=True)]
+    shares: list[float | None] = [
+        m / t if t else None for m, t in zip(mentions, totals, strict=True)
+    ]
     base = next(
         (
             s
             for m, s in zip(mentions, shares, strict=True)
-            if m >= params.min_mentions_per_month and s > 0
+            if m >= params.min_mentions_per_month and s
         ),
         None,
     )
@@ -76,8 +90,10 @@ def build_points(
                 month=month,
                 mentions=mentions[i],
                 total_posts=totals[i],
-                share=round(shares[i], DECIMALS),
-                index=round(shares[i] / base * params.index_base, 2) if base else None,
+                share=round(share, DECIMALS) if (share := shares[i]) is not None else None,
+                index=round(share / base * params.index_base, 2)
+                if base and share is not None
+                else None,
                 ma_short=round(ma_s, DECIMALS) if ma_s is not None else None,
                 ma_long=round(ma_l, DECIMALS) if ma_l is not None else None,
             )
@@ -115,10 +131,13 @@ def skill_signals(
     posts_by_month: Mapping[str, Sequence[str]], skills: Sequence[SkillSpec], params: SignalParams
 ) -> list[SkillSignal]:
     """Signals for every configured skill over the months given (oldest first after sorting)."""
-    months = sorted(posts_by_month)[-params.window_months :]
+    available = sorted(posts_by_month)
+    months = (
+        calendar_months(available[0], available[-1])[-params.window_months :] if available else []
+    )
     compiled = compile_skills(skills)
-    hits = {m: [skills_in_post(p, compiled) for p in posts_by_month[m]] for m in months}
-    totals = [len(posts_by_month[m]) for m in months]
+    hits = {m: [skills_in_post(p, compiled) for p in posts_by_month.get(m, [])] for m in months}
+    totals = [len(posts_by_month.get(m, [])) for m in months]
     out = []
     for spec in skills:
         mentions = [sum(spec.id in h for h in hits[m]) for m in months]

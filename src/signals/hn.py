@@ -136,20 +136,46 @@ def load_months(
     now: datetime | None = None,
     sleep: Callable[[float], None] = time.sleep,
 ) -> tuple[dict[str, list[str]], list[str]]:
-    """Posts per month from `since_month` on, using the cache. Returns (posts, fetched months)."""
+    """Posts per month from `since_month` on, using the cache. Returns (posts, fetched months).
+
+    A cached thread is reused only if it was fetched after its month ended; a thread cached while
+    its month was still open (it keeps filling up) is fetched once more, then kept for good.
+    """
     current = (now or datetime.now(UTC)).strftime("%Y-%m")
     cache_dir.mkdir(parents=True, exist_ok=True)
     posts: dict[str, list[str]] = {}
     fetched: list[str] = []
     for ref in discover_threads(client, since_month, sleep):
         path = cache_dir / f"{ref.month}.json"
-        if path.exists() and ref.month != current:
-            thread = json.loads(path.read_text(encoding="utf-8"))
+        cached = json.loads(path.read_text(encoding="utf-8")) if path.exists() else None
+        if cached is not None and _is_final(cached, ref.month, current):
+            thread = cached.get("thread", cached)  # older files hold the bare thread
         else:
             thread = _get(client, f"/items/{ref.story_id}", None, sleep)
             tmp = path.with_suffix(".json.tmp")
-            tmp.write_text(json.dumps(thread), encoding="utf-8")
+            tmp.write_text(
+                json.dumps({"fetched_month": current, "thread": thread}), encoding="utf-8"
+            )
             tmp.replace(path)
             fetched.append(ref.month)
         posts[ref.month] = posts_of(thread)
     return posts, fetched
+
+
+def cached_thread(cache_dir: Path, month: str) -> dict[str, Any]:
+    """The thread saved for `month` (either cache file format)."""
+    data: dict[str, Any] = json.loads((cache_dir / f"{month}.json").read_text(encoding="utf-8"))
+    thread: dict[str, Any] = data.get("thread", data)
+    return thread
+
+
+def _is_final(cached: dict[str, Any], month: str, current: str) -> bool:
+    """True if the cached thread was fetched in a later month than its own (it was complete).
+
+    Files from before fetched_month was recorded hold the raw thread; they were all written in
+    one run, when only the current month was still open, so they count as final.
+    """
+    if month == current:
+        return False
+    fetched_month = cached.get("fetched_month")
+    return fetched_month is None or fetched_month > month

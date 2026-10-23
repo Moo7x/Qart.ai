@@ -496,7 +496,7 @@ export interface SignalPoint {
   month: string;
   mentions: number;
   total_posts: number;
-  share: number;
+  share: number | null; // null for a month with no thread
   index: number | null;
   ma_short: number | null;
   ma_long: number | null;

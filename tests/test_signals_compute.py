@@ -2,7 +2,13 @@
 
 import pytest
 
-from src.signals.compute import build_points, change_12m, label_for, skill_signals
+from src.signals.compute import (
+    build_points,
+    calendar_months,
+    change_12m,
+    label_for,
+    skill_signals,
+)
 from src.signals.config import default_config
 
 PARAMS = default_config().params
@@ -60,3 +66,19 @@ def test_skill_signals_count_posts_once_and_keep_the_window() -> None:
     assert python.latest_sample_size == 2 and python.latest_total_posts == 3
     assert len(python.points) == len(MONTHS) <= PARAMS.window_months
     assert signals["pytorch"].latest_sample_size == 0
+
+
+def test_a_missing_month_is_a_gap_not_a_shift() -> None:
+    """A month with no thread stays in place, so lags and averages never slide onto other months."""
+    posts = {f"2025-{m:02d}": ["Python role"] * 10 for m in range(1, 13)}
+    posts |= {f"2026-{m:02d}": ["Python role"] * 10 for m in range(1, 4)}
+    del posts["2025-06"]
+    python = next(
+        s for s in skill_signals(posts, default_config().skills, PARAMS) if s.id == "python"
+    )
+    months = [p.month for p in python.points]
+    assert months == calendar_months("2025-01", "2026-03")
+    gap = python.points[months.index("2025-06")]
+    assert gap.total_posts == 0 and gap.share is None and gap.index is None
+    assert python.points[months.index("2025-07")].ma_short is None  # window touches the gap
+    assert python.points[-1].ma_long is None and python.label == "insufficient_data"

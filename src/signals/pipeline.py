@@ -94,8 +94,8 @@ def build_skill_signals(
     fetched_at: str,
 ) -> dict[str, Any]:
     signals = skill_signals(posts_by_month, cfg.skills, cfg.params)
-    months = sorted(posts_by_month)[-cfg.params.window_months :]
-    latest_total = len(posts_by_month[months[-1]]) if months else 0
+    months = [p.month for p in signals[0].points] if signals else []  # calendar months, gaps kept
+    latest_total = len(posts_by_month.get(months[-1], [])) if months else 0
     envelope = _envelope("hn", cfg, latest_post_date, fetched_at)
     envelope["caveats"].append(
         f"Latest month: {latest_total} job posts in the thread ({months[-1] if months else '–'})."
@@ -110,7 +110,7 @@ def build_skill_signals(
 
 def latest_post_date(cache_dir: Path, month: str) -> str:
     """The newest job-post date in a cached month (YYYY-MM-DD); the month start if none."""
-    thread = json.loads((cache_dir / f"{month}.json").read_text(encoding="utf-8"))
+    thread = hn.cached_thread(cache_dir, month)
     dates = [c["created_at"][:10] for c in thread.get("children", []) if c.get("created_at")]
     return max(dates, default=f"{month}-01")
 

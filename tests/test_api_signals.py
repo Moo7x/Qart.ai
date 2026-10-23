@@ -22,6 +22,7 @@ def test_staleness_uses_the_data_date() -> None:
     assert freshness("2026-10-01", date(2026, 10, 20)) == {"age_days": 19, "stale": False}
     assert freshness("2026-08-01", date(2026, 10, 20))["stale"] is True
     assert freshness("not a date")["stale"] is True
+    assert freshness(None)["stale"] is True  # type: ignore[arg-type]  # a snapshot with no date
 
 
 def test_for_user_uses_onboarding_skills_and_says_it_changes_nothing(client: TestClient) -> None:

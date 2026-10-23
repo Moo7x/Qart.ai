@@ -5,7 +5,7 @@
  "attribution": "Source: Indeed Hiring Lab",
  "update_frequency": "daily values (7-day trailing average), repository refreshed monthly",
  "data_as_of": "2026-09-30",
- "fetched_at": "2026-10-23T01:11:44+00:00",
+ "fetched_at": "2026-10-23T07:16:11+00:00",
  "caveats": [
   "Share of job postings on Indeed that mention AI terms, averaged per month.",
   "Covers 9 countries (AU, CA, DE, FR, GB, IE, IT, NL, US). Malaysia and Singapore are not covered; no chart labels this data as Malaysia."

@@ -22,7 +22,7 @@ const SERIES = [
  */
 function indexedPoints(skill: SkillSignal) {
   const anchor = skill.points.find(p => p.index !== null && p.index > 0)
-  const base = anchor ? (anchor.share * 100) / (anchor.index as number) : null
+  const base = anchor?.share != null ? (anchor.share * 100) / (anchor.index as number) : null
   const rebase = (v: number | null) => (v === null || !base ? null : Math.round((v / base) * 100))
   return skill.points.map(p => ({
     month: p.month,
@@ -117,7 +117,7 @@ function SkillRow({ skill, why }: { skill: SkillSignal; why?: string }) {
         </span>
         <span className="md:order-none justify-self-end md:justify-self-start"><SignalBadge label={skill.label} /></span>
         <span className="text-sm tabular-nums text-ink md:text-right"><span className="md:hidden text-xs text-graphite">12-month change </span>{skill.label === 'insufficient_data' ? <span title="Too few mentions for a reliable change">–</span> : formatChange(skill.change_12m)}</span>
-        <span className="justify-self-end md:justify-self-start"><Sparkline values={skill.points.map(p => p.ma_short ?? p.share)} label={`${skill.name} trend over ${skill.points.length} months`} /></span>
+        <span className="justify-self-end md:justify-self-start"><Sparkline values={skill.points.map(p => p.ma_short ?? p.share).filter((v): v is number => v !== null)} label={`${skill.name} trend over ${skill.points.length} months`} /></span>
         <span className="text-xs tabular-nums text-graphite md:text-right">{skill.latest_sample_size} of {skill.latest_total_posts}<span className="md:hidden"> posts last month</span></span>
         <span className="hidden md:block text-graphite" aria-hidden="true">{open ? <ChevronUp size={16} /> : <ChevronDown size={16} />}</span>
       </button>

@@ -34,13 +34,13 @@ def read_snapshot(name: str, directory: Path = SNAPSHOT_DIR) -> dict[str, Any]:
             status_code=404, detail=f"{name} not found; run python scripts/fetch_signals.py"
         )
     data: dict[str, Any] = json.loads(path.read_text(encoding="utf-8"))
-    return {**data, **freshness(data.get("data_as_of", ""))}
+    return {**data, **freshness(data.get("data_as_of") or "")}
 
 
 def freshness(data_as_of: str, today: date | None = None) -> dict[str, Any]:
     """Age of the data in days and whether it is stale (older than stale_after_days)."""
     try:
-        as_of = date.fromisoformat(data_as_of[:10])
+        as_of = date.fromisoformat(str(data_as_of)[:10])
     except ValueError:
         return {"age_days": None, "stale": True}
     age = ((today or datetime.now(UTC).date()) - as_of).days
