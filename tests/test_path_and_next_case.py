@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 
 from src.contract import Event, PathPlan, Profile, SkillState
+from src.engine import params
 from src.engine.catalogue import (
     CASE_INDEX_PATH,
     checkin_cases_by_skill,
@@ -202,3 +203,28 @@ def test_timeframe_sets_the_path_budget() -> None:
     # More time closes more of the worst-case gap (13 vs 52 weeks at 1 h/week).
     assert long.total_hours > short.total_hours
     assert long.worst_case_gap < short.worst_case_gap
+
+
+def test_low_ai_comfort_moves_an_ai_intro_first_and_only_reorders() -> None:
+    cat = default_catalogue()
+    states = states_after([])
+
+    def plan(comfort: int | None) -> PathPlan:
+        return plan_path(
+            "u_aina",
+            ROLE,
+            4.0,
+            states,
+            cat,
+            cat.assumptions_v1,
+            PLANNED_CASES,
+            set(),
+            ai_comfort=comfort,
+        )
+
+    base, low, high = plan(None), plan(2), plan(8)
+    assert [s.ref for s in high.steps] == [s.ref for s in base.steps]
+    assert sorted(s.ref for s in low.steps) == sorted(s.ref for s in base.steps)
+    assert low.steps[0].ref in params.AI_INTRO_COURSES
+    assert "2/10" in low.steps[0].because
+    assert low.total_hours == base.total_hours

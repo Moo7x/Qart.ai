@@ -17,7 +17,7 @@ no learning module: more teaching would not produce the missing evidence.
 
 import math
 from collections.abc import Callable, Sequence
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 
 from src.contract import (
     SCENARIOS,
@@ -260,6 +260,28 @@ def order_steps(inputs: PlanInputs, chosen: Sequence[Resource]) -> list[Resource
     return ordered
 
 
+def ai_intro_first(ordered: Sequence[Resource], ai_comfort: int | None) -> list[Resource]:
+    """Low AI comfort (≤ AI_COMFORT_LOW): move the shortest chosen AI-intro course to the front.
+
+    Only reorders what the planner already chose (gap logic unchanged); the course's own
+    prerequisites stay before it, and its reason says why it moved.
+    """
+    result = list(ordered)
+    if ai_comfort is None or ai_comfort > params.AI_COMFORT_LOW:
+        return result
+    intros = [r for r in result if r.ref in params.AI_INTRO_COURSES]
+    if not intros:
+        return result
+    intro = min(intros, key=lambda r: (r.hours, r.id))
+    result.remove(intro)
+    prereq_positions = [i for i, r in enumerate(result) if r.id in intro.prerequisites]
+    position = max(prereq_positions) + 1 if prereq_positions else 0
+    note = f"Placed first: you rated your comfort with AI tools {ai_comfort}/10."
+    moved = replace(intro, because=f"{intro.because} {note}".strip())
+    result.insert(position, moved)
+    return result
+
+
 def plan_inputs(
     role_id: str,
     states: dict[str, SkillState],
@@ -308,6 +330,7 @@ def plan_path(
     seen_case_ids: set[str],
     selector: "Selector | None" = None,
     horizon_weeks: int = params.PLAN_HORIZON_WEEKS,
+    ai_comfort: int | None = None,
 ) -> PathPlan:
     """The robust path for one employee and target role (contract PathPlan).
 
@@ -318,7 +341,9 @@ def plan_path(
     role_skills = [s.skill_id for s in catalogue.roles[role_id].skills]
     resources = build_resources(role_skills, by_skill, catalogue, cases, seen_case_ids)
     budget = weekly_hours * horizon_weeks
-    chosen = order_steps(inputs, (selector or greedy_select)(inputs, resources, budget))
+    chosen = ai_intro_first(
+        order_steps(inputs, (selector or greedy_select)(inputs, resources, budget)), ai_comfort
+    )
     total = sum(r.hours for r in chosen)
     return PathPlan(
         user_id=user_id,

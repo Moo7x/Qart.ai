@@ -388,6 +388,7 @@ def get_path(
         default_case_index(),
         {e.case_id for e in events},
         horizon_weeks=horizon_weeks(profile, params.PLAN_HORIZON_WEEKS),
+        ai_comfort=profile.preferences.ai_comfort,
     )
 
 
