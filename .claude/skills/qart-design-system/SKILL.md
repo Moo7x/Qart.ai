@@ -129,6 +129,17 @@ Profile (`/start`) → Signals (`/signals`) → Matches (`/matches`; `/future` r
 - Pathway ticks are a per-persona browser checklist, labelled "not evidence".
 - Mockup numbers in `design/qart-flow/` are illustrative. Never copy them; see `docs/screens_gap_report.md`.
 
+### Charts (Future Skills Radar and any new chart)
+Load the dataviz skill before writing chart code, and validate any categorical palette with its script.
+- **Library:** Recharts (lazy page chunk); sparklines are inline SVG (`web/src/components/SignalParts.tsx`).
+- **Colours:** `CHART` in SignalParts (action `#0075de`, coral `#f64932`, saffron `#e89d01`; grey for sparklines and axes). These passed the validator on white; saffron is under 3:1 contrast, so a legend and a numbers table are always there.
+- **One y-axis per chart.** Rebase series to a common index rather than adding a second scale.
+- **Hover tooltip** on every line chart.
+- **Legend** for two or more series. A single series has no legend; its title names it.
+- **Text** uses text tokens, never the line colour.
+- **Every chart has a provenance line** (`Provenance`): source, licence, data date, refresh date, link, caveats, and a "Stale data" badge after 45 days. Non-Malaysian data always says "not Malaysia".
+- **Wording:** "trend" or "signal", never "prediction" or "forecast".
+
 ### Personas and roles
 The nav changes with the persona (`web/src/persona.tsx`): employees get Profile / Signals / Matches / Pathway / SDG impact / Scenarios / Work queue / My skills, HR gets HR summary / Evidence & assumptions, and the senior gets Companion updates. Use `useUserId()` for every per-person call; never hard-code a user or case id. The persona select and Reset demo sit at the right of the nav. "Synthetic · demo data" appears from `lg` up.
 

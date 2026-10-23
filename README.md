@@ -157,6 +157,14 @@ python -m pytest
 
 The tests never call paid services. Code checks: `ruff check .` and `mypy src eval`. Evaluation: `python -m eval.runner` (writes `eval/RESULTS.md`; LLM rows need `LLM_API_KEY`).
 
+### Refresh the AI signals (Future Skills Radar)
+
+```bash
+python scripts/fetch_signals.py
+```
+
+Fetches public data only: the [Indeed Hiring Lab AI Tracker](https://github.com/hiring-lab/ai-tracker) (CC BY 4.0, "Source: Indeed Hiring Lab") and Hacker News "Ask HN: Who is hiring?" threads through the Algolia HN API (no key). It writes `data/snapshots/market_pulse.json` and `data/snapshots/skill_signals.json`; raw HN threads are cached in `data/raw/hn/` (gitignored), so a re-run fetches only new months. The app reads the snapshots only and works offline. A weekly GitHub Actions job (`.github/workflows/refresh-signals.yml`) runs the same script and opens a pull request with the updated snapshots. Skills, patterns and thresholds live in `catalogue/signal_config.json`; matcher precision is in `eval/signals_precision.md`.
+
 ---
 
 ## How We Use Replit *(Required)*

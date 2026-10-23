@@ -1,0 +1,45 @@
+# Weekly refresh of the Future Skills Radar snapshots (AI_SIGNAL_SPEC.md §5).
+# Fetches public data only (Indeed Hiring Lab AI Tracker CSV, HN "Who is hiring?" via Algolia),
+# then opens a pull request with the updated data/snapshots/*.json instead of committing:
+# a person reviews the change, and pushes to main (which rebuild the RunPod worker) stay rare.
+name: Refresh AI signals
+
+on:
+  schedule:
+    - cron: "17 3 * * 1" # Mondays 03:17 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      # Raw HN threads are gitignored; keep them between runs so only new months are fetched.
+      - uses: actions/cache@v4
+        with:
+          path: data/raw/hn
+          key: hn-threads-${{ github.run_id }}
+          restore-keys: hn-threads-
+      - run: python scripts/fetch_signals.py
+      - uses: peter-evans/create-pull-request@v7
+        with:
+          branch: signals/weekly-refresh
+          title: "data: weekly AI signals refresh"
+          commit-message: "data: refresh Skills Radar snapshots"
+          body: |
+            Automated weekly refresh of `data/snapshots/market_pulse.json` and
+            `data/snapshots/skill_signals.json` from public sources (Indeed Hiring Lab AI Tracker,
+            CC BY 4.0; HN "Who is hiring?" via the Algolia API). Check `data_as_of` before merging.
+          add-paths: |
+            data/snapshots/market_pulse.json
+            data/snapshots/skill_signals.json
