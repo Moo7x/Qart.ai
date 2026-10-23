@@ -14,11 +14,13 @@ httpx==0.28.1
 openai==3.36.1
 # Data packs, field profiles and source registry are YAML
 pyyaml==6.0.3
+# CV upload: text from PDF and DOCX files, and multipart form parsing
+pypdf==5.4.0
+python-docx==1.2.0
+python-multipart==0.0.32
 
 # Development and tests
 pytest==9.1.1
 ruff==0.17.1
 mypy==2.4.0
 types-PyYAML==6.0.12.20260906
-# Checks the TalentCorp extraction against the PDF (test only; skipped without the PDF)
-pypdf==5.4.0
