@@ -43,3 +43,10 @@
 | 2026-10-23 | dataset | DOSM "Big Data Analytics: Job Market Insights" quarterly release pages, Q2 2023 – Q2 2026 (dosm.gov.my/portal-main/release-content/…) | Online job offerings per quarter, total and Accountants and Auditors | Malaysian Government Open Data Terms of Use 1.0, checked 2026-10-23 | free / public | team |
 | 2026-10-23 | dataset | Anthropic Economic Index release_2026_06_26 (aei_claude_ai_2026-06-26.csv, Hugging Face) | Share of sampled conversations per finance occupation, global and Malaysia; automation vs augmentation split | Data CC-BY | free / public | team |
 | 2026-10-23 | dataset | TalentCorp (2024), Impact Study of AI, Digital and Green Economy on the Malaysian Workforce: GBS (PDF, local copy not committed) | Impact level of the 24 finance & accounting roles, 16 in-demand skills, 5 emerging roles (facts with page numbers) | All rights reserved: facts only, no text reproduced | free download | team |
+| 2026-10-23 | framework | React 19.3 + react-dom | Web app UI | MIT | free / open source | team |
+| 2026-10-23 | library | react-router-dom 7.18 | Page routing (Overview, Live intelligence) | MIT | free / open source | team |
+| 2026-10-23 | library | lucide-react 1.61 | Line icons in the pipeline diagram and menu | ISC | free / open source | team |
+| 2026-10-23 | library (dev) | Vite 8.3 + @vitejs/plugin-react, TypeScript 6.0, Tailwind CSS 4.3 (@tailwindcss/vite), oxlint 1.88 | Build, type checking, styling and linting of the web app | MIT / MIT / Apache-2.0 / MIT / MIT | free / open source | team |
+| 2026-10-23 | font | Geist and Geist Mono (Google Fonts) | Interface and data typography | SIL Open Font License 1.1 | free | team |
+| 2026-10-23 | design reference | Clerk website style (colour, type and radius principles only) | Inspiration for the UI direction; no brand assets or components copied | — | public website | team |
+| 2026-10-23 | removed | axios | Replaced by the browser's fetch | — | — | team |
