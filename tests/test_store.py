@@ -59,6 +59,18 @@ def test_missing_value_stays_missing(tmp_path: Path) -> None:
     assert query_observations(engine)[0]["value"] is None
 
 
+def test_source_can_revise_back_to_a_previously_seen_value(tmp_path: Path) -> None:
+    engine = engine_at(tmp_path)
+    insert_observations(engine, [obs(100)], run_id=None)
+    insert_observations(engine, [obs(200)], run_id=None)
+    assert insert_observations(engine, [obs(100)], run_id=None) == 1
+    assert query_observations(engine)[0]["value"] == 100
+    assert query_observations(engine, through_id=2)[0]["value"] == 200
+    assert insert_observations(engine, [obs(100)], run_id=None) == 0
+    assert insert_observations(engine, [obs(200), obs(100)], run_id=None) == 2
+    assert query_observations(engine)[0]["value"] == 100
+
+
 def test_lock_blocks_a_second_holder_until_released(tmp_path: Path) -> None:
     engine = engine_at(tmp_path)
     assert acquire_lock(engine, "pipeline", "run-a", HOUR)

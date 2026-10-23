@@ -17,9 +17,10 @@ Rule: never invent statistics; every number cites a source.
    Insights (quarterly release pages), Anthropic Economic Index (Hugging Face release, streamed and
    filtered), TalentCorp GBS study (hand extraction with page numbers). Each returns observations
    and a note for the run log.
-3. **Store** (`src/evidence/store.py`): observations are immutable. A fact's identity is a hash of
-   its content, so a re-fetch of the same value is skipped and a revision becomes a new row.
-   Missing stays missing, never zero.
+3. **Store** (`src/evidence/store.py`): observations are immutable. Re-fetching the current value
+   is skipped; a revision becomes a new row, including A→B→A reversals. A repeated historical
+   value gets a hash linked to its predecessor, retaining the unique-hash constraint. A cutoff id
+   reconstructs the latest revision available then. Missing stays missing, never zero.
 4. **Pipeline** (`src/pipeline/run.py`): a lock stops overlapping runs; each source gets two
    attempts; a failing source keeps its last good data; a run with nothing new is "no change".
 5. **Measures** (`src/evidence/measures.py`):

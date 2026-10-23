@@ -1,7 +1,7 @@
 """Evidence store: immutable observations, pipeline runs and the run lock.
 
-Observations are never updated in place. A re-fetch that returns the same value is skipped (same
-content hash); a revised value is stored as a new row, so earlier results stay reproducible.
+Observations are never updated in place. A re-fetch of the current value is skipped. A revision,
+including a return to an earlier value, becomes a new row so cutoffs remain reproducible.
 """
 
 import hashlib
@@ -21,6 +21,7 @@ from sqlalchemy import (
     Table,
     Text,
     UniqueConstraint,
+    func,
     insert,
     select,
     update,
@@ -154,15 +155,28 @@ class Observation:
 
 
 def insert_observations(engine: Engine, observations: list[Observation], run_id: int | None) -> int:
-    """Store facts not seen before; return how many were new."""
+    """Store changed current facts, including source reversals; return new revision count."""
     new = 0
     with engine.begin() as conn:
-        known = set(conn.execute(select(observation_table.c.content_hash)).scalars())
+        saved = list(
+            conn.execute(select(observation_table).order_by(observation_table.c.id)).mappings()
+        )
+        known = {r["content_hash"] for r in saved}
+        identity = ("source_id", "series", "entity", "geography", "period")
+        content = ("value", "denominator", "unit", "method_version")
+        latest = {tuple(r[k] for k in identity): dict(r) for r in saved}
         for obs in observations:
+            key = tuple(getattr(obs, k) for k in identity)
+            previous = latest.get(key)
+            if previous and all(previous[k] == getattr(obs, k) for k in content):
+                continue
             digest = obs.content_hash()
             if digest in known:
-                continue
-            conn.execute(
+                # A -> B -> A is a new revision, not a duplicate of the original A. Retain
+                # the unique hash constraint while linking this occurrence to its predecessor.
+                assert previous is not None
+                digest = hashlib.sha256(json.dumps([digest, previous["id"]]).encode()).hexdigest()
+            result = conn.execute(
                 insert(observation_table).values(
                     source_id=obs.source_id,
                     series=obs.series,
@@ -182,15 +196,25 @@ def insert_observations(engine: Engine, observations: list[Observation], run_id:
                 )
             )
             known.add(digest)
+            latest[key] = {k: getattr(obs, k) for k in content}
+            primary_key = result.inserted_primary_key
+            if primary_key is None:
+                raise RuntimeError("database returned no observation id")
+            latest[key]["id"] = primary_key[0]
             new += 1
     return new
 
 
 def query_observations(
-    engine: Engine, source_id: str | None = None, series: str | None = None
+    engine: Engine,
+    source_id: str | None = None,
+    series: str | None = None,
+    through_id: int | None = None,
 ) -> list[dict[str, Any]]:
     """Latest version of each fact (by source, series, entity, geography, period)."""
     stmt = select(observation_table).order_by(observation_table.c.id)
+    if through_id is not None:
+        stmt = stmt.where(observation_table.c.id <= through_id)
     if source_id:
         stmt = stmt.where(observation_table.c.source_id == source_id)
     if series:
@@ -201,6 +225,12 @@ def query_observations(
             key = (row["source_id"], row["series"], row["entity"], row["geography"], row["period"])
             latest[key] = dict(row)  # later ids are revisions and win
     return list(latest.values())
+
+
+def latest_observation_id(engine: Engine) -> int:
+    """Immutable store high-water mark; zero denotes the empty evidence snapshot."""
+    with engine.connect() as conn:
+        return int(conn.execute(select(func.max(observation_table.c.id))).scalar() or 0)
 
 
 def start_run(engine: Engine, trigger: str) -> int:
