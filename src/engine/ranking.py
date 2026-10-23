@@ -462,7 +462,9 @@ def _reasons(
     elif not tracked:
         reasons.append("No market trend data for this role's core skills.")
     else:
-        reasons.append(f"Its core skills are Stable {dated}.")
+        tracked_names = _names(list(tracked), vocabulary)
+        verb = "is" if len(tracked) == 1 else "are"
+        reasons.append(f"{tracked_names} {verb} Stable {dated}.")
     hours, plan = round(gap_hours), f"{months}-month plan at {answers.weekly_hours:g} h/week"
     if gap_hours == 0:
         reasons.append("You already meet the level it asks for in every skill.")

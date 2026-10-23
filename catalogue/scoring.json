@@ -3,7 +3,7 @@
   "scenarios": {
     "moderate": {
       "label": "Moderate AI disruption",
-      "description": "AI adoption keeps today's pace: today's trend labels, the spec's weights.",
+      "description": "AI adoption keeps today's pace: skills are scored on today's market trends.",
       "weights": {
         "grow": {
           "skill": 0.5,

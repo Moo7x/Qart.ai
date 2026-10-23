@@ -217,6 +217,7 @@ Results are **counts on synthetic variants**. The acceptance set and its criteri
 | `GET /api/snapshots` · `GET /api/snapshots/diff?from=&to=` | A | Snapshot[] / diff |
 | `GET /api/roles` | A | Role[] |
 | `GET /api/sdg` *(v2.1)* | A | SDG targets (title, UN link, rationale) + role/skill tags from the catalogue |
+| `GET /api/ranking/{user_id}?scenario=moderate\|fast` *(v2.5)* | B | Role ranking (pure `rank_roles`): every target role with score, band, components, weights, reasons, flags, gap (ordered, hours, fits timeframe), both scenario scores; plus trend provenance, scenario descriptions and AEI automation share as evidence. The Matches page uses it; the old `/api/recommendations` is no longer shown |
 | `GET /api/questionnaire` · `GET /api/held-skills/{user_id}` *(v2.4)* | B | Questionnaire config (current roles + typical skills, weekly tasks → skills, tool chips → skills, levels 0.3/0.7/1.0); the person's held skills = questionnaire levels raised by practice evidence |
 | `GET /api/signals/market-pulse` · `GET /api/signals/skills` · `GET /api/signals/for-user/{user_id}` *(v2.3)* | B | Future Skills Radar snapshots (Indeed AI Tracker, HN "Who is hiring?") with provenance, `age_days`, `stale`; for-user = the person's skills vs the signals (informational) |
 | `GET /api/recommendations/{user_id}?scenario=&snapshot=` | A | Recommendation |
