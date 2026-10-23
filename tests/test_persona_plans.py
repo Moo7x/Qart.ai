@@ -8,24 +8,11 @@ The demo build uses verified courses only (tests/test_resource_catalogue.py, DEM
 
 from typing import Any
 
-import pytest
-
 from src.engine.catalogue import default_catalogue
 from src.engine.learning_plan import LearningPlan, plan_for_profile
 from tests.test_personas import PERSONA_DIR, SIGNALS, load, profile_for
 
 COURSES = default_catalogue().courses
-HRD_FLAG = pytest.mark.xfail(
-    strict=True,
-    reason=(
-        "flagged for team: with the spec's scoring, free self-paced courses outscore the 2-day "
-        "HRD-claimable workshop for p1 (no format or certificate preference), and with employer "
-        "'not sure' its listed RM3,456 ranks it lower still, so no HRD step appears. The HRD logic "
-        "itself works (with hands-on + certificate preferences the workshop is chosen at RM0 with "
-        "the HR action). Decide: a declared bonus for HRD-claimable courses when the budget is "
-        "'employer pays', or relax these expectations."
-    ),
-)
 
 
 def plan_of(name: str, **overrides: Any) -> LearningPlan:
@@ -36,7 +23,6 @@ def plan_of(name: str, **overrides: Any) -> LearningPlan:
     return plan
 
 
-@HRD_FLAG
 def test_p1_hrd_registered_employer_pays_nothing_and_gets_an_hr_action() -> None:
     plan = plan_of("p1_recon_nearby")
     hrd = [s for s in plan.steps if s.kind == "course" and s.hrd_claimable]
@@ -46,12 +32,12 @@ def test_p1_hrd_registered_employer_pays_nothing_and_gets_an_hr_action() -> None
     assert plan.summary.cost_possibly_covered_by_employer_myr > 0
 
 
-@HRD_FLAG
 def test_p1b_employer_not_sure_shows_the_listed_price_and_a_may_be_claimable_note() -> None:
     plan = plan_of("p1_recon_nearby", employer_hrd="not_sure")
     hrd = [s for s in plan.steps if s.kind == "course" and s.hrd_claimable]
     assert hrd and all(s.cost_to_user_myr is None or s.cost_to_user_myr > 0 for s in hrd)
     assert any("May be claimable" in n for n in plan.notes)
+    assert any("whether your company is HRD Corp-registered" in x for x in plan.action_items)
 
 
 def test_p3_eligible_graduate_starts_with_ai_untuk_rakyat_and_pays_nothing() -> None:

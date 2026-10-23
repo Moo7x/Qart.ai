@@ -385,3 +385,23 @@ def test_a_free_if_eligible_course_is_never_described_as_plain_free() -> None:
     )
     reason = plan([gap("sql")], [gated]).steps[0].reasons[0]
     assert reason.startswith("Free if you are eligible")
+
+
+def test_employer_pays_prefers_an_hrd_claimable_course_only_for_employed_people_who_asked() -> None:
+    free = course("free", {"sql": (0, 0.7)}, hours=2, format=["hands_on"])
+    hrd = HRD.model_copy(update={"id": "hrd", "hours": 6})
+    asked = replace(A, budget="employer_pays", employment="employed", employer_hrd="yes")
+    assert plan([gap("sql")], [free, hrd], asked).steps[0].resource_id == "hrd"
+    assert (
+        "employer-funded through HRD Corp"
+        in plan([gap("sql")], [free, hrd], asked).steps[0].reasons[0]
+    )
+    not_sure = replace(asked, employer_hrd="not_sure")
+    step = plan([gap("sql")], [free, hrd], not_sure).steps[0]
+    assert step.resource_id == "hrd" and step.cost_to_user_myr == 900  # listed price, with a note
+    for other in (
+        replace(asked, employer_hrd="no"),
+        replace(asked, budget=None),
+        replace(asked, employment="student"),
+    ):
+        assert plan([gap("sql")], [free, hrd], other).steps[0].resource_id == "free"

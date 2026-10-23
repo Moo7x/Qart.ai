@@ -25,6 +25,7 @@ One pure function, `build_learning_plan`: no network, no AI model, no randomness
    - ties break on cost, then hours, then id;
    - the next 2 courses are kept for "Swap";
    - a course over 3× the gap's estimated hours is used only when nothing shorter exists.
+   - **employer-funded first:** for someone employed who chose "Any, if my employer pays" and whose employer is HRD-registered (or who is not sure), an HRD-claimable course gets +5, so it wins even at its listed price. If they're not sure, the action item first asks HR whether the company is registered.
 4. **Order:**
    - with AI comfort 3/10 or below, an AI-literacy course goes first. AI untuk Rakyat is chosen only if you're known to be eligible (18–30 and Malaysian); otherwise you get a course open to everyone;
    - after that, the gap order (core first, then score gain per hour), moved so a skill never comes before its prerequisite.

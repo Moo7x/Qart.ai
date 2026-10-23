@@ -47,6 +47,7 @@ class ScoreWeights(BaseModel):
     language_match: float
     self_paced: float
     shorter_max: float
+    employer_funded: float  # HRD-claimable, for people who asked their employer to pay
 
 
 class PlanConfig(BaseModel):
@@ -259,6 +260,10 @@ def _score(
     elif cost.to_user is not None and cost.to_user <= w.cheap_limit_myr:
         score += w.cheap
         bits.append(f"RM{cost.to_user:g}")
+    wants_employer = a.budget == "employer_pays" and a.employment == "employed"
+    if course.hrd_claimable and wants_employer and a.employer_hrd in ("yes", "not_sure"):
+        score += w.employer_funded
+        bits.append("employer-funded through HRD Corp, as you asked")
     matching = [f for f in course.format if f in a.formats]
     if matching:
         score += w.format_match
@@ -526,14 +531,18 @@ def _course_step(
         reasons.append(f"Chosen over {n} alternative{'s' if n > 1 else ''} because {why}.")
     actions = []
     if c.delivery == "scheduled":
-        claim = (
-            c.hrd_claimable and a.employment == "employed" and a.employer_hrd in ("yes", "not_sure")
-        )
-        actions.append(
-            f"Ask HR to apply for the HRD Corp grant via e-TRiS before {c.title} starts."
-            if claim
-            else f"Register for the next intake of {c.title}."
-        )
+        employed = c.hrd_claimable and a.employment == "employed"
+        if employed and a.employer_hrd == "yes":
+            actions.append(
+                f"Ask HR to apply for the HRD Corp grant via e-TRiS before {c.title} starts."
+            )
+        elif employed and a.employer_hrd == "not_sure":
+            actions.append(
+                "Ask HR whether your company is HRD Corp-registered; if it is, ask them to apply "
+                f"for the grant via e-TRiS before {c.title} starts."
+            )
+        else:
+            actions.append(f"Register for the next intake of {c.title}.")
     step = PlanStep(
         order=order,
         kind="course",

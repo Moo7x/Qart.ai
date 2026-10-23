@@ -1,5 +1,5 @@
 {
-  "_about": "Learning-plan settings (pathway.md §4). Every value is a DECLARED design choice from the spec, not fitted to data. Budget limit and timeframe weeks come from questionnaire.json and scoring.json so they exist once. max_overshoot: a course longer than this multiple of the gap's estimated hours is chosen only when no shorter course covers the skill (it stays a Swap alternative).",
+  "_about": "Learning-plan settings (pathway.md §4). Every value is a DECLARED design choice from the spec, not fitted to data. Budget limit and timeframe weeks come from questionnaire.json and scoring.json so they exist once. max_overshoot: a course longer than this multiple of the gap's estimated hours is chosen only when no shorter course covers the skill (it stays a Swap alternative). score.employer_funded (team decision 2026-10-23): an HRD-claimable course gets this bonus for someone employed who chose the budget 'Any, if my employer pays' and whose employer is HRD-registered or who is not sure, so employer-funded training is preferred as they asked; it is larger than free (3) + self-paced (0.5) + shorter (1) so it also wins at its listed price.",
   "level_slack": 0.3,
   "max_courses_per_skill": 2,
   "alternatives": 2,
@@ -12,7 +12,8 @@
     "certificate": 1.0,
     "language_match": 1.0,
     "self_paced": 0.5,
-    "shorter_max": 1.0
+    "shorter_max": 1.0,
+    "employer_funded": 5.0
   },
   "practice_buffer": 0.2,
   "milestone_every_weeks": 4,
