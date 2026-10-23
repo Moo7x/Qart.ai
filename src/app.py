@@ -28,6 +28,7 @@ from src.api.changes import router as changes_router  # noqa: E402
 from src.api.decision import router as decision_router  # noqa: E402
 from src.api.evidence import router as evidence_router  # noqa: E402
 from src.api.journey import router as journey_router  # noqa: E402
+from src.api.occupations import router as occupations_router  # noqa: E402
 from src.config import Settings, load_settings  # noqa: E402
 from src.db import init_db, make_engine, ping  # noqa: E402
 from src.pipeline.run import start_catch_up_if_stale  # noqa: E402
@@ -93,6 +94,7 @@ def create_app(settings: Settings | None = None, first_run: bool = True) -> Fast
     application.include_router(journey_router)
     application.include_router(changes_router)
     application.include_router(decision_router)
+    application.include_router(occupations_router)
     if WEB_DIST.is_dir():
         application.mount("/", SinglePageApp(directory=WEB_DIST, html=True), name="web")
     else:

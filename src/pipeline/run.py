@@ -40,6 +40,7 @@ from src.evidence.store import (
     start_run,
 )
 from src.occupations.catalogue import build_index, refresh_catalogue
+from src.occupations.preview import fill_isco
 
 logger = logging.getLogger(__name__)
 
@@ -192,6 +193,7 @@ def _run_all(
             notes = [
                 refresh_catalogue(engine, client),
                 build_index(engine, load_settings(), client),
+                fill_isco(engine, client),
             ]
         results.append(
             {

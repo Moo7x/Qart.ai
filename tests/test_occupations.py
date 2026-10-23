@@ -197,3 +197,36 @@ def test_run_job_gives_up_at_the_budget(settings: Settings) -> None:
             client,
             sleep=lambda s: None,
         )
+
+
+def test_preview_uses_the_field_link_and_labels_coverage(engine: Engine) -> None:
+    from src.occupations.preview import preview
+
+    with httpx.Client(transport=Capture(fake_services([]))) as client:
+        cat.refresh_catalogue(engine, client)
+        rows: list[dict[str, Any]] = [
+            {
+                "source_id": "anthropic_economic_index",
+                "series": "aei_pct",
+                "entity": "43-3031.00 x",
+                "geography": "GLOBAL",
+                "period": "2026-05",
+                "value": 0.3,
+                "url": "u",
+                "cited_span": "",
+            },
+        ]
+        clerk = preview(engine, "43-3031.00", rows, [], client)
+        nurse = preview(engine, "29-1141.00", [], [], client)
+        assert preview(engine, "00-0000.00", [], [], client) is None
+    assert clerk is not None and nurse is not None
+    assert clerk["in_field"] and clerk["isco"] == "4311"  # verified field link, no ESCO call
+    assert clerk["ai_use"]["share"] == 0.3 and clerk["ai_use"]["share_local"] is None
+    assert not nurse["in_field"] and nurse["isco"] is None and nurse["isco_note"]  # said why
+    assert "Evidence preview only" in nurse["coverage"]
+
+
+def test_detect_route_returns_labelled_suggestions(client: Any) -> None:
+    body = client.post("/api/occupations/detect", json={"text": "accounts clerk"}).json()
+    assert body["engine"] == "none" and body["matches"] == []  # empty catalogue in tests
+    assert client.get("/api/occupations/29-1141.00").status_code == 404
