@@ -36,3 +36,9 @@ AEI_MIN_ABSOLUTE_CHANGE = 0.02
 # "not enough evidence yet", with its direction as an early signal.
 MIN_INDEPENDENT_SOURCES = 2
 MIN_POINTS_SINGLE_OFFICIAL_SERIES = 8
+
+# --- Pipeline freshness --------------------------------------------------------------------
+# If the newest run started longer ago than this, opening the app starts a background "catch-up"
+# run. It backs up the scheduled job: DOSM publishes quarterly and the Economic Index irregularly,
+# so one check a day is enough to notice a new release on the day it appears.
+RUN_STALE_AFTER_HOURS = 24

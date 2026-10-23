@@ -11,16 +11,18 @@ rest. A run that finds nothing new is logged as "no change", which is a normal, 
 
 import argparse
 import logging
+import threading
 import time
 import uuid
 from collections.abc import Callable, Mapping
 from dataclasses import dataclass, field
-from datetime import timedelta
+from datetime import UTC, datetime, timedelta
 from typing import Any
 
 import httpx
 from sqlalchemy import Engine
 
+from src import params
 from src.collectors import aei, dosm_jmi, dosm_wages, talentcorp
 from src.collectors.base import Collect
 from src.evidence.registry import registry
@@ -29,6 +31,7 @@ from src.evidence.store import (
     acquire_lock,
     finish_run,
     insert_observations,
+    list_runs,
     release_lock,
     start_run,
 )
@@ -171,6 +174,26 @@ def _run_all(
     new_total = sum(r["new"] for r in results)
     finish_run(engine, run_id, status, new_total, results)
     return RunSummary(run_id, status, new_total, results)
+
+
+def is_stale(engine: Engine, now: datetime | None = None) -> bool:
+    """True when no run exists, or the newest one started more than RUN_STALE_AFTER_HOURS ago."""
+    latest = next(iter(list_runs(engine, 1)), None)
+    if latest is None:
+        return True
+    started: datetime = latest["started_at"]
+    if started.tzinfo is None:  # SQLite returns naive UTC
+        started = started.replace(tzinfo=UTC)
+    age = (now or datetime.now(UTC)) - started
+    return age > timedelta(hours=params.RUN_STALE_AFTER_HOURS)
+
+
+def start_catch_up_if_stale(engine: Engine) -> bool:
+    """Start a background run when the evidence is stale; the lock skips it if one is running."""
+    if not is_stale(engine):
+        return False
+    threading.Thread(target=run_pipeline, args=(engine, "catch-up"), daemon=True).start()
+    return True
 
 
 def main() -> None:

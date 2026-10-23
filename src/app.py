@@ -7,13 +7,11 @@ shadowed by the static files.
 """
 
 import logging
-import threading
 from pathlib import Path
 
 from fastapi import APIRouter, FastAPI
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
-from sqlalchemy import Engine
 from starlette.exceptions import HTTPException
 from starlette.responses import Response
 from starlette.types import Scope
@@ -26,8 +24,7 @@ import src.evidence.store  # noqa: E402, F401  (registers the evidence tables be
 from src.api.evidence import router as evidence_router  # noqa: E402
 from src.config import Settings, load_settings  # noqa: E402
 from src.db import init_db, make_engine, ping  # noqa: E402
-from src.evidence.store import list_runs  # noqa: E402
-from src.pipeline.run import run_pipeline  # noqa: E402
+from src.pipeline.run import start_catch_up_if_stale  # noqa: E402
 
 logger = logging.getLogger(__name__)
 
@@ -59,20 +56,12 @@ class Health(BaseModel):
     embeddings: str
 
 
-def start_first_run_if_empty(engine: Engine) -> None:
-    """A fresh deployment has no evidence yet: start one run in the background so pages fill in
-    without anyone waiting on it. Later runs come from the schedule or Run now."""
-    if list_runs(engine, 1):
-        return
-    threading.Thread(target=run_pipeline, args=(engine, "first start"), daemon=True).start()
-
-
 def create_app(settings: Settings | None = None, first_run: bool = True) -> FastAPI:
     settings = settings or load_settings()
     engine = make_engine(settings.database_url)
     init_db(engine)
     if first_run:
-        start_first_run_if_empty(engine)
+        start_catch_up_if_stale(engine)  # a fresh deployment fills itself in the background
 
     application = FastAPI(
         title="Qart.ai",
@@ -81,6 +70,7 @@ def create_app(settings: Settings | None = None, first_run: bool = True) -> Fast
     )
     application.state.engine = engine
     application.state.settings = settings
+    application.state.catch_up = first_run  # tests switch background runs off
     api = APIRouter(prefix="/api")
 
     @api.get("/health")

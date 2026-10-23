@@ -8,6 +8,7 @@ import httpx
 import pytest
 from sqlalchemy import Engine
 
+from src import params
 from src.collectors.base import Collect, CollectorResult, SourceState
 from src.db import init_db, make_engine
 from src.evidence.store import Observation, acquire_lock, list_runs, query_observations
@@ -109,3 +110,16 @@ def test_an_unexpected_error_in_one_source_does_not_stop_the_others(
     summary = pipeline.run_pipeline(engine, "manual", offline, retry_pause=0)
     assert summary.status == "partial"
     assert list_runs(engine, 1)[0]["status"] == "partial"  # the run record is closed
+
+
+def test_evidence_is_stale_without_runs_and_after_a_day(
+    engine: Engine, offline: ClientFactory, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    from datetime import UTC, datetime
+
+    assert pipeline.is_stale(engine)
+    monkeypatch.setattr(pipeline, "COLLECTORS", all_fakes())
+    pipeline.run_pipeline(engine, "manual", offline, retry_pause=0)
+    assert not pipeline.is_stale(engine)
+    later = datetime.now(UTC) + timedelta(hours=params.RUN_STALE_AFTER_HOURS + 1)
+    assert pipeline.is_stale(engine, now=later)

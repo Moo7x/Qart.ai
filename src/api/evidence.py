@@ -13,7 +13,7 @@ from src.evidence import measures
 from src.evidence.registry import registry
 from src.evidence.signals import Signal, build_signals
 from src.evidence.store import list_runs, query_observations
-from src.pipeline.run import LOCK_NAME, run_pipeline
+from src.pipeline.run import LOCK_NAME, run_pipeline, start_catch_up_if_stale
 
 router = APIRouter(prefix="/api")
 
@@ -94,7 +94,10 @@ def sources(engine: Engine = Depends(get_engine)) -> list[SourceStatus]:
 
 
 @router.get("/signals")
-def signals(engine: Engine = Depends(get_engine)) -> SignalsResponse:
+def signals(request: Request, engine: Engine = Depends(get_engine)) -> SignalsResponse:
+    # Opening the overview checks freshness: a backup for the scheduled job (see params).
+    if request.app.state.catch_up:
+        start_catch_up_if_stale(engine)
     rows = query_observations(engine)
     return SignalsResponse(
         generated_at=datetime.now(UTC).isoformat(),
