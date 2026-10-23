@@ -473,5 +473,105 @@
         "data_engineering"
       ]
     }
-  ]
+  ],
+  "funding": {
+    "_about": "Funding and eligibility answers for the learning plan (pathway.md §2). 'Not sure' and 'Prefer not to say' never block a plan; they lead to notes. Age band and citizenship are only used to check course eligibility, never in the ranking or any HR view.",
+    "employment": [
+      {
+        "id": "employed",
+        "label": "Employed"
+      },
+      {
+        "id": "job_seeking",
+        "label": "Job seeking"
+      },
+      {
+        "id": "student",
+        "label": "Student"
+      },
+      {
+        "id": "self_employed",
+        "label": "Self-employed"
+      }
+    ],
+    "employer_hrd": [
+      {
+        "id": "yes",
+        "label": "Yes"
+      },
+      {
+        "id": "no",
+        "label": "No"
+      },
+      {
+        "id": "not_sure",
+        "label": "Not sure"
+      }
+    ],
+    "budget": [
+      {
+        "id": "free_only",
+        "label": "Free only"
+      },
+      {
+        "id": "up_to_200",
+        "label": "Up to ~RM200"
+      },
+      {
+        "id": "employer_pays",
+        "label": "Any, if my employer pays"
+      }
+    ],
+    "budget_limit_myr": 200,
+    "language": [
+      {
+        "id": "en",
+        "label": "English"
+      },
+      {
+        "id": "ms",
+        "label": "Bahasa Malaysia"
+      },
+      {
+        "id": "either",
+        "label": "Either"
+      }
+    ],
+    "age_band": [
+      {
+        "id": "under_18",
+        "label": "Under 18"
+      },
+      {
+        "id": "18_30",
+        "label": "18–30"
+      },
+      {
+        "id": "31_45",
+        "label": "31–45"
+      },
+      {
+        "id": "46_plus",
+        "label": "46+"
+      },
+      {
+        "id": "prefer_not",
+        "label": "Prefer not to say"
+      }
+    ],
+    "malaysian": [
+      {
+        "id": "yes",
+        "label": "Yes"
+      },
+      {
+        "id": "no",
+        "label": "No"
+      },
+      {
+        "id": "prefer_not",
+        "label": "Prefer not to say"
+      }
+    ]
+  }
 }

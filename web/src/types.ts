@@ -149,11 +149,24 @@ export interface Preferences {
   current_job?: string | null;
   tasks?: string[];
   skill_levels?: Record<string, SkillLevel>;
+  // v2.6: funding and eligibility for the learning plan (age band and citizenship: eligibility only)
+  employment?: 'employed' | 'job_seeking' | 'student' | 'self_employed' | null;
+  employer_hrd?: 'yes' | 'no' | 'not_sure' | null;
+  budget?: 'free_only' | 'up_to_200' | 'employer_pays' | null;
+  wants_certificate?: boolean | null;
+  language?: 'en' | 'ms' | 'either' | null;
+  age_band?: 'under_18' | '18_30' | '31_45' | '46_plus' | 'prefer_not' | null;
+  malaysian?: 'yes' | 'no' | 'prefer_not' | null;
 }
 
 // GET /api/questionnaire (v2.4)
 export type SkillLevel = 'heard' | 'sometimes' | 'confident';
+export interface QuestionnaireOption { id: string; label: string }
 export interface Questionnaire {
+  funding: {
+    employment: QuestionnaireOption[]; employer_hrd: QuestionnaireOption[]; budget: QuestionnaireOption[];
+    budget_limit_myr: number; language: QuestionnaireOption[]; age_band: QuestionnaireOption[]; malaysian: QuestionnaireOption[];
+  };
   industries: string[];
   education: { label: string; level: string }[];
   education_order: string[];

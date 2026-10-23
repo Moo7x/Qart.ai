@@ -14,6 +14,15 @@ There is no CV upload. The role ranking and the skills gap (QART_NEXT_STEPS §5�
 - The person taps a chip to change its level, or removes it. The final chips are saved as `preferences.skill_levels`.
 - **Held skills** are those levels, raised by practice evidence. A skill shown in a case with help counts at least as "use sometimes"; shown on your own, "confident". A claim alone adds nothing.
 
+**Funding and eligibility** (pathway.md §2) sit in a compact block in "How you learn". They are saved for the learning plan:
+- course language;
+- "Right now I am…" (employment status);
+- the HRD Corp question, only when Employed (switching away clears it);
+- budget;
+- a "Certificates where possible" chip next to the format chips.
+
+Age band and citizenship are in a collapsed "Eligibility (optional)" row, only for checking who a course is open to.
+
 ## 4. Where in the code
 - Config: `catalogue/questionnaire.json` (current roles, tasks, tools, levels)
 - Logic: `src/engine/questionnaire.py` (`prefill_levels`, `held_skills`)

@@ -57,7 +57,23 @@ class EducationOption(BaseModel):
     level: str  # one of education_order; only the soft min_education note reads it
 
 
+class Option(BaseModel):
+    id: str
+    label: str
+
+
+class Funding(BaseModel):
+    employment: list[Option]
+    employer_hrd: list[Option]
+    budget: list[Option]
+    budget_limit_myr: float  # "Up to ~RM200"
+    language: list[Option]
+    age_band: list[Option]
+    malaysian: list[Option]
+
+
 class Questionnaire(BaseModel):
+    funding: Funding
     industries: list[str]
     education: list[EducationOption]
     education_order: list[str]  # lowest to highest

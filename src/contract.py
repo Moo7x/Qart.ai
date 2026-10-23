@@ -46,6 +46,13 @@ Direction = Literal["grow", "adjacent", "switch"]
 TimeframeMonths = Literal[3, 6, 12]
 # Addition (v2.4): the three self-rated levels of the questionnaire (values in questionnaire.json).
 SkillLevel = Literal["heard", "sometimes", "confident"]
+# Addition (v2.6): funding and eligibility answers for the learning plan (pathway.md §2).
+Employment = Literal["employed", "job_seeking", "student", "self_employed"]
+EmployerHrd = Literal["yes", "no", "not_sure"]
+Budget = Literal["free_only", "up_to_200", "employer_pays"]
+LearningLanguage = Literal["en", "ms", "either"]
+AgeBand = Literal["under_18", "18_30", "31_45", "46_plus", "prefer_not"]
+Citizenship = Literal["yes", "no", "prefer_not"]
 AI_COMFORT_MAX = 10  # intake slider 0..10, the person's own rating
 NOTES_MAX_CHARS = 500  # free text is synthetic demo data; capped so it stays a short note
 
@@ -71,6 +78,15 @@ class Preferences(BaseModel):
     tasks: list[str] = []
     # Final state of the skill chips (role pre-fill + tasks + tools, as the person edited them).
     skill_levels: dict[str, SkillLevel] = {}
+    # v2.6 (learning plan). Age band and citizenship only check course eligibility: never the
+    # ranking, never logged, never in HR views.
+    employment: Employment | None = None
+    employer_hrd: EmployerHrd | None = None  # only meaningful when employed
+    budget: Budget | None = None
+    wants_certificate: bool | None = None
+    language: LearningLanguage | None = None
+    age_band: AgeBand | None = None
+    malaysian: Citizenship | None = None
 
 
 class Profile(BaseModel):

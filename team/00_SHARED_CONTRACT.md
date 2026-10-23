@@ -22,6 +22,16 @@ Contract version: **v2** (21 Oct 2026). v2 aligns with `PROJECT_PLAN.md` v2:
 - New `PathPlan.horizon_weeks`, `PathPlan.profile_inputs`, `Recommendation.profile_inputs`: plain lines naming the answers used.
 - Still stored only: tools, formats (courses have no format field yet). Never read: industry, education (no demographic fields in scoring), notes.
 
+**v2.6 additions (23 Oct 2026, additive):** funding and eligibility for the learning plan (pathway.md §2). `Profile.preferences` gains:
+- `employment` (employed / job_seeking / student / self_employed);
+- `employer_hrd` (yes / no / not_sure; only when employed);
+- `budget` (free_only / up_to_200 / employer_pays);
+- `wants_certificate`;
+- `language` (en / ms / either);
+- `age_band` and `malaysian`.
+
+The options live in `catalogue/questionnaire.json` → `funding`. Age band and citizenship only check course eligibility: never the ranking (a fairness test pins this), never logged, never in HR views. "Not sure" and "Prefer not to say" never block a plan.
+
 **v2.4 additions (23 Oct 2026, additive):** onboarding questionnaire (QART_NEXT_STEPS §3). `Profile.preferences` gains `current_job` (an id from `catalogue/questionnaire.json`, any job, not only catalogue roles), `tasks` (task ids) and `skill_levels` (`{skill_id: "heard"|"sometimes"|"confident"}`, the final skill chips). `POST /api/profile` returns 422 for unknown ids. Held skills = `skill_levels`, raised (never lowered) by evidence: observed with help → "sometimes", demonstrated independently → "confident". The old evidence recommender does not read these fields; the Skills Radar's "your skills" does.
 
 **v2.3 additions (23 Oct 2026, additive):** Future Skills Radar (AI_SIGNAL_SPEC.md). Three read-only `/api/signals/*` endpoints serve snapshots written by `scripts/fetch_signals.py` (`data/snapshots/market_pulse.json`, `skill_signals.json`; spec schema with `data_as_of` = latest data date). They are trend signals for display only: no ranking, path or weight reads them. Profile tools are matched to signal skills server-side; nothing about users is sent to the sources.

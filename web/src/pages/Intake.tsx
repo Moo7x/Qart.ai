@@ -4,7 +4,7 @@ import { ArrowRight, Check, Plus, X } from 'lucide-react'
 import { getNextCase, getProfile, getQuestionnaire, postProfile } from '../api'
 import { useReveal } from '../motion'
 import { useUserId } from '../persona'
-import type { Preferences, Profile, Questionnaire, SkillLevel } from '../types'
+import type { Preferences, Profile, Questionnaire, QuestionnaireOption, SkillLevel } from '../types'
 import { btn, Card, Highlight, input as inputCls, PageHeader, ProvenanceTag, Tag } from '../ui'
 
 // Years are chosen as a band; the profile stores a number, so each band maps to its midpoint
@@ -61,14 +61,33 @@ function ShapesRanking({ what = 'These become your skills, which your role match
   return <Tag tone="action" title={what}>Shapes your ranking</Tag>
 }
 
+/** Funding and learning answers for the learning plan (pathway.md §2), which is built next. */
+function ForPlan() {
+  return <Tag tone="linen" title="Saved for your learning plan: which courses fit your budget, format and language.">Saved · for your learning plan</Tag>
+}
+
+/** Age band and citizenship: only for course eligibility, never for ranking. */
+function EligibilityOnly() {
+  return <Tag tone="linen" title="Only used to check who a course is open to (for example a programme for Malaysians aged 18–30). Never used to rank roles.">Only used to check course eligibility</Tag>
+}
+
+/** One-choice chip row; tapping the chosen chip again clears it. */
+function ChoiceRow({ legend, aside, options, value, onChange }: {
+  legend: ReactNode; aside?: ReactNode; options: QuestionnaireOption[]; value: string | null | undefined; onChange: (v: string | null) => void
+}) {
+  return (
+    <fieldset>
+      <legend className="flex flex-wrap items-center gap-2 text-sm font-medium text-ink mb-2">{legend} {aside}</legend>
+      <div className="flex flex-wrap gap-2">
+        {options.map(o => <Chip key={o.id} on={value === o.id} onClick={() => onChange(value === o.id ? null : o.id)}>{o.label}</Chip>)}
+      </div>
+    </fieldset>
+  )
+}
+
 /** Saved answers the ranking only shows as a note, never scores. */
 function NoteOnly() {
   return <Tag tone="linen" title="Saved. Shown as a note on roles that often ask for more; it never changes a score.">Saved · shown as a note</Tag>
-}
-
-/** Answers kept in Profile.preferences that nothing reads yet. */
-function SavedOnly() {
-  return <Tag tone="linen" title="Stored in your profile. Nothing uses it yet.">Saved · not used yet</Tag>
 }
 
 function CardTitle({ children, aside }: { children: ReactNode; aside?: ReactNode }) {
@@ -332,7 +351,7 @@ export default function Intake() {
             </label>
             {/* Until it is set the handle is hidden, so the label and the handle never disagree (§4.1). */}
             <input
-              id="ai-comfort" type="range" min={0} max={10} step={1} value={prefs.ai_comfort ?? 5}
+              id="ai-comfort" type="range" min={0} max={10} step={1} value={prefs.ai_comfort ?? 0}
               onChange={e => setPref('ai_comfort', parseInt(e.target.value, 10))}
               onPointerUp={e => setPref('ai_comfort', parseInt(e.currentTarget.value, 10))}
               aria-valuetext={prefs.ai_comfort == null ? 'not set' : `${prefs.ai_comfort} out of 10`}
@@ -344,11 +363,40 @@ export default function Intake() {
             </p>
           </div>
           <fieldset>
-            <legend className="flex flex-wrap items-center gap-2 text-sm font-medium text-ink mb-2">Preferred format <SavedOnly /></legend>
+            <legend className="flex flex-wrap items-center gap-2 text-sm font-medium text-ink mb-2">Preferred format <ForPlan /></legend>
             <div className="flex flex-wrap gap-2">
               {FORMATS.map(f => <Chip key={f} on={(prefs.formats ?? []).includes(f)} onClick={() => setPref('formats', toggle(prefs.formats ?? [], f))}>{f}</Chip>)}
+              <Chip on={prefs.wants_certificate === true} onClick={() => setPref('wants_certificate', prefs.wants_certificate ? null : true)}>Certificates where possible</Chip>
             </div>
           </fieldset>
+          {q && (
+            <>
+              <ChoiceRow legend="Course language" aside={<ForPlan />} options={q.funding.language} value={prefs.language} onChange={v => setPref('language', v as Preferences['language'])} />
+              <ChoiceRow
+                legend="Right now I am…" aside={<ForPlan />}
+                options={q.funding.employment}
+                value={prefs.employment}
+                // The HRD Corp question only applies to employees, so it is cleared otherwise.
+                onChange={v => setPrefs(p => ({ ...p, employment: v as Preferences['employment'], employer_hrd: v === 'employed' ? p.employer_hrd : null }))}
+              />
+              {prefs.employment === 'employed' && (
+                <ChoiceRow
+                  legend="Is your employer registered with HRD Corp?" aside={<ForPlan />}
+                  options={q.funding.employer_hrd}
+                  value={prefs.employer_hrd} onChange={v => setPref('employer_hrd', v as Preferences['employer_hrd'])}
+                />
+              )}
+              <ChoiceRow legend="Budget for courses" aside={<ForPlan />} options={q.funding.budget} value={prefs.budget} onChange={v => setPref('budget', v as Preferences['budget'])} />
+              <details className="group rounded-md border border-hairline px-4 py-3">
+                <summary className="cursor-pointer text-sm font-medium text-ink">Eligibility <span className="font-normal text-graphite">(optional)</span></summary>
+                <div className="mt-3 space-y-4">
+                  <p className="text-xs text-graphite">Some free programmes are only for certain ages or for Malaysians. These answers are only used to check that; "Prefer not to say" never hides a course, it adds a note.</p>
+                  <ChoiceRow legend="Age" aside={<EligibilityOnly />} options={q.funding.age_band} value={prefs.age_band} onChange={v => setPref('age_band', v as Preferences['age_band'])} />
+                  <ChoiceRow legend="Malaysian citizen?" aside={<EligibilityOnly />} options={q.funding.malaysian} value={prefs.malaysian} onChange={v => setPref('malaysian', v as Preferences['malaysian'])} />
+                </div>
+              </details>
+            </>
+          )}
           <label className="flex flex-col gap-1.5 text-sm font-medium text-ink">
             <span>Anything else we should know? <span className="font-normal text-graphite">(optional)</span></span>
             <textarea

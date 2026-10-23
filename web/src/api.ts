@@ -204,6 +204,15 @@ const MOCK_PATH: PathPlan = {
 
 // A small slice of catalogue/questionnaire.json (same shape as GET /api/questionnaire).
 const MOCK_QUESTIONNAIRE: Questionnaire = {
+  funding: {
+    employment: [{ id: 'employed', label: 'Employed' }, { id: 'job_seeking', label: 'Job seeking' }],
+    employer_hrd: [{ id: 'yes', label: 'Yes' }, { id: 'no', label: 'No' }, { id: 'not_sure', label: 'Not sure' }],
+    budget: [{ id: 'free_only', label: 'Free only' }],
+    budget_limit_myr: 200,
+    language: [{ id: 'en', label: 'English' }, { id: 'either', label: 'Either' }],
+    age_band: [{ id: 'prefer_not', label: 'Prefer not to say' }],
+    malaysian: [{ id: 'prefer_not', label: 'Prefer not to say' }],
+  },
   industries: ['Finance & accounting', 'Other'],
   education: [{ label: "Bachelor's degree", level: 'bachelor' }],
   education_order: ['secondary', 'certification', 'diploma', 'bachelor', 'master'],

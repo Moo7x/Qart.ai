@@ -214,13 +214,16 @@ def test_a_new_trend_snapshot_visibly_changes_the_ranking() -> None:
 
 
 def test_fairness_personal_answers_never_change_a_score() -> None:
-    """Education, years of experience and free text never enter a component."""
+    """Education, years, free text, age band, citizenship and funding never enter a component."""
     base = rank_for_profile(profile(), snapshot=snapshot({}))
     scores = {r.role_id: r.score for r in base.roles}
     for other in [
         profile(education="SPM / secondary school"),
         profile(education="Master's or higher"),
         profile(notes="I am 52 and a woman (synthetic)"),
+        profile(age_band="46_plus", malaysian="no"),
+        profile(age_band="18_30", malaysian="yes"),
+        profile(employment="job_seeking", budget="free_only", language="ms"),
         profile().model_copy(update={"years_experience": 25}),
     ]:
         assert {

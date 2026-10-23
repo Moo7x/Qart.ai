@@ -66,3 +66,21 @@ def test_evidence_raises_but_never_lowers_a_level() -> None:
         held["cutoff_timing"].value == 1.0 and held["cutoff_timing"].source == "practice evidence"
     )
     assert "fx_conversion" not in held  # a self-reported claim alone adds nothing
+
+
+def test_funding_options_match_the_contract() -> None:
+    """The questionnaire's option ids are exactly the values Preferences accepts."""
+    from typing import get_args
+
+    from src.contract import AgeBand, Budget, Citizenship, EmployerHrd, Employment, LearningLanguage
+
+    f = Q.funding
+    for options, literal in [
+        (f.employment, Employment),
+        (f.employer_hrd, EmployerHrd),
+        (f.budget, Budget),
+        (f.language, LearningLanguage),
+        (f.age_band, AgeBand),
+        (f.malaysian, Citizenship),
+    ]:
+        assert [o.id for o in options] == list(get_args(literal))

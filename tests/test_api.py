@@ -88,7 +88,9 @@ def test_profile_preferences_round_trip(client: TestClient) -> None:
     profile = client.get("/api/profile/u_aina").json()
     saved = client.post("/api/profile", json={**profile, "preferences": PREFERENCES})
     assert saved.status_code == 200
-    assert client.get("/api/profile/u_aina").json()["preferences"] == PREFERENCES
+    stored = client.get("/api/profile/u_aina").json()["preferences"]
+    assert {k: stored[k] for k in PREFERENCES} == PREFERENCES
+    assert stored["employment"] is None and stored["age_band"] is None  # v2.6 fields default empty
     too_comfortable = {**PREFERENCES, "ai_comfort": 11}
     bad = client.post("/api/profile", json={**profile, "preferences": too_comfortable})
     assert bad.status_code == 422
