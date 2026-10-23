@@ -165,6 +165,46 @@ python scripts/fetch_signals.py
 
 Fetches public data only: the [Indeed Hiring Lab AI Tracker](https://github.com/hiring-lab/ai-tracker) (CC BY 4.0, "Source: Indeed Hiring Lab") and Hacker News "Ask HN: Who is hiring?" threads through the Algolia HN API (no key). It writes `data/snapshots/market_pulse.json` and `data/snapshots/skill_signals.json`; raw HN threads are cached in `data/raw/hn/` (gitignored), so a re-run fetches only new months. The app reads the snapshots only and works offline. A weekly GitHub Actions job (`.github/workflows/refresh-signals.yml`) runs the same script and opens a pull request with the updated snapshots. Skills, patterns and thresholds live in `catalogue/signal_config.json`; matcher precision is in `eval/signals_precision.md`.
 
+### Refresh the job-board signal (Greenhouse, Lever, Ashby)
+
+```bash
+python scripts/fetch_jobs.py           # one run: ~30 requests, about a minute
+python scripts/fetch_jobs.py --check   # verify the board tokens only
+python scripts/fetch_jobs.py --retag   # re-tag stored jobs after a rule change (no network)
+```
+
+Run it **daily**: the boards only list jobs open today, so history is built one snapshot at a time. `.github/workflows/refresh-jobs.yml` runs it every day at 02:41 UTC and keeps the job database in the Actions cache. It updates one pull request with `data/snapshots/ats_signals.json`. With cron instead, use `41 2 * * * cd /path/to/Qart.ai && .venv/bin/python scripts/fetch_jobs.py`.
+
+## Data sources
+
+Every market and AI-trend number in the app comes from real, dated, public data. People's profiles, cases and HR teams are synthetic demo data and are never sent to any of these sources. The app reads saved snapshots only, so it works offline.
+
+| Source | What we use | Licence / terms | Refresh |
+|---|---|---|---|
+| [Indeed Hiring Lab AI Tracker](https://github.com/hiring-lab/ai-tracker) | Monthly share of Indeed postings mentioning AI, 9 countries (not Malaysia or Singapore) | CC BY 4.0, "Source: Indeed Hiring Lab" | weekly |
+| Hacker News "Ask HN: Who is hiring?" via the [Algolia HN API](https://hn.algolia.com/api) | Monthly skill-mention counts, 36 months | public API, no key; post text © its authors, only counts stored | weekly |
+| Public ATS job boards: [Greenhouse](https://docs.greenhouse.io/job-board.html), [Lever](https://github.com/lever/postings-api), [Ashby](https://developers.ashbyhq.com/docs/public-job-posting-api) | Open postings → weekly and monthly AI share by region (Malaysia, Singapore, APAC, remote, global), skill shares, AI share by type of work | Public, documented, unauthenticated GET endpoints. None of the three pages states rate limits or usage terms; we fetch politely (1 s pause, retries with backoff, a descriptive User-Agent) and store only counts in the repo; posting text stays © each employer | daily |
+| [Anthropic Economic Index](https://huggingface.co/datasets/Anthropic/EconomicIndex) | AI use by occupation (automation vs augmentation) | CC BY | per release |
+| [O\*NET OnLine](https://www.onetonline.org/) | Occupation codes behind the role catalogue | CC BY 4.0 (USDOL/ETA) | checked 2026-10-23 |
+
+**Companies covered by the job-board signal** (`catalogue/ats_companies.json`, tokens verified on 2026-10-23, chosen for Malaysia, Singapore and APAC hiring; add more under `ADD_YOUR_OWN`):
+- Greenhouse: Stripe, Databricks, Datadog, MongoDB, GitLab, Okta, Anthropic, Agoda, Thoughtworks, Elastic, Pinterest, Appier, Rubrik, Airbnb, Coinbase, Twilio
+- Lever: Ninja Van, Lalamove, Palantir, Nium, Binance, Spotify
+- Ashby: Airwallex, OpenAI, Linear, Cohere, Notion, Replit
+
+**How the job-board snapshots work:**
+1. Each run saves the raw responses under `data/raw/ats/{date}/` (gitignored).
+2. It upserts normalised postings into `data/raw/ats/jobs.sqlite`, deduplicated by source + job ID. `first_seen` is kept and `last_seen` moves each run.
+3. Before tagging, each company's boilerplate is removed: any 8-word run found in 30% or more of its postings. Without this, a company "About us" paragraph mentioning AI made every one of its postings an "AI posting". On the first run this cut the overall share from 82% to 60%.
+4. A posting counts as open in a week or month when it was seen in it. Shares from fewer than 20 postings are shown as insufficient.
+
+**Known limitations:**
+- Coverage is biased toward tech and fast-growing companies that use these three systems. It's a sample, not the Malaysian job market.
+- There's no history before the first snapshot (2026-10-23). The trend chart shows the Indeed tracker until a region has 4 weeks of job-board data, and shows today's job-board figure beside it.
+- A board that fails on a given day makes its jobs look closed that day.
+- AI mentions and skills are keyword matches, not read by a person.
+- We never use LinkedIn, JobStreet, Indeed's own site or any source whose terms forbid automated access.
+
 ---
 
 ## How We Use Replit *(Required)*

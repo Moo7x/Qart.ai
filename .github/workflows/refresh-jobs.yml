@@ -1,0 +1,51 @@
+# Daily refresh of the job-board signal (Greenhouse, Lever, Ashby public job-board APIs).
+# The boards list only jobs open today, so history comes from running this every day: the job
+# database (first_seen / last_seen) is kept between runs in the Actions cache, the day's raw
+# responses are kept as a 14-day artifact, and the updated aggregate snapshot is proposed as a
+# pull request (one branch, updated each day) for a person to merge. Nothing is pushed to main.
+name: Refresh job-board signal
+
+on:
+  schedule:
+    - cron: "41 2 * * *" # daily 02:41 UTC (10:41 in Malaysia)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      # The job history (gitignored SQLite) must survive between runs.
+      - uses: actions/cache@v4
+        with:
+          path: data/raw/ats/jobs.sqlite
+          key: ats-jobs-${{ github.run_id }}
+          restore-keys: ats-jobs-
+      - run: python scripts/fetch_jobs.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ats-raw-${{ github.run_id }}
+          path: data/raw/ats/*/
+          retention-days: 14
+      - uses: peter-evans/create-pull-request@v7
+        with:
+          branch: signals/daily-jobs
+          title: "data: daily job-board signal"
+          commit-message: "data: refresh job-board snapshot"
+          body: |
+            Automated daily refresh of `data/snapshots/ats_signals.json` from the public job
+            boards listed in `catalogue/ats_companies.json` (Greenhouse, Lever, Ashby). Aggregate
+            counts and shares only. Check `data_as_of`, `coverage.companies_failed` and the
+            run log before merging.
+          add-paths: |
+            data/snapshots/ats_signals.json

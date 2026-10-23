@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowLeft, ExternalLink, TriangleAlert } from 'lucide-react'
-import { getMarketPulse, getSkillSignals, getSnapshots } from '../api'
+import { getHiringNow, getMarketPulse, getSkillSignals, getSnapshots } from '../api'
 import { useReveal } from '../motion'
-import type { SignalSnapshotMeta, Snapshot } from '../types'
+import type { HiringNow, SignalSnapshotMeta, Snapshot } from '../types'
 import { Card, Highlight, Loading, PageHeader, ProvenanceTag, Tag } from '../ui'
 
 interface Feed {
@@ -27,6 +27,17 @@ function fromSignal(meta: SignalSnapshotMeta, what: string, usedFor: string): Fe
   }
 }
 
+function fromJobs(h: HiringNow): Feed {
+  const c = h.meta.coverage
+  return {
+    name: h.meta.source,
+    what: `Open postings on the public job boards of ${c?.companies.length ?? 0} companies (Greenhouse, Lever, Ashby), saved every day; first snapshot ${h.meta.first_snapshot}. ${c?.open_jobs_latest_run ?? 0} open postings in the latest run.`,
+    used_for: 'Market pulse (AI share by region, once a region has 4 weeks) and Hiring now on the Signals page.',
+    url: 'https://docs.greenhouse.io/job-board.html', license: h.meta.license, frequency: h.meta.update_frequency,
+    data_as_of: h.meta.data_as_of, fetched: (h.meta.fetched_at ?? '').slice(0, 10), caveats: h.meta.caveats, stale: h.stale,
+  }
+}
+
 function fromAei(snaps: Snapshot[]): Feed | null {
   const latest = snaps[snaps.length - 1]
   if (!latest) return null
@@ -47,11 +58,12 @@ export default function Sources() {
   useReveal(root, [feeds !== null])
 
   useEffect(() => {
-    Promise.all([getSkillSignals().catch(() => null), getMarketPulse().catch(() => null), getSnapshots().catch(() => [])])
-      .then(([skills, pulse, aei]) => {
+    Promise.all([getSkillSignals().catch(() => null), getMarketPulse().catch(() => null), getSnapshots().catch(() => []), getHiringNow().catch(() => null)])
+      .then(([skills, pulse, aei, jobs]) => {
         const list: (Feed | null)[] = [
           skills && fromSignal(skills, 'Monthly “Ask HN: Who is hiring?” threads; each top-level comment is one job post, matched to skills by keyword.', 'Future Skills Radar; the Pathway “market context” card.'),
           pulse && fromSignal(pulse, 'Daily share of Indeed job postings mentioning AI terms (7-day average), per country, shown as a monthly mean.', 'Market Pulse on the Signals page.'),
+          jobs && fromJobs(jobs),
           fromAei(aei),
         ]
         setFeeds(list.filter((f): f is Feed => f !== null))
