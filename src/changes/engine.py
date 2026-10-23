@@ -51,6 +51,7 @@ class WeightDelta(BaseModel):
 class RoleDelta(BaseModel):
     role_id: str
     title: str
+    soc: str
     rank_before: int
     rank_after: int
     fit_before: float
@@ -200,6 +201,7 @@ def compare(
             RoleDelta(
                 role_id=role.role_id,
                 title=role.title,
+                soc=role.soc,
                 rank_before=old_rank,
                 rank_after=i,
                 fit_before=previous.fit,

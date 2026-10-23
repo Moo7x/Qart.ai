@@ -263,7 +263,7 @@ export type WeightDelta = {
   points_before: number; points_after: number; essential: boolean; reason: string
 }
 export type RoleDelta = {
-  role_id: string; title: string; rank_before: number; rank_after: number
+  role_id: string; title: string; soc: string; rank_before: number; rank_after: number
   fit_before: number; fit_after: number; weights: WeightDelta[]
 }
 export type PathSummary = {

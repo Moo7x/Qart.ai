@@ -47,6 +47,7 @@ def test_comparison_recomputes_weights_and_preserves_claims_and_essentials() -> 
     assert profile == saved
     assert report.recommendation_changed
     changed = next(r for r in report.roles if r.role_id == "o2c_reporting_analyst")
+    assert changed.soc == "15-2051.01"
     assert changed.fit_before != changed.fit_after
     assert changed.weights
     assert all(w.before == w.after for w in changed.weights if w.essential)

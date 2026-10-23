@@ -56,13 +56,16 @@ function Report({ report }: { report: ChangeReport }) {
       <section className="min-w-0 overflow-x-auto">
         <h3 className="h2 mb-3">2 · Scenario emphasis → your role scores</h3>
         <p className="text-xs text-graphite">Your skills stay fixed. Essential weights stay fixed; their share of a normalised total can change. Expand a role for the exact calculation differences.</p>
-        {report.roles.map((role) => (
+        {report.roles.map((role) => {
+          const driver = report.evidence.find((e) => e.source_id === 'anthropic_economic_index' && e.metric === 'aei_collaboration_bucket_automation_pct' && e.geography === 'GLOBAL' && e.entity.split(' ')[0] === role.soc)
+          return (
           <details key={role.role_id} className="border-t border-hairline py-3">
             <summary className="cursor-pointer text-sm">
               <span className="font-semibold">{role.title}</span>
               <span className="ml-3 font-mono">{role.fit_before.toFixed(1)} → {role.fit_after.toFixed(1)} / 100</span>
               <span className="ml-3 text-graphite">rank {role.rank_before} → {role.rank_after}</span>
             </summary>
+            <p className="text-xs text-graphite">Mapped occupation: {role.soc}. {driver && <>Observed global automation-style conversation share: {driver.before ?? 'not available'}% → {driver.after ?? 'not available'}%. <a href={driver.url} target="_blank" rel="noreferrer">Source for this role’s scenario input ↗</a></>}</p>
             {role.weights.length === 0 ? <p className="text-xs text-graphite">No requirement weights or contributions changed.</p> : (
               <ul className="space-y-3 pl-5 text-xs">
                 {role.weights.map((w) => (
@@ -75,7 +78,8 @@ function Report({ report }: { report: ChangeReport }) {
               </ul>
             )}
           </details>
-        ))}
+          )
+        })}
       </section>
       {pathway ? (
         <section>
