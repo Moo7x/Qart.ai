@@ -447,3 +447,22 @@ export type ForecastCheck = {
   mae: Record<string, number>
   best: string | null
 }
+
+// ---- Trends (src/evidence/trends.py) ----
+
+export type TrendsResponse = {
+  employment: {
+    group: string
+    major_group: string
+    title: string
+    points: Point[]
+    first: string
+    last: string
+    change_long: number
+    change_recent: number | null
+  }[]
+  recent_from: string
+  job_ads: { quarters: string[]; breaks: string[]; professionals: Point[]; named: { entity: string; points: Point[] }[] }
+  skills: { skill: string; name: string; ai_role: string; change: number; roles: number; basis: string[] }[]
+  exposure: { isco: string; title: string; mean: number | null; gradient: string | null }[]
+}

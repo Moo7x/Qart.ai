@@ -7,6 +7,7 @@ import { Onboarding } from './pages/Onboarding'
 import { Overview } from './pages/Overview'
 import { Pathway } from './pages/Pathway'
 import { Roles } from './pages/Roles'
+import { Trends } from './pages/Trends'
 import { JourneyProvider } from './state'
 
 function Shell() {
@@ -21,6 +22,7 @@ function Shell() {
         <Route path="/pathway" element={<Pathway />} />
         <Route path="/future" element={<Future />} />
         <Route path="/changes" element={<Changes />} />
+        <Route path="/trends" element={<Trends />} />
         <Route path="/live" element={<LiveIntelligence />} />
         <Route
           path="*"

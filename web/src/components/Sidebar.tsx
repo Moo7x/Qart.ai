@@ -1,4 +1,4 @@
-import { Activity, ArrowRight, ListOrdered, Radar, Route as RouteIcon, UserRound } from 'lucide-react'
+import { Activity, ArrowRight, ChartLine, ListOrdered, Radar, Route as RouteIcon, UserRound } from 'lucide-react'
 import { Link, NavLink } from 'react-router-dom'
 import { formatWhen, useApi } from '../api'
 import { useJourney } from '../state'
@@ -68,6 +68,10 @@ export function Sidebar() {
         </Link>
       )}
       <div className="mx-1.5 my-3 h-px bg-surface" />
+      <NavLink to="/trends" className={navClass}>
+        <ChartLine size={16} aria-hidden="true" className="text-cyan" />
+        Trends
+      </NavLink>
       <NavLink to="/live" className={navClass}>
         <Activity size={16} aria-hidden="true" className="text-cyan" />
         Live intelligence
