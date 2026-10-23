@@ -3,7 +3,7 @@ import { type FormEvent, useState } from 'react'
 import { formatWhen, parseUtc, sendJSON, useApi } from '../api'
 import { PipelineDiagram, type StepId } from '../components/PipelineDiagram'
 import { Empty, Loading, Problem } from '../components/ui'
-import type { BacktestEntry, ModelVersion, Run, SourceStatus } from '../types'
+import type { BacktestEntry, ForecastCheck, ModelVersion, Run, SourceStatus } from '../types'
 
 const RUNS_POLL_MS = 5_000
 const SECONDS_PER_MINUTE = 60
@@ -88,6 +88,7 @@ export function LiveIntelligence() {
   const sources = useApi<SourceStatus[]>('/api/sources')
   const backtest = useApi<BacktestEntry[]>('/api/pipeline/backtest')
   const models = useApi<ModelVersion[]>('/api/pipeline/models')
+  const rolling = useApi<ForecastCheck[]>('/api/pipeline/forecast-check')
   const [step, setStep] = useState<StepId>('validate')
   const [open, setOpen] = useState<number | null>(null)
 
@@ -182,6 +183,32 @@ export function LiveIntelligence() {
                 ))}
               </tbody>
             </table>
+          )}
+          {rolling.data && rolling.data.length > 0 && (
+            <details className="text-[13px]">
+              <summary className="cursor-pointer text-graphite">Rolling check: every forecast origin from 2015, one and two years ahead</summary>
+              <table className="mt-2 w-full border-collapse text-xs">
+                <thead>
+                  <tr className="cap text-left">
+                    <th className="py-1.5 pr-2 font-medium">Group · horizon</th>
+                    {['naive', 'drift', 'linear', 'damped', 'smoothing'].map((m) => <th key={m} className="px-1.5 py-1.5 text-right font-medium">{m === 'naive' ? 'no change' : m}</th>)}
+                  </tr>
+                </thead>
+                <tbody>
+                  {rolling.data.filter((r) => ['clerical', 'professionals', 'technicians'].includes(r.group)).map((r) => (
+                    <tr key={`${r.group}-${r.horizon}`} className="border-t border-mist">
+                      <td className="py-1.5 pr-2">{r.group} · {r.horizon} y <span className="text-ash">({r.origins.length} origins)</span></td>
+                      {['naive', 'drift', 'linear', 'damped', 'smoothing'].map((m) => (
+                        <td key={m} className={`px-1.5 py-1.5 text-right font-mono ${r.best === m ? 'font-semibold text-rising' : ''}`}>{r.mae[m]?.toFixed(2) ?? '—'}</td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <p className="m-0 mt-1.5 text-xs text-graphite">
+                Mean error in percentage points; each method sees only the years before its origin. A trend is projected only if a trend method (drift, line, damped) beats no change; smoothing is a flat forecast. Retrospective on today's published series.
+              </p>
+            </details>
           )}
           {models.data && models.data.length > 0 && (
             <details className="text-[13px]">

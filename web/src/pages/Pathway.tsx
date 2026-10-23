@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useApi } from '../api'
+import { PlanCompare } from '../components/PlanCompare'
 import { ScenarioSwitch, SdgTag } from '../components/journey'
 import { Loading, Problem } from '../components/ui'
 import { useJourney } from '../state'
@@ -71,6 +72,8 @@ function ProfilePathway({ profileId, scenario }: { profileId: string; scenario: 
               <Link to="/roles" className="text-[13px]">Change destination</Link>
             </div>
           </header>
+
+          <PlanCompare profileId={profileId} scenario={scenario} />
 
           <div className="flex flex-wrap items-start gap-5">
             <section aria-label="Steps" className="card-light min-w-0 flex-[3_1_520px] overflow-hidden">
