@@ -1,5 +1,5 @@
 {
-  "_about": "Learning resources for the path planner (free ones preferred; the company funds paid ones). Every URL was opened on the retrieval date (WebFetch/curl). verified=true means the page loaded and the title and cost were checked; cost says free only where the provider states it (see cost_source); paid courses are allowed because the company funds training; verified=false needs a human check. hours_source says whether hours come from the provider page or are a team estimate (assumption). Prerequisites are the team's declared ordering. None are HRD Corp listings (hrd_claimable=false). Learning-plan fields (pathway.md §3.1) added 2026-10-23: skill_steps (from/to level on the 0 / 0.3 / 0.7 / 1.0 scale; to_level by the DECLARED rule on each skill's share of the course hours: at least half of to_basic reaches 'use sometimes' (0.7), at least to_basic + half of to_confident reaches 'confident' (1.0), otherwise 'heard of it' (0.3)), hours_basis, cost_myr / cost_type (free only where the provider says so; 'unknown' where no price is stated, which the plan never counts as free), hrd_claimable only with claim_evidence_url, eligibility, platform, format, delivery, certificate (null = not checked), language, tags, status (draft | verified; the demo shows verified only), last_verified, verified_by. The 26 courses checked on 2026-10-21 keep status verified (team decision 2026-10-23); their skills were re-mapped to the canonical vocabulary.",
+  "_about": "Learning resources for the path planner (free ones preferred; the company funds paid ones). Every URL was opened on the retrieval date (WebFetch/curl). verified=true means the page loaded and the title and cost were checked; cost says free only where the provider states it (see cost_source); paid courses are allowed because the company funds training; verified=false needs a human check. hours_source says whether hours come from the provider page or are a team estimate (assumption). Prerequisites are the team's declared ordering. None are HRD Corp listings (hrd_claimable=false). Learning-plan fields (pathway.md §3.1) added 2026-10-23: skill_steps (from/to level on the 0 / 0.3 / 0.7 / 1.0 scale; to_level by the DECLARED rule on each skill's share of the course hours: at least half of to_basic reaches 'use sometimes' (0.7), at least to_basic + half of to_confident reaches 'confident' (1.0), otherwise 'heard of it' (0.3)), hours_basis, cost_myr / cost_type (free only where the provider says so; 'unknown' where no price is stated, which the plan never counts as free), hrd_claimable only with claim_evidence_url, eligibility, platform, format, delivery, certificate (null = not checked), language, tags, status (draft | verified; the demo shows verified only), last_verified, verified_by. The 26 courses checked on 2026-10-21 keep status verified (team decision 2026-10-23); their skills were re-mapped to the canonical vocabulary. On 2026-10-23 the team lead approved all 33 researched drafts in bulk (verified_by says so).",
   "retrieved": "2026-10-21",
   "courses": [
     {
@@ -1355,7 +1355,7 @@
       ],
       "prerequisites": [],
       "retrieved": "2026-10-23",
-      "verified": false,
+      "verified": true,
       "hrd_claimable": false,
       "hours_source": "page: 3 hours 24 minutes, 10 lessons",
       "cost_source": "Page: 'FREE Certification Course' (2026-10-23)",
@@ -1385,11 +1385,11 @@
         "en"
       ],
       "tags": [],
-      "status": "draft",
+      "status": "verified",
       "last_verified": "2026-10-23",
-      "verified_by": "claude_code (draft: page opened 2026-10-23; needs a team review)",
+      "verified_by": "Person B (team lead): bulk approval of the 2026-10-23 research on 2026-10-23, without a separate per-course check",
       "source_notes": "Also offered in German, Spanish, French and Japanese.",
-      "verification_note": "Draft from 2026-10-23 research: page opened and the facts above quoted from it, but a team member has not reviewed it yet (docs/resource_review.md)."
+      "verification_note": "Approved in bulk by the team lead; the facts were quoted from the course page on 2026-10-23. Open questions in docs/resource_review.md still apply."
     },
     {
       "id": "course_28",
@@ -1403,7 +1403,7 @@
       ],
       "prerequisites": [],
       "retrieved": "2026-10-23",
-      "verified": false,
+      "verified": true,
       "hrd_claimable": false,
       "hours_source": "course page (via search index): 6 hours, 7 labs, beginner, self-paced; older Cisco pages say 15 hours",
       "cost_source": "Page title: 'Free Online Course' (2026-10-23)",
@@ -1434,11 +1434,11 @@
         "en"
       ],
       "tags": [],
-      "status": "draft",
+      "status": "verified",
       "last_verified": "2026-10-23",
-      "verified_by": "claude_code (draft: page opened 2026-10-23; needs a team review)",
+      "verified_by": "Person B (team lead): bulk approval of the 2026-10-23 research on 2026-10-23, without a separate per-course check",
       "source_notes": "Digital badge on completion. The page renders in the browser; hours and badge read from the search index, team to confirm on the page.",
-      "verification_note": "Draft from 2026-10-23 research: page opened and the facts above quoted from it, but a team member has not reviewed it yet (docs/resource_review.md)."
+      "verification_note": "Approved in bulk by the team lead; the facts were quoted from the course page on 2026-10-23. Open questions in docs/resource_review.md still apply."
     },
     {
       "id": "course_29",
@@ -1452,7 +1452,7 @@
       ],
       "prerequisites": [],
       "retrieved": "2026-10-23",
-      "verified": false,
+      "verified": true,
       "hrd_claimable": false,
       "hours_source": "course page (via search index): 6 hours, 3 labs, beginner, self-paced",
       "cost_source": "Page title: 'Free Course on Components' (2026-10-23)",
@@ -1483,11 +1483,11 @@
         "en"
       ],
       "tags": [],
-      "status": "draft",
+      "status": "verified",
       "last_verified": "2026-10-23",
-      "verified_by": "claude_code (draft: page opened 2026-10-23; needs a team review)",
+      "verified_by": "Person B (team lead): bulk approval of the 2026-10-23 research on 2026-10-23, without a separate per-course check",
       "source_notes": "Hours read from the search index; team to confirm on the page.",
-      "verification_note": "Draft from 2026-10-23 research: page opened and the facts above quoted from it, but a team member has not reviewed it yet (docs/resource_review.md)."
+      "verification_note": "Approved in bulk by the team lead; the facts were quoted from the course page on 2026-10-23. Open questions in docs/resource_review.md still apply."
     },
     {
       "id": "course_30",
@@ -1501,7 +1501,7 @@
       ],
       "prerequisites": [],
       "retrieved": "2026-10-23",
-      "verified": false,
+      "verified": true,
       "hrd_claimable": false,
       "hours_source": "page: '3 months at 10 hours a week' (13 weeks x 10 h)",
       "cost_source": "Free for eligible Malaysians through Rakyat Digital's Coursera Global Learning Pass (3 months of access from 16 Sep 2026, limited licences, register with the Rakyat Digital email; rakyatdigital.gov.my/en/skills-hub). Otherwise a paid Coursera subscription; price not recorded. Eligibility (Malaysian citizens via MyDigital ID) is from news reports: the portal FAQ answers could not be read by script; team to confirm.",
@@ -1534,11 +1534,11 @@
         "en"
       ],
       "tags": [],
-      "status": "draft",
+      "status": "verified",
       "last_verified": "2026-10-23",
-      "verified_by": "claude_code (draft: page opened 2026-10-23; needs a team review)",
+      "verified_by": "Person B (team lead): bulk approval of the 2026-10-23 research on 2026-10-23, without a separate per-course check",
       "source_notes": null,
-      "verification_note": "Draft from 2026-10-23 research: page opened and the facts above quoted from it, but a team member has not reviewed it yet (docs/resource_review.md)."
+      "verification_note": "Approved in bulk by the team lead; the facts were quoted from the course page on 2026-10-23. Open questions in docs/resource_review.md still apply."
     },
     {
       "id": "course_31",
@@ -1552,7 +1552,7 @@
       ],
       "prerequisites": [],
       "retrieved": "2026-10-23",
-      "verified": false,
+      "verified": true,
       "hrd_claimable": false,
       "hours_source": "page: 'over 140 hours of instruction'; courses add up to about 142 h",
       "cost_source": "Free for eligible Malaysians through Rakyat Digital's Coursera Global Learning Pass (3 months of access from 16 Sep 2026, limited licences, register with the Rakyat Digital email; rakyatdigital.gov.my/en/skills-hub). Otherwise a paid Coursera subscription; price not recorded. Eligibility (Malaysian citizens via MyDigital ID) is from news reports: the portal FAQ answers could not be read by script; team to confirm.",
@@ -1585,11 +1585,11 @@
         "en"
       ],
       "tags": [],
-      "status": "draft",
+      "status": "verified",
       "last_verified": "2026-10-23",
-      "verified_by": "claude_code (draft: page opened 2026-10-23; needs a team review)",
+      "verified_by": "Person B (team lead): bulk approval of the 2026-10-23 research on 2026-10-23, without a separate per-course check",
       "source_notes": null,
-      "verification_note": "Draft from 2026-10-23 research: page opened and the facts above quoted from it, but a team member has not reviewed it yet (docs/resource_review.md)."
+      "verification_note": "Approved in bulk by the team lead; the facts were quoted from the course page on 2026-10-23. Open questions in docs/resource_review.md still apply."
     },
     {
       "id": "course_32",
@@ -1603,7 +1603,7 @@
       ],
       "prerequisites": [],
       "retrieved": "2026-10-23",
-      "verified": false,
+      "verified": true,
       "hrd_claimable": false,
       "hours_source": "page: '6 months at 7 hours a week' (26 weeks x 7 h)",
       "cost_source": "Free for eligible Malaysians through Rakyat Digital's Coursera Global Learning Pass (3 months of access from 16 Sep 2026, limited licences, register with the Rakyat Digital email; rakyatdigital.gov.my/en/skills-hub). Otherwise a paid Coursera subscription; price not recorded. Eligibility (Malaysian citizens via MyDigital ID) is from news reports: the portal FAQ answers could not be read by script; team to confirm.",
@@ -1636,11 +1636,11 @@
         "en"
       ],
       "tags": [],
-      "status": "draft",
+      "status": "verified",
       "last_verified": "2026-10-23",
-      "verified_by": "claude_code (draft: page opened 2026-10-23; needs a team review)",
+      "verified_by": "Person B (team lead): bulk approval of the 2026-10-23 research on 2026-10-23, without a separate per-course check",
       "source_notes": "Also uses Python, Linux and SQL hands-on.",
-      "verification_note": "Draft from 2026-10-23 research: page opened and the facts above quoted from it, but a team member has not reviewed it yet (docs/resource_review.md)."
+      "verification_note": "Approved in bulk by the team lead; the facts were quoted from the course page on 2026-10-23. Open questions in docs/resource_review.md still apply."
     },
     {
       "id": "course_33",
@@ -1656,7 +1656,7 @@
       ],
       "prerequisites": [],
       "retrieved": "2026-10-23",
-      "verified": false,
+      "verified": true,
       "hrd_claimable": false,
       "hours_source": "page: 'over 180 hours of instruction' (course listings add up to about 152 h)",
       "cost_source": "Free for eligible Malaysians through Rakyat Digital's Coursera Global Learning Pass (3 months of access from 16 Sep 2026, limited licences, register with the Rakyat Digital email; rakyatdigital.gov.my/en/skills-hub). Otherwise a paid Coursera subscription; price not recorded. Eligibility (Malaysian citizens via MyDigital ID) is from news reports: the portal FAQ answers could not be read by script; team to confirm.",
@@ -1699,11 +1699,11 @@
         "en"
       ],
       "tags": [],
-      "status": "draft",
+      "status": "verified",
       "last_verified": "2026-10-23",
-      "verified_by": "claude_code (draft: page opened 2026-10-23; needs a team review)",
+      "verified_by": "Person B (team lead): bulk approval of the 2026-10-23 research on 2026-10-23, without a separate per-course check",
       "source_notes": null,
-      "verification_note": "Draft from 2026-10-23 research: page opened and the facts above quoted from it, but a team member has not reviewed it yet (docs/resource_review.md)."
+      "verification_note": "Approved in bulk by the team lead; the facts were quoted from the course page on 2026-10-23. Open questions in docs/resource_review.md still apply."
     },
     {
       "id": "course_34",
@@ -1717,7 +1717,7 @@
       ],
       "prerequisites": [],
       "retrieved": "2026-10-23",
-      "verified": false,
+      "verified": true,
       "hrd_claimable": false,
       "hours_source": "Microsoft Learn catalog: 137 min, beginner",
       "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free' (checked 2026-10-21); duration from the Microsoft Learn catalog API (2026-10-23)",
@@ -1748,11 +1748,11 @@
         "en"
       ],
       "tags": [],
-      "status": "draft",
+      "status": "verified",
       "last_verified": "2026-10-23",
-      "verified_by": "claude_code (draft: page opened 2026-10-23; needs a team review)",
+      "verified_by": "Person B (team lead): bulk approval of the 2026-10-23 research on 2026-10-23, without a separate per-course check",
       "source_notes": null,
-      "verification_note": "Draft from 2026-10-23 research: page opened and the facts above quoted from it, but a team member has not reviewed it yet (docs/resource_review.md)."
+      "verification_note": "Approved in bulk by the team lead; the facts were quoted from the course page on 2026-10-23. Open questions in docs/resource_review.md still apply."
     },
     {
       "id": "course_35",
@@ -1766,7 +1766,7 @@
       ],
       "prerequisites": [],
       "retrieved": "2026-10-23",
-      "verified": false,
+      "verified": true,
       "hrd_claimable": false,
       "hours_source": "Microsoft Learn catalog: 492 min, beginner",
       "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free' (checked 2026-10-21); duration from the Microsoft Learn catalog API (2026-10-23)",
@@ -1797,11 +1797,11 @@
         "en"
       ],
       "tags": [],
-      "status": "draft",
+      "status": "verified",
       "last_verified": "2026-10-23",
-      "verified_by": "claude_code (draft: page opened 2026-10-23; needs a team review)",
+      "verified_by": "Person B (team lead): bulk approval of the 2026-10-23 research on 2026-10-23, without a separate per-course check",
       "source_notes": null,
-      "verification_note": "Draft from 2026-10-23 research: page opened and the facts above quoted from it, but a team member has not reviewed it yet (docs/resource_review.md)."
+      "verification_note": "Approved in bulk by the team lead; the facts were quoted from the course page on 2026-10-23. Open questions in docs/resource_review.md still apply."
     },
     {
       "id": "course_36",
@@ -1815,7 +1815,7 @@
       ],
       "prerequisites": [],
       "retrieved": "2026-10-23",
-      "verified": false,
+      "verified": true,
       "hrd_claimable": false,
       "hours_source": "Microsoft Learn catalog: 192 min, beginner",
       "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free' (checked 2026-10-21); duration from the Microsoft Learn catalog API (2026-10-23)",
@@ -1846,11 +1846,11 @@
         "en"
       ],
       "tags": [],
-      "status": "draft",
+      "status": "verified",
       "last_verified": "2026-10-23",
-      "verified_by": "claude_code (draft: page opened 2026-10-23; needs a team review)",
+      "verified_by": "Person B (team lead): bulk approval of the 2026-10-23 research on 2026-10-23, without a separate per-course check",
       "source_notes": null,
-      "verification_note": "Draft from 2026-10-23 research: page opened and the facts above quoted from it, but a team member has not reviewed it yet (docs/resource_review.md)."
+      "verification_note": "Approved in bulk by the team lead; the facts were quoted from the course page on 2026-10-23. Open questions in docs/resource_review.md still apply."
     },
     {
       "id": "course_37",
@@ -1864,7 +1864,7 @@
       ],
       "prerequisites": [],
       "retrieved": "2026-10-23",
-      "verified": false,
+      "verified": true,
       "hrd_claimable": false,
       "hours_source": "Microsoft Learn catalog: 277 min, beginner",
       "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free' (checked 2026-10-21); duration from the Microsoft Learn catalog API (2026-10-23)",
@@ -1895,11 +1895,11 @@
         "en"
       ],
       "tags": [],
-      "status": "draft",
+      "status": "verified",
       "last_verified": "2026-10-23",
-      "verified_by": "claude_code (draft: page opened 2026-10-23; needs a team review)",
+      "verified_by": "Person B (team lead): bulk approval of the 2026-10-23 research on 2026-10-23, without a separate per-course check",
       "source_notes": null,
-      "verification_note": "Draft from 2026-10-23 research: page opened and the facts above quoted from it, but a team member has not reviewed it yet (docs/resource_review.md)."
+      "verification_note": "Approved in bulk by the team lead; the facts were quoted from the course page on 2026-10-23. Open questions in docs/resource_review.md still apply."
     },
     {
       "id": "course_38",
@@ -1913,7 +1913,7 @@
       ],
       "prerequisites": [],
       "retrieved": "2026-10-23",
-      "verified": false,
+      "verified": true,
       "hrd_claimable": false,
       "hours_source": "estimate: a single help article; the page states no duration",
       "cost_source": "No price or paywall shown, but the page does not state that it is free (2026-10-23)",
@@ -1943,11 +1943,11 @@
         "en"
       ],
       "tags": [],
-      "status": "draft",
+      "status": "verified",
       "last_verified": "2026-10-23",
-      "verified_by": "claude_code (draft: page opened 2026-10-23; needs a team review)",
+      "verified_by": "Person B (team lead): bulk approval of the 2026-10-23 research on 2026-10-23, without a separate per-course check",
       "source_notes": null,
-      "verification_note": "Draft from 2026-10-23 research: page opened and the facts above quoted from it, but a team member has not reviewed it yet (docs/resource_review.md)."
+      "verification_note": "Approved in bulk by the team lead; the facts were quoted from the course page on 2026-10-23. Open questions in docs/resource_review.md still apply."
     },
     {
       "id": "course_39",
@@ -1961,7 +1961,7 @@
       ],
       "prerequisites": [],
       "retrieved": "2026-10-23",
-      "verified": false,
+      "verified": true,
       "hrd_claimable": false,
       "hours_source": "Microsoft Learn catalog: 847 min",
       "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free' (checked 2026-10-21); duration from the Microsoft Learn catalog API (2026-10-23)",
@@ -1992,11 +1992,11 @@
         "en"
       ],
       "tags": [],
-      "status": "draft",
+      "status": "verified",
       "last_verified": "2026-10-23",
-      "verified_by": "claude_code (draft: page opened 2026-10-23; needs a team review)",
+      "verified_by": "Person B (team lead): bulk approval of the 2026-10-23 research on 2026-10-23, without a separate per-course check",
       "source_notes": null,
-      "verification_note": "Draft from 2026-10-23 research: page opened and the facts above quoted from it, but a team member has not reviewed it yet (docs/resource_review.md)."
+      "verification_note": "Approved in bulk by the team lead; the facts were quoted from the course page on 2026-10-23. Open questions in docs/resource_review.md still apply."
     },
     {
       "id": "course_40",
@@ -2011,7 +2011,7 @@
       ],
       "prerequisites": [],
       "retrieved": "2026-10-23",
-      "verified": false,
+      "verified": true,
       "hrd_claimable": false,
       "hours_source": "Microsoft Learn catalog: 176 min, intermediate",
       "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free' (checked 2026-10-21); duration from the Microsoft Learn catalog API (2026-10-23)",
@@ -2047,11 +2047,11 @@
         "en"
       ],
       "tags": [],
-      "status": "draft",
+      "status": "verified",
       "last_verified": "2026-10-23",
-      "verified_by": "claude_code (draft: page opened 2026-10-23; needs a team review)",
+      "verified_by": "Person B (team lead): bulk approval of the 2026-10-23 research on 2026-10-23, without a separate per-course check",
       "source_notes": null,
-      "verification_note": "Draft from 2026-10-23 research: page opened and the facts above quoted from it, but a team member has not reviewed it yet (docs/resource_review.md)."
+      "verification_note": "Approved in bulk by the team lead; the facts were quoted from the course page on 2026-10-23. Open questions in docs/resource_review.md still apply."
     },
     {
       "id": "course_41",
@@ -2066,7 +2066,7 @@
       ],
       "prerequisites": [],
       "retrieved": "2026-10-23",
-      "verified": false,
+      "verified": true,
       "hrd_claimable": false,
       "hours_source": "Microsoft Learn catalog: 140 min, beginner",
       "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free' (checked 2026-10-21); duration from the Microsoft Learn catalog API (2026-10-23)",
@@ -2104,11 +2104,11 @@
       "tags": [
         "ai_literacy"
       ],
-      "status": "draft",
+      "status": "verified",
       "last_verified": "2026-10-23",
-      "verified_by": "claude_code (draft: page opened 2026-10-23; needs a team review)",
+      "verified_by": "Person B (team lead): bulk approval of the 2026-10-23 research on 2026-10-23, without a separate per-course check",
       "source_notes": null,
-      "verification_note": "Draft from 2026-10-23 research: page opened and the facts above quoted from it, but a team member has not reviewed it yet (docs/resource_review.md)."
+      "verification_note": "Approved in bulk by the team lead; the facts were quoted from the course page on 2026-10-23. Open questions in docs/resource_review.md still apply."
     },
     {
       "id": "course_42",
@@ -2122,7 +2122,7 @@
       ],
       "prerequisites": [],
       "retrieved": "2026-10-23",
-      "verified": false,
+      "verified": true,
       "hrd_claimable": false,
       "hours_source": "Microsoft Learn catalog: 28 min, beginner",
       "cost_source": "Microsoft Learn FAQ: 'Microsoft Learn training is free' (checked 2026-10-21); duration from the Microsoft Learn catalog API (2026-10-23)",
@@ -2155,11 +2155,11 @@
       "tags": [
         "ai_literacy"
       ],
-      "status": "draft",
+      "status": "verified",
       "last_verified": "2026-10-23",
-      "verified_by": "claude_code (draft: page opened 2026-10-23; needs a team review)",
+      "verified_by": "Person B (team lead): bulk approval of the 2026-10-23 research on 2026-10-23, without a separate per-course check",
       "source_notes": null,
-      "verification_note": "Draft from 2026-10-23 research: page opened and the facts above quoted from it, but a team member has not reviewed it yet (docs/resource_review.md)."
+      "verification_note": "Approved in bulk by the team lead; the facts were quoted from the course page on 2026-10-23. Open questions in docs/resource_review.md still apply."
     },
     {
       "id": "course_43",
@@ -2173,7 +2173,7 @@
       ],
       "prerequisites": [],
       "retrieved": "2026-10-23",
-      "verified": false,
+      "verified": true,
       "hrd_claimable": false,
       "hours_source": "page: 3-4 hours (average), beginner",
       "cost_source": "Page: 'this free online course' (2026-10-23); the certificate may be paid",
@@ -2203,11 +2203,11 @@
         "en"
       ],
       "tags": [],
-      "status": "draft",
+      "status": "verified",
       "last_verified": "2026-10-23",
-      "verified_by": "claude_code (draft: page opened 2026-10-23; needs a team review)",
+      "verified_by": "Person B (team lead): bulk approval of the 2026-10-23 research on 2026-10-23, without a separate per-course check",
       "source_notes": "Also in Spanish. Whether the certificate is free is not stated.",
-      "verification_note": "Draft from 2026-10-23 research: page opened and the facts above quoted from it, but a team member has not reviewed it yet (docs/resource_review.md)."
+      "verification_note": "Approved in bulk by the team lead; the facts were quoted from the course page on 2026-10-23. Open questions in docs/resource_review.md still apply."
     },
     {
       "id": "course_44",
@@ -2221,7 +2221,7 @@
       ],
       "prerequisites": [],
       "retrieved": "2026-10-23",
-      "verified": false,
+      "verified": true,
       "hrd_claimable": false,
       "hours_source": "page: module estimates add up to about 13 h (2 h + 11 x 1 h)",
       "cost_source": "Free for eligible Malaysians through Rakyat Digital's Coursera Global Learning Pass (3 months of access from 16 Sep 2026, limited licences, register with the Rakyat Digital email; rakyatdigital.gov.my/en/skills-hub). Otherwise a paid Coursera subscription; price not recorded. Eligibility (Malaysian citizens via MyDigital ID) is from news reports: the portal FAQ answers could not be read by script; team to confirm.",
@@ -2253,11 +2253,11 @@
         "en"
       ],
       "tags": [],
-      "status": "draft",
+      "status": "verified",
       "last_verified": "2026-10-23",
-      "verified_by": "claude_code (draft: page opened 2026-10-23; needs a team review)",
+      "verified_by": "Person B (team lead): bulk approval of the 2026-10-23 research on 2026-10-23, without a separate per-course check",
       "source_notes": null,
-      "verification_note": "Draft from 2026-10-23 research: page opened and the facts above quoted from it, but a team member has not reviewed it yet (docs/resource_review.md)."
+      "verification_note": "Approved in bulk by the team lead; the facts were quoted from the course page on 2026-10-23. Open questions in docs/resource_review.md still apply."
     },
     {
       "id": "course_45",
@@ -2271,7 +2271,7 @@
       ],
       "prerequisites": [],
       "retrieved": "2026-10-23",
-      "verified": false,
+      "verified": true,
       "hrd_claimable": false,
       "hours_source": "page: module estimates add up to about 19 h; '2 weeks at 10 hours a week'",
       "cost_source": "Page: 'Enroll for free' and a 'Full Course, No Certificate' option; the certificate is paid (2026-10-23)",
@@ -2302,11 +2302,11 @@
         "en"
       ],
       "tags": [],
-      "status": "draft",
+      "status": "verified",
       "last_verified": "2026-10-23",
-      "verified_by": "claude_code (draft: page opened 2026-10-23; needs a team review)",
+      "verified_by": "Person B (team lead): bulk approval of the 2026-10-23 research on 2026-10-23, without a separate per-course check",
       "source_notes": "Intermediate; needs working Python and basic maths (matrices, gradients).",
-      "verification_note": "Draft from 2026-10-23 research: page opened and the facts above quoted from it, but a team member has not reviewed it yet (docs/resource_review.md)."
+      "verification_note": "Approved in bulk by the team lead; the facts were quoted from the course page on 2026-10-23. Open questions in docs/resource_review.md still apply."
     },
     {
       "id": "course_46",
@@ -2320,7 +2320,7 @@
       ],
       "prerequisites": [],
       "retrieved": "2026-10-23",
-      "verified": false,
+      "verified": true,
       "hrd_claimable": false,
       "hours_source": "page: '2 months at 10 hours a week' (about 8.7 weeks x 10 h)",
       "cost_source": "Free for eligible Malaysians through Rakyat Digital's Coursera Global Learning Pass (3 months of access from 16 Sep 2026, limited licences, register with the Rakyat Digital email; rakyatdigital.gov.my/en/skills-hub). Otherwise a paid Coursera subscription; price not recorded. Eligibility (Malaysian citizens via MyDigital ID) is from news reports: the portal FAQ answers could not be read by script; team to confirm. Page FAQ: 'No, you cannot take this course for free.'",
@@ -2353,11 +2353,11 @@
         "en"
       ],
       "tags": [],
-      "status": "draft",
+      "status": "verified",
       "last_verified": "2026-10-23",
-      "verified_by": "claude_code (draft: page opened 2026-10-23; needs a team review)",
+      "verified_by": "Person B (team lead): bulk approval of the 2026-10-23 research on 2026-10-23, without a separate per-course check",
       "source_notes": "The same material is free without a certificate at py4e.com (no duration stated there).",
-      "verification_note": "Draft from 2026-10-23 research: page opened and the facts above quoted from it, but a team member has not reviewed it yet (docs/resource_review.md)."
+      "verification_note": "Approved in bulk by the team lead; the facts were quoted from the course page on 2026-10-23. Open questions in docs/resource_review.md still apply."
     },
     {
       "id": "course_47",
@@ -2372,7 +2372,7 @@
       ],
       "prerequisites": [],
       "retrieved": "2026-10-23",
-      "verified": false,
+      "verified": true,
       "hrd_claimable": false,
       "hours_source": "page: module estimates 5 + 4 + 4 + 3 h",
       "cost_source": "Free for eligible Malaysians through Rakyat Digital's Coursera Global Learning Pass (3 months of access from 16 Sep 2026, limited licences, register with the Rakyat Digital email; rakyatdigital.gov.my/en/skills-hub). Otherwise a paid Coursera subscription; price not recorded. Eligibility (Malaysian citizens via MyDigital ID) is from news reports: the portal FAQ answers could not be read by script; team to confirm.",
@@ -2409,11 +2409,11 @@
         "en"
       ],
       "tags": [],
-      "status": "draft",
+      "status": "verified",
       "last_verified": "2026-10-23",
-      "verified_by": "claude_code (draft: page opened 2026-10-23; needs a team review)",
+      "verified_by": "Person B (team lead): bulk approval of the 2026-10-23 research on 2026-10-23, without a separate per-course check",
       "source_notes": null,
-      "verification_note": "Draft from 2026-10-23 research: page opened and the facts above quoted from it, but a team member has not reviewed it yet (docs/resource_review.md)."
+      "verification_note": "Approved in bulk by the team lead; the facts were quoted from the course page on 2026-10-23. Open questions in docs/resource_review.md still apply."
     },
     {
       "id": "course_48",
@@ -2427,7 +2427,7 @@
       ],
       "prerequisites": [],
       "retrieved": "2026-10-23",
-      "verified": false,
+      "verified": true,
       "hrd_claimable": false,
       "hours_source": "page: 1h40m, beginner",
       "cost_source": "Page: 'Course access is free for a limited time during the DeepLearning.AI learning platform beta' (2026-10-23)",
@@ -2458,11 +2458,11 @@
         "en"
       ],
       "tags": [],
-      "status": "draft",
+      "status": "verified",
       "last_verified": "2026-10-23",
-      "verified_by": "claude_code (draft: page opened 2026-10-23; needs a team review)",
+      "verified_by": "Person B (team lead): bulk approval of the 2026-10-23 research on 2026-10-23, without a separate per-course check",
       "source_notes": "Free only for a limited time; needs basic Python; the accomplishment needs PRO.",
-      "verification_note": "Draft from 2026-10-23 research: page opened and the facts above quoted from it, but a team member has not reviewed it yet (docs/resource_review.md)."
+      "verification_note": "Approved in bulk by the team lead; the facts were quoted from the course page on 2026-10-23. Open questions in docs/resource_review.md still apply."
     },
     {
       "id": "course_49",
@@ -2477,7 +2477,7 @@
       ],
       "prerequisites": [],
       "retrieved": "2026-10-23",
-      "verified": false,
+      "verified": true,
       "hrd_claimable": false,
       "hours_source": "page: 1h42m, intermediate",
       "cost_source": "Page: 'Course access is free for a limited time during the DeepLearning.AI learning platform beta' (2026-10-23)",
@@ -2513,11 +2513,11 @@
         "en"
       ],
       "tags": [],
-      "status": "draft",
+      "status": "verified",
       "last_verified": "2026-10-23",
-      "verified_by": "claude_code (draft: page opened 2026-10-23; needs a team review)",
+      "verified_by": "Person B (team lead): bulk approval of the 2026-10-23 research on 2026-10-23, without a separate per-course check",
       "source_notes": "Free only for a limited time; needs intermediate Python.",
-      "verification_note": "Draft from 2026-10-23 research: page opened and the facts above quoted from it, but a team member has not reviewed it yet (docs/resource_review.md)."
+      "verification_note": "Approved in bulk by the team lead; the facts were quoted from the course page on 2026-10-23. Open questions in docs/resource_review.md still apply."
     },
     {
       "id": "course_50",
@@ -2532,7 +2532,7 @@
       ],
       "prerequisites": [],
       "retrieved": "2026-10-23",
-      "verified": false,
+      "verified": true,
       "hrd_claimable": false,
       "hours_source": "page: each chapter about 6-8 hours of work in a week; 12 chapters (12 x 7 h)",
       "cost_source": "Page: 'It's completely free and without ads' (2026-10-23)",
@@ -2568,11 +2568,11 @@
         "en"
       ],
       "tags": [],
-      "status": "draft",
+      "status": "verified",
       "last_verified": "2026-10-23",
-      "verified_by": "claude_code (draft: page opened 2026-10-23; needs a team review)",
+      "verified_by": "Person B (team lead): bulk approval of the 2026-10-23 research on 2026-10-23, without a separate per-course check",
       "source_notes": "Needs good Python; better after an intro deep learning course. No certification yet.",
-      "verification_note": "Draft from 2026-10-23 research: page opened and the facts above quoted from it, but a team member has not reviewed it yet (docs/resource_review.md)."
+      "verification_note": "Approved in bulk by the team lead; the facts were quoted from the course page on 2026-10-23. Open questions in docs/resource_review.md still apply."
     },
     {
       "id": "course_51",
@@ -2588,7 +2588,7 @@
       ],
       "prerequisites": [],
       "retrieved": "2026-10-23",
-      "verified": false,
+      "verified": true,
       "hrd_claimable": false,
       "hours_source": "estimate: the hub lists 30 + 40 + 120 + 40 + 40 min for five modules; the sixth (AI Nation 2030) shows no time",
       "cost_source": "Literacy hub: 'These courses are accessible to all and support at NO cost'; completing all 6 modules gives Malaysian citizens aged 18-30 a free 3-month subscription to selected AI tools (Ministry of Digital, 30 Aug 2026)",
@@ -2635,11 +2635,11 @@
       "tags": [
         "ai_literacy"
       ],
-      "status": "draft",
+      "status": "verified",
       "last_verified": "2026-10-23",
-      "verified_by": "claude_code (draft: page opened 2026-10-23; needs a team review)",
+      "verified_by": "Person B (team lead): bulk approval of the 2026-10-23 research on 2026-10-23, without a separate per-course check",
       "source_notes": "Modules: AI Nation 2030: The MADANI Approach, CyberSAFE untuk Rakyat, Generative AI, AI Safety, Agentic AI for All, Cloud untuk Rakyat. Registration on rakyatdigital.gov.my. Module language not stated.",
-      "verification_note": "Draft from 2026-10-23 research: page opened and the facts above quoted from it, but a team member has not reviewed it yet (docs/resource_review.md)."
+      "verification_note": "Approved in bulk by the team lead; the facts were quoted from the course page on 2026-10-23. Open questions in docs/resource_review.md still apply."
     },
     {
       "id": "course_52",
@@ -2653,7 +2653,7 @@
       ],
       "prerequisites": [],
       "retrieved": "2026-10-23",
-      "verified": false,
+      "verified": true,
       "hrd_claimable": false,
       "hours_source": "page: Duration 1 Hour 21 Min, beginner",
       "cost_source": "e-LATiH course page: 'Free', 'Certificate of Completion' (2026-10-23)",
@@ -2683,11 +2683,11 @@
         "ms"
       ],
       "tags": [],
-      "status": "draft",
+      "status": "verified",
       "last_verified": "2026-10-23",
-      "verified_by": "claude_code (draft: page opened 2026-10-23; needs a team review)",
+      "verified_by": "Person B (team lead): bulk approval of the 2026-10-23 research on 2026-10-23, without a separate per-course check",
       "source_notes": "Title and description in Bahasa Malaysia.",
-      "verification_note": "Draft from 2026-10-23 research: page opened and the facts above quoted from it, but a team member has not reviewed it yet (docs/resource_review.md)."
+      "verification_note": "Approved in bulk by the team lead; the facts were quoted from the course page on 2026-10-23. Open questions in docs/resource_review.md still apply."
     },
     {
       "id": "course_53",
@@ -2701,7 +2701,7 @@
       ],
       "prerequisites": [],
       "retrieved": "2026-10-23",
-      "verified": false,
+      "verified": true,
       "hrd_claimable": false,
       "hours_source": "page: Duration 1 Hour 9 Min, beginner",
       "cost_source": "e-LATiH course page: 'Free', 'Certificate of Completion' (2026-10-23)",
@@ -2731,11 +2731,11 @@
         "en"
       ],
       "tags": [],
-      "status": "draft",
+      "status": "verified",
       "last_verified": "2026-10-23",
-      "verified_by": "claude_code (draft: page opened 2026-10-23; needs a team review)",
+      "verified_by": "Person B (team lead): bulk approval of the 2026-10-23 research on 2026-10-23, without a separate per-course check",
       "source_notes": "Language not stated on the page; English title.",
-      "verification_note": "Draft from 2026-10-23 research: page opened and the facts above quoted from it, but a team member has not reviewed it yet (docs/resource_review.md)."
+      "verification_note": "Approved in bulk by the team lead; the facts were quoted from the course page on 2026-10-23. Open questions in docs/resource_review.md still apply."
     },
     {
       "id": "course_54",
@@ -2749,7 +2749,7 @@
       ],
       "prerequisites": [],
       "retrieved": "2026-10-23",
-      "verified": false,
+      "verified": true,
       "hrd_claimable": false,
       "hours_source": "page: Duration 2 Hours, beginner",
       "cost_source": "e-LATiH course page: RM230.00 (2026-10-23)",
@@ -2780,11 +2780,11 @@
         "en"
       ],
       "tags": [],
-      "status": "draft",
+      "status": "verified",
       "last_verified": "2026-10-23",
-      "verified_by": "claude_code (draft: page opened 2026-10-23; needs a team review)",
+      "verified_by": "Person B (team lead): bulk approval of the 2026-10-23 research on 2026-10-23, without a separate per-course check",
       "source_notes": null,
-      "verification_note": "Draft from 2026-10-23 research: page opened and the facts above quoted from it, but a team member has not reviewed it yet (docs/resource_review.md)."
+      "verification_note": "Approved in bulk by the team lead; the facts were quoted from the course page on 2026-10-23. Open questions in docs/resource_review.md still apply."
     },
     {
       "id": "course_55",
@@ -2799,7 +2799,7 @@
       ],
       "prerequisites": [],
       "retrieved": "2026-10-23",
-      "verified": false,
+      "verified": true,
       "hrd_claimable": false,
       "hours_source": "page: Duration 1 Hour 30 Min, 12 lessons",
       "cost_source": "e-LATiH course page: RM70.00 (2026-10-23)",
@@ -2834,11 +2834,11 @@
         "en"
       ],
       "tags": [],
-      "status": "draft",
+      "status": "verified",
       "last_verified": "2026-10-23",
-      "verified_by": "claude_code (draft: page opened 2026-10-23; needs a team review)",
+      "verified_by": "Person B (team lead): bulk approval of the 2026-10-23 research on 2026-10-23, without a separate per-course check",
       "source_notes": null,
-      "verification_note": "Draft from 2026-10-23 research: page opened and the facts above quoted from it, but a team member has not reviewed it yet (docs/resource_review.md)."
+      "verification_note": "Approved in bulk by the team lead; the facts were quoted from the course page on 2026-10-23. Open questions in docs/resource_review.md still apply."
     },
     {
       "id": "course_56",
@@ -2853,7 +2853,7 @@
       ],
       "prerequisites": [],
       "retrieved": "2026-10-23",
-      "verified": false,
+      "verified": true,
       "hrd_claimable": false,
       "hours_source": "page: Duration 1 Hour 38 Min, 15 lessons",
       "cost_source": "e-LATiH course page: RM70.00 (2026-10-23)",
@@ -2888,11 +2888,11 @@
         "en"
       ],
       "tags": [],
-      "status": "draft",
+      "status": "verified",
       "last_verified": "2026-10-23",
-      "verified_by": "claude_code (draft: page opened 2026-10-23; needs a team review)",
+      "verified_by": "Person B (team lead): bulk approval of the 2026-10-23 research on 2026-10-23, without a separate per-course check",
       "source_notes": null,
-      "verification_note": "Draft from 2026-10-23 research: page opened and the facts above quoted from it, but a team member has not reviewed it yet (docs/resource_review.md)."
+      "verification_note": "Approved in bulk by the team lead; the facts were quoted from the course page on 2026-10-23. Open questions in docs/resource_review.md still apply."
     },
     {
       "id": "course_57",
@@ -2906,7 +2906,7 @@
       ],
       "prerequisites": [],
       "retrieved": "2026-10-23",
-      "verified": false,
+      "verified": true,
       "hrd_claimable": false,
       "hours_source": "page: Duration 2 Hours, beginner",
       "cost_source": "e-LATiH course page: RM230.00 (2026-10-23)",
@@ -2937,11 +2937,11 @@
         "en"
       ],
       "tags": [],
-      "status": "draft",
+      "status": "verified",
       "last_verified": "2026-10-23",
-      "verified_by": "claude_code (draft: page opened 2026-10-23; needs a team review)",
+      "verified_by": "Person B (team lead): bulk approval of the 2026-10-23 research on 2026-10-23, without a separate per-course check",
       "source_notes": null,
-      "verification_note": "Draft from 2026-10-23 research: page opened and the facts above quoted from it, but a team member has not reviewed it yet (docs/resource_review.md)."
+      "verification_note": "Approved in bulk by the team lead; the facts were quoted from the course page on 2026-10-23. Open questions in docs/resource_review.md still apply."
     },
     {
       "id": "course_58",
@@ -2957,7 +2957,7 @@
       ],
       "prerequisites": [],
       "retrieved": "2026-10-23",
-      "verified": false,
+      "verified": true,
       "hrd_claimable": true,
       "hours_source": "estimate: page says a hands-on 2-day workshop (2 x 7 h)",
       "cost_source": "Price not stated on the page (2026-10-23)",
@@ -2998,11 +2998,11 @@
         "en"
       ],
       "tags": [],
-      "status": "draft",
+      "status": "verified",
       "last_verified": "2026-10-23",
-      "verified_by": "claude_code (draft: page opened 2026-10-23; needs a team review)",
+      "verified_by": "Person B (team lead): bulk approval of the 2026-10-23 research on 2026-10-23, without a separate per-course check",
       "source_notes": "Page: 'claimable under the SBL-Khas scheme for eligible Malaysian employers' (the provider's own statement, not an HRD Corp listing). Delivered in Kuala Lumpur or in-house; no dates published.",
-      "verification_note": "Draft from 2026-10-23 research: page opened and the facts above quoted from it, but a team member has not reviewed it yet (docs/resource_review.md)."
+      "verification_note": "Approved in bulk by the team lead; the facts were quoted from the course page on 2026-10-23. Open questions in docs/resource_review.md still apply."
     },
     {
       "id": "course_59",
@@ -3018,7 +3018,7 @@
       ],
       "prerequisites": [],
       "retrieved": "2026-10-23",
-      "verified": false,
+      "verified": true,
       "hrd_claimable": true,
       "hours_source": "estimate: page says 2 days in person (2 x 7 h)",
       "cost_source": "Page: self-funded RM3,200 + 8% SST (RM3,456); HRDC-claimable tier RM3,500 + 8% SST (2026-10-23)",
@@ -3059,11 +3059,11 @@
         "en"
       ],
       "tags": [],
-      "status": "draft",
+      "status": "verified",
       "last_verified": "2026-10-23",
-      "verified_by": "claude_code (draft: page opened 2026-10-23; needs a team review)",
+      "verified_by": "Person B (team lead): bulk approval of the 2026-10-23 research on 2026-10-23, without a separate per-course check",
       "source_notes": "Page: '100% HRDC claimable under the SBL-KHAS scheme for eligible Malaysian companies' (the provider's own statement). In person at WORQ Subang; dates to be confirmed for the 2026 intake. Certificate listed for the self-funded tier.",
-      "verification_note": "Draft from 2026-10-23 research: page opened and the facts above quoted from it, but a team member has not reviewed it yet (docs/resource_review.md)."
+      "verification_note": "Approved in bulk by the team lead; the facts were quoted from the course page on 2026-10-23. Open questions in docs/resource_review.md still apply."
     }
   ]
 }

@@ -2,6 +2,8 @@
 
 Generated 2026-10-23 from `catalogue/courses.json`.
 
+> **Update 2026-10-23:** the team lead approved all drafts below in bulk, so they are now `verified` and used in plans. That approval did not include a separate check of each page, so the open questions at the end still apply. Re-check those items before the demo.
+
 **33 draft courses** need a team member to open each page, confirm the facts, and switch `status` to `verified`, with `verified_by` set to their name and `last_verified` to the date. Until then the plan uses only the 26 verified courses (unless `SHOW_DRAFT_RESOURCES=true` in development).
 
 With the drafts, every one of the 25 core role skills has at least one course; with verified courses only, 15 of 25 do.
