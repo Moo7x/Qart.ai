@@ -16,3 +16,9 @@ date_start,date_end,geo_id,geo_level,category_name,hierarchy_level,metric_id,val
 2026-05-01,2026-06-01,MYS,country,soc_occupation,0,pct,0.15,Accountants and Auditors,13-2011.00
 2026-05-01,2026-06-01,GLOBAL,global,soc_occupation,0,pct,0.12,Accountants and Auditors,13-2011.00
 2026-05-01,2026-06-01,GLOBAL,global,soc_occupation,0,pct,0.35,Software Developers,15-1252.00
+2026-05-01,2026-06-01,GLOBAL,global,onet,0,pct,0.02,Prepare adjusting journal entries.,21515
+2026-05-01,2026-06-01,GLOBAL,global,onet,0,collaboration_bucket_automation_pct,61.4,Prepare adjusting journal entries.,21515
+2026-04-01,2026-05-01,GLOBAL,global,onet,0,collaboration_bucket_automation_pct,58.0,Prepare adjusting journal entries.,21515
+2026-05-01,2026-06-01,MYS,country,onet,0,pct,0.05,Prepare adjusting journal entries.,21515
+2026-05-01,2026-06-01,GLOBAL,global,onet,0,pct,0.4,Write song lyrics.,99999
+2026-05-01,2026-06-01,GLOBAL,global,onet,1,pct,0.9,Prepare financial documents.,21515
