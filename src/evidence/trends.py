@@ -17,6 +17,7 @@ from typing import Any
 from src import params
 from src.collectors.ilo import OCCUPATION_SERIES, gradient_of
 from src.evidence import measures
+from src.evidence.field import field_profile
 from src.match.engine import Evidence, requirement_automation, scenario_weight
 from src.pack import Pack
 
@@ -121,6 +122,7 @@ def _skills(pack: Pack, evidence: Evidence) -> list[dict[str, Any]]:
 
 
 def _exposure(rows: list[Row]) -> list[dict[str, Any]]:
+    groups = field_profile().isco_codes()
     out = [
         {
             "isco": r["entity"].split(" ", 1)[0],
@@ -129,7 +131,9 @@ def _exposure(rows: list[Row]) -> list[dict[str, Any]]:
             "gradient": gradient_of(r["cited_span"]),
         }
         for r in rows
-        if r["series"] == OCCUPATION_SERIES and r["value"] is not None
+        if r["series"] == OCCUPATION_SERIES
+        and r["value"] is not None
+        and r["entity"].split(" ", 1)[0] in groups
     ]
     return sorted(out, key=lambda e: -(e["mean"] or 0.0))
 

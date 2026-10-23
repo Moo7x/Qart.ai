@@ -72,13 +72,14 @@ def stream_lines(client: httpx.Client, url: str) -> Iterator[str]:
 
 
 def parse_rows(lines: Iterable[str], release_date: str, url: str) -> list[Observation]:
-    codes = field_profile().soc_codes()
     tasks = load_pack().task_ids()
     country = field_profile().country
     observations = []
     for row in csv.DictReader(lines):
         node = row["node_external_id"]
-        if row["category_name"] == "soc_occupation" and node in codes:
+        # Every occupation is kept (the evidence preview serves any detected occupation); the
+        # field's own screens filter to field codes.
+        if row["category_name"] == "soc_occupation" and row["hierarchy_level"] == "0":
             prefix, kind, unit_of = "aei_", "soc_occupation", "occupation"
         elif row["category_name"] == "onet" and row["hierarchy_level"] == "0" and node in tasks:
             prefix, kind, unit_of = "aei_task_", "onet task", "task"
@@ -116,7 +117,7 @@ def collect(client: httpx.Client, state: SourceState) -> CollectorResult:
     release, release_date, csv_path = found
     # Remember the release together with the occupations and linked tasks read from it: adding
     # either to the pack must trigger a re-read of the same release.
-    seen_key = f"{release}|{','.join(sorted(field_profile().soc_codes()))}"
+    seen_key = f"{release}|all-occupations"
     seen_key += f"|{','.join(sorted(load_pack().task_ids(), key=int))}"
     if state.get(STATE_KEY) == seen_key:
         return CollectorResult([], note=f"no new release since {release_date}")

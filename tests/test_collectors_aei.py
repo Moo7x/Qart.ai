@@ -23,7 +23,8 @@ def test_parse_keeps_field_occupations_and_known_metrics_only() -> None:
         series[("aei_collaboration_bucket_automation_pct", "13-2011.00", "GLOBAL", "2026-05")]
         == 45.02
     )
-    assert not any(o.entity.startswith("15-1252") for o in observations)  # not a finance occupation
+    # Every occupation is kept for the evidence preview; field screens filter to field codes.
+    assert any(o.entity.startswith("15-1252") for o in observations)
     assert not any(o.series == "aei_ai_autonomy_mean" for o in observations)  # metric not kept
     units = {o.unit for o in observations if o.series == "aei_collaboration_bucket_automation_pct"}
     assert units == {"% of this occupation's conversations"}

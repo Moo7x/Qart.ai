@@ -82,13 +82,12 @@ def _number(text: str) -> float | None:
 
 
 def parse_scores(data: bytes, url: str) -> list[Observation]:
-    wanted = field_profile().isco_codes()
     observations = []
     seen: set[str] = set()
     for row in read_rows(data):
         isco = row["ISCO_08"].strip()
-        if isco not in wanted:
-            continue
+        if not isco:
+            continue  # every ISCO-08 group is kept; field screens filter to the field's groups
         if isco not in seen:
             seen.add(isco)
             observations.append(
@@ -135,7 +134,7 @@ def collect(client: httpx.Client, state: SourceState) -> CollectorResult:
     meta = client.get(META, headers={"Accept": "application/vnd.github+json"})
     meta.raise_for_status()
     info = meta.json()
-    seen_key = f"{info['sha']}|{','.join(sorted(field_profile().isco_codes()))}"
+    seen_key = f"{info['sha']}|all-groups"
     if state.get(STATE_KEY) == seen_key:
         return CollectorResult([], note="score file unchanged since last read")
     response = client.get(info["download_url"], follow_redirects=True)
