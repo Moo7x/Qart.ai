@@ -8,7 +8,7 @@ import json
 from dataclasses import dataclass, field
 from functools import cached_property, lru_cache
 from pathlib import Path
-from typing import Any
+from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -46,6 +46,8 @@ class SkillInfo(BaseModel):
     patterns: list[str] = []
     case_sensitive_patterns: list[str] = []
     market_name: str | None = None  # label in the radar when it differs from `name`
+    # DECLARED: how much of the skill AI can increasingly do on its own (fast scenario only).
+    ai_exposure: Literal["high", "medium", "low"] | None = None
 
 
 class SdgTarget(BaseModel):

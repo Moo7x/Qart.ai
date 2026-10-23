@@ -7,6 +7,11 @@ For each role in catalogue/target_roles.json, four components in 0–1:
   direction    fit of the person's direction to same / adjacent / far family, + industry bonus
   feasibility  min(1, available hours / hours to close the gap); 1 when there is no gap
 score = round(100 × Σ weight × component), with the weights of the person's direction.
+Scenarios (Domain 1 must-have 6), both declared assumptions and estimates, not predictions:
+  moderate  the spec's weights
+  fast      momentum weighs more, and the score drops by exposure_penalty × exposure, where
+            exposure = share of the role's core weight AI can increasingly do on its own
+Every role is scored under both; the ranking is ordered by the chosen one.
 Guards: a person covering under half of a role's core weight is capped at the top of
 "Stretch"; fewer than `min_skills_for_ranking` skills gives starter roles, not a ranking.
 Ties: score, then momentum, then name. Reasons and flags are templates built from the same
@@ -49,8 +54,17 @@ class Bands(BaseModel):
     good: int
 
 
+class Scenario(BaseModel):
+    label: str
+    description: str
+    weights: dict[str, Weights]  # by direction
+    exposure_penalty: float  # points removed at full exposure
+
+
 class ScoringConfig(BaseModel):
-    weights: dict[str, Weights]
+    scenarios: dict[str, Scenario]
+    default_scenario: str
+    exposure_values: dict[str, float]
     default_direction: str
     direction_fit: dict[str, dict[str, float]]
     industry_bonus: float
@@ -112,12 +126,28 @@ class MatchedSkill:
 
 
 @dataclass(frozen=True)
+class ScenarioScore:
+    scenario: str
+    label: str
+    score: int
+    band: str
+    capped: bool
+    weights: Weights
+    exposure_points: int  # points removed for AI exposure (0 in the moderate scenario)
+    note: str
+
+
+@dataclass(frozen=True)
 class RankedRole:
     role_id: str
     name: str
     family: str
-    score: int
+    score: int  # in the chosen scenario
     band: str
+    scenario: str
+    scenarios: dict[str, ScenarioScore]
+    ai_exposure: float  # share of core weight AI can increasingly do on its own (assumption)
+    exposed_core_skills: list[str]  # core skills with high exposure
     components: Components
     weights_used: Weights
     relation: Relation
@@ -137,6 +167,7 @@ class RankedRole:
 class Ranking:
     roles: list[RankedRole]
     empty_profile: bool
+    scenario: str = "moderate"
     starter_roles: list[str] = field(default_factory=list)
     message: str | None = None
     signals_source: str = ""
@@ -184,9 +215,10 @@ def score_role(
     vocabulary: Mapping[str, SkillInfo],
     cfg: ScoringConfig,
     education_order: list[str],
+    scenario: str | None = None,
 ) -> RankedRole:
     direction = answers.direction or cfg.default_direction
-    weights = cfg.weights[direction]
+    chosen = scenario or cfg.default_scenario
     matched, gap_hours = [], 0.0
     weighted = total = core_weighted = core_total = 0.0
     for rs in role.skills:
@@ -227,34 +259,40 @@ def score_role(
     feasibility = 1.0 if gap_hours == 0 else min(1.0, available / gap_hours)
 
     components = Components(skill, momentum, direction_fit, feasibility)
-    raw = round(
-        100
-        * (
-            weights.skill * skill
-            + weights.momentum * momentum
-            + weights.direction * direction_fit
-            + weights.feasibility * feasibility
+    exposure_of = {
+        s.id: cfg.exposure_values[vocabulary[s.id].ai_exposure or "medium"]
+        for s in role.core_skills
+    }
+    exposure = sum(exposure_of.values()) / len(exposure_of)
+    exposed = [k for k, v in exposure_of.items() if v == max(cfg.exposure_values.values())]
+    scores = {
+        name: _scenario_score(
+            name, sc, direction, components, core_coverage, exposure, exposed, vocabulary, cfg
         )
-    )
-    capped = core_coverage < cfg.core_coverage_min and raw >= cfg.bands.good
-    score = cfg.bands.good - 1 if capped else raw
+        for name, sc in cfg.scenarios.items()
+    }
+    picked = scores[chosen]
 
     reasons = _reasons(
         matched, tracked, signals, rel, catalogue, answers, gap_hours, available, months, vocabulary
     )
-    flags = _flags(role, answers, education_order, capped)
+    flags = _flags(role, answers, education_order, picked.capped)
     return RankedRole(
         role_id=role.id,
         name=role.name,
         family=role.family,
-        score=score,
-        band=_band(score, cfg),
+        score=picked.score,
+        band=picked.band,
+        scenario=chosen,
+        scenarios=scores,
+        ai_exposure=round(exposure, 3),
+        exposed_core_skills=exposed,
         components=components,
-        weights_used=weights,
+        weights_used=picked.weights,
         relation=rel,
         matched_skills=matched,
         core_coverage=core_coverage,
-        capped=capped,
+        capped=picked.capped,
         gap_hours=round(gap_hours, 1),
         available_hours=round(available, 1),
         momentum_skills=tracked,
@@ -263,6 +301,47 @@ def score_role(
         source_code=role.source.code,
         source_url=role.source.url,
     )
+
+
+def _scenario_score(
+    name: str,
+    scenario: Scenario,
+    direction: str,
+    c: Components,
+    core_coverage: float,
+    exposure: float,
+    exposed: list[str],
+    vocabulary: Mapping[str, SkillInfo],
+    cfg: ScoringConfig,
+) -> ScenarioScore:
+    w = scenario.weights[direction]
+    weighted = round(
+        100
+        * (
+            w.skill * c.skill
+            + w.momentum * c.momentum
+            + w.direction * c.direction
+            + w.feasibility * c.feasibility
+        )
+    )
+    points = round(scenario.exposure_penalty * exposure)
+    raw = max(0, weighted - points)
+    capped = core_coverage < cfg.core_coverage_min and raw >= cfg.bands.good
+    score = cfg.bands.good - 1 if capped else raw
+    if points and exposed:
+        verb = "is" if len(exposed) == 1 else "are"
+        note = (
+            f"{_names(exposed, vocabulary)} {verb} work AI can increasingly do on its own, "
+            f"so this scenario takes off {points} points."
+        )
+    elif points:
+        note = (
+            "Some of its core skills are partly automatable, "
+            f"so this scenario takes off {points} points."
+        )
+    else:
+        note = "No points taken off for AI exposure in this scenario."
+    return ScenarioScore(name, scenario.label, score, _band(score, cfg), capped, w, points, note)
 
 
 def _reasons(
@@ -350,8 +429,9 @@ def rank_roles(
     vocabulary: Mapping[str, SkillInfo],
     cfg: ScoringConfig,
     education_order: list[str],
+    scenario: str | None = None,
 ) -> Ranking:
-    """Rank every catalogue role for one person. Pure and deterministic."""
+    """Rank every catalogue role for one person under `scenario`. Pure and deterministic."""
     held = {k: v for k, v in levels.items() if v > 0}
     if len(held) < cfg.min_skills_for_ranking:
         return Ranking(
@@ -363,13 +443,14 @@ def rank_roles(
             signals_data_as_of=signals.data_as_of,
         )
     ranked = [
-        score_role(r, held, answers, signals, catalogue, vocabulary, cfg, education_order)
+        score_role(r, held, answers, signals, catalogue, vocabulary, cfg, education_order, scenario)
         for r in catalogue.roles
     ]
     ranked.sort(key=lambda r: (-r.score, -r.components.momentum, r.name))
     return Ranking(
         roles=ranked,
         empty_profile=False,
+        scenario=scenario or cfg.default_scenario,
         signals_source=signals.source,
         signals_data_as_of=signals.data_as_of,
     )
@@ -408,6 +489,7 @@ def rank_for_profile(
     profile: Profile,
     states: list[SkillState] | None = None,
     snapshot: Mapping[str, object] | None = None,
+    scenario: str | None = None,
 ) -> Ranking:
     """Convenience wrapper: questionnaire + evidence → levels, default catalogue and config."""
     from src.api_signals import read_snapshot  # noqa: PLC0415 (avoids an import cycle)
@@ -428,4 +510,5 @@ def rank_for_profile(
         default_catalogue().vocabulary,
         default_scoring(),
         q.education_order,
+        scenario,
     )

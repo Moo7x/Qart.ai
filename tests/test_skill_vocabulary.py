@@ -68,6 +68,7 @@ def test_vocabulary_ids_are_unique_and_complete() -> None:
             assert skill.type is not None, f"evidence skill {skill.id} needs execution/oversight"
         if skill.trend_tracked:
             assert skill.patterns, f"tracked skill {skill.id} needs Hacker News patterns"
+        assert skill.ai_exposure is not None, f"{skill.id} needs ai_exposure (fast scenario)"
 
 
 def test_radar_tracks_exactly_the_trend_tracked_vocabulary_skills() -> None:

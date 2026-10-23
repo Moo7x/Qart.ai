@@ -98,7 +98,7 @@ def test_components_match_hand_calculation() -> None:
     gap = 7 + 14 + 14  # b 0.35→0.7, c 0→0.7, n 0→0.7
     assert got.gap_hours == pytest.approx(gap)
     assert got.components.feasibility == 1.0  # 39 h available
-    w = CFG.weights["adjacent"]
+    w = CFG.scenarios["moderate"].weights["adjacent"]
     expected = 100 * (w.skill * 0.45 + w.momentum * 0.5 + w.direction * 1 + w.feasibility * 1)
     assert got.score == round(expected)
 
@@ -226,3 +226,55 @@ def test_fairness_personal_answers_never_change_a_score() -> None:
         assert {
             r.role_id: r.score for r in rank_for_profile(other, snapshot=snapshot({})).roles
         } == scores
+
+
+# --- Scenarios (Domain 1 must-have 6) --------------------------------------------------------
+
+
+def exposed_vocab(levels: dict[str, str]) -> dict[str, SkillInfo]:
+    return {k: v.model_copy(update={"ai_exposure": levels.get(k, "low")}) for k, v in VOCAB.items()}
+
+
+def test_every_role_is_scored_under_both_scenarios() -> None:
+    r = role("r", "near", {"a": 3, "b": 3, "c": 3})
+    got = one(r, {"a": 0.7, "b": 0.7, "c": 0.7})
+    assert set(got.scenarios) == {"moderate", "fast"}
+    assert got.scenario == "moderate" and got.score == got.scenarios["moderate"].score
+    assert got.scenarios["moderate"].exposure_points == 0
+
+
+def test_fast_scenario_takes_points_in_proportion_to_ai_exposure() -> None:
+    r = role("r", "near", {"a": 3, "b": 3, "c": 3, "n": 1})
+    cat = RoleCatalogue(roles=[r], families=FAMILIES)
+    levels = {"a": 0.7, "b": 0.7, "c": 0.7}
+    penalty = CFG.scenarios["fast"].exposure_penalty
+
+    def fast(exposure: dict[str, str]):  # type: ignore[no-untyped-def]
+        return score_role(
+            r, levels, ANSWERS, Signals({}), cat, exposed_vocab(exposure), CFG, EDU, "fast"
+        )
+
+    low = fast({})
+    high = fast({"a": "high", "b": "high", "c": "high"})
+    mixed = fast({"a": "high", "b": "medium"})  # (1 + 0.5 + 0) / 3 of the core weight
+    assert low.scenarios["fast"].exposure_points == 0 and low.exposed_core_skills == []
+    assert high.scenarios["fast"].exposure_points == round(penalty)
+    assert mixed.ai_exposure == pytest.approx(0.5) and mixed.exposed_core_skills == ["a"]
+    assert mixed.scenarios["fast"].exposure_points == round(penalty * 0.5)
+    assert "A is work AI can increasingly do on its own" in mixed.scenarios["fast"].note
+    assert high.score == high.scenarios["fast"].score < low.score  # ranked by the chosen scenario
+
+
+def test_the_chosen_scenario_orders_the_ranking() -> None:
+    routine = role("routine", "near", {"a": 3, "b": 3})
+    judgement = role("judgement", "near", {"c": 3, "d": 3})
+    cat = RoleCatalogue(roles=[routine, judgement], families=FAMILIES)
+    vocab = exposed_vocab({"a": "high", "b": "high"})
+    levels = {"a": 0.7, "b": 0.7, "c": 0.7, "d": 0.5}  # slightly better at the routine role
+
+    def order(scenario: str) -> list[str]:
+        ranked = rank_roles(levels, ANSWERS, Signals({}), cat, vocab, CFG, EDU, scenario)
+        return [x.role_id for x in ranked.roles]
+
+    assert order("moderate") == ["routine", "judgement"]
+    assert order("fast") == ["judgement", "routine"]

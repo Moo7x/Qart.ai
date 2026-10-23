@@ -1,24 +1,62 @@
 {
-  "_about": "Role-ranking weights and thresholds (QART_NEXT_STEPS §5.3–5.5). Every value is a DECLARED design choice from the spec, not fitted to data; tune only until the persona tests pass, and flag a persona expectation that seems wrong instead of bending the formula. Changed 2026-10-23 (team decision on persona p1): a different role in the same family counts as a nearby move, adjacent.same 0.6 -> 0.9.",
-  "weights": {
-    "grow": {
-      "skill": 0.5,
-      "momentum": 0.2,
-      "direction": 0.2,
-      "feasibility": 0.1
+  "_about": "Role-ranking weights and thresholds (QART_NEXT_STEPS §5.3–5.5). Every value is a DECLARED design choice from the spec, not fitted to data; tune only until the persona tests pass, and flag a persona expectation that seems wrong instead of bending the formula. Changed 2026-10-23 (team decision on persona p1): a different role in the same family counts as a nearby move, adjacent.same 0.6 -> 0.9. Scenarios (Domain 1 must-have 6): both are DECLARED assumptions, estimates and not predictions. exposure = share of a role's core weight AI can increasingly do on its own (skills.json ai_exposure: high 1, medium 0.5, low 0); the fast scenario subtracts exposure_penalty x exposure points.",
+  "scenarios": {
+    "moderate": {
+      "label": "Moderate AI disruption",
+      "description": "AI adoption keeps today's pace: today's trend labels, the spec's weights.",
+      "weights": {
+        "grow": {
+          "skill": 0.5,
+          "momentum": 0.2,
+          "direction": 0.2,
+          "feasibility": 0.1
+        },
+        "adjacent": {
+          "skill": 0.5,
+          "momentum": 0.2,
+          "direction": 0.2,
+          "feasibility": 0.1
+        },
+        "switch": {
+          "skill": 0.35,
+          "momentum": 0.3,
+          "direction": 0.2,
+          "feasibility": 0.15
+        }
+      },
+      "exposure_penalty": 0
     },
-    "adjacent": {
-      "skill": 0.5,
-      "momentum": 0.2,
-      "direction": 0.2,
-      "feasibility": 0.1
-    },
-    "switch": {
-      "skill": 0.35,
-      "momentum": 0.3,
-      "direction": 0.2,
-      "feasibility": 0.15
+    "fast": {
+      "label": "Fast AI disruption",
+      "description": "AI takes over routine work sooner: market momentum counts more, and roles built on skills AI can increasingly do on its own lose up to 15 points.",
+      "weights": {
+        "grow": {
+          "skill": 0.4,
+          "momentum": 0.3,
+          "direction": 0.2,
+          "feasibility": 0.1
+        },
+        "adjacent": {
+          "skill": 0.4,
+          "momentum": 0.3,
+          "direction": 0.2,
+          "feasibility": 0.1
+        },
+        "switch": {
+          "skill": 0.3,
+          "momentum": 0.35,
+          "direction": 0.2,
+          "feasibility": 0.15
+        }
+      },
+      "exposure_penalty": 15
     }
+  },
+  "default_scenario": "moderate",
+  "exposure_values": {
+    "high": 1.0,
+    "medium": 0.5,
+    "low": 0.0
   },
   "default_direction": "adjacent",
   "direction_fit": {

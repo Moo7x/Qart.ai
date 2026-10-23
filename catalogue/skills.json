@@ -1,5 +1,5 @@
 {
-  "_about": "Skill IDs from team/00_SHARED_CONTRACT.md §3. type drives the scenario shift rule: when the company's AI drafts or does a task, part of that task's EXECUTION-skill weight moves to OVERSIGHT skills (catalogue/company_assumptions.json). The classification is a team design choice (declared), documented per skill in type_reason. Single canonical skill vocabulary for the whole app (QART_NEXT_STEPS §2): practice skills, role skills and market skills and questionnaire skills. evidence_tracked = an evidence state is kept for it (practice cases, My skills, HR). trend_tracked = it has Hacker News match patterns for the Skills Radar. learn_hours are ASSUMPTIONS (team estimates, not data): hours from none to 'use sometimes' and from there to 'confident'.",
+  "_about": "Skill IDs from team/00_SHARED_CONTRACT.md §3. type drives the scenario shift rule: when the company's AI drafts or does a task, part of that task's EXECUTION-skill weight moves to OVERSIGHT skills (catalogue/company_assumptions.json). The classification is a team design choice (declared), documented per skill in type_reason. Single canonical skill vocabulary for the whole app (QART_NEXT_STEPS §2): practice skills, role skills and market skills and questionnaire skills. evidence_tracked = an evidence state is kept for it (practice cases, My skills, HR). trend_tracked = it has Hacker News match patterns for the Skills Radar. learn_hours are ASSUMPTIONS (team estimates, not data): hours from none to 'use sometimes' and from there to 'confident'. ai_exposure (high / medium / low) is a DECLARED assumption for the fast-AI-disruption scenario: how much of the skill AI can increasingly do on its own (high = routine preparation AI already drafts; medium = AI drafts parts, a person still builds or checks; low = judgement, oversight, building AI systems or work with people). It is not data and never changes the moderate scenario.",
   "skills": [
     {
       "id": "recon_to_source",
@@ -16,7 +16,8 @@
       },
       "trend_tracked": false,
       "patterns": [],
-      "case_sensitive_patterns": []
+      "case_sensitive_patterns": [],
+      "ai_exposure": "high"
     },
     {
       "id": "duplicate_detection",
@@ -33,7 +34,8 @@
       },
       "trend_tracked": false,
       "patterns": [],
-      "case_sensitive_patterns": []
+      "case_sensitive_patterns": [],
+      "ai_exposure": "high"
     },
     {
       "id": "cutoff_timing",
@@ -50,7 +52,8 @@
       },
       "trend_tracked": false,
       "patterns": [],
-      "case_sensitive_patterns": []
+      "case_sensitive_patterns": [],
+      "ai_exposure": "high"
     },
     {
       "id": "unsupported_adjustment",
@@ -67,7 +70,8 @@
       },
       "trend_tracked": false,
       "patterns": [],
-      "case_sensitive_patterns": []
+      "case_sensitive_patterns": [],
+      "ai_exposure": "low"
     },
     {
       "id": "fx_conversion",
@@ -84,7 +88,8 @@
       },
       "trend_tracked": false,
       "patterns": [],
-      "case_sensitive_patterns": []
+      "case_sensitive_patterns": [],
+      "ai_exposure": "high"
     },
     {
       "id": "transposition_check",
@@ -101,7 +106,8 @@
       },
       "trend_tracked": false,
       "patterns": [],
-      "case_sensitive_patterns": []
+      "case_sensitive_patterns": [],
+      "ai_exposure": "high"
     },
     {
       "id": "escalation_judgment",
@@ -118,7 +124,8 @@
       },
       "trend_tracked": false,
       "patterns": [],
-      "case_sensitive_patterns": []
+      "case_sensitive_patterns": [],
+      "ai_exposure": "low"
     },
     {
       "id": "ai_output_review",
@@ -135,7 +142,8 @@
       },
       "trend_tracked": false,
       "patterns": [],
-      "case_sensitive_patterns": []
+      "case_sensitive_patterns": [],
+      "ai_exposure": "low"
     },
     {
       "id": "variance_analysis",
@@ -152,7 +160,8 @@
       },
       "trend_tracked": false,
       "patterns": [],
-      "case_sensitive_patterns": []
+      "case_sensitive_patterns": [],
+      "ai_exposure": "high"
     },
     {
       "id": "data_quality",
@@ -173,7 +182,8 @@
         "\\bdata validation\\b",
         "\\bdata governance\\b"
       ],
-      "case_sensitive_patterns": []
+      "case_sensitive_patterns": [],
+      "ai_exposure": "medium"
     },
     {
       "id": "controls_design",
@@ -190,7 +200,8 @@
       },
       "trend_tracked": false,
       "patterns": [],
-      "case_sensitive_patterns": []
+      "case_sensitive_patterns": [],
+      "ai_exposure": "low"
     },
     {
       "id": "process_automation",
@@ -215,7 +226,8 @@
       "case_sensitive_patterns": [
         "\\bRPA\\b"
       ],
-      "market_name": "RPA / process automation"
+      "market_name": "RPA / process automation",
+      "ai_exposure": "low"
     },
     {
       "id": "stakeholder_communication",
@@ -232,7 +244,8 @@
       },
       "trend_tracked": false,
       "patterns": [],
-      "case_sensitive_patterns": []
+      "case_sensitive_patterns": [],
+      "ai_exposure": "low"
     },
     {
       "id": "forecasting",
@@ -249,7 +262,8 @@
       },
       "trend_tracked": false,
       "patterns": [],
-      "case_sensitive_patterns": []
+      "case_sensitive_patterns": [],
+      "ai_exposure": "medium"
     },
     {
       "id": "spreadsheet_modelling",
@@ -272,7 +286,8 @@
       "case_sensitive_patterns": [
         "\\bExcel\\b(?! at)"
       ],
-      "market_name": "Excel"
+      "market_name": "Excel",
+      "ai_exposure": "high"
     },
     {
       "id": "sql_basics",
@@ -296,7 +311,8 @@
       "case_sensitive_patterns": [
         "\\bSQL\\b"
       ],
-      "market_name": "SQL"
+      "market_name": "SQL",
+      "ai_exposure": "medium"
     },
     {
       "id": "python",
@@ -313,7 +329,8 @@
       "patterns": [
         "\\bPython\\b"
       ],
-      "case_sensitive_patterns": []
+      "case_sensitive_patterns": [],
+      "ai_exposure": "medium"
     },
     {
       "id": "pytorch",
@@ -330,7 +347,8 @@
       "patterns": [
         "\\bPyTorch\\b"
       ],
-      "case_sensitive_patterns": []
+      "case_sensitive_patterns": [],
+      "ai_exposure": "low"
     },
     {
       "id": "tensorflow",
@@ -347,7 +365,8 @@
       "patterns": [
         "\\bTensorFlow\\b"
       ],
-      "case_sensitive_patterns": []
+      "case_sensitive_patterns": [],
+      "ai_exposure": "low"
     },
     {
       "id": "llms",
@@ -370,7 +389,8 @@
       ],
       "case_sensitive_patterns": [
         "\\bLLMs?\\b"
-      ]
+      ],
+      "ai_exposure": "low"
     },
     {
       "id": "rag",
@@ -390,7 +410,8 @@
       ],
       "case_sensitive_patterns": [
         "\\bRAG\\b"
-      ]
+      ],
+      "ai_exposure": "low"
     },
     {
       "id": "langchain",
@@ -408,7 +429,8 @@
         "\\bLangChain\\b",
         "\\bLangGraph\\b"
       ],
-      "case_sensitive_patterns": []
+      "case_sensitive_patterns": [],
+      "ai_exposure": "low"
     },
     {
       "id": "ai_agents",
@@ -427,7 +449,8 @@
         "\\bagentic\\b",
         "\\bLLM agents?\\b"
       ],
-      "case_sensitive_patterns": []
+      "case_sensitive_patterns": [],
+      "ai_exposure": "low"
     },
     {
       "id": "mlops",
@@ -445,7 +468,8 @@
         "\\bMLOps\\b",
         "\\bML ?Ops\\b"
       ],
-      "case_sensitive_patterns": []
+      "case_sensitive_patterns": [],
+      "ai_exposure": "low"
     },
     {
       "id": "computer_vision",
@@ -462,7 +486,8 @@
       "patterns": [
         "\\bcomputer vision\\b"
       ],
-      "case_sensitive_patterns": []
+      "case_sensitive_patterns": [],
+      "ai_exposure": "low"
     },
     {
       "id": "nlp",
@@ -482,7 +507,8 @@
       ],
       "case_sensitive_patterns": [
         "\\bNLP\\b"
-      ]
+      ],
+      "ai_exposure": "low"
     },
     {
       "id": "kubernetes",
@@ -500,7 +526,8 @@
         "\\bKubernetes\\b",
         "\\bk8s\\b"
       ],
-      "case_sensitive_patterns": []
+      "case_sensitive_patterns": [],
+      "ai_exposure": "low"
     },
     {
       "id": "aws",
@@ -520,7 +547,8 @@
       ],
       "case_sensitive_patterns": [
         "\\bAWS\\b"
-      ]
+      ],
+      "ai_exposure": "low"
     },
     {
       "id": "typescript",
@@ -537,7 +565,8 @@
       "patterns": [
         "\\bTypeScript\\b"
       ],
-      "case_sensitive_patterns": []
+      "case_sensitive_patterns": [],
+      "ai_exposure": "medium"
     },
     {
       "id": "react",
@@ -556,7 +585,8 @@
       ],
       "case_sensitive_patterns": [
         "\\bReact(?:\\.js|JS)?\\b(?! Native)"
-      ]
+      ],
+      "ai_exposure": "medium"
     },
     {
       "id": "data_visualisation",
@@ -575,7 +605,8 @@
         "\\bTableau\\b",
         "\\bLooker\\b"
       ],
-      "case_sensitive_patterns": []
+      "case_sensitive_patterns": [],
+      "ai_exposure": "medium"
     },
     {
       "id": "erp",
@@ -598,7 +629,8 @@
       "case_sensitive_patterns": [
         "\\bERP\\b",
         "\\bSAP\\b"
-      ]
+      ],
+      "ai_exposure": "medium"
     },
     {
       "id": "financial_reporting",
@@ -613,7 +645,8 @@
       },
       "trend_tracked": false,
       "patterns": [],
-      "case_sensitive_patterns": []
+      "case_sensitive_patterns": [],
+      "ai_exposure": "high"
     },
     {
       "id": "bookkeeping",
@@ -628,7 +661,8 @@
       },
       "trend_tracked": false,
       "patterns": [],
-      "case_sensitive_patterns": []
+      "case_sensitive_patterns": [],
+      "ai_exposure": "high"
     },
     {
       "id": "excel_automation",
@@ -643,7 +677,8 @@
       },
       "trend_tracked": false,
       "patterns": [],
-      "case_sensitive_patterns": []
+      "case_sensitive_patterns": [],
+      "ai_exposure": "medium"
     },
     {
       "id": "statistics_basics",
@@ -658,7 +693,8 @@
       },
       "trend_tracked": false,
       "patterns": [],
-      "case_sensitive_patterns": []
+      "case_sensitive_patterns": [],
+      "ai_exposure": "medium"
     },
     {
       "id": "business_analysis",
@@ -673,7 +709,8 @@
       },
       "trend_tracked": false,
       "patterns": [],
-      "case_sensitive_patterns": []
+      "case_sensitive_patterns": [],
+      "ai_exposure": "low"
     },
     {
       "id": "project_management",
@@ -688,7 +725,8 @@
       },
       "trend_tracked": false,
       "patterns": [],
-      "case_sensitive_patterns": []
+      "case_sensitive_patterns": [],
+      "ai_exposure": "low"
     },
     {
       "id": "digital_marketing",
@@ -703,7 +741,8 @@
       },
       "trend_tracked": false,
       "patterns": [],
-      "case_sensitive_patterns": []
+      "case_sensitive_patterns": [],
+      "ai_exposure": "medium"
     },
     {
       "id": "customer_service",
@@ -718,7 +757,8 @@
       },
       "trend_tracked": false,
       "patterns": [],
-      "case_sensitive_patterns": []
+      "case_sensitive_patterns": [],
+      "ai_exposure": "high"
     },
     {
       "id": "it_support",
@@ -733,7 +773,8 @@
       },
       "trend_tracked": false,
       "patterns": [],
-      "case_sensitive_patterns": []
+      "case_sensitive_patterns": [],
+      "ai_exposure": "medium"
     },
     {
       "id": "cybersecurity_basics",
@@ -748,7 +789,8 @@
       },
       "trend_tracked": false,
       "patterns": [],
-      "case_sensitive_patterns": []
+      "case_sensitive_patterns": [],
+      "ai_exposure": "low"
     },
     {
       "id": "ai_assistants",
@@ -763,7 +805,8 @@
       },
       "trend_tracked": false,
       "patterns": [],
-      "case_sensitive_patterns": []
+      "case_sensitive_patterns": [],
+      "ai_exposure": "low"
     }
   ]
 }
