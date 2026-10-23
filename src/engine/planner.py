@@ -261,6 +261,9 @@ def order_steps(inputs: PlanInputs, chosen: Sequence[Resource]) -> list[Resource
     return ordered
 
 
+AI_INTRO_NOTE = "Placed first: you rated your comfort with AI tools"
+
+
 def ai_intro_first(ordered: Sequence[Resource], ai_comfort: int | None) -> list[Resource]:
     """Low AI comfort (≤ AI_COMFORT_LOW): move the shortest chosen AI-intro course to the front.
 
@@ -274,10 +277,14 @@ def ai_intro_first(ordered: Sequence[Resource], ai_comfort: int | None) -> list[
     if not intros:
         return result
     intro = min(intros, key=lambda r: (r.hours, r.id))
+    original = result.index(intro)
     result.remove(intro)
     prereq_positions = [i for i, r in enumerate(result) if r.id in intro.prerequisites]
     position = max(prereq_positions) + 1 if prereq_positions else 0
-    note = f"Placed first: you rated your comfort with AI tools {ai_comfort}/10."
+    if position == original:  # already there: nothing moved, so the answer changed nothing
+        result.insert(position, intro)
+        return result
+    note = f"{AI_INTRO_NOTE} {ai_comfort}/10."
     moved = replace(intro, because=f"{intro.because} {note}".strip())
     result.insert(position, moved)
     return result
@@ -297,8 +304,8 @@ def path_inputs(
     if prefs.direction is not None and role_from_direction:
         title = catalogue.roles[plan.target_role_id].title
         lines.append(f"Direction: {DIRECTION_LABEL[prefs.direction]}, so the path is for {title}.")
-    moved = plan.steps and plan.steps[0].ref in params.AI_INTRO_COURSES
-    if moved and prefs.ai_comfort is not None and prefs.ai_comfort <= params.AI_COMFORT_LOW:
+    # Only when ai_intro_first actually moved the course (it then adds AI_INTRO_NOTE to the step).
+    if any(AI_INTRO_NOTE in (step.because or "") for step in plan.steps):
         lines.append(f"AI comfort {prefs.ai_comfort}/10: an AI-intro course comes first.")
     return lines
 

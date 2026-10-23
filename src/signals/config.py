@@ -2,15 +2,16 @@
 tracked skills, which come from the canonical vocabulary in catalogue/skills.json
 (entries with trend_tracked: true)."""
 
-import json
+from collections.abc import Iterable
 from functools import lru_cache
 from pathlib import Path
 
 from pydantic import BaseModel, ConfigDict, Field
 
+from src.engine.catalogue import SkillInfo, default_catalogue
+
 REPO_ROOT = Path(__file__).resolve().parents[2]
 CONFIG_PATH = REPO_ROOT / "catalogue" / "signal_config.json"
-SKILLS_PATH = REPO_ROOT / "catalogue" / "skills.json"
 
 
 class SignalParams(BaseModel):
@@ -64,25 +65,25 @@ class SignalConfig(BaseModel):
     skills: list[SkillSpec] = []
 
 
-def tracked_skills(skills_path: Path = SKILLS_PATH) -> list[SkillSpec]:
-    """Skills with trend_tracked: true, as the matcher and signal computation need them."""
-    vocabulary = json.loads(skills_path.read_text(encoding="utf-8"))["skills"]
+def tracked_skills(vocabulary: Iterable[SkillInfo] | None = None) -> list[SkillSpec]:
+    """Skills with trend_tracked: true from the validated canonical vocabulary."""
+    skills = vocabulary if vocabulary is not None else default_catalogue().vocabulary.values()
     return [
         SkillSpec(
-            id=s["id"],
-            name=s.get("market_name") or s["name"],
-            category=s.get("category", ""),
-            patterns=s.get("patterns", []),
-            case_sensitive_patterns=s.get("case_sensitive_patterns", []),
+            id=s.id,
+            name=s.market_name or s.name,
+            category=s.category,
+            patterns=s.patterns,
+            case_sensitive_patterns=s.case_sensitive_patterns,
         )
-        for s in vocabulary
-        if s.get("trend_tracked")
+        for s in skills
+        if s.trend_tracked
     ]
 
 
-def load_config(path: Path = CONFIG_PATH, skills_path: Path = SKILLS_PATH) -> SignalConfig:
+def load_config(path: Path = CONFIG_PATH) -> SignalConfig:
     config = SignalConfig.model_validate_json(path.read_text(encoding="utf-8"))
-    return config.model_copy(update={"skills": tracked_skills(skills_path)})
+    return config.model_copy(update={"skills": tracked_skills()})
 
 
 @lru_cache(maxsize=1)

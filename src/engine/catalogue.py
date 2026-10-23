@@ -6,7 +6,7 @@ and the version-1 company assumptions. Later assumption versions live in the sto
 
 import json
 from dataclasses import dataclass, field
-from functools import lru_cache
+from functools import cached_property, lru_cache
 from pathlib import Path
 from typing import Any
 
@@ -104,9 +104,12 @@ class Catalogue:
             raise ValueError(f"evidence skill {skill_id} has no execution/oversight type")
         return skill_type
 
-    @property
+    @cached_property
     def skill_types(self) -> dict[str, SkillType]:
-        """Execution/oversight per evidence skill, for the requirement-card weights."""
+        """Execution/oversight per evidence skill, for the requirement-card weights.
+
+        Cached: scoring reads it per role and scenario, and the catalogue never changes.
+        """
         return {k: self.skill_type(k) for k in self.skills}
 
     @property

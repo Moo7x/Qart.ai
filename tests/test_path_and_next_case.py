@@ -12,7 +12,7 @@ from src.engine.catalogue import (
     load_case_index,
 )
 from src.engine.next_case import next_case
-from src.engine.planner import Selector, plan_path
+from src.engine.planner import AI_INTRO_NOTE, Resource, Selector, ai_intro_first, plan_path
 from src.engine.planner_cpsat import cpsat_select
 from src.engine.skills import derive_states
 from tests.helpers import golden_journey_events
@@ -228,3 +228,14 @@ def test_low_ai_comfort_moves_an_ai_intro_first_and_only_reorders() -> None:
     assert low.steps[0].ref in params.AI_INTRO_COURSES
     assert "2/10" in low.steps[0].because
     assert low.total_hours == base.total_hours
+
+
+def test_ai_intro_already_first_is_not_reported_as_moved() -> None:
+    """The comfort answer is only credited when it actually moved the course."""
+    intro = sorted(params.AI_INTRO_COURSES)[0]
+    first = Resource(id=intro, ref=intro, type="course", title="AI intro", hours=2, gains={})
+    other = Resource(id="x", ref="x", type="course", title="Other", hours=5, gains={})
+    unchanged = ai_intro_first([first, other], ai_comfort=2)
+    assert unchanged == [first, other] and AI_INTRO_NOTE not in unchanged[0].because
+    moved = ai_intro_first([other, first], ai_comfort=2)
+    assert moved[0].id == intro and AI_INTRO_NOTE in moved[0].because
