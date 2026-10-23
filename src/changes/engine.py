@@ -46,6 +46,12 @@ class WeightDelta(BaseModel):
     points_after: float
     essential: bool
     reason: str
+    # The observed automation-style share behind the weight, and whether it is task-level or the
+    # occupation's (None = no observation in that snapshot).
+    share_before: float | None = None
+    share_after: float | None = None
+    basis_before: str = "none"
+    basis_after: str = "none"
 
 
 class RoleDelta(BaseModel):
@@ -192,6 +198,10 @@ def compare(
                 points_after=r.contribution,
                 essential=r.essential,
                 reason=r.shift_reason,
+                share_before=old_weights[r.skill].automation_share,
+                share_after=r.automation_share,
+                basis_before=old_weights[r.skill].automation_basis,
+                basis_after=r.automation_basis,
             )
             for r in role.requirements
             if abs(r.weight - old_weights[r.skill].weight) > EPSILON
@@ -253,8 +263,9 @@ def compare(
         recommendation_changed=changed,
         notes=[
             "The profile, essential requirements and selected destination are held fixed.",
-            "Global occupation-level AI usage informs declared scenario weights, not a "
-            "measured Malaysian adoption rate. Fit is not a hiring probability.",
+            "Global AI usage on each skill's linked O*NET tasks (or its occupation, where no "
+            "task-level data is published) informs declared scenario weights, not a measured "
+            "Malaysian adoption rate. Fit is not a hiring probability.",
             "Job-ad observations provide demand context; the current fit formula uses skills "
             "and AI-use emphasis, so a job-ad update alone does not alter fit.",
             *(

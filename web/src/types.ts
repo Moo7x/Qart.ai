@@ -150,6 +150,13 @@ export type ProfileData = {
 }
 
 export type GapColumn = 'ready' | 'bridgeable' | 'missing' | 'not_stated'
+export type AutomationBasis = 'task' | 'occupation' | 'none'
+export type TaskEvidence = {
+  task: string
+  text: string
+  automation_share: number | null
+  importance: number | null
+}
 export type RequirementScore = {
   skill: string
   skill_name: string
@@ -163,6 +170,9 @@ export type RequirementScore = {
   contribution: number
   column: GapColumn
   evidence_pages: number[]
+  automation_share: number | null
+  automation_basis: AutomationBasis
+  tasks: TaskEvidence[]
 }
 export type SdgRef = { target: string; title: string; how: string }
 export type RoleCard = {
@@ -261,6 +271,8 @@ export type EvidenceDelta = {
 export type WeightDelta = {
   skill: string; name: string; before: number; after: number
   points_before: number; points_after: number; essential: boolean; reason: string
+  share_before: number | null; share_after: number | null
+  basis_before: AutomationBasis; basis_after: AutomationBasis
 }
 export type RoleDelta = {
   role_id: string; title: string; soc: string; rank_before: number; rank_after: number
