@@ -74,11 +74,15 @@ export function useApi<T>(path: string, pollMs?: number): Loadable<T> {
   return { data, error, loading, reload }
 }
 
-/** Server timestamps from SQLite have no zone; they are UTC. Show them in Malaysia time. */
+/** Server timestamps are UTC: Postgres sends a zone, SQLite does not. */
+export function parseUtc(iso: string): number {
+  return Date.parse(/[zZ]$|[+-]\d\d:\d\d$/.test(iso) ? iso : `${iso}Z`)
+}
+
+/** Show a server timestamp in Malaysia time. */
 export function formatWhen(iso: string | null): string {
   if (!iso) return '—'
-  const withZone = /[zZ]|[+-]\d\d:\d\d$/.test(iso) ? iso : `${iso}Z`
-  return new Date(withZone).toLocaleString('en-MY', {
+  return new Date(parseUtc(iso)).toLocaleString('en-MY', {
     timeZone: 'Asia/Kuala_Lumpur',
     day: 'numeric',
     month: 'short',

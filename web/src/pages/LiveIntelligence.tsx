@@ -1,6 +1,6 @@
 import { Lock } from 'lucide-react'
 import { type FormEvent, useState } from 'react'
-import { formatWhen, postJSON, useApi } from '../api'
+import { formatWhen, parseUtc, postJSON, useApi } from '../api'
 import { PipelineDiagram, type StepId } from '../components/PipelineDiagram'
 import { Empty, Loading, Problem } from '../components/ui'
 import type { BacktestEntry, Run, SourceStatus } from '../types'
@@ -23,7 +23,7 @@ const STEP_TEXT: Record<StepId, [string, string]> = {
 
 function duration(run: Run): string {
   if (!run.finished_at) return '—'
-  const seconds = (Date.parse(`${run.finished_at}Z`) - Date.parse(`${run.started_at}Z`)) / 1000
+  const seconds = (parseUtc(run.finished_at) - parseUtc(run.started_at)) / 1000
   return seconds >= SECONDS_PER_MINUTE ? `${Math.round(seconds / SECONDS_PER_MINUTE)} min` : `${Math.round(seconds)} s`
 }
 
