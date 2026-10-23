@@ -1,5 +1,6 @@
 """The field pack is consistent and every name is on the TalentCorp page it cites."""
 
+import csv
 import re
 from functools import cache
 
@@ -95,3 +96,27 @@ def test_names_and_links_appear_on_their_cited_pages() -> None:
                 if squash(name) not in pages[p - 1]
             ]
     assert missing == []
+
+
+ONET_TASKS = PDF.parent.parent / "onet_31_0" / "task_statements.csv"
+
+
+def test_task_links_belong_to_their_occupation_and_skill() -> None:
+    pack = load_pack()
+    for soc, occupation in pack.tasks.occupations.items():
+        needed = {
+            r.skill for d in pack.destination_roles.values() if d.soc == soc for r in d.requires
+        }
+        assert set(occupation.skills) <= needed
+        for links in occupation.skills.values():
+            assert links and len({link.task for link in links}) == len(links)
+
+
+@pytest.mark.skipif(not ONET_TASKS.exists(), reason="O*NET files are kept in gitignored data/raw")
+def test_task_wording_is_verbatim_o_net() -> None:
+    with ONET_TASKS.open(encoding="utf-8") as handle:
+        onet = {(r["O*NET-SOC Code"], int(r["Task ID"])): r["Task"] for r in csv.DictReader(handle)}
+    for soc, occupation in load_pack().tasks.occupations.items():
+        for links in occupation.skills.values():
+            for link in links:
+                assert onet[(soc, link.task)] == link.text

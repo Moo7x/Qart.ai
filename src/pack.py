@@ -81,6 +81,25 @@ class SdgMap(BaseModel):
     destination: list[SdgLink]
 
 
+class TaskLink(BaseModel):
+    task: int  # O*NET task id (also the Economic Index node id for that task)
+    text: str  # verbatim O*NET task statement
+
+
+class TaskOccupation(BaseModel):
+    title: str
+    skills: dict[str, list[TaskLink]]  # pack skill id -> the O*NET tasks that show it
+
+
+class TaskCrosswalk(BaseModel):
+    """data/packs/gbs_fa/tasks.yaml: declared links from role skills to O*NET tasks."""
+
+    source: str
+    source_url: str
+    licence: str
+    occupations: dict[str, TaskOccupation]  # O*NET-SOC code -> links
+
+
 class Pack(BaseModel):
     skills: dict[str, Skill]
     current_roles: dict[str, CurrentRole]
@@ -88,9 +107,23 @@ class Pack(BaseModel):
     courses: dict[str, Course]
     courses_checked: str
     sdg: SdgMap
+    tasks: TaskCrosswalk
 
     def courses_for(self, skill_id: str) -> list[Course]:
         return [c for c in self.courses.values() if skill_id in c.covers]
+
+    def tasks_for(self, soc: str, skill_id: str) -> list[TaskLink]:
+        occupation = self.tasks.occupations.get(soc)
+        return occupation.skills.get(skill_id, []) if occupation else []
+
+    def task_ids(self) -> set[str]:
+        """Every linked O*NET task id, as the collectors filter source rows by it."""
+        return {
+            str(link.task)
+            for occupation in self.tasks.occupations.values()
+            for links in occupation.skills.values()
+            for link in links
+        }
 
 
 class PackError(ValueError):
@@ -140,6 +173,16 @@ def _check(pack: Pack) -> None:
         for link in links
         if link.target not in pack.sdg.targets
     ]
+    for soc, occupation in pack.tasks.occupations.items():
+        roles = [d for d in pack.destination_roles.values() if d.soc == soc]
+        if not roles:
+            problems.append(f"tasks: no destination role in occupation {soc}")
+        needed = {r.skill for d in roles for r in d.requires}
+        problems += [
+            f"tasks {soc}: {s} is not required by a role in this occupation"
+            for s in occupation.skills
+            if s not in needed
+        ]
     kinds = {s.kind for s in pack.skills.values()}
     problems += [
         f"skill kind {k} has no SDG mapping" for k in kinds if not pack.sdg.skill_kinds.get(k)
@@ -163,6 +206,9 @@ def load_pack() -> Pack:
         courses={c["id"]: Course.model_validate(c) for c in courses["courses"]},
         courses_checked=str(courses["checked"]),
         sdg=SdgMap.model_validate(sdg),
+        tasks=TaskCrosswalk.model_validate(
+            yaml.safe_load((PACK_DIR / "tasks.yaml").read_text(encoding="utf-8"))
+        ),
     )
     _check(pack)
     return pack
