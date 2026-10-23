@@ -10,7 +10,8 @@
       "SQL"
     ],
     "tasks": [
-      "query_database"
+      "query_database",
+      "analyse_statistics"
     ],
     "direction": "switch",
     "timeframe_months": 6,

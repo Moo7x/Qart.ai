@@ -25,5 +25,6 @@
       "fpa_analyst"
     ]
   },
-  "_about": "Synthetic persona (QART_NEXT_STEPS §8). Expectations are the team's career-counsellor view; assert top-3 membership and bands, never exact order or scores. If one looks wrong, flag it for the team instead of bending the formula."
+  "_about": "Synthetic persona (QART_NEXT_STEPS §8). Expectations are the team's career-counsellor view; assert top-3 membership and bands, never exact order or scores. If one looks wrong, flag it for the team instead of bending the formula.",
+  "flagged_for_team": "With the spec's weights the top 3 is Finance Data Analyst 70, Data Analyst 61, Finance Automation Specialist 60; FP&A Analyst is 4th at 57, because a nearby move scores a same-family role 0.6 for direction. Team to decide: accept Data Analyst in this expectation, or raise direction_fit.adjacent.same in catalogue/scoring.json. Not tuned yet (spec: flag, don't bend the formula)."
 }

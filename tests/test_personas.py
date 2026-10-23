@@ -3,7 +3,9 @@
 Each fixture in tests/personas/ holds a full questionnaire answer set and the team's expected
 outcome. Answers are turned into skill chips exactly as the questionnaire does (role pre-fill +
 tasks + tools at "use sometimes"), then `skill_edits` apply the person's own level changes.
-We assert top-3 membership, families and bands, never exact order or scores.
+We assert top-3 membership, families and bands, never exact order or scores. A fixture with
+`flagged_for_team` is an expectation the formula does not meet; it stays a strict xfail until the
+team decides (QART_NEXT_STEPS §8: flag it, don't bend the formula).
 """
 
 import json
@@ -14,9 +16,12 @@ import pytest
 
 from src.contract import Preferences, Profile
 from src.engine.questionnaire import default_questionnaire, prefill_levels
+from src.engine.ranking import rank_for_profile
 
 PERSONA_DIR = Path(__file__).parent / "personas"
-PERSONAS = sorted(PERSONA_DIR.glob("*.json"))
+PERSONAS = sorted(PERSONA_DIR.glob("p*.json"))
+# Pinned radar labels, so a weekly data refresh cannot change persona outcomes.
+SIGNALS = json.loads((PERSONA_DIR / "skill_signals_labels.json").read_text(encoding="utf-8"))
 
 
 def load(path: Path) -> dict[str, Any]:
@@ -52,13 +57,17 @@ def profile_for(persona: dict[str, Any]) -> Profile:
     )
 
 
-@pytest.mark.xfail(reason="rank_roles is built in the next step (QART_NEXT_STEPS §5)", strict=True)
-@pytest.mark.parametrize("path", PERSONAS, ids=lambda p: p.stem)
-def test_persona_expectations(path: Path) -> None:
-    from src.engine.ranking import rank_for_profile  # noqa: PLC0415 (not built yet)
+def _case(path: Path) -> Any:
+    """A persona the team still has to decide on is a strict xfail, with the reason shown."""
+    flag = load(path).get("flagged_for_team")
+    marks = [pytest.mark.xfail(reason=f"flagged for team: {flag}", strict=True)] if flag else []
+    return pytest.param(path, id=path.stem, marks=marks)
 
+
+@pytest.mark.parametrize("path", [_case(p) for p in PERSONAS])
+def test_persona_expectations(path: Path) -> None:
     persona = load(path)
-    result = rank_for_profile(profile_for(persona))
+    result = rank_for_profile(profile_for(persona), snapshot=SIGNALS)
     expect = persona["expect"]
     if expect.get("empty_profile"):
         assert result.empty_profile and result.starter_roles

@@ -1,0 +1,87 @@
+{
+  "_about": "Radar labels pinned for the persona tests (copied from data/snapshots/skill_signals.json, data to 2026-10-15), so a weekly data refresh cannot change persona outcomes. Refresh by hand when the team re-checks the personas.",
+  "source": "Hacker News “Ask HN: Who is hiring?” (via the Algolia HN Search API)",
+  "data_as_of": "2026-10-15",
+  "series": [
+    {
+      "id": "data_quality",
+      "label": "insufficient_data"
+    },
+    {
+      "id": "process_automation",
+      "label": "insufficient_data"
+    },
+    {
+      "id": "spreadsheet_modelling",
+      "label": "insufficient_data"
+    },
+    {
+      "id": "sql_basics",
+      "label": "stable"
+    },
+    {
+      "id": "python",
+      "label": "stable"
+    },
+    {
+      "id": "pytorch",
+      "label": "stable"
+    },
+    {
+      "id": "tensorflow",
+      "label": "insufficient_data"
+    },
+    {
+      "id": "llms",
+      "label": "stable"
+    },
+    {
+      "id": "rag",
+      "label": "rising"
+    },
+    {
+      "id": "langchain",
+      "label": "insufficient_data"
+    },
+    {
+      "id": "ai_agents",
+      "label": "rising"
+    },
+    {
+      "id": "mlops",
+      "label": "insufficient_data"
+    },
+    {
+      "id": "computer_vision",
+      "label": "stable"
+    },
+    {
+      "id": "nlp",
+      "label": "insufficient_data"
+    },
+    {
+      "id": "kubernetes",
+      "label": "rising"
+    },
+    {
+      "id": "aws",
+      "label": "stable"
+    },
+    {
+      "id": "typescript",
+      "label": "stable"
+    },
+    {
+      "id": "react",
+      "label": "stable"
+    },
+    {
+      "id": "data_visualisation",
+      "label": "insufficient_data"
+    },
+    {
+      "id": "erp",
+      "label": "insufficient_data"
+    }
+  ]
+}
