@@ -70,7 +70,7 @@ export function Trends() {
   const last = data?.employment[0]?.last
   const change = (g: TrendsResponse['employment'][number]) => (span === 'long' ? g.change_long : g.change_recent)
   return (
-    <main className="flex min-w-0 flex-[999_1_640px] flex-col gap-6 px-5 py-7 md:px-10">
+    <main className="page">
       <header className="flex flex-col gap-1.5">
         <span className="eyebrow">Trends · rising and declining</span>
         <h1 className="h1">{t('What is growing, what is shrinking')}</h1>

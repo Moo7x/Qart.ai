@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useT } from '../i18n'
 import { sendJSON, useApi } from '../api'
+import { JourneyRoute, NextStep } from '../components/journey'
 import { Loading, Problem } from '../components/ui'
 import { useJourney } from '../state'
 import { NeedProfile } from './Roles'
@@ -55,7 +56,8 @@ export function Cv() {
   }
 
   return (
-    <main className="flex min-w-0 flex-[999_1_640px] flex-col gap-6 px-5 py-7 md:px-10">
+    <main className="page">
+      <JourneyRoute />
       <header className="flex flex-col gap-1.5">
         <span className="eyebrow">My CV · draft update</span>
         <h1 className="h1">{t('Your CV, updated from what you confirmed')}</h1>
@@ -94,6 +96,7 @@ export function Cv() {
           <p className="m-0 text-xs text-graphite">Synthetic demo data only. A CV wording is not a hiring guarantee and is not checked against any applicant system.</p>
         </>
       )}
+      <NextStep to="/pathway" label="Back to your plan" hint="Keep going: mark plan steps done as you finish them" />
     </main>
   )
 }

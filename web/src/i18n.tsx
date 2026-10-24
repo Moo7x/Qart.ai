@@ -10,6 +10,7 @@ const KEY = 'qart.lang'
 const MS: Record<string, string> = {
   // navigation
   'Your journey · GBS finance': 'Perjalanan anda · kewangan GBS',
+  'Also useful': 'Turut berguna',
   Overview: 'Gambaran keseluruhan',
   'My goal': 'Matlamat saya',
   'My options': 'Pilihan saya',

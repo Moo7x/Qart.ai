@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { useApi } from '../api'
-import { Dots, ScenarioSwitch, SdgTag } from '../components/journey'
+import { Dots, ScenarioSwitch, SdgTag, JourneyRoute, NextStep } from '../components/journey'
 import { Loading, Problem } from '../components/ui'
 import { useJourney } from '../state'
 import type { FutureResponse } from '../types'
@@ -17,7 +17,8 @@ export function Future() {
   const today = data?.current_role ?? (data?.situation === 'student' ? 'Student or recent graduate' : 'Moving into finance')
 
   return (
-    <main className="flex min-w-0 flex-[999_1_640px] flex-col gap-6 px-5 py-7 md:px-10">
+    <main className="page">
+      <JourneyRoute />
       {noDestination && (
         <div className="flex flex-col gap-3">
           <span className="eyebrow">Today → Future you</span>
@@ -104,6 +105,7 @@ export function Future() {
           </p>
         </>
       )}
+      <NextStep to="/cv" label="Update your CV" hint="Next: add what you have done to your CV" />
     </main>
   )
 }

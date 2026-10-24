@@ -145,7 +145,7 @@ export function Changes() {
   }
 
   return (
-    <main className="flex min-w-0 flex-[999_1_640px] flex-col gap-6 px-5 py-7 md:px-10">
+    <main className="page">
       <header className="flex flex-wrap items-end justify-between gap-4">
         <div><span className="eyebrow">What changed · from evidence to your decision</span><h1 className="h1 mt-2">{t('See the difference, then choose')}</h1></div>
         <ScenarioSwitch />

@@ -5,7 +5,7 @@ import { sendJSON, useApi } from '../api'
 import { ReportProblem } from '../components/Feedback'
 import { PlanCompare } from '../components/PlanCompare'
 import { Roadmap } from '../components/Roadmap'
-import { ScenarioSwitch, SdgTag } from '../components/journey'
+import { ScenarioSwitch, SdgTag, JourneyRoute, NextStep } from '../components/journey'
 import { Loading, Problem } from '../components/ui'
 import { useJourney } from '../state'
 import type { PathwayResponse, ProgressResponse, Scenario } from '../types'
@@ -58,7 +58,8 @@ function ProfilePathway({ profileId, scenario }: { profileId: string; scenario: 
   const finished = data ? data.steps.filter((s) => done.includes(s.course.id)).length : 0
 
   return (
-    <main className="flex min-w-0 flex-[999_1_640px] flex-col gap-6 px-5 py-7 md:px-10">
+    <main className="page">
+      <JourneyRoute />
       {noDestination && (
         <div className="flex flex-col gap-3">
           <span className="eyebrow">My plan · pathway</span>
@@ -206,6 +207,7 @@ function ProfilePathway({ profileId, scenario }: { profileId: string; scenario: 
           </div>
         </>
       )}
+      <NextStep to="/future" label="See today versus future you" hint="Next: what this plan changes, in both scenarios" />
     </main>
   )
 }

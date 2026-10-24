@@ -3,7 +3,7 @@ import { useT } from '../i18n'
 import { Link } from 'react-router-dom'
 import { formatWhen, useApi } from '../api'
 import { EvidenceDrawer } from '../components/EvidenceDrawer'
-import { ScenarioSwitch, levelText } from '../components/journey'
+import { ScenarioSwitch, levelText, JourneyRoute, NextStep } from '../components/journey'
 import { LineChart, Sparkline, type Series } from '../components/LineChart'
 import { OccupationEvidence } from '../components/OccupationEvidence'
 import { SkillRadar } from '../components/SkillRadar'
@@ -217,7 +217,8 @@ export function Overview() {
   const aiUse = all.filter((s) => s.family === 'ai_task_use')
 
   return (
-    <main className="flex min-w-0 flex-[999_1_640px] flex-col gap-6 px-5 py-7 md:px-10">
+    <main className="page">
+      <JourneyRoute />
       <header className="flex flex-col gap-1.5">
         <span className="eyebrow">Overview · GBS finance &amp; accounting · Malaysia</span>
         <h1 className="h1">{t('What the evidence shows for your field')}</h1>
@@ -312,6 +313,7 @@ export function Overview() {
       )}
 
       {selected && <EvidenceDrawer signal={selected} onClose={() => setSelected(null)} />}
+      <NextStep to="/roles" label="See the roles that fit you" hint="Next: compare the roles your skills lead to" />
     </main>
   )
 }

@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import { sendJSON, useApi } from '../api'
 import { Activity } from '../components/Activity'
 import { ReportProblem } from '../components/Feedback'
-import { LEVEL_NAMES, levelText } from '../components/journey'
+import { LEVEL_NAMES, levelText, JourneyRoute, NextStep } from '../components/journey'
 import { Loading, Problem } from '../components/ui'
 import { useJourney } from '../state'
 import type { GoalInput, GoalResponse, PostingRequirement, PackInfo } from '../types'
@@ -66,7 +66,8 @@ export function Goal() {
 
   const cov = result?.coverage
   return (
-    <main className="flex min-w-0 flex-[999_1_640px] flex-col gap-6 px-5 py-7 md:px-10">
+    <main className="page">
+      <JourneyRoute />
       <header className="flex flex-col gap-1.5">
         <span className="eyebrow">My goal · the role you are aiming for</span>
         <h1 className="h1">{t('Where do you want to be?')}</h1>
@@ -141,6 +142,7 @@ export function Goal() {
           </div>
         </section>
       )}
+      <NextStep to="/roles" label="Compare roles" hint="Next: see how your goal compares with the roles that fit you" />
     </main>
   )
 }

@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useT } from '../i18n'
 import { Link, useNavigate } from 'react-router-dom'
 import { sendJSON, useApi } from '../api'
-import { Dots, ScenarioSwitch, SdgTag, levelText } from '../components/journey'
+import { Dots, ScenarioSwitch, SdgTag, levelText, JourneyRoute, NextStep } from '../components/journey'
 import { CompareRoles, Openings } from '../components/CompareRoles'
 import { BestQuestion, MeterRow, WhatIf } from '../components/Decision'
 import { ExplainRole } from '../components/ExplainRole'
@@ -166,7 +166,8 @@ export function Roles() {
   }
 
   return (
-    <main className="flex min-w-0 flex-[999_1_640px] flex-col gap-6 px-5 py-7 md:px-10">
+    <main className="page">
+      <JourneyRoute />
       <header className="flex flex-wrap items-end justify-between gap-4">
         <div className="flex flex-col gap-1.5">
           <span className="eyebrow">My options · every destination role is scored</span>
@@ -281,6 +282,7 @@ export function Roles() {
           </div>
         </div>
       )}
+      <NextStep to="/pathway" label="Open the plan for your role" hint="Next: a free learning plan for the role you chose" />
     </main>
   )
 }

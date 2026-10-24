@@ -31,7 +31,7 @@ export function Occupations() {
   }
 
   return (
-    <main className="flex min-w-0 flex-[999_1_640px] flex-col gap-6 px-5 py-7 md:px-10">
+    <main className="page">
       <header className="flex flex-col gap-1.5">
         <span className="eyebrow">Any occupation · evidence preview</span>
         <h1 className="h1">{t('What the evidence says about your job')}</h1>
