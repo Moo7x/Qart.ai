@@ -7,7 +7,6 @@ import { Goal } from './pages/Goal'
 import { Changes } from './pages/Changes'
 import { LiveIntelligence } from './pages/LiveIntelligence'
 import { Onboarding } from './pages/Onboarding'
-import { Overview } from './pages/Overview'
 import { Pathway } from './pages/Pathway'
 import { Occupations } from './pages/Occupations'
 import { Roles } from './pages/Roles'
@@ -16,6 +15,7 @@ import { JourneyProvider, useJourney } from './state'
 
 // The charting library is only needed on Trends, so that page loads on demand.
 const Trends = lazy(() => import('./pages/Trends').then((m) => ({ default: m.Trends })))
+const Overview = lazy(() => import('./pages/Overview').then((m) => ({ default: m.Overview })))
 
 function Shell() {
   const location = useLocation()
@@ -24,17 +24,17 @@ function Shell() {
   if (location.pathname === '/') return <Navigate to="/start" replace />
   if (location.pathname === '/overview' && !profileId) return <Navigate to="/start" replace />
   return (
-    <div className="flex min-h-screen flex-wrap items-start bg-fog">
+    <div className="app-shell">
       <Sidebar />
       <Routes>
-        <Route path="/overview" element={<Overview />} />
+        <Route path="/overview" element={<Suspense fallback={<main className="page"><span role="status" className="cap">Loading your overview…</span></main>}><Overview /></Suspense>} />
         <Route path="/goal" element={<Goal />} />
         <Route path="/roles" element={<Roles />} />
         <Route path="/pathway" element={<Pathway />} />
         <Route path="/future" element={<Future />} />
         <Route path="/changes" element={<Changes />} />
         <Route path="/cv" element={<Cv />} />
-        <Route path="/trends" element={<Suspense fallback={<main className="page"><span className="cap">Loading the trends…</span></main>}><Trends /></Suspense>} />
+        <Route path="/trends" element={<Suspense fallback={<main className="page"><span role="status" className="cap">Loading the trends…</span></main>}><Trends /></Suspense>} />
         <Route path="/occupations" element={<Occupations />} />
         <Route path="/live" element={<LiveIntelligence />} />
         <Route

@@ -1,11 +1,12 @@
 """Journey routes: intake, profiles, matched roles, destination, pathway, Today → Future you."""
 
+import json
 from dataclasses import asdict
 from typing import Any
 
 from fastapi import APIRouter, Depends, File, HTTPException, Query, UploadFile
 from pydantic import BaseModel, Field
-from sqlalchemy import Engine
+from sqlalchemy import Engine, select
 
 from src import params
 from src.api.evidence import get_engine, get_settings
@@ -31,6 +32,7 @@ from src.match.explain import explain, facts
 from src.match.outlook import role_outlook
 from src.match.radar import radar
 from src.match.tasks import task_view
+from src.occupations.catalogue import catalogue_table
 from src.pack import Pack, load_pack
 from src.pathway.planner import Pathway, plan_pathway
 from src.pathway.tracks import build_tracks, comparison
@@ -72,8 +74,39 @@ def require_profile(engine: Engine, profile_id: str) -> tuple[ProfileData, str |
     return found
 
 
+def _task_examples(pack: Pack, engine: Engine) -> list[dict[str, str]]:
+    """Use a role's own crosswalk; otherwise its stored O*NET core tasks, never another role."""
+    socs = {r.soc for r in pack.current_roles.values()}
+    with engine.connect() as conn:
+        rows = conn.execute(select(catalogue_table).where(catalogue_table.c.soc.in_(socs)))
+        catalogue = {r["soc"]: dict(r) for r in rows.mappings()}
+    examples: list[dict[str, str]] = []
+    for role in pack.current_roles.values():
+        occupation = pack.tasks.occupations.get(role.soc)
+        stored = catalogue.get(role.soc)
+        if occupation:
+            texts = [t.text for ts in occupation.skills.values() for t in ts]
+            source = pack.tasks.source
+        elif stored:
+            texts = [t["text"] for t in json.loads(stored["tasks"])]
+            source = f"O*NET {stored['release']} core tasks · fetched {stored['updated_at'].date()}"
+        else:
+            continue
+        examples.extend(
+            {
+                "role_id": role.id,
+                "soc": role.soc,
+                "text": text,
+                "source": source,
+                "url": pack.tasks.source_url,
+            }
+            for text in list(dict.fromkeys(texts))[:3]
+        )
+    return examples
+
+
 @router.get("/pack")
-def pack_info() -> dict[str, Any]:
+def pack_info(engine: Engine = Depends(get_engine)) -> dict[str, Any]:
     pack = load_pack()
     return {
         "field": "GBS finance & accounting (Malaysia)",
@@ -85,15 +118,7 @@ def pack_info() -> dict[str, Any]:
         "samples": [{"id": k, "label": v} for k, v in SAMPLES.items()],
         "proficiency": list(params.PROFICIENCY_LABELS),
         "courses_checked": pack.courses_checked,
-        "task_examples": [
-            {
-                "text": next(iter(occ.skills.values()))[0].text,
-                "source": pack.tasks.source,
-                "url": pack.tasks.source_url,
-            }
-            for occ in pack.tasks.occupations.values()
-            if occ.skills
-        ][:4],
+        "task_examples": _task_examples(pack, engine),
     }
 
 

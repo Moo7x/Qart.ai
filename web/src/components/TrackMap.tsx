@@ -29,7 +29,7 @@ function states(track: Track, done: string[]): State[] {
 }
 
 function NodeMark({ state, index }: { state: State; index: number }) {
-  const base = 'relative z-10 grid h-9 w-9 place-items-center rounded-full border-2 text-[12px] font-semibold'
+  const base = 'relative z-10 grid h-9 w-9 shrink-0 place-items-center rounded border text-[12px] font-semibold'
   if (state === 'done') return <span className={`${base} border-violet bg-violet text-white`}>✓</span>
   if (state === 'current') return <span className={`${base} border-violet bg-paper text-violet ring-4 ring-violet-soft`}>{index + 1}</span>
   if (state === 'no_course') return <span className={`${base} border-dashed border-stone bg-fog text-ash`}>–</span>
@@ -135,10 +135,10 @@ export function TrackMap({ tracks, done, onToggle, paused, checked }: { tracks: 
         const countable = st.filter((s) => s !== 'no_course').length
         const last = ti === tracks.length - 1
         return (
-          <section key={track.id} aria-label={track.title} className="grid gap-x-6 gap-y-3 pb-8 md:grid-cols-[minmax(220px,260px)_minmax(0,1fr)]">
+          <section key={track.id} aria-label={track.title} className="track-row">
             <div className="relative flex gap-3">
-              {!last && <span aria-hidden="true" className="absolute bottom-[-32px] left-[19px] top-10 w-[2px] bg-line" />}
-              <span aria-hidden="true" className={`relative z-10 grid h-10 w-10 shrink-0 place-items-center rounded-full font-mono text-[14px] font-semibold ${countable > 0 && finished === countable ? 'bg-violet text-white' : 'bg-void text-white'}`}>{ti + 1}</span>
+              {!last && <span aria-hidden="true" className="track-spine" />}
+              <span aria-hidden="true" className={`relative z-10 grid h-10 w-10 shrink-0 place-items-center rounded font-mono text-[14px] font-semibold ${countable > 0 && finished === countable ? 'bg-violet text-white' : 'bg-void text-white'}`}>{ti + 1}</span>
               <div className="flex min-w-0 flex-col gap-1 pt-1">
                 <h3 className="m-0 text-[17px] font-semibold tracking-tight">{track.title}</h3>
                 <span className="text-[12px] text-graphite">{track.why}</span>
@@ -148,22 +148,22 @@ export function TrackMap({ tracks, done, onToggle, paused, checked }: { tracks: 
             {track.nodes.length === 0 ? (
               <p className="m-0 self-center text-[13px] text-graphite">Nothing to build here: you already meet these skills for this role.</p>
             ) : (
-              <ol className="relative m-0 flex list-none gap-1 overflow-x-auto p-0 pb-2 pl-1 md:pl-0">
+              <ol className="track-skills">
                 {track.nodes.map((node, ni) => (
-                  <li key={node.id} className="relative flex w-[128px] shrink-0 flex-col items-center">
-                    {ni < track.nodes.length - 1 && <span aria-hidden="true" className={`absolute left-1/2 right-[-50%] top-[18px] h-[2px] ${st[ni] === 'done' ? 'bg-violet' : 'bg-line'}`} />}
+                  <li key={node.id} className="min-w-0">
                     <button
                       type="button"
                       onClick={() => setOpen({ track: ti, node: ni })}
-                      className="group flex w-full cursor-pointer flex-col items-center gap-1.5 border-0 bg-transparent px-1 text-center"
+                      className={`skill-node skill-node-${st[ni]} group`}
                       aria-label={`${node.title}: ${st[ni] === 'done' ? 'done' : st[ni] === 'current' ? 'next up' : st[ni] === 'locked' ? 'locked' : 'no course yet'}. Open courses, videos and articles`}
                     >
-                      <NodeMark state={st[ni]} index={ni} />
-                      <span className={`line-clamp-2 text-[12px] leading-tight group-hover:underline ${st[ni] === 'current' ? 'font-semibold text-void' : st[ni] === 'done' ? 'text-void' : 'text-graphite'}`}>{node.title}</span>
-                      <span className="font-mono text-[10px] text-ash">
+                      <span className="flex w-full items-center justify-between gap-3"><NodeMark state={st[ni]} index={ni} /><span className="text-xs font-medium">{st[ni] === 'current' ? 'Next up ↗' : st[ni] === 'done' ? 'Done' : st[ni] === 'locked' ? 'Locked' : 'No planned course'}</span></span>
+                      <span className="text-[15px] font-semibold leading-snug text-void group-hover:underline">{node.title}</span>
+                      <span className="font-mono text-[11px] text-graphite">
                         {node.now !== null || node.required !== null ? `${levelText(node.now)} → ${levelText(node.after)}` : `${node.courses.length + node.videos.length + node.articles.length} resources`}
                         {node.essential ? ' · ★' : ''}
                       </span>
+                      <span className="mt-auto pt-1 text-xs text-graphite">Courses · videos · articles →</span>
                     </button>
                   </li>
                 ))}

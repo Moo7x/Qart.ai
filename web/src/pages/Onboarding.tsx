@@ -30,7 +30,7 @@ const SDGS = [
 ]
 
 function chip(on: boolean): string {
-  return `min-h-[40px] cursor-pointer rounded-full px-3.5 text-sm ${on ? 'border border-violet bg-violet-soft text-[#3b1fc2]' : 'border border-hairline bg-white text-void'}`
+  return `min-h-[44px] cursor-pointer rounded px-3.5 py-2 text-sm ${on ? 'border border-violet bg-violet-soft text-[#3b1fc2]' : 'border border-hairline bg-white text-void'}`
 }
 
 export function Onboarding() {
@@ -46,6 +46,7 @@ export function Onboarding() {
   const [step, setStep] = useState(editing ? 1 : 0)
   const [situation, setSituation] = useState<Situation>('working')
   const [stages, setStages] = useState<Stage[] | undefined>(undefined)
+  const [activityStep, setActivityStep] = useState(0)
   const [extraction, setExtraction] = useState<Extraction | null>(null)
   const [role, setRole] = useState('other')
   const [years, setYears] = useState('')
@@ -67,6 +68,7 @@ export function Onboarding() {
     const p = existing.data.profile
     setSituation(p.situation); setRole(p.current_role); setYears(p.years_experience === null ? '' : String(p.years_experience))
     setSkills(p.skills); setHours(p.weekly_hours); setBudget(p.budget); setInterests(p.interests); setSdgs(p.sdg_priorities)
+    setTasks([...new Set(Object.values(p.skills).map((s) => s.evidence).filter(Boolean))].join('\n'))
     hydrated.current = true
   }, [editing, existing.data])
 
@@ -84,10 +86,12 @@ export function Onboarding() {
       found[s.skill] = { level: s.level, evidence: s.evidence, source: s.level === null ? 'keyword' : 'cv' }
     }
     setSkills(found)
+    setTasks([...new Set(result.skills.map((s) => s.evidence).filter(Boolean))].join('\n'))
     go(3)
   }
 
   async function run(label: string, action: () => Promise<void>) {
+    setActivityStep(step)
     setStages(undefined)
     setBusy(label)
     setError(null)
@@ -195,6 +199,17 @@ export function Onboarding() {
 
   const addable = (pack.data?.skills ?? []).filter((s) => !(s.id in skills) && addQuery.length > 1 && s.name.toLowerCase().includes(addQuery.toLowerCase())).slice(0, 6)
   const evidence = signals.data?.signals.filter((s) => s.id === 'dosm_jmi_accountants_and_auditors' || s.id === 'dosm_share_clerical') ?? []
+  const examples = pack.data?.task_examples.filter((example) => example.role_id === role) ?? []
+  const help = [
+    ['Your next move, made visible', 'Start with what you do today. Compare future roles, understand the gaps, then choose a practical learning route.'],
+    ['A route that starts with you', 'Working, studying or changing careers: your situation changes the context, never your skill score.'],
+    ['You control what gets used', 'Use a synthetic sample for this demo. Review every extracted skill and set your own levels before continuing.'],
+    ['Describe the work, not just the title', 'Your tasks help find relevant skills. Suggestions are yours to accept; a job title never proves proficiency.'],
+    ['Unknown is different from missing', 'Leave a level unrated when unsure. Your matches show that uncertainty instead of treating the skill as verified.'],
+    ['Make the plan fit your week', 'Course hours are estimates from the checked catalogue. More weekly time changes the schedule, not your current ability.'],
+    ['Choose what matters to you', 'Interests help order close matches. SDG links explain the contribution of each skill and role, rather than adding points.'],
+    ['Real work, visible progress', 'Each build-log line records an actual API request. No invented progress or generated hiring probabilities.'],
+  ][step]
 
   return (
     <div className="relative min-h-screen w-full overflow-hidden bg-fog">
@@ -211,7 +226,8 @@ export function Onboarding() {
         <Link to="/live" className="text-sm text-graphite">{t('Browse public evidence')}</Link>
       </header>
 
-      <main className="relative mx-auto flex max-w-[640px] flex-col gap-7 px-6 pb-16 pt-8">
+      <main className="onboarding-layout">
+      <div className="flex min-w-0 flex-col gap-7">
         {editing && existing.loading && <p role="status">Loading your saved answers…</p>}
         {editing && existing.error && <p role="alert">Could not load your saved answers. <button type="button" className="btn" onClick={existing.reload}>Retry</button></p>}
         {step >= 1 && step <= LAST_QUESTION && (
@@ -230,7 +246,7 @@ export function Onboarding() {
         {step === 0 && (
           <section className="flex flex-col gap-6 pt-6">
             <span className="eyebrow">{t('GBS finance & accounting · Malaysia')}</span>
-            <h1 className="m-0 text-[56px] font-semibold leading-[1.02] tracking-[-0.035em]">{t('Where is your finance career going as AI changes the work?')}</h1>
+            <h1 className="m-0 text-[clamp(36px,4.4vw,62px)] font-semibold leading-[1.04] tracking-[-0.045em]">{t('Where is your finance career going as AI changes the work?')}</h1>
             <p className="m-0 max-w-[560px] text-lg text-graphite">
               Qart.ai reads Malaysia's public labour and job-ad data, shows which of your skills are gaining weight, which roles fit you, and a free learning plan. Every number links to its source.
             </p>
@@ -240,12 +256,12 @@ export function Onboarding() {
               <span className="text-[13px] text-graphite">{t('Skip any question. The demo uses synthetic CVs only.')}</span>
             </div>
             {evidence.length > 0 && (
-              <div className="card-dark flex flex-col gap-2.5 px-5 py-4">
-                <span className="font-mono text-[11px] tracking-widest text-cyan">LATEST EVIDENCE IN THE PIPELINE</span>
+              <div className="section">
+                <span className="cap">Observed · latest public evidence</span>
                 {evidence.map((s) => (
                   <div key={s.id} className="grid grid-cols-[minmax(0,1fr)_auto] gap-x-4 font-mono text-[13px]">
                     <span>{s.title}</span>
-                    <span className="text-cyan">{s.points.at(-1)?.value.toFixed(2)}%</span>
+                    <span className="text-observed">{s.points.at(-1)?.value.toFixed(2)}%</span>
                     <span className="text-stone">{s.sources[0]?.name} · {s.points.at(-1)?.period}</span>
                   </div>
                 ))}
@@ -298,7 +314,7 @@ export function Onboarding() {
               <span className="cap">{t('Or try a synthetic sample')}</span>
               <div className="flex flex-wrap gap-2">
                 {(pack.data?.samples ?? []).map((s) => (
-                  <button key={s.id} type="button" className={chip(false)} onClick={() => pickSample(s.id)}>
+                  <button key={s.id} type="button" disabled={busy !== null} className={chip(false)} onClick={() => pickSample(s.id)}>
                     {s.label}
                   </button>
                 ))}
@@ -323,9 +339,6 @@ export function Onboarding() {
                 </select>
               </label>
             )}
-            {situation !== 'student' && <div className="flex flex-wrap gap-2" aria-label="Role examples">
-              {pack.data?.current_roles.slice(0,4).map((r) => <button key={r.id} type="button" className={chip(role === r.id)} onClick={() => setRole(r.id)}>{r.title}</button>)}
-            </div>}
             <label className="flex flex-col gap-1.5 text-[13px] font-medium">
               Years of work experience
               <input type="number" min={0} max={60} value={years} onChange={(e) => setYears(e.target.value)} className="min-h-[44px] rounded-md border border-hairline bg-fog px-3 text-[15px]" />
@@ -337,11 +350,11 @@ export function Onboarding() {
             <button type="button" className="btn self-start" disabled={busy !== null || tasks.trim().length < 3} onClick={findFromTasks}>
               Find the matching skills
             </button>
-            <div className="flex flex-col gap-2" aria-label="Task examples">
+            {examples.length > 0 && <div className="flex flex-col gap-2" aria-label="Task examples">
               <span className="cap">Or start from an O*NET task and edit it</span>
-              {pack.data?.task_examples.map((example) => <button key={example.text} type="button" className="btn justify-start py-2 text-left text-xs" onClick={() => { setTasks(example.text); setSuggestions(null) }}>{example.text}</button>)}
-              {pack.data?.task_examples[0] && <a className="text-xs text-graphite" href={pack.data.task_examples[0].url} target="_blank" rel="noreferrer">Task examples: {pack.data.task_examples[0].source}</a>}
-            </div>
+              {examples.map((example) => <button key={example.text} type="button" className="btn justify-start py-2 text-left text-xs" onClick={() => { setTasks(example.text); setSuggestions(null); setSelected([]) }}>{example.text}</button>)}
+              <a className="text-xs text-graphite" href={examples[0].url} target="_blank" rel="noreferrer">Task examples: {examples[0].source} · occupation {examples[0].soc}</a>
+            </div>}
             {suggestions && <section aria-label="Suggested skills" className="border-y border-hairline py-4">
               <p className="m-0 text-sm font-medium">{suggestions.hits.length ? 'Choose the skills that describe your work' : 'No matching skills found. Try a specific task, or add skills on the next step.'}</p>
               <p className="text-xs text-graphite">Matched by {suggestions.engine}. {suggestions.note}</p>
@@ -401,7 +414,7 @@ export function Onboarding() {
                 <button
                   key={s.id}
                   type="button"
-                  className="min-h-[36px] cursor-pointer rounded-full border border-dashed border-stone bg-transparent px-3 text-sm"
+                  className="min-h-[44px] cursor-pointer rounded border border-dashed border-stone bg-transparent px-3 text-sm"
                   onClick={() => {
                     setSkills((prev) => ({ ...prev, [s.id]: { level: 1, evidence: '', source: 'self' } }))
                     setAddQuery('')
@@ -441,12 +454,12 @@ export function Onboarding() {
           <section className="flex flex-col gap-5">
             <h1 className="h1">{t('What matters to you in your next role?')}</h1>
             <p className="m-0 text-graphite">{t('Used only to order roles that fit you almost equally well. It never changes a fit score.')}</p>
-            <div className="flex flex-wrap gap-2">
+            <div className="grid gap-2 sm:grid-cols-2">
               {INTERESTS.map((i) => {
                 const on = interests.includes(i.id)
                 return (
                   <button key={i.id} type="button" aria-pressed={on} className={chip(on)} onClick={() => setInterests(on ? interests.filter((x) => x !== i.id) : [...interests, i.id])}>
-                    {t(i.label)}<span className="ml-1 text-xs">({pack.data?.skills.filter((s) => s.kind === i.id).slice(0,2).map((s) => s.name).join(', ')})</span>
+                    <span className="block text-left font-medium">{t(i.label)}</span><span className="mt-1 block text-left text-xs text-graphite">{pack.data?.skills.filter((s) => s.kind === i.id).slice(0,2).map((s) => s.name).join(' · ')}</span>
                   </button>
                 )
               })}
@@ -458,7 +471,7 @@ export function Onboarding() {
                   const on = sdgs.includes(g.id)
                   return (
                     <button key={g.id} type="button" aria-pressed={on} onClick={() => setSdgs(on ? sdgs.filter((x) => x !== g.id) : [...sdgs, g.id])}
-                      className="min-h-[40px] cursor-pointer rounded-full px-3.5 text-sm"
+                      className="min-h-[44px] cursor-pointer rounded px-3.5 text-sm"
                       style={on ? { background: g.colour, color: '#fff', border: 0 } : { background: '#fff', color: g.colour, border: `1px solid ${g.colour}` }}>
                       {g.label}
                     </button>
@@ -488,7 +501,7 @@ export function Onboarding() {
           </section>
         )}
 
-        <Activity running={busy !== null} label={t(busy ?? '')} stages={stages} />
+        {step === activityStep && <Activity running={busy !== null} label={t(busy ?? '')} stages={stages} />}
         {error && <p role="alert" className="m-0 text-sm text-weak">{error}</p>}
 
         {step >= 1 && step <= LAST_QUESTION && (
@@ -504,6 +517,16 @@ export function Onboarding() {
             </span>
           </div>
         )}
+      </div>
+      <aside className="onboarding-help" aria-label="About this step">
+        <span className="eyebrow">{step === 0 ? 'Your career, your decision' : `Your journey · ${Math.min(step, 6)} / 6`}</span>
+        <h2 className="h2">{help[0]}</h2>
+        <p className="m-0 text-graphite">{help[1]}</p>
+        <ol className="welcome-route">
+          {['Your skills today', 'Future roles that fit', 'A plan you can follow'].map((label, i) => <li key={label}><span>{i + 1}</span>{label}</li>)}
+        </ol>
+        <p className="m-0 border-t border-line pt-4 text-xs text-graphite">Public evidence. Explainable calculations. You choose the destination.</p>
+      </aside>
       </main>
     </div>
   )

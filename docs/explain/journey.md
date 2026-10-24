@@ -1,6 +1,6 @@
 # Personal journey
 
-**First-run flow:** `/` sends visitors without a saved profile to `/start`. After building,
+**First-run flow:** `/` always sends visitors to `/start`, including saved-profile users. After building,
 the final action opens Overview. Overview's edit action loads existing answers and updates the
 same profile without clearing its destination. Start over forgets the browser's profile key and
 resets the scenario; it does not delete database records. Evidence pages remain publicly accessible.
@@ -173,3 +173,8 @@ comparison and remain deferred. No tutoring, exercises or practice assessment ar
 ### Opening and saved profiles
 The root URL always opens the welcome flow at /start. Saved profiles are resumed explicitly through Continue with my saved profile, opening /overview. All Overview navigation uses /overview. A server 404 clears an obsolete browser profile key; transient failures keep it for retry.
 
+
+### Career workbook layout and resource windows
+Desktop pages use a centred workspace beside the menu; onboarding pairs each question with relevant help. Task examples come only from the selected role's own O*NET occupation (the task crosswalk first, otherwise the already stored occupation catalogue with release/fetch date), and extracted CV quotes prefill an editable task description. Activity results stay on the step that ran the action.
+
+My plan opens with three connected track stations. Full skill labels and explicit next/done/locked/no-planned-course states replace truncated labels. Selecting a skill opens three independently closable, scrollable resource panes. Escape or Close all dismisses them; keyboard focus stays inside the dialog and returns to the triggering node. Completion remains self-reported and does not prove proficiency.

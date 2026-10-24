@@ -95,3 +95,5 @@ Format: `YYYY-MM-DD HH:MM · who · decision · why · what we do instead`
 
 2026-10-24 · UI entry flow: always show /start on root navigation, with explicit saved-profile continuation to /overview. Clear only confirmed missing profiles (404), preserving keys across transient server failures. Scoring and journey order unchanged.
 
+
+2026-10-24 · Round 3 visual design: centred responsive career workbook; question/help onboarding; own-occupation task examples and editable CV quotes; three connected learning tracks with full skill labels and accessible temporary resource panes. Existing catalogue, planner and scoring rules preserved. No new dependencies.

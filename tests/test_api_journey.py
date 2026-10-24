@@ -1,8 +1,11 @@
 """The journey API: intake → profile → ranked roles → destination → pathway → future you."""
 
-from typing import Any
+from typing import Any, cast
 
+from fastapi import FastAPI
 from fastapi.testclient import TestClient
+
+from src.pack import load_pack
 
 NUR = {
     "situation": "working",
@@ -41,6 +44,38 @@ def test_pack_lists_skills_roles_and_synthetic_samples(client: TestClient) -> No
     assert body["task_examples"] and all(x["url"] for x in body["task_examples"])
     assert {s["id"] for s in body["samples"]} == {"nur", "hafiz", "mei"}
     assert "THIS PERSON DOES NOT EXIST" in client.get("/api/samples/nur").json()["text"]
+
+
+def test_task_examples_belong_to_the_selected_roles_own_occupation(client: TestClient) -> None:
+    pack = load_pack()
+    examples = client.get("/api/pack").json()["task_examples"]
+    assert examples
+    for example in examples:
+        role = pack.current_roles[example["role_id"]]
+        assert example["soc"] == role.soc
+        tasks = pack.tasks.occupations[role.soc]
+        assert any(example["text"] == task.text for ts in tasks.skills.values() for task in ts)
+
+
+def test_task_examples_use_stored_own_occupation_when_crosswalk_has_no_current_role(
+    client: TestClient,
+) -> None:
+    from datetime import UTC, datetime
+
+    from sqlalchemy import insert
+
+    from src.occupations.catalogue import catalogue_table, parse_onet
+    from tests.test_occupations import onet_zip
+
+    with cast(FastAPI, client.app).state.engine.begin() as conn:
+        rows = [{**r, "updated_at": datetime.now(UTC)} for r in parse_onet(onet_zip(), "31.0")]
+        conn.execute(insert(catalogue_table), rows)
+    examples = client.get("/api/pack").json()["task_examples"]
+    cash = [e for e in examples if e["role_id"] == "cash_application_analyst"]
+    assert len(cash) == 1
+    assert cash[0]["soc"] == "43-3031.00"
+    assert cash[0]["text"] == "Post journal entries."
+    assert "fetched" in cash[0]["source"]
 
 
 def test_parse_scrubs_and_labels_the_fallback(client: TestClient) -> None:
@@ -116,9 +151,8 @@ def test_editing_answers_preserves_the_same_profile_and_destination(client: Test
     saved = client.get(f"/api/profiles/{pid}").json()
     assert saved["destination"] == "cost_accountant"
     assert saved["profile"]["weekly_hours"] == 4
-    assert (
-        saved["profile"]["skills"] == client.get(f"/api/profiles/{pid}").json()["profile"]["skills"]
-    )
+    assert saved["profile"]["skills"]["cash_application"]["level"] == 3
+    assert saved["profile"]["skills"]["sql"]["level"] is None
     assert client.get(f"/api/profiles/{pid}/pathway").status_code == 200
 
 
