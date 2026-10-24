@@ -38,6 +38,7 @@ def create(client: TestClient, body: dict[str, Any] = NUR) -> str:
 def test_pack_lists_skills_roles_and_synthetic_samples(client: TestClient) -> None:
     body = client.get("/api/pack").json()
     assert len(body["destination_roles"]) == 9
+    assert body["task_examples"] and all(x["url"] for x in body["task_examples"])
     assert {s["id"] for s in body["samples"]} == {"nur", "hafiz", "mei"}
     assert "THIS PERSON DOES NOT EXIST" in client.get("/api/samples/nur").json()["text"]
 
@@ -105,6 +106,20 @@ def test_destination_persists_and_drives_the_pathway(client: TestClient) -> None
     assert path["role_id"] == "o2c_reporting_analyst"
     assert path["steps"] and all(s["sdgs"] for s in path["steps"])
     assert path["courses_checked"]
+
+
+def test_editing_answers_preserves_the_same_profile_and_destination(client: TestClient) -> None:
+    pid = create(client)
+    client.post(f"/api/profiles/{pid}/destination", json={"role_id": "cost_accountant"})
+    edited = {**NUR, "weekly_hours": 4, "interests": ["green"]}
+    assert client.put(f"/api/profiles/{pid}", json=edited).status_code == 200
+    saved = client.get(f"/api/profiles/{pid}").json()
+    assert saved["destination"] == "cost_accountant"
+    assert saved["profile"]["weekly_hours"] == 4
+    assert (
+        saved["profile"]["skills"] == client.get(f"/api/profiles/{pid}").json()["profile"]["skills"]
+    )
+    assert client.get(f"/api/profiles/{pid}/pathway").status_code == 200
 
 
 def test_future_compares_today_and_after_in_both_scenarios(client: TestClient) -> None:

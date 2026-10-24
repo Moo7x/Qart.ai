@@ -81,6 +81,15 @@ def pack_info() -> dict[str, Any]:
         "samples": [{"id": k, "label": v} for k, v in SAMPLES.items()],
         "proficiency": list(params.PROFICIENCY_LABELS),
         "courses_checked": pack.courses_checked,
+        "task_examples": [
+            {
+                "text": next(iter(occ.skills.values()))[0].text,
+                "source": pack.tasks.source,
+                "url": pack.tasks.source_url,
+            }
+            for occ in pack.tasks.occupations.values()
+            if occ.skills
+        ][:4],
     }
 
 

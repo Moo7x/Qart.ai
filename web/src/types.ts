@@ -115,6 +115,7 @@ export type CurrentRole = {
   other_sectors: string[]
 }
 export type PackInfo = {
+  task_examples: { text: string; source: string; url: string }[]
   field: string
   skills: PackSkill[]
   current_roles: CurrentRole[]

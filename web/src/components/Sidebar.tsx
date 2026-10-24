@@ -1,7 +1,7 @@
-import { Activity, ArrowRight, ChartLine, FileText, Flag, ListOrdered, Radar, Route as RouteIcon, Search, UserRound } from 'lucide-react'
+import { Activity, ArrowRight, ChartLine, FileText, Flag, ListOrdered, Radar, Route as RouteIcon, Search } from 'lucide-react'
 import { LanguageSwitch, useT } from '../i18n'
 import { useEffect, useState } from 'react'
-import { Link, NavLink, useLocation } from 'react-router-dom'
+import { NavLink, useLocation } from 'react-router-dom'
 import { formatWhen, useApi } from '../api'
 import { useJourney } from '../state'
 import type { ChangesResponse, Run } from '../types'
@@ -19,7 +19,7 @@ export function Sidebar() {
   const { t } = useT()
   const runs = useApi<Run[]>('/api/pipeline/runs?limit=1', RUNS_POLL_MS)
   const latest = runs.data?.[0]
-  const { profileId, setProfileId } = useJourney()
+  const { profileId } = useJourney()
   const changes = useApi<ChangesResponse>(profileId ? `/api/profiles/${profileId}/changes` : null, RUNS_POLL_MS)
   // On phones the menu folds into a button so the page content comes first.
   const [open, setOpen] = useState(false)
@@ -78,20 +78,6 @@ export function Sidebar() {
         <FileText size={16} aria-hidden="true" />
         {t('My CV')}
       </NavLink>
-      {profileId ? (
-        <button
-          type="button"
-          onClick={() => setProfileId(null)}
-          className="flex min-h-[38px] cursor-pointer items-center gap-2.5 rounded-md border-0 bg-transparent px-2.5 text-left text-sm text-stone hover:bg-obsidian hover:text-white"
-        >
-          <UserRound size={16} aria-hidden="true" />
-          {t('Start again with a new profile')}
-        </button>
-      ) : (
-        <Link to="/start" className="mt-1 flex min-h-[38px] items-center justify-center rounded-md bg-violet text-sm font-medium text-white no-underline hover:bg-violet-hover">
-          {t('Start · tell us about yourself')}
-        </Link>
-      )}
       <div className="mx-1.5 my-3 h-px bg-surface" />
       <span className="cap px-2.5 pb-1.5 text-slate-mid">{t('Evidence')}</span>
       <NavLink to="/trends" className={navClass}>

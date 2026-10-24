@@ -1,6 +1,6 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useT } from '../i18n'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { getJSON, sendJSON, uploadFile, useApi } from '../api'
 import { Activity } from '../components/Activity'
 import { Dots } from '../components/journey'
@@ -37,10 +37,14 @@ function chip(on: boolean): string {
 export function Onboarding() {
   const { t } = useT()
   const navigate = useNavigate()
-  const { setProfileId } = useJourney()
+  const { profileId, setProfileId } = useJourney()
+  const [searchParams] = useSearchParams()
+  const editing = searchParams.get('edit') === '1' && profileId !== null
+  const existing = useApi<{ profile: ProfileData }>(editing ? `/api/profiles/${profileId}` : null)
+  const hydrated = useRef(false)
   const pack = useApi<PackInfo>('/api/pack')
   const signals = useApi<SignalsResponse>('/api/signals')
-  const [step, setStep] = useState(0)
+  const [step, setStep] = useState(editing ? 1 : 0)
   const [situation, setSituation] = useState<Situation>('working')
   const [stages, setStages] = useState<Stage[] | undefined>(undefined)
   const [extraction, setExtraction] = useState<Extraction | null>(null)
@@ -58,6 +62,13 @@ export function Onboarding() {
   const [built, setBuilt] = useState<MatchesResponse | null>(null)
   const [suggestions, setSuggestions] = useState<SkillSuggestions | null>(null)
   const [selected, setSelected] = useState<string[]>([])
+  useEffect(() => {
+    if (!editing || !existing.data || hydrated.current) return
+    const p = existing.data.profile
+    setSituation(p.situation); setRole(p.current_role); setYears(p.years_experience === null ? '' : String(p.years_experience))
+    setSkills(p.skills); setHours(p.weekly_hours); setBudget(p.budget); setInterests(p.interests); setSdgs(p.sdg_priorities)
+    hydrated.current = true
+  }, [editing, existing.data])
 
   const skillName = (id: string) => pack.data?.skills.find((s) => s.id === id)?.name ?? id
   const go = (n: number) => setStep(Math.max(0, Math.min(BUILDING, n)))
@@ -127,11 +138,16 @@ export function Onboarding() {
         interests,
         sdg_priorities: sdgs,
         skills,
-        extraction_engine: extraction?.engine ?? 'none',
+        extraction_engine: extraction?.engine ?? existing.data?.profile.extraction_engine ?? 'none',
       }
-      const created = await sendJSON<{ id: string }>('/api/profiles', { body: profile })
-      setProfileId(created.id)
-      setBuilt(await getJSON<MatchesResponse>(`/api/profiles/${created.id}/matches`))
+      let id = profileId
+      if (editing && id) await sendJSON(`/api/profiles/${id}`, { method: 'PUT', body: profile })
+      else {
+        const created = await sendJSON<{ id: string }>('/api/profiles', { body: profile })
+        id = created.id
+        setProfileId(id)
+      }
+      setBuilt(await getJSON<MatchesResponse>(`/api/profiles/${id}/matches`))
     })
 
   const addable = (pack.data?.skills ?? []).filter((s) => !(s.id in skills) && addQuery.length > 1 && s.name.toLowerCase().includes(addQuery.toLowerCase())).slice(0, 6)
@@ -149,10 +165,12 @@ export function Onboarding() {
           </svg>
           <span className="text-[17px] font-semibold tracking-tight">Qart.ai</span>
         </Link>
-        <Link to="/" className="text-sm text-graphite">{t('Skip to the evidence overview')}</Link>
+        <Link to="/live" className="text-sm text-graphite">{t('Browse public evidence')}</Link>
       </header>
 
       <main className="relative mx-auto flex max-w-[640px] flex-col gap-7 px-6 pb-16 pt-8">
+        {editing && existing.loading && <p role="status">Loading your saved answers…</p>}
+        {editing && existing.error && <p role="alert">Could not load your saved answers. <button type="button" className="btn" onClick={existing.reload}>Retry</button></p>}
         {step >= 1 && step <= LAST_QUESTION && (
           <div className="flex flex-col gap-2.5">
             <div role="progressbar" aria-valuemin={1} aria-valuemax={LAST_QUESTION} aria-valuenow={step} aria-label="Onboarding progress" className="grid grid-cols-6 gap-1.5">
@@ -261,6 +279,9 @@ export function Onboarding() {
                 </select>
               </label>
             )}
+            {situation !== 'student' && <div className="flex flex-wrap gap-2" aria-label="Role examples">
+              {pack.data?.current_roles.slice(0,4).map((r) => <button key={r.id} type="button" className={chip(role === r.id)} onClick={() => setRole(r.id)}>{r.title}</button>)}
+            </div>}
             <label className="flex flex-col gap-1.5 text-[13px] font-medium">
               Years of work experience
               <input type="number" min={0} max={60} value={years} onChange={(e) => setYears(e.target.value)} className="min-h-[44px] rounded-md border border-hairline bg-fog px-3 text-[15px]" />
@@ -272,6 +293,11 @@ export function Onboarding() {
             <button type="button" className="btn self-start" disabled={busy !== null || tasks.trim().length < 3} onClick={findFromTasks}>
               Find the matching skills
             </button>
+            <div className="flex flex-col gap-2" aria-label="Task examples">
+              <span className="cap">Or start from an O*NET task and edit it</span>
+              {pack.data?.task_examples.map((example) => <button key={example.text} type="button" className="btn justify-start py-2 text-left text-xs" onClick={() => { setTasks(example.text); setSuggestions(null) }}>{example.text}</button>)}
+              {pack.data?.task_examples[0] && <a className="text-xs text-graphite" href={pack.data.task_examples[0].url} target="_blank" rel="noreferrer">Task examples: {pack.data.task_examples[0].source}</a>}
+            </div>
             {suggestions && <section aria-label="Suggested skills" className="border-y border-hairline py-4">
               <p className="m-0 text-sm font-medium">{suggestions.hits.length ? 'Choose the skills that describe your work' : 'No matching skills found. Try a specific task, or add skills on the next step.'}</p>
               <p className="text-xs text-graphite">Matched by {suggestions.engine}. {suggestions.note}</p>
@@ -377,7 +403,7 @@ export function Onboarding() {
                 const on = interests.includes(i.id)
                 return (
                   <button key={i.id} type="button" aria-pressed={on} className={chip(on)} onClick={() => setInterests(on ? interests.filter((x) => x !== i.id) : [...interests, i.id])}>
-                    {t(i.label)}
+                    {t(i.label)}<span className="ml-1 text-xs">({pack.data?.skills.filter((s) => s.kind === i.id).slice(0,2).map((s) => s.name).join(', ')})</span>
                   </button>
                 )
               })}
@@ -416,8 +442,7 @@ export function Onboarding() {
             </div>
             {built && (
               <div className="flex flex-wrap items-center gap-3">
-                <button type="button" className="btn btn-v min-h-[44px]" onClick={() => navigate('/roles')}>{t('See roles that fit me →')}</button>
-                <Link to="/" className="text-[13px] text-graphite">{t('Or look at the evidence first')}</Link>
+                <button type="button" className="btn btn-v min-h-[44px]" onClick={() => navigate('/')}>{t('Open my overview →')}</button>
               </div>
             )}
           </section>
@@ -433,7 +458,7 @@ export function Onboarding() {
               {step < LAST_QUESTION && (
                 <button type="button" className="min-h-[44px] cursor-pointer border-0 bg-transparent px-3 text-[15px] text-graphite" onClick={() => go(step + 1)}>{t('Skip')}</button>
               )}
-              <button type="button" className="btn btn-v min-h-[44px]" disabled={busy !== null} onClick={() => (step === LAST_QUESTION ? finish() : go(step + 1))}>
+              <button type="button" className="btn btn-v min-h-[44px]" disabled={busy !== null || (editing && !hydrated.current)} onClick={() => (step === LAST_QUESTION ? finish() : go(step + 1))}>
                 {step === LAST_QUESTION ? 'Build my picture' : 'Continue'}
               </button>
             </span>

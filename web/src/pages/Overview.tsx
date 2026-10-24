@@ -128,14 +128,7 @@ function AxisRow({ axis }: { axis: RadarAxis }) {
 function PersonalRadar({ onPick }: { onPick: (s: Signal) => void }) {
   const { profileId, scenario } = useJourney()
   const view = useApi<RadarResponse>(profileId ? `/api/profiles/${profileId}/radar?scenario=${scenario}` : null)
-  if (!profileId) {
-    return (
-      <section className="card-light flex flex-wrap items-center justify-between gap-3 px-6 py-4 text-[13px]">
-        <span>Tell us about yourself to see your own skills radar and the signals for your current job.</span>
-        <Link className="btn btn-v" to="/start">Start</Link>
-      </section>
-    )
-  }
+  if (!profileId) return null
   if (view.loading) return <Loading what="your radar" />
   if (view.error) return <Problem what="your radar" message={view.error} onRetry={view.reload} />
   const data = view.data
@@ -211,6 +204,7 @@ function CurrentJob() {
 
 export function Overview() {
   const { t } = useT()
+  const { setProfileId, setScenario } = useJourney()
   const signals = useApi<SignalsResponse>('/api/signals')
   const sources = useApi<SourceStatus[]>('/api/sources')
   const [selected, setSelected] = useState<Signal | null>(null)
@@ -232,6 +226,10 @@ export function Overview() {
           needs enough comparable data, and expert views are kept apart from measured data.
         </p>
       </header>
+      <div className="flex flex-wrap items-center gap-3">
+        <Link className="btn" to="/start?edit=1">Edit my profile</Link>
+        <button type="button" className="cursor-pointer border-0 bg-transparent text-sm text-graphite underline underline-offset-4" onClick={() => { setProfileId(null); setScenario('moderate') }}>Start over</button>
+      </div>
 
       <PersonalRadar onPick={setSelected} />
       <CurrentJob />

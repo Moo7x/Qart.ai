@@ -1,5 +1,11 @@
 # Personal journey
 
+**First-run flow:** `/` sends visitors without a saved profile to `/start`. After building,
+the final action opens Overview. Overview's edit action loads existing answers and updates the
+same profile without clearing its destination. Start over forgets the browser's profile key and
+resets the scenario; it does not delete database records. Evidence pages remain publicly accessible.
+Role/task/interest/goal example chips derive from the verified pack; task examples cite O*NET.
+
 **Fix-round diagnostics:** an unhandled API error returns a random reference. Logs contain only
 the route template, exception class and code locations, never exception values or SQL parameters.
 The opt-in `tests/test_postgres_journey.py` checks onboarding on a disposable PostgreSQL database

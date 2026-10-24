@@ -1,4 +1,4 @@
-import { Route, Routes, useLocation } from 'react-router-dom'
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { Sidebar } from './components/Sidebar'
 import { Cv } from './pages/Cv'
 import { Future } from './pages/Future'
@@ -12,11 +12,13 @@ import { Occupations } from './pages/Occupations'
 import { Roles } from './pages/Roles'
 import { Trends } from './pages/Trends'
 import { LanguageProvider } from './i18n'
-import { JourneyProvider } from './state'
+import { JourneyProvider, useJourney } from './state'
 
 function Shell() {
   const location = useLocation()
-  if (location.pathname === '/start') return <Onboarding />
+  const { profileId } = useJourney()
+  if (location.pathname === '/start') return <Onboarding key={location.search} />
+  if (location.pathname === '/' && !profileId) return <Navigate to="/start" replace />
   return (
     <div className="flex min-h-screen flex-wrap items-start bg-fog">
       <Sidebar />

@@ -6,7 +6,7 @@ import { Activity } from '../components/Activity'
 import { ReportProblem } from '../components/Feedback'
 import { Loading, Problem } from '../components/ui'
 import { useJourney } from '../state'
-import type { GoalInput, GoalResponse, PostingRequirement } from '../types'
+import type { GoalInput, GoalResponse, PostingRequirement, PackInfo } from '../types'
 import { NeedProfile } from './Roles'
 
 const EMPTY: GoalInput = { role_title: '', company: '', location: '', why: '', posting_text: '', posting_url: '', posting_date: '' }
@@ -34,6 +34,7 @@ function Field({ label, value, onChange, placeholder, area }: { label: string; v
 export function Goal() {
   const { t } = useT()
   const { profileId, scenario } = useJourney()
+  const pack = useApi<PackInfo>('/api/pack')
   const view = useApi<GoalResponse>(profileId ? `/api/profiles/${profileId}/goal?scenario=${scenario}` : null)
   const [form, setForm] = useState<GoalInput>(EMPTY)
   const [result, setResult] = useState<GoalResponse | null>(null)
@@ -81,6 +82,9 @@ export function Goal() {
           <Field label="Role you want" value={form.role_title} onChange={set('role_title')} placeholder="e.g. FP&A Analyst" />
           <Field label="Company (optional)" value={form.company} onChange={set('company')} placeholder="e.g. a GBS centre in KL" />
           <Field label="Location (optional)" value={form.location} onChange={set('location')} placeholder="e.g. Kuala Lumpur" />
+        </div>
+        <div className="flex flex-wrap gap-2" aria-label="Goal examples from the verified pack">
+          {pack.data?.destination_roles.slice(0,3).map((r) => <button key={r.id} type="button" className="btn text-xs" onClick={() => set('role_title')(r.title)}>{r.title}</button>)}
         </div>
         <Field label="Why this goal matters to you (optional)" value={form.why} onChange={set('why')} />
         <Field label="Paste a public job posting (optional)" value={form.posting_text} onChange={set('posting_text')} placeholder="Paste the requirements section of a posting you found" area />

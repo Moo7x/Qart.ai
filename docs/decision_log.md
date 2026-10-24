@@ -1,5 +1,7 @@
 # Decision log (our own reasoning: evidence the idea is ours)
 
+- 2026-10-24 · team · Route first-time root visitors into onboarding and saved-profile visitors into Overview. Edit hydrates and updates the same profile; Start over forgets the browser key, not database records. Remove onboarding navigation entries. Derive editable role/task/interest/goal examples from the pack and preserve free text and labelled synthetic CV samples.
+
 - 2026-10-24 · team · Any occupation reports observed catalogue/index readiness and limits. A reviewed Kerani akaun query alias supports the example during English keyword fallback, not arbitrary Malay translation. Cache identity includes the database and all vector hashes; removed occupation codes and malformed vectors no longer crash detection. Local English detection already worked; cloud state still needs deployment logs.
 
 - 2026-10-24 · team · Move skill search from eight-second runsync to the shared async RunPod queue; show measured stages, explicit fallback/empty states and selectable suggestions. Do not automatically add top hits or present similarity as proficiency. Cache keys include skill text; malformed vectors fall back visibly.
