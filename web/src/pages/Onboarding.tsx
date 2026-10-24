@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useT } from '../i18n'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { getJSON, sendJSON, uploadFile, useApi } from '../api'
-import { Activity, RunLog, type LogLine } from '../components/Activity'
+import { ProcessLog, RunLog, type LogLine } from '../components/Activity'
 import { LevelPicker } from '../components/journey'
 import { useJourney } from '../state'
 import type { Extraction, MatchesResponse, PackInfo, PathwayResponse, ProfileData, SignalsResponse, Situation, SkillClaim, SkillKind, Stage } from '../types'
@@ -47,6 +47,8 @@ export function Onboarding() {
   const [situation, setSituation] = useState<Situation>('working')
   const [stages, setStages] = useState<Stage[] | undefined>(undefined)
   const [activityStep, setActivityStep] = useState(0)
+  const [activityTitle, setActivityTitle] = useState('')
+  const [activityResult, setActivityResult] = useState<string | undefined>(undefined)
   const [extraction, setExtraction] = useState<Extraction | null>(null)
   const [role, setRole] = useState('other')
   const [years, setYears] = useState('')
@@ -87,11 +89,20 @@ export function Onboarding() {
     }
     setSkills(found)
     setTasks([...new Set(result.skills.map((s) => s.evidence).filter(Boolean))].join('\n'))
+    const removed = Object.values(result.removed).reduce((a, b) => a + b, 0)
+    setActivityResult(
+      `${result.skills.length} skill${result.skills.length === 1 ? '' : 's'} found, each quoting your CV · ${removed} personal detail${removed === 1 ? '' : 's'} removed` +
+        (result.rejected.length ? ` · ${result.rejected.length} claim${result.rejected.length === 1 ? '' : 's'} dropped: quote not in the CV` : ''),
+    )
+    // The log follows the person to the step where the results are shown.
+    setActivityStep(3)
     go(3)
   }
 
   async function run(label: string, action: () => Promise<void>) {
     setActivityStep(step)
+    setActivityTitle(label.replace(/…$/, ''))
+    setActivityResult(undefined)
     setStages(undefined)
     setBusy(label)
     setError(null)
@@ -120,6 +131,7 @@ export function Onboarding() {
       const result = await sendJSON<SkillSuggestions>('/api/skills/search', { body: { text: tasks } })
       setSuggestions(result)
       setStages(result.stages)
+      setActivityResult(result.hits.length ? `${result.hits.length} matching skill${result.hits.length === 1 ? '' : 's'} to choose from below` : 'No matching skill found; try a more specific task')
     })
 
   function setLevel(id: string, level: number) {
@@ -501,7 +513,7 @@ export function Onboarding() {
           </section>
         )}
 
-        {step === activityStep && <Activity running={busy !== null} label={t(busy ?? '')} stages={stages} />}
+        {step === activityStep && step < BUILDING && <ProcessLog title={activityTitle || 'Activity'} running={busy !== null} label={t(busy ?? '')} stages={stages} result={activityResult} />}
         {error && <p role="alert" className="m-0 text-sm text-weak">{error}</p>}
 
         {step >= 1 && step <= LAST_QUESTION && (

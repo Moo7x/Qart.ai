@@ -51,6 +51,27 @@ export function RunLog({ lines, total, title }: { lines: LogLine[]; total: numbe
   )
 }
 
+// A long action (reading a CV, matching tasks) as the same terminal-style log: while it runs,
+// one live line with the elapsed time; afterwards, each stage the server measured, plus a result
+// line built from what came back. Nothing is shown as done before the server says so.
+export function ProcessLog({ title, running, label, stages, result }: { title: string; running: boolean; label: string; stages?: Stage[]; result?: string }) {
+  const [startedAt, setStartedAt] = useState(() => Date.now())
+  useEffect(() => {
+    if (running) setStartedAt(Date.now())
+  }, [running])
+  if (running) return <RunLog title={title} total={1} lines={[{ label, status: 'running', startedAt }]} />
+  if (!stages || stages.length === 0) return null
+  const lines: LogLine[] = stages.map((s) => ({
+    label: s.name,
+    status: 'done',
+    startedAt,
+    seconds: s.seconds,
+    detail: `${s.engine}${s.outcome !== 'ok' ? ` · ${s.outcome}, fallback used` : ''}`,
+  }))
+  if (result) lines.push({ label: 'Result', status: 'done', startedAt, seconds: 0, detail: result })
+  return <RunLog title={title} total={lines.length} lines={lines} />
+}
+
 // Status of a long action: while it runs, what it is doing and for how long (no fake progress
 // bar, the work has no known length); afterwards, the stages the server measured.
 export function Activity({ running, label, stages, dark = false }: { running: boolean; label: string; stages?: Stage[]; dark?: boolean }) {
