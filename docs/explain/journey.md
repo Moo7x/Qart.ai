@@ -47,6 +47,17 @@ when the posting says so; otherwise keyword matching, labelled. Coverage is coun
 level 2 where the posting states none (declared). Stepping stones are verified roles sharing the
 posting's skills, with the person's fit and learning that serves both. No scraping or applying.
 
+**Journey screens.** Navigation follows My goal → My options (Roles) → My plan (Pathway) → What
+changed, with Trends, Any occupation and Live intelligence under Evidence. Overview shows what is
+changing in the person's current job (its occupation's evidence). Roles compares two roles side by
+side, links each role to external job searches (JobStreet by title, the MYFutureJobs search page;
+Qart does not read or check openings), and tailors one line by situation: graduates see TalentCorp's
+listed ways in, switchers see which stated skills carry over. Pathway shows a clickable
+prerequisite roadmap (done, ready, needs a prerequisite) and three progress measures kept apart:
+plan completion (self-reported, saved per profile in `src/journey/progress.py`), requirement
+coverage (changes only when the person edits their levels) and skills still to tell; plus this
+week's steps within the weekly hours, and pause/resume that never lowers anything.
+
 **Decision support.** `src/match/decision.py`: meters keep coverage (the fit), essential readiness
 (below level versus not stated) and profile completeness apart; the fit range recomputes with
 unstated skills at proficient (assumption-based, not a statistical interval); the most valuable
