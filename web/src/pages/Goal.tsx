@@ -3,6 +3,7 @@ import { useT } from '../i18n'
 import { Link } from 'react-router-dom'
 import { sendJSON, useApi } from '../api'
 import { Activity } from '../components/Activity'
+import { JobPosts } from '../components/CompareRoles'
 import { ReportProblem } from '../components/Feedback'
 import { LEVEL_NAMES, levelText, JourneyRoute, NextStep } from '../components/journey'
 import { Loading, Problem } from '../components/ui'
@@ -78,7 +79,8 @@ export function Goal() {
       {view.loading && <Loading what="your goal" />}
       {view.error && <Problem what="your goal" message={view.error} onRetry={view.reload} />}
 
-      <form onSubmit={save} className="card-light flex flex-col gap-3 px-6 py-5">
+      <div className="grid items-start gap-6 xl:grid-cols-[minmax(0,1.6fr)_minmax(260px,1fr)]">
+      <form onSubmit={save} className="card-light flex min-w-0 flex-col gap-4 px-6 py-5">
         <div className="grid gap-3 [grid-template-columns:repeat(auto-fit,minmax(200px,1fr))]">
           <Field label="Role you want" value={form.role_title} onChange={set('role_title')} placeholder="e.g. FP&A Analyst" />
           <Field label="Company (optional)" value={form.company} onChange={set('company')} placeholder="e.g. a GBS centre in KL" />
@@ -97,6 +99,8 @@ export function Goal() {
         <Activity running={busy} label="Reading the posting and checking every quote" stages={result?.stages} />
         {error && <p role="alert" className="m-0 text-sm text-weak">{error}</p>}
       </form>
+      <aside className="section xl:sticky xl:top-8"><span className="eyebrow">A goal you define</span><h2 className="h2">Start with the work you want</h2><p className="m-0 text-graphite">A role title saves your goal. Add a public posting to compare its actual requirements with the skills you stated.</p><p className="m-0 text-sm text-graphite">Company and location are your preferences. They do not imply a vacancy or a hiring prediction.</p>{form.role_title.trim().length > 1 && <JobPosts title={form.role_title} />}</aside>
+      </div>
 
       {cov && (
         <section className="card-light flex flex-col gap-3 px-6 py-5">
@@ -132,6 +136,7 @@ export function Goal() {
             {result.stepping_stones.map((s) => (
               <div key={s.role_id} className="flex flex-col gap-1 rounded-lg border border-mist p-3 text-[13px]">
                 <span className="font-semibold">{s.title}</span>
+                <JobPosts title={s.title} className="job-link self-start" />
                 <span className="font-mono text-xs">fit {Math.round(s.fit)} / 100{s.longer_route ? ' · longer route' : ''}</span>
                 <span className="text-xs text-graphite">Shares {s.overlap}: {s.shared.join(', ')}</span>
                 {s.shared_courses.length > 0 && (

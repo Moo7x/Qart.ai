@@ -291,8 +291,8 @@ export function Roles() {
               const ranks = stability.data?.roles.find((x) => x.role_id === r.role_id)?.ranks
               const on = r.role_id === role.role_id
               return (
+                <div key={r.role_id}>
                 <button
-                  key={r.role_id}
                   type="button"
                   aria-pressed={on}
                   onClick={() => setSelected(r.role_id)}
@@ -318,6 +318,8 @@ export function Roles() {
                   </span>
                   <span className="text-right font-mono text-xl tracking-tight">{Math.round(r.fit)}</span>
                 </button>
+                <JobPosts title={r.title} className="job-link mb-3 ml-11" />
+                </div>
               )
             })}
             <p className="m-0 pt-3 text-[11px] text-graphite">

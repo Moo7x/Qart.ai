@@ -11,9 +11,9 @@ export function jobSearches(title: string) {
   const slug = encodeURIComponent(plain.toLowerCase().replace(/\s+/g, '-'))
   const words = encodeURIComponent(plain).replace(/%20/g, '+')
   return [
-    { label: 'JobStreet · all Malaysia', url: `https://my.jobstreet.com/${slug}-jobs`, hint: `live posts for “${plain}”` },
-    { label: 'JobStreet · Kuala Lumpur', url: `https://my.jobstreet.com/${slug}-jobs/in-Kuala-Lumpur`, hint: 'where most GBS centres are' },
-    { label: 'Indeed Malaysia', url: `https://malaysia.indeed.com/jobs?q=${words}&l=Malaysia`, hint: `live posts for “${plain}”` },
+    { label: 'JobStreet · all Malaysia', url: `https://my.jobstreet.com/${slug}-jobs`, hint: `Search Malaysia for “${plain}”` },
+    { label: 'JobStreet · Kuala Lumpur', url: `https://my.jobstreet.com/${slug}-jobs/in-Kuala-Lumpur`, hint: `Search Kuala Lumpur for “${plain}”` },
+    { label: 'Indeed Malaysia', url: `https://malaysia.indeed.com/jobs?q=${words}&l=Malaysia`, hint: `Search Malaysia for “${plain}”` },
     { label: 'MYFutureJobs (government portal)', url: 'https://candidates.myfuturejobs.gov.my/search-jobs', hint: `type “${plain}” there` },
   ]
 }
@@ -48,7 +48,7 @@ export function JobPosts({ title, label = 'See job posts', className = 'btn' }: 
             {
               key: 'posts',
               title: 'Live job posts for this role',
-              hint: 'Each link opens today’s postings on that site, in a new tab.',
+              hint: 'External searches, checked 24 Oct 2026. Results may vary or be empty; no vacancy is guaranteed.',
               body: (
                 <div className="flex flex-col gap-3">
                   <ul className="m-0 flex list-none flex-col p-0">

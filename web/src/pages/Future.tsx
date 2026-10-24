@@ -134,7 +134,7 @@ export function Future() {
               <div className="flex flex-col gap-2">
                 <h3 className="cap m-0">Emerging roles observed · PDF p. {data.market.emerging_page}</h3>
                 <div className="flex flex-wrap gap-1.5">
-                  {data.market.emerging_roles.map((n) => <span key={n} className="tag border border-dashed border-stone bg-paper text-void">{n}</span>)}
+                  {data.market.emerging_roles.map((n) => <JobPosts key={n} title={n} label={`${n} ↗`} className="job-link text-left" />)}
                 </div>
                 <span className="text-[12px] text-graphite">No verified Qart pathway for these yet, so they are shown, not scored.</span>
               </div>

@@ -24,7 +24,7 @@ function readDone(key: string): string[] {
 export function Pathway() {
   const { profileId, scenario } = useJourney()
   if (!profileId) return <NeedProfile />
-  return <ProfilePathway key={profileId} profileId={profileId} scenario={scenario} />
+  return <ProfilePathway key={`${profileId}-${scenario}`} profileId={profileId} scenario={scenario} />
 }
 
 function ProfilePathway({ profileId, scenario }: { profileId: string; scenario: Scenario }) {
@@ -34,18 +34,30 @@ function ProfilePathway({ profileId, scenario }: { profileId: string; scenario: 
   // Self-reported completion, saved per profile on the server; it never changes skills or fit.
   const progress = useApi<ProgressResponse>(`/api/profiles/${profileId}/progress?scenario=${scenario}`)
   const [state, setState] = useState<ProgressResponse | null>(null)
+  const [saving, setSaving] = useState(false)
+  const [saveError, setSaveError] = useState<string | null>(null)
   const current = state ?? progress.data
   const done = current?.done ?? []
 
   async function save(next: { done: string[]; paused: boolean }) {
-    setState(await sendJSON<ProgressResponse>(`/api/profiles/${profileId}/progress?scenario=${scenario}`, { method: 'PUT', body: next }))
-    window.dispatchEvent(new Event(PROGRESS_EVENT))
+    setSaving(true)
+    setSaveError(null)
+    try {
+      setState(await sendJSON<ProgressResponse>(`/api/profiles/${profileId}/progress?scenario=${scenario}`, { method: 'PUT', body: next }))
+      window.dispatchEvent(new Event(PROGRESS_EVENT))
+      return true
+    } catch (reason) {
+      setSaveError(reason instanceof Error ? reason.message : String(reason))
+      return false
+    } finally {
+      setSaving(false)
+    }
   }
 
   useEffect(() => {
     const legacy = readDone(`qart.done.${profileId}`)
     if (progress.data && progress.data.done.length === 0 && legacy.length > 0) {
-      void save({ done: legacy, paused: progress.data.paused }).then(() => window.localStorage.removeItem(`qart.done.${profileId}`))
+      void save({ done: legacy, paused: progress.data.paused }).then((saved) => { if (saved) window.localStorage.removeItem(`qart.done.${profileId}`) })
     }
   }, [progress.data]) // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -87,6 +99,22 @@ function ProfilePathway({ profileId, scenario }: { profileId: string; scenario: 
             </div>
           </header>
 
+          <section aria-label="Your roadmap" className="flex min-w-0 flex-col gap-4">
+            <div className="flex flex-col gap-1">
+              <h2 className="h2">Your roadmap</h2>
+              <p className="m-0 max-w-[720px] text-[13px] text-graphite">
+                Three tracks: AI basics first, then the skills this role needs without AI and with AI. Each step opens its courses, YouTube videos and articles; a step unlocks when the one before it in its track is done.
+              </p>
+            </div>
+            {(tracks.loading || (progress.loading && !current)) && <Loading what="your roadmap" />}
+            {tracks.error && <Problem what="your roadmap" message={tracks.error} onRetry={tracks.reload} />}
+            {saveError && <p role="alert" className="m-0 text-weak">Progress was not saved: {saveError}. Try the action again.</p>}
+            {/* Drawn only once saved progress is known, so steps never flash the wrong state. */}
+            {tracks.data && (current || progress.error) && <TrackMap tracks={tracks.data.tracks} done={done} onToggle={toggle} paused={saving || progress.loading || (current?.paused ?? false)} checked={tracks.data.resources_checked} />}
+          </section>
+
+          {tracks.data && <RouteCompare data={tracks.data.comparison} scenario={scenario} />}
+
           {current?.plan && (
             <section aria-label="Your progress" className="flex flex-col gap-3">
               <div className="flex flex-wrap items-end justify-between gap-3">
@@ -97,7 +125,7 @@ function ProfilePathway({ profileId, scenario }: { profileId: string; scenario: 
                     {current.paused && <span className="ml-2 font-semibold text-weak">Paused</span>}
                   </span>
                 </div>
-                <button type="button" className="btn" onClick={() => save({ done, paused: !current.paused })}>{current.paused ? t('Resume') : t('Pause for now')}</button>
+                <button type="button" className="btn" disabled={saving} onClick={() => save({ done, paused: !current.paused })}>{current.paused ? t('Resume') : t('Pause for now')}</button>
               </div>
               <div
                 role="progressbar"
@@ -125,20 +153,6 @@ function ProfilePathway({ profileId, scenario }: { profileId: string; scenario: 
               )}
             </section>
           )}
-
-          <section aria-label="Your roadmap" className="flex min-w-0 flex-col gap-4">
-            <div className="flex flex-col gap-1">
-              <h2 className="h2">Your roadmap</h2>
-              <p className="m-0 max-w-[720px] text-[13px] text-graphite">
-                Three tracks: AI basics first, then the skills this role needs without AI and with AI. Each step opens its courses, YouTube videos and articles; a step unlocks when the one before it in its track is done.
-              </p>
-            </div>
-            {tracks.loading && <Loading what="your roadmap" />}
-            {tracks.error && <Problem what="your roadmap" message={tracks.error} onRetry={tracks.reload} />}
-            {tracks.data && <TrackMap tracks={tracks.data.tracks} done={done} onToggle={toggle} paused={current?.paused ?? false} checked={tracks.data.resources_checked} />}
-          </section>
-
-          {tracks.data && <RouteCompare data={tracks.data.comparison} scenario={scenario} />}
 
           <div className="grid items-start gap-8 lg:grid-cols-[minmax(0,1.6fr)_minmax(280px,1fr)]">
             <section aria-label="About the plan" className="flex min-w-0 flex-col gap-3">

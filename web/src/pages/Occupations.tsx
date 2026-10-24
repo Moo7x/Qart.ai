@@ -39,6 +39,8 @@ export function Occupations() {
           Not in finance? Type your job title in English or Malay. We find the matching occupation and show the public evidence available for it: AI use on its tasks, potential exposure and Malaysian labour signals. Full role plans exist only for GBS finance.
         </p>
       </header>
+      <div className="grid items-start gap-6 xl:grid-cols-[minmax(280px,1fr)_minmax(0,1.6fr)]">
+      <div className="flex min-w-0 flex-col gap-5 xl:sticky xl:top-8">
       {status.data && <div className="border-y border-hairline py-3 text-sm text-graphite">
         <span className="tag bg-observed-bg text-observed">Observed · catalogue status</span>{' '}
         {status.data.occupations ? <>{status.data.occupations} occupations · {status.data.vectors} indexed · O*NET {status.data.release} · updated {status.data.updated_at?.slice(0,10)}.</> : <>The occupation catalogue is not ready yet. <Link to="/live">Check collection status</Link>; collection must finish before search can work.</>}
@@ -54,6 +56,9 @@ export function Occupations() {
       </form>
       <Activity running={busy} label="Matching your title; the GPU may be waking up" stages={result?.stages} />
       {error && <p role="alert" className="m-0 text-sm text-weak">{error}</p>}
+      </div>
+      <div className="flex min-w-0 flex-col gap-5">
+      {!result && <section className="section"><span className="eyebrow">Explore the evidence</span><h2 className="h2">Understand how the work is changing</h2><p className="m-0 text-graphite">Search, choose the closest occupation, then inspect its sources. A match is a starting point for exploration.</p><dl className="m-0 grid gap-5 sm:grid-cols-2">{[['AI use', 'What sampled Claude conversations show, with task-level detail where available.'], ['Potential exposure', 'An ILO estimate of which work could be affected, not a claim of job losses.'], ['Malaysian labour signals', 'DOSM occupation-group evidence, kept separate from global AI-use data.'], ['Full learning pathways', 'Available for the verified Malaysian GBS finance catalogue. Other occupations show evidence only.']].map(([label, body]) => <div key={label} className="border-t border-line pt-3"><dt className="font-semibold">{label}</dt><dd className="m-0 mt-1 text-sm text-graphite">{body}</dd></div>)}</dl></section>}
       {result && (
         <section className="card-light flex flex-col gap-2 px-6 py-4">
           <span className="cap">Which of these is closest? You choose.</span>
@@ -69,6 +74,8 @@ export function Occupations() {
         </section>
       )}
       {chosen && <OccupationEvidence key={chosen} soc={chosen} />}
+      </div>
+      </div>
     </main>
   )
 }

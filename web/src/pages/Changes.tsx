@@ -154,7 +154,8 @@ export function Changes() {
       {changes.loading && !changes.data && <Loading what="evidence changes" />}
       {changes.error && <Problem what="change history" message={changes.error} onRetry={changes.reload} />}
       {message && <p role="status" className="rounded-md bg-fog p-3 text-sm">{message}</p>}
-      <section className="card-light p-5">
+      <div className="grid items-start gap-6 xl:grid-cols-[minmax(260px,0.7fr)_minmax(0,1.6fr)]">
+      <section className="card-light min-w-0 p-5 xl:sticky xl:top-8">
         <h2 className="h2">Collected updates</h2>
         {proposals.length === 0 && <p className="text-sm text-graphite">No proposals yet. A genuinely new observation can create one; a quiet scheduled check is a valid no-change result.</p>}
         {proposals.map((proposal) => (
@@ -168,7 +169,7 @@ export function Changes() {
           </details>
         ))}
       </section>
-      <section className="card-light flex flex-col gap-4 p-5">
+      <section className="card-light flex min-w-0 flex-col gap-4 p-5">
         <div><h2 className="h2">Replay genuine historical observations</h2><p className="mb-0 text-sm text-graphite">Select saved observation periods. These are not necessarily separate publication releases. Other reference data stays fixed.</p></div>
         {available.length === 0 ? <p className="text-sm">At least two saved periods from a supported source are needed. Collect evidence on the Live intelligence page first.</p> : <>
           <div className="flex flex-wrap items-end gap-3">
@@ -180,6 +181,7 @@ export function Changes() {
           {preview && preview.scenario === scenario && <Report report={preview} />}
         </>}
       </section>
+      </div>
     </main>
   )
 }

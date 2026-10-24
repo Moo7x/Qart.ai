@@ -97,3 +97,5 @@ Format: `YYYY-MM-DD HH:MM · who · decision · why · what we do instead`
 
 
 2026-10-24 · Round 3 visual design: centred responsive career workbook; question/help onboarding; own-occupation task examples and editable CV quotes; three connected learning tracks with full skill labels and accessible temporary resource panes. Existing catalogue, planner and scoring rules preserved. No new dependencies.
+
+2026-10-24 · Personal Overview prioritises the person before field evidence; shared light charts and wrapping radar labels. Goal, change and occupation views use balanced responsive grids. Job-board controls reuse checked search patterns with an explicit no-vacancy guarantee. Progress writes expose failures and retain legacy data on failure. No recommendation formula or data-source changes.
