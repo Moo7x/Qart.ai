@@ -22,11 +22,13 @@ load_env_file()  # local .env (gitignored); must run before settings are read
 
 import src.evidence.models  # noqa: E402, F401  (registers the model-version table)
 import src.evidence.store  # noqa: E402, F401  (registers the evidence tables before init_db)
+import src.goal.store  # noqa: E402, F401  (registers the goal table)
 import src.journey.store  # noqa: E402, F401  (registers the profile table)
 import src.occupations.catalogue  # noqa: E402, F401  (registers the occupation tables)
 from src.api.changes import router as changes_router  # noqa: E402
 from src.api.decision import router as decision_router  # noqa: E402
 from src.api.evidence import router as evidence_router  # noqa: E402
+from src.api.goal import router as goal_router  # noqa: E402
 from src.api.journey import router as journey_router  # noqa: E402
 from src.api.occupations import router as occupations_router  # noqa: E402
 from src.config import Settings, load_settings  # noqa: E402
@@ -94,6 +96,7 @@ def create_app(settings: Settings | None = None, first_run: bool = True) -> Fast
     application.include_router(journey_router)
     application.include_router(changes_router)
     application.include_router(decision_router)
+    application.include_router(goal_router)
     application.include_router(occupations_router)
     if WEB_DIST.is_dir():
         application.mount("/", SinglePageApp(directory=WEB_DIST, html=True), name="web")
