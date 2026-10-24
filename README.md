@@ -166,7 +166,7 @@ The tests never call paid services. Code checks: `ruff check .` and `mypy src te
 
 - **Workload:** GPU inference. A serverless worker serves two open models: `BAAI/bge-m3` (embeddings, MIT) and `BAAI/bge-reranker-v2-m3` (reranker, Apache-2.0). Inference only; nothing is trained.
 - **Setup:** `runpod/handler.py` is deployed as a **RunPod Serverless Endpoint**, built from `runpod/Dockerfile` (min workers 0, max 1).
-- **Use in Qart.ai:** mapping a person's free-text experience to canonical skills before matching, with a time budget and a labelled BM25 fallback (slice 2).
+- **Use in Qart.ai:** matching any job title, in English or Malay, to 1,016 occupations, and mapping a person's free-text tasks to canonical skills before matching. Every call has a time budget and a labelled BM25 fallback. On 40 labelled titles, top-1 accuracy is 72% with the models and 58% with BM25 alone (Malay titles: 75% and 0%).
 
 📄 Proof of use: [`submission/RUNPOD PROOF OF USE.pdf`](submission/RUNPOD%20PROOF%20OF%20USE.pdf)
 
