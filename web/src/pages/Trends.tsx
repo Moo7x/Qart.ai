@@ -73,6 +73,7 @@ export function Trends() {
               <h2 className="h2">Share of Malaysian employees by occupation group, {first}–{last}</h2>
               <Kind kind="observed" />
             </div>
+            <p className="m-0 max-w-[760px] text-[14px] leading-relaxed"><span className="font-semibold">What this shows:</span> out of every 100 employees in Malaysia, how many work in each type of job, year by year since 2011 (official DOSM figures). A rising line means that type of work is a growing part of the workforce; a falling line, a shrinking part. Finance clerks are counted under clerical support, accountants under professionals.</p>
             <SmallMultiples series={groups} unit="% of employees" source={`DOSM via OpenDOSM, ${first}–${last}`} />
             <p className="m-0 text-xs text-graphite">
               % of all employees, yearly. Each panel has its own vertical scale so small groups stay readable; compare groups by the change under each title, or in the next chart. Hover a line for exact values. DOSM, wages by occupation (OpenDOSM); 2010 is left out because the classification changed in 2011.

@@ -277,9 +277,10 @@ export function Overview() {
         <div className="flex flex-wrap items-stretch gap-5">
           <section className="card-light flex min-w-0 flex-[3_1_480px] flex-col gap-3.5 p-5">
             <div className="flex flex-wrap items-baseline justify-between gap-3">
-              <h2 className="h2">Share of Malaysian employees by occupation group</h2>
+              <h2 className="h2">How Malaysia’s workforce has shifted since 2011</h2>
               <span className="font-mono text-xs text-graphite">Observed · % of employees · 2011–2025</span>
             </div>
+            <p className="m-0 max-w-[760px] text-[14px] leading-relaxed"><span className="font-semibold">What this shows:</span> out of every 100 employees in Malaysia, how many work in each type of job, year by year since 2011 (official DOSM figures). A rising line means that type of work is a growing part of the workforce; a falling line, a shrinking part. Finance clerks are counted under clerical support, accountants under professionals.</p>
             <TimeSeriesChart series={chartSeries} unit="% of employees" axis="%" source="OpenDOSM · employees by occupation, 2011–2025" />
             <p className="m-0 text-xs text-graphite">
               Observed history from OpenDOSM; 2010 is left out because the occupation classification changed in 2011.
