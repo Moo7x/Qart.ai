@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import Any
 
 import httpx
+import pytest
 
 from src.config import Settings
 from src.intake import extract as extract_mod
@@ -89,7 +90,7 @@ def test_skill_search_falls_back_when_runpod_is_slow(settings: Settings) -> None
     configured = Settings(**{**settings.__dict__, "runpod_api_key": "k", "runpod_endpoint_id": "e"})
 
     def cold(request: httpx.Request) -> httpx.Response:
-        return httpx.Response(200, json={"status": "IN_QUEUE"})
+        return httpx.Response(200, json={"id": "cold", "status": "FAILED"})
 
     with httpx.Client(transport=httpx.MockTransport(cold)) as client:
         result = search(load_pack(), "matching receipts to invoices", configured, client)
@@ -118,3 +119,33 @@ def test_skill_search_uses_runpod_vectors_when_they_arrive(settings: Settings) -
     skill_search._SKILL_VECTORS.clear()
     assert result.engine == "bge-m3 (RunPod)"
     assert result.hits[0].skill == "sql"
+
+
+def test_skill_search_polls_a_queued_worker_and_reports_real_stages(
+    settings: Settings, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    from src import runpod_jobs
+    from src.intake import skill_search
+
+    monkeypatch.setattr(runpod_jobs, "POLL_SECONDS", 0)
+    skill_search._SKILL_VECTORS.clear()
+    configured = Settings(**{**settings.__dict__, "runpod_api_key": "k", "runpod_endpoint_id": "e"})
+    pending: list[str] = []
+    calls: list[str] = []
+
+    def queued(request: httpx.Request) -> httpx.Response:
+        calls.append(request.url.path)
+        if request.url.path.endswith("/run"):
+            pending.extend(json.loads(request.content)["input"]["texts"])
+            return httpx.Response(200, json={"id": "queued-job", "status": "IN_QUEUE"})
+        vectors = [[1.0, 0.0]] + [
+            [1.0, 0.0] if "Reconciliation" in text else [0.0, 1.0] for text in pending[1:]
+        ]
+        return httpx.Response(200, json={"status": "COMPLETED", "output": {"vectors": vectors}})
+
+    with httpx.Client(transport=httpx.MockTransport(queued)) as client:
+        result = search(load_pack(), "reconcile bank statements", configured, client)
+    skill_search._SKILL_VECTORS.clear()
+    assert calls == ["/v2/e/run", "/v2/e/status/queued-job"]
+    assert result.hits[0].skill == "reconciliation" and result.engine == "bge-m3 (RunPod)"
+    assert result.stages[0]["outcome"] == "ok" and result.stages[0]["seconds"] >= 0

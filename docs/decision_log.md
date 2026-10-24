@@ -1,5 +1,7 @@
 # Decision log (our own reasoning: evidence the idea is ours)
 
+- 2026-10-24 · team · Move skill search from eight-second runsync to the shared async RunPod queue; show measured stages, explicit fallback/empty states and selectable suggestions. Do not automatically add top hits or present similarity as proficiency. Cache keys include skill text; malformed vectors fall back visibly.
+
 - 2026-10-24 · team · Published onboarding 500 did not reproduce on disposable PostgreSQL with 8,996 public observations: create 201, matches/radar 200. Add an opt-in real-Postgres regression and privacy-safe error reference/code-location logging instead of guessing at a schema fix. Cloud failure still needs its matching diagnostic line.
 
 Format: `YYYY-MM-DD HH:MM · who · decision · why · what we do instead`

@@ -12,6 +12,7 @@ const LAST_QUESTION = 6
 const BUILDING = 7
 const HOURS = [2, 4, 6, 10]
 const MAX_LEVEL = 4
+type SkillSuggestions = { hits: { skill: string; name: string; score: number }[]; engine: string; note: string; stages?: Stage[] }
 const SITUATIONS: { id: Situation; title: string; body: string }[] = [
   { id: 'working', title: 'I work in finance now', body: 'See how AI is changing your tasks, and routes to nearby roles.' },
   { id: 'student', title: "I'm studying or just graduated", body: 'Entry roles that fit you and the skills to build first.' },
@@ -55,6 +56,8 @@ export function Onboarding() {
   const [busy, setBusy] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [built, setBuilt] = useState<MatchesResponse | null>(null)
+  const [suggestions, setSuggestions] = useState<SkillSuggestions | null>(null)
+  const [selected, setSelected] = useState<string[]>([])
 
   const skillName = (id: string) => pack.data?.skills.find((s) => s.id === id)?.name ?? id
   const go = (n: number) => setStep(Math.max(0, Math.min(BUILDING, n)))
@@ -97,12 +100,11 @@ export function Onboarding() {
 
   const findFromTasks = () =>
     run('Matching your tasks to skills…', async () => {
-      const result = await sendJSON<{ hits: { skill: string }[]; engine: string }>('/api/skills/search', { body: { text: tasks } })
-      setSkills((prev) => {
-        const next = { ...prev }
-        for (const hit of result.hits.slice(0, 3)) next[hit.skill] ??= { level: null, evidence: tasks, source: 'keyword' }
-        return next
-      })
+      setSuggestions(null)
+      setSelected([])
+      const result = await sendJSON<SkillSuggestions>('/api/skills/search', { body: { text: tasks } })
+      setSuggestions(result)
+      setStages(result.stages)
     })
 
   function setLevel(id: string, delta: number) {
@@ -265,11 +267,28 @@ export function Onboarding() {
             </label>
             <label className="flex flex-col gap-1.5 text-[13px] font-medium">
               Main tasks, in your own words
-              <textarea value={tasks} onChange={(e) => setTasks(e.target.value)} rows={3} placeholder="e.g. applying customer receipts, month-end reports" className="rounded-md border border-hairline bg-fog px-3 py-2 text-[15px]" />
+              <textarea value={tasks} onChange={(e) => { setTasks(e.target.value); setSuggestions(null); setSelected([]) }} rows={3} placeholder="e.g. applying customer receipts, month-end reports" className="rounded-md border border-hairline bg-fog px-3 py-2 text-[15px]" />
             </label>
-            <button type="button" className="btn self-start" disabled={tasks.trim().length < 3} onClick={findFromTasks}>
+            <button type="button" className="btn self-start" disabled={busy !== null || tasks.trim().length < 3} onClick={findFromTasks}>
               Find the matching skills
             </button>
+            {suggestions && <section aria-label="Suggested skills" className="border-y border-hairline py-4">
+              <p className="m-0 text-sm font-medium">{suggestions.hits.length ? 'Choose the skills that describe your work' : 'No matching skills found. Try a specific task, or add skills on the next step.'}</p>
+              <p className="text-xs text-graphite">Matched by {suggestions.engine}. {suggestions.note}</p>
+              {suggestions.hits.map((hit) => <label key={hit.skill} className="flex min-h-11 items-center gap-3 text-sm">
+                <input type="checkbox" checked={selected.includes(hit.skill)} onChange={(e) => setSelected((prev) => e.target.checked ? [...prev, hit.skill] : prev.filter((id) => id !== hit.skill))} />
+                {hit.name}{hit.skill in skills && ' · already in your profile'}
+              </label>)}
+              {suggestions.hits.length > 0 && <button type="button" className="btn" disabled={!selected.length} onClick={() => {
+                setSkills((prev) => {
+                  const next = { ...prev }
+                  for (const id of selected) next[id] ??= { level: null, evidence: '', source: 'self' }
+                  return next
+                })
+                setSuggestions(null)
+                setSelected([])
+              }}>Add selected skills</button>}
+            </section>}
           </section>
         )}
 

@@ -5,6 +5,10 @@ the route template, exception class and code locations, never exception values o
 The opt-in `tests/test_postgres_journey.py` checks onboarding on a disposable PostgreSQL database
 specified by `QART_TEST_POSTGRES_URL`. A passing local check does not verify Replit's schema/version.
 
+**Task-to-skill search:** uses the shared RunPod async queue (30-second interactive budget),
+validates vectors and caches skill text rather than ID alone. Measured stages and engine/fallback
+notes are returned. Suggestions are not claims: the person selects skills, then sets levels.
+
 **What and why.** A synthetic CV or questionnaire becomes editable skill claims, scores for all
 nine GBS destinations, a person-chosen goal and an ordered free-resource pathway (must-haves
 1, 3–6). `src/intake/` scrubs identifiers and checks model quotes; missing services use labelled
