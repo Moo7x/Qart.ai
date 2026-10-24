@@ -23,7 +23,7 @@
 | Live Demo (Replit) | https://qartai.replit.app/start                        |
 | RunPod Endpoint    | Private serverless endpoint, called only by the server |
 | Slide Deck         | [`submission/SDC2026_Qart.ai_PitchDeck.pdf`](submission/SDC2026_Qart.ai_PitchDeck.pdf) |
-| Demo Video         | To be added                                            |
+| Demo Video         | https://youtu.be/vUb9ipMBztw                           |
 
 ---
 
@@ -231,7 +231,7 @@ Both members iterated on the frontend and backend together once the first workin
 
 - [x] Team name, domain and SDG track filled in
 - [x] Slide deck added in `submission/`
-- [ ] Demo video link added
+- [x] Demo video link added
 - [x] Replit used, with proof of use in `submission/`
 - [x] RunPod used, with proof of use in `submission/`
 - [x] Preliminary proposal and Technical & Tools Declaration completed in `submission/`
