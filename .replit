@@ -11,7 +11,8 @@ localPort = 8000
 externalPort = 80
 
 [deployment]
-run = ["sh", "-c", "bash replit_start.sh"]
+build = ["sh", "-c", "bash replit_build.sh"]
+run = ["sh", "-c", "bash replit_serve.sh"]
 deploymentTarget = "cloudrun"
 
 [env]
