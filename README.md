@@ -8,11 +8,11 @@
 
 | Field                  | Details                                     |
 | ---------------------- | ------------------------------------------- |
-| **Team Name**          | Your Team Name                              |
+| **Team Name**          | Qart.ai                                      |
 | **Team Domain**        | Domain 1: Aiversecity Future-Ready Workforce |
 | **SDG Track (1–17)**   | SDG 4: Quality Education (targets 4.4, 4.3); SDG 8 (targets 8.2, 8.5) |
-| **Team Leader**        | Leader Name                                 |
-| **University**         | University Name(s)                          |
+| **Team Leader**        | Kydyrgaliyev Meiirman                                |
+| **University**         | Xiamen University Malaysia                         |
 | **Number of Members**  | 2                                           |
 
 ## Links
@@ -20,7 +20,7 @@
 | Resource          | Link                                           |
 | ----------------- | ---------------------------------------------- |
 | GitHub Repository | https://github.com/Moo7x/qart.ai               |
-| Replit Project    | https://replit.com/@your-username/your-project |
+| Replit Project    | https://qart-ai.replit.app/                    |
 | Live Demo         | https://your-project.replit.app                |
 | RunPod Endpoint   | https://api.runpod.ai/v2/your-endpoint-id      |
 | Slide Deck        | https://example.com/slides                     |
