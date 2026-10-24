@@ -13,6 +13,21 @@ from pydantic import BaseModel
 from src.evidence.field import PACK_DIR
 
 Tier = Literal["core", "upskill", "support"]
+
+# Courses a released feedback correction marked unavailable (src/feedback/). Kept outside the
+# cached pack so a correction applies at once; every planner reads courses through courses_for.
+_UNAVAILABLE: set[str] = set()
+
+
+def set_unavailable(course_ids: set[str]) -> None:
+    _UNAVAILABLE.clear()
+    _UNAVAILABLE.update(course_ids)
+
+
+def unavailable() -> frozenset[str]:
+    return frozenset(_UNAVAILABLE)
+
+
 AiRole = Literal["routine", "complement", "neutral"]
 
 
@@ -110,7 +125,9 @@ class Pack(BaseModel):
     tasks: TaskCrosswalk
 
     def courses_for(self, skill_id: str) -> list[Course]:
-        return [c for c in self.courses.values() if skill_id in c.covers]
+        return [
+            c for c in self.courses.values() if skill_id in c.covers and c.id not in _UNAVAILABLE
+        ]
 
     def tasks_for(self, soc: str, skill_id: str) -> list[TaskLink]:
         occupation = self.tasks.occupations.get(soc)

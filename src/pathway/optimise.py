@@ -88,7 +88,7 @@ def _evaluate(
 def _relevant(pack: Pack, match: RoleMatch) -> set[str]:
     gaps = {r.skill for r in match.requirements if (r.claimed or 0) < r.required}
     ids: set[str] = set()
-    stack = [c.id for c in pack.courses.values() if gaps & set(c.covers)]
+    stack = [c.id for skill in gaps for c in pack.courses_for(skill)]
     while stack:
         course = stack.pop()
         if course not in ids:

@@ -1,0 +1,12 @@
+# Fixed synthetic profiles used to evaluate a proposed correction before it is released
+# (src/feedback/service.py). Levels are invented for testing; no real person.
+profiles:
+  - id: clerk_sparse
+    weekly_hours: 4
+    levels: {reconciliation: 3, cash_application: 3, erp: 2}
+  - id: analyst_mid
+    weekly_hours: 6
+    levels: {reporting: 2, dashboards: 1, erp: 2, accounting_principles: 2, financial_reporting: 2}
+  - id: graduate_new
+    weekly_hours: 8
+    levels: {accounting_principles: 1, reporting: 1}
