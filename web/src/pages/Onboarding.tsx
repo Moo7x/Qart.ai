@@ -2,10 +2,10 @@ import { useEffect, useRef, useState } from 'react'
 import { useT } from '../i18n'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { getJSON, sendJSON, uploadFile, useApi } from '../api'
-import { Activity } from '../components/Activity'
+import { Activity, RunLog, type LogLine } from '../components/Activity'
 import { LevelPicker } from '../components/journey'
 import { useJourney } from '../state'
-import type { Extraction, MatchesResponse, PackInfo, ProfileData, SignalsResponse, Situation, SkillClaim, SkillKind, Stage } from '../types'
+import type { Extraction, MatchesResponse, PackInfo, PathwayResponse, ProfileData, SignalsResponse, Situation, SkillClaim, SkillKind, Stage } from '../types'
 
 const STEPS = ['', 'Your situation', 'Your CV', 'Your work today', 'Your skills', 'Time and budget', 'What matters to you']
 const LAST_QUESTION = 6
@@ -59,6 +59,7 @@ export function Onboarding() {
   const [busy, setBusy] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [built, setBuilt] = useState<MatchesResponse | null>(null)
+  const [log, setLog] = useState<LogLine[]>([])
   const [suggestions, setSuggestions] = useState<SkillSuggestions | null>(null)
   const [selected, setSelected] = useState<string[]>([])
   useEffect(() => {
@@ -137,14 +138,59 @@ export function Onboarding() {
         skills,
         extraction_engine: extraction?.engine ?? existing.data?.profile.extraction_engine ?? 'none',
       }
-      let id = profileId
-      if (editing && id) await sendJSON(`/api/profiles/${id}`, { method: 'PUT', body: profile })
-      else {
-        const created = await sendJSON<{ id: string }>('/api/profiles', { body: profile })
-        id = created.id
-        setProfileId(id)
+      setBuilt(null)
+      setLog([])
+      // Each line is one real request, shown when it starts and ticked off when it returns.
+      async function logged<T>(label: string, work: () => Promise<T>, found: (result: T) => string): Promise<T> {
+        const startedAt = Date.now()
+        setLog((lines) => [...lines, { label, status: 'running', startedAt }])
+        const finishLine = (patch: Partial<LogLine>) =>
+          setLog((lines) => lines.map((line, i) => (i === lines.length - 1 ? { ...line, ...patch, seconds: (Date.now() - startedAt) / 1000 } : line)))
+        try {
+          const result = await work()
+          finishLine({ status: 'done', detail: found(result) })
+          return result
+        } catch (reason) {
+          finishLine({ status: 'failed', detail: reason instanceof Error ? reason.message : String(reason) })
+          throw reason
+        }
       }
-      setBuilt(await getJSON<MatchesResponse>(`/api/profiles/${id}/matches`))
+      let id = profileId
+      await logged(
+        editing ? 'Update your saved profile' : 'Save your profile',
+        async () => {
+          if (editing && id) await sendJSON(`/api/profiles/${id}`, { method: 'PUT', body: profile })
+          else {
+            id = (await sendJSON<{ id: string }>('/api/profiles', { body: profile })).id
+            setProfileId(id)
+          }
+        },
+        () => { const n = Object.keys(skills).length; return `${n} skill claim${n === 1 ? "" : "s"} saved; names and contact details are never stored` },
+      )
+      const moderate = await logged(
+        'Score the destination roles · moderate AI adoption',
+        () => getJSON<MatchesResponse>(`/api/profiles/${id}/matches?scenario=moderate`),
+        (m) => `${m.roles.length} roles scored · best fit: ${m.roles[0]?.title ?? 'none'} · AI-use evidence for ${m.evidence.occupations} occupations, ${m.evidence.period}`,
+      )
+      await logged(
+        'Re-score them · fast AI adoption',
+        () => getJSON<MatchesResponse>(`/api/profiles/${id}/matches?scenario=fast`),
+        (m) => `best fit under fast adoption: ${m.roles[0]?.title ?? 'none'}`,
+      )
+      const top = moderate.roles[0]
+      if (top) {
+        await logged(
+          `Plan free courses towards ${top.title}`,
+          () => getJSON<PathwayResponse>(`/api/profiles/${id}/pathway?scenario=moderate&role_id=${top.role_id}`),
+          (p) => `${p.steps.length} verified courses · ${p.total_hours} h · about ${p.weeks} weeks at ${hours} h a week`,
+        )
+      }
+      await logged(
+        "Load today's market evidence",
+        () => getJSON<SignalsResponse>('/api/signals'),
+        (r) => `${r.signals.length} signals from ${r.observations} stored observations, each with its source and date`,
+      )
+      setBuilt(moderate)
     })
 
   const addable = (pack.data?.skills ?? []).filter((s) => !(s.id in skills) && addQuery.length > 1 && s.name.toLowerCase().includes(addQuery.toLowerCase())).slice(0, 6)
@@ -426,16 +472,13 @@ export function Onboarding() {
           <section className="flex flex-col gap-5 pt-3">
             <span className="eyebrow">{built ? 'Ready' : 'Almost there'}</span>
             <h1 className="m-0 text-[40px] font-semibold leading-[1.1] tracking-[-0.035em]">{t("Building your picture from today's evidence")}</h1>
-            <div className="card-dark flex flex-col gap-3.5 px-6 py-5 font-mono text-[13px]" aria-live="polite">
-              <span><span className="text-cyan">{built ? '✓' : '…'}</span> Saved your profile without your name or contact details</span>
-              {built && (
-                <>
-                  <span><span className="text-cyan">✓</span> Read AI-use evidence for {built.evidence.occupations} occupations · {built.evidence.period}</span>
-                  <span><span className="text-cyan">✓</span> Scored {built.roles.length} destination roles under {built.scenario_label.toLowerCase()}</span>
-                  <span><span className="text-cyan">✓</span> Planned verified free courses within {hours} h a week</span>
-                </>
-              )}
-            </div>
+            <RunLog title="Build log" lines={log} total={5} />
+            {log.some((line) => line.status === 'failed') && (
+              <div className="flex flex-wrap items-center gap-3">
+                <button type="button" className="btn" disabled={busy !== null} onClick={finish}>Try again</button>
+                <span className="text-[13px] text-graphite">Your answers are kept.</span>
+              </div>
+            )}
             {built && (
               <div className="flex flex-wrap items-center gap-3">
                 <button type="button" className="btn btn-v min-h-[44px]" onClick={() => navigate('/')}>{t('Open my overview →')}</button>

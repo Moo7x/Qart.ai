@@ -2,6 +2,55 @@ import { useEffect, useState } from 'react'
 
 export type Stage = { name: string; engine: string; outcome: string; seconds: number }
 
+export type LogLine = { label: string; status: 'running' | 'done' | 'failed'; startedAt: number; detail?: string; seconds?: number }
+
+const SPINNER = ['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏']
+
+// Terminal-style log of real work: a line appears when its request starts and ticks off when it
+// returns, with the time it took and what it found. `total` is the number of planned requests, so
+// the bar only counts requests that actually finished.
+export function RunLog({ lines, total, title }: { lines: LogLine[]; total: number; title: string }) {
+  const running = lines.some((l) => l.status === 'running')
+  const [now, setNow] = useState(() => Date.now())
+  useEffect(() => {
+    if (!running) return
+    const timer = window.setInterval(() => setNow(Date.now()), 120)
+    return () => window.clearInterval(timer)
+  }, [running])
+  const done = lines.filter((l) => l.status === 'done').length
+  const frame = SPINNER[Math.floor(now / 120) % SPINNER.length]
+  return (
+    <section aria-label={title} className="border border-obsidian bg-void font-mono text-[13px] text-white">
+      <div className="flex items-center justify-between gap-3 border-b border-surface px-4 py-2.5 text-[11px] tracking-widest text-stone">
+        <span>{title.toUpperCase()}</span>
+        <span>{done}/{total} DONE</span>
+      </div>
+      <div className="h-[3px] bg-surface" aria-hidden="true">
+        <div className="h-full bg-cyan transition-[width] duration-300" style={{ width: `${(100 * done) / total}%` }} />
+      </div>
+      <ol className="m-0 flex list-none flex-col gap-3 px-4 py-4" aria-live="polite">
+        {lines.map((line, i) => {
+          const seconds = line.seconds ?? (now - line.startedAt) / 1000
+          return (
+            <li key={`${line.label}-${i}`} className="grid grid-cols-[18px_minmax(0,1fr)_auto] gap-x-2">
+              <span aria-hidden="true" className={line.status === 'failed' ? 'text-weak' : 'text-cyan'}>
+                {line.status === 'done' ? '✓' : line.status === 'failed' ? '✗' : <><span className="motion-reduce:hidden">{frame}</span><span className="hidden motion-reduce:inline">…</span></>}
+              </span>
+              <span className={line.status === 'running' ? 'text-white' : 'text-[#e6e6ea]'}>
+                {line.label}
+                <span className="sr-only"> · {line.status}</span>
+              </span>
+              <span className="text-right text-stone">{seconds.toFixed(1)} s</span>
+              {line.detail && <span className={`col-start-2 col-end-4 text-xs ${line.status === 'failed' ? 'text-weak' : 'text-stone'}`}>{line.detail}</span>}
+            </li>
+          )
+        })}
+        {running && <li aria-hidden="true" className="text-stone motion-safe:animate-pulse">▍</li>}
+      </ol>
+    </section>
+  )
+}
+
 // Status of a long action: while it runs, what it is doing and for how long (no fake progress
 // bar, the work has no known length); afterwards, the stages the server measured.
 export function Activity({ running, label, stages, dark = false }: { running: boolean; label: string; stages?: Stage[]; dark?: boolean }) {
