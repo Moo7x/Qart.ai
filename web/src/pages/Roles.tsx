@@ -8,7 +8,7 @@ import { ExplainRole } from '../components/ExplainRole'
 import { RoleTasks } from '../components/RoleTasks'
 import { Loading, Problem } from '../components/ui'
 import { useJourney } from '../state'
-import type { GapColumn, MatchesResponse, RoleCard, SensitivityResponse } from '../types'
+import type { GapColumn, MatchesResponse, PackInfo, ProfileData, RoleCard, SensitivityResponse, Situation } from '../types'
 
 const GAP_TITLE: Record<GapColumn, [string, string]> = {
   ready: ['Ready now', 'text-rising'],
@@ -38,7 +38,29 @@ function bars(role: RoleCard) {
   return { ready: share(['ready']), partly: share(['bridgeable']) }
 }
 
-function Why({ role, onChoose, chosen, busy }: { role: RoleCard; onChoose: () => void; chosen: boolean; busy: boolean }) {
+// Graduates: entry roles TalentCorp lists with a route to this role. Switchers: what carries over.
+function ForYou({ role, situation, pack }: { role: RoleCard; situation: Situation; pack: PackInfo | null }) {
+  if (situation === 'student') {
+    const ways = (pack?.current_roles ?? []).filter((r) => r.transitions.includes(role.role_id))
+    if (ways.length === 0) return null
+    return (
+      <p className="m-0 text-[13px] text-stone">
+        <span className="font-semibold text-white">Ways in:</span> start as {ways.map((w) => w.title).join(', ')}. TalentCorp lists a route from {ways.length === 1 ? 'that role' : 'these roles'} to {role.title} (expert view).
+      </p>
+    )
+  }
+  if (situation === 'switcher') {
+    const carry = role.requirements.filter((r) => r.column === 'ready').map((r) => r.skill_name)
+    return (
+      <p className="m-0 text-[13px] text-stone">
+        <span className="font-semibold text-white">What carries over:</span> {carry.length ? `${carry.join(', ')}, at the level this role needs (your own rating).` : 'none of your stated skills yet reach this role’s level; tell us more on the question above.'}
+      </p>
+    )
+  }
+  return null
+}
+
+function Why({ role, onChoose, chosen, busy, situation, pack }: { role: RoleCard; onChoose: () => void; chosen: boolean; busy: boolean; situation: Situation; pack: PackInfo | null }) {
   const { ready, partly } = bars(role)
   const { profileId, scenario } = useJourney()
   return (
@@ -61,6 +83,7 @@ function Why({ role, onChoose, chosen, busy }: { role: RoleCard; onChoose: () =>
         <span style={{ width: `${partly}%` }} className="bg-violet-light" />
       </div>
       <MeterRow meters={role.meters} range={role.fit_range} />
+      <ForYou role={role} situation={situation} pack={pack} />
       <div className="rounded-lg bg-surface px-3.5 py-3">
         <p className="m-0 font-mono text-xs">fit = 100 × Σ w · min(your level ÷ needed level, 1) ÷ Σ w</p>
         <p className="m-0 mt-1.5 text-xs text-stone">
@@ -111,6 +134,8 @@ export function Roles() {
   const navigate = useNavigate()
   const current = useApi<MatchesResponse>(profileId ? `/api/profiles/${profileId}/matches?scenario=${scenario}` : null)
   const baseline = useApi<MatchesResponse>(profileId ? `/api/profiles/${profileId}/matches?scenario=moderate` : null)
+  const profile = useApi<{ profile: ProfileData }>(profileId ? `/api/profiles/${profileId}` : null)
+  const pack = useApi<PackInfo>('/api/pack')
   const stability = useApi<SensitivityResponse>(profileId ? `/api/profiles/${profileId}/sensitivity?scenario=${scenario}` : null)
   const [selected, setSelected] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
@@ -208,7 +233,7 @@ export function Roles() {
 
           <div className="flex min-w-0 flex-[1.4_1_480px] flex-col gap-5">
             <BestQuestion profileId={profileId} scenario={scenario} onAnswered={() => { current.reload(); baseline.reload(); stability.reload() }} />
-            <Why role={role} chosen={data.destination === role.role_id} busy={busy} onChoose={() => choose(role.role_id)} />
+            <Why role={role} chosen={data.destination === role.role_id} busy={busy} onChoose={() => choose(role.role_id)} situation={profile.data?.profile.situation ?? 'working'} pack={pack.data} />
             <section className="card-light flex flex-col gap-3.5 px-6 py-5">
               <h2 className="h2">Your skills gap for this role</h2>
               <div className="grid grid-cols-2 gap-3.5 md:grid-cols-4">
