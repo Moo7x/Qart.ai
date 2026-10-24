@@ -45,6 +45,21 @@ Rule: never invent statistics; every number cites a source.
    official series with ≥ 8 comparable points; otherwise "not enough evidence yet" with an early
    direction. TalentCorp is always an "expert view". All thresholds are in `src/params.py`.
 
+## Any occupation and the Trends page
+- `src/occupations/catalogue.py` keeps every O*NET 31.0 occupation (title, reported titles, the
+  pack's Malaysian GBS role titles, description, top core tasks) and its closest ESCO occupation.
+  After each run the pipeline step `occupation_index` embeds new or changed texts with BGE-M3 on
+  RunPod (queued jobs, `src/runpod_jobs.py`) and back-fills ISCO-08 links from the ESCO API.
+- `src/occupations/detect.py` matches a job title: BGE-M3 similarity, then the BGE reranker on the
+  top 10, both on RunPod; BM25 when RunPod or the index is unavailable, labelled. The person picks.
+  `python -m src.occupations.evaluate` writes the measured comparison to `docs/RUNPOD_EVAL.md`.
+- `src/occupations/preview.py` shows one occupation's evidence: O*NET tasks, Economic Index use,
+  ILO exposure of its ISCO-08 group, the DOSM major-group trend and the MyCOL listing. Roles,
+  courses and pathways appear only for the verified GBS finance occupations.
+- `src/evidence/trends.py` feeds the Trends page: employment shares by major group with long and
+  recent change, the Professionals job-ad share and named occupations (DOSM releases), skill
+  emphasis under fast adoption (assumption) and ILO exposure (estimate).
+
 ## Where in the code
 `src/collectors/*.py::collect` (`onet.py`, `ilo.py` for tasks and exposure) ·
 `src/pipeline/run.py::run_pipeline` ·
