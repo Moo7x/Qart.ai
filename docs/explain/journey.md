@@ -1,5 +1,10 @@
 # Personal journey
 
+**Fix-round diagnostics:** an unhandled API error returns a random reference. Logs contain only
+the route template, exception class and code locations, never exception values or SQL parameters.
+The opt-in `tests/test_postgres_journey.py` checks onboarding on a disposable PostgreSQL database
+specified by `QART_TEST_POSTGRES_URL`. A passing local check does not verify Replit's schema/version.
+
 **What and why.** A synthetic CV or questionnaire becomes editable skill claims, scores for all
 nine GBS destinations, a person-chosen goal and an ordered free-resource pathway (must-haves
 1, 3–6). `src/intake/` scrubs identifiers and checks model quotes; missing services use labelled
