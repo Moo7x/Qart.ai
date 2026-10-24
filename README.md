@@ -187,14 +187,14 @@ Both members iterated on the frontend and backend together once the first workin
 
 ## Submission Checklist
 
-- [ ] Team name, domain and SDG track filled in
+- [x] Team name, domain and SDG track filled in
 - [ ] Slide deck link added
 - [ ] Demo video link added
-- [ ] Replit used, with proof of use in `submission/`
-- [ ] RunPod used, with proof of use in `submission/`
-- [ ] Submission template completed in `submission/`
+- [x] Replit used, with proof of use in `submission/`
+- [x] RunPod used, with proof of use in `submission/`
+- [x] Submission template and Technical & Tools Declaration completed in `submission/`
 - [ ] "How to Run" steps verified
-- [ ] No API keys or secrets committed to the repository
+- [x] No API keys or secrets committed to the repository
 
 ## License
 
