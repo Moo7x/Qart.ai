@@ -1,4 +1,4 @@
-import { Activity, ArrowRight, ChartLine, ListOrdered, Radar, Route as RouteIcon, Search, UserRound } from 'lucide-react'
+import { Activity, ArrowRight, ChartLine, Flag, ListOrdered, Radar, Route as RouteIcon, Search, UserRound } from 'lucide-react'
 import { Link, NavLink } from 'react-router-dom'
 import { formatWhen, useApi } from '../api'
 import { useJourney } from '../state'
@@ -35,6 +35,10 @@ export function Sidebar() {
       <NavLink to="/" end className={navClass}>
         <Radar size={16} aria-hidden="true" />
         Overview
+      </NavLink>
+      <NavLink to="/goal" className={navClass}>
+        <Flag size={16} aria-hidden="true" />
+        My goal
       </NavLink>
       <NavLink to="/roles" className={navClass}>
         <ListOrdered size={16} aria-hidden="true" />

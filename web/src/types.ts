@@ -490,3 +490,40 @@ export type OccupationPreview = {
   employment: Signal | null
   mycol: null | { listed: boolean; name: string | null; of: number }
 }
+
+// ---- Goal (src/goal/, src/api/goal.py) ----
+
+export type GoalInput = {
+  role_title: string
+  company: string
+  location: string
+  why: string
+  posting_text: string
+  posting_url: string
+  posting_date: string
+}
+export type PostingRequirement = {
+  quote: string
+  skill: string | null
+  skill_name: string | null
+  essential: boolean
+  required_level: number | null
+  claimed: number | null
+  status: 'met' | 'below' | 'not_stated' | 'outside_catalogue'
+}
+export type GoalResponse = {
+  goal: GoalInput | null
+  coverage?: null | {
+    engine: string
+    note: string
+    requirements: PostingRequirement[]
+    covered: number
+    mapped: number
+    not_stated: number
+    outside_catalogue: number
+    essentials_met: number
+    essentials: number
+    default_level: number
+  }
+  stepping_stones?: { role_id: string; title: string; shared: string[]; overlap: number; fit: number; longer_route: boolean; shared_courses: { id: string; title: string; url: string }[] }[]
+}
