@@ -4,10 +4,11 @@ import { formatWhen, useApi } from '../api'
 import { EvidenceDrawer } from '../components/EvidenceDrawer'
 import { ScenarioSwitch } from '../components/journey'
 import { LineChart, Sparkline, type Series } from '../components/LineChart'
+import { OccupationEvidence } from '../components/OccupationEvidence'
 import { SkillRadar } from '../components/SkillRadar'
 import { DIRECTION_LABEL, Empty, Loading, Problem } from '../components/ui'
 import { useJourney } from '../state'
-import type { Direction, RadarAxis, RadarResponse, Signal, SignalsResponse, SourceStatus } from '../types'
+import type { Direction, PackInfo, ProfileData, RadarAxis, RadarResponse, Signal, SignalsResponse, SourceStatus } from '../types'
 
 // Occupation groups drawn in the chart, with one colour each (dark-panel palette).
 const GROUP_COLOURS: Record<string, { label: string; color: string }> = {
@@ -184,6 +185,29 @@ function PersonalRadar({ onPick }: { onPick: (s: Signal) => void }) {
   )
 }
 
+// Working adults and switchers: what the evidence says about the job they have today.
+function CurrentJob() {
+  const { profileId } = useJourney()
+  const profile = useApi<{ profile: ProfileData }>(profileId ? `/api/profiles/${profileId}` : null)
+  const pack = useApi<PackInfo>('/api/pack')
+  const data = profile.data?.profile
+  if (!data || data.situation === 'student') return null
+  const role = pack.data?.current_roles.find((r) => r.id === data.current_role)
+  if (!role) return null
+  return (
+    <section className="flex flex-col gap-3">
+      <div className="flex flex-col gap-1">
+        <span className="eyebrow">What is changing in your current job</span>
+        <h2 className="h2">{role.title}</h2>
+        <p className="m-0 text-[13px] text-graphite">
+          TalentCorp rates it {role.impact} impact (PDF p. {role.page}) and lists {role.transitions.length} routes from it in GBS. Below is the evidence for its standard occupation.
+        </p>
+      </div>
+      <OccupationEvidence soc={role.soc} compact />
+    </section>
+  )
+}
+
 export function Overview() {
   const signals = useApi<SignalsResponse>('/api/signals')
   const sources = useApi<SourceStatus[]>('/api/sources')
@@ -208,6 +232,7 @@ export function Overview() {
       </header>
 
       <PersonalRadar onPick={setSelected} />
+      <CurrentJob />
 
       {signals.loading && <Loading what="the evidence" />}
       {signals.error && <Problem what="the evidence" message={signals.error} onRetry={signals.reload} />}

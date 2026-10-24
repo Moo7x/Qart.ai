@@ -49,7 +49,7 @@ function ProfilePathway({ profileId, scenario }: { profileId: string; scenario: 
     <main className="flex min-w-0 flex-[999_1_640px] flex-col gap-6 px-5 py-7 md:px-10">
       {noDestination && (
         <div className="flex flex-col gap-3">
-          <span className="eyebrow">Pathway</span>
+          <span className="eyebrow">My plan · pathway</span>
           <h1 className="h1">Choose a destination role first</h1>
           <Link className="btn btn-v self-start" to="/roles">See roles that fit me</Link>
         </div>

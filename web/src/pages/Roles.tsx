@@ -136,7 +136,7 @@ export function Roles() {
     <main className="flex min-w-0 flex-[999_1_640px] flex-col gap-6 px-5 py-7 md:px-10">
       <header className="flex flex-wrap items-end justify-between gap-4">
         <div className="flex flex-col gap-1.5">
-          <span className="eyebrow">Roles that fit · every destination role is scored</span>
+          <span className="eyebrow">My options · every destination role is scored</span>
           <h1 className="h1">Where your skills can take you</h1>
           <p className="m-0 max-w-[640px] text-graphite">
             Destination roles TalentCorp lists for highly impacted GBS finance roles. Fit compares your levels with what each role needs under the selected scenario; outlook is shown separately with its sources.

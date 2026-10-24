@@ -31,7 +31,7 @@ export function Sidebar() {
         </svg>
         <span className="text-base font-semibold tracking-tight text-white">Qart.ai</span>
       </span>
-      <span className="cap px-2.5 pb-1.5 text-slate-mid">GBS finance &amp; accounting</span>
+      <span className="cap px-2.5 pb-1.5 text-slate-mid">Your journey · GBS finance</span>
       <NavLink to="/" end className={navClass}>
         <Radar size={16} aria-hidden="true" />
         Overview
@@ -42,11 +42,11 @@ export function Sidebar() {
       </NavLink>
       <NavLink to="/roles" className={navClass}>
         <ListOrdered size={16} aria-hidden="true" />
-        Roles that fit
+        My options
       </NavLink>
       <NavLink to="/pathway" className={navClass}>
         <RouteIcon size={16} aria-hidden="true" />
-        Pathway
+        My plan
       </NavLink>
       <NavLink to="/future" className={navClass}>
         <ArrowRight size={16} aria-hidden="true" />
@@ -72,6 +72,7 @@ export function Sidebar() {
         </Link>
       )}
       <div className="mx-1.5 my-3 h-px bg-surface" />
+      <span className="cap px-2.5 pb-1.5 text-slate-mid">Evidence</span>
       <NavLink to="/trends" className={navClass}>
         <ChartLine size={16} aria-hidden="true" className="text-cyan" />
         Trends
