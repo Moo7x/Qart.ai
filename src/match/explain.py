@@ -55,13 +55,14 @@ def facts(match: RoleMatch, path: Pathway, scenario_label: str) -> list[dict[str
         }
     ]
     for i, req in enumerate(match.requirements, 1):
-        claimed = "not stated" if req.claimed is None else f"level {req.claimed}"
+        # Levels are stored 0-4 and shown to people on the 1-5 scale the screens use.
+        claimed = "not stated" if req.claimed is None else f"{req.claimed + 1} of 5"
         out.append(
             {
                 "id": f"skill{i}",
                 "text": (
                     f"{req.skill_name}{' (essential)' if req.essential else ''}: you {claimed}, "
-                    f"the role needs level {req.required}; it adds {req.contribution:.1f} fit "
+                    f"the role needs {req.required + 1} of 5; it adds {req.contribution:.1f} fit "
                     f"points. {req.shift_reason}"
                 ),
             }

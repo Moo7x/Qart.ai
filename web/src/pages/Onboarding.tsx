@@ -3,7 +3,7 @@ import { useT } from '../i18n'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { getJSON, sendJSON, uploadFile, useApi } from '../api'
 import { Activity } from '../components/Activity'
-import { Dots } from '../components/journey'
+import { LevelPicker } from '../components/journey'
 import { useJourney } from '../state'
 import type { Extraction, MatchesResponse, PackInfo, ProfileData, SignalsResponse, Situation, SkillClaim, SkillKind, Stage } from '../types'
 
@@ -11,7 +11,6 @@ const STEPS = ['', 'Your situation', 'Your CV', 'Your work today', 'Your skills'
 const LAST_QUESTION = 6
 const BUILDING = 7
 const HOURS = [2, 4, 6, 10]
-const MAX_LEVEL = 4
 type SkillSuggestions = { hits: { skill: string; name: string; score: number }[]; engine: string; note: string; stages?: Stage[] }
 const SITUATIONS: { id: Situation; title: string; body: string }[] = [
   { id: 'working', title: 'I work in finance now', body: 'See how AI is changing your tasks, and routes to nearby roles.' },
@@ -118,10 +117,8 @@ export function Onboarding() {
       setStages(result.stages)
     })
 
-  function setLevel(id: string, delta: number) {
+  function setLevel(id: string, level: number) {
     setSkills((prev) => {
-      const current = prev[id]?.level ?? 0
-      const level = Math.max(0, Math.min(MAX_LEVEL, current + delta))
       return { ...prev, [id]: { ...(prev[id] ?? { evidence: '', source: 'self' }), level, source: prev[id]?.source === 'cv' ? 'cv' : 'self' } }
     })
   }
@@ -322,7 +319,7 @@ export function Onboarding() {
           <section className="flex flex-col gap-4">
             <h1 className="h1">{t('Check your skills')}</h1>
             <p className="m-0 text-graphite">
-              Levels are what you claim, not a test: {pack.data?.proficiency.map((p, i) => `${i} ${p}`).join(' · ')}.
+              Rate each skill from 1 (none) to 5 (expert). A level is your own claim, not a test.
             </p>
             {extraction && (
               <p className="m-0 font-mono text-[11px] text-graphite">
@@ -341,10 +338,9 @@ export function Onboarding() {
                       {claim.source === 'cv' ? `CV: “${claim.evidence}”` : claim.source === 'keyword' ? 'Found by keyword · set your level' : 'You set this'}
                     </span>
                   </span>
-                  <span className="flex items-center gap-1.5">
-                    <button type="button" aria-label={`Lower ${skillName(id)}`} className="h-8 w-8 cursor-pointer rounded-md border border-hairline bg-white" onClick={() => setLevel(id, -1)}>−</button>
-                    <span className="w-[76px] text-center"><Dots level={claim.level} /></span>
-                    <button type="button" aria-label={`Raise ${skillName(id)}`} className="h-8 w-8 cursor-pointer rounded-md border border-hairline bg-white" onClick={() => setLevel(id, 1)}>+</button>
+                  <span className="flex flex-col items-end gap-1">
+                    <LevelPicker level={claim.level} label={`Your level in ${skillName(id)}`} onChange={(level) => setLevel(id, level)} />
+                    {claim.level === null && <span className="text-[11px] text-graphite">Not rated yet</span>}
                   </span>
                 </div>
               ))}

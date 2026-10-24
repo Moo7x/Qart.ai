@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import { sendJSON, useApi } from '../api'
 import { Activity } from '../components/Activity'
 import { ReportProblem } from '../components/Feedback'
+import { LEVEL_NAMES, levelText } from '../components/journey'
 import { Loading, Problem } from '../components/ui'
 import { useJourney } from '../state'
 import type { GoalInput, GoalResponse, PostingRequirement, PackInfo } from '../types'
@@ -16,7 +17,6 @@ const STATUS: Record<PostingRequirement['status'], [string, string]> = {
   not_stated: ['Not stated · tell us', 'text-graphite'],
   outside_catalogue: ['Outside our skill catalogue', 'text-ash'],
 }
-const LEVELS = ['none', 'aware', 'working', 'proficient', 'expert']
 
 function Field({ label, value, onChange, placeholder, area }: { label: string; value: string; onChange: (v: string) => void; placeholder?: string; area?: boolean }) {
   return (
@@ -105,7 +105,7 @@ export function Goal() {
           </div>
           <p className="m-0 text-xs text-graphite">
             {result?.goal?.company ? `${result.goal.company} · ` : ''}{result?.goal?.posting_date ? `posting dated ${result.goal.posting_date} · ` : ''}
-            Read by {cov.engine}{cov.note ? ` (${cov.note})` : ''}. Each line quotes the posting. Where it states no level, &ldquo;{LEVELS[cov.default_level]}&rdquo; is assumed.{' '}
+            Read by {cov.engine}{cov.note ? ` (${cov.note})` : ''}. Each line quotes the posting. Where it states no level, &ldquo;{LEVEL_NAMES[cov.default_level]} ({levelText(cov.default_level)})&rdquo; is assumed.{' '}
             {[cov.not_stated > 0 ? `${cov.not_stated} not stated in your profile yet` : '', cov.outside_catalogue > 0 ? `${cov.outside_catalogue} outside our skill catalogue` : ''].filter(Boolean).join('; ')}
             {cov.not_stated + cov.outside_catalogue > 0 ? '.' : ''}
           </p>
@@ -113,7 +113,7 @@ export function Goal() {
             {cov.requirements.map((r) => (
               <li key={r.quote} className="grid gap-1 border-t border-mist py-2 text-[13px] md:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)_auto]">
                 <span>&ldquo;{r.quote}&rdquo;{r.essential && <span className="ml-1.5 font-mono text-[10px] text-amber-glow">REQUIRED</span>}</span>
-                <span className="text-graphite">{r.skill_name ?? '—'}{r.skill && <span className="font-mono"> · you {r.claimed ?? '—'} / needs {r.required_level ?? cov.default_level}</span>}</span>
+                <span className="text-graphite">{r.skill_name ?? '—'}{r.skill && <span className="font-mono"> · you {levelText(r.claimed)} / needs {levelText(r.required_level ?? cov.default_level)}</span>}</span>
                 <span className={STATUS[r.status][1]}>{STATUS[r.status][0]}</span>
                 <span className="md:col-span-3"><ReportProblem kinds={['wrong_skill_mapping', 'unsupported_claim']} targetType="requirement" targetId={r.quote.slice(0, 120)} page="goal" /></span>
               </li>

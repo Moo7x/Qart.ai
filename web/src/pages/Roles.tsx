@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useT } from '../i18n'
 import { Link, useNavigate } from 'react-router-dom'
 import { sendJSON, useApi } from '../api'
-import { Dots, ScenarioSwitch, SdgTag } from '../components/journey'
+import { Dots, ScenarioSwitch, SdgTag, levelText } from '../components/journey'
 import { CompareRoles, Openings } from '../components/CompareRoles'
 import { BestQuestion, MeterRow, WhatIf } from '../components/Decision'
 import { ExplainRole } from '../components/ExplainRole'
@@ -113,7 +113,7 @@ function Why({ role, onChoose, chosen, busy, situation, pack }: { role: RoleCard
                   <span className="block text-[11px] text-slate-mid">{r.shift_reason}</span>
                 </td>
                 <td className="px-2 py-2"><Dots level={r.claimed} tone="light" /></td>
-                <td className="px-2 py-2 font-mono">{r.required}</td>
+                <td className="px-2 py-2 font-mono">{levelText(r.required)}</td>
                 <td className="px-2 py-2 text-right font-mono">{r.weight.toFixed(2)}</td>
                 <td className="py-2 pl-2 text-right font-mono">{r.contribution.toFixed(1)}</td>
               </tr>
@@ -250,7 +250,7 @@ export function Roles() {
                     {role.requirements.filter((r) => r.column === col).map((r) => (
                       <div key={r.skill} className="border-t border-mist pt-2 text-[13px]">
                         <div className="font-medium">{r.skill_name}</div>
-                        <div className="font-mono text-[11px] text-ash">you {r.claimed ?? '—'} · needs {r.required}</div>
+                        <div className="font-mono text-[11px] text-ash">you {levelText(r.claimed)} · needs {levelText(r.required)}</div>
                       </div>
                     ))}
                   </div>

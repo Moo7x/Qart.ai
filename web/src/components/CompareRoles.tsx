@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import type { RoleCard } from '../types'
+import { levelText } from './journey'
 
 // External job searches for a role title. Qart does not read, rank or check these openings.
 export function jobSearches(title: string) {
@@ -70,7 +71,7 @@ export function CompareRoles({ roles }: { roles: RoleCard[] }) {
             ))}
             {skills.map(([skill, name]) => {
               const [l, r] = [need(left, skill), need(right, skill)]
-              const cell = (x: typeof l) => (x ? `you ${x.claimed ?? '—'} / needs ${x.required}${x.essential ? ' · essential' : ''}` : 'not needed')
+              const cell = (x: typeof l) => (x ? `you ${levelText(x.claimed)} / needs ${levelText(x.required)}${x.essential ? ' · essential' : ''}` : 'not needed')
               return (
                 <tr key={skill} className="border-t border-mist text-xs">
                   <td className="py-1 pr-2">{name}</td>

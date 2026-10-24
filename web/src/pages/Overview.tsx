@@ -3,7 +3,7 @@ import { useT } from '../i18n'
 import { Link } from 'react-router-dom'
 import { formatWhen, useApi } from '../api'
 import { EvidenceDrawer } from '../components/EvidenceDrawer'
-import { ScenarioSwitch } from '../components/journey'
+import { ScenarioSwitch, levelText } from '../components/journey'
 import { LineChart, Sparkline, type Series } from '../components/LineChart'
 import { OccupationEvidence } from '../components/OccupationEvidence'
 import { SkillRadar } from '../components/SkillRadar'
@@ -108,7 +108,7 @@ function AxisRow({ axis }: { axis: RadarAxis }) {
     <li className="flex flex-col gap-1 border-t border-surface py-2.5 text-[13px]" title={axis.reason}>
       <span className="flex flex-wrap items-baseline justify-between gap-2">
         <span className="font-semibold">{axis.name}</span>
-        <span className="font-mono text-[11px] text-stone">you {axis.claimed ?? '—'} · needs {axis.required} · after {axis.after}</span>
+        <span className="font-mono text-[11px] text-stone">you {levelText(axis.claimed)} · needs {levelText(axis.required)} · after {levelText(axis.after)}</span>
       </span>
       <span className="flex flex-wrap gap-x-3 gap-y-1 text-[11px]">
         <span className={tone}>{label} <span className="text-slate-mid">(assumption)</span></span>
