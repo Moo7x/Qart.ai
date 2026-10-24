@@ -191,7 +191,7 @@ export function LiveIntelligence() {
           {rolling.data && rolling.data.length > 0 && (
             <details className="text-[13px]">
               <summary className="cursor-pointer text-graphite">Rolling check: every forecast origin from 2015, one and two years ahead</summary>
-              <table className="mt-2 w-full border-collapse text-xs">
+              <div className="mt-2 overflow-x-auto"><table className="w-full min-w-[360px] border-collapse text-xs">
                 <thead>
                   <tr className="cap text-left">
                     <th className="py-1.5 pr-2 font-medium">Group · horizon</th>
@@ -208,7 +208,7 @@ export function LiveIntelligence() {
                     </tr>
                   ))}
                 </tbody>
-              </table>
+              </table></div>
               <p className="m-0 mt-1.5 text-xs text-graphite">
                 Mean error in percentage points; each method sees only the years before its origin. A trend is projected only if a trend method (drift, line, damped) beats no change; smoothing is a flat forecast. Retrospective on today's published series.
               </p>
@@ -219,7 +219,7 @@ export function LiveIntelligence() {
               <summary className="cursor-pointer text-graphite">
                 Model versions: re-scored each time new DOSM data arrives ({models.data.length} stored)
               </summary>
-              <table className="mt-2 w-full border-collapse text-xs">
+              <div className="mt-2 overflow-x-auto"><table className="w-full min-w-[360px] border-collapse text-xs">
                 <thead>
                   <tr className="cap text-left">
                     <th className="py-1.5 pr-2 font-medium">Group · data to</th>
@@ -240,7 +240,7 @@ export function LiveIntelligence() {
                     </tr>
                   ))}
                 </tbody>
-              </table>
+              </table></div>
               <p className="m-0 mt-1.5 text-xs text-graphite">A run with no new DOSM data stores no version; its log says the models are unchanged.</p>
             </details>
           )}
