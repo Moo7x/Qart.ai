@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useT } from '../i18n'
 import { getJSON } from '../api'
 import type { Explanation, Scenario } from '../types'
+import { Activity } from './Activity'
 
 // Plain-language sentences written by the model from computed facts only. The numbers stay in the
 // cited facts (written by code), shown under each sentence.
@@ -29,6 +30,7 @@ export function ExplainRole({ profileId, roleId, scenario }: { profileId: string
         <button type="button" className="btn" onClick={load} disabled={busy}>
           {busy ? 'Writing…' : t('Explain this in plain words')}
         </button>
+        <Activity running={busy} label="Writing from the computed facts" dark />
         {error && <span role="alert" className="text-xs text-amber-glow">{error}</span>}
       </div>
     )
@@ -49,6 +51,7 @@ export function ExplainRole({ profileId, roleId, scenario }: { profileId: string
         ))}
       </ul>
       <span className="font-mono text-[11px] text-slate-mid">
+        <Activity running={false} label="" stages={data.stages} dark />
         Written by {data.engine}{data.note ? ` · ${data.note}` : ''}. It only rephrases the computed facts and may word them loosely: the facts under each sentence are the record, and every number comes from code.
       </span>
     </div>

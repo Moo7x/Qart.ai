@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useT } from '../i18n'
 import { Link } from 'react-router-dom'
 import { sendJSON, useApi } from '../api'
+import { Activity } from '../components/Activity'
 import { ReportProblem } from '../components/Feedback'
 import { Loading, Problem } from '../components/ui'
 import { useJourney } from '../state'
@@ -88,6 +89,7 @@ export function Goal() {
           <Field label="Date on the posting (optional)" value={form.posting_date} onChange={set('posting_date')} placeholder="e.g. 2026-10-20" />
         </div>
         <button type="submit" className="btn btn-v self-start" disabled={busy || form.role_title.trim().length < 2}>{busy ? 'Reading the posting…' : t('Save my goal')}</button>
+        <Activity running={busy} label="Reading the posting and checking every quote" stages={result?.stages} />
         {error && <p role="alert" className="m-0 text-sm text-weak">{error}</p>}
       </form>
 

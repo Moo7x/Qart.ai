@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useT } from '../i18n'
 import { sendJSON } from '../api'
+import { Activity } from '../components/Activity'
 import { OccupationEvidence } from '../components/OccupationEvidence'
 import type { Detection } from '../types'
 
@@ -42,6 +43,7 @@ export function Occupations() {
         </label>
         <button type="submit" className="btn btn-v" disabled={busy || text.trim().length < 2}>{busy ? 'Matching… (the GPU may be waking up)' : t('Find my occupation')}</button>
       </form>
+      <Activity running={busy} label="Matching on RunPod: a cold GPU needs about 20 s to wake up" stages={result?.stages} />
       {error && <p role="alert" className="m-0 text-sm text-weak">{error}</p>}
       {result && (
         <section className="card-light flex flex-col gap-2 px-6 py-4">

@@ -134,6 +134,7 @@ export type Extraction = {
   note: string
   removed: Record<string, number>
   rejected: { skill: string; reason: string }[]
+  stages?: Stage[]
 }
 
 export type SkillClaim = { level: number | null; evidence: string; source: 'cv' | 'self' | 'keyword' }
@@ -373,6 +374,7 @@ export type Explanation = {
   sentences: { text: string; facts: { id: string; text: string }[] }[]
   engine: string
   note: string
+  stages?: Stage[]
 }
 
 // ---- Trend model versions (src/evidence/models.py) ----
@@ -473,6 +475,7 @@ export type Detection = {
   query: string
   engine: string
   note: string
+  stages?: Stage[]
   matches: { soc: string; title: string; score: number; in_field: boolean }[]
 }
 export type OccupationPreview = {
@@ -525,6 +528,7 @@ export type GoalResponse = {
     essentials: number
     default_level: number
   }
+  stages?: Stage[]
   stepping_stones?: { role_id: string; title: string; shared: string[]; overlap: number; fit: number; longer_route: boolean; shared_courses: { id: string; title: string; url: string }[] }[]
 }
 
@@ -546,3 +550,5 @@ export type ProgressResponse = {
     weekly_hours: number
   }
 }
+
+export type Stage = { name: string; engine: string; outcome: string; seconds: number }

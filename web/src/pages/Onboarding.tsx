@@ -2,9 +2,10 @@ import { useState } from 'react'
 import { useT } from '../i18n'
 import { Link, useNavigate } from 'react-router-dom'
 import { getJSON, sendJSON, uploadFile, useApi } from '../api'
+import { Activity } from '../components/Activity'
 import { Dots } from '../components/journey'
 import { useJourney } from '../state'
-import type { Extraction, MatchesResponse, PackInfo, ProfileData, SignalsResponse, Situation, SkillClaim, SkillKind } from '../types'
+import type { Extraction, MatchesResponse, PackInfo, ProfileData, SignalsResponse, Situation, SkillClaim, SkillKind, Stage } from '../types'
 
 const STEPS = ['', 'Your situation', 'Your CV', 'Your work today', 'Your skills', 'Time and budget', 'What matters to you']
 const LAST_QUESTION = 6
@@ -40,6 +41,7 @@ export function Onboarding() {
   const signals = useApi<SignalsResponse>('/api/signals')
   const [step, setStep] = useState(0)
   const [situation, setSituation] = useState<Situation>('working')
+  const [stages, setStages] = useState<Stage[] | undefined>(undefined)
   const [extraction, setExtraction] = useState<Extraction | null>(null)
   const [role, setRole] = useState('other')
   const [years, setYears] = useState('')
@@ -59,6 +61,7 @@ export function Onboarding() {
 
   function applyExtraction(result: Extraction) {
     setExtraction(result)
+    setStages(result.stages)
     if (result.current_role !== 'other') setRole(result.current_role)
     if (result.years_experience !== null) setYears(String(result.years_experience))
     if (result.interests.length) setInterests(result.interests)
@@ -71,6 +74,7 @@ export function Onboarding() {
   }
 
   async function run(label: string, action: () => Promise<void>) {
+    setStages(undefined)
     setBusy(label)
     setError(null)
     try {
@@ -400,7 +404,7 @@ export function Onboarding() {
           </section>
         )}
 
-        {busy && <p role="status" className="m-0 text-sm text-graphite">{busy}</p>}
+        <Activity running={busy !== null} label={t(busy ?? '')} stages={stages} />
         {error && <p role="alert" className="m-0 text-sm text-weak">{error}</p>}
 
         {step >= 1 && step <= LAST_QUESTION && (
