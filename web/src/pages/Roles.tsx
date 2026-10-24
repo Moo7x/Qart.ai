@@ -1,10 +1,16 @@
 import { useState } from 'react'
+import { useT } from '../i18n'
 import { Link, useNavigate } from 'react-router-dom'
 import { sendJSON, useApi } from '../api'
 import { Dots, ScenarioSwitch, SdgTag } from '../components/journey'
+import { CompareRoles, Openings } from '../components/CompareRoles'
+import { BestQuestion, MeterRow, WhatIf } from '../components/Decision'
+import { ExplainRole } from '../components/ExplainRole'
+import { ReportProblem } from '../components/Feedback'
+import { RoleTasks } from '../components/RoleTasks'
 import { Loading, Problem } from '../components/ui'
 import { useJourney } from '../state'
-import type { GapColumn, MatchesResponse, RoleCard } from '../types'
+import type { GapColumn, MatchesResponse, PackInfo, ProfileData, RoleCard, SensitivityResponse, Situation } from '../types'
 
 const GAP_TITLE: Record<GapColumn, [string, string]> = {
   ready: ['Ready now', 'text-rising'],
@@ -34,8 +40,32 @@ function bars(role: RoleCard) {
   return { ready: share(['ready']), partly: share(['bridgeable']) }
 }
 
-function Why({ role, onChoose, chosen, busy }: { role: RoleCard; onChoose: () => void; chosen: boolean; busy: boolean }) {
+// Graduates: entry roles TalentCorp lists with a route to this role. Switchers: what carries over.
+function ForYou({ role, situation, pack }: { role: RoleCard; situation: Situation; pack: PackInfo | null }) {
+  if (situation === 'student') {
+    const ways = (pack?.current_roles ?? []).filter((r) => r.transitions.includes(role.role_id))
+    if (ways.length === 0) return null
+    return (
+      <p className="m-0 text-[13px] text-stone">
+        <span className="font-semibold text-white">Ways in:</span> start as {ways.map((w) => w.title).join(', ')}. TalentCorp lists a route from {ways.length === 1 ? 'that role' : 'these roles'} to {role.title} (expert view).
+      </p>
+    )
+  }
+  if (situation === 'switcher') {
+    const carry = role.requirements.filter((r) => r.column === 'ready').map((r) => r.skill_name)
+    return (
+      <p className="m-0 text-[13px] text-stone">
+        <span className="font-semibold text-white">What carries over:</span> {carry.length ? `${carry.join(', ')}, at the level this role needs (your own rating).` : 'none of your stated skills yet reach this role’s level; tell us more on the question above.'}
+      </p>
+    )
+  }
+  return null
+}
+
+function Why({ role, onChoose, chosen, busy, situation, pack }: { role: RoleCard; onChoose: () => void; chosen: boolean; busy: boolean; situation: Situation; pack: PackInfo | null }) {
+  const { t } = useT()
   const { ready, partly } = bars(role)
+  const { profileId, scenario } = useJourney()
   return (
     <section className="card-dark flex flex-col gap-4 bg-[radial-gradient(70%_80%_at_90%_0%,rgba(108,71,255,0.2),rgba(33,33,38,0)_70%)] p-6">
       <div className="flex flex-wrap items-start justify-between gap-4">
@@ -55,6 +85,8 @@ function Why({ role, onChoose, chosen, busy }: { role: RoleCard; onChoose: () =>
         <span style={{ width: `${ready}%` }} className="bg-mint" />
         <span style={{ width: `${partly}%` }} className="bg-violet-light" />
       </div>
+      <MeterRow meters={role.meters} range={role.fit_range} />
+      <ForYou role={role} situation={situation} pack={pack} />
       <div className="rounded-lg bg-surface px-3.5 py-3">
         <p className="m-0 font-mono text-xs">fit = 100 × Σ w · min(your level ÷ needed level, 1) ÷ Σ w</p>
         <p className="m-0 mt-1.5 text-xs text-stone">
@@ -89,9 +121,12 @@ function Why({ role, onChoose, chosen, busy }: { role: RoleCard; onChoose: () =>
           </tbody>
         </table>
       </div>
+      <Openings title={role.title} />
+      <ReportProblem kinds={['not_my_goal', 'wrong_number', 'unsupported_claim']} targetType="role" targetId={role.role_id} page="roles" dark />
+      {profileId && <ExplainRole key={`${role.role_id}-${scenario}`} profileId={profileId} roleId={role.role_id} scenario={scenario} />}
       <div className="flex flex-wrap gap-2">
         <button type="button" className="btn btn-v" onClick={onChoose} disabled={busy}>
-          {chosen ? 'Your destination ✓ · open the pathway' : 'Choose as my destination'}
+          {chosen ? 'Your destination ✓ · open the pathway' : t('Choose as my destination')}
         </button>
       </div>
     </section>
@@ -99,10 +134,15 @@ function Why({ role, onChoose, chosen, busy }: { role: RoleCard; onChoose: () =>
 }
 
 export function Roles() {
+  const { t } = useT()
   const { profileId, scenario } = useJourney()
   const navigate = useNavigate()
   const current = useApi<MatchesResponse>(profileId ? `/api/profiles/${profileId}/matches?scenario=${scenario}` : null)
   const baseline = useApi<MatchesResponse>(profileId ? `/api/profiles/${profileId}/matches?scenario=moderate` : null)
+  const profile = useApi<{ profile: ProfileData }>(profileId ? `/api/profiles/${profileId}` : null)
+  const pack = useApi<PackInfo>('/api/pack')
+  const prefs = useApi<{ not_my_goal: string[] }>(profileId ? `/api/profiles/${profileId}/preferences` : null)
+  const stability = useApi<SensitivityResponse>(profileId ? `/api/profiles/${profileId}/sensitivity?scenario=${scenario}` : null)
   const [selected, setSelected] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -129,8 +169,8 @@ export function Roles() {
     <main className="flex min-w-0 flex-[999_1_640px] flex-col gap-6 px-5 py-7 md:px-10">
       <header className="flex flex-wrap items-end justify-between gap-4">
         <div className="flex flex-col gap-1.5">
-          <span className="eyebrow">Roles that fit · every destination role is scored</span>
-          <h1 className="h1">Where your skills can take you</h1>
+          <span className="eyebrow">My options · every destination role is scored</span>
+          <h1 className="h1">{t('Where your skills can take you')}</h1>
           <p className="m-0 max-w-[640px] text-graphite">
             Destination roles TalentCorp lists for highly impacted GBS finance roles. Fit compares your levels with what each role needs under the selected scenario; outlook is shown separately with its sources.
           </p>
@@ -163,6 +203,7 @@ export function Roles() {
               const was = moderateRank.indexOf(r.role_id)
               const moved = scenario === 'fast' && was >= 0 ? was - i : 0
               const b = bars(r)
+              const ranks = stability.data?.roles.find((x) => x.role_id === r.role_id)?.ranks
               return (
                 <button
                   key={r.role_id}
@@ -180,8 +221,12 @@ export function Roles() {
                     </span>
                     <span className="flex flex-wrap gap-1.5">
                       {r.listed_transition && <span className="tag bg-observed-bg text-observed">Route from your role</span>}
+                      {prefs.data?.not_my_goal.includes(r.role_id) && <span className="tag bg-mist text-ash">You said: not your goal</span>}
                       {r.longer_route && <span className="tag bg-weak-bg text-weak">Longer route</span>}
                       {moved !== 0 && <span className="tag bg-estimate-bg text-estimate">{moved > 0 ? `▲ ${moved}` : `▼ ${-moved}`} under Fast</span>}
+                      {ranks && (Math.min(...ranks) === Math.max(...ranks)
+                        ? <span className="tag bg-mist text-graphite" title="Same rank for every declared AI-adoption intensity">steady rank</span>
+                        : <span className="tag bg-estimate-bg text-estimate" title="Rank across AI-adoption intensities from none to stronger than fast">rank {Math.min(...ranks)}–{Math.max(...ranks)} by adoption</span>)}
                     </span>
                   </span>
                   <span className="text-right font-mono text-2xl tracking-tight">{Math.round(r.fit)}</span>
@@ -194,7 +239,8 @@ export function Roles() {
           </section>
 
           <div className="flex min-w-0 flex-[1.4_1_480px] flex-col gap-5">
-            <Why role={role} chosen={data.destination === role.role_id} busy={busy} onChoose={() => choose(role.role_id)} />
+            <BestQuestion profileId={profileId} scenario={scenario} onAnswered={() => { current.reload(); baseline.reload(); stability.reload() }} />
+            <Why role={role} chosen={data.destination === role.role_id} busy={busy} onChoose={() => choose(role.role_id)} situation={profile.data?.profile.situation ?? 'working'} pack={pack.data} />
             <section className="card-light flex flex-col gap-3.5 px-6 py-5">
               <h2 className="h2">Your skills gap for this role</h2>
               <div className="grid grid-cols-2 gap-3.5 md:grid-cols-4">
@@ -229,6 +275,9 @@ export function Roles() {
                 ))}
               </div>
             </section>
+            <CompareRoles roles={data.roles} />
+            <WhatIf key={`whatif-${role.role_id}`} profileId={profileId} scenario={scenario} role={role} />
+            <RoleTasks key={role.role_id} profileId={profileId} roleId={role.role_id} />
           </div>
         </div>
       )}

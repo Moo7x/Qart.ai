@@ -18,6 +18,7 @@ from src.config import Settings
 from src.intake.pii import scrub
 from src.intake.skill_search import bm25
 from src.pack import Pack
+from src.stages import Stages
 
 LLM_TIME_BUDGET_SECONDS = 25.0
 MAX_CV_CHARS = 12_000  # longer text is cut: a CV, not a book
@@ -53,6 +54,7 @@ class Extraction:
     note: str
     removed: dict[str, int]
     rejected: list[dict[str, str]] = field(default_factory=list)
+    stages: list[dict[str, Any]] = field(default_factory=list)  # measured, for the activity panel
 
 
 def _normalise(text: str) -> str:
@@ -175,13 +177,17 @@ def keyword_extract(pack: Pack, cv_text: str) -> tuple[str, list[ClaimedSkill]]:
 def extract(
     pack: Pack, raw_text: str, settings: Settings, complete: Complete | None = None
 ) -> Extraction:
-    cleaned = scrub(raw_text[:MAX_CV_CHARS])
+    stages = Stages()
+    with stages.step("Remove names, IC, phone and email", "rules"):
+        cleaned = scrub(raw_text[:MAX_CV_CHARS])
     text = cleaned.text
     if settings.llm_configured or complete is not None:
         try:
-            raw = (complete or openai_complete(settings))(messages(pack, text), schema(pack))
-            answer = json.loads(raw)
-            skills, rejected = _validate(pack, answer, text)
+            with stages.step("Read skills with quoted evidence", settings.llm_model):
+                raw = (complete or openai_complete(settings))(messages(pack, text), schema(pack))
+            with stages.step("Check every quote is in your CV", "code"):
+                answer = json.loads(raw)
+                skills, rejected = _validate(pack, answer, text)
             role = answer.get("current_role")
             return Extraction(
                 current_role=role if role in pack.current_roles else "other",
@@ -192,12 +198,14 @@ def extract(
                 note=f"{len(rejected)} claim(s) rejected by the evidence check" if rejected else "",
                 removed=cleaned.removed,
                 rejected=rejected,
+                stages=stages.items,
             )
         except Exception as exc:  # noqa: BLE001  any model or parsing failure → labelled fallback
             note = f"model unavailable ({type(exc).__name__}); keyword fallback used"
     else:
         note = "no language model configured; keyword fallback used"
-    role, skills = keyword_extract(pack, text)
+    with stages.step("Match CV sentences to skills", "BM25 keywords"):
+        role, skills = keyword_extract(pack, text)
     return Extraction(
         current_role=role,
         years_experience=None,
@@ -206,4 +214,5 @@ def extract(
         engine="BM25 keywords (fallback)",
         note=note,
         removed=cleaned.removed,
+        stages=stages.items,
     )

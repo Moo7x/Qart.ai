@@ -2,26 +2,47 @@
 # Lists the occupations the evidence layer follows for this field. Codes are US SOC / O*NET
 # (O*NET 31.0, CC BY 4.0), the classification the Anthropic Economic Index uses.
 # Role-level detail (TalentCorp roles, tasks, skills) lives in the other files of this pack.
+# isco: the ISCO-08 unit group (the base of Malaysia's MASCO) reached through the official
+# ESCO–O*NET crosswalk (ESCO Secretariat with USDOL/ETA, version 1, Sep 2022, O*NET-SOC 2019):
+# the ESCO occupation named in `esco`, whose ESCO code starts with its ISCO-08 group (ESCO API,
+# checked 2026-10-23). Rule: the exact match; where none has an ISCO code, the closest listed match
+# whose ISCO-08 title names the same work, labelled by `esco_match`. Order Clerks has no usable
+# match (only order picker and office clerk) and stays without one.
 id: gbs_fa
 name: GBS finance & accounting
 country: MYS
 soc_occupations:
-  - {code: "13-2011.00", name: Accountants and Auditors}
-  - {code: "13-2031.00", name: Budget Analysts}
-  - {code: "13-2041.00", name: Credit Analysts}
-  - {code: "13-2051.00", name: Financial and Investment Analysts}
-  - {code: "11-3031.01", name: Treasurers and Controllers}
-  - {code: "15-2051.01", name: Business Intelligence Analysts}
-  - {code: "43-3011.00", name: Bill and Account Collectors}
-  - {code: "43-3021.00", name: Billing and Posting Clerks}
-  - {code: "43-3031.00", name: "Bookkeeping, Accounting, and Auditing Clerks"}
-  - {code: "43-3051.00", name: Payroll and Timekeeping Clerks}
-  - {code: "43-3061.00", name: Procurement Clerks}
-  - {code: "43-9021.00", name: Data Entry Keyers}
+  - {code: "13-2011.00", name: Accountants and Auditors, isco: "2411", esco: "accountant", esco_match: exactMatch,
+     esco_uri: http://data.europa.eu/esco/occupation/eda0d957-3c3c-4139-b89a-a18bc9e18897}
+  - {code: "13-2031.00", name: Budget Analysts, isco: "2411", esco: "budget analyst", esco_match: exactMatch,
+     esco_uri: http://data.europa.eu/esco/occupation/4e4a291d-1d38-4c5a-812a-5827d0691b11}
+  - {code: "13-2041.00", name: Credit Analysts, isco: "3312", esco: "credit analyst", esco_match: exactMatch,
+     esco_uri: http://data.europa.eu/esco/occupation/075e4d25-74b3-46fb-9b6e-6b53cdb196e7}
+  - {code: "13-2051.00", name: Financial and Investment Analysts, isco: "2413", esco: "financial analyst", esco_match: broadMatch,
+     esco_uri: http://data.europa.eu/esco/occupation/8d586ee9-0ab1-4155-a3b0-2ca786c8e48c}
+  - {code: "11-3031.01", name: Treasurers and Controllers, isco: "1211", esco: "corporate treasurer", esco_match: exactMatch,
+     esco_uri: http://data.europa.eu/esco/occupation/3e1a2f3c-20d6-4d33-aa6f-63cd2a32698d}
+  - {code: "15-2051.01", name: Business Intelligence Analysts, isco: "2421", esco: "business analyst", esco_match: exactMatch,
+     esco_uri: http://data.europa.eu/esco/occupation/60082a99-d8ef-4e84-9290-78902681b6ed}
+  - {code: "43-3011.00", name: Bill and Account Collectors, isco: "4214", esco: "debt collector", esco_match: exactMatch,
+     esco_uri: http://data.europa.eu/esco/occupation/50a66df6-c141-4b4a-937a-d3bc55737ae3}
+  - {code: "43-3021.00", name: Billing and Posting Clerks, isco: "4311", esco: "billing clerk", esco_match: exactMatch,
+     esco_uri: http://data.europa.eu/esco/occupation/bafbc672-0ad9-41af-9de8-db0c91a24f9b}
+  - {code: "43-3031.00", name: "Bookkeeping, Accounting, and Auditing Clerks", isco: "4311", esco: "billing clerk", esco_match: broadMatch,
+     esco_uri: http://data.europa.eu/esco/occupation/bafbc672-0ad9-41af-9de8-db0c91a24f9b}
+  - {code: "43-3051.00", name: Payroll and Timekeeping Clerks, isco: "4313", esco: "payroll clerk", esco_match: exactMatch,
+     esco_uri: http://data.europa.eu/esco/occupation/ade351da-7bda-424e-8682-bbdcab2a25be}
+  - {code: "43-3061.00", name: Procurement Clerks, isco: "3323", esco: "purchaser", esco_match: closeMatch,
+     esco_uri: http://data.europa.eu/esco/occupation/29fa406d-de89-4515-be8d-0fe7bda993f1}
+  - {code: "43-9021.00", name: Data Entry Keyers, isco: "4132", esco: "data entry clerk", esco_match: exactMatch,
+     esco_uri: http://data.europa.eu/esco/occupation/6353b3e8-e8f2-4ecb-b230-186927139892}
   - {code: "43-4151.00", name: Order Clerks}
-  - {code: "15-1211.00", name: Computer Systems Analysts}
-  - {code: "13-1111.00", name: Management Analysts}
-  - {code: "13-1023.00", name: "Purchasing Agents, Except Wholesale, Retail, and Farm Products"}
+  - {code: "15-1211.00", name: Computer Systems Analysts, isco: "2511", esco: "ICT system analyst", esco_match: exactMatch,
+     esco_uri: http://data.europa.eu/esco/occupation/a6a0b60f-08da-4faa-bf54-942987efb471}
+  - {code: "13-1111.00", name: Management Analysts, isco: "2421", esco: "business analyst", esco_match: closeMatch,
+     esco_uri: http://data.europa.eu/esco/occupation/60082a99-d8ef-4e84-9290-78902681b6ed}
+  - {code: "13-1023.00", name: "Purchasing Agents, Except Wholesale, Retail, and Farm Products", isco: "3323", esco: "purchaser", esco_match: exactMatch,
+     esco_uri: http://data.europa.eu/esco/occupation/29fa406d-de89-4515-be8d-0fe7bda993f1}
 # DOSM job-ad releases name occupations in words; these are the ones followed for this field.
 dosm_job_ad_occupations:
   - Accountants and Auditors

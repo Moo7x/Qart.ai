@@ -1,9 +1,11 @@
 import { Lock } from 'lucide-react'
+import { useT } from '../i18n'
 import { type FormEvent, useState } from 'react'
 import { formatWhen, parseUtc, sendJSON, useApi } from '../api'
 import { PipelineDiagram, type StepId } from '../components/PipelineDiagram'
 import { Empty, Loading, Problem } from '../components/ui'
-import type { BacktestEntry, Run, SourceStatus } from '../types'
+import { FeedbackReview } from '../components/Feedback'
+import type { BacktestEntry, ForecastCheck, ModelVersion, Run, SourceStatus } from '../types'
 
 const RUNS_POLL_MS = 5_000
 const SECONDS_PER_MINUTE = 60
@@ -81,10 +83,16 @@ function RunNow({ onStarted }: { onStarted: () => void }) {
   )
 }
 
+// Steps logged with a run that are not sources.
+export const STEPS = ['trend_models', 'occupation_index']
+
 export function LiveIntelligence() {
+  const { t } = useT()
   const runs = useApi<Run[]>('/api/pipeline/runs?limit=12', RUNS_POLL_MS)
   const sources = useApi<SourceStatus[]>('/api/sources')
   const backtest = useApi<BacktestEntry[]>('/api/pipeline/backtest')
+  const models = useApi<ModelVersion[]>('/api/pipeline/models')
+  const rolling = useApi<ForecastCheck[]>('/api/pipeline/forecast-check')
   const [step, setStep] = useState<StepId>('validate')
   const [open, setOpen] = useState<number | null>(null)
 
@@ -98,7 +106,7 @@ export function LiveIntelligence() {
       <header className="flex flex-wrap items-end justify-between gap-4">
         <div className="flex flex-col gap-1.5">
           <span className="eyebrow">Live intelligence · open to everyone</span>
-          <h1 className="h1">Where every number comes from</h1>
+          <h1 className="h1">{t('Where every number comes from')}</h1>
           <p className="m-0 max-w-[640px] text-graphite">
             The pipeline runs on a schedule even when nobody is using the app. Every run is logged, including runs where
             nothing changed.
@@ -180,8 +188,66 @@ export function LiveIntelligence() {
               </tbody>
             </table>
           )}
+          {rolling.data && rolling.data.length > 0 && (
+            <details className="text-[13px]">
+              <summary className="cursor-pointer text-graphite">Rolling check: every forecast origin from 2015, one and two years ahead</summary>
+              <div className="mt-2 overflow-x-auto"><table className="w-full min-w-[360px] border-collapse text-xs">
+                <thead>
+                  <tr className="cap text-left">
+                    <th className="py-1.5 pr-2 font-medium">Group · horizon</th>
+                    {['naive', 'drift', 'linear', 'damped', 'smoothing'].map((m) => <th key={m} className="px-1.5 py-1.5 text-right font-medium">{m === 'naive' ? 'no change' : m}</th>)}
+                  </tr>
+                </thead>
+                <tbody>
+                  {rolling.data.filter((r) => ['clerical', 'professionals', 'technicians'].includes(r.group)).map((r) => (
+                    <tr key={`${r.group}-${r.horizon}`} className="border-t border-mist">
+                      <td className="py-1.5 pr-2">{r.group} · {r.horizon} y <span className="text-ash">({r.origins.length} origins)</span></td>
+                      {['naive', 'drift', 'linear', 'damped', 'smoothing'].map((m) => (
+                        <td key={m} className={`px-1.5 py-1.5 text-right font-mono ${r.best === m ? 'font-semibold text-rising' : ''}`}>{r.mae[m]?.toFixed(2) ?? '—'}</td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table></div>
+              <p className="m-0 mt-1.5 text-xs text-graphite">
+                Mean error in percentage points; each method sees only the years before its origin. A trend is projected only if a trend method (drift, line, damped) beats no change; smoothing is a flat forecast. Retrospective on today's published series.
+              </p>
+            </details>
+          )}
+          {models.data && models.data.length > 0 && (
+            <details className="text-[13px]">
+              <summary className="cursor-pointer text-graphite">
+                Model versions: re-scored each time new DOSM data arrives ({models.data.length} stored)
+              </summary>
+              <div className="mt-2 overflow-x-auto"><table className="w-full min-w-[360px] border-collapse text-xs">
+                <thead>
+                  <tr className="cap text-left">
+                    <th className="py-1.5 pr-2 font-medium">Group · data to</th>
+                    <th className="px-2 py-1.5 font-medium">Scored on</th>
+                    <th className="px-2 py-1.5 text-right font-medium">No change</th>
+                    <th className="px-2 py-1.5 text-right font-medium">Line</th>
+                    <th className="py-1.5 pl-2 font-medium">Stored</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {models.data.map((v) => (
+                    <tr key={v.id} className="border-t border-mist">
+                      <td className="py-1.5 pr-2">{v.group_id.replace('_', ' & ')} · {v.last_year}</td>
+                      <td className="px-2 py-1.5 font-mono">{v.test_years}</td>
+                      <td className={`px-2 py-1.5 text-right font-mono ${v.best === 'naive' ? 'font-semibold text-rising' : ''}`}>{v.naive.toFixed(2)}</td>
+                      <td className={`px-2 py-1.5 text-right font-mono ${v.best === 'linear' ? 'font-semibold text-rising' : ''}`}>{v.linear.toFixed(2)}</td>
+                      <td className="py-1.5 pl-2 text-graphite">{formatWhen(v.created_at)}{v.run_id ? ` · run ${v.run_id}` : ''}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table></div>
+              <p className="m-0 mt-1.5 text-xs text-graphite">A run with no new DOSM data stores no version; its log says the models are unchanged.</p>
+            </details>
+          )}
         </section>
       </div>
+
+      <FeedbackReview />
 
       <section className="card-light flex flex-col gap-2.5 px-6 py-5">
         <h2 className="h2">Registered sources</h2>
@@ -229,7 +295,9 @@ export function LiveIntelligence() {
 }
 
 function FragmentRow({ run, open, onToggle }: { run: Run; open: boolean; onToggle: () => void }) {
-  const ok = run.sources.filter((s) => s.status === 'ok').length
+  // The trend-model step is logged with the run but is not a source.
+  const collected = run.sources.filter((s) => !STEPS.includes(s.source_id))
+  const ok = collected.filter((s) => s.status === 'ok').length
   return (
     <>
       <tr className="border-t border-mist">
@@ -239,7 +307,7 @@ function FragmentRow({ run, open, onToggle }: { run: Run; open: boolean; onToggl
           </button>
         </td>
         <td className="px-2 py-2.5">{run.trigger}</td>
-        <td className="px-2 py-2.5 font-mono">{run.status === 'running' ? '…' : `${ok}/${run.sources.length}`}</td>
+        <td className="px-2 py-2.5 font-mono">{run.status === 'running' ? '…' : `${ok}/${collected.length}`}</td>
         <td className="px-2 py-2.5 font-mono">{run.new_observations}</td>
         <td className="px-2 py-2.5 font-mono">{duration(run)}</td>
         <td className="py-2.5 pl-2"><span className={`tag ${RESULT_STYLE[run.status] ?? 'bg-mist text-graphite'}`}>{run.status}</span></td>

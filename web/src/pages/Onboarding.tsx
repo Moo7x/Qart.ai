@@ -1,9 +1,11 @@
 import { useState } from 'react'
+import { useT } from '../i18n'
 import { Link, useNavigate } from 'react-router-dom'
 import { getJSON, sendJSON, uploadFile, useApi } from '../api'
+import { Activity } from '../components/Activity'
 import { Dots } from '../components/journey'
 import { useJourney } from '../state'
-import type { Extraction, MatchesResponse, PackInfo, ProfileData, SignalsResponse, Situation, SkillClaim, SkillKind } from '../types'
+import type { Extraction, MatchesResponse, PackInfo, ProfileData, SignalsResponse, Situation, SkillClaim, SkillKind, Stage } from '../types'
 
 const STEPS = ['', 'Your situation', 'Your CV', 'Your work today', 'Your skills', 'Time and budget', 'What matters to you']
 const LAST_QUESTION = 6
@@ -32,12 +34,14 @@ function chip(on: boolean): string {
 }
 
 export function Onboarding() {
+  const { t } = useT()
   const navigate = useNavigate()
   const { setProfileId } = useJourney()
   const pack = useApi<PackInfo>('/api/pack')
   const signals = useApi<SignalsResponse>('/api/signals')
   const [step, setStep] = useState(0)
   const [situation, setSituation] = useState<Situation>('working')
+  const [stages, setStages] = useState<Stage[] | undefined>(undefined)
   const [extraction, setExtraction] = useState<Extraction | null>(null)
   const [role, setRole] = useState('other')
   const [years, setYears] = useState('')
@@ -57,6 +61,7 @@ export function Onboarding() {
 
   function applyExtraction(result: Extraction) {
     setExtraction(result)
+    setStages(result.stages)
     if (result.current_role !== 'other') setRole(result.current_role)
     if (result.years_experience !== null) setYears(String(result.years_experience))
     if (result.interests.length) setInterests(result.interests)
@@ -69,6 +74,7 @@ export function Onboarding() {
   }
 
   async function run(label: string, action: () => Promise<void>) {
+    setStages(undefined)
     setBusy(label)
     setError(null)
     try {
@@ -141,7 +147,7 @@ export function Onboarding() {
           </svg>
           <span className="text-[17px] font-semibold tracking-tight">Qart.ai</span>
         </Link>
-        <Link to="/" className="text-sm text-graphite">Skip to the evidence overview</Link>
+        <Link to="/" className="text-sm text-graphite">{t('Skip to the evidence overview')}</Link>
       </header>
 
       <main className="relative mx-auto flex max-w-[640px] flex-col gap-7 px-6 pb-16 pt-8">
@@ -153,21 +159,21 @@ export function Onboarding() {
               ))}
             </div>
             <span className="font-mono text-xs text-graphite">
-              Step {step} of {LAST_QUESTION} · {STEPS[step]}
+              Step {step} of {LAST_QUESTION} · {t(STEPS[step])}
             </span>
           </div>
         )}
 
         {step === 0 && (
           <section className="flex flex-col gap-6 pt-6">
-            <span className="eyebrow">GBS finance &amp; accounting · Malaysia</span>
-            <h1 className="m-0 text-[56px] font-semibold leading-[1.02] tracking-[-0.035em]">Where is your finance career going as AI changes the work?</h1>
+            <span className="eyebrow">{t('GBS finance & accounting · Malaysia')}</span>
+            <h1 className="m-0 text-[56px] font-semibold leading-[1.02] tracking-[-0.035em]">{t('Where is your finance career going as AI changes the work?')}</h1>
             <p className="m-0 max-w-[560px] text-lg text-graphite">
               Qart.ai reads Malaysia's public labour and job-ad data, shows which of your skills are gaining weight, which roles fit you, and a free learning plan. Every number links to its source.
             </p>
             <div className="flex flex-wrap items-center gap-3">
-              <button type="button" className="btn btn-v min-h-[44px] text-[15px]" onClick={() => go(1)}>Start · about 3 minutes</button>
-              <span className="text-[13px] text-graphite">Skip any question. The demo uses synthetic CVs only.</span>
+              <button type="button" className="btn btn-v min-h-[44px] text-[15px]" onClick={() => go(1)}>{t('Start · about 3 minutes')}</button>
+              <span className="text-[13px] text-graphite">{t('Skip any question. The demo uses synthetic CVs only.')}</span>
             </div>
             {evidence.length > 0 && (
               <div className="card-dark flex flex-col gap-2.5 px-5 py-4">
@@ -186,8 +192,8 @@ export function Onboarding() {
 
         {step === 1 && (
           <section className="flex flex-col gap-4">
-            <h1 className="h1">Which describes you?</h1>
-            <p className="m-0 text-graphite">This changes what you see first.</p>
+            <h1 className="h1">{t('Which describes you?')}</h1>
+            <p className="m-0 text-graphite">{t('This changes what you see first.')}</p>
             <div role="radiogroup" aria-label="Your situation" className="flex flex-col gap-2.5">
               {SITUATIONS.map((s) => (
                 <button
@@ -199,8 +205,8 @@ export function Onboarding() {
                   className={`flex w-full cursor-pointer items-center justify-between gap-4 rounded-lg bg-white px-[18px] py-4 text-left ${situation === s.id ? 'border-[1.5px] border-violet shadow-[0_0_0_3px_rgba(108,71,255,0.12)]' : 'border border-hairline'}`}
                 >
                   <span>
-                    <span className="block font-semibold">{s.title}</span>
-                    <span className="block text-sm text-graphite">{s.body}</span>
+                    <span className="block font-semibold">{t(s.title)}</span>
+                    <span className="block text-sm text-graphite">{t(s.body)}</span>
                   </span>
                   <span aria-hidden="true" className={`h-[18px] w-[18px] flex-none rounded-full ${situation === s.id ? 'border-[5px] border-violet' : 'border-[1.5px] border-stone'}`} />
                 </button>
@@ -211,10 +217,10 @@ export function Onboarding() {
 
         {step === 2 && (
           <section className="flex flex-col gap-4">
-            <h1 className="h1">Add your CV</h1>
-            <p className="m-0 text-graphite">We pre-fill the next questions from it. Prefer not to? Skip and answer them yourself.</p>
+            <h1 className="h1">{t('Add your CV')}</h1>
+            <p className="m-0 text-graphite">{t('We pre-fill the next questions from it. Prefer not to? Skip and answer them yourself.')}</p>
             <label className="relative flex min-h-[160px] cursor-pointer flex-col items-center justify-center gap-1.5 rounded-lg border-[1.5px] border-dashed border-stone bg-white p-4 text-center">
-              <span className="font-semibold">Drop a PDF, DOCX or text file</span>
+              <span className="font-semibold">{t('Drop a PDF, DOCX or text file')}</span>
               <span className="text-[13px] text-graphite">or click to browse</span>
               <input
                 type="file"
@@ -225,7 +231,7 @@ export function Onboarding() {
               />
             </label>
             <div className="flex flex-col gap-2">
-              <span className="cap">Or try a synthetic sample</span>
+              <span className="cap">{t('Or try a synthetic sample')}</span>
               <div className="flex flex-wrap gap-2">
                 {(pack.data?.samples ?? []).map((s) => (
                   <button key={s.id} type="button" className={chip(false)} onClick={() => pickSample(s.id)}>
@@ -234,7 +240,7 @@ export function Onboarding() {
                 ))}
               </div>
             </div>
-            <p className="m-0 text-[13px] text-graphite">Names, IC numbers, phone numbers and emails are removed before anything reads the CV. The CV text itself is not stored.</p>
+            <p className="m-0 text-[13px] text-graphite">{t('Names, IC numbers, phone numbers and emails are removed before anything reads the CV. The CV text itself is not stored.')}</p>
           </section>
         )}
 
@@ -246,7 +252,7 @@ export function Onboarding() {
               <label className="flex flex-col gap-1.5 text-[13px] font-medium">
                 Current or last role
                 <select value={role} onChange={(e) => setRole(e.target.value)} className="min-h-[44px] rounded-md border border-hairline bg-fog px-3 text-[15px]">
-                  <option value="other">None of these</option>
+                  <option value="other">{t('None of these')}</option>
                   {(pack.data?.current_roles ?? []).map((r) => (
                     <option key={r.id} value={r.id}>{r.title}</option>
                   ))}
@@ -269,7 +275,7 @@ export function Onboarding() {
 
         {step === 4 && (
           <section className="flex flex-col gap-4">
-            <h1 className="h1">Check your skills</h1>
+            <h1 className="h1">{t('Check your skills')}</h1>
             <p className="m-0 text-graphite">
               Levels are what you claim, not a test: {pack.data?.proficiency.map((p, i) => `${i} ${p}`).join(' · ')}.
             </p>
@@ -281,7 +287,7 @@ export function Onboarding() {
               </p>
             )}
             <div className="card-light">
-              {Object.keys(skills).length === 0 && <p className="m-0 px-4 py-4 text-sm text-graphite">No skills yet. Add the ones you have below.</p>}
+              {Object.keys(skills).length === 0 && <p className="m-0 px-4 py-4 text-sm text-graphite">{t('No skills yet. Add the ones you have below.')}</p>}
               {Object.entries(skills).map(([id, claim]) => (
                 <div key={id} className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-b border-mist px-4 py-3">
                   <span className="min-w-0 flex-[1_1_260px]">
@@ -322,9 +328,9 @@ export function Onboarding() {
 
         {step === 5 && (
           <section className="flex flex-col gap-5">
-            <h1 className="h1">How much time and money can you put into learning?</h1>
+            <h1 className="h1">{t('How much time and money can you put into learning?')}</h1>
             <div role="radiogroup" aria-label="Hours per week" className="flex flex-col gap-2.5">
-              <span className="text-[13px] font-medium">Hours per week</span>
+              <span className="text-[13px] font-medium">{t('Hours per week')}</span>
               <div className="flex flex-wrap gap-2">
                 {HOURS.map((h) => (
                   <button key={h} type="button" role="radio" aria-checked={hours === h} className={chip(hours === h)} onClick={() => setHours(h)}>{h} h</button>
@@ -332,33 +338,33 @@ export function Onboarding() {
               </div>
             </div>
             <div role="radiogroup" aria-label="Budget" className="flex flex-col gap-2.5">
-              <span className="text-[13px] font-medium">Budget</span>
+              <span className="text-[13px] font-medium">{t('Budget')}</span>
               <div className="flex flex-wrap gap-2">
-                <button type="button" role="radio" aria-checked={budget === 'free'} className={chip(budget === 'free')} onClick={() => setBudget('free')}>Free only</button>
-                <button type="button" role="radio" aria-checked={budget === 'free_hrd'} className={chip(budget === 'free_hrd')} onClick={() => setBudget('free_hrd')}>Free + HRD Corp-claimable</button>
-                <button type="button" role="radio" aria-checked={budget === 'up_to_500'} className={chip(budget === 'up_to_500')} onClick={() => setBudget('up_to_500')}>Up to RM 500</button>
+                <button type="button" role="radio" aria-checked={budget === 'free'} className={chip(budget === 'free')} onClick={() => setBudget('free')}>{t('Free only')}</button>
+                <button type="button" role="radio" aria-checked={budget === 'free_hrd'} className={chip(budget === 'free_hrd')} onClick={() => setBudget('free_hrd')}>{t('Free + HRD Corp-claimable')}</button>
+                <button type="button" role="radio" aria-checked={budget === 'up_to_500'} className={chip(budget === 'up_to_500')} onClick={() => setBudget('up_to_500')}>{t('Up to RM 500')}</button>
               </div>
-              <span className="text-xs text-graphite">Every course listed today is free. HRD Corp-claimable programmes are shown only once the official listing confirms them.</span>
+              <span className="text-xs text-graphite">{t('Every course listed today is free. HRD Corp-claimable programmes are shown only once the official listing confirms them.')}</span>
             </div>
           </section>
         )}
 
         {step === 6 && (
           <section className="flex flex-col gap-5">
-            <h1 className="h1">What matters to you in your next role?</h1>
-            <p className="m-0 text-graphite">Used only to order roles that fit you almost equally well. It never changes a fit score.</p>
+            <h1 className="h1">{t('What matters to you in your next role?')}</h1>
+            <p className="m-0 text-graphite">{t('Used only to order roles that fit you almost equally well. It never changes a fit score.')}</p>
             <div className="flex flex-wrap gap-2">
               {INTERESTS.map((i) => {
                 const on = interests.includes(i.id)
                 return (
                   <button key={i.id} type="button" aria-pressed={on} className={chip(on)} onClick={() => setInterests(on ? interests.filter((x) => x !== i.id) : [...interests, i.id])}>
-                    {i.label}
+                    {t(i.label)}
                   </button>
                 )
               })}
             </div>
             <div className="flex flex-col gap-2.5">
-              <span className="text-[13px] font-medium">Sustainable Development Goals you care about (optional)</span>
+              <span className="text-[13px] font-medium">{t('Sustainable Development Goals you care about (optional)')}</span>
               <div className="flex flex-wrap gap-2">
                 {SDGS.map((g) => {
                   const on = sdgs.includes(g.id)
@@ -378,7 +384,7 @@ export function Onboarding() {
         {step === BUILDING && (
           <section className="flex flex-col gap-5 pt-3">
             <span className="eyebrow">{built ? 'Ready' : 'Almost there'}</span>
-            <h1 className="m-0 text-[40px] font-semibold leading-[1.1] tracking-[-0.035em]">Building your picture from today's evidence</h1>
+            <h1 className="m-0 text-[40px] font-semibold leading-[1.1] tracking-[-0.035em]">{t("Building your picture from today's evidence")}</h1>
             <div className="card-dark flex flex-col gap-3.5 px-6 py-5 font-mono text-[13px]" aria-live="polite">
               <span><span className="text-cyan">{built ? '✓' : '…'}</span> Saved your profile without your name or contact details</span>
               {built && (
@@ -391,14 +397,14 @@ export function Onboarding() {
             </div>
             {built && (
               <div className="flex flex-wrap items-center gap-3">
-                <button type="button" className="btn btn-v min-h-[44px]" onClick={() => navigate('/roles')}>See roles that fit me →</button>
-                <Link to="/" className="text-[13px] text-graphite">Or look at the evidence first</Link>
+                <button type="button" className="btn btn-v min-h-[44px]" onClick={() => navigate('/roles')}>{t('See roles that fit me →')}</button>
+                <Link to="/" className="text-[13px] text-graphite">{t('Or look at the evidence first')}</Link>
               </div>
             )}
           </section>
         )}
 
-        {busy && <p role="status" className="m-0 text-sm text-graphite">{busy}</p>}
+        <Activity running={busy !== null} label={t(busy ?? '')} stages={stages} />
         {error && <p role="alert" className="m-0 text-sm text-weak">{error}</p>}
 
         {step >= 1 && step <= LAST_QUESTION && (
@@ -406,7 +412,7 @@ export function Onboarding() {
             <button type="button" className="min-h-[44px] cursor-pointer border-0 bg-transparent px-3 text-[15px] text-graphite" onClick={() => go(step - 1)}>← Back</button>
             <span className="flex gap-2">
               {step < LAST_QUESTION && (
-                <button type="button" className="min-h-[44px] cursor-pointer border-0 bg-transparent px-3 text-[15px] text-graphite" onClick={() => go(step + 1)}>Skip</button>
+                <button type="button" className="min-h-[44px] cursor-pointer border-0 bg-transparent px-3 text-[15px] text-graphite" onClick={() => go(step + 1)}>{t('Skip')}</button>
               )}
               <button type="button" className="btn btn-v min-h-[44px]" disabled={busy !== null} onClick={() => (step === LAST_QUESTION ? finish() : go(step + 1))}>
                 {step === LAST_QUESTION ? 'Build my picture' : 'Continue'}

@@ -8,6 +8,10 @@ in; ranked roles with every number explained come out. Nothing here calls a mode
 c_k is the person's claimed level of skill k (0 if not stated), r_k the level the role needs and
 w_k the weight of that requirement under the scenario. Essential requirements keep their level and
 weight in every scenario; other weights shift with the scenario (see `scenario_weight`).
+
+The observed AI-use share behind a shift is task-level where it can be: the O*NET tasks linked to
+the skill in this occupation (data/packs/gbs_fa/tasks.yaml), averaged with O*NET importance as the
+weight. A skill without task-level evidence uses its occupation's share, and says so.
 """
 
 from collections.abc import Mapping
@@ -28,6 +32,23 @@ class Evidence:
     automation_share: dict[str, float]  # SOC code -> % of conversations that are automation-style
     automation_period: str  # e.g. "2026-05"
     automation_source: str
+    task_automation: dict[str, float] = field(default_factory=dict)  # O*NET task id -> same %
+    task_period: str = ""
+    task_importance: dict[str, float] = field(default_factory=dict)  # task id -> O*NET IM 1–5
+    task_importance_source: str = ""
+
+
+AutomationBasis = Literal["task", "occupation", "none"]
+
+
+@dataclass(frozen=True)
+class TaskEvidence:
+    """One O*NET task linked to a requirement, with what is observed about it (None = missing)."""
+
+    task: str
+    text: str
+    automation_share: float | None
+    importance: float | None
 
 
 @dataclass(frozen=True)
@@ -44,6 +65,9 @@ class RequirementScore:
     contribution: float  # fit points this requirement adds
     column: GapColumn
     evidence_pages: list[int]
+    automation_share: float | None = None  # the observed share the shift used
+    automation_basis: AutomationBasis = "none"
+    tasks: list[TaskEvidence] = field(default_factory=list)
 
 
 @dataclass
@@ -63,8 +87,48 @@ def required_level(req: Requirement) -> int:
     return params.ROLE_TIER_LEVEL[req.tier]
 
 
+def requirement_automation(
+    pack: Pack, role: DestinationRole, skill_id: str, evidence: Evidence
+) -> tuple[float | None, AutomationBasis, list[TaskEvidence]]:
+    """Observed automation-style share for one requirement, the level it comes from, its tasks.
+
+    a = Σ_t importance_t × share_t ÷ Σ_t importance_t over the linked tasks with observed use
+    (importance 1 when O*NET has none). With no task-level observation: the occupation's share.
+    """
+    tasks = [
+        TaskEvidence(
+            task=str(link.task),
+            text=link.text,
+            automation_share=evidence.task_automation.get(str(link.task)),
+            importance=evidence.task_importance.get(str(link.task)),
+        )
+        for link in pack.tasks_for(role.soc, skill_id)
+    ]
+    observed = [t for t in tasks if t.automation_share is not None]
+    if observed:
+        weights = [t.importance or 1.0 for t in observed]
+        total = sum(w * (t.automation_share or 0.0) for w, t in zip(weights, observed, strict=True))
+        return total / sum(weights), "task", tasks
+    occupation = evidence.automation_share.get(role.soc)
+    return occupation, ("occupation" if occupation is not None else "none"), tasks
+
+
+def _basis_text(basis: AutomationBasis, tasks: list[TaskEvidence]) -> str:
+    if basis == "task":
+        observed = sum(t.automation_share is not None for t in tasks)
+        return f"AI use on {observed} of {len(tasks)} linked O*NET tasks"
+    if tasks:
+        return "AI use for this occupation (its linked tasks have no published task-level data)"
+    return "AI use for this occupation (no O*NET task is linked to this skill)"
+
+
 def scenario_weight(
-    req: Requirement, ai_role: str, scenario: Scenario, automation_share: float | None
+    req: Requirement,
+    ai_role: str,
+    scenario: Scenario,
+    automation_share: float | None,
+    basis: str = "AI use for this occupation",
+    intensity: float | None = None,
 ) -> tuple[float, str]:
     """Weight of one requirement under a scenario, and the sentence that explains it.
 
@@ -73,7 +137,8 @@ def scenario_weight(
       d  +1 for skills that complement AI, −1 for routine skills, 0 otherwise (declared per skill)
       s  scenario intensity: how much of the observed automation-style use is assumed to reach
          these tasks within the horizon (declared: moderate 0.5, fast 1.0)
-      a  share of the role's occupation conversations that are automation-style (observed)
+      a  share of AI use that is automation-style (observed): on the skill's linked tasks, or
+         for the occupation when no linked task has data (see `requirement_automation`)
     Essential requirements are never shifted.
     """
     base = params.ROLE_TIER_WEIGHT[req.tier]
@@ -84,16 +149,17 @@ def scenario_weight(
         reason = (
             "No shift: neither routine nor AI-complementing."
             if direction == 0
-            else "No shift: no observed AI-use data for this occupation."
+            else "No shift: no observed AI-use data for this skill or its occupation."
         )
         return base, reason
-    intensity = params.SCENARIO_INTENSITY[scenario]
+    # `intensity` overrides the scenario's declared value only for sensitivity checks.
+    if intensity is None:
+        intensity = params.SCENARIO_INTENSITY[scenario]
     factor = 1 + direction * intensity * automation_share / 100
     verb = "up" if direction > 0 else "down"
     return base * factor, (
-        f"Weight {verb} ×{factor:.2f}: {automation_share:.0f}% of AI use for this occupation is "
-        f"automation-style (observed), and {scenario} adoption assumes {intensity:.0%} of it "
-        f"reaches these tasks."
+        f"Weight {verb} ×{factor:.2f}: {automation_share:.0f}% of {basis} is automation-style "
+        f"(observed), and {scenario} adoption assumes {intensity:.0%} of it reaches these tasks."
     )
 
 
@@ -113,6 +179,7 @@ def score_role(
     levels: Mapping[str, int | None],
     scenario: Scenario,
     evidence: Evidence,
+    intensity: float | None = None,
 ) -> RoleMatch:
     share = evidence.automation_share.get(role.soc)
     scored = []
@@ -120,11 +187,14 @@ def score_role(
         skill = pack.skills[req.skill]
         r = required_level(req)
         c = levels.get(req.skill)
-        weight, reason = scenario_weight(req, skill.ai_role, scenario, share)
-        scored.append((req, skill.name, r, c, weight, reason))
-    total_weight = sum(w for *_, w, _ in scored)
+        a, basis, tasks = requirement_automation(pack, role, req.skill, evidence)
+        weight, reason = scenario_weight(
+            req, skill.ai_role, scenario, a, _basis_text(basis, tasks), intensity
+        )
+        scored.append((req, skill.name, r, c, weight, reason, a, basis, tasks))
+    total_weight = sum(item[4] for item in scored)
     results = []
-    for req, name, r, c, weight, reason in scored:
+    for req, name, r, c, weight, reason, a, basis, tasks in scored:
         attained = min((c or 0) / r, 1.0)
         results.append(
             RequirementScore(
@@ -140,6 +210,9 @@ def score_role(
                 contribution=100 * weight * attained / total_weight,
                 column=gap_column(c, r),
                 evidence_pages=req.pages,
+                automation_share=a,
+                automation_basis=basis,
+                tasks=tasks,
             )
         )
     essential_gaps = [
@@ -169,10 +242,11 @@ def rank_roles(
     scenario: Scenario,
     evidence: Evidence,
     interests: set[str] | None = None,
+    intensity: float | None = None,
 ) -> list[RoleMatch]:
     """Every destination role, best fit first. Interests only re-order near-ties."""
     matches = [
-        score_role(pack, role, levels, scenario, evidence)
+        score_role(pack, role, levels, scenario, evidence, intensity)
         for role in pack.destination_roles.values()
     ]
     matches.sort(key=lambda m: -m.fit)

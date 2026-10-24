@@ -1,0 +1,46 @@
+# Labelled queries for occupation matching (team-labelled, synthetic; no real CVs).
+# Each query lists the O*NET-SOC codes a careful reader would accept as the right occupation.
+# Used by `python -m src.occupations.evaluate` to compare keyword, dense and reranked matching.
+labelled_by: team
+date: "2026-10-24"
+queries:
+  - {q: "Accounts receivable executive", ok: ["43-3031.00", "43-3011.00"]}
+  - {q: "Cash application analyst", ok: ["43-3031.00"]}
+  - {q: "Accounts payable assistant", ok: ["43-3031.00"]}
+  - {q: "Akauntan", ok: ["13-2011.00"], lang: ms}
+  - {q: "Juruaudit dalaman", ok: ["13-2011.00"], lang: ms}
+  - {q: "Kerani akaun", ok: ["43-3031.00"], lang: ms}
+  - {q: "Payroll executive", ok: ["43-3051.00"]}
+  - {q: "Credit controller", ok: ["13-2041.00", "43-3011.00"]}
+  - {q: "Debt collection officer", ok: ["43-3011.00"]}
+  - {q: "Billing specialist", ok: ["43-3021.00"]}
+  - {q: "FP&A analyst", ok: ["13-2051.00", "13-2031.00"]}
+  - {q: "Budget analyst", ok: ["13-2031.00"]}
+  - {q: "Financial controller", ok: ["11-3031.01"]}
+  - {q: "Treasury manager", ok: ["11-3031.01"]}
+  - {q: "Procurement executive", ok: ["13-1023.00", "43-3061.00"]}
+  - {q: "Purchasing officer", ok: ["13-1023.00", "43-3061.00"]}
+  - {q: "Data entry operator", ok: ["43-9021.00"]}
+  - {q: "Power BI developer building finance dashboards", ok: ["15-2051.01"]}
+  - {q: "SAP FI functional consultant", ok: ["15-1211.00"]}
+  - {q: "Process improvement lead", ok: ["13-1111.00"]}
+  - {q: "Cost accountant", ok: ["13-2011.00"]}
+  - {q: "Penganalisis kewangan", ok: ["13-2051.00"], lang: ms}
+  - {q: "Pegawai pembelian", ok: ["13-1023.00", "43-3061.00"], lang: ms}
+  - {q: "Order entry clerk", ok: ["43-4151.00"]}
+  - {q: "I follow up customers about overdue invoices", ok: ["43-3011.00"]}
+  - {q: "I reconcile bank statements and post journal entries", ok: ["43-3031.00", "13-2011.00"]}
+  - {q: "Software engineer", ok: ["15-1252.00"]}
+  - {q: "Jururawat", ok: ["29-1141.00"], lang: ms}
+  - {q: "Registered nurse", ok: ["29-1141.00"]}
+  - {q: "Primary school teacher", ok: ["25-2021.00"]}
+  - {q: "Guru sekolah rendah", ok: ["25-2021.00"], lang: ms}
+  - {q: "Graphic designer", ok: ["27-1024.00"]}
+  - {q: "Electrician", ok: ["47-2111.00"]}
+  - {q: "Truck driver", ok: ["53-3032.00"]}
+  - {q: "Pemandu lori", ok: ["53-3032.00"], lang: ms}
+  - {q: "Chef", ok: ["35-1011.00"]}
+  - {q: "Customer service representative", ok: ["43-4051.00"]}
+  - {q: "Data scientist", ok: ["15-2051.00"]}
+  - {q: "HR executive", ok: ["13-1071.00"]}
+  - {q: "Marketing executive", ok: ["13-1161.00", "11-2021.00", "13-1161.01"]}

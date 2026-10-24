@@ -115,3 +115,20 @@ def test_jmi_does_not_refetch_releases_read_before() -> None:
         second = dosm_jmi.collect(client, state)
     assert "big-data-analytics-job-market-insights-and-my-job-profile-first-q12025" not in requested
     assert "2024-Q1" in second.note  # still counted as a known release
+
+
+def test_releases_give_the_professionals_share_and_named_occupations() -> None:
+    from src.collectors.dosm_jmi import parse_release, release_observations
+
+    pages = {
+        q: (FIXTURES / "dosm_jmi" / f"{q}.html").read_text(encoding="utf-8")
+        for q in ("q2_2023", "q1_2024", "q1_2026")
+    }
+    shares = {q: parse_release(q, html).professional_share for q, html in pages.items()}
+    assert shares == {"q2_2023": 48.1, "q1_2024": 47.6, "q1_2026": 50.4}
+    newest = parse_release("q1_2026", pages["q1_2026"])
+    assert ("Software Developers", 20089) in [(n, c) for n, c, _ in newest.named]
+    observations = release_observations(newest)
+    entities = [o.entity for o in observations if o.series == "online_job_offerings"]
+    assert entities.count("Accountants and Auditors") == 1  # not duplicated by the named list
+    assert any(o.series == "online_job_offerings_share" and o.value == 50.4 for o in observations)

@@ -31,7 +31,8 @@ SLUG_PATTERN = re.compile(
 QUARTER_WORDS = {"first": 1, "second": 2, "third": 3, "fourth": 4}
 QUARTERS_PER_YEAR = 4
 HTTP_OK = 200
-STATE_KEY = "read_releases"
+# v2: releases are re-read once so the named occupations and the Professionals share are added.
+STATE_KEY = "read_releases_v2"
 MAX_RELEASE_PAGES = 60  # about 15 years of quarters; stops a runaway crawl if links loop
 MONTHS = [
     "january",
@@ -53,6 +54,15 @@ ACCOUNTANTS = re.compile(r"Accountants (?:and|&) Auditors \(([\d,]+)(?: job offe
 # The total is the first large number after the quarter is named, e.g. "... increased by 6.6 per
 # cent to 626,861", "... was 587,801", "... with 392,054 vacancies", "... to record 338,305".
 TOTAL = re.compile(r"(?:to record|to|was|with|amounting to)\s+([\d]{1,3}(?:,\d{3})+)")
+# The Professionals major group's share, stated in every release though worded differently:
+# "Professional category, accounting for 50.4 per cent", "Professional category with 47.6 per
+# cent", "Professionals accounted the largest share during the quarter with 48.1 per cent".
+PROFESSIONALS = re.compile(r"Professionals?\b(?: category)?[^.%]{0,70}?(\d{1,2}\.\d) per cent")
+# Named occupations with a count: "Accountants and Auditors (24,784 job offerings)" or "(20,846)".
+NAMED = re.compile(
+    r"([A-Z][A-Za-z,&/'\- ]+?)\s*\(([\d]{1,3}(?:,\d{3})*)(?: job offerings| vacancies)?\)"
+)
+LEAD_IN = re.compile(r"\b(?:for|by|were|was|as well as|and also|such as)\s+|,\s*")
 
 
 @dataclass(frozen=True)
@@ -65,6 +75,9 @@ class Release:
     total_span: str
     accountants: int | None
     accountants_span: str
+    professional_share: float | None = None
+    professional_span: str = ""
+    named: tuple[tuple[str, int, str], ...] = ()  # (occupation, count, sentence)
 
 
 def page_text(page_html: str) -> str:
@@ -105,6 +118,20 @@ def parse_release(slug: str, page_html: str) -> Release:
     named = re.search(r"in the (first|second|third|fourth) quarter of \d{4}", overview, re.I)
     total_match = TOTAL.search(overview, named.end()) if named else None
     accountants = ACCOUNTANTS.search(overview)
+    # Occupation paragraph only: from the occupation heading to the economic-activity heading.
+    start = re.search(
+        r"(?:Advertised Online|Online) (?:for|by) (?:Major Group )?Occupation", overview
+    )
+    end = re.search(r"(?:Advertised Online|Online) (?:for|by) Economic Activit", overview)
+    occupation = overview[start.start() : end.start() if end else None] if start else ""
+    share = PROFESSIONALS.search(occupation)
+    listed: list[tuple[str, int, str]] = []
+    for m in NAMED.finditer(occupation):
+        name = LEAD_IN.split(m.group(1))[-1].strip().replace(" & ", " and ")
+        if name and name[0].isupper() and len(name.split()) <= 8:
+            listed.append(
+                (name, int(m.group(2).replace(",", "")), _sentence(occupation, m.start()))
+            )
     return Release(
         slug=slug,
         quarter=quarter,
@@ -114,6 +141,9 @@ def parse_release(slug: str, page_html: str) -> Release:
         total_span=_sentence(overview, total_match.start()) if total_match else "",
         accountants=int(accountants.group(1).replace(",", "")) if accountants else None,
         accountants_span=_sentence(overview, accountants.start()) if accountants else "",
+        professional_share=float(share.group(1)) if share else None,
+        professional_span=_sentence(occupation, share.start()) if share else "",
+        named=tuple(listed),
     )
 
 
@@ -146,7 +176,43 @@ def release_observations(release: Release) -> list[Observation]:
         method_version=METHOD_VERSION,
         published=release.published,
     )
-    return [total, accountants]
+    out = [total, accountants]
+    if release.professional_share is not None:
+        out.append(
+            Observation(
+                source_id=SOURCE_ID,
+                series="online_job_offerings_share",
+                entity="Professionals",
+                geography="MYS",
+                period=release.quarter,
+                value=release.professional_share,
+                unit="% of online job offerings",
+                url=url,
+                cited_span=release.professional_span,
+                method_version=METHOD_VERSION,
+                published=release.published,
+            )
+        )
+    for name, count, span in release.named:
+        if name == "Accountants and Auditors":
+            continue  # already stored above under the same entity
+        out.append(
+            Observation(
+                source_id=SOURCE_ID,
+                series="online_job_offerings",
+                entity=name,
+                geography="MYS",
+                period=release.quarter,
+                value=float(count),
+                unit="job offerings",
+                denominator=float(release.total) if release.total else None,
+                url=url,
+                cited_span=span,
+                method_version=METHOD_VERSION,
+                published=release.published,
+            )
+        )
+    return out
 
 
 def discover_slugs(page_html: str) -> set[str]:

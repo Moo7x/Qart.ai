@@ -215,7 +215,10 @@ def ai_use_signals(rows: list[dict[str, Any]]) -> list[Signal]:
     world = measures.aei_series(rows, "pct", "GLOBAL")
     automation = measures.aei_series(rows, "collaboration_bucket_automation_pct", "GLOBAL")
     out = []
+    codes = field_profile().soc_codes()
     for entity, global_points in sorted(world.items()):
+        if entity.split(" ", 1)[0] not in codes:
+            continue  # the store holds every occupation; this page is about the field
         points, geo = (
             (local[entity], country)
             if len(local.get(entity, [])) >= 2

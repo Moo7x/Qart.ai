@@ -1,16 +1,27 @@
 import { useState } from 'react'
+import { useT } from '../i18n'
 import { Link } from 'react-router-dom'
 import { formatWhen, getJSON, sendJSON, useApi } from '../api'
 import { ScenarioSwitch } from '../components/journey'
 import { Loading, Problem } from '../components/ui'
 import { useJourney } from '../state'
-import type { ChangeReport, ChangesResponse, PathSummary, Proposal } from '../types'
+import type { AutomationBasis, ChangeReport, ChangesResponse, PathSummary, Proposal } from '../types'
 import { NeedProfile } from './Roles'
 
 const CHANGE_POLL_MS = 60_000
 const SOURCE_NAMES: Record<string, string> = {
   anthropic_economic_index: 'Anthropic Economic Index · AI use',
   dosm_job_market_insights: 'DOSM Job Market Insights · advertised demand',
+}
+
+const BASIS_LABEL: Record<AutomationBasis, string> = {
+  task: 'linked O*NET tasks',
+  occupation: 'occupation level',
+  none: 'no observation',
+}
+
+function shareText(share: number | null, basis: AutomationBasis) {
+  return share === null ? BASIS_LABEL.none : `${share.toFixed(1)}% (${BASIS_LABEL[basis]})`
 }
 
 function PathColumn({ title, path }: { title: string; path: PathSummary }) {
@@ -65,13 +76,14 @@ function Report({ report }: { report: ChangeReport }) {
               <span className="ml-3 font-mono">{role.fit_before.toFixed(1)} → {role.fit_after.toFixed(1)} / 100</span>
               <span className="ml-3 text-graphite">rank {role.rank_before} → {role.rank_after}</span>
             </summary>
-            <p className="text-xs text-graphite">Mapped occupation: {role.soc}. {driver && <>Observed global automation-style conversation share: {driver.before ?? 'not available'}% → {driver.after ?? 'not available'}%. <a href={driver.url} target="_blank" rel="noreferrer">Source for this role’s scenario input ↗</a></>}</p>
+            <p className="text-xs text-graphite">Mapped occupation: {role.soc}. {driver && <>Occupation-level automation-style share (used for skills without task-level data): {driver.before ?? 'not available'}% → {driver.after ?? 'not available'}%. <a href={driver.url} target="_blank" rel="noreferrer">Source ↗</a></>}</p>
             {role.weights.length === 0 ? <p className="text-xs text-graphite">No requirement weights or contributions changed.</p> : (
               <ul className="space-y-3 pl-5 text-xs">
                 {role.weights.map((w) => (
                   <li key={w.skill}>
                     <span className="font-semibold">{w.name}{w.essential ? ' · essential' : ''}</span>
                     <div className="font-mono">Weight {w.before.toFixed(4)} → {w.after.toFixed(4)} · fit points {w.points_before.toFixed(4)} → {w.points_after.toFixed(4)}</div>
+                    <div className="font-mono text-graphite">Observed automation-style share: {shareText(w.share_before, w.basis_before)} → {shareText(w.share_after, w.basis_after)}</div>
                     <div className="text-graphite">{w.reason} Scenario rule, not an observed change in your ability.</div>
                   </li>
                 ))}
@@ -96,6 +108,7 @@ function Report({ report }: { report: ChangeReport }) {
 }
 
 export function Changes() {
+  const { t } = useT()
   const { profileId, scenario } = useJourney()
   const changes = useApi<ChangesResponse>(profileId ? `/api/profiles/${profileId}/changes` : null, CHANGE_POLL_MS)
   const [source, setSource] = useState('')
@@ -134,7 +147,7 @@ export function Changes() {
   return (
     <main className="flex min-w-0 flex-[999_1_640px] flex-col gap-6 px-5 py-7 md:px-10">
       <header className="flex flex-wrap items-end justify-between gap-4">
-        <div><span className="eyebrow">What changed · from evidence to your decision</span><h1 className="h1 mt-2">See the difference, then choose</h1></div>
+        <div><span className="eyebrow">What changed · from evidence to your decision</span><h1 className="h1 mt-2">{t('See the difference, then choose')}</h1></div>
         <ScenarioSwitch />
       </header>
       <p className="m-0 max-w-[760px] text-sm text-graphite">Collected evidence can propose a revision. Your roles and pathway keep their accepted evidence until you choose an update. Historical replay is separate and never changes your profile.</p>

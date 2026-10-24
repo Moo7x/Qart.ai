@@ -3,7 +3,13 @@
 import pytest
 
 from src import params
-from src.match.engine import Evidence, rank_roles, scenario_weight, score_role
+from src.match.engine import (
+    Evidence,
+    RequirementScore,
+    rank_roles,
+    scenario_weight,
+    score_role,
+)
 from src.pack import Requirement, load_pack
 
 # Automation-style shares per SOC as the Economic Index reported them for May 2026 (global).
@@ -107,3 +113,49 @@ def test_contributions_add_up_to_the_fit(scenario: str) -> None:
     for role in pack.destination_roles.values():
         match = score_role(pack, role, NUR, scenario, EVIDENCE)  # type: ignore[arg-type]
         assert abs(sum(r.contribution for r in match.requirements) - match.fit) < 0.1
+
+
+TASK_EVIDENCE = Evidence(
+    automation_share=EVIDENCE.automation_share,
+    automation_period="2026-05",
+    automation_source="test",
+    task_automation={"16139": 90.0, "16134": 40.0},  # two tasks linked to dashboards (BI analysts)
+    task_period="2026-05",
+    task_importance={"16139": 4.36, "16134": 3.95, "16150": 4.64},
+)
+
+
+def _requirement(role_id: str, skill: str, evidence: Evidence) -> RequirementScore:
+    pack = load_pack()
+    match = score_role(pack, pack.destination_roles[role_id], NUR, "moderate", evidence)
+    return next(r for r in match.requirements if r.skill == skill)
+
+
+def test_task_level_share_is_the_importance_weighted_mean_of_linked_tasks() -> None:
+    req = _requirement("o2c_reporting_analyst", "dashboards", TASK_EVIDENCE)
+    expected = (4.36 * 90.0 + 3.95 * 40.0) / (4.36 + 3.95)
+    assert req.automation_basis == "task"
+    assert req.automation_share == pytest.approx(expected)
+    assert req.weight == pytest.approx(1.0 * (1 + 0.5 * expected / 100))
+    assert "2 of 2 linked O*NET tasks" in req.shift_reason
+
+
+def test_skill_without_task_evidence_falls_back_to_its_occupation_and_says_so() -> None:
+    unlinked = _requirement("o2c_reporting_analyst", "credit_collections", TASK_EVIDENCE)
+    assert (unlinked.automation_basis, unlinked.automation_share) == ("occupation", 66.0)
+    assert unlinked.tasks == [] and "no O*NET task is linked" in unlinked.shift_reason
+    no_data = _requirement("o2c_reporting_analyst", "business_environment_analytics", TASK_EVIDENCE)
+    assert no_data.automation_basis == "occupation"
+    assert len(no_data.tasks) == 3 and all(t.automation_share is None for t in no_data.tasks)
+    assert "no published task-level data" in no_data.shift_reason
+
+
+def test_partly_observed_skill_uses_only_the_observed_tasks() -> None:
+    req = _requirement("o2c_reporting_analyst", "data_management", TASK_EVIDENCE)
+    assert req.automation_basis == "task" and req.automation_share == pytest.approx(90.0)
+    assert "1 of 2 linked O*NET tasks" in req.shift_reason
+
+
+def test_essential_requirement_keeps_its_weight_with_task_evidence() -> None:
+    req = _requirement("o2c_reporting_analyst", "reporting", TASK_EVIDENCE)
+    assert req.essential and req.weight == params.ROLE_TIER_WEIGHT["core"]

@@ -23,8 +23,11 @@ def test_parse_keeps_field_occupations_and_known_metrics_only() -> None:
         series[("aei_collaboration_bucket_automation_pct", "13-2011.00", "GLOBAL", "2026-05")]
         == 45.02
     )
-    assert not any(o.entity.startswith("15-1252") for o in observations)  # not a finance occupation
+    # Every occupation is kept for the evidence preview; field screens filter to field codes.
+    assert any(o.entity.startswith("15-1252") for o in observations)
     assert not any(o.series == "aei_ai_autonomy_mean" for o in observations)  # metric not kept
+    units = {o.unit for o in observations if o.series == "aei_collaboration_bucket_automation_pct"}
+    assert units == {"% of this occupation's conversations"}
 
 
 def fake_hub(downloads: list[str]) -> httpx.MockTransport:
@@ -77,3 +80,20 @@ def test_new_occupations_in_the_field_trigger_a_re_read(
         state.set(aei.STATE_KEY, "release_2026_06_26|13-2011.00")  # as if fewer codes were read
         aei.collect(client, state)
     assert len(downloads) == 2
+
+
+def test_parse_keeps_linked_task_rows_in_their_own_series() -> None:
+    with SAMPLE.open(encoding="utf-8", newline="") as handle:
+        observations = aei.parse_rows(handle, "2026-06-26", "https://example.test")
+    tasks = {
+        (o.series, o.geography, o.period): o
+        for o in observations
+        if o.series.startswith("aei_task_")
+    }
+    auto = tasks[("aei_task_collaboration_bucket_automation_pct", "GLOBAL", "2026-05")]
+    assert auto.value == 61.4 and auto.entity.startswith("21515 ")
+    assert auto.unit == "% of this task's conversations"
+    assert tasks[("aei_task_pct", "MYS", "2026-05")].value == 0.05
+    assert ("aei_task_pct", "GLOBAL", "2026-05") in tasks
+    assert not any(o.entity.startswith("99999") for o in observations)  # not a linked task
+    assert len(tasks) == 4  # the hierarchy-1 row (a work activity, not the task) is dropped

@@ -1,8 +1,10 @@
 """Anthropic Economic Index: how much of Claude's sampled usage maps to each finance occupation.
 
 We keep, for the field's occupations, the share of conversations (`pct`, global and Malaysia) and
-the global split between automation-style and augmentation-style use. Months are compared only
-within one release, because earlier releases used a different sampling method.
+the global split between automation-style and augmentation-style use. The same metrics are kept for
+the O*NET tasks linked in data/packs/gbs_fa/tasks.yaml (task-level rows, series `aei_task_*`), so
+each task shows its own observed AI use. Months are compared only within one release, because
+earlier releases used a different sampling method.
 
 The newest release file is about 220 MB, so it is streamed and filtered row by row, and a release
 already ingested is not downloaded again (remembered in the source state).
@@ -19,6 +21,7 @@ from src.collectors.base import CollectorResult, SourceState
 from src.config import REPO_ROOT
 from src.evidence.field import field_profile
 from src.evidence.store import Observation
+from src.pack import load_pack
 
 SOURCE_ID = "anthropic_economic_index"
 TREE_API = "https://huggingface.co/api/datasets/Anthropic/EconomicIndex/tree/main"
@@ -69,31 +72,36 @@ def stream_lines(client: httpx.Client, url: str) -> Iterator[str]:
 
 
 def parse_rows(lines: Iterable[str], release_date: str, url: str) -> list[Observation]:
-    codes = field_profile().soc_codes()
+    tasks = load_pack().task_ids()
+    country = field_profile().country
     observations = []
     for row in csv.DictReader(lines):
-        if row["category_name"] != "soc_occupation" or row["node_external_id"] not in codes:
+        node = row["node_external_id"]
+        # Every occupation is kept (the evidence preview serves any detected occupation); the
+        # field's own screens filter to field codes.
+        if row["category_name"] == "soc_occupation" and row["hierarchy_level"] == "0":
+            prefix, kind, unit_of = "aei_", "soc_occupation", "occupation"
+        elif row["category_name"] == "onet" and row["hierarchy_level"] == "0" and node in tasks:
+            prefix, kind, unit_of = "aei_task_", "onet task", "task"
+        else:
             continue
         metrics = GLOBAL_METRICS if row["geo_id"] == "GLOBAL" else COUNTRY_METRICS
-        if (
-            row["geo_id"] not in ("GLOBAL", field_profile().country)
-            or row["metric_id"] not in metrics
-        ):
+        if row["geo_id"] not in ("GLOBAL", country) or row["metric_id"] not in metrics:
             continue
         observations.append(
             Observation(
                 source_id=SOURCE_ID,
-                series=f"aei_{row['metric_id']}",
-                entity=f"{row['node_external_id']} {row['node_name']}",
+                series=f"{prefix}{row['metric_id']}",
+                entity=f"{node} {row['node_name']}",
                 geography=row["geo_id"],
                 period=row["date_start"][:7],
                 value=float(row["value"]) if row["value"] != "" else None,
-                unit=metrics[row["metric_id"]],
+                unit=metrics[row["metric_id"]].replace("occupation", unit_of),
                 url=url,
                 cited_span=(
                     f"{row['date_start']}..{row['date_end']} · {row['geo_id']} · "
-                    f"soc_occupation · {row['metric_id']} = {row['value']} · "
-                    f"{row['node_name']} ({row['node_external_id']})"
+                    f"{kind} · {row['metric_id']} = {row['value']} · "
+                    f"{row['node_name']} ({node})"
                 ),
                 method_version=METHOD_VERSION,
                 published=release_date,
@@ -107,9 +115,10 @@ def collect(client: httpx.Client, state: SourceState) -> CollectorResult:
     if found is None:
         return CollectorResult([], note="no release in the monthly format was found")
     release, release_date, csv_path = found
-    # Remember the release together with the occupations read from it: adding an occupation to
-    # the field profile must trigger a re-read of the same release.
-    seen_key = f"{release}|{','.join(sorted(field_profile().soc_codes()))}"
+    # Remember the release together with the occupations and linked tasks read from it: adding
+    # either to the pack must trigger a re-read of the same release.
+    seen_key = f"{release}|all-occupations"
+    seen_key += f"|{','.join(sorted(load_pack().task_ids(), key=int))}"
     if state.get(STATE_KEY) == seen_key:
         return CollectorResult([], note=f"no new release since {release_date}")
     url = RESOLVE + csv_path

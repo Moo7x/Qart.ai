@@ -1,0 +1,134 @@
+# Task crosswalk: which O*NET tasks show each skill a destination role needs (PLAN §4.3).
+# Keyed by the role's O*NET-SOC occupation, then by pack skill id. The links of an occupation
+# serve every destination role in that occupation.
+# Task ids and wording are copied verbatim from the O*NET 31.0 Database (task_statements.csv),
+# U.S. Department of Labor, Employment and Training Administration, CC BY 4.0. The links
+# themselves are a declared mapping reviewed by the team (an assumption), not O*NET data.
+# Only tasks of the role's own occupation are linked. A requirement with no fitting task here
+# (for example the green skills, which O*NET 31.0 does not describe for these occupations)
+# falls back to occupation-level evidence, and the screen says so.
+source: O*NET 31.0 Database, task_statements.csv
+source_url: https://www.onetcenter.org/database.html
+licence: CC BY 4.0 (USDOL/ETA)
+occupations:
+  "15-2051.01":
+    title: "Business Intelligence Analysts"
+    skills:
+      reporting:
+        - {task: 16150, text: "Generate standard or custom reports summarizing business, financial, or economic data for review by executives, managers, clients, and other stakeholders."}
+        - {task: 16142, text: "Document specifications for business intelligence or information technology reports, dashboards, or other outputs."}
+      big_data_analytics:
+        - {task: 16141, text: "Identify and analyze industry or geographic trends with business strategy implications."}
+        - {task: 16149, text: "Synthesize current business intelligence or trend data to support recommendations for action."}
+      statistical_analytics:
+        - {task: 16149, text: "Synthesize current business intelligence or trend data to support recommendations for action."}
+        - {task: 16148, text: "Analyze competitive market strategies through analysis of related product, market, or share trends."}
+      data_management:
+        - {task: 16139, text: "Maintain or update business intelligence tools, databases, dashboards, systems, or methods."}
+        - {task: 16140, text: "Manage timely flow of business intelligence information to users."}
+      systems_integration:
+        - {task: 16144, text: "Create business intelligence tools or systems, including design of related databases, spreadsheets, or outputs."}
+        - {task: 16137, text: "Create or review technical design documentation to ensure the accurate development of reporting solutions."}
+      business_environment_analytics:
+        - {task: 16141, text: "Identify and analyze industry or geographic trends with business strategy implications."}
+        - {task: 16148, text: "Analyze competitive market strategies through analysis of related product, market, or share trends."}
+        - {task: 16146, text: "Collect business intelligence data from available industry reports, public information, field reports, or purchased sources."}
+      dashboards:
+        - {task: 16139, text: "Maintain or update business intelligence tools, databases, dashboards, systems, or methods."}
+        - {task: 16134, text: "Provide technical support for existing reports, dashboards, or other tools."}
+  "15-1211.00":
+    title: "Computer Systems Analysts"
+    skills:
+      erp:
+        - {task: 3475, text: "Assess the usefulness of pre-developed application packages and adapt them to a user environment."}
+        - {task: 3465, text: "Test, maintain, and monitor computer programs and systems, including coordinating the installation of computer programs and systems."}
+      financial_systems:
+        - {task: 3482, text: "Use the computer in the analysis and solution of business problems, such as development of integrated production and inventory control and cost analysis systems."}
+        - {task: 3474, text: "Analyze information processing or computation needs and plan and design computer systems, using techniques such as structured analysis, data modeling, and information engineering."}
+      advanced_technology_integration:
+        - {task: 3468, text: "Coordinate and link the computer systems within an organization to increase compatibility so that information can be shared."}
+        - {task: 3479, text: "Recommend new equipment or software packages."}
+      data_management:
+        - {task: 3474, text: "Analyze information processing or computation needs and plan and design computer systems, using techniques such as structured analysis, data modeling, and information engineering."}
+      system_performance:
+        - {task: 20950, text: "Troubleshoot program and system malfunctions to restore normal functioning."}
+        - {task: 3478, text: "Review and analyze computer printouts and performance indicators to locate code problems, and correct errors by correcting codes."}
+  "13-2011.00":
+    title: "Accountants and Auditors"
+    skills:
+      standard_costing:
+        - {task: 21531, text: "Develop, maintain, or analyze budgets, preparing periodic reports that compare budgeted costs to actual costs."}
+        - {task: 21519, text: "Analyze business operations, trends, costs, revenues, financial commitments, and obligations to project future revenues and expenses or to provide advice."}
+      accounting_principles:
+        - {task: 21514, text: "Prepare, examine, or analyze accounting records, financial statements, or other financial reports to assess accuracy, completeness, and conformance to reporting and procedural standards."}
+        - {task: 21517, text: "Establish tables of accounts and assign entries to proper accounts."}
+      variance_analytics:
+        - {task: 21531, text: "Develop, maintain, or analyze budgets, preparing periodic reports that compare budgeted costs to actual costs."}
+      big_data_analytics:
+        - {task: 21519, text: "Analyze business operations, trends, costs, revenues, financial commitments, and obligations to project future revenues and expenses or to provide advice."}
+      financial_reporting:
+        - {task: 21532, text: "Prepare, analyze, or verify annual reports, financial statements, and other records, using accepted accounting and statistical procedures to assess financial condition and facilitate financial planning."}
+        - {task: 21514, text: "Prepare, examine, or analyze accounting records, financial statements, or other financial reports to assess accuracy, completeness, and conformance to reporting and procedural standards."}
+      erp:
+        - {task: 21521, text: "Develop, implement, modify, and document recordkeeping and accounting systems, making use of current computer technology."}
+      fixed_assets:
+        - {task: 21534, text: "Review data about material assets, net worth, liabilities, capital stock, surplus, income, or expenditures."}
+        - {task: 21518, text: "Examine inventory to verify journal and ledger entries."}
+      general_ledger:
+        - {task: 21515, text: "Prepare adjusting journal entries."}
+        - {task: 21516, text: "Review accounts for discrepancies and reconcile differences."}
+        - {task: 21517, text: "Establish tables of accounts and assign entries to proper accounts."}
+      reporting:
+        - {task: 21520, text: "Report to management regarding the finances of establishment."}
+        - {task: 21505, text: "Prepare detailed reports on audit findings."}
+      internal_controls:
+        - {task: 21507, text: "Collect and analyze data to detect deficient controls, duplicated effort, extravagance, fraud, or non-compliance with laws, regulations, and management policies."}
+        - {task: 21511, text: "Examine and evaluate financial and information systems, recommending controls to ensure system reliability and data integrity."}
+        - {task: 21508, text: "Inspect account books and accounting systems for efficiency, effectiveness, and use of accepted accounting procedures to record transactions."}
+      compliance_reporting:
+        - {task: 21513, text: "Examine records and interview workers to ensure recording of transactions and compliance with laws and regulations."}
+        - {task: 21526, text: "Compute taxes owed and prepare tax returns, ensuring compliance with payment, reporting, or other tax requirements."}
+      stakeholder_management:
+        - {task: 21510, text: "Confer with company officials about financial and regulatory matters."}
+  "13-2031.00":
+    title: "Budget Analysts"
+    skills:
+      budget_management:
+        - {task: 3394, text: "Analyze monthly department budgeting and accounting reports to maintain expenditure controls."}
+        - {task: 3402, text: "Examine budget estimates for completeness, accuracy, and conformance with procedures and regulations."}
+        - {task: 3399, text: "Summarize budgets and submit recommendations for the approval or disapproval of funds requests."}
+      fpa:
+        - {task: 3405, text: "Compile and analyze accounting records and other data to determine the financial resources required to implement a program."}
+        - {task: 3401, text: "Review operating budgets to analyze trends affecting budget needs."}
+        - {task: 3398, text: "Provide advice and technical assistance with cost analysis, fiscal allocation, and budget preparation."}
+      variance_analytics:
+        - {task: 3394, text: "Analyze monthly department budgeting and accounting reports to maintain expenditure controls."}
+      financial_reporting:
+        - {task: 3395, text: "Direct the preparation of regular and special budget reports."}
+  "13-1111.00":
+    title: "Management Analysts"
+    skills:
+      continuous_improvement:
+        - {task: 7277, text: "Analyze data gathered and develop solutions or alternative methods of proceeding."}
+        - {task: 7282, text: "Document findings of study and prepare recommendations for implementation of new systems, procedures, or organizational changes."}
+        - {task: 7285, text: "Plan study of work problems and procedures, such as organizational change, communications, information flow, integrated production methods, inventory control, or cost analysis."}
+      process_optimisation:
+        - {task: 7285, text: "Plan study of work problems and procedures, such as organizational change, communications, information flow, integrated production methods, inventory control, or cost analysis."}
+        - {task: 7280, text: "Review forms and reports and confer with management and users about format, distribution, and purpose, identifying problems and improvements."}
+      big_data_analytics:
+        - {task: 7276, text: "Gather and organize information on problems or procedures."}
+        - {task: 7277, text: "Analyze data gathered and develop solutions or alternative methods of proceeding."}
+      statistical_analytics:
+        - {task: 7277, text: "Analyze data gathered and develop solutions or alternative methods of proceeding."}
+      stakeholder_management:
+        - {task: 7278, text: "Confer with personnel concerned to ensure successful functioning of newly implemented systems or procedures."}
+        - {task: 7281, text: "Interview personnel and conduct on-site observation to ascertain unit functions, work performed, and methods, equipment, and personnel used."}
+  "13-1023.00":
+    title: "Purchasing Agents, Except Wholesale, Retail, and Farm Products"
+    skills:
+      vendor_management:
+        - {task: 1144, text: "Research and evaluate suppliers, based on price, quality, selection, service, support, availability, reliability, production and distribution capabilities, and the supplier's reputation and history."}
+        - {task: 1147, text: "Negotiate, renegotiate, and administer contracts with suppliers, vendors, and other representatives."}
+        - {task: 1150, text: "Evaluate and monitor contract performance to ensure compliance with contractual obligations and to determine need for changes."}
+      data_management:
+        - {task: 1151, text: "Maintain and review computerized or manual records of purchased items, costs, deliveries, product performance, and inventories."}

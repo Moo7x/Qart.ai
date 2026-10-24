@@ -11,8 +11,12 @@ const SOURCE_NODES = [
   { id: 'dosm_job_market_insights', label: 'DOSM job ads', sub: 'quarterly releases', icon: Database },
   { id: 'anthropic_economic_index', label: 'Economic Index', sub: 'AI task use', icon: Database },
   { id: 'talentcorp_gbs_2024', label: 'TalentCorp study', sub: 'GBS roles · 2024', icon: FileText },
+  { id: 'onet_database', label: 'O*NET database', sub: 'tasks + importance', icon: Database },
+  { id: 'ilo_genai_exposure_2025', label: 'ILO exposure index', sub: 'potential · 2025', icon: FileText },
+  { id: 'mycol_2024_2025', label: 'MyCOL list', sub: 'critical jobs · 2024/25', icon: FileText },
 ]
-const SOURCE_TOP = [140, 208, 276, 344]
+const SOURCE_TOP = [118, 170, 222, 274, 326, 378, 430]
+const SOURCE_H = 44
 
 export type StepId = 'schedule' | 'sources' | 'fetch' | 'validate' | 'measure' | 'label' | 'forecast' | 'match' | 'notify' | 'telegram'
 
@@ -77,8 +81,8 @@ const LINES: [number, number, number, number, boolean][] = [
   // [x1, y1, x2, y2, arrowhead]
   [240, 82, 410, 82, false],
   [410, 82, 410, 170, true],
-  ...SOURCE_TOP.map((t): [number, number, number, number, boolean] => [240, t + 26, 280, t + 26, false]),
-  [280, 166, 280, 370, false],
+  ...SOURCE_TOP.map((t): [number, number, number, number, boolean] => [240, t + SOURCE_H / 2, 280, t + SOURCE_H / 2, false]),
+  [280, SOURCE_TOP[0] + SOURCE_H / 2, 280, SOURCE_TOP[SOURCE_TOP.length - 1] + SOURCE_H / 2, false],
   [280, 204, 318, 204, true],
   [410, 236, 410, 298, true],
   [410, 364, 410, 426, true],
@@ -97,9 +101,10 @@ export function PipelineDiagram({ run, running, selected, onSelect }: {
   selected: StepId
   onSelect: (step: StepId) => void
 }) {
-  const bySource = new Map((run?.sources ?? []).map((s) => [s.source_id, s]))
-  const ok = (run?.sources ?? []).filter((s) => s.status === 'ok').length
-  const total = run?.sources.length ?? 0
+  const collected = (run?.sources ?? []).filter((s) => !['trend_models', 'occupation_index'].includes(s.source_id))  // steps, not sources
+  const bySource = new Map(collected.map((s) => [s.source_id, s]))
+  const ok = collected.filter((s) => s.status === 'ok').length
+  const total = collected.length
   return (
     <div className="overflow-x-auto">
       <div className="relative" style={{ width: W, height: H }}>
@@ -134,7 +139,7 @@ export function PipelineDiagram({ run, running, selected, onSelect }: {
           const result = bySource.get(s.id)
           const status = result ? (result.status === 'ok' ? `ok · ${result.new} new` : 'failed · kept last good') : s.sub
           return (
-            <Node key={s.id} x={40} y={SOURCE_TOP[i]} w={200} h={52} icon={<s.icon size={16} />} title={s.label} sub={status} tone="cyan" selected={selected === 'sources'} onClick={() => onSelect('sources')} />
+            <Node key={s.id} x={40} y={SOURCE_TOP[i]} w={200} h={SOURCE_H} icon={<s.icon size={16} />} title={s.label} sub={status} tone="cyan" selected={selected === 'sources'} onClick={() => onSelect('sources')} />
           )
         })}
         <Node x={320} y={172} w={180} h={64} icon={<Download size={16} />} title="Fetch" sub={run ? `${ok} of ${total} sources ok` : 'waiting'} tone="violet" selected={selected === 'fetch'} onClick={() => onSelect('fetch')} />

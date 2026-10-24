@@ -8,11 +8,16 @@ from fastapi import APIRouter, BackgroundTasks, Depends, Header, HTTPException, 
 from pydantic import BaseModel
 from sqlalchemy import Engine
 
+from src import params
 from src.config import Settings
 from src.evidence import measures
+from src.evidence.models import history
 from src.evidence.registry import registry
 from src.evidence.signals import Signal, build_signals
 from src.evidence.store import list_runs, query_observations
+from src.evidence.trends import trends
+from src.match.evidence import automation_evidence
+from src.pack import load_pack
 from src.pipeline.run import LOCK_NAME, run_pipeline, start_catch_up_if_stale
 
 router = APIRouter(prefix="/api")
@@ -143,6 +148,32 @@ def backtest(engine: Engine = Depends(get_engine)) -> list[BacktestEntry]:
             )
         )
     return entries
+
+
+@router.get("/trends")
+def trend_series(engine: Engine = Depends(get_engine)) -> dict[str, Any]:
+    """Rising and declining series for the Trends page, each labelled by kind in the UI."""
+    rows = query_observations(engine)
+    return trends(load_pack(), rows, automation_evidence(rows))
+
+
+@router.get("/pipeline/forecast-check")
+def forecast_check(engine: Engine = Depends(get_engine)) -> list[dict[str, Any]]:
+    """Rolling-origin errors per occupation group and horizon, from all stored years."""
+    shares = measures.occupation_shares(
+        query_observations(engine, source_id="dosm_wages_occupation")
+    )
+    return [
+        {"group": group, **measures.rolling_backtest(series, horizon)}
+        for group, series in sorted(shares.items())
+        for horizon in params.ROLLING_HORIZONS
+    ]
+
+
+@router.get("/pipeline/models")
+def model_versions(engine: Engine = Depends(get_engine)) -> list[dict[str, Any]]:
+    """Every stored trend-model version with its backtest errors, oldest first per group."""
+    return history(engine)
 
 
 @router.post("/pipeline/run", status_code=202)

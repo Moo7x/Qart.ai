@@ -9,10 +9,11 @@ from typing import Any, Literal
 from pydantic import BaseModel
 
 from src import params
+from src.evidence.field import field_profile
 from src.journey.store import ProfileData
 from src.match.engine import Scenario, rank_roles
 from src.match.evidence import automation_evidence
-from src.pack import Pack
+from src.pack import Pack, load_pack
 from src.pathway.planner import plan_pathway
 
 Row = dict[str, Any]
@@ -46,6 +47,12 @@ class WeightDelta(BaseModel):
     points_after: float
     essential: bool
     reason: str
+    # The observed automation-style share behind the weight, and whether it is task-level or the
+    # occupation's (None = no observation in that snapshot).
+    share_before: float | None = None
+    share_after: float | None = None
+    basis_before: str = "none"
+    basis_after: str = "none"
 
 
 class RoleDelta(BaseModel):
@@ -105,8 +112,19 @@ def _latest(rows: list[Row]) -> dict[tuple[str, ...], Row]:
     return latest
 
 
+def _relevant(row: Row) -> bool:
+    """Rows about the field: the store also holds every occupation for the evidence preview."""
+    entity = str(row["entity"]).split(" ", 1)[0]
+    if row["source_id"] == "anthropic_economic_index":
+        return entity in field_profile().soc_codes() or entity in load_pack().task_ids()
+    if row["source_id"] == "ilo_genai_exposure_2025":
+        return entity.split(".")[0] in field_profile().isco_codes()
+    return True
+
+
 def evidence_deltas(before: list[Row], after: list[Row]) -> list[EvidenceDelta]:
     """Latest observed cells, never a synthetic adoption percentage or causal attribution."""
+    before, after = [r for r in before if _relevant(r)], [r for r in after if _relevant(r)]
     old, new = _latest(before), _latest(after)
     out = []
     for key in sorted(old.keys() | new.keys()):
@@ -192,6 +210,10 @@ def compare(
                 points_after=r.contribution,
                 essential=r.essential,
                 reason=r.shift_reason,
+                share_before=old_weights[r.skill].automation_share,
+                share_after=r.automation_share,
+                basis_before=old_weights[r.skill].automation_basis,
+                basis_after=r.automation_basis,
             )
             for r in role.requirements
             if abs(r.weight - old_weights[r.skill].weight) > EPSILON
@@ -253,8 +275,9 @@ def compare(
         recommendation_changed=changed,
         notes=[
             "The profile, essential requirements and selected destination are held fixed.",
-            "Global occupation-level AI usage informs declared scenario weights, not a "
-            "measured Malaysian adoption rate. Fit is not a hiring probability.",
+            "Global AI usage on each skill's linked O*NET tasks (or its occupation, where no "
+            "task-level data is published) informs declared scenario weights, not a measured "
+            "Malaysian adoption rate. Fit is not a hiring probability.",
             "Job-ad observations provide demand context; the current fit formula uses skills "
             "and AI-use emphasis, so a job-ad update alone does not alter fit.",
             *(

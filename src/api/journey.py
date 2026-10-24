@@ -11,6 +11,7 @@ from src import params
 from src.api.evidence import get_engine, get_settings
 from src.changes.store import accepted_rows, baseline_cutoff
 from src.config import REPO_ROOT, Settings
+from src.evidence.signals import build_signals, job_ad_signals, occupation_signals
 from src.intake.extract import extract
 from src.intake.files import UnsupportedFileError, read_cv
 from src.intake.skill_search import search
@@ -21,8 +22,13 @@ from src.journey.store import (
     get_profile,
     update_profile,
 )
+from src.match.decision import fit_range, meters
 from src.match.engine import Evidence, RoleMatch, Scenario, rank_roles, score_role
 from src.match.evidence import automation_evidence
+from src.match.explain import explain, facts
+from src.match.outlook import role_outlook
+from src.match.radar import radar
+from src.match.tasks import task_view
 from src.pack import Pack, load_pack
 from src.pathway.planner import Pathway, plan_pathway
 
@@ -164,7 +170,13 @@ def _role_sdgs(pack: Pack, match: RoleMatch) -> list[dict[str, str]]:
 
 
 def _card(
-    pack: Pack, match: RoleMatch, data: ProfileData, path: Pathway, evidence: Evidence
+    pack: Pack,
+    match: RoleMatch,
+    data: ProfileData,
+    path: Pathway,
+    evidence: Evidence,
+    demand: list[dict[str, str]],
+    scenario: Scenario,
 ) -> dict[str, Any]:
     role = pack.destination_roles[match.role_id]
     current = pack.current_roles.get(data.current_role)
@@ -189,7 +201,9 @@ def _card(
     return {
         **asdict(match),
         "impact": role.impact,
-        "outlook": outlook,
+        "outlook": outlook + demand,
+        "meters": meters(match),
+        "fit_range": fit_range(pack, match, data.levels(), scenario, evidence),
         "listed_transition": bool(current and match.role_id in current.transitions),
         "effort_hours": path.total_hours,
         "effort_weeks": path.weeks,
@@ -206,7 +220,9 @@ def matches(
 ) -> dict[str, Any]:
     data, destination = require_profile(engine, profile_id)
     pack = load_pack()
-    evidence = evidence_for(engine, profile_id)
+    rows = accepted_rows(engine, profile_id)
+    evidence = automation_evidence(rows)
+    signals = occupation_signals(rows) + job_ad_signals(rows)
     levels = data.levels()
     ranked = rank_roles(pack, levels, scenario, evidence, set(data.interests) or None)
     cards = [
@@ -216,6 +232,8 @@ def matches(
             data,
             plan_pathway(pack, m, levels, data.weekly_hours, scenario, evidence),
             evidence,
+            role_outlook(pack, pack.destination_roles[m.role_id], rows, signals),
+            scenario,
         )
         for m in ranked
     ]
@@ -275,6 +293,63 @@ def pathway(
     out["courses_checked"] = pack.courses_checked
     out["scenario"] = scenario
     return out
+
+
+@router.get("/profiles/{profile_id}/roles/{role_id}/explain")
+def explain_role(
+    profile_id: str,
+    role_id: str,
+    scenario: Scenario = Query(default="moderate"),
+    engine: Engine = Depends(get_engine),
+    settings: Settings = Depends(get_settings),
+) -> dict[str, Any]:
+    """Plain-language sentences about one computed role result, each tied to the facts it uses."""
+    data, _ = require_profile(engine, profile_id)
+    pack = load_pack()
+    role = pack.destination_roles.get(role_id)
+    if role is None:
+        raise HTTPException(status_code=404, detail="unknown destination role")
+    rows = accepted_rows(engine, profile_id)
+    evidence = automation_evidence(rows)
+    levels = data.levels()
+    match = score_role(pack, role, levels, scenario, evidence)
+    path = plan_pathway(pack, match, levels, data.weekly_hours, scenario, evidence)
+    return explain(facts(match, path, SCENARIO_LABEL[scenario]), settings)
+
+
+@router.get("/profiles/{profile_id}/radar")
+def personal_radar(
+    profile_id: str,
+    scenario: Scenario = Query(default="moderate"),
+    engine: Engine = Depends(get_engine),
+) -> dict[str, Any]:
+    """The chosen (or best-fitting) role's skills for this person, and their field's signals."""
+    data, destination = require_profile(engine, profile_id)
+    pack = load_pack()
+    rows = accepted_rows(engine, profile_id)
+    evidence = automation_evidence(rows)
+    levels = data.levels()
+    if destination:
+        match = score_role(pack, pack.destination_roles[destination], levels, scenario, evidence)
+    else:
+        match = rank_roles(pack, levels, scenario, evidence, set(data.interests) or None)[0]
+    path = plan_pathway(pack, match, levels, data.weekly_hours, scenario, evidence)
+    out = radar(pack, match, path, bool(destination), rows, build_signals(rows), data.current_role)
+    return {**out, "scenario": scenario, "scenario_label": SCENARIO_LABEL[scenario]}
+
+
+@router.get("/profiles/{profile_id}/roles/{role_id}/tasks")
+def role_tasks(
+    profile_id: str, role_id: str, engine: Engine = Depends(get_engine)
+) -> dict[str, Any]:
+    """The role's linked O*NET tasks with the four kinds of evidence, at the accepted cutoff."""
+    require_profile(engine, profile_id)
+    pack = load_pack()
+    role = pack.destination_roles.get(role_id)
+    if role is None:
+        raise HTTPException(status_code=404, detail="unknown destination role")
+    impact = f"TalentCorp rates it {IMPACT_MEANING[role.impact]}."
+    return task_view(pack, role, accepted_rows(engine, profile_id), impact)
 
 
 @router.get("/profiles/{profile_id}/future")

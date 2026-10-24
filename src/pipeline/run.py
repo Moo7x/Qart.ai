@@ -24,8 +24,10 @@ from sqlalchemy import Engine
 
 from src import params
 from src.changes.service import refresh_proposals
-from src.collectors import aei, dosm_jmi, dosm_wages, talentcorp
+from src.collectors import aei, dosm_jmi, dosm_wages, ilo, mycol, onet, talentcorp
 from src.collectors.base import Collect
+from src.config import load_settings
+from src.evidence.models import record_versions
 from src.evidence.registry import registry
 from src.evidence.store import (
     DbSourceState,
@@ -37,6 +39,8 @@ from src.evidence.store import (
     release_lock,
     start_run,
 )
+from src.occupations.catalogue import build_index, refresh_catalogue
+from src.occupations.preview import fill_isco
 
 logger = logging.getLogger(__name__)
 
@@ -51,6 +55,9 @@ COLLECTORS: Mapping[str, Collect] = {
     "dosm_jmi": dosm_jmi.collect,
     "aei": aei.collect,
     "talentcorp": talentcorp.collect,
+    "onet": onet.collect,
+    "ilo": ilo.collect,
+    "mycol": mycol.collect,
 }
 
 
@@ -175,10 +182,44 @@ def _run_all(
             results.append(_run_source(engine, client, source.id, collect, run_id, retry_pause))
     status = overall_status(results)
     new_total = sum(r["new"] for r in results)
+    # Steps after collection are logged in the run but never change its status, and a failure in
+    # one never loses the data collected above.
+    try:
+        results.append(record_versions(engine, run_id))
+    except Exception as exc:  # noqa: BLE001
+        results.append(_failed_step("trend_models", exc))
+    try:
+        with factory() as client:
+            notes = [
+                refresh_catalogue(engine, client),
+                build_index(engine, load_settings(), client),
+                fill_isco(engine, client),
+            ]
+        results.append(
+            {
+                "source_id": "occupation_index",
+                "status": "ok",
+                "fetched": 0,
+                "new": 0,
+                "note": "; ".join(notes),
+            }
+        )
+    except Exception as exc:  # noqa: BLE001  RunPod or O*NET down: previous index and BM25 stay
+        results.append(_failed_step("occupation_index", exc))
     # Also retry publication after a previous run stored evidence but failed before publication.
     refresh_proposals(engine, previous_cutoff, run_id)
     finish_run(engine, run_id, status, new_total, results)
     return RunSummary(run_id, status, new_total, results)
+
+
+def _failed_step(name: str, exc: Exception) -> dict[str, Any]:
+    return {
+        "source_id": name,
+        "status": "failed",
+        "fetched": 0,
+        "new": 0,
+        "error": f"{type(exc).__name__}: {exc}"[:300],
+    }
 
 
 def is_stale(engine: Engine, now: datetime | None = None) -> bool:

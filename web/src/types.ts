@@ -134,6 +134,7 @@ export type Extraction = {
   note: string
   removed: Record<string, number>
   rejected: { skill: string; reason: string }[]
+  stages?: Stage[]
 }
 
 export type SkillClaim = { level: number | null; evidence: string; source: 'cv' | 'self' | 'keyword' }
@@ -150,6 +151,13 @@ export type ProfileData = {
 }
 
 export type GapColumn = 'ready' | 'bridgeable' | 'missing' | 'not_stated'
+export type AutomationBasis = 'task' | 'occupation' | 'none'
+export type TaskEvidence = {
+  task: string
+  text: string
+  automation_share: number | null
+  importance: number | null
+}
 export type RequirementScore = {
   skill: string
   skill_name: string
@@ -163,6 +171,9 @@ export type RequirementScore = {
   contribution: number
   column: GapColumn
   evidence_pages: number[]
+  automation_share: number | null
+  automation_basis: AutomationBasis
+  tasks: TaskEvidence[]
 }
 export type SdgRef = { target: string; title: string; how: string }
 export type RoleCard = {
@@ -182,6 +193,8 @@ export type RoleCard = {
   effort_weeks: number
   uncovered: string[]
   sdgs: SdgRef[]
+  meters: Meters
+  fit_range: { low: number; high: number }
 }
 export type MatchesResponse = {
   scenario: Scenario
@@ -261,6 +274,8 @@ export type EvidenceDelta = {
 export type WeightDelta = {
   skill: string; name: string; before: number; after: number
   points_before: number; points_after: number; essential: boolean; reason: string
+  share_before: number | null; share_after: number | null
+  basis_before: AutomationBasis; basis_after: AutomationBasis
 }
 export type RoleDelta = {
   role_id: string; title: string; soc: string; rank_before: number; rank_after: number
@@ -286,3 +301,254 @@ export type ChangesResponse = {
   accepted_cutoff: number; latest_cutoff: number; proposals: Proposal[]
   replay_sources: { source_id: string; periods: string[] }[]
 }
+
+// ---- Role tasks (src/match/tasks.py) ----
+
+export type TaskUse = {
+  share: number | null
+  automation: number | null
+  augmentation: number | null
+  share_local: number | null
+  period: string
+  url: string
+}
+export type RoleTask = {
+  task: string
+  text: string
+  skills: string[]
+  observed_use: TaskUse | null
+  importance: { value: number | null; release: string; url: string } | null
+}
+export type RoleTasksResponse = {
+  role_id: string
+  soc: string
+  occupation: { code: string; name: string; isco: string | null; esco: string | null; esco_match: string | null; esco_uri: string | null } | null
+  tasks: RoleTask[]
+  exposure: null | {
+    isco: string
+    title: string
+    mean: number | null
+    gradient: string | null
+    url: string
+    published: string | null
+    tasks: { text: string; score: number | null }[]
+  }
+  expert: { impact: string; text: string }
+  deployment: null
+  summary: string
+  unlinked_skills: string[]
+  sources: { tasks: string; observed_use: string; exposure: string; expert: string }
+}
+
+// ---- Personal radar (src/match/radar.py) ----
+
+export type RadarAxis = {
+  skill: string
+  name: string
+  kind: SkillKind
+  essential: boolean
+  claimed: number | null
+  required: number
+  after: number
+  emphasis: 'rising' | 'weakening' | 'stable' | 'fixed'
+  weight_factor: number
+  reason: string
+  ai_use: { automation_share: number | null; basis: AutomationBasis; tasks_observed: number; tasks_linked: number } | null
+  in_demand: boolean | null
+}
+export type RadarResponse = {
+  role_id: string
+  title: string
+  chosen: boolean
+  fit: number
+  fit_after: number
+  axes: RadarAxis[]
+  field_signals: Signal[]
+  scenario: Scenario
+  scenario_label: string
+}
+
+// ---- Role explanation (src/match/explain.py) ----
+
+export type Explanation = {
+  sentences: { text: string; facts: { id: string; text: string }[] }[]
+  engine: string
+  note: string
+  stages?: Stage[]
+}
+
+// ---- Trend model versions (src/evidence/models.py) ----
+
+export type ModelVersion = {
+  id: number
+  group_id: string
+  created_at: string
+  run_id: number | null
+  first_year: string
+  last_year: string
+  points: number
+  train_end: number
+  test_years: string
+  naive: number
+  linear: number
+  damped: number
+  best: 'naive' | 'linear' | 'damped'
+}
+
+// ---- Decision support (src/match/decision.py, src/pathway/optimise.py) ----
+
+export type Meters = {
+  coverage: number
+  essentials_ready: boolean
+  essentials_below: string[]
+  essentials_unstated: string[]
+  completeness: number
+  stated: number
+  requirements: number
+}
+export type Question = {
+  skill: string
+  skill_name: string
+  value: number
+  top_role_changes: boolean
+  essential_for: string[]
+  swing: number
+  effect: string
+}
+export type SensitivityResponse = {
+  intensities: number[]
+  roles: { role_id: string; title: string; ranks: number[]; stable: boolean }[]
+}
+export type WhatIfResponse = {
+  roles: { role_id: string; title: string; rank_now: number; rank_then: number; fit_now: number; fit_then: number }[]
+  pathway: null | { role_id: string; now: { hours: number; weeks: number }; then: { hours: number; weeks: number } }
+}
+export type PlanOption = {
+  course_ids: string[]
+  courses: { id: string; title: string; url: string; hours: number }[]
+  hours: number
+  fit_after: Record<Scenario, number>
+  essentials_reached: number
+  essentials_total: number
+}
+export type PlansResponse = {
+  role_id: string
+  scenario: Scenario
+  budget_hours: number
+  budget_weeks: number
+  fit_now: number
+  relevant_courses: number
+  exact: boolean
+  plans: { greedy: PlanOption; best?: PlanOption; robust?: PlanOption }
+  note: string
+}
+export type ForecastCheck = {
+  group: string
+  horizon: number
+  origins: number[]
+  mae: Record<string, number>
+  best: string | null
+}
+
+// ---- Trends (src/evidence/trends.py) ----
+
+export type TrendsResponse = {
+  employment: {
+    group: string
+    major_group: string
+    title: string
+    points: Point[]
+    first: string
+    last: string
+    change_long: number
+    change_recent: number | null
+  }[]
+  recent_from: string
+  job_ads: { quarters: string[]; breaks: string[]; professionals: Point[]; named: { entity: string; points: Point[] }[] }
+  skills: { skill: string; name: string; ai_role: string; change: number; roles: number; basis: string[] }[]
+  exposure: { isco: string; title: string; mean: number | null; gradient: string | null }[]
+}
+
+// ---- Occupations (src/occupations/) ----
+
+export type Detection = {
+  query: string
+  engine: string
+  note: string
+  stages?: Stage[]
+  matches: { soc: string; title: string; score: number; in_field: boolean }[]
+}
+export type OccupationPreview = {
+  soc: string
+  title: string
+  description: string
+  in_field: boolean
+  coverage: string
+  esco: { title: string | null; match: string | null; uri: string | null }
+  isco: string | null
+  isco_note: string
+  tasks: { task: string; text: string; importance: number | null }[]
+  ai_use: null | { share: number; share_local: number | null; automation: number | null; period: string; url: string }
+  exposure: null | { isco: string; title: string; mean: number | null; gradient: string | null; tasks: { text: string; score: number | null }[]; url: string }
+  employment: Signal | null
+  mycol: null | { listed: boolean; name: string | null; of: number }
+}
+
+// ---- Goal (src/goal/, src/api/goal.py) ----
+
+export type GoalInput = {
+  role_title: string
+  company: string
+  location: string
+  why: string
+  posting_text: string
+  posting_url: string
+  posting_date: string
+}
+export type PostingRequirement = {
+  quote: string
+  skill: string | null
+  skill_name: string | null
+  essential: boolean
+  required_level: number | null
+  claimed: number | null
+  status: 'met' | 'below' | 'not_stated' | 'outside_catalogue'
+}
+export type GoalResponse = {
+  goal: GoalInput | null
+  coverage?: null | {
+    engine: string
+    note: string
+    requirements: PostingRequirement[]
+    covered: number
+    mapped: number
+    not_stated: number
+    outside_catalogue: number
+    essentials_met: number
+    essentials: number
+    default_level: number
+  }
+  stages?: Stage[]
+  stepping_stones?: { role_id: string; title: string; shared: string[]; overlap: number; fit: number; longer_route: boolean; shared_courses: { id: string; title: string; url: string }[] }[]
+}
+
+// ---- Progress (src/journey/progress.py, src/api/decision.py) ----
+
+export type ProgressResponse = {
+  done: string[]
+  paused: boolean
+  updated_at: string | null
+  plan: null | {
+    role_id: string
+    steps: number
+    steps_done: number
+    hours: number
+    hours_done: number
+    coverage: number
+    open_questions: number
+    this_week: { id: string; title: string; hours: number }[]
+    weekly_hours: number
+  }
+}
+
+export type Stage = { name: string; engine: string; outcome: string; seconds: number }

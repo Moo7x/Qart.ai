@@ -17,8 +17,8 @@ async function readError(response: Response): Promise<string> {
   }
 }
 
-export async function getJSON<T>(path: string): Promise<T> {
-  const response = await fetch(path)
+export async function getJSON<T>(path: string, { headers = {} }: { headers?: Record<string, string> } = {}): Promise<T> {
+  const response = await fetch(path, { headers })
   if (!response.ok) throw new ApiError(response.status, await readError(response))
   return (await response.json()) as T
 }
