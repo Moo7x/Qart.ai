@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { sendJSON, useApi } from '../api'
 import { Dots, ScenarioSwitch, SdgTag } from '../components/journey'
+import { CompareRoles, Openings } from '../components/CompareRoles'
 import { BestQuestion, MeterRow, WhatIf } from '../components/Decision'
 import { ExplainRole } from '../components/ExplainRole'
 import { RoleTasks } from '../components/RoleTasks'
@@ -94,6 +95,7 @@ function Why({ role, onChoose, chosen, busy }: { role: RoleCard; onChoose: () =>
           </tbody>
         </table>
       </div>
+      <Openings title={role.title} />
       {profileId && <ExplainRole key={`${role.role_id}-${scenario}`} profileId={profileId} roleId={role.role_id} scenario={scenario} />}
       <div className="flex flex-wrap gap-2">
         <button type="button" className="btn btn-v" onClick={onChoose} disabled={busy}>
@@ -241,6 +243,7 @@ export function Roles() {
                 ))}
               </div>
             </section>
+            <CompareRoles roles={data.roles} />
             <WhatIf key={`whatif-${role.role_id}`} profileId={profileId} scenario={scenario} role={role} />
             <RoleTasks key={role.role_id} profileId={profileId} roleId={role.role_id} />
           </div>
