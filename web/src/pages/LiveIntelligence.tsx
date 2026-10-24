@@ -86,6 +86,94 @@ function RunNow({ onStarted }: { onStarted: () => void }) {
 // Steps logged with a run that are not sources.
 export const STEPS = ['trend_models', 'occupation_index']
 
+// Plain names for the DOSM occupation groups and the three simple forecast methods.
+const GROUP_NAME: Record<string, string> = {
+  agriculture: 'Skilled agricultural workers',
+  clerical: 'Clerical support workers',
+  craft: 'Craft and trades workers',
+  elementary: 'Elementary occupations',
+  managers: 'Managers',
+  operators: 'Plant and machine operators',
+  professionals: 'Professionals',
+  service_sales: 'Service and sales workers',
+  technicians: 'Technicians and associate professionals',
+}
+const METHOD: Record<'naive' | 'linear' | 'damped', [string, string]> = {
+  naive: ['Keep last value', '#5e5f6e'],
+  linear: ['Straight-line trend', '#d9771f'],
+  damped: ['Slowing trend', '#6c47ff'],
+}
+const TRIGGER: Record<string, string> = { schedule: 'Scheduled', manual: 'Run by admin', 'catch-up': 'Catch-up on start', admin: 'Run by admin' }
+
+function RunCard({ run, names }: { run: Run; names: Record<string, string> }) {
+  const collected = run.sources.filter((s) => !STEPS.includes(s.source_id))
+  const ok = collected.filter((s) => s.status === 'ok').length
+  const grew = collected.filter((s) => s.new > 0).sort((a, b) => b.new - a.new)
+  const headline =
+    run.status === 'running'
+      ? 'Collecting now…'
+      : run.new_observations > 0
+        ? `${run.new_observations.toLocaleString()} new data points: ${grew.slice(0, 3).map((s) => `${names[s.source_id] ?? s.source_id} +${s.new.toLocaleString()}`).join(', ')}${grew.length > 3 ? '…' : ''}`
+        : `${ok} of ${collected.length} sources checked: nothing new published since the last run`
+  return (
+    <li className="flex flex-col gap-3 border-t border-line py-4 first:border-t-0 first:pt-0">
+      <div className="flex flex-wrap items-baseline justify-between gap-2">
+        <span className="font-semibold">{formatWhen(run.started_at)}</span>
+        <span className="flex items-center gap-2 text-[12px] text-graphite">
+          <span className="tag bg-mist text-graphite">{TRIGGER[run.trigger] ?? run.trigger}</span>
+          {duration(run)}
+          <span className={`tag ${RESULT_STYLE[run.status] ?? 'bg-mist text-graphite'}`}>{run.status}</span>
+        </span>
+      </div>
+      <p className="m-0 text-[14px]">{headline}</p>
+      <ul className="m-0 flex list-none flex-wrap gap-1.5 p-0" aria-label="Sources in this run">
+        {collected.map((s) => (
+          <li key={s.source_id} title={[s.note, s.error].filter(Boolean).join(' · ') || undefined} className={`rounded border px-2 py-1 text-[11px] ${s.status === 'ok' ? 'border-line bg-paper' : 'border-weak bg-weak-bg text-weak'}`}>
+            <span aria-hidden="true">{s.status === 'ok' ? '✓' : '✗'}</span> {names[s.source_id] ?? s.source_id}
+            <span className="ml-1 font-mono text-graphite">{s.new > 0 ? `+${s.new.toLocaleString()}` : 'no change'}</span>
+          </li>
+        ))}
+      </ul>
+    </li>
+  )
+}
+
+// The backtest in words and bars: shorter bar = smaller average miss.
+function ModelCheck({ rows, rolling }: { rows: BacktestEntry[]; rolling: ForecastCheck[] }) {
+  const max = Math.max(...rows.flatMap((r) => [r.naive, r.linear, r.damped]), 0.01)
+  const naiveWins = rows.filter((r) => r.best === 'naive').length
+  // The stricter rolling check: flat forecasts (no change, smoothing) against trend methods.
+  const flatWins = rolling.filter((r) => r.best === 'naive' || r.best === 'smoothing').length
+  return (
+    <div className="flex flex-col gap-5">
+      <p className="m-0 max-w-[820px] text-[14px] leading-relaxed">
+        We hid the years 2022–2025, asked three simple methods to predict each group&rsquo;s share of Malaysian employees from the years before, and compared with what really happened. The result is mixed: keeping the last value won in {naiveWins} of {rows.length} groups.{rolling.length > 0 && <> A stricter check, restarting from every year since 2015, found a flat forecast best in <span className="font-semibold">{flatWins} of {rolling.length}</span> comparisons, and the trend wins were small.</>} <span className="font-semibold">With evidence this weak, Qart shows the history and does not draw forecast lines.</span>
+      </p>
+      <div className="flex flex-wrap gap-4 text-[12px] text-graphite">
+        {(Object.keys(METHOD) as (keyof typeof METHOD)[]).map((m) => (
+          <span key={m} className="flex items-center gap-1.5"><span aria-hidden="true" className="inline-block h-2.5 w-5 rounded-sm" style={{ background: METHOD[m][1] }} />{METHOD[m][0]}</span>
+        ))}
+        <span>Bar = average miss in percentage points of the workforce (0.5 means predicting 13.1% when it was 13.6%). Shorter is better.</span>
+      </div>
+      <div className="grid gap-x-10 gap-y-5 md:grid-cols-2 xl:grid-cols-3">
+        {rows.map((r) => (
+          <div key={r.group} className="flex flex-col gap-1.5">
+            <span className="text-[13px] font-semibold">{GROUP_NAME[r.group] ?? r.group}</span>
+            {(Object.keys(METHOD) as (keyof typeof METHOD)[]).map((m) => (
+              <div key={m} className="grid grid-cols-[minmax(0,1fr)_64px] items-center gap-2" title={METHOD[m][0]}>
+                <span className="h-2.5 rounded-sm bg-mist">
+                  <span className="block h-full rounded-sm" style={{ width: `${(100 * r[m]) / max}%`, background: METHOD[m][1] }} />
+                </span>
+                <span className={`text-right font-mono text-[11px] ${r.best === m ? 'font-semibold text-rising' : 'text-graphite'}`}>{r[m].toFixed(2)}{r.best === m ? ' ✓' : ''}</span>
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 export function LiveIntelligence() {
   const { t } = useT()
   const runs = useApi<Run[]>('/api/pipeline/runs?limit=12', RUNS_POLL_MS)
@@ -94,12 +182,12 @@ export function LiveIntelligence() {
   const models = useApi<ModelVersion[]>('/api/pipeline/models')
   const rolling = useApi<ForecastCheck[]>('/api/pipeline/forecast-check')
   const [step, setStep] = useState<StepId>('validate')
-  const [open, setOpen] = useState<number | null>(null)
 
   const latest = runs.data?.[0]
   const running = latest?.status === 'running'
   const finished = runs.data?.find((r) => r.status !== 'running')
   const [stepTitle, stepText] = STEP_TEXT[step]
+  const names = Object.fromEntries((sources.data ?? []).map((src) => [src.id, src.name.split(' · ')[0].split(' (')[0]]))
 
   return (
     <main className="page">
@@ -128,44 +216,32 @@ export function LiveIntelligence() {
         </div>
       </section>
 
-      <div className="flex flex-wrap items-start gap-5">
-        <section className="card-light flex min-w-0 flex-[1_1_440px] flex-col gap-2.5 px-6 py-5">
+      <section className="panel">
+        <div className="flex flex-wrap items-baseline justify-between gap-2">
           <h2 className="h2">Run history</h2>
-          {runs.loading && <Loading what="runs" />}
-          {runs.error && <Problem what="runs" message={runs.error} onRetry={runs.reload} />}
-          {runs.data && runs.data.length === 0 && <Empty>No run yet. A new deployment starts its first run on its own.</Empty>}
-          {runs.data && runs.data.length > 0 && (
-            <div className="overflow-x-auto">
-              <table className="w-full min-w-[520px] border-collapse text-[13px]">
-                <thead>
-                  <tr className="cap text-left">
-                    <th className="py-2 pr-2 font-medium">When</th>
-                    <th className="px-2 py-2 font-medium">Trigger</th>
-                    <th className="px-2 py-2 font-medium">Sources</th>
-                    <th className="px-2 py-2 font-medium">New rows</th>
-                    <th className="px-2 py-2 font-medium">Took</th>
-                    <th className="py-2 pl-2 font-medium">Result</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {runs.data.map((run) => (
-                    <FragmentRow key={run.id} run={run} open={open === run.id} onToggle={() => setOpen(open === run.id ? null : run.id)} />
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
-        </section>
+          <span className="text-[12px] text-graphite">Every collection run, newest first. Sources publish quarterly or yearly, so most runs rightly find nothing new.</span>
+        </div>
+        {runs.loading && <Loading what="runs" />}
+        {runs.error && <Problem what="runs" message={runs.error} onRetry={runs.reload} />}
+        {runs.data && runs.data.length === 0 && <Empty>No run yet. A new deployment starts its first run on its own.</Empty>}
+        {runs.data && runs.data.length > 0 && (
+          <ol className="m-0 grid list-none gap-x-10 p-0 xl:grid-cols-2">
+            {runs.data.slice(0, 8).map((run) => <RunCard key={run.id} run={run} names={names} />)}
+          </ol>
+        )}
+      </section>
 
-        <section className="card-light flex min-w-0 flex-[1_1_360px] flex-col gap-2.5 px-6 py-5">
-          <h2 className="h2">Model check</h2>
-          <p className="m-0 text-[13px] text-graphite">
-            Share of employees per occupation group, fitted to 2021 and scored on 2022–2025 (mean error in percentage
-            points). Where &ldquo;no change&rdquo; wins, the app shows history and does not project a trend.
-          </p>
+        <section className="panel">
+          <div className="flex flex-col gap-1">
+            <span className="eyebrow">Model check</span>
+            <h2 className="m-0 text-[22px] font-semibold tracking-tight">Can Qart predict where jobs are heading? We tested it.</h2>
+          </div>
           {backtest.error && <Problem what="the backtest" message={backtest.error} onRetry={backtest.reload} />}
+          {backtest.data && backtest.data.length > 0 && <ModelCheck rows={backtest.data} rolling={rolling.data ?? []} />}
           {backtest.data && (
-            <table className="w-full border-collapse text-[13px]">
+            <details className="text-[13px]">
+            <summary className="cursor-pointer text-graphite">Details for analysts: the same test as a table</summary>
+            <table className="mt-2 w-full border-collapse text-[13px]">
               <thead>
                 <tr className="cap text-left">
                   <th className="py-2 pr-2 font-medium">Group</th>
@@ -177,7 +253,7 @@ export function LiveIntelligence() {
               <tbody>
                 {backtest.data.map((row) => (
                   <tr key={row.group} className="border-t border-mist">
-                    <td className="py-2 pr-2">{row.group.replace('_', ' & ')}</td>
+                    <td className="py-2 pr-2">{GROUP_NAME[row.group] ?? row.group}</td>
                     {(['naive', 'linear', 'damped'] as const).map((model) => (
                       <td key={model} className={`px-2 py-2 text-right font-mono ${row.best === model ? 'font-semibold text-rising' : ''}`}>
                         {row[model].toFixed(2)}
@@ -187,6 +263,7 @@ export function LiveIntelligence() {
                 ))}
               </tbody>
             </table>
+            </details>
           )}
           {rolling.data && rolling.data.length > 0 && (
             <details className="text-[13px]">
@@ -245,7 +322,6 @@ export function LiveIntelligence() {
             </details>
           )}
         </section>
-      </div>
 
       <FeedbackReview />
 
@@ -294,39 +370,3 @@ export function LiveIntelligence() {
   )
 }
 
-function FragmentRow({ run, open, onToggle }: { run: Run; open: boolean; onToggle: () => void }) {
-  // The trend-model step is logged with the run but is not a source.
-  const collected = run.sources.filter((s) => !STEPS.includes(s.source_id))
-  const ok = collected.filter((s) => s.status === 'ok').length
-  return (
-    <>
-      <tr className="border-t border-mist">
-        <td className="py-2.5 pr-2 font-mono text-xs">
-          <button type="button" onClick={onToggle} aria-expanded={open} className="cursor-pointer border-0 bg-transparent p-0 text-left font-mono text-xs">
-            {open ? '▾' : '▸'} {formatWhen(run.started_at)}
-          </button>
-        </td>
-        <td className="px-2 py-2.5">{run.trigger}</td>
-        <td className="px-2 py-2.5 font-mono">{run.status === 'running' ? '…' : `${ok}/${collected.length}`}</td>
-        <td className="px-2 py-2.5 font-mono">{run.new_observations}</td>
-        <td className="px-2 py-2.5 font-mono">{duration(run)}</td>
-        <td className="py-2.5 pl-2"><span className={`tag ${RESULT_STYLE[run.status] ?? 'bg-mist text-graphite'}`}>{run.status}</span></td>
-      </tr>
-      {open && (
-        <tr>
-          <td colSpan={6} className="pb-3">
-            <ul className="m-0 flex list-none flex-col gap-1 rounded-md bg-fog p-3 font-mono text-[11px] text-graphite">
-              {run.sources.map((s) => (
-                <li key={s.source_id}>
-                  <span className={s.status === 'ok' ? 'text-rising' : 'text-weak'}>{s.status}</span> · {s.source_id} · {s.new} new
-                  {s.note ? ` · ${s.note}` : ''}
-                  {s.error ? ` · ${s.error}` : ''}
-                </li>
-              ))}
-            </ul>
-          </td>
-        </tr>
-      )}
-    </>
-  )
-}
