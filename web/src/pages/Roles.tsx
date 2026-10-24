@@ -78,7 +78,7 @@ function RoleDetail({ role, roles, onChoose, chosen, busy, situation, pack }: { 
   const { profileId, scenario } = useJourney()
   const [tab, setTab] = useState<Tab>('why')
   return (
-    <section aria-label={`${role.title}: details`} className="flex min-w-0 flex-col gap-5">
+    <section aria-label={`${role.title}: details`} className="panel min-w-0 gap-6">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div className="flex min-w-0 flex-col gap-1">
           <span className="eyebrow">Selected role</span>
@@ -278,8 +278,8 @@ export function Roles() {
 
       {data && role && (
         <div className="grid items-start gap-8 lg:grid-cols-[minmax(280px,340px)_minmax(0,1fr)]">
-          <section aria-label="Ranked roles" className="flex min-w-0 flex-col lg:sticky lg:top-6">
-            <div className="cap grid grid-cols-[24px_minmax(0,1fr)_44px] gap-3 border-b border-line pb-2">
+          <section aria-label="Ranked roles" className="panel min-w-0 gap-0 overflow-hidden !p-0 lg:sticky lg:top-6">
+            <div className="cap grid grid-cols-[24px_minmax(0,1fr)_44px] gap-3 border-b border-line px-5 pb-3 pt-5">
               <span>#</span>
               <span>Role</span>
               <span className="text-right">Fit</span>
@@ -291,12 +291,12 @@ export function Roles() {
               const ranks = stability.data?.roles.find((x) => x.role_id === r.role_id)?.ranks
               const on = r.role_id === role.role_id
               return (
-                <div key={r.role_id}>
+                <div key={r.role_id} className={`border-b border-line px-3 pb-3 last:border-b-0 ${on ? 'bg-violet-soft' : ''}`}>
                 <button
                   type="button"
                   aria-pressed={on}
                   onClick={() => setSelected(r.role_id)}
-                  className={`grid w-full cursor-pointer grid-cols-[24px_minmax(0,1fr)_44px] items-start gap-x-3 border-0 border-b border-l-2 border-b-line py-3 pl-2 pr-0 text-left ${on ? 'border-l-violet bg-paper' : 'border-l-transparent bg-transparent hover:bg-paper'}`}
+                  className={`grid w-full cursor-pointer grid-cols-[24px_minmax(0,1fr)_44px] items-start gap-x-3 border-0 border-l-2 bg-transparent py-4 pl-2 pr-2 text-left ${on ? 'border-l-violet' : 'border-l-transparent hover:bg-fog'}`}
                 >
                   <span className="pt-0.5 font-mono text-ash">{i + 1}</span>
                   <span className="flex min-w-0 flex-col gap-1.5">
@@ -318,7 +318,7 @@ export function Roles() {
                   </span>
                   <span className="text-right font-mono text-xl tracking-tight">{Math.round(r.fit)}</span>
                 </button>
-                <JobPosts title={r.title} className="job-link mb-3 ml-11" />
+                <JobPosts title={r.title} className="job-link ml-11" />
                 </div>
               )
             })}
