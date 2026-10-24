@@ -102,7 +102,7 @@ export function LiveIntelligence() {
   const [stepTitle, stepText] = STEP_TEXT[step]
 
   return (
-    <main className="flex min-w-0 flex-[999_1_640px] flex-col gap-6 px-5 py-7 md:px-10">
+    <main className="page">
       <header className="flex flex-wrap items-end justify-between gap-4">
         <div className="flex flex-col gap-1.5">
           <span className="eyebrow">Live intelligence · open to everyone</span>

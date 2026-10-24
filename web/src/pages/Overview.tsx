@@ -3,7 +3,7 @@ import { useT } from '../i18n'
 import { Link } from 'react-router-dom'
 import { formatWhen, useApi } from '../api'
 import { EvidenceDrawer } from '../components/EvidenceDrawer'
-import { ScenarioSwitch } from '../components/journey'
+import { ScenarioSwitch, levelText, JourneyRoute, NextStep } from '../components/journey'
 import { LineChart, Sparkline, type Series } from '../components/LineChart'
 import { OccupationEvidence } from '../components/OccupationEvidence'
 import { SkillRadar } from '../components/SkillRadar'
@@ -108,7 +108,7 @@ function AxisRow({ axis }: { axis: RadarAxis }) {
     <li className="flex flex-col gap-1 border-t border-surface py-2.5 text-[13px]" title={axis.reason}>
       <span className="flex flex-wrap items-baseline justify-between gap-2">
         <span className="font-semibold">{axis.name}</span>
-        <span className="font-mono text-[11px] text-stone">you {axis.claimed ?? '—'} · needs {axis.required} · after {axis.after}</span>
+        <span className="font-mono text-[11px] text-stone">you {levelText(axis.claimed)} · needs {levelText(axis.required)} · after {levelText(axis.after)}</span>
       </span>
       <span className="flex flex-wrap gap-x-3 gap-y-1 text-[11px]">
         <span className={tone}>{label} <span className="text-slate-mid">(assumption)</span></span>
@@ -128,14 +128,7 @@ function AxisRow({ axis }: { axis: RadarAxis }) {
 function PersonalRadar({ onPick }: { onPick: (s: Signal) => void }) {
   const { profileId, scenario } = useJourney()
   const view = useApi<RadarResponse>(profileId ? `/api/profiles/${profileId}/radar?scenario=${scenario}` : null)
-  if (!profileId) {
-    return (
-      <section className="card-light flex flex-wrap items-center justify-between gap-3 px-6 py-4 text-[13px]">
-        <span>Tell us about yourself to see your own skills radar and the signals for your current job.</span>
-        <Link className="btn btn-v" to="/start">Start</Link>
-      </section>
-    )
-  }
+  if (!profileId) return null
   if (view.loading) return <Loading what="your radar" />
   if (view.error) return <Problem what="your radar" message={view.error} onRetry={view.reload} />
   const data = view.data
@@ -211,6 +204,7 @@ function CurrentJob() {
 
 export function Overview() {
   const { t } = useT()
+  const { setProfileId, setScenario } = useJourney()
   const signals = useApi<SignalsResponse>('/api/signals')
   const sources = useApi<SourceStatus[]>('/api/sources')
   const [selected, setSelected] = useState<Signal | null>(null)
@@ -223,7 +217,8 @@ export function Overview() {
   const aiUse = all.filter((s) => s.family === 'ai_task_use')
 
   return (
-    <main className="flex min-w-0 flex-[999_1_640px] flex-col gap-6 px-5 py-7 md:px-10">
+    <main className="page">
+      <JourneyRoute />
       <header className="flex flex-col gap-1.5">
         <span className="eyebrow">Overview · GBS finance &amp; accounting · Malaysia</span>
         <h1 className="h1">{t('What the evidence shows for your field')}</h1>
@@ -232,6 +227,10 @@ export function Overview() {
           needs enough comparable data, and expert views are kept apart from measured data.
         </p>
       </header>
+      <div className="flex flex-wrap items-center gap-3">
+        <Link className="btn" to="/start?edit=1">Edit my profile</Link>
+        <button type="button" className="cursor-pointer border-0 bg-transparent text-sm text-graphite underline underline-offset-4" onClick={() => { setProfileId(null); setScenario('moderate') }}>Start over</button>
+      </div>
 
       <PersonalRadar onPick={setSelected} />
       <CurrentJob />
@@ -314,6 +313,7 @@ export function Overview() {
       )}
 
       {selected && <EvidenceDrawer signal={selected} onClose={() => setSelected(null)} />}
+      <NextStep to="/roles" label="See the roles that fit you" hint="Next: compare the roles your skills lead to" />
     </main>
   )
 }

@@ -7,9 +7,12 @@ shadowed by the static files.
 """
 
 import logging
+import traceback
+import uuid
 from pathlib import Path
 
-from fastapi import APIRouter, FastAPI
+from fastapi import APIRouter, FastAPI, Request
+from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from starlette.exceptions import HTTPException
@@ -85,6 +88,31 @@ def create_app(settings: Settings | None = None, first_run: bool = True) -> Fast
     application.state.engine = engine
     application.state.settings = settings
     application.state.catch_up = first_run  # tests switch background runs off
+
+    @application.exception_handler(Exception)
+    async def unexpected_error(request: Request, exc: Exception) -> JSONResponse:
+        """Log code locations, never exception values, SQL parameters or profile contents."""
+        reference = uuid.uuid4().hex[:12]
+        route = getattr(request.scope.get("route"), "path", "unmatched")
+        frames = [
+            f"{Path(f.filename).name}:{f.lineno}:{f.name}"
+            for f in traceback.extract_tb(exc.__traceback__)
+        ]
+        logger.error(
+            "QART_REQUEST_ERROR reference=%s method=%s route=%s error=%s frames=%s",
+            reference,
+            request.method,
+            route,
+            type(exc).__name__,
+            " > ".join(frames),
+        )
+        return JSONResponse(
+            status_code=500,
+            content={
+                "detail": f"This step could not finish. Retry or share reference {reference}."
+            },
+        )
+
     api = APIRouter(prefix="/api")
 
     @api.get("/health")

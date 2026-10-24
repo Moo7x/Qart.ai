@@ -1,11 +1,10 @@
 import { useState } from 'react'
 import { useT } from '../i18n'
 import { useApi } from '../api'
-import { LineChart, type Series } from '../components/LineChart'
+import { SmallMultiples, TimeSeriesChart, type ChartSeries } from '../components/Charts'
 import { Loading, Problem } from '../components/ui'
 import type { TrendsResponse } from '../types'
 
-const COLOURS = ['#9d86ff', '#5de3ff', '#ffa86b', '#3fd1a0', '#ff7aa8', '#c4c5cf', '#ffd166', '#7aa2ff', '#a0e57a']
 const KIND = {
   observed: ['Observed', 'bg-observed-bg text-observed'],
   assumption: ['Assumption', 'bg-mist text-graphite'],
@@ -14,19 +13,6 @@ const KIND = {
 
 function Kind({ kind }: { kind: keyof typeof KIND }) {
   return <span className={`tag ${KIND[kind][1]}`}>{KIND[kind][0]}</span>
-}
-
-function Legend({ series, dark }: { series: Series[]; dark: boolean }) {
-  return (
-    <div className={`flex flex-wrap gap-x-4 gap-y-1 font-mono text-[11px] ${dark ? 'text-stone' : 'text-graphite'}`}>
-      {series.map((s) => (
-        <span key={s.label} className="flex items-center gap-1.5">
-          <span aria-hidden="true" className="inline-block h-0.5 w-4" style={{ background: s.color }} />
-          {s.label}
-        </span>
-      ))}
-    </div>
-  )
 }
 
 // Horizontal bars around zero: rising to the right in green, declining to the left in amber.
@@ -59,18 +45,18 @@ export function Trends() {
   const view = useApi<TrendsResponse>('/api/trends')
   const [span, setSpan] = useState<'long' | 'recent'>('long')
   const data = view.data
-  const lines: Series[] = (data?.employment ?? []).map((g, i) => ({ label: g.title, color: COLOURS[i % COLOURS.length], points: g.points }))
-  const adLines: Series[] = data
-    ? [
-        { label: 'Professionals (share of all ads)', color: '#6c47ff', points: data.job_ads.professionals },
-        ...data.job_ads.named.slice(0, 4).map((n, i) => ({ label: n.entity, color: COLOURS[(i + 1) % COLOURS.length], points: n.points })),
-      ]
-    : []
+  // Biggest groups first; each panel states its own change so differing y-axes never mislead.
+  const groups = [...(data?.employment ?? [])]
+    .sort((a, b) => (b.points.at(-1)?.value ?? 0) - (a.points.at(-1)?.value ?? 0))
+    .map((g) => ({ label: g.title, points: g.points, note: `${g.change_long > 0 ? '+' : ''}${g.change_long} pts since ${g.first}` }))
+  // Two charts, not one: the Professionals share (~40%) would flatten the named occupations (~5%).
+  const professionals: ChartSeries[] = data ? [{ label: 'Professionals', points: data.job_ads.professionals }] : []
+  const named: ChartSeries[] = (data?.job_ads.named ?? []).slice(0, 4).map((n) => ({ label: n.entity, points: n.points }))
   const first = data?.employment[0]?.first
   const last = data?.employment[0]?.last
   const change = (g: TrendsResponse['employment'][number]) => (span === 'long' ? g.change_long : g.change_recent)
   return (
-    <main className="flex min-w-0 flex-[999_1_640px] flex-col gap-6 px-5 py-7 md:px-10">
+    <main className="page">
       <header className="flex flex-col gap-1.5">
         <span className="eyebrow">Trends · rising and declining</span>
         <h1 className="h1">{t('What is growing, what is shrinking')}</h1>
@@ -82,18 +68,19 @@ export function Trends() {
       {view.error && <Problem what="the trends" message={view.error} onRetry={view.reload} />}
       {data && (
         <>
-          <section className="card-dark flex flex-col gap-3 p-6">
+          <section className="section">
             <div className="flex flex-wrap items-center justify-between gap-2">
-              <h2 className="h2">Share of Malaysian employees by occupation group</h2>
+              <h2 className="h2">Share of Malaysian employees by occupation group, {first}–{last}</h2>
               <Kind kind="observed" />
             </div>
-            <LineChart series={lines} unit="% of employees" />
-            <Legend series={lines} dark />
-            <p className="m-0 text-xs text-stone">DOSM, wages by occupation (OpenDOSM), {first}–{last}. 2010 is left out: the classification changed in 2011.</p>
+            <SmallMultiples series={groups} unit="% of employees" source={`DOSM via OpenDOSM, ${first}–${last}`} />
+            <p className="m-0 text-xs text-graphite">
+              % of all employees, yearly. Each panel has its own vertical scale so small groups stay readable; compare groups by the change under each title, or in the next chart. Hover a line for exact values. DOSM, wages by occupation (OpenDOSM); 2010 is left out because the classification changed in 2011.
+            </p>
           </section>
 
           <div className="flex flex-wrap items-start gap-5">
-            <section className="card-light flex min-w-0 flex-[1_1_380px] flex-col gap-3 px-6 py-5">
+            <section className="section min-w-0 flex-[1_1_380px]">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <h2 className="h2">Which groups rose or fell</h2>
                 <Kind kind="observed" />
@@ -111,7 +98,7 @@ export function Trends() {
               </p>
             </section>
 
-            <section className="card-light flex min-w-0 flex-[1_1_380px] flex-col gap-3 px-6 py-5">
+            <section className="section min-w-0 flex-[1_1_380px]">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <h2 className="h2">Skills gaining or losing emphasis</h2>
                 <Kind kind="assumption" />
@@ -126,20 +113,28 @@ export function Trends() {
             </section>
           </div>
 
-          <section className="card-light flex flex-col gap-3 px-6 py-5">
+          <section className="section">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <h2 className="h2">Online job ads by quarter</h2>
               <Kind kind="observed" />
             </div>
-            <LineChart series={adLines} unit="% of online job offerings" dark={false} />
-            <Legend series={adLines} dark={false} />
+            <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)]">
+              <div className="flex min-w-0 flex-col gap-1">
+                <h3 className="cap m-0">Professionals, share of all ads</h3>
+                <TimeSeriesChart series={professionals} unit="% of online job ads" axis="% of ads" source="DOSM Job Market Insights" />
+              </div>
+              <div className="flex min-w-0 flex-col gap-1">
+                <h3 className="cap m-0">Named occupations, share of all ads</h3>
+                <TimeSeriesChart series={named} unit="% of online job ads" axis="% of ads" source="DOSM Job Market Insights" />
+              </div>
+            </div>
             <p className="m-0 text-xs text-graphite">
               DOSM Job Market Insights, from major private platforms (not all vacancies). Named occupations appear only in quarters where DOSM lists them among the top ones, so gaps are not zero.
               {data.job_ads.breaks.length > 0 && <> Total ads jumped in {data.job_ads.breaks.join(', ')}: a possible change in platform coverage, so compare within each side of it.</>}
             </p>
           </section>
 
-          <section className="card-light flex flex-col gap-3 px-6 py-5">
+          <section className="section">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <h2 className="h2">How much of each occupation&rsquo;s tasks GenAI could do</h2>
               <Kind kind="estimate" />

@@ -227,6 +227,17 @@ def test_preview_uses_the_field_link_and_labels_coverage(engine: Engine) -> None
 
 
 def test_detect_route_returns_labelled_suggestions(client: Any) -> None:
+    status = client.get("/api/occupations/status").json()
+    assert status["occupations"] == 0 and status["vectors"] == 0
+    assert "Kerani akaun" in status["examples"]
     body = client.post("/api/occupations/detect", json={"text": "accounts clerk"}).json()
     assert body["engine"] == "none" and body["matches"] == []  # empty catalogue in tests
     assert client.get("/api/occupations/29-1141.00").status_code == 404
+
+
+def test_malay_example_has_an_explicit_keyword_alias(engine: Engine, settings: Settings) -> None:
+    with httpx.Client(transport=Capture(fake_services([]))) as client:
+        cat.refresh_catalogue(engine, client)
+    found = detect(engine, settings, "Kerani akaun")
+    assert found.matches[0].soc == "43-3031.00"
+    assert "translation" in found.note and "fallback" in found.engine

@@ -14,7 +14,7 @@ from dataclasses import dataclass, field
 from typing import Any
 
 import httpx
-from sqlalchemy import Engine, func, select
+from sqlalchemy import Engine, select
 
 from src.config import Settings
 from src.evidence.field import field_profile
@@ -26,6 +26,8 @@ DENSE_CANDIDATES = 10  # passed to the reranker: enough to recover a near miss, 
 SHOWN = 3
 BM25_K1, BM25_B = 1.5, 0.75  # standard BM25 constants
 TOKEN = re.compile(r"[a-z0-9]+")
+# Team-reviewed bilingual example query, not a claim of complete Malay keyword coverage.
+MALAY_QUERIES = {"kerani akaun": "accounts clerk"}
 
 
 @dataclass
@@ -79,12 +81,15 @@ _CACHE: dict[str, Any] = {}
 def _cached_vectors(engine: Engine) -> dict[str, list[float]]:
     """Vectors from the database, reloaded only when the stored set changes."""
     with engine.connect() as conn:
-        signature = tuple(
-            conn.execute(
-                select(func.count(), func.max(vector_table.c.text_hash)).where(
-                    vector_table.c.model == MODEL
+        signature = (
+            engine,
+            tuple(
+                conn.execute(
+                    select(vector_table.c.soc, vector_table.c.text_hash)
+                    .where(vector_table.c.model == MODEL)
+                    .order_by(vector_table.c.soc)
                 )
-            ).one()
+            ),
         )
     if _CACHE.get("signature") != signature:
         _CACHE["signature"], _CACHE["vectors"] = signature, vectors(engine)
@@ -123,7 +128,7 @@ def detect(
 
     if not rows:
         return Detection(query, "none", "the occupation catalogue has not been collected yet")
-    index = _cached_vectors(engine)
+    index = {soc: v for soc, v in _cached_vectors(engine).items() if soc in by_soc}
     if settings.runpod_configured and index:
         own = client is None
         http = client or httpx.Client(timeout=30)
@@ -139,7 +144,7 @@ def detect(
                 scores = rerank(settings, query, passages, INTERACTIVE_BUDGET_SECONDS, http)
             ranked = sorted(zip([s for s, _ in dense], scores, strict=True), key=lambda x: -x[1])
             return result(f"{MODEL} + bge-reranker-v2-m3 (RunPod)", "", ranked)
-        except (RunPodError, httpx.HTTPError) as exc:
+        except (RunPodError, httpx.HTTPError, ValueError, KeyError, TypeError) as exc:
             note = f"RunPod unavailable ({type(exc).__name__}); keyword search used"
         finally:
             if own:
@@ -151,5 +156,10 @@ def detect(
             else "RunPod not configured; keyword search used"
         )
     with stages.step("Keyword search over occupations", "BM25"):
-        ranked_kw = bm25(rows, query, SHOWN)
+        expanded = MALAY_QUERIES.get(query.strip().lower(), query)
+        ranked_kw = bm25(rows, expanded, SHOWN)
+    if expanded != query:
+        note += "; team-reviewed example translation: accounts clerk"
+    elif not ranked_kw:
+        note += "; keyword fallback searches English titles. Try an English example."
     return result("BM25 keywords (fallback)", note, ranked_kw)

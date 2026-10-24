@@ -69,7 +69,10 @@ def build_draft(
     ]
     return {
         "headline": [headline],
-        "skills": [f"{name} — own rating: {LEVEL_WORDS[level]}" for level, name in skills],
+        "skills": [
+            f"{name} — own rating: {level + 1} of 5 ({LEVEL_WORDS[level]})"
+            for level, name in skills
+        ],
         "experience": quotes,
         "learning": learning,
     }
@@ -102,6 +105,24 @@ def diff(
         }
         for section, lines in new.items()
     }
+
+
+def select_changes(
+    old: dict[str, list[str]] | None,
+    new: dict[str, list[str]],
+    skip_added: list[str],
+    keep_removed: list[str],
+) -> dict[str, list[str]]:
+    """The person's choice applied to a draft: added lines they skip stay out, removed lines
+    they keep stay in. Lines that are not part of the diff are ignored, so nothing new enters."""
+    old = old or {}
+    changes = diff(old, new)
+    out: dict[str, list[str]] = {}
+    for section, lines in new.items():
+        added = set(changes[section]["added"]) & set(skip_added)
+        kept = [line for line in changes[section]["removed"] if line in keep_removed]
+        out[section] = [line for line in lines if line not in added] + kept
+    return out
 
 
 def accept(engine: Engine, profile_id: str, sections: dict[str, list[str]]) -> int:

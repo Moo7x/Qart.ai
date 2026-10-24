@@ -1,28 +1,74 @@
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import type { RoleCard } from '../types'
+import { levelText } from './journey'
+import { Windows } from './Windows'
 
-// External job searches for a role title. Qart does not read, rank or check these openings.
+// Live job-post searches for a role title on portals whose search URL was checked in a browser on
+// 2026-10-24 (each opened real postings for the title). LinkedIn needs sign-in and Hiredly ignored
+// the search term, so they are left out. Qart does not read, rank, store or apply to postings.
 export function jobSearches(title: string) {
   const plain = title.replace(/\s*\([^)]*\)/g, '').trim()
   const slug = encodeURIComponent(plain.toLowerCase().replace(/\s+/g, '-'))
+  const words = encodeURIComponent(plain).replace(/%20/g, '+')
   return [
-    { label: 'JobStreet', url: `https://my.jobstreet.com/${slug}-jobs`, hint: `search “${plain}”` },
-    { label: 'MYFutureJobs (government portal)', url: 'https://candidates.myfuturejobs.gov.my/search-jobs', hint: `search “${plain}” there` },
+    { label: 'JobStreet · all Malaysia', url: `https://my.jobstreet.com/${slug}-jobs`, hint: `live posts for “${plain}”` },
+    { label: 'JobStreet · Kuala Lumpur', url: `https://my.jobstreet.com/${slug}-jobs/in-Kuala-Lumpur`, hint: 'where most GBS centres are' },
+    { label: 'Indeed Malaysia', url: `https://malaysia.indeed.com/jobs?q=${words}&l=Malaysia`, hint: `live posts for “${plain}”` },
+    { label: 'MYFutureJobs (government portal)', url: 'https://candidates.myfuturejobs.gov.my/search-jobs', hint: `type “${plain}” there` },
   ]
 }
 
 export function Openings({ title }: { title: string }) {
   return (
-    <p className="m-0 text-xs text-stone">
+    <p className="m-0 text-[13px] text-graphite">
       See openings:{' '}
       {jobSearches(title).map((s, i) => (
         <span key={s.label}>
           {i > 0 && ' · '}
-          <a href={s.url} target="_blank" rel="noreferrer" className="text-cyan">{s.label} ↗</a> ({s.hint})
+          <a href={s.url} target="_blank" rel="noreferrer" className="font-medium text-violet">{s.label} ↗</a>
         </span>
       ))}
       . External sites; Qart does not check these openings or apply for you.
     </p>
+  )
+}
+
+// A button that opens a temporary window with live job-post searches for one role.
+export function JobPosts({ title, label = 'See job posts', className = 'btn' }: { title: string; label?: string; className?: string }) {
+  const [open, setOpen] = useState(false)
+  const close = useCallback(() => setOpen(false), [])
+  return (
+    <>
+      <button type="button" className={className} onClick={() => setOpen(true)}>{label}</button>
+      {open && (
+        <Windows
+          title={`Job posts · ${title}`}
+          onClose={close}
+          panes={[
+            {
+              key: 'posts',
+              title: 'Live job posts for this role',
+              hint: 'Each link opens today’s postings on that site, in a new tab.',
+              body: (
+                <div className="flex flex-col gap-3">
+                  <ul className="m-0 flex list-none flex-col p-0">
+                    {jobSearches(title).map((s) => (
+                      <li key={s.label} className="border-b border-line py-2.5 last:border-0">
+                        <a href={s.url} target="_blank" rel="noopener noreferrer" className="text-[14px] font-medium text-void">{s.label} ↗</a>
+                        <span className="block text-[12px] text-graphite">{s.hint}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <p className="m-0 text-[11px] text-graphite">
+                    Qart links to the job boards and does not copy, rank or check individual postings (recruitment integrations are outside this project). Check each employer&rsquo;s own page before you apply.
+                  </p>
+                </div>
+              ),
+            },
+          ]}
+        />
+      )}
+    </>
   )
 }
 
@@ -70,7 +116,7 @@ export function CompareRoles({ roles }: { roles: RoleCard[] }) {
             ))}
             {skills.map(([skill, name]) => {
               const [l, r] = [need(left, skill), need(right, skill)]
-              const cell = (x: typeof l) => (x ? `you ${x.claimed ?? '—'} / needs ${x.required}${x.essential ? ' · essential' : ''}` : 'not needed')
+              const cell = (x: typeof l) => (x ? `you ${levelText(x.claimed)} / needs ${levelText(x.required)}${x.essential ? ' · essential' : ''}` : 'not needed')
               return (
                 <tr key={skill} className="border-t border-mist text-xs">
                   <td className="py-1 pr-2">{name}</td>

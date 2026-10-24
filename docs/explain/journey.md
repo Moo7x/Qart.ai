@@ -1,5 +1,20 @@
 # Personal journey
 
+**First-run flow:** `/` sends visitors without a saved profile to `/start`. After building,
+the final action opens Overview. Overview's edit action loads existing answers and updates the
+same profile without clearing its destination. Start over forgets the browser's profile key and
+resets the scenario; it does not delete database records. Evidence pages remain publicly accessible.
+Role/task/interest/goal example chips derive from the verified pack; task examples cite O*NET.
+
+**Fix-round diagnostics:** an unhandled API error returns a random reference. Logs contain only
+the route template, exception class and code locations, never exception values or SQL parameters.
+The opt-in `tests/test_postgres_journey.py` checks onboarding on a disposable PostgreSQL database
+specified by `QART_TEST_POSTGRES_URL`. A passing local check does not verify Replit's schema/version.
+
+**Task-to-skill search:** uses the shared RunPod async queue (30-second interactive budget),
+validates vectors and caches skill text rather than ID alone. Measured stages and engine/fallback
+notes are returned. Suggestions are not claims: the person selects skills, then sets levels.
+
 **What and why.** A synthetic CV or questionnaire becomes editable skill claims, scores for all
 nine GBS destinations, a person-chosen goal and an ordered free-resource pathway (must-haves
 1, 3–6). `src/intake/` scrubs identifiers and checks model quotes; missing services use labelled
@@ -57,6 +72,29 @@ prerequisite roadmap (done, ready, needs a prerequisite) and three progress meas
 plan completion (self-reported, saved per profile in `src/journey/progress.py`), requirement
 coverage (changes only when the person edits their levels) and skills still to tell; plus this
 week's steps within the weekly hours, and pause/resume that never lowers anything.
+
+**My plan as three tracks.** `src/pathway/tracks.py` (GET `/api/profiles/{id}/tracks`) shows the
+plan as three rows: (1) AI basics, a declared foundation everyone sees first (what generative AI
+is, prompting at work, using AI responsibly, data basics); (2) reskilling without AI, the role's
+gaps in finance, business and green skills; (3) reskilling with AI, its gaps in data and digital
+skills (`params.AI_TRACK_KINDS`, following TalentCorp's skill clusters). Each skill is a node;
+clicking it opens three temporary windows: courses (planned ones count towards hours and fit),
+YouTube videos and articles. Videos and articles come from `data/packs/gbs_fa/resources.yaml`:
+YouTube title and channel checked through the public oEmbed endpoint, length and date from the
+watch page, articles loaded and title-matched, all on 2026-10-24; they are links only and never
+counted in hours or fit. A node unlocks when the earlier nodes of its track are done.
+
+**With AI or without.** The comparison plans the role twice with the same planner and course
+rules: over the non-digital skills only, and over every skill plus the AI-basics courses. The same
+engine scores fit under both scenarios; it shows hours, weeks, courses, fit after and fit gained
+per 10 hours. "With AI" means also learning the AI-related skills, not studying with an AI tutor;
+no study claims a speed-up from AI tutoring for this audience, so none is assumed.
+
+**Job posts.** Each role has a "See job posts" window with live searches on JobStreet (Malaysia
+and Kuala Lumpur), Indeed Malaysia and MYFutureJobs; the URL patterns were opened in a browser on
+2026-10-24 and returned real postings for the titles. LinkedIn (sign-in wall) and Hiredly (ignores
+the search term) were left out. Qart links only: it does not copy, rank or check postings, since
+recruitment integrations are outside the brief.
 
 **Feedback.** `src/feedback/service.py`: "Report a problem" on roles, courses and posting lines
 stores the kind, the target and the version the person saw. Preferences ("not my goal",

@@ -4,9 +4,10 @@ import { Link } from 'react-router-dom'
 import { sendJSON, useApi } from '../api'
 import { Activity } from '../components/Activity'
 import { ReportProblem } from '../components/Feedback'
+import { LEVEL_NAMES, levelText, JourneyRoute, NextStep } from '../components/journey'
 import { Loading, Problem } from '../components/ui'
 import { useJourney } from '../state'
-import type { GoalInput, GoalResponse, PostingRequirement } from '../types'
+import type { GoalInput, GoalResponse, PostingRequirement, PackInfo } from '../types'
 import { NeedProfile } from './Roles'
 
 const EMPTY: GoalInput = { role_title: '', company: '', location: '', why: '', posting_text: '', posting_url: '', posting_date: '' }
@@ -16,7 +17,6 @@ const STATUS: Record<PostingRequirement['status'], [string, string]> = {
   not_stated: ['Not stated · tell us', 'text-graphite'],
   outside_catalogue: ['Outside our skill catalogue', 'text-ash'],
 }
-const LEVELS = ['none', 'aware', 'working', 'proficient', 'expert']
 
 function Field({ label, value, onChange, placeholder, area }: { label: string; value: string; onChange: (v: string) => void; placeholder?: string; area?: boolean }) {
   return (
@@ -34,6 +34,7 @@ function Field({ label, value, onChange, placeholder, area }: { label: string; v
 export function Goal() {
   const { t } = useT()
   const { profileId, scenario } = useJourney()
+  const pack = useApi<PackInfo>('/api/pack')
   const view = useApi<GoalResponse>(profileId ? `/api/profiles/${profileId}/goal?scenario=${scenario}` : null)
   const [form, setForm] = useState<GoalInput>(EMPTY)
   const [result, setResult] = useState<GoalResponse | null>(null)
@@ -65,7 +66,8 @@ export function Goal() {
 
   const cov = result?.coverage
   return (
-    <main className="flex min-w-0 flex-[999_1_640px] flex-col gap-6 px-5 py-7 md:px-10">
+    <main className="page">
+      <JourneyRoute />
       <header className="flex flex-col gap-1.5">
         <span className="eyebrow">My goal · the role you are aiming for</span>
         <h1 className="h1">{t('Where do you want to be?')}</h1>
@@ -81,6 +83,9 @@ export function Goal() {
           <Field label="Role you want" value={form.role_title} onChange={set('role_title')} placeholder="e.g. FP&A Analyst" />
           <Field label="Company (optional)" value={form.company} onChange={set('company')} placeholder="e.g. a GBS centre in KL" />
           <Field label="Location (optional)" value={form.location} onChange={set('location')} placeholder="e.g. Kuala Lumpur" />
+        </div>
+        <div className="flex flex-wrap gap-2" aria-label="Goal examples from the verified pack">
+          {pack.data?.destination_roles.slice(0,3).map((r) => <button key={r.id} type="button" className="btn text-xs" onClick={() => set('role_title')(r.title)}>{r.title}</button>)}
         </div>
         <Field label="Why this goal matters to you (optional)" value={form.why} onChange={set('why')} />
         <Field label="Paste a public job posting (optional)" value={form.posting_text} onChange={set('posting_text')} placeholder="Paste the requirements section of a posting you found" area />
@@ -101,7 +106,7 @@ export function Goal() {
           </div>
           <p className="m-0 text-xs text-graphite">
             {result?.goal?.company ? `${result.goal.company} · ` : ''}{result?.goal?.posting_date ? `posting dated ${result.goal.posting_date} · ` : ''}
-            Read by {cov.engine}{cov.note ? ` (${cov.note})` : ''}. Each line quotes the posting. Where it states no level, &ldquo;{LEVELS[cov.default_level]}&rdquo; is assumed.{' '}
+            Read by {cov.engine}{cov.note ? ` (${cov.note})` : ''}. Each line quotes the posting. Where it states no level, &ldquo;{LEVEL_NAMES[cov.default_level]} ({levelText(cov.default_level)})&rdquo; is assumed.{' '}
             {[cov.not_stated > 0 ? `${cov.not_stated} not stated in your profile yet` : '', cov.outside_catalogue > 0 ? `${cov.outside_catalogue} outside our skill catalogue` : ''].filter(Boolean).join('; ')}
             {cov.not_stated + cov.outside_catalogue > 0 ? '.' : ''}
           </p>
@@ -109,7 +114,7 @@ export function Goal() {
             {cov.requirements.map((r) => (
               <li key={r.quote} className="grid gap-1 border-t border-mist py-2 text-[13px] md:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)_auto]">
                 <span>&ldquo;{r.quote}&rdquo;{r.essential && <span className="ml-1.5 font-mono text-[10px] text-amber-glow">REQUIRED</span>}</span>
-                <span className="text-graphite">{r.skill_name ?? '—'}{r.skill && <span className="font-mono"> · you {r.claimed ?? '—'} / needs {r.required_level ?? cov.default_level}</span>}</span>
+                <span className="text-graphite">{r.skill_name ?? '—'}{r.skill && <span className="font-mono"> · you {levelText(r.claimed)} / needs {levelText(r.required_level ?? cov.default_level)}</span>}</span>
                 <span className={STATUS[r.status][1]}>{STATUS[r.status][0]}</span>
                 <span className="md:col-span-3"><ReportProblem kinds={['wrong_skill_mapping', 'unsupported_claim']} targetType="requirement" targetId={r.quote.slice(0, 120)} page="goal" /></span>
               </li>
@@ -137,6 +142,7 @@ export function Goal() {
           </div>
         </section>
       )}
+      <NextStep to="/roles" label="Compare roles" hint="Next: see how your goal compares with the roles that fit you" />
     </main>
   )
 }

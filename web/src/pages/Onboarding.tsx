@@ -1,17 +1,17 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useT } from '../i18n'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { getJSON, sendJSON, uploadFile, useApi } from '../api'
-import { Activity } from '../components/Activity'
-import { Dots } from '../components/journey'
+import { Activity, RunLog, type LogLine } from '../components/Activity'
+import { LevelPicker } from '../components/journey'
 import { useJourney } from '../state'
-import type { Extraction, MatchesResponse, PackInfo, ProfileData, SignalsResponse, Situation, SkillClaim, SkillKind, Stage } from '../types'
+import type { Extraction, MatchesResponse, PackInfo, PathwayResponse, ProfileData, SignalsResponse, Situation, SkillClaim, SkillKind, Stage } from '../types'
 
 const STEPS = ['', 'Your situation', 'Your CV', 'Your work today', 'Your skills', 'Time and budget', 'What matters to you']
 const LAST_QUESTION = 6
 const BUILDING = 7
 const HOURS = [2, 4, 6, 10]
-const MAX_LEVEL = 4
+type SkillSuggestions = { hits: { skill: string; name: string; score: number }[]; engine: string; note: string; stages?: Stage[] }
 const SITUATIONS: { id: Situation; title: string; body: string }[] = [
   { id: 'working', title: 'I work in finance now', body: 'See how AI is changing your tasks, and routes to nearby roles.' },
   { id: 'student', title: "I'm studying or just graduated", body: 'Entry roles that fit you and the skills to build first.' },
@@ -36,10 +36,14 @@ function chip(on: boolean): string {
 export function Onboarding() {
   const { t } = useT()
   const navigate = useNavigate()
-  const { setProfileId } = useJourney()
+  const { profileId, setProfileId } = useJourney()
+  const [searchParams] = useSearchParams()
+  const editing = searchParams.get('edit') === '1' && profileId !== null
+  const existing = useApi<{ profile: ProfileData }>(editing ? `/api/profiles/${profileId}` : null)
+  const hydrated = useRef(false)
   const pack = useApi<PackInfo>('/api/pack')
   const signals = useApi<SignalsResponse>('/api/signals')
-  const [step, setStep] = useState(0)
+  const [step, setStep] = useState(editing ? 1 : 0)
   const [situation, setSituation] = useState<Situation>('working')
   const [stages, setStages] = useState<Stage[] | undefined>(undefined)
   const [extraction, setExtraction] = useState<Extraction | null>(null)
@@ -55,6 +59,16 @@ export function Onboarding() {
   const [busy, setBusy] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [built, setBuilt] = useState<MatchesResponse | null>(null)
+  const [log, setLog] = useState<LogLine[]>([])
+  const [suggestions, setSuggestions] = useState<SkillSuggestions | null>(null)
+  const [selected, setSelected] = useState<string[]>([])
+  useEffect(() => {
+    if (!editing || !existing.data || hydrated.current) return
+    const p = existing.data.profile
+    setSituation(p.situation); setRole(p.current_role); setYears(p.years_experience === null ? '' : String(p.years_experience))
+    setSkills(p.skills); setHours(p.weekly_hours); setBudget(p.budget); setInterests(p.interests); setSdgs(p.sdg_priorities)
+    hydrated.current = true
+  }, [editing, existing.data])
 
   const skillName = (id: string) => pack.data?.skills.find((s) => s.id === id)?.name ?? id
   const go = (n: number) => setStep(Math.max(0, Math.min(BUILDING, n)))
@@ -97,18 +111,15 @@ export function Onboarding() {
 
   const findFromTasks = () =>
     run('Matching your tasks to skills…', async () => {
-      const result = await sendJSON<{ hits: { skill: string }[]; engine: string }>('/api/skills/search', { body: { text: tasks } })
-      setSkills((prev) => {
-        const next = { ...prev }
-        for (const hit of result.hits.slice(0, 3)) next[hit.skill] ??= { level: null, evidence: tasks, source: 'keyword' }
-        return next
-      })
+      setSuggestions(null)
+      setSelected([])
+      const result = await sendJSON<SkillSuggestions>('/api/skills/search', { body: { text: tasks } })
+      setSuggestions(result)
+      setStages(result.stages)
     })
 
-  function setLevel(id: string, delta: number) {
+  function setLevel(id: string, level: number) {
     setSkills((prev) => {
-      const current = prev[id]?.level ?? 0
-      const level = Math.max(0, Math.min(MAX_LEVEL, current + delta))
       return { ...prev, [id]: { ...(prev[id] ?? { evidence: '', source: 'self' }), level, source: prev[id]?.source === 'cv' ? 'cv' : 'self' } }
     })
   }
@@ -125,11 +136,61 @@ export function Onboarding() {
         interests,
         sdg_priorities: sdgs,
         skills,
-        extraction_engine: extraction?.engine ?? 'none',
+        extraction_engine: extraction?.engine ?? existing.data?.profile.extraction_engine ?? 'none',
       }
-      const created = await sendJSON<{ id: string }>('/api/profiles', { body: profile })
-      setProfileId(created.id)
-      setBuilt(await getJSON<MatchesResponse>(`/api/profiles/${created.id}/matches`))
+      setBuilt(null)
+      setLog([])
+      // Each line is one real request, shown when it starts and ticked off when it returns.
+      async function logged<T>(label: string, work: () => Promise<T>, found: (result: T) => string): Promise<T> {
+        const startedAt = Date.now()
+        setLog((lines) => [...lines, { label, status: 'running', startedAt }])
+        const finishLine = (patch: Partial<LogLine>) =>
+          setLog((lines) => lines.map((line, i) => (i === lines.length - 1 ? { ...line, ...patch, seconds: (Date.now() - startedAt) / 1000 } : line)))
+        try {
+          const result = await work()
+          finishLine({ status: 'done', detail: found(result) })
+          return result
+        } catch (reason) {
+          finishLine({ status: 'failed', detail: reason instanceof Error ? reason.message : String(reason) })
+          throw reason
+        }
+      }
+      let id = profileId
+      await logged(
+        editing ? 'Update your saved profile' : 'Save your profile',
+        async () => {
+          if (editing && id) await sendJSON(`/api/profiles/${id}`, { method: 'PUT', body: profile })
+          else {
+            id = (await sendJSON<{ id: string }>('/api/profiles', { body: profile })).id
+            setProfileId(id)
+          }
+        },
+        () => { const n = Object.keys(skills).length; return `${n} skill claim${n === 1 ? "" : "s"} saved; names and contact details are never stored` },
+      )
+      const moderate = await logged(
+        'Score the destination roles · moderate AI adoption',
+        () => getJSON<MatchesResponse>(`/api/profiles/${id}/matches?scenario=moderate`),
+        (m) => `${m.roles.length} roles scored · best fit: ${m.roles[0]?.title ?? 'none'} · AI-use evidence for ${m.evidence.occupations} occupations, ${m.evidence.period}`,
+      )
+      await logged(
+        'Re-score them · fast AI adoption',
+        () => getJSON<MatchesResponse>(`/api/profiles/${id}/matches?scenario=fast`),
+        (m) => `best fit under fast adoption: ${m.roles[0]?.title ?? 'none'}`,
+      )
+      const top = moderate.roles[0]
+      if (top) {
+        await logged(
+          `Plan free courses towards ${top.title}`,
+          () => getJSON<PathwayResponse>(`/api/profiles/${id}/pathway?scenario=moderate&role_id=${top.role_id}`),
+          (p) => `${p.steps.length} verified courses · ${p.total_hours} h · about ${p.weeks} weeks at ${hours} h a week`,
+        )
+      }
+      await logged(
+        "Load today's market evidence",
+        () => getJSON<SignalsResponse>('/api/signals'),
+        (r) => `${r.signals.length} signals from ${r.observations} stored observations, each with its source and date`,
+      )
+      setBuilt(moderate)
     })
 
   const addable = (pack.data?.skills ?? []).filter((s) => !(s.id in skills) && addQuery.length > 1 && s.name.toLowerCase().includes(addQuery.toLowerCase())).slice(0, 6)
@@ -147,10 +208,12 @@ export function Onboarding() {
           </svg>
           <span className="text-[17px] font-semibold tracking-tight">Qart.ai</span>
         </Link>
-        <Link to="/" className="text-sm text-graphite">{t('Skip to the evidence overview')}</Link>
+        <Link to="/live" className="text-sm text-graphite">{t('Browse public evidence')}</Link>
       </header>
 
       <main className="relative mx-auto flex max-w-[640px] flex-col gap-7 px-6 pb-16 pt-8">
+        {editing && existing.loading && <p role="status">Loading your saved answers…</p>}
+        {editing && existing.error && <p role="alert">Could not load your saved answers. <button type="button" className="btn" onClick={existing.reload}>Retry</button></p>}
         {step >= 1 && step <= LAST_QUESTION && (
           <div className="flex flex-col gap-2.5">
             <div role="progressbar" aria-valuemin={1} aria-valuemax={LAST_QUESTION} aria-valuenow={step} aria-label="Onboarding progress" className="grid grid-cols-6 gap-1.5">
@@ -259,17 +322,42 @@ export function Onboarding() {
                 </select>
               </label>
             )}
+            {situation !== 'student' && <div className="flex flex-wrap gap-2" aria-label="Role examples">
+              {pack.data?.current_roles.slice(0,4).map((r) => <button key={r.id} type="button" className={chip(role === r.id)} onClick={() => setRole(r.id)}>{r.title}</button>)}
+            </div>}
             <label className="flex flex-col gap-1.5 text-[13px] font-medium">
               Years of work experience
               <input type="number" min={0} max={60} value={years} onChange={(e) => setYears(e.target.value)} className="min-h-[44px] rounded-md border border-hairline bg-fog px-3 text-[15px]" />
             </label>
             <label className="flex flex-col gap-1.5 text-[13px] font-medium">
               Main tasks, in your own words
-              <textarea value={tasks} onChange={(e) => setTasks(e.target.value)} rows={3} placeholder="e.g. applying customer receipts, month-end reports" className="rounded-md border border-hairline bg-fog px-3 py-2 text-[15px]" />
+              <textarea value={tasks} onChange={(e) => { setTasks(e.target.value); setSuggestions(null); setSelected([]) }} rows={3} placeholder="e.g. applying customer receipts, month-end reports" className="rounded-md border border-hairline bg-fog px-3 py-2 text-[15px]" />
             </label>
-            <button type="button" className="btn self-start" disabled={tasks.trim().length < 3} onClick={findFromTasks}>
+            <button type="button" className="btn self-start" disabled={busy !== null || tasks.trim().length < 3} onClick={findFromTasks}>
               Find the matching skills
             </button>
+            <div className="flex flex-col gap-2" aria-label="Task examples">
+              <span className="cap">Or start from an O*NET task and edit it</span>
+              {pack.data?.task_examples.map((example) => <button key={example.text} type="button" className="btn justify-start py-2 text-left text-xs" onClick={() => { setTasks(example.text); setSuggestions(null) }}>{example.text}</button>)}
+              {pack.data?.task_examples[0] && <a className="text-xs text-graphite" href={pack.data.task_examples[0].url} target="_blank" rel="noreferrer">Task examples: {pack.data.task_examples[0].source}</a>}
+            </div>
+            {suggestions && <section aria-label="Suggested skills" className="border-y border-hairline py-4">
+              <p className="m-0 text-sm font-medium">{suggestions.hits.length ? 'Choose the skills that describe your work' : 'No matching skills found. Try a specific task, or add skills on the next step.'}</p>
+              <p className="text-xs text-graphite">Matched by {suggestions.engine}. {suggestions.note}</p>
+              {suggestions.hits.map((hit) => <label key={hit.skill} className="flex min-h-11 items-center gap-3 text-sm">
+                <input type="checkbox" checked={selected.includes(hit.skill)} onChange={(e) => setSelected((prev) => e.target.checked ? [...prev, hit.skill] : prev.filter((id) => id !== hit.skill))} />
+                {hit.name}{hit.skill in skills && ' · already in your profile'}
+              </label>)}
+              {suggestions.hits.length > 0 && <button type="button" className="btn" disabled={!selected.length} onClick={() => {
+                setSkills((prev) => {
+                  const next = { ...prev }
+                  for (const id of selected) next[id] ??= { level: null, evidence: '', source: 'self' }
+                  return next
+                })
+                setSuggestions(null)
+                setSelected([])
+              }}>Add selected skills</button>}
+            </section>}
           </section>
         )}
 
@@ -277,7 +365,7 @@ export function Onboarding() {
           <section className="flex flex-col gap-4">
             <h1 className="h1">{t('Check your skills')}</h1>
             <p className="m-0 text-graphite">
-              Levels are what you claim, not a test: {pack.data?.proficiency.map((p, i) => `${i} ${p}`).join(' · ')}.
+              Rate each skill from 1 (none) to 5 (expert). A level is your own claim, not a test.
             </p>
             {extraction && (
               <p className="m-0 font-mono text-[11px] text-graphite">
@@ -296,10 +384,9 @@ export function Onboarding() {
                       {claim.source === 'cv' ? `CV: “${claim.evidence}”` : claim.source === 'keyword' ? 'Found by keyword · set your level' : 'You set this'}
                     </span>
                   </span>
-                  <span className="flex items-center gap-1.5">
-                    <button type="button" aria-label={`Lower ${skillName(id)}`} className="h-8 w-8 cursor-pointer rounded-md border border-hairline bg-white" onClick={() => setLevel(id, -1)}>−</button>
-                    <span className="w-[76px] text-center"><Dots level={claim.level} /></span>
-                    <button type="button" aria-label={`Raise ${skillName(id)}`} className="h-8 w-8 cursor-pointer rounded-md border border-hairline bg-white" onClick={() => setLevel(id, 1)}>+</button>
+                  <span className="flex flex-col items-end gap-1">
+                    <LevelPicker level={claim.level} label={`Your level in ${skillName(id)}`} onChange={(level) => setLevel(id, level)} />
+                    {claim.level === null && <span className="text-[11px] text-graphite">Not rated yet</span>}
                   </span>
                 </div>
               ))}
@@ -358,7 +445,7 @@ export function Onboarding() {
                 const on = interests.includes(i.id)
                 return (
                   <button key={i.id} type="button" aria-pressed={on} className={chip(on)} onClick={() => setInterests(on ? interests.filter((x) => x !== i.id) : [...interests, i.id])}>
-                    {t(i.label)}
+                    {t(i.label)}<span className="ml-1 text-xs">({pack.data?.skills.filter((s) => s.kind === i.id).slice(0,2).map((s) => s.name).join(', ')})</span>
                   </button>
                 )
               })}
@@ -385,20 +472,16 @@ export function Onboarding() {
           <section className="flex flex-col gap-5 pt-3">
             <span className="eyebrow">{built ? 'Ready' : 'Almost there'}</span>
             <h1 className="m-0 text-[40px] font-semibold leading-[1.1] tracking-[-0.035em]">{t("Building your picture from today's evidence")}</h1>
-            <div className="card-dark flex flex-col gap-3.5 px-6 py-5 font-mono text-[13px]" aria-live="polite">
-              <span><span className="text-cyan">{built ? '✓' : '…'}</span> Saved your profile without your name or contact details</span>
-              {built && (
-                <>
-                  <span><span className="text-cyan">✓</span> Read AI-use evidence for {built.evidence.occupations} occupations · {built.evidence.period}</span>
-                  <span><span className="text-cyan">✓</span> Scored {built.roles.length} destination roles under {built.scenario_label.toLowerCase()}</span>
-                  <span><span className="text-cyan">✓</span> Planned verified free courses within {hours} h a week</span>
-                </>
-              )}
-            </div>
+            <RunLog title="Build log" lines={log} total={5} />
+            {log.some((line) => line.status === 'failed') && (
+              <div className="flex flex-wrap items-center gap-3">
+                <button type="button" className="btn" disabled={busy !== null} onClick={finish}>Try again</button>
+                <span className="text-[13px] text-graphite">Your answers are kept.</span>
+              </div>
+            )}
             {built && (
               <div className="flex flex-wrap items-center gap-3">
-                <button type="button" className="btn btn-v min-h-[44px]" onClick={() => navigate('/roles')}>{t('See roles that fit me →')}</button>
-                <Link to="/" className="text-[13px] text-graphite">{t('Or look at the evidence first')}</Link>
+                <button type="button" className="btn btn-v min-h-[44px]" onClick={() => navigate('/')}>{t('Open my overview →')}</button>
               </div>
             )}
           </section>
@@ -414,7 +497,7 @@ export function Onboarding() {
               {step < LAST_QUESTION && (
                 <button type="button" className="min-h-[44px] cursor-pointer border-0 bg-transparent px-3 text-[15px] text-graphite" onClick={() => go(step + 1)}>{t('Skip')}</button>
               )}
-              <button type="button" className="btn btn-v min-h-[44px]" disabled={busy !== null} onClick={() => (step === LAST_QUESTION ? finish() : go(step + 1))}>
+              <button type="button" className="btn btn-v min-h-[44px]" disabled={busy !== null || (editing && !hydrated.current)} onClick={() => (step === LAST_QUESTION ? finish() : go(step + 1))}>
                 {step === LAST_QUESTION ? 'Build my picture' : 'Continue'}
               </button>
             </span>

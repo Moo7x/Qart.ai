@@ -1,4 +1,5 @@
-import { Route, Routes, useLocation } from 'react-router-dom'
+import { lazy, Suspense } from 'react'
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { Sidebar } from './components/Sidebar'
 import { Cv } from './pages/Cv'
 import { Future } from './pages/Future'
@@ -10,13 +11,17 @@ import { Overview } from './pages/Overview'
 import { Pathway } from './pages/Pathway'
 import { Occupations } from './pages/Occupations'
 import { Roles } from './pages/Roles'
-import { Trends } from './pages/Trends'
 import { LanguageProvider } from './i18n'
-import { JourneyProvider } from './state'
+import { JourneyProvider, useJourney } from './state'
+
+// The charting library is only needed on Trends, so that page loads on demand.
+const Trends = lazy(() => import('./pages/Trends').then((m) => ({ default: m.Trends })))
 
 function Shell() {
   const location = useLocation()
-  if (location.pathname === '/start') return <Onboarding />
+  const { profileId } = useJourney()
+  if (location.pathname === '/start') return <Onboarding key={location.search} />
+  if (location.pathname === '/' && !profileId) return <Navigate to="/start" replace />
   return (
     <div className="flex min-h-screen flex-wrap items-start bg-fog">
       <Sidebar />
@@ -28,7 +33,7 @@ function Shell() {
         <Route path="/future" element={<Future />} />
         <Route path="/changes" element={<Changes />} />
         <Route path="/cv" element={<Cv />} />
-        <Route path="/trends" element={<Trends />} />
+        <Route path="/trends" element={<Suspense fallback={<main className="page"><span className="cap">Loading the trends…</span></main>}><Trends /></Suspense>} />
         <Route path="/occupations" element={<Occupations />} />
         <Route path="/live" element={<LiveIntelligence />} />
         <Route

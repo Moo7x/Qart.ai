@@ -10,11 +10,13 @@ from sqlalchemy import Engine
 from src import params
 from src.api.evidence import get_engine, get_settings
 from src.changes.store import accepted_rows, baseline_cutoff
+from src.collectors.talentcorp import load_extraction
 from src.config import REPO_ROOT, Settings
 from src.evidence.signals import build_signals, job_ad_signals, occupation_signals
 from src.intake.extract import extract
 from src.intake.files import UnsupportedFileError, read_cv
 from src.intake.skill_search import search
+from src.journey.progress import get_progress
 from src.journey.store import (
     ProfileData,
     choose_destination,
@@ -31,6 +33,8 @@ from src.match.radar import radar
 from src.match.tasks import task_view
 from src.pack import Pack, load_pack
 from src.pathway.planner import Pathway, plan_pathway
+from src.pathway.tracks import build_tracks, comparison
+from src.resources import load_resources
 
 router = APIRouter(prefix="/api")
 
@@ -81,6 +85,15 @@ def pack_info() -> dict[str, Any]:
         "samples": [{"id": k, "label": v} for k, v in SAMPLES.items()],
         "proficiency": list(params.PROFICIENCY_LABELS),
         "courses_checked": pack.courses_checked,
+        "task_examples": [
+            {
+                "text": next(iter(occ.skills.values()))[0].text,
+                "source": pack.tasks.source,
+                "url": pack.tasks.source_url,
+            }
+            for occ in pack.tasks.occupations.values()
+            if occ.skills
+        ][:4],
     }
 
 
@@ -295,6 +308,33 @@ def pathway(
     return out
 
 
+@router.get("/profiles/{profile_id}/tracks")
+def tracks(
+    profile_id: str,
+    scenario: Scenario = Query(default="moderate"),
+    engine: Engine = Depends(get_engine),
+) -> dict[str, Any]:
+    """My plan as AI basics, reskilling without AI and with AI, plus the route comparison."""
+    data, destination = require_profile(engine, profile_id)
+    chosen = _destination_or_query(destination, None)
+    pack = load_pack()
+    res = load_resources()
+    evidence = evidence_for(engine, profile_id)
+    match = score_role(pack, pack.destination_roles[chosen], data.levels(), scenario, evidence)
+    path = plan_pathway(pack, match, data.levels(), data.weekly_hours, scenario, evidence)
+    done = get_progress(engine, profile_id)["done"]
+    return {
+        "role_id": chosen,
+        "role_title": match.title,
+        "scenario": scenario,
+        "weekly_hours": data.weekly_hours,
+        "tracks": build_tracks(pack, res, match, path, done),
+        "comparison": comparison(pack, res, data.levels(), chosen, data.weekly_hours, evidence),
+        "resources_checked": res.checked,
+        "courses_checked": pack.courses_checked,
+    }
+
+
 @router.get("/profiles/{profile_id}/roles/{role_id}/explain")
 def explain_role(
     profile_id: str,
@@ -352,6 +392,27 @@ def role_tasks(
     return task_view(pack, role, accepted_rows(engine, profile_id), impact)
 
 
+def _top_roles(
+    pack: Pack, levels: dict[str, int | None], scenario: Scenario, evidence: Evidence
+) -> list[dict[str, Any]]:
+    ranked = rank_roles(pack, levels, scenario, evidence)[: params.FUTURE_ROLES_SHOWN]
+    return [{"role_id": m.role_id, "title": m.title, "fit": m.fit} for m in ranked]
+
+
+def _talentcorp_market() -> dict[str, Any]:
+    """In-demand skills and emerging roles as TalentCorp names them (expert view, with pages)."""
+    data = load_extraction()
+    skills = data["in_demand_skills"]
+    return {
+        "source": "TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS",
+        "published": str(data["published"]),
+        "in_demand": {"ai_digital": skills["ai_digital"], "green": skills["green"]},
+        "in_demand_page": skills["pdf_page"],
+        "emerging_roles": data["emerging_roles"]["roles"],
+        "emerging_page": data["emerging_roles"]["pdf_page"],
+    }
+
+
 @router.get("/profiles/{profile_id}/future")
 def future(
     profile_id: str,
@@ -370,7 +431,11 @@ def future(
         match = score_role(pack, role, levels, scenario, evidence)
         path = plan_pathway(pack, match, levels, data.weekly_hours, scenario, evidence)
         after = {g.skill: g.after for step in path.steps for g in step.gains}
+        # Projected levels if the plan is finished (estimate): the higher of claim and plan.
+        levels_after = {**levels, **{k: max(v, levels.get(k) or 0) for k, v in after.items()}}
         by_scenario[scenario] = {
+            "roles_now": _top_roles(pack, levels, scenario, evidence),
+            "roles_after": _top_roles(pack, levels_after, scenario, evidence),
             "fit_now": path.fit_before,
             "fit_after": path.fit_after,
             "hours": path.total_hours,
@@ -391,6 +456,12 @@ def future(
         }
     current = pack.current_roles.get(data.current_role)
     return {
+        "skills_now": [
+            {"skill": sid, "name": pack.skills[sid].name, "level": level}
+            for sid, level in sorted(levels.items(), key=lambda kv: -(kv[1] or 0))
+            if level is not None and sid in pack.skills
+        ],
+        "market": _talentcorp_market(),
         "destination": {"id": role.id, "title": role.title},
         "current_role": current.title if current else None,
         "situation": data.situation,

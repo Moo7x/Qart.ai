@@ -124,6 +124,7 @@ All libraries, datasets and models, with licences, are listed in [`docs/DECLARAT
 2. Open the **Secrets** tab and add the variables listed in `.env.example` (`LLM_API_KEY`, `DATABASE_URL`, `QART_ADMIN_TOKEN`, optionally `RUNPOD_API_KEY` and `RUNPOD_ENDPOINT_ID`).
 3. Click **Run**. Replit runs `replit_start.sh`: it installs the Python packages, builds the web app and starts `uvicorn src.app:app` on port 8000.
 4. To publish, choose an **Autoscale** deployment. `.replit` builds once (`replit_build.sh`) and then only starts the server (`replit_serve.sh`), so it answers Replit's health check on `/` within seconds.
+5. For the daily evidence run, import the same repository into a second Repl, add the production database's `DATABASE_URL` and the API keys to its Secrets plus `QART_DEPLOY_ROLE=pipeline`, and publish it as a **Scheduled** deployment. The same `replit_serve.sh` then runs the pipeline once per schedule instead of starting the server.
 
 Without the LLM or RunPod keys the app still runs; `/api/health` shows which parts use a labelled fallback.
 

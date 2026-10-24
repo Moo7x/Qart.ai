@@ -1,9 +1,8 @@
 import { useState } from 'react'
 import { sendJSON, useApi } from '../api'
 import type { Meters, Question, RoleCard, Scenario, WhatIfResponse } from '../types'
+import { LEVEL_NAMES, LevelPicker } from './journey'
 import { Loading, Problem } from './ui'
-
-const LEVELS = ['none', 'aware', 'working', 'proficient', 'expert']
 
 // Coverage, essentials and profile completeness kept apart, so one number never hides them.
 export function MeterRow({ meters, range }: { meters: Meters; range: { low: number; high: number } }) {
@@ -21,10 +20,10 @@ export function MeterRow({ meters, range }: { meters: Meters; range: { low: numb
         ['ESSENTIALS', essentials, [...meters.essentials_below, ...meters.essentials_unstated.map((n) => `${n} (not stated)`)].join(', ') || 'none missing'],
         ['PROFILE STATED', `${Math.round(meters.completeness)}%`, `${meters.stated} of ${meters.requirements} skills`],
       ].map(([label, value, hint]) => (
-        <div key={label} className="rounded-lg bg-surface px-3 py-2">
-          <span className="block font-mono text-[10px] tracking-widest text-stone">{label}</span>
+        <div key={label} className="border-l-2 border-line py-0.5 pl-3">
+          <span className="block font-mono text-[10px] tracking-widest text-ash">{label}</span>
           <span className="block text-[15px] font-semibold">{value}</span>
-          <span className="block text-[11px] text-slate-mid">{hint}</span>
+          <span className="block text-[11px] text-graphite">{hint}</span>
         </div>
       ))}
     </div>
@@ -61,12 +60,8 @@ export function BestQuestion({ profileId, scenario, onAnswered }: { profileId: s
       <span className="cap text-violet">The question that matters most for you now</span>
       <h2 className="h2">How would you rate your {first.skill_name}?</h2>
       <p className="m-0 text-[13px] text-graphite">{first.effect}</p>
-      <div className="flex flex-wrap gap-2" role="group" aria-label={`Your level in ${first.skill_name}`}>
-        {LEVELS.map((label, level) => (
-          <button key={label} type="button" className="btn" disabled={busy} onClick={() => answer(level)}>
-            {label}
-          </button>
-        ))}
+      <div className="max-w-[360px]">
+        <LevelPicker level={null} label={`Your level in ${first.skill_name}`} disabled={busy} onChange={answer} />
       </div>
       {error && <p role="alert" className="m-0 text-xs text-weak">{error}</p>}
       <p className="m-0 text-xs text-graphite">
@@ -107,7 +102,7 @@ export function WhatIf({ profileId, scenario, role }: { profileId: string; scena
         <label className="flex flex-col gap-1">
           <span className="cap">were</span>
           <select className="rounded-md border border-hairline px-2 py-1.5" value={level} onChange={(e) => setLevel(Number(e.target.value))}>
-            {LEVELS.map((label, i) => <option key={label} value={i}>{label}</option>)}
+            {LEVEL_NAMES.map((label, i) => <option key={label} value={i}>{i + 1} · {label}</option>)}
           </select>
         </label>
         <button type="button" className="btn btn-v" onClick={run}>Recompute</button>
