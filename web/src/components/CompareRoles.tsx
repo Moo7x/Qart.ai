@@ -14,12 +14,12 @@ export function jobSearches(title: string) {
 
 export function Openings({ title }: { title: string }) {
   return (
-    <p className="m-0 text-xs text-stone">
+    <p className="m-0 text-[13px] text-graphite">
       See openings:{' '}
       {jobSearches(title).map((s, i) => (
         <span key={s.label}>
           {i > 0 && ' · '}
-          <a href={s.url} target="_blank" rel="noreferrer" className="text-cyan">{s.label} ↗</a> ({s.hint})
+          <a href={s.url} target="_blank" rel="noreferrer" className="font-medium text-violet">{s.label} ↗</a> ({s.hint})
         </span>
       ))}
       . External sites; Qart does not check these openings or apply for you.

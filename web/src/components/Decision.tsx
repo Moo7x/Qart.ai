@@ -20,10 +20,10 @@ export function MeterRow({ meters, range }: { meters: Meters; range: { low: numb
         ['ESSENTIALS', essentials, [...meters.essentials_below, ...meters.essentials_unstated.map((n) => `${n} (not stated)`)].join(', ') || 'none missing'],
         ['PROFILE STATED', `${Math.round(meters.completeness)}%`, `${meters.stated} of ${meters.requirements} skills`],
       ].map(([label, value, hint]) => (
-        <div key={label} className="rounded-lg bg-surface px-3 py-2">
-          <span className="block font-mono text-[10px] tracking-widest text-stone">{label}</span>
+        <div key={label} className="border-l-2 border-line py-0.5 pl-3">
+          <span className="block font-mono text-[10px] tracking-widest text-ash">{label}</span>
           <span className="block text-[15px] font-semibold">{value}</span>
-          <span className="block text-[11px] text-slate-mid">{hint}</span>
+          <span className="block text-[11px] text-graphite">{hint}</span>
         </div>
       ))}
     </div>
