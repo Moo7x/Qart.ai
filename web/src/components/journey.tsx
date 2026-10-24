@@ -7,6 +7,10 @@ import { useJourney } from '../state'
 // Official UN SDG colours (un.org brand guidelines) for the goals the pack uses.
 const SDG_COLOUR: Record<number, string> = { 4: '#C5192D', 8: '#A21942', 12: '#BF8B2E', 13: '#3F7E44' }
 
+export function sdgColour(target: string): string {
+  return SDG_COLOUR[Number(target.split('.')[0])] ?? '#5e5f6e'
+}
+
 export function SdgTag({ target }: { target: string }) {
   const goal = Number(target.split('.')[0])
   return (

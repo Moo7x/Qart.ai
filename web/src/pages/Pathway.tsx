@@ -5,7 +5,7 @@ import { sendJSON, useApi } from '../api'
 import { PlanCompare } from '../components/PlanCompare'
 import { RouteCompare } from '../components/RouteCompare'
 import { TrackMap } from '../components/TrackMap'
-import { ScenarioSwitch, SdgTag, JourneyRoute, NextStep, PROGRESS_EVENT } from '../components/journey'
+import { ScenarioSwitch, SdgTag, sdgColour, JourneyRoute, NextStep, PROGRESS_EVENT } from '../components/journey'
 import { Loading, Problem } from '../components/ui'
 import { useJourney } from '../state'
 import type { PathwayResponse, ProgressResponse, Scenario, TracksResponse } from '../types'
@@ -99,13 +99,19 @@ function ProfilePathway({ profileId, scenario }: { profileId: string; scenario: 
             </div>
           </header>
 
-          <section aria-label="Your roadmap" className="flex min-w-0 flex-col gap-4">
+          <section aria-label="Your roadmap" className="panel min-w-0 gap-5">
             <div className="flex flex-col gap-1">
               <h2 className="h2">Your roadmap</h2>
               <p className="m-0 max-w-[720px] text-[13px] text-graphite">
                 Three tracks: AI basics first, then the skills this role needs without AI and with AI. Each step opens its courses, YouTube videos and articles; a step unlocks when the one before it in its track is done.
               </p>
             </div>
+            {(data.essentials_unmet.length > 0 || data.uncovered.length > 0) && (
+              <div className="flex flex-col gap-1 border-l-4 border-weak bg-weak-bg px-4 py-3 text-[13px]">
+                {data.essentials_unmet.length > 0 && <span className="font-semibold text-weak">Essential skills still below the level after this plan: {data.essentials_unmet.join(', ')}.</span>}
+                {data.uncovered.length > 0 && <span className="text-graphite">No verified free course yet for: {data.uncovered.join(', ')} — the stop still offers videos and articles.</span>}
+              </div>
+            )}
             {(tracks.loading || (progress.loading && !current)) && <Loading what="your roadmap" />}
             {tracks.error && <Problem what="your roadmap" message={tracks.error} onRetry={tracks.reload} />}
             {saveError && <p role="alert" className="m-0 text-weak">Progress was not saved: {saveError}. Try the action again.</p>}
@@ -116,7 +122,7 @@ function ProfilePathway({ profileId, scenario }: { profileId: string; scenario: 
           {tracks.data && <RouteCompare data={tracks.data.comparison} scenario={scenario} />}
 
           {current?.plan && (
-            <section aria-label="Your progress" className="flex flex-col gap-3">
+            <section aria-label="Your progress" className="panel gap-4">
               <div className="flex flex-wrap items-end justify-between gap-3">
                 <div className="flex items-baseline gap-3">
                   <span className="font-mono text-[40px] leading-none tracking-[-0.05em]">{current.plan.steps_done}<span className="text-graphite">/{current.plan.steps}</span></span>
@@ -154,33 +160,26 @@ function ProfilePathway({ profileId, scenario }: { profileId: string; scenario: 
             </section>
           )}
 
-          <div className="grid items-start gap-8 lg:grid-cols-[minmax(0,1.6fr)_minmax(280px,1fr)]">
-            <section aria-label="About the plan" className="flex min-w-0 flex-col gap-3">
-              <h2 className="h2">About this plan</h2>
-              <div className="flex flex-col gap-1.5 text-xs text-graphite">
-                <span>Courses are ordered by prerequisites, essentials first. A short course raises a skill by at most one level; covering material is not the same as proven skill. Videos and articles are extra and never counted in hours or fit.</span>
-                {data.uncovered.length > 0 && <span>No verified free course yet for: {data.uncovered.join(', ')}.</span>}
-                {data.partly_covered.length > 0 && <span>Only partly covered by free courses: {data.partly_covered.join(', ')}.</span>}
-                {data.essentials_unmet.length > 0 && <span className="text-weak">Essential skills still below the level after this path: {data.essentials_unmet.join(', ')}.</span>}
-              </div>
-            </section>
-
-            <aside aria-label="SDG contribution" className="flex min-w-0 flex-col gap-4 lg:sticky lg:top-6">
-              <div className="flex items-baseline justify-between gap-3 border-b-2 border-void pb-3">
-                <span className="text-[13px]">Fit now → after the path</span>
-                <span className="font-mono text-2xl tracking-tight">{Math.round(data.fit_before)} → {Math.round(data.fit_after)}<span className="ml-1.5 text-[11px] text-estimate">estimate</span></span>
-              </div>
-              <h2 className="h2">How this path contributes: {Object.keys(data.sdg_summary).length} SDG targets</h2>
+          <section aria-label="SDG contribution" className="sdg-band">
+            <div className="mx-auto flex max-w-[760px] flex-col items-center gap-2 text-center">
+              <span className="eyebrow">Sustainable Development Goals</span>
+              <h2 className="m-0 text-[26px] font-semibold leading-tight tracking-tight">How this plan contributes to {Object.keys(data.sdg_summary).length} SDG targets</h2>
+              <p className="m-0 text-[14px] text-graphite">
+                Fit for {data.role_title}: <span className="font-mono font-semibold text-void">{Math.round(data.fit_before)} → {Math.round(data.fit_after)}</span>{' '}
+                <span className="text-[12px] text-estimate">estimate after the plan</span>
+              </p>
+            </div>
+            <div className="sdg-grid">
               {Object.entries(data.sdg_summary).map(([target, hows]) => (
-                <div key={target} className="flex flex-col gap-1 border-t border-line pt-3 text-[13px]">
-                  <span className="flex items-center gap-2"><SdgTag target={target} /><span className="font-semibold">{data.sdg_targets[target]?.title}</span></span>
-                  {hows.map((h) => <span key={h}>{h}</span>)}
-                  <span className="text-[11px] text-graphite">&ldquo;{data.sdg_targets[target]?.text}&rdquo;</span>
-                </div>
+                <article key={target} className="sdg-card" style={{ borderLeftColor: sdgColour(target) }}>
+                  <span className="flex flex-wrap items-center gap-2"><SdgTag target={target} /><span className="text-[15px] font-semibold">{data.sdg_targets[target]?.title}</span></span>
+                  {hows.map((h) => <p key={h} className="m-0 text-[14px] leading-relaxed">{h}</p>)}
+                  <p className="m-0 text-[12px] italic text-graphite">&ldquo;{data.sdg_targets[target]?.text}&rdquo;</p>
+                </article>
               ))}
-              <span className="font-mono text-[11px] text-graphite">{data.sdg_source}</span>
-            </aside>
-          </div>
+            </div>
+            <p className="m-0 text-center font-mono text-[11px] text-graphite">{data.sdg_source} · these are the mechanisms by which the plan contributes, not a measured impact</p>
+          </section>
 
           <PlanCompare profileId={profileId} scenario={scenario} />
         </>
