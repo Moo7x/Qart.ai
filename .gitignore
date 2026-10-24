@@ -27,3 +27,7 @@ eval/optimisation/variants/
 
 # Local scratch files (not part of the project)
 notes/
+
+# Temporary files left by Office exports
+*.tmp
+~$*
