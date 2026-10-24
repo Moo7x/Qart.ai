@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { useApi } from '../api'
 import type { ProgressResponse } from '../types'
@@ -88,6 +89,9 @@ export function ScenarioSwitch() {
 
 type Station = { key: string; label: string; to: string; paths: string[] }
 
+// Sent after plan progress is saved, so the route redraws without a page reload.
+export const PROGRESS_EVENT = 'qart:progress'
+
 const STATIONS: Station[] = [
   { key: 'profile', label: 'Your profile', to: '/start?edit=1', paths: ['/start'] },
   { key: 'picture', label: 'Your picture', to: '/', paths: ['/'] },
@@ -104,6 +108,11 @@ export function JourneyRoute() {
   const { pathname } = useLocation()
   const saved = useApi<{ destination: string | null }>(profileId ? `/api/profiles/${profileId}` : null)
   const progress = useApi<ProgressResponse>(profileId ? `/api/profiles/${profileId}/progress?scenario=${scenario}` : null)
+  const { reload } = progress
+  useEffect(() => {
+    window.addEventListener(PROGRESS_EVENT, reload)
+    return () => window.removeEventListener(PROGRESS_EVENT, reload)
+  }, [reload])
   if (!profileId) return null
   const chosen = Boolean(saved.data?.destination)
   const plan = progress.data?.plan

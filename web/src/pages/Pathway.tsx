@@ -2,16 +2,14 @@ import { useEffect, useState } from 'react'
 import { useT } from '../i18n'
 import { Link } from 'react-router-dom'
 import { sendJSON, useApi } from '../api'
-import { ReportProblem } from '../components/Feedback'
 import { PlanCompare } from '../components/PlanCompare'
 import { Roadmap } from '../components/Roadmap'
-import { ScenarioSwitch, SdgTag, JourneyRoute, NextStep } from '../components/journey'
+import { ScenarioSwitch, SdgTag, JourneyRoute, NextStep, PROGRESS_EVENT } from '../components/journey'
 import { Loading, Problem } from '../components/ui'
 import { useJourney } from '../state'
 import type { PathwayResponse, ProgressResponse, Scenario } from '../types'
 import { NeedProfile } from './Roles'
 
-const MINUTES_PER_HOUR = 60
 // Older builds kept completion in this browser; it is moved to the server once.
 function readDone(key: string): string[] {
   try {
@@ -39,6 +37,7 @@ function ProfilePathway({ profileId, scenario }: { profileId: string; scenario: 
 
   async function save(next: { done: string[]; paused: boolean }) {
     setState(await sendJSON<ProgressResponse>(`/api/profiles/${profileId}/progress?scenario=${scenario}`, { method: 'PUT', body: next }))
+    window.dispatchEvent(new Event(PROGRESS_EVENT))
   }
 
   useEffect(() => {
@@ -87,124 +86,75 @@ function ProfilePathway({ profileId, scenario }: { profileId: string; scenario: 
           </header>
 
           {current?.plan && (
-            <section className="card-light flex flex-col gap-3 px-6 py-5">
-              <div className="flex flex-wrap items-center justify-between gap-2">
-                <h2 className="h2">{current.paused ? 'Paused: your plan waits for you' : 'Your progress'}</h2>
+            <section aria-label="Your progress" className="flex flex-col gap-3">
+              <div className="flex flex-wrap items-end justify-between gap-3">
+                <div className="flex items-baseline gap-3">
+                  <span className="font-mono text-[40px] leading-none tracking-[-0.05em]">{current.plan.steps_done}<span className="text-graphite">/{current.plan.steps}</span></span>
+                  <span className="text-[13px] text-graphite">
+                    steps done · {current.plan.hours_done} of {current.plan.hours} h
+                    {current.paused && <span className="ml-2 font-semibold text-weak">Paused</span>}
+                  </span>
+                </div>
                 <button type="button" className="btn" onClick={() => save({ done, paused: !current.paused })}>{current.paused ? t('Resume') : t('Pause for now')}</button>
               </div>
-              <div className="grid gap-3 [grid-template-columns:repeat(auto-fit,minmax(180px,1fr))]">
-                <div className="rounded-lg border border-mist px-3 py-2">
-                  <span className="cap">Plan completed</span>
-                  <span className="block text-lg font-semibold">{current.plan.steps_done} of {current.plan.steps} steps</span>
-                  <span className="text-xs text-graphite">{current.plan.hours_done} of {current.plan.hours} h · your own record</span>
-                </div>
-                <div className="rounded-lg border border-mist px-3 py-2">
-                  <span className="cap">Requirement coverage</span>
-                  <span className="block text-lg font-semibold">{Math.round(current.plan.coverage)} / 100</span>
-                  <span className="text-xs text-graphite">changes only when you update your skill levels</span>
-                </div>
-                <div className="rounded-lg border border-mist px-3 py-2">
-                  <span className="cap">Still to tell us</span>
-                  <span className="block text-lg font-semibold">{current.plan.open_questions} skill{current.plan.open_questions === 1 ? '' : 's'}</span>
-                  <Link to="/roles" className="text-xs">answer on My options</Link>
-                </div>
+              <div
+                role="progressbar"
+                aria-label="Plan completed"
+                aria-valuemin={0}
+                aria-valuemax={data.steps.length}
+                aria-valuenow={finished}
+                className="grid h-3 gap-[3px]"
+                style={{ gridTemplateColumns: data.steps.map((s) => `${Math.max(s.hours, 0.5)}fr`).join(' ') }}
+              >
+                {data.steps.map((s) => (
+                  <span key={s.course.id} title={s.course.title} className={`transition-colors duration-500 ${done.includes(s.course.id) ? 'bg-violet' : 'bg-line'}`} />
+                ))}
+              </div>
+              <div className="flex flex-wrap gap-x-6 gap-y-1 text-[12px] text-graphite">
+                <span>Segment width = course hours · your own record</span>
+                <span>Requirement coverage {Math.round(current.plan.coverage)}/100 (changes only when you update your skill levels)</span>
+                {current.plan.open_questions > 0 && <Link to="/roles">{current.plan.open_questions} skill{current.plan.open_questions === 1 ? '' : 's'} still to rate</Link>}
               </div>
               {!current.paused && current.plan.this_week.length > 0 && (
-                <p className="m-0 text-[13px]">
+                <p className="m-0 border-l-2 border-violet pl-3 text-[13px]">
                   <span className="font-semibold">This week ({current.plan.weekly_hours} h):</span>{' '}
                   {current.plan.this_week.map((w) => `${w.title} (${w.hours} h)`).join(' · ')}
                 </p>
               )}
-              <p className="m-0 text-xs text-graphite">Finishing a course is recorded as learning, not as a skill level. Pausing loses nothing and never lowers anything.</p>
             </section>
           )}
 
-          <Roadmap steps={data.steps} done={done} />
-
-          <PlanCompare profileId={profileId} scenario={scenario} />
-
-          <div className="flex flex-wrap items-start gap-5">
-            <section aria-label="Steps" className="card-light min-w-0 flex-[3_1_520px] overflow-hidden">
-              {data.steps.length === 0 && <p className="m-0 px-5 py-5 text-sm">You already meet every requirement this pathway can teach. See the gaps below, if any.</p>}
-              {data.steps.map((step) => {
-                const isDone = done.includes(step.course.id)
-                return (
-                  <article key={step.course.id} className="grid grid-cols-[96px_minmax(0,1fr)] border-b border-mist">
-                    <div className="flex flex-col items-start gap-2 py-[18px] pl-[18px]">
-                      <span className="font-mono text-xs text-ash">
-                        WEEK {step.week_start}{step.week_end > step.week_start ? `–${step.week_end}` : ''}
-                      </span>
-                      <span className={`flex h-[26px] w-[26px] items-center justify-center rounded-full text-xs font-semibold ${isDone ? 'bg-[#12a372] text-white' : 'bg-white text-violet shadow-[inset_0_0_0_1.5px_#6c47ff]'}`}>
-                        {isDone ? '✓' : step.order}
-                      </span>
-                    </div>
-                    <div className="flex min-w-0 flex-col gap-2.5 py-[18px] pl-2 pr-5">
-                      <div className="flex flex-wrap items-baseline justify-between gap-2">
-                        <h3 className="m-0 text-base font-semibold tracking-tight">{step.course.title}</h3>
-                        <span className="font-mono text-xs text-graphite">
-                          {step.course.minutes >= MINUTES_PER_HOUR ? `${step.hours} h` : `${step.course.minutes} min`} · free · {step.course.level}
-                        </span>
-                      </div>
-                      <span className="text-[13px] text-graphite">{step.course.provider}</span>
-                      {step.gains.length > 0 ? (
-                        <div className="flex flex-wrap gap-x-4 gap-y-1 text-[13px]">
-                          <span className="cap">Projected levels · assumption</span>
-                          {step.gains.map((g) => (
-                            <span key={g.skill}>{g.skill_name} {g.before} → {g.after}</span>
-                          ))}
-                        </div>
-                      ) : (
-                        <span className="text-[13px] text-graphite">Needed first for: {step.prerequisite_for.length ? 'the next course' : 'later steps'}</span>
-                      )}
-                      {step.sdgs.map((s) => (
-                        <div key={s.target} className="flex items-start gap-2.5 rounded-md bg-fog px-3 py-2 text-[13px]">
-                          <SdgTag target={s.target} />
-                          <span>{s.how}</span>
-                        </div>
-                      ))}
-                      <div className="flex flex-wrap items-center justify-between gap-2">
-                        <span className="font-mono text-[11px] text-ash">CHECKED {data.courses_checked} · {step.course.provider.toUpperCase()}</span>
-                        <span className="flex gap-2">
-                          <a className="btn" href={step.course.url} target="_blank" rel="noopener noreferrer">{t('Open course ↗')}</a>
-                          <button type="button" className="btn" aria-pressed={isDone} onClick={() => toggle(step.course.id)}>{isDone ? 'Done ✓' : t('Mark as done')}</button>
-                        </span>
-                      </div>
-                      <ReportProblem kinds={['course_unavailable', 'impractical_schedule', 'wrong_skill_mapping']} targetType="course" targetId={step.course.id} page="pathway" />
-                    </div>
-                  </article>
-                )
-              })}
-              <div className="flex flex-col gap-1.5 px-[18px] py-3.5 text-xs text-graphite">
-                <span>Ordered by prerequisites, essentials first. A short course raises a skill by at most one level; covering material is not the same as proven skill.</span>
+          <div className="grid items-start gap-8 lg:grid-cols-[minmax(0,1.6fr)_minmax(280px,1fr)]">
+            <section aria-label="Plan steps" className="flex min-w-0 flex-col gap-3">
+              <h2 className="h2">Your route, step by step</h2>
+              {data.steps.length === 0 && <p className="m-0 text-sm">You already meet every requirement this pathway can teach. See the gaps below, if any.</p>}
+              <Roadmap steps={data.steps} done={done} onToggle={toggle} checked={data.courses_checked} paused={current?.paused ?? false} />
+              <div className="flex flex-col gap-1.5 text-xs text-graphite">
+                <span>Ordered by prerequisites, essentials first. Each step unlocks when the one before is done. A short course raises a skill by at most one level; covering material is not the same as proven skill.</span>
                 {data.uncovered.length > 0 && <span>No verified free course yet for: {data.uncovered.join(', ')}.</span>}
                 {data.partly_covered.length > 0 && <span>Only partly covered by free courses: {data.partly_covered.join(', ')}.</span>}
                 {data.essentials_unmet.length > 0 && <span className="text-weak">Essential skills still below the level after this path: {data.essentials_unmet.join(', ')}.</span>}
               </div>
             </section>
 
-            <aside aria-label="SDG contribution" className="card-dark flex min-w-0 flex-[2_1_320px] flex-col gap-4 p-[22px]">
-              <span className="font-mono text-[11px] tracking-widest text-cyan">HOW THIS PATH CONTRIBUTES</span>
-              <h2 className="m-0 text-xl font-semibold tracking-tight">{Object.keys(data.sdg_summary).length} SDG targets, with the reason for each</h2>
+            <aside aria-label="SDG contribution" className="flex min-w-0 flex-col gap-4 lg:sticky lg:top-6">
+              <div className="flex items-baseline justify-between gap-3 border-b-2 border-void pb-3">
+                <span className="text-[13px]">Fit now → after the path</span>
+                <span className="font-mono text-2xl tracking-tight">{Math.round(data.fit_before)} → {Math.round(data.fit_after)}<span className="ml-1.5 text-[11px] text-estimate">estimate</span></span>
+              </div>
+              <h2 className="h2">How this path contributes: {Object.keys(data.sdg_summary).length} SDG targets</h2>
               {Object.entries(data.sdg_summary).map(([target, hows]) => (
-                <div key={target} className="grid grid-cols-[64px_minmax(0,1fr)] gap-3 border-t border-surface pt-3">
-                  <SdgTag target={target} />
-                  <div className="text-[13px]">
-                    <div className="font-semibold">{data.sdg_targets[target]?.title}</div>
-                    {hows.map((h) => (
-                      <div key={h} className="text-[#c4c5cf]">{h}</div>
-                    ))}
-                    <div className="mt-1 text-[11px] text-slate-mid">“{data.sdg_targets[target]?.text}”</div>
-                  </div>
+                <div key={target} className="flex flex-col gap-1 border-t border-line pt-3 text-[13px]">
+                  <span className="flex items-center gap-2"><SdgTag target={target} /><span className="font-semibold">{data.sdg_targets[target]?.title}</span></span>
+                  {hows.map((h) => <span key={h}>{h}</span>)}
+                  <span className="text-[11px] text-graphite">&ldquo;{data.sdg_targets[target]?.text}&rdquo;</span>
                 </div>
               ))}
-              <span className="font-mono text-[11px] text-slate-mid">{data.sdg_source}</span>
-              <div className="flex items-center justify-between border-t border-surface pt-3 font-mono text-xs">
-                <span className="text-stone">Fit now → after the path (estimate)</span>
-                <span>{Math.round(data.fit_before)} → {Math.round(data.fit_after)}</span>
-              </div>
-              <Link className="btn btn-v" to="/future">See Today → Future you</Link>
+              <span className="font-mono text-[11px] text-graphite">{data.sdg_source}</span>
             </aside>
           </div>
+
+          <PlanCompare profileId={profileId} scenario={scenario} />
         </>
       )}
       <NextStep to="/future" label="See today versus future you" hint="Next: what this plan changes, in both scenarios" />
