@@ -50,19 +50,22 @@ Working adults at risk of displacement, fresh graduates and students (also throu
 
 ### Status
 
-Built slice by slice to [`docs/PLAN.md`](docs/PLAN.md). The local baseline now includes four
-collectors and an immutable evidence store, the evidence/radar pages, synthetic CV or questionnaire
-intake, nine scored destination roles, two declared scenarios, an ordered pathway from thirty
-linked free resources, SDG explanations and Today → Future you. **What changed** replays saved
-AEI/DOSM observation periods and shows source → emphasis → score → pathway differences. Scheduled
-ingestion publishes persistent proposals; the person accepts evidence updates without changing
-their skill claims or destination. Duplicate data and unchanged recommendations are valid outcomes.
+Built slice by slice to [`docs/PLAN.md`](docs/PLAN.md) and deployed on Replit. Seven collectors
+(OpenDOSM, DOSM job ads, Anthropic Economic Index, TalentCorp, O*NET 31.0, ILO exposure index,
+MyCOL) feed an immutable evidence store, checked daily by a Replit Scheduled deployment. A person
+starts from a synthetic CV, a form or a short questionnaire; nine GBS finance destination roles are
+scored under two declared scenarios (moderate and fast AI adoption) with an explainable fit and
+skills gap. The plan is a three-track roadmap (AI basics, then reskilling without AI and with AI)
+built from 33 verified free courses, 48 videos and 41 articles, with a with/without-AI comparison
+and SDG targets on every step. **What changed** shows how new or replayed evidence would change
+emphasis, scores and pathway; the person accepts or declines, and their skill claims and destination
+never change on their own.
 
 Scope limits: AI-use scenario shifts and course gains are assumptions, not trained adoption or
-learning-outcome forecasts. Ten destination-required skills have no verified free resource and
-are reported as uncovered. Research agent, HR, Telegram and what-if/robust planning are deferred;
-voice and on-screen agent are on hold. Cloud deployment and independent scheduled-run logs still
-need verification after the team's push. See [architecture](docs/explain/ARCHITECTURE.md),
+learning-outcome forecasts. Ten of the 37 skills the destination roles need have no verified free
+course yet (videos or articles only). Full pathways cover GBS finance and accounting only; other
+occupations show evidence without a plan. Research agent, HR team view, Telegram and what-if
+planning are deferred. See [architecture](docs/explain/ARCHITECTURE.md),
 [journey](docs/explain/journey.md), [changes](docs/explain/changes.md) and
 [baseline validation](docs/BASELINE_CHECK.md).
 
