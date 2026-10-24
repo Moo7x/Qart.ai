@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { sendJSON, useApi } from '../api'
 import { PlanCompare } from '../components/PlanCompare'
+import { Roadmap } from '../components/Roadmap'
 import { ScenarioSwitch, SdgTag } from '../components/journey'
 import { Loading, Problem } from '../components/ui'
 import { useJourney } from '../state'
@@ -113,6 +114,8 @@ function ProfilePathway({ profileId, scenario }: { profileId: string; scenario: 
               <p className="m-0 text-xs text-graphite">Finishing a course is recorded as learning, not as a skill level. Pausing loses nothing and never lowers anything.</p>
             </section>
           )}
+
+          <Roadmap steps={data.steps} done={done} />
 
           <PlanCompare profileId={profileId} scenario={scenario} />
 
