@@ -102,3 +102,20 @@ def test_decision_routes(client: TestClient) -> None:
     card = client.get(f"/api/profiles/{pid}/matches").json()["roles"][0]
     assert {"meters", "fit_range"} <= set(card)
     assert client.get("/api/pipeline/forecast-check").status_code == 200
+
+
+def test_progress_is_self_reported_and_never_changes_coverage(client: TestClient) -> None:
+    pid = create(client)
+    assert client.get(f"/api/profiles/{pid}/progress").json()["plan"] is None  # no goal yet
+    client.post(f"/api/profiles/{pid}/destination", json={"role_id": "budget_analyst"})
+    before = client.get(f"/api/profiles/{pid}/progress").json()["plan"]
+    first = before["this_week"][0]["id"]
+    after = client.put(
+        f"/api/profiles/{pid}/progress", json={"done": [first, "not-a-course"], "paused": True}
+    ).json()
+    assert after["done"] == [first] and after["paused"] is True
+    assert after["plan"]["steps_done"] == 1 and after["plan"]["hours_done"] > 0
+    assert after["plan"]["coverage"] == before["coverage"]  # finishing a course is not a skill
+    assert sum(w["hours"] for w in before["this_week"]) <= max(
+        before["weekly_hours"], before["this_week"][0]["hours"]
+    )

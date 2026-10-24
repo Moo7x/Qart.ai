@@ -9,6 +9,7 @@ from sqlalchemy import Engine
 from src.api.evidence import get_engine
 from src.api.journey import _destination_or_query, require_profile
 from src.changes.store import accepted_rows
+from src.journey.progress import get_progress, save_progress
 from src.journey.store import (
     MAX_LEVEL,
     MAX_WEEKLY_HOURS,
@@ -132,3 +133,65 @@ def plans(
     levels = data.levels()
     match = score_role(pack, pack.destination_roles[chosen], levels, scenario, evidence)
     return compare_plans(pack, match, levels, data.weekly_hours, scenario, evidence)
+
+
+class ProgressIn(BaseModel):
+    done: list[str] = Field(default=[], max_length=200)
+    paused: bool = False
+
+
+def _progress_view(engine: Engine, profile_id: str, scenario: Scenario) -> dict[str, Any]:
+    """Three separate measures: plan completion, requirement coverage, open questions."""
+    data, destination = require_profile(engine, profile_id)
+    saved = get_progress(engine, profile_id)
+    out: dict[str, Any] = {**saved, "plan": None}
+    if not destination:
+        return out
+    pack = load_pack()
+    evidence = automation_evidence(accepted_rows(engine, profile_id))
+    levels = data.levels()
+    match = score_role(pack, pack.destination_roles[destination], levels, scenario, evidence)
+    path = plan_pathway(pack, match, levels, data.weekly_hours, scenario, evidence)
+    steps = [(s.course.id, s.course.title, s.hours) for s in path.steps]
+    done = [c for c, _, _ in steps if c in saved["done"]]
+    left = [(c, t, h) for c, t, h in steps if c not in saved["done"]]
+    week: list[dict[str, Any]] = []
+    budget = data.weekly_hours
+    for course_id, title, hours in left:  # this week's milestone: next steps within the hours
+        if week and sum(w["hours"] for w in week) + hours > budget:
+            break
+        week.append({"id": course_id, "title": title, "hours": hours})
+    out["plan"] = {
+        "role_id": destination,
+        "steps": len(steps),
+        "steps_done": len(done),
+        "hours": path.total_hours,
+        "hours_done": round(sum(h for c, _, h in steps if c in done), 1),
+        "coverage": match.fit,
+        "open_questions": sum(r.claimed is None for r in match.requirements),
+        "this_week": week,
+        "weekly_hours": budget,
+    }
+    return out
+
+
+@router.get("/progress")
+def progress(
+    profile_id: str,
+    scenario: Scenario = Query(default="moderate"),
+    engine: Engine = Depends(get_engine),
+) -> dict[str, Any]:
+    return _progress_view(engine, profile_id, scenario)
+
+
+@router.put("/progress")
+def set_progress(
+    profile_id: str,
+    body: ProgressIn,
+    scenario: Scenario = Query(default="moderate"),
+    engine: Engine = Depends(get_engine),
+) -> dict[str, Any]:
+    require_profile(engine, profile_id)
+    known = load_pack().courses
+    save_progress(engine, profile_id, [c for c in body.done if c in known], body.paused)
+    return _progress_view(engine, profile_id, scenario)
