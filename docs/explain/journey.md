@@ -79,6 +79,14 @@ not translated. The Malay text was written by the team with AI assistance; a nat
 is still pending and the switch says so. Occupation matching already accepts Malay job titles
 (BGE-M3 on RunPod: 75% of Malay test titles in the top 3).
 
+**Activity and mobile.** Long actions (reading a CV or a posting, matching an occupation, the
+plain-words explanation) return the stages the server measured (`src/stages.py`): name, engine,
+seconds, and whether a step failed and fell back. While one runs the page shows what it is doing
+and the elapsed time (no invented progress bar); afterwards "What happened" lists the stages, e.g.
+GPU embedding 20.9 s on a cold RunPod worker, comparison 0.1 s, reranking 2.5 s. On phones the menu
+folds into a button so content starts at the top; every page was measured at 375 px without
+sideways scrolling.
+
 **Decision support.** `src/match/decision.py`: meters keep coverage (the fit), essential readiness
 (below level versus not stated) and profile completeness apart; the fit range recomputes with
 unstated skills at proficient (assumption-based, not a statistical interval); the most valuable
