@@ -27,6 +27,7 @@ import src.journey.progress  # noqa: E402, F401  (registers the progress table)
 import src.journey.store  # noqa: E402, F401  (registers the profile table)
 import src.occupations.catalogue  # noqa: E402, F401  (registers the occupation tables)
 from src.api.changes import router as changes_router  # noqa: E402
+from src.api.cv import router as cv_router  # noqa: E402
 from src.api.decision import router as decision_router  # noqa: E402
 from src.api.evidence import router as evidence_router  # noqa: E402
 from src.api.feedback import router as feedback_router  # noqa: E402
@@ -100,6 +101,7 @@ def create_app(settings: Settings | None = None, first_run: bool = True) -> Fast
     application.include_router(journey_router)
     application.include_router(changes_router)
     application.include_router(decision_router)
+    application.include_router(cv_router)
     application.include_router(feedback_router)
     application.include_router(goal_router)
     application.include_router(occupations_router)
