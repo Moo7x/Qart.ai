@@ -107,7 +107,9 @@ All libraries, datasets and models, with licences, are listed in [`docs/DECLARAT
 ├── web/                     # React frontend (web/public/spikes: browser checks)
 ├── .env.example             # Environment variable names (no values)
 ├── .replit                  # Replit run configuration
-├── replit_start.sh          # Install, build the web app, start the server
+├── replit_build.sh          # Install Python packages and build the web app
+├── replit_serve.sh          # Start the server (a deployment's run step)
+├── replit_start.sh          # Run button: build, then serve
 ├── requirements.txt         # Python dependencies (Python 3.12)
 └── README.md
 ```
@@ -121,6 +123,7 @@ All libraries, datasets and models, with licences, are listed in [`docs/DECLARAT
 1. Open the [Replit Project](https://replit.com/@your-username/your-project), or import this repository via **Create Repl → Import from GitHub**.
 2. Open the **Secrets** tab and add the variables listed in `.env.example` (`LLM_API_KEY`, `DATABASE_URL`, `QART_ADMIN_TOKEN`, optionally `RUNPOD_API_KEY` and `RUNPOD_ENDPOINT_ID`).
 3. Click **Run**. Replit runs `replit_start.sh`: it installs the Python packages, builds the web app and starts `uvicorn src.app:app` on port 8000.
+4. To publish, choose an **Autoscale** deployment. `.replit` builds once (`replit_build.sh`) and then only starts the server (`replit_serve.sh`), so it answers Replit's health check on `/` within seconds.
 
 Without the LLM or RunPod keys the app still runs; `/api/health` shows which parts use a labelled fallback.
 
