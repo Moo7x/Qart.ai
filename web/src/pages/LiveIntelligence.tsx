@@ -3,6 +3,7 @@ import { type FormEvent, useState } from 'react'
 import { formatWhen, parseUtc, sendJSON, useApi } from '../api'
 import { PipelineDiagram, type StepId } from '../components/PipelineDiagram'
 import { Empty, Loading, Problem } from '../components/ui'
+import { FeedbackReview } from '../components/Feedback'
 import type { BacktestEntry, ForecastCheck, ModelVersion, Run, SourceStatus } from '../types'
 
 const RUNS_POLL_MS = 5_000
@@ -243,6 +244,8 @@ export function LiveIntelligence() {
           )}
         </section>
       </div>
+
+      <FeedbackReview />
 
       <section className="card-light flex flex-col gap-2.5 px-6 py-5">
         <h2 className="h2">Registered sources</h2>

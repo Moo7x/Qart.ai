@@ -5,6 +5,7 @@ import { Dots, ScenarioSwitch, SdgTag } from '../components/journey'
 import { CompareRoles, Openings } from '../components/CompareRoles'
 import { BestQuestion, MeterRow, WhatIf } from '../components/Decision'
 import { ExplainRole } from '../components/ExplainRole'
+import { ReportProblem } from '../components/Feedback'
 import { RoleTasks } from '../components/RoleTasks'
 import { Loading, Problem } from '../components/ui'
 import { useJourney } from '../state'
@@ -119,6 +120,7 @@ function Why({ role, onChoose, chosen, busy, situation, pack }: { role: RoleCard
         </table>
       </div>
       <Openings title={role.title} />
+      <ReportProblem kinds={['not_my_goal', 'wrong_number', 'unsupported_claim']} targetType="role" targetId={role.role_id} page="roles" dark />
       {profileId && <ExplainRole key={`${role.role_id}-${scenario}`} profileId={profileId} roleId={role.role_id} scenario={scenario} />}
       <div className="flex flex-wrap gap-2">
         <button type="button" className="btn btn-v" onClick={onChoose} disabled={busy}>
@@ -136,6 +138,7 @@ export function Roles() {
   const baseline = useApi<MatchesResponse>(profileId ? `/api/profiles/${profileId}/matches?scenario=moderate` : null)
   const profile = useApi<{ profile: ProfileData }>(profileId ? `/api/profiles/${profileId}` : null)
   const pack = useApi<PackInfo>('/api/pack')
+  const prefs = useApi<{ not_my_goal: string[] }>(profileId ? `/api/profiles/${profileId}/preferences` : null)
   const stability = useApi<SensitivityResponse>(profileId ? `/api/profiles/${profileId}/sensitivity?scenario=${scenario}` : null)
   const [selected, setSelected] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
@@ -215,6 +218,7 @@ export function Roles() {
                     </span>
                     <span className="flex flex-wrap gap-1.5">
                       {r.listed_transition && <span className="tag bg-observed-bg text-observed">Route from your role</span>}
+                      {prefs.data?.not_my_goal.includes(r.role_id) && <span className="tag bg-mist text-ash">You said: not your goal</span>}
                       {r.longer_route && <span className="tag bg-weak-bg text-weak">Longer route</span>}
                       {moved !== 0 && <span className="tag bg-estimate-bg text-estimate">{moved > 0 ? `▲ ${moved}` : `▼ ${-moved}`} under Fast</span>}
                       {ranks && (Math.min(...ranks) === Math.max(...ranks)

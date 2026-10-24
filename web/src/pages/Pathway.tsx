@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { sendJSON, useApi } from '../api'
+import { ReportProblem } from '../components/Feedback'
 import { PlanCompare } from '../components/PlanCompare'
 import { Roadmap } from '../components/Roadmap'
 import { ScenarioSwitch, SdgTag } from '../components/journey'
@@ -165,6 +166,7 @@ function ProfilePathway({ profileId, scenario }: { profileId: string; scenario: 
                           <button type="button" className="btn" aria-pressed={isDone} onClick={() => toggle(step.course.id)}>{isDone ? 'Done ✓' : 'Mark as done'}</button>
                         </span>
                       </div>
+                      <ReportProblem kinds={['course_unavailable', 'impractical_schedule', 'wrong_skill_mapping']} targetType="course" targetId={step.course.id} page="pathway" />
                     </div>
                   </article>
                 )

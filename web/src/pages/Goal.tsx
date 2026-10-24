@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { sendJSON, useApi } from '../api'
+import { ReportProblem } from '../components/Feedback'
 import { Loading, Problem } from '../components/ui'
 import { useJourney } from '../state'
 import type { GoalInput, GoalResponse, PostingRequirement } from '../types'
@@ -106,6 +107,7 @@ export function Goal() {
                 <span>&ldquo;{r.quote}&rdquo;{r.essential && <span className="ml-1.5 font-mono text-[10px] text-amber-glow">REQUIRED</span>}</span>
                 <span className="text-graphite">{r.skill_name ?? '—'}{r.skill && <span className="font-mono"> · you {r.claimed ?? '—'} / needs {r.required_level ?? cov.default_level}</span>}</span>
                 <span className={STATUS[r.status][1]}>{STATUS[r.status][0]}</span>
+                <span className="md:col-span-3"><ReportProblem kinds={['wrong_skill_mapping', 'unsupported_claim']} targetType="requirement" targetId={r.quote.slice(0, 120)} page="goal" /></span>
               </li>
             ))}
           </ul>
