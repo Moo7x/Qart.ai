@@ -25,6 +25,7 @@ from src.intake.pii import scrub
 from src.intake.skill_search import bm25
 from src.match.engine import Evidence, Scenario, score_role
 from src.pack import Pack
+from src.stages import Stages
 
 LLM_TIME_BUDGET_SECONDS = 25.0
 MAX_POSTING_CHARS = 8000
@@ -55,6 +56,7 @@ class PostingCheck:
     note: str
     requirements: list[PostingRequirement] = field(default_factory=list)
     rejected: int = 0
+    stages: list[dict[str, Any]] = field(default_factory=list)  # measured, for the activity panel
 
 
 def _schema(pack: Pack) -> dict[str, Any]:
@@ -149,12 +151,15 @@ def _keyword(pack: Pack, posting: str) -> list[PostingRequirement]:
 def read_requirements(
     pack: Pack, raw: str, settings: Settings, complete: Complete | None = None
 ) -> PostingCheck:
-    posting = scrub(raw[:MAX_POSTING_CHARS]).text  # a posting may carry a recruiter's contact
+    stages = Stages()
+    with stages.step("Remove contact details", "rules"):
+        posting = scrub(raw[:MAX_POSTING_CHARS]).text  # a posting may carry a recruiter's contact
     if settings.llm_configured or complete is not None:
         try:
-            answer = json.loads(
-                (complete or _openai(settings))(_messages(pack, posting), _schema(pack))
-            )
+            with stages.step("Read the requirements", settings.llm_model):
+                answer = json.loads(
+                    (complete or _openai(settings))(_messages(pack, posting), _schema(pack))
+                )
             haystack = _normalise(posting)
             kept, rejected = [], 0
             for item in answer.get("requirements", []):
@@ -180,14 +185,16 @@ def read_requirements(
                     else ""
                 )
                 return PostingCheck(
-                    f"{settings.llm_model} (schema-constrained)", note, kept, rejected
+                    f"{settings.llm_model} (schema-constrained)", note, kept, rejected, stages.items
                 )
             note = "no requirement passed the quote check; keyword fallback used"
         except Exception as exc:  # noqa: BLE001  any model or parsing failure → labelled fallback
             note = f"model unavailable ({type(exc).__name__}); keyword fallback used"
     else:
         note = "no language model configured; keyword fallback used"
-    return PostingCheck("BM25 keywords (fallback)", note, _keyword(pack, posting))
+    with stages.step("Match posting lines to skills", "BM25 keywords"):
+        found = _keyword(pack, posting)
+    return PostingCheck("BM25 keywords (fallback)", note, found, 0, stages.items)
 
 
 def coverage(check: PostingCheck, levels: Mapping[str, int | None]) -> dict[str, Any]:

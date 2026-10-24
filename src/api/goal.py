@@ -59,6 +59,7 @@ def _view(engine: Engine, profile_id: str, scenario: Scenario) -> dict[str, Any]
     return {
         "goal": {k: goal[k] for k in GoalIn.model_fields},
         "coverage": result,
+        "stages": goal.get("stages", []),
         "stepping_stones": stepping_stones(pack, check, levels, scenario, evidence)
         if result
         else [],
@@ -87,6 +88,7 @@ def set_goal(
             "engine": found.engine,
             "note": found.note,
             "requirements": [asdict(r) for r in found.requirements],
+            "stages": found.stages,
         },
     )
     return _view(engine, profile_id, scenario)

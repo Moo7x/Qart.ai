@@ -129,7 +129,10 @@ def _journey(client: TestClient, cv: str) -> dict[str, Any]:
     created = client.post("/api/profiles", json=profile)
     assert created.status_code == 201, created.text
     pid = created.json()["id"]
-    out: dict[str, Any] = {"parsed": {k: v for k, v in parsed.items() if k != "removed"}}
+    # Timings (stages) and removal counts are not results; everything else must match.
+    out: dict[str, Any] = {
+        "parsed": {k: v for k, v in parsed.items() if k not in ("removed", "stages")}
+    }
     for scenario in ("moderate", "fast"):
         roles = client.get(f"/api/profiles/{pid}/matches", params={"scenario": scenario}).json()
         out[f"roles_{scenario}"] = [

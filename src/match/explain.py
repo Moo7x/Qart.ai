@@ -21,6 +21,7 @@ from typing import Any
 from src.config import Settings
 from src.match.engine import RoleMatch
 from src.pathway.planner import Pathway
+from src.stages import Stages
 
 LLM_TIME_BUDGET_SECONDS = 15.0
 MAX_SENTENCES = 5
@@ -195,9 +196,13 @@ def explain(
         return _cache[key]
     by_id = {f["id"]: f["text"] for f in fact_list}
     result: dict[str, Any]
+    stages = Stages()
     if settings.llm_configured or complete is not None:
         try:
-            raw = (complete or openai_complete(settings))(messages(fact_list), schema(list(by_id)))
+            with stages.step("Write sentences from the computed facts", settings.llm_model):
+                raw = (complete or openai_complete(settings))(
+                    messages(fact_list), schema(list(by_id))
+                )
             sentences, dropped = _validate(json.loads(raw), by_id)
             if sentences:
                 result = {
@@ -228,6 +233,7 @@ def explain(
             "engine": "template (fallback)",
             "note": "no language model configured; computed facts shown instead",
         }
+    result["stages"] = stages.items
     # Only real model answers are cached: a fallback is retried next time, and tests that pass
     # their own `complete` never share state.
     if complete is None and result["engine"] != "template (fallback)":

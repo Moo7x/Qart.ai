@@ -20,6 +20,7 @@ from src.config import Settings
 from src.evidence.field import field_profile
 from src.occupations.catalogue import MODEL, catalogue, search_text, vector_table, vectors
 from src.runpod_jobs import INTERACTIVE_BUDGET_SECONDS, RunPodError, embed, rerank
+from src.stages import Stages
 
 DENSE_CANDIDATES = 10  # passed to the reranker: enough to recover a near miss, cheap to score
 SHOWN = 3
@@ -41,6 +42,7 @@ class Detection:
     engine: str
     note: str
     matches: list[Match] = field(default_factory=list)
+    stages: list[dict[str, Any]] = field(default_factory=list)  # measured, for the activity panel
 
 
 def _tokens(text: str) -> list[str]:
@@ -107,6 +109,7 @@ def detect(
     client: httpx.Client | None = None,
     use_reranker: bool = True,
 ) -> Detection:
+    stages = Stages()
     rows = catalogue(engine)
     by_soc = {r["soc"]: r for r in rows}
     field_codes = field_profile().soc_codes()
@@ -116,7 +119,7 @@ def detect(
             Match(soc, by_soc[soc]["title"], round(score, 4), soc in field_codes)
             for soc, score in ranked[:SHOWN]
         ]
-        return Detection(query, engine_name, note, matches)
+        return Detection(query, engine_name, note, matches, stages.items)
 
     if not rows:
         return Detection(query, "none", "the occupation catalogue has not been collected yet")
@@ -125,12 +128,15 @@ def detect(
         own = client is None
         http = client or httpx.Client(timeout=30)
         try:
-            [qv] = embed(settings, [query], INTERACTIVE_BUDGET_SECONDS, http)
-            dense = dense_candidates(qv, index, DENSE_CANDIDATES)
+            with stages.step("Embed your words on the GPU", "BGE-M3 on RunPod"):
+                [qv] = embed(settings, [query], INTERACTIVE_BUDGET_SECONDS, http)
+            with stages.step(f"Compare with {len(index)} occupations", "cosine similarity"):
+                dense = dense_candidates(qv, index, DENSE_CANDIDATES)
             if not use_reranker:
                 return result(f"{MODEL} dense (RunPod)", "", dense)
             passages = [search_text(by_soc[soc]) for soc, _ in dense]
-            scores = rerank(settings, query, passages, INTERACTIVE_BUDGET_SECONDS, http)
+            with stages.step(f"Re-rank the closest {len(passages)}", "bge-reranker on RunPod"):
+                scores = rerank(settings, query, passages, INTERACTIVE_BUDGET_SECONDS, http)
             ranked = sorted(zip([s for s, _ in dense], scores, strict=True), key=lambda x: -x[1])
             return result(f"{MODEL} + bge-reranker-v2-m3 (RunPod)", "", ranked)
         except (RunPodError, httpx.HTTPError) as exc:
@@ -144,4 +150,6 @@ def detect(
             if settings.runpod_configured
             else "RunPod not configured; keyword search used"
         )
-    return result("BM25 keywords (fallback)", note, bm25(rows, query, SHOWN))
+    with stages.step("Keyword search over occupations", "BM25"):
+        ranked_kw = bm25(rows, query, SHOWN)
+    return result("BM25 keywords (fallback)", note, ranked_kw)
