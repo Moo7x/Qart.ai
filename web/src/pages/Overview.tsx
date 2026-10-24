@@ -55,47 +55,6 @@ function SignalRow({ signal, selected, onPick }: { signal: Signal; selected: boo
   )
 }
 
-function AiUseTable({ rows, onPick }: { rows: Signal[]; onPick: (s: Signal) => void }) {
-  if (rows.length === 0) return <Empty>No Economic Index release has been collected yet.</Empty>
-  return (
-    <div className="overflow-x-auto">
-      <table className="w-full min-w-[640px] border-collapse text-[13px]">
-        <thead>
-          <tr className="cap text-left">
-            <th className="py-2 pr-2 font-medium">Occupation</th>
-            <th className="px-2 py-2 font-medium">Where</th>
-            <th className="px-2 py-2 text-right font-medium">First month</th>
-            <th className="px-2 py-2 text-right font-medium">Second month</th>
-            <th className="py-2 pl-2 font-medium">Change</th>
-          </tr>
-        </thead>
-        <tbody>
-          {rows.map((s) => {
-            const [first, last] = [s.points[0], s.points.at(-1)!]
-            const where = s.title.endsWith('(Malaysia)') ? 'Malaysia' : 'Global'
-            const name = s.title.replace(/^AI use · /, '').replace(/ \((Malaysia|global)\)$/, '')
-            return (
-              <tr key={s.id} className="cursor-pointer border-t border-mist hover:bg-fog" onClick={() => onPick(s)}>
-                <td className="py-2.5 pr-2">
-                  <button type="button" className="cursor-pointer border-0 bg-transparent p-0 text-left font-medium" onClick={() => onPick(s)}>
-                    {name}
-                  </button>
-                </td>
-                <td className="px-2 py-2.5 text-graphite">{where}</td>
-                <td className="px-2 py-2.5 text-right font-mono">{first.value.toFixed(2)}%</td>
-                <td className="px-2 py-2.5 text-right font-mono">{last.value.toFixed(2)}%</td>
-                <td className="py-2.5 pl-2 font-mono text-xs text-graphite">
-                  {s.early_direction === 'flat' ? 'within rounding' : s.early_direction === 'up' ? '↑ real change' : '↓ real change'}
-                </td>
-              </tr>
-            )
-          })}
-        </tbody>
-      </table>
-    </div>
-  )
-}
-
 const EMPHASIS: Record<RadarAxis['emphasis'], [string, string]> = {
   rising: ['↑ more emphasis', 'text-rising'],
   weakening: ['↓ less emphasis', 'text-weak'],
@@ -241,7 +200,6 @@ export function Overview() {
     .filter((s) => s.id in GROUP_COLOURS)
     .map((s) => ({ ...GROUP_COLOURS[s.id], points: s.points }))
   const listed = all.filter((s) => s.family !== 'ai_task_use')
-  const aiUse = all.filter((s) => s.family === 'ai_task_use')
 
   return (
     <main className="page">
@@ -318,18 +276,6 @@ export function Overview() {
             })}
           </section>
         </div>
-      )}
-
-      {all.length > 0 && (
-        <section className="card-light flex flex-col gap-3 px-6 py-5">
-          <div className="flex flex-wrap items-baseline justify-between gap-2">
-            <h2 className="h2">AI use by finance occupation</h2>
-            <span className="text-[13px] text-graphite">
-              Share of sampled Claude conversations, Anthropic Economic Index. Shows use of AI, not hiring or job losses.
-            </span>
-          </div>
-          <AiUseTable rows={aiUse} onPick={setSelected} />
-        </section>
       )}
 
       {selected && <EvidenceDrawer signal={selected} onClose={() => setSelected(null)} />}

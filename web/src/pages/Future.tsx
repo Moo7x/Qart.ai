@@ -37,9 +37,6 @@ export function Future() {
   const view = data?.scenarios[scenario]
   const today = data?.current_role ?? (data?.situation === 'student' ? 'Student or recent graduate' : 'Moving into finance')
   const gained = view?.skills.filter((s) => s.after > (s.now ?? 0)) ?? []
-  // In-demand skills TalentCorp names that this person states or would build (name match).
-  const known = new Set([...(data?.skills_now.map((s) => s.name.toLowerCase()) ?? []), ...gained.map((s) => s.name.toLowerCase())])
-  const inPlan = (name: string) => known.has(name.toLowerCase())
 
   return (
     <main className="page">
@@ -115,34 +112,6 @@ export function Future() {
             </section>
           </div>
 
-          <section className="section" aria-label="What the market names">
-            <div className="flex flex-wrap items-baseline justify-between gap-2">
-              <h2 className="h2">What Malaysian GBS employers are moving towards</h2>
-              <span className="tag bg-observed-bg text-observed">Expert view · {data.market.source}</span>
-            </div>
-            <div className="grid gap-6 md:grid-cols-3">
-              {([['In-demand AI and digital skills', data.market.in_demand.ai_digital], ['In-demand green skills', data.market.in_demand.green]] as const).map(([title, names]) => (
-                <div key={title} className="flex flex-col gap-2">
-                  <h3 className="cap m-0">{title} · PDF p. {data.market.in_demand_page}</h3>
-                  <div className="flex flex-wrap gap-1.5">
-                    {names.map((n) => (
-                      <span key={n} className={`tag ${inPlan(n) ? 'bg-violet text-white' : 'border border-line bg-paper text-void'}`}>{n}{inPlan(n) ? ' · yours' : ''}</span>
-                    ))}
-                  </div>
-                </div>
-              ))}
-              <div className="flex flex-col gap-2">
-                <h3 className="cap m-0">Emerging roles observed · PDF p. {data.market.emerging_page}</h3>
-                <div className="flex flex-wrap gap-1.5">
-                  {data.market.emerging_roles.map((n) => <JobPosts key={n} title={n} label={`${n} ↗`} className="job-link text-left" />)}
-                </div>
-                <span className="text-[12px] text-graphite">No verified Qart pathway for these yet, so they are shown, not scored.</span>
-              </div>
-            </div>
-            <p className="m-0 text-[12px] text-graphite">
-              &ldquo;Yours&rdquo; marks names that match a skill you stated or your plan builds. Qart lists no companies: none of its sources names employers for these roles, so each role links to a live job search instead.
-            </p>
-          </section>
 
           <section className="section" aria-label="SDG contribution">
             <div className="flex flex-wrap items-center gap-2">

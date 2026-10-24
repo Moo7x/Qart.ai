@@ -1,7 +1,6 @@
-import { useState } from 'react'
 import { useT } from '../i18n'
 import { useApi } from '../api'
-import { SmallMultiples, TimeSeriesChart, type ChartSeries } from '../components/Charts'
+import { SmallMultiples } from '../components/Charts'
 import { Loading, Problem } from '../components/ui'
 import type { TrendsResponse } from '../types'
 
@@ -43,18 +42,13 @@ function Diverging({ rows, unit }: { rows: { label: string; value: number | null
 export function Trends() {
   const { t } = useT()
   const view = useApi<TrendsResponse>('/api/trends')
-  const [span, setSpan] = useState<'long' | 'recent'>('long')
   const data = view.data
   // Biggest groups first; each panel states its own change so differing y-axes never mislead.
   const groups = [...(data?.employment ?? [])]
     .sort((a, b) => (b.points.at(-1)?.value ?? 0) - (a.points.at(-1)?.value ?? 0))
     .map((g) => ({ label: g.title, points: g.points, note: `${g.change_long > 0 ? '+' : ''}${g.change_long} pts since ${g.first}` }))
-  // Two charts, not one: the Professionals share (~40%) would flatten the named occupations (~5%).
-  const professionals: ChartSeries[] = data ? [{ label: 'Professionals', points: data.job_ads.professionals }] : []
-  const named: ChartSeries[] = (data?.job_ads.named ?? []).slice(0, 4).map((n) => ({ label: n.entity, points: n.points }))
   const first = data?.employment[0]?.first
   const last = data?.employment[0]?.last
-  const change = (g: TrendsResponse['employment'][number]) => (span === 'long' ? g.change_long : g.change_recent)
   return (
     <main className="page">
       <header className="flex flex-col gap-1.5">
@@ -76,30 +70,11 @@ export function Trends() {
             <p className="m-0 max-w-[760px] text-[14px] leading-relaxed"><span className="font-semibold">What this shows:</span> out of every 100 employees in Malaysia, how many work in each type of job, year by year since 2011 (official DOSM figures). A rising line means that type of work is a growing part of the workforce; a falling line, a shrinking part. Finance clerks are counted under clerical support, accountants under professionals.</p>
             <SmallMultiples series={groups} unit="% of employees" source={`DOSM via OpenDOSM, ${first}–${last}`} />
             <p className="m-0 text-xs text-graphite">
-              % of all employees, yearly. Each panel has its own vertical scale so small groups stay readable; compare groups by the change under each title, or in the next chart. Hover a line for exact values. DOSM, wages by occupation (OpenDOSM); 2010 is left out because the classification changed in 2011.
+              % of all employees, yearly. Each panel has its own vertical scale so small groups stay readable; compare groups by the change under each title. Hover a line for exact values. DOSM, wages by occupation (OpenDOSM); 2010 is left out because the classification changed in 2011.
             </p>
           </section>
 
-          <div className="flex flex-wrap items-start gap-5">
-            <section className="section min-w-0 flex-[1_1_380px]">
-              <div className="flex flex-wrap items-center justify-between gap-2">
-                <h2 className="h2">Which groups rose or fell</h2>
-                <Kind kind="observed" />
-              </div>
-              <div className="flex gap-2" role="group" aria-label="Time window">
-                <button type="button" className={`btn ${span === 'long' ? 'btn-v' : ''}`} onClick={() => setSpan('long')}>{first}–{last}</button>
-                <button type="button" className={`btn ${span === 'recent' ? 'btn-v' : ''}`} onClick={() => setSpan('recent')}>{data.recent_from}–{last}</button>
-              </div>
-              <Diverging
-                unit=" pts"
-                rows={[...data.employment].sort((a, b) => (change(b) ?? 0) - (change(a) ?? 0)).map((g) => ({ label: g.title, value: change(g) }))}
-              />
-              <p className="m-0 text-xs text-graphite">
-                Change in share of employees, percentage points. The two windows can disagree (clerical work fell over the long run but rose recently), so both are shown; the rolling backtest on Live intelligence says no trend can be projected yet.
-              </p>
-            </section>
-
-            <section className="section min-w-0 flex-[1_1_380px]">
+            <section className="section">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <h2 className="h2">Skills gaining or losing emphasis</h2>
                 <Kind kind="assumption" />
@@ -112,28 +87,6 @@ export function Trends() {
                 Weight change under fast adoption, averaged over the destination roles that need the skill: the declared scenario rule applied to observed AI use (task-level where published). Essentials and neutral skills do not shift. Not a forecast.
               </p>
             </section>
-          </div>
-
-          <section className="section">
-            <div className="flex flex-wrap items-center justify-between gap-2">
-              <h2 className="h2">Online job ads by quarter</h2>
-              <Kind kind="observed" />
-            </div>
-            <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)]">
-              <div className="flex min-w-0 flex-col gap-1">
-                <h3 className="cap m-0">Professionals, share of all ads</h3>
-                <TimeSeriesChart series={professionals} unit="% of online job ads" axis="% of ads" source="DOSM Job Market Insights" />
-              </div>
-              <div className="flex min-w-0 flex-col gap-1">
-                <h3 className="cap m-0">Named occupations, share of all ads</h3>
-                <TimeSeriesChart series={named} unit="% of online job ads" axis="% of ads" source="DOSM Job Market Insights" />
-              </div>
-            </div>
-            <p className="m-0 text-xs text-graphite">
-              DOSM Job Market Insights, from major private platforms (not all vacancies). Named occupations appear only in quarters where DOSM lists them among the top ones, so gaps are not zero.
-              {data.job_ads.breaks.length > 0 && <> Total ads jumped in {data.job_ads.breaks.join(', ')}: a possible change in platform coverage, so compare within each side of it.</>}
-            </p>
-          </section>
 
           <section className="section">
             <div className="flex flex-wrap items-center justify-between gap-2">
