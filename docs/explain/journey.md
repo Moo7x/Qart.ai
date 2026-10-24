@@ -66,6 +66,12 @@ first run on fixed synthetic regression profiles for every destination (plans ch
 left without a course), then released for everyone or rejected, with a logged decision. Nothing
 is learned automatically and the system never edits its own code or weights.
 
+**CV draft.** `src/cv/draft.py` (page "My CV") builds a draft only from confirmed data: a headline
+from the current role and chosen goal, skills with the person's own ratings, the sentences quoted
+from their CV, and courses they marked done under Learning (never as experience). Each draft is
+compared with the last accepted version (new lines marked, removed lines struck through); the
+person accepts it as a new version and can download it as text. Nothing is invented.
+
 **Decision support.** `src/match/decision.py`: meters keep coverage (the fit), essential readiness
 (below level versus not stated) and profile completeness apart; the fit range recomputes with
 unstated skills at proficient (assumption-based, not a statistical interval); the most valuable
