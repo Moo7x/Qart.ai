@@ -94,7 +94,7 @@ export const PROGRESS_EVENT = 'qart:progress'
 
 const STATIONS: Station[] = [
   { key: 'profile', label: 'Your profile', to: '/start?edit=1', paths: ['/start'] },
-  { key: 'picture', label: 'Your picture', to: '/', paths: ['/'] },
+  { key: 'picture', label: 'Your picture', to: '/overview', paths: ['/overview'] },
   { key: 'options', label: 'Choose a role', to: '/roles', paths: ['/roles', '/goal'] },
   { key: 'plan', label: 'Your plan', to: '/pathway', paths: ['/pathway'] },
   { key: 'future', label: 'Future you', to: '/future', paths: ['/future'] },

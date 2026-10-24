@@ -49,7 +49,7 @@ export function Sidebar() {
       </span>
       <div id="main-menu" className={`${open ? 'flex' : 'hidden'} flex-1 flex-col gap-1 md:flex`}>
       <span className="cap px-2.5 pb-1.5 text-slate-mid">{t('Your journey · GBS finance')}</span>
-      <NavLink to="/" end className={navClass}>
+      <NavLink to="/overview" end className={navClass}>
         <Radar size={16} aria-hidden="true" />
         {t('Overview')}
       </NavLink>

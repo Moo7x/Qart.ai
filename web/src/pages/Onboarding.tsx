@@ -236,6 +236,7 @@ export function Onboarding() {
             </p>
             <div className="flex flex-wrap items-center gap-3">
               <button type="button" className="btn btn-v min-h-[44px] text-[15px]" onClick={() => go(1)}>{t('Start · about 3 minutes')}</button>
+              {profileId && <Link to="/overview" className="btn">Continue with my saved profile</Link>}
               <span className="text-[13px] text-graphite">{t('Skip any question. The demo uses synthetic CVs only.')}</span>
             </div>
             {evidence.length > 0 && (
@@ -481,7 +482,7 @@ export function Onboarding() {
             )}
             {built && (
               <div className="flex flex-wrap items-center gap-3">
-                <button type="button" className="btn btn-v min-h-[44px]" onClick={() => navigate('/')}>{t('Open my overview →')}</button>
+                <button type="button" className="btn btn-v min-h-[44px]" onClick={() => navigate('/overview')}>{t('Open my overview →')}</button>
               </div>
             )}
           </section>

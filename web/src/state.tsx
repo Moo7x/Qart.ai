@@ -1,4 +1,5 @@
-import { createContext, type ReactNode, useCallback, useContext, useState } from 'react'
+import { createContext, type ReactNode, useCallback, useContext, useEffect, useState } from 'react'
+import { ApiError, getJSON } from './api'
 import type { Scenario } from './types'
 
 // The profile id is the person's key to their profile (the server never lists profiles), so it
@@ -39,6 +40,16 @@ export function JourneyProvider({ children }: { children: ReactNode }) {
     write(PROFILE_KEY, id)
     setId(id)
   }, [])
+  useEffect(() => {
+    if (!profileId) return
+    let cancelled = false
+    // A missing profile is expected after a demo database reset. A network error is not:
+    // retain the saved key on transient failures so a retry cannot lose a real profile.
+    void getJSON(`/api/profiles/${profileId}`).catch((error: unknown) => {
+      if (!cancelled && error instanceof ApiError && error.status === 404) setProfileId(null)
+    })
+    return () => { cancelled = true }
+  }, [profileId, setProfileId])
   const setScenario = useCallback((s: Scenario) => {
     write(SCENARIO_KEY, s)
     setSc(s)

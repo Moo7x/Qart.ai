@@ -21,12 +21,13 @@ function Shell() {
   const location = useLocation()
   const { profileId } = useJourney()
   if (location.pathname === '/start') return <Onboarding key={location.search} />
-  if (location.pathname === '/' && !profileId) return <Navigate to="/start" replace />
+  if (location.pathname === '/') return <Navigate to="/start" replace />
+  if (location.pathname === '/overview' && !profileId) return <Navigate to="/start" replace />
   return (
     <div className="flex min-h-screen flex-wrap items-start bg-fog">
       <Sidebar />
       <Routes>
-        <Route path="/" element={<Overview />} />
+        <Route path="/overview" element={<Overview />} />
         <Route path="/goal" element={<Goal />} />
         <Route path="/roles" element={<Roles />} />
         <Route path="/pathway" element={<Pathway />} />

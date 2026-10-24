@@ -169,3 +169,7 @@ does not prove mastery. The person chooses; Qart makes no hiring decisions.
 
 **Alternatives.** Learned ranking, robust optimisation and sensitivity analysis require measured
 comparison and remain deferred. No tutoring, exercises or practice assessment are part of Qart.
+
+### Opening and saved profiles
+The root URL always opens the welcome flow at /start. Saved profiles are resumed explicitly through Continue with my saved profile, opening /overview. All Overview navigation uses /overview. A server 404 clears an obsolete browser profile key; transient failures keep it for retry.
+
