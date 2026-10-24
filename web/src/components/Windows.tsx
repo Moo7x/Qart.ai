@@ -1,9 +1,11 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
+import { createPortal } from 'react-dom'
 
 export type Pane = { key: string; title: string; hint?: string; body: ReactNode }
 
 // Temporary windows over the page: each can be closed on its own; closing the last one (or
 // "Close all", Esc, or a click on the backdrop) returns to the page. Nothing is saved by closing.
+// Rendered into <body> so no page section's own stacking layer can draw over the windows.
 export function Windows({ title, panes, onClose }: { title: string; panes: Pane[]; onClose: () => void }) {
   const [closed, setClosed] = useState<string[]>([])
   const first = useRef<HTMLButtonElement>(null)
@@ -31,7 +33,7 @@ export function Windows({ title, panes, onClose }: { title: string; panes: Pane[
   useEffect(() => {
     if (open.length === 0) onClose()
   }, [open.length, onClose])
-  return (
+  return createPortal(
     <div ref={dialog} role="dialog" aria-modal="true" aria-label={title} className="fixed inset-0 z-50 flex flex-col bg-void/55 p-3 backdrop-blur-[2px] md:p-8" onMouseDown={(e) => e.target === e.currentTarget && onClose()}>
       <div className="mx-auto flex w-full max-w-[1200px] items-center justify-between gap-3 pb-3 text-white">
         <h2 className="m-0 min-w-0 text-lg font-semibold leading-snug tracking-tight">{title}</h2>
@@ -53,6 +55,7 @@ export function Windows({ title, panes, onClose }: { title: string; panes: Pane[
           </section>
         ))}
       </div>
-    </div>
+    </div>,
+    document.body,
   )
 }
