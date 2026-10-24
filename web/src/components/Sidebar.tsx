@@ -1,4 +1,4 @@
-import { Activity, ArrowRight, ChartLine, Flag, ListOrdered, Radar, Route as RouteIcon, Search, UserRound } from 'lucide-react'
+import { Activity, ArrowRight, ChartLine, FileText, Flag, ListOrdered, Radar, Route as RouteIcon, Search, UserRound } from 'lucide-react'
 import { Link, NavLink } from 'react-router-dom'
 import { formatWhen, useApi } from '../api'
 import { useJourney } from '../state'
@@ -56,6 +56,10 @@ export function Sidebar() {
         <Activity size={16} aria-hidden="true" />
         What changed
         {changes.data?.proposals.some((p) => p.actionable) && <span className="tag bg-violet text-white">New</span>}
+      </NavLink>
+      <NavLink to="/cv" className={navClass}>
+        <FileText size={16} aria-hidden="true" />
+        My CV
       </NavLink>
       {profileId ? (
         <button
