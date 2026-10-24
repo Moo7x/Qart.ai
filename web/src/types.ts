@@ -257,8 +257,20 @@ export type FutureScenario = {
   skills: { skill: string; name: string; required: number; now: number | null; after: number; essential: boolean }[]
   sdg_targets: string[]
   uncovered: string[]
+  roles_now: FutureRole[]
+  roles_after: FutureRole[]
 }
+export type FutureRole = { role_id: string; title: string; fit: number }
 export type FutureResponse = {
+  skills_now: { skill: string; name: string; level: number }[]
+  market: {
+    source: string
+    published: string
+    in_demand: { ai_digital: string[]; green: string[] }
+    in_demand_page: number
+    emerging_roles: string[]
+    emerging_page: number
+  }
   destination: { id: string; title: string }
   current_role: string | null
   situation: Situation
