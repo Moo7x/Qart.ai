@@ -1,6 +1,6 @@
 # Qart.ai
 
-> From "who I am today" to "where I can be in the AI era", for people in Malaysia. Qart.ai keeps collecting dated public evidence on AI and the job market, turns it into task-level change and skill forecasts under more than one scenario, ranks real future roles with an explainable fit score and skills gap, and builds a reskilling pathway where every role, skill and step is tied to an SDG target. You make the decisions.
+> Qart.ai shows finance workers and graduates in Malaysia which of their skills still count in the AI era, which future roles fit them, and a free learning route to get there, built on dated public evidence.
 
 ---
 
@@ -35,18 +35,21 @@ AI is changing which jobs exist faster than training programmes and skills frame
 
 ### Solution
 
-A scheduled intelligence pipeline collects dated evidence from registered public sources (DOSM labour statistics and job-ad insights, TalentCorp's GBS role study, the Anthropic Economic Index, taxonomies such as O*NET and ESCO). Code, not the language model, turns that evidence into:
+Qart.ai reads a person's synthetic CV or short questionnaire into skill claims, each one quoting the CV. A daily pipeline collects dated public evidence on AI and the Malaysian job market, and code, not the language model, turns it into how much each skill matters under a moderate and a fast AI-adoption scenario. Nine real GBS finance roles are then ranked with an explainable fit score and skills gap, and the person gets a roadmap: AI basics first, then reskilling without AI and with AI, built from checked free courses, videos and articles. When new evidence arrives, Qart shows what would change, and the person accepts or declines.
 
-1. task-level change for each role, keeping observed AI use, reported deployment, potential exposure and expert impact separate;
-2. skill emphasis under two scenarios (moderate and fast AI adoption), labelled as estimates, with essential skills never lowered;
-3. a ranked list of real future roles with an explainable fit score, an essential-skill gate and a three-column skills gap;
-4. an ordered, week-by-week pathway of verified free or low-cost courses, each step tagged to the SDG target it contributes to.
+### Key Features
 
-When new evidence arrives, the system recomputes and proposes a revision with the full chain (evidence → task change → skill weight → score → step). The person decides.
+- **Profile intake** — synthetic CV upload (PDF, DOCX or TXT), form or questionnaire. Personal details are removed first, and every skill quotes the CV.
+- **Live evidence layer** — seven registered public sources checked daily; every number shows its source and date.
+- **Ranked future roles** — a fit score with every point shown, an essential-skill check and a skills gap.
+- **Reskilling roadmap** — three tracks with hours and free resources, plus a with/without-AI comparison.
+- **SDG mapping** — every role, skill and step tagged to an SDG target, with how the path contributes.
+- **Two scenarios** — moderate and fast AI adoption, always labelled as estimates.
+- **The person decides** — new evidence proposes changes in *What changed*; CV updates are suggested and downloadable as PDF.
 
 ### Who it is for
 
-Working adults at risk of displacement, fresh graduates and students (also through TVET and university career centres), career switchers, and HR / L&D managers (aggregate team view only). The demo field with deep coverage is Malaysian Global Business Services (GBS), finance & accounting.
+Working adults at risk of displacement, fresh graduates and students (also through TVET and university career centres) and career switchers. The field with full coverage is Malaysian Global Business Services (GBS), finance & accounting; an HR / L&D team view is planned for a later phase.
 
 ### Status
 
