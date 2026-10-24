@@ -103,3 +103,7 @@ PLAN_BUDGET_WEEKS = 12
 # Exact search enumerates every subset of the relevant courses; above this many it would be slow
 # (2^16 = 65,536 subsets), so the comparison says it fell back to the greedy plan only.
 PLAN_MAX_EXACT_COURSES = 16
+
+# Today → Future you lists this many best-fitting roles for "now" and "after the plan". Declared
+# display parameter: enough to show alternatives without turning the page into a second ranking.
+FUTURE_ROLES_SHOWN = 3

@@ -10,6 +10,7 @@ from sqlalchemy import Engine
 from src import params
 from src.api.evidence import get_engine, get_settings
 from src.changes.store import accepted_rows, baseline_cutoff
+from src.collectors.talentcorp import load_extraction
 from src.config import REPO_ROOT, Settings
 from src.evidence.signals import build_signals, job_ad_signals, occupation_signals
 from src.intake.extract import extract
@@ -361,6 +362,27 @@ def role_tasks(
     return task_view(pack, role, accepted_rows(engine, profile_id), impact)
 
 
+def _top_roles(
+    pack: Pack, levels: dict[str, int | None], scenario: Scenario, evidence: Evidence
+) -> list[dict[str, Any]]:
+    ranked = rank_roles(pack, levels, scenario, evidence)[: params.FUTURE_ROLES_SHOWN]
+    return [{"role_id": m.role_id, "title": m.title, "fit": m.fit} for m in ranked]
+
+
+def _talentcorp_market() -> dict[str, Any]:
+    """In-demand skills and emerging roles as TalentCorp names them (expert view, with pages)."""
+    data = load_extraction()
+    skills = data["in_demand_skills"]
+    return {
+        "source": "TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS",
+        "published": str(data["published"]),
+        "in_demand": {"ai_digital": skills["ai_digital"], "green": skills["green"]},
+        "in_demand_page": skills["pdf_page"],
+        "emerging_roles": data["emerging_roles"]["roles"],
+        "emerging_page": data["emerging_roles"]["pdf_page"],
+    }
+
+
 @router.get("/profiles/{profile_id}/future")
 def future(
     profile_id: str,
@@ -379,7 +401,11 @@ def future(
         match = score_role(pack, role, levels, scenario, evidence)
         path = plan_pathway(pack, match, levels, data.weekly_hours, scenario, evidence)
         after = {g.skill: g.after for step in path.steps for g in step.gains}
+        # Projected levels if the plan is finished (estimate): the higher of claim and plan.
+        levels_after = {**levels, **{k: max(v, levels.get(k) or 0) for k, v in after.items()}}
         by_scenario[scenario] = {
+            "roles_now": _top_roles(pack, levels, scenario, evidence),
+            "roles_after": _top_roles(pack, levels_after, scenario, evidence),
             "fit_now": path.fit_before,
             "fit_after": path.fit_after,
             "hours": path.total_hours,
@@ -400,6 +426,12 @@ def future(
         }
     current = pack.current_roles.get(data.current_role)
     return {
+        "skills_now": [
+            {"skill": sid, "name": pack.skills[sid].name, "level": level}
+            for sid, level in sorted(levels.items(), key=lambda kv: -(kv[1] or 0))
+            if level is not None and sid in pack.skills
+        ],
+        "market": _talentcorp_market(),
         "destination": {"id": role.id, "title": role.title},
         "current_role": current.title if current else None,
         "situation": data.situation,
