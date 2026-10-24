@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useT } from '../i18n'
 import { sendJSON, useApi } from '../api'
 import { Loading, Problem } from '../components/ui'
 import { useJourney } from '../state'
@@ -26,6 +27,7 @@ function asText(sections: Sections): string {
 }
 
 export function Cv() {
+  const { t } = useT()
   const { profileId } = useJourney()
   const view = useApi<CvResponse>(profileId ? `/api/profiles/${profileId}/cv` : null)
   const [busy, setBusy] = useState(false)
@@ -56,7 +58,7 @@ export function Cv() {
     <main className="flex min-w-0 flex-[999_1_640px] flex-col gap-6 px-5 py-7 md:px-10">
       <header className="flex flex-col gap-1.5">
         <span className="eyebrow">My CV · draft update</span>
-        <h1 className="h1">Your CV, updated from what you confirmed</h1>
+        <h1 className="h1">{t('Your CV, updated from what you confirmed')}</h1>
         <p className="m-0 max-w-[680px] text-graphite">
           Built only from your profile, the sentences in your CV and the courses you marked done. Courses go under learning, never under experience, and ratings are your own. Nothing here is invented; check it before you use it.
         </p>
@@ -83,7 +85,7 @@ export function Cv() {
               <button type="button" className="btn btn-v" onClick={acceptDraft} disabled={busy || data.unchanged}>
                 {data.unchanged ? 'No changes since your last version' : data.versions.length ? 'Accept these changes' : 'Accept as version 1'}
               </button>
-              <button type="button" className="btn" onClick={download}>Download as text</button>
+              <button type="button" className="btn" onClick={download}>{t('Download as text')}</button>
               <span className="text-xs text-graphite">
                 {data.versions.length ? `Version ${data.versions.at(-1)!.version} accepted ${data.versions.at(-1)!.accepted_at.slice(0, 10)}. New lines are marked; removed lines are struck through.` : 'No version accepted yet.'}
               </span>

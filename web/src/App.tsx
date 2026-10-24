@@ -11,6 +11,7 @@ import { Pathway } from './pages/Pathway'
 import { Occupations } from './pages/Occupations'
 import { Roles } from './pages/Roles'
 import { Trends } from './pages/Trends'
+import { LanguageProvider } from './i18n'
 import { JourneyProvider } from './state'
 
 function Shell() {
@@ -46,8 +47,10 @@ function Shell() {
 
 export default function App() {
   return (
+    <LanguageProvider>
     <JourneyProvider>
       <Shell />
     </JourneyProvider>
+    </LanguageProvider>
   )
 }

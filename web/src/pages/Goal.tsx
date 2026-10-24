@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useT } from '../i18n'
 import { Link } from 'react-router-dom'
 import { sendJSON, useApi } from '../api'
 import { ReportProblem } from '../components/Feedback'
@@ -30,6 +31,7 @@ function Field({ label, value, onChange, placeholder, area }: { label: string; v
 }
 
 export function Goal() {
+  const { t } = useT()
   const { profileId, scenario } = useJourney()
   const view = useApi<GoalResponse>(profileId ? `/api/profiles/${profileId}/goal?scenario=${scenario}` : null)
   const [form, setForm] = useState<GoalInput>(EMPTY)
@@ -65,7 +67,7 @@ export function Goal() {
     <main className="flex min-w-0 flex-[999_1_640px] flex-col gap-6 px-5 py-7 md:px-10">
       <header className="flex flex-col gap-1.5">
         <span className="eyebrow">My goal · the role you are aiming for</span>
-        <h1 className="h1">Where do you want to be?</h1>
+        <h1 className="h1">{t('Where do you want to be?')}</h1>
         <p className="m-0 max-w-[680px] text-graphite">
           Name the role, and if you have found a real public job posting for it, paste its text. Qart reads that posting&rsquo;s requirements and shows which you already meet, and which roles get you there step by step. This checks one posting; it is not a hiring prediction.
         </p>
@@ -85,7 +87,7 @@ export function Goal() {
           <Field label="Posting link (optional)" value={form.posting_url} onChange={set('posting_url')} />
           <Field label="Date on the posting (optional)" value={form.posting_date} onChange={set('posting_date')} placeholder="e.g. 2026-10-20" />
         </div>
-        <button type="submit" className="btn btn-v self-start" disabled={busy || form.role_title.trim().length < 2}>{busy ? 'Reading the posting…' : 'Save my goal'}</button>
+        <button type="submit" className="btn btn-v self-start" disabled={busy || form.role_title.trim().length < 2}>{busy ? 'Reading the posting…' : t('Save my goal')}</button>
         {error && <p role="alert" className="m-0 text-sm text-weak">{error}</p>}
       </form>
 

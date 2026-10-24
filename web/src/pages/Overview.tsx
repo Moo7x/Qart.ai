@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useT } from '../i18n'
 import { Link } from 'react-router-dom'
 import { formatWhen, useApi } from '../api'
 import { EvidenceDrawer } from '../components/EvidenceDrawer'
@@ -209,6 +210,7 @@ function CurrentJob() {
 }
 
 export function Overview() {
+  const { t } = useT()
   const signals = useApi<SignalsResponse>('/api/signals')
   const sources = useApi<SourceStatus[]>('/api/sources')
   const [selected, setSelected] = useState<Signal | null>(null)
@@ -224,7 +226,7 @@ export function Overview() {
     <main className="flex min-w-0 flex-[999_1_640px] flex-col gap-6 px-5 py-7 md:px-10">
       <header className="flex flex-col gap-1.5">
         <span className="eyebrow">Overview · GBS finance &amp; accounting · Malaysia</span>
-        <h1 className="h1">What the evidence shows for your field</h1>
+        <h1 className="h1">{t('What the evidence shows for your field')}</h1>
         <p className="m-0 max-w-[660px] text-graphite">
           Every line comes from a registered public source and shows its date. Labels follow declared rules: a trend
           needs enough comparable data, and expert views are kept apart from measured data.
@@ -240,7 +242,7 @@ export function Overview() {
         <div className="card-light">
           <Empty>
             No evidence collected yet. The first pipeline run starts automatically on a new deployment; see{' '}
-            <Link to="/live">Live intelligence</Link> for its progress.
+            <Link to="/live">{t('Live intelligence')}</Link> for its progress.
           </Empty>
         </div>
       )}

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useT } from '../i18n'
 import { Link } from 'react-router-dom'
 import { sendJSON, useApi } from '../api'
 import { ReportProblem } from '../components/Feedback'
@@ -28,6 +29,7 @@ export function Pathway() {
 }
 
 function ProfilePathway({ profileId, scenario }: { profileId: string; scenario: Scenario }) {
+  const { t } = useT()
   const path = useApi<PathwayResponse>(`/api/profiles/${profileId}/pathway?scenario=${scenario}`)
   // Self-reported completion, saved per profile on the server; it never changes skills or fit.
   const progress = useApi<ProgressResponse>(`/api/profiles/${profileId}/progress?scenario=${scenario}`)
@@ -87,7 +89,7 @@ function ProfilePathway({ profileId, scenario }: { profileId: string; scenario: 
             <section className="card-light flex flex-col gap-3 px-6 py-5">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <h2 className="h2">{current.paused ? 'Paused: your plan waits for you' : 'Your progress'}</h2>
-                <button type="button" className="btn" onClick={() => save({ done, paused: !current.paused })}>{current.paused ? 'Resume' : 'Pause for now'}</button>
+                <button type="button" className="btn" onClick={() => save({ done, paused: !current.paused })}>{current.paused ? t('Resume') : t('Pause for now')}</button>
               </div>
               <div className="grid gap-3 [grid-template-columns:repeat(auto-fit,minmax(180px,1fr))]">
                 <div className="rounded-lg border border-mist px-3 py-2">
@@ -162,8 +164,8 @@ function ProfilePathway({ profileId, scenario }: { profileId: string; scenario: 
                       <div className="flex flex-wrap items-center justify-between gap-2">
                         <span className="font-mono text-[11px] text-ash">CHECKED {data.courses_checked} · {step.course.provider.toUpperCase()}</span>
                         <span className="flex gap-2">
-                          <a className="btn" href={step.course.url} target="_blank" rel="noopener noreferrer">Open course ↗</a>
-                          <button type="button" className="btn" aria-pressed={isDone} onClick={() => toggle(step.course.id)}>{isDone ? 'Done ✓' : 'Mark as done'}</button>
+                          <a className="btn" href={step.course.url} target="_blank" rel="noopener noreferrer">{t('Open course ↗')}</a>
+                          <button type="button" className="btn" aria-pressed={isDone} onClick={() => toggle(step.course.id)}>{isDone ? 'Done ✓' : t('Mark as done')}</button>
                         </span>
                       </div>
                       <ReportProblem kinds={['course_unavailable', 'impractical_schedule', 'wrong_skill_mapping']} targetType="course" targetId={step.course.id} page="pathway" />

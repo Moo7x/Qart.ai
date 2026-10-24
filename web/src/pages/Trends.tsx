@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useT } from '../i18n'
 import { useApi } from '../api'
 import { LineChart, type Series } from '../components/LineChart'
 import { Loading, Problem } from '../components/ui'
@@ -54,6 +55,7 @@ function Diverging({ rows, unit }: { rows: { label: string; value: number | null
 }
 
 export function Trends() {
+  const { t } = useT()
   const view = useApi<TrendsResponse>('/api/trends')
   const [span, setSpan] = useState<'long' | 'recent'>('long')
   const data = view.data
@@ -71,7 +73,7 @@ export function Trends() {
     <main className="flex min-w-0 flex-[999_1_640px] flex-col gap-6 px-5 py-7 md:px-10">
       <header className="flex flex-col gap-1.5">
         <span className="eyebrow">Trends · rising and declining</span>
-        <h1 className="h1">What is growing, what is shrinking</h1>
+        <h1 className="h1">{t('What is growing, what is shrinking')}</h1>
         <p className="m-0 max-w-[680px] text-graphite">
           Every chart says what kind of number it shows: observed (measured by the source), assumption (our declared scenario rule) or estimate (a model of potential). History is not a forecast.
         </p>

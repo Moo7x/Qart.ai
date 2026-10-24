@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useT } from '../i18n'
 import { Link } from 'react-router-dom'
 import { formatWhen, getJSON, sendJSON, useApi } from '../api'
 import { ScenarioSwitch } from '../components/journey'
@@ -107,6 +108,7 @@ function Report({ report }: { report: ChangeReport }) {
 }
 
 export function Changes() {
+  const { t } = useT()
   const { profileId, scenario } = useJourney()
   const changes = useApi<ChangesResponse>(profileId ? `/api/profiles/${profileId}/changes` : null, CHANGE_POLL_MS)
   const [source, setSource] = useState('')
@@ -145,7 +147,7 @@ export function Changes() {
   return (
     <main className="flex min-w-0 flex-[999_1_640px] flex-col gap-6 px-5 py-7 md:px-10">
       <header className="flex flex-wrap items-end justify-between gap-4">
-        <div><span className="eyebrow">What changed · from evidence to your decision</span><h1 className="h1 mt-2">See the difference, then choose</h1></div>
+        <div><span className="eyebrow">What changed · from evidence to your decision</span><h1 className="h1 mt-2">{t('See the difference, then choose')}</h1></div>
         <ScenarioSwitch />
       </header>
       <p className="m-0 max-w-[760px] text-sm text-graphite">Collected evidence can propose a revision. Your roles and pathway keep their accepted evidence until you choose an update. Historical replay is separate and never changes your profile.</p>

@@ -1,4 +1,5 @@
 import { Activity, ArrowRight, ChartLine, FileText, Flag, ListOrdered, Radar, Route as RouteIcon, Search, UserRound } from 'lucide-react'
+import { LanguageSwitch, useT } from '../i18n'
 import { Link, NavLink } from 'react-router-dom'
 import { formatWhen, useApi } from '../api'
 import { useJourney } from '../state'
@@ -14,6 +15,7 @@ function navClass({ isActive }: { isActive: boolean }): string {
 }
 
 export function Sidebar() {
+  const { t } = useT()
   const runs = useApi<Run[]>('/api/pipeline/runs?limit=1', RUNS_POLL_MS)
   const latest = runs.data?.[0]
   const { profileId, setProfileId } = useJourney()
@@ -31,35 +33,35 @@ export function Sidebar() {
         </svg>
         <span className="text-base font-semibold tracking-tight text-white">Qart.ai</span>
       </span>
-      <span className="cap px-2.5 pb-1.5 text-slate-mid">Your journey · GBS finance</span>
+      <span className="cap px-2.5 pb-1.5 text-slate-mid">{t('Your journey · GBS finance')}</span>
       <NavLink to="/" end className={navClass}>
         <Radar size={16} aria-hidden="true" />
-        Overview
+        {t('Overview')}
       </NavLink>
       <NavLink to="/goal" className={navClass}>
         <Flag size={16} aria-hidden="true" />
-        My goal
+        {t('My goal')}
       </NavLink>
       <NavLink to="/roles" className={navClass}>
         <ListOrdered size={16} aria-hidden="true" />
-        My options
+        {t('My options')}
       </NavLink>
       <NavLink to="/pathway" className={navClass}>
         <RouteIcon size={16} aria-hidden="true" />
-        My plan
+        {t('My plan')}
       </NavLink>
       <NavLink to="/future" className={navClass}>
         <ArrowRight size={16} aria-hidden="true" />
-        Today → Future you
+        {t('Today → Future you')}
       </NavLink>
       <NavLink to="/changes" className={navClass}>
         <Activity size={16} aria-hidden="true" />
-        What changed
+        {t('What changed')}
         {changes.data?.proposals.some((p) => p.actionable) && <span className="tag bg-violet text-white">New</span>}
       </NavLink>
       <NavLink to="/cv" className={navClass}>
         <FileText size={16} aria-hidden="true" />
-        My CV
+        {t('My CV')}
       </NavLink>
       {profileId ? (
         <button
@@ -68,28 +70,29 @@ export function Sidebar() {
           className="flex min-h-[38px] cursor-pointer items-center gap-2.5 rounded-md border-0 bg-transparent px-2.5 text-left text-sm text-stone hover:bg-obsidian hover:text-white"
         >
           <UserRound size={16} aria-hidden="true" />
-          Start again with a new profile
+          {t('Start again with a new profile')}
         </button>
       ) : (
         <Link to="/start" className="mt-1 flex min-h-[38px] items-center justify-center rounded-md bg-violet text-sm font-medium text-white no-underline hover:bg-violet-hover">
-          Start · tell us about yourself
+          {t('Start · tell us about yourself')}
         </Link>
       )}
       <div className="mx-1.5 my-3 h-px bg-surface" />
-      <span className="cap px-2.5 pb-1.5 text-slate-mid">Evidence</span>
+      <span className="cap px-2.5 pb-1.5 text-slate-mid">{t('Evidence')}</span>
       <NavLink to="/trends" className={navClass}>
         <ChartLine size={16} aria-hidden="true" className="text-cyan" />
-        Trends
+        {t('Trends')}
       </NavLink>
       <NavLink to="/occupations" className={navClass}>
         <Search size={16} aria-hidden="true" className="text-cyan" />
-        Any occupation
+        {t('Any occupation')}
       </NavLink>
       <NavLink to="/live" className={navClass}>
         <Activity size={16} aria-hidden="true" className="text-cyan" />
-        Live intelligence
+        {t('Live intelligence')}
       </NavLink>
       <div className="flex-1" />
+      <LanguageSwitch />
       <div className="border-t border-surface p-2.5 font-mono text-[11px] leading-relaxed text-stone">
         LAST PIPELINE RUN
         <br />

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useT } from '../i18n'
 import { getJSON, sendJSON } from '../api'
 import { useJourney } from '../state'
 
@@ -22,6 +23,7 @@ const LABELS: Record<FeedbackKind, string> = {
 
 // A small "report a problem" control. Preferences apply to the person at once; errors go to review.
 export function ReportProblem({ kinds, targetType, targetId, page, dark = false }: { kinds: FeedbackKind[]; targetType: Target; targetId: string; page: string; dark?: boolean }) {
+  const { t } = useT()
   const { profileId } = useJourney()
   const [kind, setKind] = useState<FeedbackKind>(kinds[0])
   const [message, setMessage] = useState('')
@@ -42,7 +44,7 @@ export function ReportProblem({ kinds, targetType, targetId, page, dark = false 
 
   return (
     <details className={`text-xs ${dark ? 'text-stone' : 'text-graphite'}`}>
-      <summary className="cursor-pointer">Report a problem</summary>
+      <summary className="cursor-pointer">{t('Report a problem')}</summary>
       {sent ? (
         <p className="m-0 mt-1.5">Thank you. {sent}</p>
       ) : (
@@ -51,7 +53,7 @@ export function ReportProblem({ kinds, targetType, targetId, page, dark = false 
             {kinds.map((k) => <option key={k} value={k}>{LABELS[k]}</option>)}
           </select>
           <input value={message} onChange={(e) => setMessage(e.target.value)} placeholder="What is wrong? (optional)" maxLength={1000} className="min-w-0 flex-1 rounded-md border border-hairline px-2 py-1 text-xs text-void" />
-          <button type="button" className="btn" onClick={send}>Send</button>
+          <button type="button" className="btn" onClick={send}>{t('Send')}</button>
           {error && <span role="alert" className="text-weak">{error}</span>}
         </div>
       )}

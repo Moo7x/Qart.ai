@@ -1,4 +1,5 @@
 import { Lock } from 'lucide-react'
+import { useT } from '../i18n'
 import { type FormEvent, useState } from 'react'
 import { formatWhen, parseUtc, sendJSON, useApi } from '../api'
 import { PipelineDiagram, type StepId } from '../components/PipelineDiagram'
@@ -86,6 +87,7 @@ function RunNow({ onStarted }: { onStarted: () => void }) {
 export const STEPS = ['trend_models', 'occupation_index']
 
 export function LiveIntelligence() {
+  const { t } = useT()
   const runs = useApi<Run[]>('/api/pipeline/runs?limit=12', RUNS_POLL_MS)
   const sources = useApi<SourceStatus[]>('/api/sources')
   const backtest = useApi<BacktestEntry[]>('/api/pipeline/backtest')
@@ -104,7 +106,7 @@ export function LiveIntelligence() {
       <header className="flex flex-wrap items-end justify-between gap-4">
         <div className="flex flex-col gap-1.5">
           <span className="eyebrow">Live intelligence · open to everyone</span>
-          <h1 className="h1">Where every number comes from</h1>
+          <h1 className="h1">{t('Where every number comes from')}</h1>
           <p className="m-0 max-w-[640px] text-graphite">
             The pipeline runs on a schedule even when nobody is using the app. Every run is logged, including runs where
             nothing changed.

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useT } from '../i18n'
 import { Link, useNavigate } from 'react-router-dom'
 import { sendJSON, useApi } from '../api'
 import { Dots, ScenarioSwitch, SdgTag } from '../components/journey'
@@ -62,6 +63,7 @@ function ForYou({ role, situation, pack }: { role: RoleCard; situation: Situatio
 }
 
 function Why({ role, onChoose, chosen, busy, situation, pack }: { role: RoleCard; onChoose: () => void; chosen: boolean; busy: boolean; situation: Situation; pack: PackInfo | null }) {
+  const { t } = useT()
   const { ready, partly } = bars(role)
   const { profileId, scenario } = useJourney()
   return (
@@ -124,7 +126,7 @@ function Why({ role, onChoose, chosen, busy, situation, pack }: { role: RoleCard
       {profileId && <ExplainRole key={`${role.role_id}-${scenario}`} profileId={profileId} roleId={role.role_id} scenario={scenario} />}
       <div className="flex flex-wrap gap-2">
         <button type="button" className="btn btn-v" onClick={onChoose} disabled={busy}>
-          {chosen ? 'Your destination ✓ · open the pathway' : 'Choose as my destination'}
+          {chosen ? 'Your destination ✓ · open the pathway' : t('Choose as my destination')}
         </button>
       </div>
     </section>
@@ -132,6 +134,7 @@ function Why({ role, onChoose, chosen, busy, situation, pack }: { role: RoleCard
 }
 
 export function Roles() {
+  const { t } = useT()
   const { profileId, scenario } = useJourney()
   const navigate = useNavigate()
   const current = useApi<MatchesResponse>(profileId ? `/api/profiles/${profileId}/matches?scenario=${scenario}` : null)
@@ -167,7 +170,7 @@ export function Roles() {
       <header className="flex flex-wrap items-end justify-between gap-4">
         <div className="flex flex-col gap-1.5">
           <span className="eyebrow">My options · every destination role is scored</span>
-          <h1 className="h1">Where your skills can take you</h1>
+          <h1 className="h1">{t('Where your skills can take you')}</h1>
           <p className="m-0 max-w-[640px] text-graphite">
             Destination roles TalentCorp lists for highly impacted GBS finance roles. Fit compares your levels with what each role needs under the selected scenario; outlook is shown separately with its sources.
           </p>
