@@ -58,6 +58,14 @@ plan completion (self-reported, saved per profile in `src/journey/progress.py`),
 coverage (changes only when the person edits their levels) and skills still to tell; plus this
 week's steps within the weekly hours, and pause/resume that never lowers anything.
 
+**Feedback.** `src/feedback/service.py`: "Report a problem" on roles, courses and posting lines
+stores the kind, the target and the version the person saw. Preferences ("not my goal",
+"schedule does not work") apply to that person only and at once. Error reports go to the admin
+review on Live intelligence; a "course unavailable" report carries a bounded correction, which is
+first run on fixed synthetic regression profiles for every destination (plans changed, essentials
+left without a course), then released for everyone or rejected, with a logged decision. Nothing
+is learned automatically and the system never edits its own code or weights.
+
 **Decision support.** `src/match/decision.py`: meters keep coverage (the fit), essential readiness
 (below level versus not stated) and profile completeness apart; the fit range recomputes with
 unstated skills at proficient (assumption-based, not a statistical interval); the most valuable
