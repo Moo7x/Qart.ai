@@ -39,6 +39,14 @@ Code drops sentences with numbers (digits or words), forecast or promise words, 
 citation; the cited facts, written by code, are shown under each sentence. No key, an error or no
 valid sentence gives a labelled template of the facts. Market evidence is not given to the model.
 
+**My goal.** `src/goal/posting.py` (page "My goal"): the person names a target role and may paste
+a public job posting. gpt-4o-mini lists its requirements under a strict schema, each with a quote
+code checks against the posting (PII scrubbed first), a pack skill or "other", and "required" only
+when the posting says so; otherwise keyword matching, labelled. Coverage is counts of this posting
+("covers 2 of 6, essentials 1 of 2") with unstated and out-of-catalogue requirements apart, using
+level 2 where the posting states none (declared). Stepping stones are verified roles sharing the
+posting's skills, with the person's fit and learning that serves both. No scraping or applying.
+
 **Decision support.** `src/match/decision.py`: meters keep coverage (the fit), essential readiness
 (below level versus not stated) and profile completeness apart; the fit range recomputes with
 unstated skills at proficient (assumption-based, not a statistical interval); the most valuable
