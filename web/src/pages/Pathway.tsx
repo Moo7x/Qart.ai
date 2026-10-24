@@ -1,15 +1,15 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { useApi } from '../api'
+import { sendJSON, useApi } from '../api'
 import { PlanCompare } from '../components/PlanCompare'
 import { ScenarioSwitch, SdgTag } from '../components/journey'
 import { Loading, Problem } from '../components/ui'
 import { useJourney } from '../state'
-import type { PathwayResponse, Scenario } from '../types'
+import type { PathwayResponse, ProgressResponse, Scenario } from '../types'
 import { NeedProfile } from './Roles'
 
 const MINUTES_PER_HOUR = 60
-// Progress is a convenience kept in this browser; it does not change scores.
+// Older builds kept completion in this browser; it is moved to the server once.
 function readDone(key: string): string[] {
   try {
     const saved: unknown = JSON.parse(window.localStorage.getItem(key) ?? '[]')
@@ -27,18 +27,26 @@ export function Pathway() {
 
 function ProfilePathway({ profileId, scenario }: { profileId: string; scenario: Scenario }) {
   const path = useApi<PathwayResponse>(`/api/profiles/${profileId}/pathway?scenario=${scenario}`)
-  // Never reuse another person's checkboxes when switching synthetic demo profiles.
-  const doneKey = `qart.done.${profileId}`
-  const [done, setDone] = useState<string[]>(() => readDone(doneKey))
+  // Self-reported completion, saved per profile on the server; it never changes skills or fit.
+  const progress = useApi<ProgressResponse>(`/api/profiles/${profileId}/progress?scenario=${scenario}`)
+  const [state, setState] = useState<ProgressResponse | null>(null)
+  const current = state ?? progress.data
+  const done = current?.done ?? []
+
+  async function save(next: { done: string[]; paused: boolean }) {
+    setState(await sendJSON<ProgressResponse>(`/api/profiles/${profileId}/progress?scenario=${scenario}`, { method: 'PUT', body: next }))
+  }
+
+  useEffect(() => {
+    const legacy = readDone(`qart.done.${profileId}`)
+    if (progress.data && progress.data.done.length === 0 && legacy.length > 0) {
+      void save({ done: legacy, paused: progress.data.paused }).then(() => window.localStorage.removeItem(`qart.done.${profileId}`))
+    }
+  }, [progress.data]) // eslint-disable-line react-hooks/exhaustive-deps
 
   function toggle(courseId: string) {
     const next = done.includes(courseId) ? done.filter((d) => d !== courseId) : [...done, courseId]
-    setDone(next)
-    try {
-      window.localStorage.setItem(doneKey, JSON.stringify(next))
-    } catch {
-      // Not stored: progress shows until the page is closed.
-    }
+    void save({ done: next, paused: current?.paused ?? false })
   }
 
   const noDestination = path.error?.includes('choose a destination')
@@ -72,6 +80,39 @@ function ProfilePathway({ profileId, scenario }: { profileId: string; scenario: 
               <Link to="/roles" className="text-[13px]">Change destination</Link>
             </div>
           </header>
+
+          {current?.plan && (
+            <section className="card-light flex flex-col gap-3 px-6 py-5">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <h2 className="h2">{current.paused ? 'Paused: your plan waits for you' : 'Your progress'}</h2>
+                <button type="button" className="btn" onClick={() => save({ done, paused: !current.paused })}>{current.paused ? 'Resume' : 'Pause for now'}</button>
+              </div>
+              <div className="grid gap-3 [grid-template-columns:repeat(auto-fit,minmax(180px,1fr))]">
+                <div className="rounded-lg border border-mist px-3 py-2">
+                  <span className="cap">Plan completed</span>
+                  <span className="block text-lg font-semibold">{current.plan.steps_done} of {current.plan.steps} steps</span>
+                  <span className="text-xs text-graphite">{current.plan.hours_done} of {current.plan.hours} h · your own record</span>
+                </div>
+                <div className="rounded-lg border border-mist px-3 py-2">
+                  <span className="cap">Requirement coverage</span>
+                  <span className="block text-lg font-semibold">{Math.round(current.plan.coverage)} / 100</span>
+                  <span className="text-xs text-graphite">changes only when you update your skill levels</span>
+                </div>
+                <div className="rounded-lg border border-mist px-3 py-2">
+                  <span className="cap">Still to tell us</span>
+                  <span className="block text-lg font-semibold">{current.plan.open_questions} skill{current.plan.open_questions === 1 ? '' : 's'}</span>
+                  <Link to="/roles" className="text-xs">answer on My options</Link>
+                </div>
+              </div>
+              {!current.paused && current.plan.this_week.length > 0 && (
+                <p className="m-0 text-[13px]">
+                  <span className="font-semibold">This week ({current.plan.weekly_hours} h):</span>{' '}
+                  {current.plan.this_week.map((w) => `${w.title} (${w.hours} h)`).join(' · ')}
+                </p>
+              )}
+              <p className="m-0 text-xs text-graphite">Finishing a course is recorded as learning, not as a skill level. Pausing loses nothing and never lowers anything.</p>
+            </section>
+          )}
 
           <PlanCompare profileId={profileId} scenario={scenario} />
 

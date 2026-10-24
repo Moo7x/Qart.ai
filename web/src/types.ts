@@ -527,3 +527,22 @@ export type GoalResponse = {
   }
   stepping_stones?: { role_id: string; title: string; shared: string[]; overlap: number; fit: number; longer_route: boolean; shared_courses: { id: string; title: string; url: string }[] }[]
 }
+
+// ---- Progress (src/journey/progress.py, src/api/decision.py) ----
+
+export type ProgressResponse = {
+  done: string[]
+  paused: boolean
+  updated_at: string | null
+  plan: null | {
+    role_id: string
+    steps: number
+    steps_done: number
+    hours: number
+    hours_done: number
+    coverage: number
+    open_questions: number
+    this_week: { id: string; title: string; hours: number }[]
+    weekly_hours: number
+  }
+}
