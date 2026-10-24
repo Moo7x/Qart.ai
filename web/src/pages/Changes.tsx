@@ -45,40 +45,40 @@ function Report({ report }: { report: ChangeReport }) {
         <h2 className="h2">{report.before_label} → {report.after_label}</h2>
         <span className="tag bg-estimate-bg text-estimate">{report.mode === 'replay' ? 'Historical source replay' : 'Update proposal'} · {report.scenario}</span>
       </div>
-      <p role="status" className="m-0 text-sm text-graphite">
+      <p role="status" className="m-0 text-[14px] text-graphite">
         {report.recommendation_changed ? 'The recomputed ranking, fit or pathway differs.' : 'No change to the computed ranking, fit or pathway. New evidence does not have to change your recommendation.'}
       </p>
       <details className="rounded-lg border border-hairline p-4" open>
-        <summary className="cursor-pointer text-sm font-semibold">1 · What the source reports · {report.evidence.length} changed observations</summary>
+        <summary className="cursor-pointer text-[14px] font-semibold">1 · What the source reports · {report.evidence.length} changed observations</summary>
         <div className="mt-3 max-h-[420px] overflow-auto">
-          {report.evidence.length === 0 && <p className="text-sm">No latest observed values changed.</p>}
+          {report.evidence.length === 0 && <p className="text-[14px]">No latest observed values changed.</p>}
           {report.evidence.map((e, index) => (
-            <article key={`${e.source_id}-${index}`} className="border-t border-mist py-3 text-sm">
+            <article key={`${e.source_id}-${index}`} className="border-t border-mist py-3 text-[14px]">
               <div className="font-semibold">{e.entity} · {e.geography}</div>
-              <div className="font-mono text-xs">{e.before ?? 'not available'} ({e.before_period ?? '—'}) → {e.after ?? 'not available'} ({e.after_period ?? '—'}) · {e.unit}</div>
-              <div className="mt-1 text-xs text-graphite">{e.metric} · {e.comparable ? 'Same recorded method and unit' : 'New or non-comparable cell; do not treat as a measured rate of change'}</div>
-              <blockquote className="mx-0 my-2 break-words border-l-2 border-hairline pl-3 text-xs text-graphite">{e.cited_span}</blockquote>
+              <div className="font-mono text-[13px]">{e.before ?? 'not available'} ({e.before_period ?? '—'}) → {e.after ?? 'not available'} ({e.after_period ?? '—'}) · {e.unit}</div>
+              <div className="mt-1 text-[13px] text-graphite">{e.metric} · {e.comparable ? 'Same recorded method and unit' : 'New or non-comparable cell; do not treat as a measured rate of change'}</div>
+              <blockquote className="mx-0 my-2 break-words border-l-2 border-hairline pl-3 text-[13px] text-graphite">{e.cited_span}</blockquote>
               <a href={e.url} target="_blank" rel="noreferrer">Open source ↗</a>
-              <span className="ml-2 text-xs text-graphite">Published {e.published ?? 'date not supplied'}</span>
+              <span className="ml-2 text-[13px] text-graphite">Published {e.published ?? 'date not supplied'}</span>
             </article>
           ))}
         </div>
       </details>
       <section className="min-w-0 overflow-x-auto">
         <h3 className="h2 mb-3">2 · Scenario emphasis → your role scores</h3>
-        <p className="text-xs text-graphite">Your skills stay fixed. Essential weights stay fixed; their share of a normalised total can change. Expand a role for the exact calculation differences.</p>
+        <p className="text-[13px] text-graphite">Your skills stay fixed. Essential weights stay fixed; their share of a normalised total can change. Expand a role for the exact calculation differences.</p>
         {report.roles.map((role) => {
           const driver = report.evidence.find((e) => e.source_id === 'anthropic_economic_index' && e.metric === 'aei_collaboration_bucket_automation_pct' && e.geography === 'GLOBAL' && e.entity.split(' ')[0] === role.soc)
           return (
           <details key={role.role_id} className="border-t border-hairline py-3">
-            <summary className="cursor-pointer text-sm">
+            <summary className="cursor-pointer text-[14px]">
               <span className="font-semibold">{role.title}</span>
               <span className="ml-3 font-mono">{role.fit_before.toFixed(1)} → {role.fit_after.toFixed(1)} / 100</span>
               <span className="ml-3 text-graphite">rank {role.rank_before} → {role.rank_after}</span>
             </summary>
-            <p className="text-xs text-graphite">Mapped occupation: {role.soc}. {driver && <>Occupation-level automation-style share (used for skills without task-level data): {driver.before ?? 'not available'}% → {driver.after ?? 'not available'}%. <a href={driver.url} target="_blank" rel="noreferrer">Source ↗</a></>}</p>
-            {role.weights.length === 0 ? <p className="text-xs text-graphite">No requirement weights or contributions changed.</p> : (
-              <ul className="space-y-3 pl-5 text-xs">
+            <p className="text-[13px] text-graphite">Mapped occupation: {role.soc}. {driver && <>Occupation-level automation-style share (used for skills without task-level data): {driver.before ?? 'not available'}% → {driver.after ?? 'not available'}%. <a href={driver.url} target="_blank" rel="noreferrer">Source ↗</a></>}</p>
+            {role.weights.length === 0 ? <p className="text-[13px] text-graphite">No requirement weights or contributions changed.</p> : (
+              <ul className="space-y-3 pl-5 text-[13px]">
                 {role.weights.map((w) => (
                   <li key={w.skill}>
                     <span className="font-semibold">{w.name}{w.essential ? ' · essential' : ''}</span>
@@ -96,14 +96,58 @@ function Report({ report }: { report: ChangeReport }) {
       {pathway ? (
         <section>
           <h3 className="h2">3 · Your selected pathway · {pathway.title}</h3>
-          <p className="text-sm text-graphite">{pathway.added.length} courses added · {pathway.removed.length} removed · {pathway.reordered ? 'order changed' : 'no reordering of the same courses'}. Your destination is unchanged.</p>
+          <p className="text-[14px] text-graphite">{pathway.added.length} courses added · {pathway.removed.length} removed · {pathway.reordered ? 'order changed' : 'no reordering of the same courses'}. Your destination is unchanged.</p>
           <div className="flex flex-wrap gap-4"><PathColumn title="Before" path={pathway.before} /><PathColumn title="After · proposed" path={pathway.after} /></div>
         </section>
-      ) : <p className="text-sm">Choose a destination on the <Link to="/roles">Roles page</Link> to compare its pathway too.</p>}
-      <aside className="rounded-lg bg-fog p-4 text-xs leading-relaxed text-graphite">
+      ) : <p className="text-[14px]">Choose a destination on the <Link to="/roles">Roles page</Link> to compare its pathway too.</p>}
+      <aside className="rounded-lg bg-fog p-4 text-[13px] leading-relaxed text-graphite">
         {report.notes.map((note) => <p key={note} className="my-1">{note}</p>)}
       </aside>
     </div>
+  )
+}
+
+// One collected update: the gist and the decision first, the full comparison on request.
+function ProposalCard({ proposal, busy, onDecide }: { proposal: Proposal; busy: boolean; onDecide: (d: 'accept' | 'decline') => void }) {
+  const r = proposal.report
+  const moved = [...r.roles].sort((x, y) => Math.abs(y.fit_after - y.fit_before) - Math.abs(x.fit_after - x.fit_before))[0]
+  const changedRoles = r.roles.filter((x) => x.fit_after !== x.fit_before || x.rank_after !== x.rank_before).length
+  const stats: [string, string][] = [
+    ['Observations changed', String(r.evidence.length)],
+    ['Your roles affected', `${changedRoles} of ${r.roles.length}`],
+    ['Biggest fit change', moved ? `${moved.title}: ${moved.fit_before.toFixed(1)} → ${moved.fit_after.toFixed(1)}` : 'none'],
+    ['Your plan', r.pathway ? `${r.pathway.added.length} added · ${r.pathway.removed.length} removed` : 'no destination chosen'],
+  ]
+  return (
+    <article className="flex flex-col gap-5 rounded-md border border-line bg-paper p-5 md:p-6">
+      <header className="flex flex-wrap items-start justify-between gap-4">
+        <div className="flex min-w-0 flex-col gap-1">
+          <span className="font-mono text-[12px] text-graphite">{formatWhen(proposal.created_at)} · {r.before_label} → {r.after_label}</span>
+          <h3 className="m-0 text-[20px] font-semibold leading-snug tracking-tight">
+            {r.recommendation_changed ? 'New evidence changes your results' : 'New evidence, your results stay the same'}
+          </h3>
+          {!proposal.actionable && proposal.status === 'pending' && <span className="text-[13px] text-graphite">Replaced by newer evidence, profile or calculation rules.</span>}
+        </div>
+        {proposal.actionable ? (
+          <div className="flex flex-wrap gap-2">
+            <button className="btn btn-v min-h-[44px]" disabled={busy} onClick={() => onDecide('accept')}>Use this evidence</button>
+            <button className="btn min-h-[44px]" disabled={busy} onClick={() => onDecide('decline')}>Decline</button>
+          </div>
+        ) : <span className="tag bg-mist text-graphite">{proposal.status}</span>}
+      </header>
+      <dl className="m-0 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        {stats.map(([label, value]) => (
+          <div key={label} className="border-l-2 border-violet pl-3">
+            <dt className="cap">{label}</dt>
+            <dd className="m-0 mt-1 text-[15px] font-semibold">{value}</dd>
+          </div>
+        ))}
+      </dl>
+      <details>
+        <summary className="cursor-pointer text-[14px] font-medium text-violet">See the full comparison</summary>
+        <div className="mt-4"><Report report={r} /></div>
+      </details>
+    </article>
   )
 }
 
@@ -154,23 +198,22 @@ export function Changes() {
       {changes.loading && !changes.data && <Loading what="evidence changes" />}
       {changes.error && <Problem what="change history" message={changes.error} onRetry={changes.reload} />}
       {message && <p role="status" className="rounded-md bg-fog p-3 text-sm">{message}</p>}
-      <div className="grid items-start gap-6 xl:grid-cols-[minmax(260px,0.7fr)_minmax(0,1.6fr)]">
-      <section className="card-light min-w-0 p-5 xl:sticky xl:top-8">
-        <h2 className="h2">Collected updates</h2>
-        {proposals.length === 0 && <p className="text-sm text-graphite">No proposals yet. A genuinely new observation can create one; a quiet scheduled check is a valid no-change result.</p>}
-        {proposals.map((proposal) => (
-          <details key={proposal.id} className="mt-4 border-t border-hairline pt-4" open={proposal.actionable}>
-            <summary className="mb-4 cursor-pointer text-sm">{formatWhen(proposal.created_at)} · {proposal.status}{!proposal.actionable && proposal.status === 'pending' ? ' · replaced by newer evidence, profile or calculation rules' : ''}</summary>
-            <Report report={proposal.report} />
-            {proposal.actionable && <div className="mt-4 flex flex-wrap gap-3">
-              <button className="btn btn-v" disabled={busy} onClick={() => decide(proposal, 'accept')}>Use this evidence for both scenarios</button>
-              <button className="btn" disabled={busy} onClick={() => decide(proposal, 'decline')}>Decline this proposal</button>
-            </div>}
-          </details>
-        ))}
+      <section className="panel">
+        <div className="flex flex-wrap items-baseline justify-between gap-2">
+          <h2 className="h2">Updates for you</h2>
+          <span className="text-[13px] text-graphite">{proposals.filter((x) => x.actionable).length} waiting for your decision · {proposals.length} in total</span>
+        </div>
+        {proposals.length === 0 && (
+          <p className="m-0 max-w-[760px] text-[14px] text-graphite">
+            Nothing to decide right now. When a source publishes new data that changes your results, it appears here as a card you can accept or decline. A scheduled check that finds nothing new is a normal result.
+          </p>
+        )}
+        <div className="flex flex-col gap-4">
+          {proposals.map((proposal) => <ProposalCard key={proposal.id} proposal={proposal} busy={busy} onDecide={(d) => decide(proposal, d)} />)}
+        </div>
       </section>
-      <section className="card-light flex min-w-0 flex-col gap-4 p-5">
-        <div><h2 className="h2">Replay genuine historical observations</h2><p className="mb-0 text-sm text-graphite">Select saved observation periods. These are not necessarily separate publication releases. Other reference data stays fixed.</p></div>
+      <section className="panel min-w-0">
+        <div><h2 className="h2">Replay past data: what would have changed?</h2><p className="mb-0 mt-1 text-[14px] text-graphite">Select saved observation periods. These are not necessarily separate publication releases. Other reference data stays fixed.</p></div>
         {available.length === 0 ? <p className="text-sm">At least two saved periods from a supported source are needed. Collect evidence on the Live intelligence page first.</p> : <>
           <div className="flex flex-wrap items-end gap-3">
             <label className="flex min-w-0 flex-col gap-1 text-xs">Source<select className="min-h-[40px] max-w-full rounded-md border border-hairline bg-white p-2 text-sm" value={sourceId} onChange={(e) => { setSource(e.target.value); setBefore(''); setAfter(''); setPreview(null) }}>{available.map((s) => <option key={s.source_id} value={s.source_id}>{SOURCE_NAMES[s.source_id] ?? s.source_id}</option>)}</select></label>
@@ -181,7 +224,6 @@ export function Changes() {
           {preview && preview.scenario === scenario && <Report report={preview} />}
         </>}
       </section>
-      </div>
     </main>
   )
 }
