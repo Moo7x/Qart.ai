@@ -73,6 +73,29 @@ plan completion (self-reported, saved per profile in `src/journey/progress.py`),
 coverage (changes only when the person edits their levels) and skills still to tell; plus this
 week's steps within the weekly hours, and pause/resume that never lowers anything.
 
+**My plan as three tracks.** `src/pathway/tracks.py` (GET `/api/profiles/{id}/tracks`) shows the
+plan as three rows: (1) AI basics, a declared foundation everyone sees first (what generative AI
+is, prompting at work, using AI responsibly, data basics); (2) reskilling without AI, the role's
+gaps in finance, business and green skills; (3) reskilling with AI, its gaps in data and digital
+skills (`params.AI_TRACK_KINDS`, following TalentCorp's skill clusters). Each skill is a node;
+clicking it opens three temporary windows: courses (planned ones count towards hours and fit),
+YouTube videos and articles. Videos and articles come from `data/packs/gbs_fa/resources.yaml`:
+YouTube title and channel checked through the public oEmbed endpoint, length and date from the
+watch page, articles loaded and title-matched, all on 2026-10-24; they are links only and never
+counted in hours or fit. A node unlocks when the earlier nodes of its track are done.
+
+**With AI or without.** The comparison plans the role twice with the same planner and course
+rules: over the non-digital skills only, and over every skill plus the AI-basics courses. The same
+engine scores fit under both scenarios; it shows hours, weeks, courses, fit after and fit gained
+per 10 hours. "With AI" means also learning the AI-related skills, not studying with an AI tutor;
+no study claims a speed-up from AI tutoring for this audience, so none is assumed.
+
+**Job posts.** Each role has a "See job posts" window with live searches on JobStreet (Malaysia
+and Kuala Lumpur), Indeed Malaysia and MYFutureJobs; the URL patterns were opened in a browser on
+2026-10-24 and returned real postings for the titles. LinkedIn (sign-in wall) and Hiredly (ignores
+the search term) were left out. Qart links only: it does not copy, rank or check postings, since
+recruitment integrations are outside the brief.
+
 **Feedback.** `src/feedback/service.py`: "Report a problem" on roles, courses and posting lines
 stores the kind, the target and the version the person saw. Preferences ("not my goal",
 "schedule does not work") apply to that person only and at once. Error reports go to the admin
