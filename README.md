@@ -20,9 +20,8 @@
 | Resource          | Link                                           |
 | ----------------- | ---------------------------------------------- |
 | GitHub Repository | https://github.com/Moo7x/qart.ai               |
-| Replit Project    | https://qart-ai.replit.app/                    |
-| Live Demo         | https://your-project.replit.app                |
-| RunPod Endpoint   | https://api.runpod.ai/v2/your-endpoint-id      |
+| Live Demo (Replit) | https://qartai.replit.app/start               |
+| RunPod Endpoint   | Private serverless endpoint, called only by the server |
 | Slide Deck        | https://example.com/slides                     |
 | Demo Video        | https://example.com/demo-video                 |
 
@@ -176,7 +175,10 @@ The tests never call paid services. Code checks: `ruff check .` and `mypy src te
 
 | Name        | Role                | GitHub                                   |
 | ----------- | ------------------- | ---------------------------------------- |
-| Member Name | Role | [@username](https://github.com/username) |
+| Kydyrgaliyev Meiirman | Team leader · planning and idea · frontend and UI | [@kydyrgaliyevm](https://github.com/kydyrgaliyevm) |
+| Mounir Ben Hassine | Planning and idea · backend, data pipeline and deployment | [@Moo7x](https://github.com/Moo7x) |
+
+Both members iterated on the frontend and backend together once the first working version was in place.
 
 ---
 
