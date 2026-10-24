@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { useT } from '../i18n'
 import type { PathwayStep } from '../types'
 import { ReportProblem } from './Feedback'
@@ -92,6 +93,7 @@ export function Roadmap({ steps, done, onToggle, checked, paused }: { steps: Pat
                         {s === 'done' ? 'Done ✓ · undo' : t('Mark as done')}
                       </button>
                     )}
+                    {s === 'done' && <Link to="/cv" className="text-[13px] font-medium text-violet">Add it to your CV →</Link>}
                   </div>
                   <span className="font-mono text-[10px] uppercase tracking-wider text-ash">Link checked {checked} · {step.course.provider}</span>
                   <ReportProblem kinds={['course_unavailable', 'impractical_schedule', 'wrong_skill_mapping']} targetType="course" targetId={step.course.id} page="pathway" />

@@ -172,3 +172,56 @@
 @media (prefers-reduced-motion: reduce) {
   .flow-dot { animation: none !important; }
 }
+
+/* Download PDF on My CV: only the one-page CV is printed. */
+#cv-print {
+  display: none;
+}
+@media print {
+  @page {
+    size: A4;
+    margin: 18mm 16mm;
+  }
+  body * {
+    visibility: hidden;
+  }
+  #cv-print,
+  #cv-print * {
+    visibility: visible;
+  }
+  #cv-print {
+    display: block;
+    position: absolute;
+    inset: 0 auto auto 0;
+    width: 100%;
+    color: #000;
+    font-family: var(--font-sans);
+    font-size: 11pt;
+    line-height: 1.45;
+  }
+  #cv-print h1 {
+    margin: 0 0 4mm;
+    font-size: 22pt;
+    letter-spacing: -0.02em;
+  }
+  #cv-print h2 {
+    margin: 6mm 0 2mm;
+    padding-bottom: 1mm;
+    border-bottom: 0.6pt solid #000;
+    font-size: 10pt;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  #cv-print ul {
+    margin: 0;
+    padding-left: 5mm;
+  }
+  #cv-print p {
+    margin: 0;
+  }
+  #cv-print footer {
+    margin-top: 8mm;
+    font-size: 8pt;
+    color: #444;
+  }
+}
