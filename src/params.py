@@ -107,3 +107,9 @@ PLAN_MAX_EXACT_COURSES = 16
 # Today → Future you lists this many best-fitting roles for "now" and "after the plan". Declared
 # display parameter: enough to show alternatives without turning the page into a second ranking.
 FUTURE_ROLES_SHOWN = 3
+
+# My plan splits reskilling into two tracks by the pack's declared skill kind: "data_digital"
+# skills (data, systems, automation, prompting) form "Reskilling with AI"; finance, business and
+# green skills form "Reskilling without AI". Declared parameter: the split follows TalentCorp's
+# own skill clusters rather than a new judgement per skill.
+AI_TRACK_KINDS = ("data_digital",)

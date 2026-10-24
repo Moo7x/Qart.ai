@@ -16,6 +16,7 @@ from src.evidence.signals import build_signals, job_ad_signals, occupation_signa
 from src.intake.extract import extract
 from src.intake.files import UnsupportedFileError, read_cv
 from src.intake.skill_search import search
+from src.journey.progress import get_progress
 from src.journey.store import (
     ProfileData,
     choose_destination,
@@ -32,6 +33,8 @@ from src.match.radar import radar
 from src.match.tasks import task_view
 from src.pack import Pack, load_pack
 from src.pathway.planner import Pathway, plan_pathway
+from src.pathway.tracks import build_tracks, comparison
+from src.resources import load_resources
 
 router = APIRouter(prefix="/api")
 
@@ -303,6 +306,33 @@ def pathway(
     out["courses_checked"] = pack.courses_checked
     out["scenario"] = scenario
     return out
+
+
+@router.get("/profiles/{profile_id}/tracks")
+def tracks(
+    profile_id: str,
+    scenario: Scenario = Query(default="moderate"),
+    engine: Engine = Depends(get_engine),
+) -> dict[str, Any]:
+    """My plan as AI basics, reskilling without AI and with AI, plus the route comparison."""
+    data, destination = require_profile(engine, profile_id)
+    chosen = _destination_or_query(destination, None)
+    pack = load_pack()
+    res = load_resources()
+    evidence = evidence_for(engine, profile_id)
+    match = score_role(pack, pack.destination_roles[chosen], data.levels(), scenario, evidence)
+    path = plan_pathway(pack, match, data.levels(), data.weekly_hours, scenario, evidence)
+    done = get_progress(engine, profile_id)["done"]
+    return {
+        "role_id": chosen,
+        "role_title": match.title,
+        "scenario": scenario,
+        "weekly_hours": data.weekly_hours,
+        "tracks": build_tracks(pack, res, match, path, done),
+        "comparison": comparison(pack, res, data.levels(), chosen, data.weekly_hours, evidence),
+        "resources_checked": res.checked,
+        "courses_checked": pack.courses_checked,
+    }
 
 
 @router.get("/profiles/{profile_id}/roles/{role_id}/explain")

@@ -1,0 +1,65 @@
+# Supplementary free resources shown next to the courses on My plan: YouTube videos and articles.
+# They are linked, never copied, and they are NOT counted in the planned hours or the projected
+# fit: only courses (courses.yaml) are, under the declared course rules.
+# Every entry was checked on the date in `checked`:
+#   videos   – title and channel from YouTube's public oEmbed endpoint
+#              (https://www.youtube.com/oembed?url=...), length and upload date from the watch
+#              page. Kept only from recognisable channels (professional bodies, universities,
+#              the tool's makers, established educators); vendor sales videos were left out.
+#   articles – the page loaded (HTTP 200 in code, or in a browser where the site blocks scripts)
+#              and its title matched; publisher is the site owner.
+# `skills` are pack skill ids. AI-basics topics (ai_basics) are a declared foundation that every
+# person sees first; only `prompt_engineering` and `data_management` there are also pack skills.
+checked: "2026-10-24"
+
+videos:
+  - {id: yt_google_intro_genai, title: "Introduction to Generative AI", channel: "Google Cloud Tech", url: "https://www.youtube.com/watch?v=G2fqAlgmoPo", minutes: 22, published: "2023-05-08", topics: [genai_basics]}
+  - {id: yt_ibm_genai_models, title: "What are Generative AI models?", channel: "IBM Technology", url: "https://www.youtube.com/watch?v=hfIUstzHs9A", minutes: 9, published: "2023-03-22", topics: [genai_basics]}
+  - {id: yt_google_intro_llm, title: "Introduction to large language models", channel: "Google Cloud Tech", url: "https://www.youtube.com/watch?v=zizonToFXDs", minutes: 16, published: "2023-05-08", topics: [genai_basics]}
+  - {id: yt_ibm_how_llms_work, title: "How Large Language Models Work", channel: "IBM Technology", url: "https://www.youtube.com/watch?v=5sLYAQS9sWQ", minutes: 6, published: "2023-07-28", topics: [genai_basics]}
+  - {id: yt_assemblyai_prompting, title: "Prompt Engineering 101 - Crash Course & Tips", channel: "AssemblyAI", url: "https://www.youtube.com/watch?v=aOm75o2Z5-o", minutes: 14, published: "2023-06-24", skills: [prompt_engineering], topics: [prompting]}
+  - {id: yt_google_responsible_ai, title: "Introduction to Responsible AI", channel: "Google Cloud", url: "https://www.youtube.com/watch?v=w_3L1Bf2P_g", minutes: 8, published: "2024-04-08", topics: [responsible_ai]}
+  - {id: yt_mslearn_responsible_ai, title: "Responsible AI Principles AI-3017 | Episode 3", channel: "Microsoft Learn", url: "https://www.youtube.com/watch?v=8Ra5L1aQ5YM", minutes: 10, published: "2025-11-11", topics: [responsible_ai]}
+  - {id: yt_fei_internal_controls, title: "Internal Controls and the COSO Framework", channel: "Financial Executives International (FEI)", url: "https://www.youtube.com/watch?v=tWBPo--PzO4", minutes: 4, published: "2017-09-27", skills: [internal_controls]}
+  - {id: yt_coursera_stakeholders, title: "How to Map & Manage Project Stakeholders | Microsoft PM Guide", channel: "Coursera", url: "https://www.youtube.com/watch?v=brIoRSdrGkU", minutes: 5, published: "2025-10-17", skills: [stakeholder_management]}
+  - {id: yt_sea_energy_audit, title: "Energy Auditing VS. Energy Management", channel: "Sustainability Education Academy", url: "https://www.youtube.com/watch?v=Vgv3nmOesgo", minutes: 11, published: "2025-04-23", skills: [energy_management]}
+  - {id: yt_strategyzer_bmc, title: "Business Model Canvas Explained", channel: "Strategyzer", url: "https://www.youtube.com/watch?v=QoAOzMTLP5s", minutes: 2, published: "2011-09-01", skills: [digital_business_model]}
+  - {id: yt_srm_intro, title: "What is Supplier Relationship Management (SRM)?", channel: "Martin John Training", url: "https://www.youtube.com/watch?v=GPFDfVF_iqE", minutes: 3, published: "2023-07-11", skills: [vendor_management]}
+  - {id: yt_b2u_pestel, title: "PESTEL Analysis EXPLAINED", channel: "Business To You", url: "https://www.youtube.com/watch?v=bYn4CyL3r5w", minutes: 10, published: "2018-05-22", skills: [business_environment_analytics]}
+  - {id: yt_iso14001_internal_audit, title: "Internal Audits for ISO 14001", channel: "TNV Akademi", url: "https://www.youtube.com/watch?v=t7skiOMlguI", minutes: 6, published: "2024-03-23", skills: [green_auditing]}
+  - {id: yt_ualberta_hse, title: "Health, Safety, and Environment Management System: 10 Elements", channel: "Health, Safety and Environment U of A (University of Alberta)", url: "https://www.youtube.com/watch?v=XJhloigZ7ac", minutes: 1, published: "2022-02-23", skills: [ehs]}
+  - {id: yt_wwise_sox, title: "SOX Compliance Explained", channel: "WWISE (World Wide Industrial & Systems Engineers)", url: "https://www.youtube.com/watch?v=leskBVUQGEQ", minutes: 2, published: "2026-08-17", skills: [compliance_reporting, internal_controls]}
+  - {id: yt_circular_economy, title: "Circular Economy Explained by Ellen MacArthur (Beyond Recycling)", channel: "Sustainability Illustrated", url: "https://www.youtube.com/watch?v=aSCQd6A19YQ", minutes: 6, published: "2026-01-22", skills: [green_asset_management]}
+  - {id: yt_fcc_sql, title: "SQL Tutorial - Full Database Course for Beginners", channel: "freeCodeCamp.org", url: "https://www.youtube.com/watch?v=HXV3zeQKqGY", minutes: 261, published: "2018-07-02", skills: [sql, database_querying]}
+  - {id: yt_accountingstuff_fs, title: "The Ultimate Guide to Financial Statements", channel: "Accounting Stuff", url: "https://www.youtube.com/watch?v=eorpdJUWfTA", minutes: 35, published: "2024-10-02", skills: [financial_reporting, accounting_principles]}
+  - {id: yt_cfi_fpa, title: "Corporate Finance Explained | FP&A and Business Strategy", channel: "Corporate Finance Institute", url: "https://www.youtube.com/watch?v=QsaCZMJ_bco", minutes: 12, published: "2025-03-21", skills: [fpa, budget_management]}
+
+articles:
+  - {id: ar_ibm_genai, title: "What is Generative AI?", publisher: IBM, url: "https://www.ibm.com/think/topics/generative-ai", topics: [genai_basics]}
+  - {id: ar_ibm_prompting, title: "What Is Prompt Engineering?", publisher: IBM, url: "https://www.ibm.com/think/topics/prompt-engineering", skills: [prompt_engineering], topics: [prompting]}
+  - {id: ar_ms_responsible_ai, title: "Responsible AI Principles and Approach", publisher: Microsoft, url: "https://www.microsoft.com/en-us/ai/principles-and-approach", topics: [responsible_ai]}
+  - {id: ar_ibm_data_management, title: "What Is Data Management?", publisher: IBM, url: "https://www.ibm.com/think/topics/data-management", skills: [data_management], topics: [data_basics]}
+  - {id: ar_coso_internal_control, title: "Internal Control", publisher: COSO, url: "https://www.coso.org/guidance-on-ic", skills: [internal_controls]}
+  - {id: ar_iso_14000, title: "ISO 14000 family — Environmental management", publisher: ISO, url: "https://www.iso.org/standards/popular/iso-14000-family", skills: [green_auditing, esg]}
+  - {id: ar_iso_50001, title: "ISO 50001 — Energy management", publisher: ISO, url: "https://www.iso.org/iso-50001-energy-management.html", skills: [energy_management]}
+  - {id: ar_iso_45001, title: "ISO 45001:2018 - Occupational health and safety management systems", publisher: ISO, url: "https://www.iso.org/standard/45001", skills: [ehs]}
+  - {id: ar_ifrs_sustainability, title: "IFRS Sustainability Standards Navigator", publisher: IFRS Foundation, url: "https://www.ifrs.org/issued-standards/ifrs-sustainability-standards-navigator/", skills: [esg, compliance_reporting]}
+  - {id: ar_ifrs_conceptual, title: "Conceptual Framework for Financial Reporting", publisher: IFRS Foundation, url: "https://www.ifrs.org/issued-standards/list-of-standards/conceptual-framework/", skills: [accounting_principles, financial_reporting]}
+  - {id: ar_cipd_pestle, title: "PESTLE analysis", publisher: CIPD, url: "https://www.cipd.org/uk/knowledge/factsheets/pestle-analysis-factsheet/", skills: [business_environment_analytics]}
+  - {id: ar_cips_srm, title: "Supplier Relationship Management", publisher: CIPS, url: "https://www.cips.org/intelligence-hub/supplier-relationship-management", skills: [vendor_management]}
+  - {id: ar_strategyzer_bmc, title: "The Business Model Canvas", publisher: Strategyzer, url: "https://www.strategyzer.com/library/the-business-model-canvas", skills: [digital_business_model]}
+  - {id: ar_ms_power_bi, title: "What is Power BI?", publisher: Microsoft Learn, url: "https://learn.microsoft.com/en-us/power-bi/fundamentals/power-bi-overview", skills: [dashboards, data_visualisation]}
+  - {id: ar_ibm_data_viz, title: "What Is Data Visualization?", publisher: IBM, url: "https://www.ibm.com/think/topics/data-visualization", skills: [data_visualisation, dashboards]}
+  - {id: ar_ms_power_automate, title: "Explore the Power Automate home page", publisher: Microsoft Learn, url: "https://learn.microsoft.com/en-us/power-automate/getting-started", skills: [process_automation]}
+  - {id: ar_ms_tsql, title: "Transact-SQL Reference (Database Engine)", publisher: Microsoft Learn, url: "https://learn.microsoft.com/en-us/sql/t-sql/language-reference", skills: [sql, database_querying]}
+  - {id: ar_emf_circular, title: "The Circular Economy — Definition & Model Explained", publisher: Ellen MacArthur Foundation, url: "https://www.ellenmacarthurfoundation.org/topics/circular-economy-introduction/overview", skills: [green_asset_management]}
+  - {id: ar_ibm_big_data, title: "What is Big Data Analytics?", publisher: IBM, url: "https://www.ibm.com/think/topics/big-data-analytics", skills: [big_data_analytics]}
+  - {id: ar_ibm_data_migration, title: "What is Data Migration?", publisher: IBM, url: "https://www.ibm.com/think/topics/data-migration", skills: [data_migration]}
+
+# The AI-basics track: what everyone learns first, whatever role they aim for (declared
+# foundation, not a TalentCorp requirement). Each topic lists its courses (courses.yaml ids).
+ai_basics:
+  - {id: genai_basics, title: "What generative AI is and is not", courses: [ms_genai_basics]}
+  - {id: prompting, title: "Prompting AI tools well at work", skill: prompt_engineering, courses: [ms_copilot_finance_prompts, ms_get_started_copilot]}
+  - {id: responsible_ai, title: "Using AI responsibly", courses: [ms_responsible_ai_intro]}
+  - {id: data_basics, title: "Data basics behind AI", skill: data_management, courses: [ms_core_data_concepts]}
