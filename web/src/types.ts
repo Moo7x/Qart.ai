@@ -565,3 +565,42 @@ export type ProgressResponse = {
 }
 
 export type Stage = { name: string; engine: string; outcome: string; seconds: number }
+
+// ---- My plan tracks (src/pathway/tracks.py, GET /api/profiles/{id}/tracks) ----
+
+export type TrackCourse = { id: string; title: string; provider: string; url: string; minutes: number; level: string; planned: boolean; done: boolean }
+export type TrackVideo = { id: string; title: string; channel: string; url: string; minutes: number; published: string }
+export type TrackArticle = { id: string; title: string; publisher: string; url: string }
+export type TrackNode = {
+  id: string
+  title: string
+  skill: string | null
+  essential: boolean
+  now: number | null
+  required: number | null
+  after: number | null
+  courses: TrackCourse[]
+  videos: TrackVideo[]
+  articles: TrackArticle[]
+  status: 'done' | 'open' | 'no_course'
+}
+export type Track = { id: 'ai_basics' | 'without_ai' | 'with_ai'; title: string; why: string; nodes: TrackNode[] }
+export type RouteMetrics = {
+  hours: number
+  weeks: number
+  courses: number
+  fit_after: Record<Scenario, number>
+  points_per_10h: Record<Scenario, number>
+  essentials_unmet: string[]
+  ai_basics_hours?: number
+}
+export type TracksResponse = {
+  role_id: string
+  role_title: string
+  scenario: Scenario
+  weekly_hours: number
+  tracks: Track[]
+  comparison: { fit_now: Record<Scenario, number>; without_ai: RouteMetrics; with_ai: RouteMetrics; note: string }
+  resources_checked: string
+  courses_checked: string
+}

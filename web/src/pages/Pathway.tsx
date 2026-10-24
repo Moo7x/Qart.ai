@@ -3,11 +3,12 @@ import { useT } from '../i18n'
 import { Link } from 'react-router-dom'
 import { sendJSON, useApi } from '../api'
 import { PlanCompare } from '../components/PlanCompare'
-import { Roadmap } from '../components/Roadmap'
+import { RouteCompare } from '../components/RouteCompare'
+import { TrackMap } from '../components/TrackMap'
 import { ScenarioSwitch, SdgTag, JourneyRoute, NextStep, PROGRESS_EVENT } from '../components/journey'
 import { Loading, Problem } from '../components/ui'
 import { useJourney } from '../state'
-import type { PathwayResponse, ProgressResponse, Scenario } from '../types'
+import type { PathwayResponse, ProgressResponse, Scenario, TracksResponse } from '../types'
 import { NeedProfile } from './Roles'
 
 // Older builds kept completion in this browser; it is moved to the server once.
@@ -29,6 +30,7 @@ export function Pathway() {
 function ProfilePathway({ profileId, scenario }: { profileId: string; scenario: Scenario }) {
   const { t } = useT()
   const path = useApi<PathwayResponse>(`/api/profiles/${profileId}/pathway?scenario=${scenario}`)
+  const tracks = useApi<TracksResponse>(`/api/profiles/${profileId}/tracks?scenario=${scenario}`)
   // Self-reported completion, saved per profile on the server; it never changes skills or fit.
   const progress = useApi<ProgressResponse>(`/api/profiles/${profileId}/progress?scenario=${scenario}`)
   const [state, setState] = useState<ProgressResponse | null>(null)
@@ -124,13 +126,25 @@ function ProfilePathway({ profileId, scenario }: { profileId: string; scenario: 
             </section>
           )}
 
+          <section aria-label="Your roadmap" className="flex min-w-0 flex-col gap-4">
+            <div className="flex flex-col gap-1">
+              <h2 className="h2">Your roadmap</h2>
+              <p className="m-0 max-w-[720px] text-[13px] text-graphite">
+                Three tracks: AI basics first, then the skills this role needs without AI and with AI. Each step opens its courses, YouTube videos and articles; a step unlocks when the one before it in its track is done.
+              </p>
+            </div>
+            {tracks.loading && <Loading what="your roadmap" />}
+            {tracks.error && <Problem what="your roadmap" message={tracks.error} onRetry={tracks.reload} />}
+            {tracks.data && <TrackMap tracks={tracks.data.tracks} done={done} onToggle={toggle} paused={current?.paused ?? false} checked={tracks.data.resources_checked} />}
+          </section>
+
+          {tracks.data && <RouteCompare data={tracks.data.comparison} scenario={scenario} />}
+
           <div className="grid items-start gap-8 lg:grid-cols-[minmax(0,1.6fr)_minmax(280px,1fr)]">
-            <section aria-label="Plan steps" className="flex min-w-0 flex-col gap-3">
-              <h2 className="h2">Your route, step by step</h2>
-              {data.steps.length === 0 && <p className="m-0 text-sm">You already meet every requirement this pathway can teach. See the gaps below, if any.</p>}
-              <Roadmap steps={data.steps} done={done} onToggle={toggle} checked={data.courses_checked} paused={current?.paused ?? false} />
+            <section aria-label="About the plan" className="flex min-w-0 flex-col gap-3">
+              <h2 className="h2">About this plan</h2>
               <div className="flex flex-col gap-1.5 text-xs text-graphite">
-                <span>Ordered by prerequisites, essentials first. Each step unlocks when the one before is done. A short course raises a skill by at most one level; covering material is not the same as proven skill.</span>
+                <span>Courses are ordered by prerequisites, essentials first. A short course raises a skill by at most one level; covering material is not the same as proven skill. Videos and articles are extra and never counted in hours or fit.</span>
                 {data.uncovered.length > 0 && <span>No verified free course yet for: {data.uncovered.join(', ')}.</span>}
                 {data.partly_covered.length > 0 && <span>Only partly covered by free courses: {data.partly_covered.join(', ')}.</span>}
                 {data.essentials_unmet.length > 0 && <span className="text-weak">Essential skills still below the level after this path: {data.essentials_unmet.join(', ')}.</span>}

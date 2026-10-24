@@ -225,3 +225,8 @@
     color: #444;
   }
 }
+
+@keyframes pop {
+  from { opacity: 0; transform: translateY(6px) scale(0.985); }
+  to { opacity: 1; transform: none; }
+}
