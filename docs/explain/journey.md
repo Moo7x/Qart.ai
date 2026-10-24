@@ -72,6 +72,13 @@ from their CV, and courses they marked done under Learning (never as experience)
 compared with the last accepted version (new lines marked, removed lines struck through); the
 person accepts it as a new version and can download it as text. Nothing is invented.
 
+**Bahasa Malaysia.** `web/src/i18n.tsx` adds an English / Bahasa Malaysia switch (remembered in
+the browser) for navigation, onboarding, page titles and main actions. Texts are keyed by their
+English wording, so anything untranslated stays English. Evidence, source passages and numbers are
+not translated. The Malay text was written by the team with AI assistance; a native-speaker review
+is still pending and the switch says so. Occupation matching already accepts Malay job titles
+(BGE-M3 on RunPod: 75% of Malay test titles in the top 3).
+
 **Decision support.** `src/match/decision.py`: meters keep coverage (the fit), essential readiness
 (below level versus not stated) and profile completeness apart; the fit range recomputes with
 unstated skills at proficient (assumption-based, not a statistical interval); the most valuable
