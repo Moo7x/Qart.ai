@@ -3,7 +3,7 @@ import { useT } from '../i18n'
 import { Link, useNavigate } from 'react-router-dom'
 import { sendJSON, useApi } from '../api'
 import { Dots, ScenarioSwitch, SdgTag, levelText, JourneyRoute, NextStep } from '../components/journey'
-import { CompareRoles, Openings } from '../components/CompareRoles'
+import { CompareRoles, JobPosts, Openings } from '../components/CompareRoles'
 import { BestQuestion, MeterRow, WhatIf } from '../components/Decision'
 import { ExplainRole } from '../components/ExplainRole'
 import { ReportProblem } from '../components/Feedback'
@@ -109,7 +109,8 @@ function RoleDetail({ role, roles, onChoose, chosen, busy, situation, pack }: { 
         <button type="button" className="btn btn-v min-h-[44px]" onClick={onChoose} disabled={busy}>
           {chosen ? 'Your destination ✓ · open the plan' : t('Choose as my destination')}
         </button>
-        <span className="text-[13px] text-graphite">You can change it any time.</span>
+        <JobPosts title={role.title} className="btn min-h-[44px]" />
+        <span className="text-[13px] text-graphite">You can change your destination any time.</span>
       </div>
 
       <div role="tablist" aria-label="About this role" className="flex gap-1 overflow-x-auto border-b border-line">

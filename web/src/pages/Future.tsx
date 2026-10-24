@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { useApi } from '../api'
-import { jobSearches } from '../components/CompareRoles'
+import { JobPosts } from '../components/CompareRoles'
 import { Dots, ScenarioSwitch, SdgTag, JourneyRoute, NextStep, levelText } from '../components/journey'
 import { Loading, Problem } from '../components/ui'
 import { useJourney } from '../state'
@@ -11,13 +11,12 @@ function RoleList({ roles, destination, estimate }: { roles: FutureRole[]; desti
   return (
     <ol className="m-0 flex list-none flex-col p-0">
       {roles.map((r) => {
-        const [jobstreet] = jobSearches(r.title)
         return (
           <li key={r.role_id} className="grid grid-cols-[minmax(0,1fr)_auto] items-baseline gap-x-3 border-t border-line py-2.5 text-[14px]">
             <span className="min-w-0">
               <span className="font-medium">{r.title}</span>
               {r.role_id === destination && <span className="tag ml-2 bg-violet text-white">Your destination</span>}
-              <a href={jobstreet.url} target="_blank" rel="noreferrer" className="block text-[12px] text-violet">Search openings on JobStreet ↗</a>
+              <JobPosts title={r.title} label="See job posts →" className="block cursor-pointer border-0 bg-transparent p-0 text-left text-[12px] font-medium text-violet hover:underline" />
             </span>
             <span className="font-mono text-lg tracking-tight">
               {Math.round(r.fit)}<span className="text-[11px] text-graphite"> fit{estimate ? ' · est.' : ''}</span>
