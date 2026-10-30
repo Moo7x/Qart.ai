@@ -90,7 +90,7 @@ function ProfilePathway({ profileId, scenario }: { profileId: string; scenario: 
               <span className="eyebrow">Pathway · destination you chose</span>
               <h1 className="h1">{data.role_title}</h1>
               <p className="m-0 font-mono text-[13px] text-graphite">
-                {data.total_hours} h · RM 0 · {data.weekly_hours} h a week · about {data.weeks} week{data.weeks === 1 ? '' : 's'} · {finished} of {data.steps.length} steps done
+                {data.total_hours} h{tracks.data?.comparison.with_ai.ai_basics_hours ? ` + ${tracks.data.comparison.with_ai.ai_basics_hours} h AI basics` : ''} · RM 0 · {data.weekly_hours} h a week · about {data.weeks} week{data.weeks === 1 ? '' : 's'} · {finished} of {data.steps.length} steps done
               </p>
             </div>
             <div className="flex flex-col items-end gap-2">

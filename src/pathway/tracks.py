@@ -8,7 +8,9 @@
 Each skill is a node with its planned courses (from the pathway planner, unchanged), other free
 courses, and the checked videos and articles. The comparison plans the role twice with the same
 planner and the same course rules: once over the non-AI skills only, once over every skill plus
-the AI-basics courses. Fit is scored by the same engine; every number here is an estimate from
+the AI-basics courses. Plan hours are only the planned study steps; the AI-basics hours are
+reported apart (`plan_hours` + `ai_basics_hours` = the with-AI `hours`), never added silently.
+Fit is scored by the same engine; every number here is an estimate from
 declared rules, not a measured learning result. "With AI" means learning the AI-related skills,
 not studying with an AI tutor.
 """
@@ -196,12 +198,15 @@ def comparison(
                 len(f.steps) + len(basics),
                 f.essentials_unmet,
             ),
+            # The two parts of the with-AI hours, named so no screen adds them silently.
+            "plan_hours": f.total_hours,
             "ai_basics_hours": round(basics_hours, 1),
         },
         "note": (
             "Both routes use the same free courses, planner and course rules; fit is scored by "
-            "the same engine. AI-basics hours are added to the with-AI route and change fit only "
-            "where the role lists those skills. Estimates, not measured learning results."
+            "the same engine. The with-AI time is the plan's study steps plus the AI-basics "
+            "courses, named separately; AI basics change fit only where the role lists those "
+            "skills. Estimates, not measured learning results."
         ),
     }
 

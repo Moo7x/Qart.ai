@@ -600,6 +600,7 @@ export type RouteMetrics = {
   points_per_10h: Record<Scenario, number>
   essentials_unmet: string[]
   ai_basics_hours?: number
+  plan_hours?: number
 }
 export type TracksResponse = {
   role_id: string

@@ -89,7 +89,9 @@ counted in hours or fit. A node unlocks when the earlier nodes of its track are 
 **With AI or without.** The comparison plans the role twice with the same planner and course
 rules: over the non-digital skills only, and over every skill plus the AI-basics courses. The same
 engine scores fit under both scenarios; it shows hours, weeks, courses, fit after and fit gained
-per 10 hours. "With AI" means also learning the AI-related skills, not studying with an AI tutor;
+per 10 hours. Plan hours have one definition, the planned study steps: the with-AI time is shown
+as "X h plan + Y h AI basics" (`plan_hours`, `ai_basics_hours`), and the plan page adds
+"+ Y h AI basics" beside its total instead of folding it in. "With AI" means also learning the AI-related skills, not studying with an AI tutor;
 no study claims a speed-up from AI tutoring for this audience, so none is assumed.
 
 **Job posts.** Each role has a "See job posts" window with live searches on JobStreet (Malaysia
