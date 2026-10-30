@@ -8,6 +8,7 @@ import { Changes } from './pages/Changes'
 import { LiveIntelligence } from './pages/LiveIntelligence'
 import { Onboarding } from './pages/Onboarding'
 import { Pathway } from './pages/Pathway'
+import { Privacy } from './pages/Privacy'
 import { Occupations } from './pages/Occupations'
 import { Roles } from './pages/Roles'
 import { LanguageProvider } from './i18n'
@@ -113,6 +114,7 @@ function Shell() {
         <Route path="/trends" element={<PageError><Suspense fallback={<main className="page"><span role="status" className="cap">Loading the trends…</span></main>}><Trends /></Suspense></PageError>} />
         <Route path="/occupations" element={<Occupations />} />
         <Route path="/live" element={<LiveIntelligence />} />
+        <Route path="/privacy" element={<Privacy />} />
         <Route
           path="*"
           element={

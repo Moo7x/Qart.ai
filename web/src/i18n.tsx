@@ -32,6 +32,7 @@ const MS: Record<string, string> = {
   'SDG contribution': 'Sumbangan SDG',
   'Compare futures': 'Bandingkan masa depan',
   'Your picture at a glance': 'Gambaran anda secara ringkas',
+  Privacy: 'Privasi',
   // end phase2 A
   // onboarding
   'Your situation': 'Situasi anda',

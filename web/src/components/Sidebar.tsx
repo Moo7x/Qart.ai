@@ -118,6 +118,7 @@ export function Sidebar() {
         {t('Live intelligence')}
       </NavLink>
       <div className="flex-1" />
+      <NavLink to="/privacy" className={subClass}>{t('Privacy')}</NavLink>
       <LanguageSwitch />
       <div className="border-t border-surface p-2.5 font-mono text-[11px] leading-relaxed text-stone">
         LAST PIPELINE RUN
