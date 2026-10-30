@@ -58,7 +58,8 @@ def test_claims_without_a_real_quote_are_rejected(settings: Settings) -> None:
         "interests": ["data_digital"],
     }
     result = extract_mod.extract(load_pack(), nur_text(), settings, fake_model(answer))
-    assert [s.skill for s in result.skills] == ["cash_application"]
+    # `erp` comes from the ERP rule (the CV names SAP), not from the model: tests/test_erp_rule.py.
+    assert [s.skill for s in result.skills if s.skill != "erp"] == ["cash_application"]
     assert {r["skill"] for r in result.rejected} == {"sql", "made_up_skill"}
     assert result.current_role == "cash_application_analyst"
     assert "schema-constrained" in result.engine
@@ -69,7 +70,8 @@ def test_without_a_model_the_keyword_fallback_is_labelled(settings: Settings) ->
     assert result.engine == "BM25 keywords (fallback)"
     assert "fallback" in result.note
     assert result.current_role == "cash_application_analyst"
-    assert all(s.level is None for s in result.skills)  # the person sets levels
+    # The person sets keyword levels; only the ERP rule's claim has one (tests/test_erp_rule.py).
+    assert all(s.level is None for s in result.skills if s.skill != "erp")
     assert {"cash_application", "reconciliation"} <= {s.skill for s in result.skills}
 
 

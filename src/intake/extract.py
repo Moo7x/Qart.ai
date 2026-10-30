@@ -5,6 +5,8 @@ skill ids, so the model cannot name a skill we do not have. Code then checks eve
 sentence against the scrubbed CV and rejects any claim whose quote is not really there.
 Fallback (no key, timeout, invalid answer): keyword matching, labelled as such; its skills come
 without a level for the person to set.
+Both paths end with one rule: if the CV names an ERP system (params.ERP_ALIASES) and no `erp`
+claim was read, one is added at level 2 with that sentence as evidence, and the note says so.
 Levels are always the person's claims as read from their CV, never verified skill.
 """
 
@@ -13,7 +15,7 @@ import re
 from dataclasses import dataclass, field
 from typing import Any
 
-from src import llm
+from src import llm, params
 from src.config import Settings
 from src.intake.pii import scrub
 from src.intake.skill_search import bm25
@@ -25,6 +27,10 @@ MAX_CV_CHARS = 12_000  # longer text is cut: a CV, not a book
 KEYWORD_MIN_SCORE = 2.0  # BM25 score a sentence must reach to count as mentioning a skill
 MIN_QUOTE_CHARS = 8  # a quote shorter than this cannot show anything (e.g. a lone word)
 SENTENCE = re.compile(r"(?<=[.!?])\s+|\n+")
+ERP_PATTERN = re.compile(
+    r"(?<!\w)(" + "|".join(re.escape(a) for a in params.ERP_ALIASES) + r")(?!\w)", re.IGNORECASE
+)
+ERP_RULE_NOTE = "ERP claim added by rule: the CV names an ERP system"
 KINDS = ["finance_core", "data_digital", "green", "business"]
 
 Complete = llm.Complete
@@ -157,6 +163,25 @@ def keyword_extract(pack: Pack, cv_text: str) -> tuple[str, list[ClaimedSkill]]:
     return role, list(found.values())
 
 
+def erp_rule(pack: Pack, cv_text: str, skills: list[ClaimedSkill]) -> ClaimedSkill | None:
+    """An `erp` claim from the first CV sentence naming an ERP system, if none was read."""
+    if any(s.skill == "erp" for s in skills):
+        return None
+    for sentence in (s.strip().lstrip("-•* ") for s in SENTENCE.split(cv_text)):
+        if len(sentence) >= MIN_QUOTE_CHARS and ERP_PATTERN.search(sentence):
+            return ClaimedSkill("erp", pack.skills["erp"].name, params.ERP_RULE_LEVEL, sentence)
+    return None
+
+
+def _with_erp_rule(
+    pack: Pack, cv_text: str, skills: list[ClaimedSkill], note: str
+) -> tuple[list[ClaimedSkill], str]:
+    added = erp_rule(pack, cv_text, skills)
+    if added is None:
+        return skills, note
+    return [*skills, added], "; ".join(n for n in (note, ERP_RULE_NOTE) if n)
+
+
 def extract(
     pack: Pack, raw_text: str, settings: Settings, complete: Complete | None = None
 ) -> Extraction:
@@ -171,6 +196,10 @@ def extract(
             with stages.step("Check every quote is in your CV", "code"):
                 answer = json.loads(raw)
                 skills, rejected = _validate(pack, answer, text)
+                checked = (
+                    f"{len(rejected)} claim(s) rejected by the evidence check" if rejected else ""
+                )
+                skills, checked = _with_erp_rule(pack, text, skills, checked)
             role = answer.get("current_role")
             return Extraction(
                 current_role=role if role in pack.current_roles else "other",
@@ -178,7 +207,7 @@ def extract(
                 skills=skills,
                 interests=[k for k in answer.get("interests", []) if k in KINDS],
                 engine=f"{settings.llm_model} (schema-constrained)",
-                note=f"{len(rejected)} claim(s) rejected by the evidence check" if rejected else "",
+                note=checked,
                 removed=cleaned.removed,
                 rejected=rejected,
                 stages=stages.items,
@@ -189,6 +218,7 @@ def extract(
         note = "no language model configured; keyword fallback used"
     with stages.step("Match CV sentences to skills", "BM25 keywords"):
         role, skills = keyword_extract(pack, text)
+        skills, note = _with_erp_rule(pack, text, skills, note)
     return Extraction(
         current_role=role,
         years_experience=None,

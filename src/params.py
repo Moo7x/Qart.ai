@@ -125,3 +125,23 @@ AI_TRACK_KINDS = ("data_digital",)
 # Owner B adds parameters for the 0–5 level scale, fit range and bands, study versus practice,
 # the adaptive plan, SDG totals and badges here (and edits the matching, decision and pathway
 # sections above).
+
+# CV reading (src/intake/extract.py, B1).
+# ERP systems a CV may name. If the CV names one and no `erp` claim was read, a claim at
+# ERP_RULE_LEVEL is added with that sentence as evidence: naming the system a person posted or
+# reconciled in is direct evidence of using it. Declared list: the ERP and accounting systems
+# common in Malaysian GBS and SME finance; matched as whole words, ignoring case.
+ERP_ALIASES = (
+    "SAP",
+    "S/4HANA",
+    "Oracle",
+    "Dynamics 365",
+    "NetSuite",
+    "Workday Financials",
+    "Infor",
+    "Sage X3",
+    "SQL Accounting",
+    "AutoCount",
+)
+# Level of the rule's claim: "did it in a job" (2), the most a tool mention alone shows. Declared.
+ERP_RULE_LEVEL = 2
