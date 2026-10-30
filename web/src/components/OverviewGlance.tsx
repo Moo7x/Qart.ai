@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { formatWhen, useApi } from '../api'
 import { useJourney } from '../state'
 import type { ChangesResponse, MatchesResponse, PathwayResponse, ProgressResponse, RoleCard, Run, SourceStatus, TrendsResponse } from '../types'
+import type { SeriesForecast } from '../typesAgents'
 import { levelText, ScenarioSwitch, SdgTag } from './journey'
 import { KindLabel, WhyButton } from './Why'
 
@@ -144,10 +145,22 @@ function WeekCard() {
 }
 
 function TrendsCard({ period }: { period: string }) {
+  const { scenario } = useJourney()
   const trends = useApi<TrendsResponse>('/api/trends')
+  const forecasts = useApi<SeriesForecast[]>('/api/forecast')
   const data = trends.data
   if (!data) return null
-  const skills = [...data.skills].sort((a, b) => b.change - a.change)
+  // Two-year forecast change per group (A2), shown beside the observed change when available.
+  const ahead = new Map(
+    (forecasts.data ?? [])
+      .filter((f) => f.kind === 'employment_share' && f.forecast.length > 0)
+      .map((f) => [f.series_id.split(':')[1], (f.forecast.at(-1)?.point ?? 0) - (f.history.at(-1)?.value ?? 0)]),
+  )
+  const next = (group: string) => {
+    const v = ahead.get(group)
+    return v === undefined ? '' : ` → ${v > 0 ? '+' : ''}${v.toFixed(2)}`
+  }
+  const skills = [...data.skills_by_scenario[scenario]].sort((a, b) => b.change - a.change)
   const rising = skills.filter((s) => s.change > 0).slice(0, SNAPSHOT_ITEMS)
   const falling = skills.filter((s) => s.change < 0).slice(-SNAPSHOT_ITEMS).reverse()
   const groups = data.employment.filter((g) => g.change_recent !== null).sort((a, b) => (b.change_recent ?? 0) - (a.change_recent ?? 0))
@@ -160,7 +173,7 @@ function TrendsCard({ period }: { period: string }) {
       <span className="cap">Skills and jobs on the move</span>
       <div className="grid gap-3 text-[13px] sm:grid-cols-2">
         <div className="min-w-0">
-          <span className="mb-1 flex flex-wrap items-center gap-1.5 text-[12px] text-graphite">Skills · weight change, fast adoption <KindLabel kind="assumption" /></span>
+          <span className="mb-1 flex flex-wrap items-center gap-1.5 text-[12px] text-graphite">Skills · weight change, {scenario} adoption <KindLabel kind="assumption" /></span>
           <ul className="m-0 flex list-none flex-col gap-1 p-0">
             {rising.map((s) => line(s.name, `+${s.change}%`, true))}
             {falling.map((s) => line(s.name, `${s.change}%`, false))}
@@ -169,17 +182,18 @@ function TrendsCard({ period }: { period: string }) {
         <div className="min-w-0">
           <span className="mb-1 flex flex-wrap items-center gap-1.5 text-[12px] text-graphite">Job groups · share of employees {years} <KindLabel kind="observed" /></span>
           <ul className="m-0 flex list-none flex-col gap-1 p-0">
-            {groups.slice(0, SNAPSHOT_ITEMS).filter((g) => (g.change_recent ?? 0) > 0).map((g) => line(g.title, `+${g.change_recent} pp`, true))}
-            {groups.slice(-SNAPSHOT_ITEMS).filter((g) => (g.change_recent ?? 0) < 0).reverse().map((g) => line(g.title, `${g.change_recent} pp`, false))}
+            {groups.slice(0, SNAPSHOT_ITEMS).filter((g) => (g.change_recent ?? 0) > 0).map((g) => line(g.title, `+${g.change_recent}${next(g.group)} pp`, true))}
+            {groups.slice(-SNAPSHOT_ITEMS).filter((g) => (g.change_recent ?? 0) < 0).reverse().map((g) => line(g.title, `${g.change_recent}${next(g.group)} pp`, false))}
           </ul>
+          {ahead.size > 0 && <span className="mt-1 flex flex-wrap items-center gap-1.5 text-[11px] text-graphite">past change → forecast next two years <KindLabel kind="estimate" /></span>}
         </div>
       </div>
       <div className="mt-auto flex flex-wrap items-center gap-2">
         <WhyButton
           title="Where these trends come from"
           panes={[
-            { key: 'skills', title: 'Skills', hint: 'Assumption applied to observed AI use', body: <p className="m-0">How much each skill's weight in the destination roles moves under fast AI adoption: routine work loses weight and AI-complementing work gains it, in proportion to the automation-style share of AI use on its tasks (Anthropic Economic Index, {period}). It is a scenario rule, not a forecast of jobs.</p> },
-            { key: 'groups', title: 'Job groups', hint: 'Observed', body: <p className="m-0">Change in each occupation group's share of all employees in Malaysia, in percentage points, {years} (OpenDOSM, wages by occupation). Finance clerks sit in clerical support, accountants in professionals.</p> },
+            { key: 'skills', title: 'Skills', hint: 'Assumption applied to observed AI use', body: <p className="m-0">How much each skill's weight in the destination roles moves under {scenario} AI adoption: routine work loses weight and AI-complementing work gains it, in proportion to the automation-style share of AI use on its tasks (Anthropic Economic Index, {period}). It is a scenario rule, not a forecast of jobs.</p> },
+            { key: 'groups', title: 'Job groups', hint: 'Observed, then estimated', body: <p className="m-0">Change in each occupation group's share of all employees in Malaysia, in percentage points, {years} (OpenDOSM, wages by occupation). After the arrow: the forecast change over the next two years, from the model that beat keeping the last value in a backtest (or the last value itself when none did). Finance clerks sit in clerical support, accountants in professionals. The Future skills radar shows each model and its range.</p> },
           ]}
         />
         <Link className="text-[13px]" to="/trends">Future skills radar →</Link>
