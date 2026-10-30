@@ -660,6 +660,9 @@ on data we never tuned on.
   3. rerank the fused top 10 with bge-reranker-v2-m3.
 - **Fallbacks:** BM25 alone when RunPod is unavailable (labelled); dense+BM25 without rerank when
   the rerank job fails (labelled).
+- **Outcome (measured):** hybrid+rerank did not beat dense+rerank on the hold-out set (top-1 68%
+  vs 70%) or the development set (68% vs 72%), so the app keeps dense+rerank and the hybrid stays
+  in the evaluation only; skill search is unchanged for the same reason (docs/RUNPOD_EVAL.md).
 - **Hold-out set:** commit it **before** any tuning. Contents: 40 new queries (at least 15 in Malay,
   5 mixed English/Malay, 5 with typos), each with the accepted O*NET-SOC codes, labelled by the
   team and dated.

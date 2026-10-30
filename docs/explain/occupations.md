@@ -20,6 +20,12 @@ English lookup worked with GPU calls disabled; the Malay example previously retu
 hits. The page now explains index readiness, model/fallback engines and empty results separately.
 Cloud catalogue state and successful paid inference still require the deployed app's run log.
 
+Measured choice: `python -m src.occupations.evaluate [dev|holdout]` compares keyword, dense,
+dense+rerank, hybrid (keyword and dense merged by reciprocal rank fusion) and hybrid+rerank on two
+labelled sets, one frozen before the hybrid was built. Dense+rerank was best or equal on both
+(hold-out top-1 70%, keyword 46%), so the app uses it; when only the rerank job fails, the dense
+list is shown, labelled. Results: docs/RUNPOD_EVAL.md.
+
 Tests use fake catalogue/model responses, including the bilingual example. Browser QA uses the
 real local API with a copied database, no paid inference. Source: O*NET database (CC BY 4.0), source
 and date displayed; a query match is not verified proficiency, future demand or a hiring prediction.
