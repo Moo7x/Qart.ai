@@ -1,4 +1,4 @@
-"""Hybrid occupation search: keyword and dense lists fused by rank, each fallback labelled."""
+"""Rank fusion for the measured hybrid search, and the labelled fallback when reranking fails."""
 
 import json
 from pathlib import Path
@@ -49,24 +49,7 @@ class FailRerank(httpx.MockTransport):
         return self.inner.handle_request(request)
 
 
-def test_hybrid_reranks_and_names_every_engine(engine: Engine, settings: Settings) -> None:
-    live = runpod_settings(settings)
-    index = {"Bookkeeping, Accounting, and Auditing Clerks": 0, "Software Developers": 1}
-    log: list[str] = []
-    with httpx.Client(transport=Capture(fake_services(log, index))) as client:
-        cat.refresh_catalogue(engine, client)
-        cat.build_index(engine, live, client)
-        found = detect(engine, live, "Accounts Clerk", client)
-    assert found.engine.startswith("BM25 + ") and "reranker" in found.engine
-    assert [s["name"] for s in found.stages][:4] == [
-        "Embed your words on the GPU",
-        "Compare with 3 occupations",
-        "Keyword search over occupations",
-        "Merge the two lists",
-    ]
-
-
-def test_a_failed_rerank_still_returns_the_merged_list_labelled(
+def test_a_failed_rerank_still_returns_the_dense_list_labelled(
     engine: Engine, settings: Settings
 ) -> None:
     live = runpod_settings(settings)
@@ -75,6 +58,6 @@ def test_a_failed_rerank_still_returns_the_merged_list_labelled(
         cat.refresh_catalogue(engine, client)
         cat.build_index(engine, live, client)
     with httpx.Client(transport=FailRerank(Capture(fake_services([], index)))) as client:
-        found = detect(engine, live, "Accounts Clerk", client)
+        found = detect(engine, live, "Bookkeeping, Accounting, and Auditing Clerks", client)
     assert "no re-rank" in found.engine and "re-ranker unavailable" in found.note
-    assert found.matches and found.matches[0].soc == "43-3031.00"  # keyword + dense agree
+    assert found.matches and found.matches[0].soc == "43-3031.00"  # the closest by meaning

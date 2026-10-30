@@ -1,12 +1,13 @@
 """Match a job title or short description to standard O*NET occupations.
 
-Primary (hybrid): BM25 keyword search and BGE-M3 dense search on RunPod each return their
-HYBRID_CANDIDATES best occupations; reciprocal rank fusion merges the two lists (an occupation
-high in either list rises; one high in both rises most), and the BGE cross-encoder reranker on
-RunPod reorders the RERANK_CANDIDATES best of the fused list. Keyword search catches exact
-titles and codes; dense search catches meaning, Malay and typos; the reranker reads query and
-occupation text together.
-Fallbacks, each labelled: the fused list without reranking when only the rerank job fails; BM25
+Primary: embed the query with BGE-M3 on RunPod, take the DENSE_CANDIDATES most similar
+occupations (cosine; vectors are normalised), then reorder them with the BGE cross-encoder
+reranker on RunPod.
+A hybrid search (BM25 and dense lists merged by reciprocal rank fusion, then reranked) was built
+and measured on a hold-out set frozen beforehand (docs/RUNPOD_EVAL.md): it did not beat
+dense+rerank (top-1 68% vs 70%) and was no better on the development set (68% vs 72%), so the app
+keeps dense+rerank; `rrf` stays for the evaluation.
+Fallbacks, each labelled: the dense list without reranking when only the rerank job fails; BM25
 alone when RunPod is not configured, cold beyond the budget, or has no index yet. Either way the
 person confirms the occupation; a match is a suggestion, not a classification of the person.
 """
@@ -26,11 +27,10 @@ from src.occupations.catalogue import MODEL, catalogue, search_text, vector_tabl
 from src.runpod_jobs import INTERACTIVE_BUDGET_SECONDS, RunPodError, embed, rerank
 from src.stages import Stages
 
-DENSE_CANDIDATES = 10  # dense-only shortlist (kept for the evaluation's dense+rerank baseline)
-# Hybrid search. Each list contributes its 50 best occupations (about 5% of the 1,016), so a
-# match one method ranks poorly can still be found by the other. RRF_K = 60 is the constant of
-# the original reciprocal rank fusion paper (Cormack, Clarke & Büttcher 2009), not tuned here.
-# The reranker scores the 10 best fused occupations: enough to recover a near miss, cheap to score.
+DENSE_CANDIDATES = 10  # passed to the reranker: enough to recover a near miss, cheap to score
+# Hybrid search, measured in the evaluation only. Each list contributes its 50 best occupations
+# (about 5% of the 1,016). RRF_K = 60 is the constant of the original reciprocal rank fusion paper
+# (Cormack, Clarke & Büttcher 2009), not tuned. The reranker scores the 10 best fused occupations.
 HYBRID_CANDIDATES = 50
 RRF_K = 60
 RERANK_CANDIDATES = 10
@@ -161,23 +161,19 @@ def detect(
             with stages.step("Embed your words on the GPU", "BGE-M3 on RunPod"):
                 [qv] = embed(settings, [query], INTERACTIVE_BUDGET_SECONDS, http)
             with stages.step(f"Compare with {len(index)} occupations", "cosine similarity"):
-                dense = dense_candidates(qv, index, HYBRID_CANDIDATES)
-            with stages.step("Keyword search over occupations", "BM25"):
-                keyword = bm25(rows, keyword_query(query), HYBRID_CANDIDATES)
-            with stages.step("Merge the two lists", "reciprocal rank fusion"):
-                fused = rrf([[s for s, _ in dense], [s for s, _ in keyword]])
+                dense = dense_candidates(qv, index, DENSE_CANDIDATES)
             if not use_reranker:
-                return result(f"BM25 + {MODEL} hybrid (RunPod)", "", fused)
-            shortlist = [soc for soc, _ in fused[:RERANK_CANDIDATES]]
+                return result(f"{MODEL} dense (RunPod)", "", dense)
+            shortlist = [soc for soc, _ in dense]
             passages = [search_text(by_soc[soc]) for soc in shortlist]
             try:
-                with stages.step(f"Re-rank the best {len(passages)}", "bge-reranker on RunPod"):
+                with stages.step(f"Re-rank the closest {len(passages)}", "bge-reranker on RunPod"):
                     scores = rerank(settings, query, passages, INTERACTIVE_BUDGET_SECONDS, http)
             except (RunPodError, httpx.HTTPError, ValueError, KeyError, TypeError) as exc:
-                note = f"re-ranker unavailable ({type(exc).__name__}); merged list shown"
-                return result(f"BM25 + {MODEL} hybrid (RunPod, no re-rank)", note, fused)
+                note = f"re-ranker unavailable ({type(exc).__name__}); closest by meaning shown"
+                return result(f"{MODEL} dense (RunPod, no re-rank)", note, dense)
             ranked = sorted(zip(shortlist, scores, strict=True), key=lambda x: -x[1])
-            return result(f"BM25 + {MODEL} hybrid + bge-reranker-v2-m3 (RunPod)", "", ranked)
+            return result(f"{MODEL} + bge-reranker-v2-m3 (RunPod)", "", ranked)
         except (RunPodError, httpx.HTTPError, ValueError, KeyError, TypeError) as exc:
             note = f"RunPod unavailable ({type(exc).__name__}); keyword search used"
         finally:
