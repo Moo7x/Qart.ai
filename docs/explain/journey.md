@@ -20,6 +20,16 @@ nine GBS destinations, a person-chosen goal and an ordered free-resource pathway
 1, 3–6). `src/intake/` scrubs identifiers and checks model quotes; missing services use labelled
 keyword/form fallbacks. `src/pack.py` validates the curated skill, role, resource and SDG pack.
 
+**Levels.** `src/levels.py` reads `data/packs/gbs_fa/levels.yaml`: a 0–5 scale (none · novice ·
+aware · working · proficient · expert) and, for every skill a destination role requires, five
+"I can…" sentences, one per level. The person picks the highest sentence true for their work in the
+last two years; level 3 and above need work done, not study. The sentences are our own, written to
+the level structure of SFIA 9 and, for finance skills, the Skills Framework for Accountancy (ACRA
+and SkillsFuture Singapore) and UF's accounts payable competency; each skill cites its basis and
+its TalentCorp page, and stays `status: draft` until the team reviews it. Stored levels keep their
+numbers: core requirements stay at 3 ("working"), upskill and support at 2 ("aware").
+`python -m src.levels --missing` lists required skills without five sentences.
+
 **Calculation.** `src/match/engine.py` computes
 `fit = 100 × sum(weight × min(claimed / required, 1)) / sum(weight)`.
 Unknown levels contribute zero but remain "not stated"; essential gaps mean "longer route".

@@ -1,0 +1,649 @@
+# Level descriptions (docs/PHASE2_PLAN.md §4 C1): a 0–5 scale and, per skill, five
+# "I can…" sentences. The sentences are our own, written from the level structure of the
+# cited frameworks; no framework text is copied (SFIA text is copyrighted). Each skill is
+# `status: draft` until the team has reviewed its sentences. Levels are always a person's
+# claim, never verified skill. `python -m src.levels --missing` lists required skills
+# without a full set of sentences.
+checked: '2026-10-30'
+scale:
+- level: 0
+  label: none
+  meaning: No exposure
+- level: 1
+  label: novice
+  meaning: Understands the basics and can follow along
+- level: 2
+  label: aware
+  meaning: Does routine tasks with guidance or a template
+- level: 3
+  label: working
+  meaning: Handles the full task alone, including common problems
+- level: 4
+  label: proficient
+  meaning: Handles complex cases, improves the process, guides others
+- level: 5
+  label: expert
+  meaning: Sets standards or direction for a team, function or region
+rules:
+- 'Done, not studied: levels 3 and above need work experience; study alone counts as level 2 at most.'
+- Pick the highest sentence that is true for your work in the last two years.
+- Link a CV line where possible.
+skills:
+  accounting_principles:
+    status: draft
+    basis:
+    - title: ACRA and SkillsFuture Singapore, Skills Framework for Accountancy
+      url: https://www.acra.gov.sg/advancing-accountancy/skills-framework/
+      read: '2026-10-30'
+    - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+      url: https://sfia-online.org/en/sfia-9/responsibilities
+      read: '2026-10-30'
+    - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+      url: https://www.talentcorp.com.my
+      read: '2026-10-23'
+    anchors:
+      1: I can explain double entry, accruals and the difference between cash and profit.
+      2: I record routine transactions under the right accounts with a reviewer checking my work.
+      3: I apply the accounting standards to my own area's transactions, including common judgement calls.
+      4: I resolve complex treatment questions, write the accounting position, and coach others on it.
+      5: I set the accounting policies an entity or service centre applies and answer to auditors for them.
+  advanced_technology_integration:
+    status: draft
+    basis:
+    - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+      url: https://sfia-online.org/en/sfia-9/responsibilities
+      read: '2026-10-30'
+    - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 43'
+      url: https://www.talentcorp.com.my
+      read: '2026-10-23'
+    anchors:
+      1: I can explain how tools such as AI, RPA or cloud platforms fit into finance work.
+      2: I use a new finance technology set up by others and report issues to the project team.
+      3: I bring a new tool into my team's process end to end, including testing and training users.
+      4: I lead integration of several technologies across processes and fix the problems they cause.
+      5: I decide which technologies a finance function adopts and the roadmap for bringing them in.
+  big_data_analytics:
+    status: draft
+    basis:
+    - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+      url: https://sfia-online.org/en/sfia-9/responsibilities
+      read: '2026-10-30'
+    - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+      url: https://www.talentcorp.com.my
+      read: '2026-10-23'
+    anchors:
+      1: I can explain what large data sets are and how they differ from a spreadsheet extract.
+      2: I run prepared analyses on large finance data sets and check the outputs with a reviewer.
+      3: I build my own analysis of large data sets to answer a business question and explain the result.
+      4: I design analyses across many sources, handle data quality issues, and guide other analysts.
+      5: I set how a finance function uses large-scale data and which questions it invests in.
+  budget_management:
+    status: draft
+    basis:
+    - title: ACRA and SkillsFuture Singapore, Skills Framework for Accountancy
+      url: https://www.acra.gov.sg/advancing-accountancy/skills-framework/
+      read: '2026-10-30'
+    - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+      url: https://sfia-online.org/en/sfia-9/responsibilities
+      read: '2026-10-30'
+    - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+      url: https://www.talentcorp.com.my
+      read: '2026-10-23'
+    anchors:
+      1: I can explain how a budget is built and how actuals are compared with it.
+      2: I collect budget inputs and update templates under a lead's direction.
+      3: I prepare and monitor the budget for my own cost centres, including reforecasts.
+      4: I run the budget cycle for a business unit, challenge assumptions, and train budget holders.
+      5: I set the budgeting process and calendar for an entity or region.
+  business_environment_analytics:
+    status: draft
+    basis:
+    - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+      url: https://sfia-online.org/en/sfia-9/responsibilities
+      read: '2026-10-30'
+    - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 45'
+      url: https://www.talentcorp.com.my
+      read: '2026-10-23'
+    anchors:
+      1: I can explain how market, economic or regulatory changes can affect a business's numbers.
+      2: I gather external data, such as rates or market indices, into a prepared analysis.
+      3: I analyse how an external change affects my area and present the impact on its own.
+      4: I build scenario analyses of external drivers for leadership and guide others doing them.
+      5: I set how a finance function tracks its business environment and feeds it into decisions.
+  compliance_reporting:
+    status: draft
+    basis:
+    - title: ACRA and SkillsFuture Singapore, Skills Framework for Accountancy
+      url: https://www.acra.gov.sg/advancing-accountancy/skills-framework/
+      read: '2026-10-30'
+    - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+      url: https://sfia-online.org/en/sfia-9/responsibilities
+      read: '2026-10-30'
+    - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 24'
+      url: https://www.talentcorp.com.my
+      read: '2026-10-23'
+    anchors:
+      1: I can explain which regulatory and statutory reports apply to my entity and why.
+      2: I prepare sections of compliance reports from a checklist, with a reviewer signing off.
+      3: I prepare and submit compliance reports for my area on time, resolving routine queries.
+      4: I handle complex or new reporting requirements, improve the process, and train preparers.
+      5: I own the compliance reporting framework for an entity or region and answer to regulators.
+  continuous_improvement:
+    status: draft
+    basis:
+    - title: ACRA and SkillsFuture Singapore, Skills Framework for Accountancy
+      url: https://www.acra.gov.sg/advancing-accountancy/skills-framework/
+      read: '2026-10-30'
+    - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+      url: https://sfia-online.org/en/sfia-9/responsibilities
+      read: '2026-10-30'
+    - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+      url: https://www.talentcorp.com.my
+      read: '2026-10-23'
+    anchors:
+      1: I can explain basic improvement ideas such as root cause, waste and standard work.
+      2: I take part in improvement activities and suggest changes to my own tasks.
+      3: I run an improvement on my own process end to end and measure the result.
+      4: I lead improvement projects across teams and coach others in the methods.
+      5: I set the improvement programme and targets for a team, function or service centre.
+  credit_collections:
+    status: draft
+    basis:
+    - title: ACRA and SkillsFuture Singapore, Skills Framework for Accountancy
+      url: https://www.acra.gov.sg/advancing-accountancy/skills-framework/
+      read: '2026-10-30'
+    - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+      url: https://sfia-online.org/en/sfia-9/responsibilities
+      read: '2026-10-30'
+    - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+      url: https://www.talentcorp.com.my
+      read: '2026-10-23'
+    anchors:
+      1: I can explain credit terms, ageing and why overdue accounts are followed up.
+      2: I send reminders and log customer replies on overdue accounts following a script.
+      3: I manage my own portfolio of customer accounts, including disputes and payment plans.
+      4: I handle escalated or high-value accounts, improve the collection process, and train collectors.
+      5: I set the credit and collections policy for an entity or service centre.
+  dashboards:
+    status: draft
+    basis:
+    - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+      url: https://sfia-online.org/en/sfia-9/responsibilities
+      read: '2026-10-30'
+    - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+      url: https://www.talentcorp.com.my
+      read: '2026-10-23'
+    anchors:
+      1: I can read a finance dashboard and explain what its main charts show.
+      2: I refresh existing dashboards and make small changes to them from a request.
+      3: I build a dashboard from data I prepare, choose the right charts, and publish it to users.
+      4: I build dashboards over several data sources, set the layout standards, and guide other builders.
+      5: I decide the reporting and dashboard standards a finance function uses.
+  data_management:
+    status: draft
+    basis:
+    - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+      url: https://sfia-online.org/en/sfia-9/responsibilities
+      read: '2026-10-30'
+    - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+      url: https://www.talentcorp.com.my
+      read: '2026-10-23'
+    anchors:
+      1: I can explain why data must be accurate, complete and owned by someone.
+      2: I maintain records and fix data errors following a set procedure.
+      3: I manage the data for my own area, including definitions, quality checks and access requests.
+      4: I design data controls across processes, resolve ownership disputes, and train data stewards.
+      5: I set the data management standards for a finance function or service centre.
+  data_migration:
+    status: draft
+    basis:
+    - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+      url: https://sfia-online.org/en/sfia-9/responsibilities
+      read: '2026-10-30'
+    - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 47'
+      url: https://www.talentcorp.com.my
+      read: '2026-10-23'
+    anchors:
+      1: I can explain what a data migration is and why data must be mapped and checked.
+      2: I prepare and check migration files from a mapping template under supervision.
+      3: I migrate my own area's data end to end, including reconciliation of what moved.
+      4: I plan complex migrations across entities or systems and guide the migration team.
+      5: I set the migration approach and acceptance rules for a programme or function.
+  database_querying:
+    status: draft
+    basis:
+    - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+      url: https://sfia-online.org/en/sfia-9/responsibilities
+      read: '2026-10-30'
+    - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+      url: https://www.talentcorp.com.my
+      read: '2026-10-23'
+    anchors:
+      1: I can explain what a database table and a query are.
+      2: I run and adjust saved queries to pull the data I need.
+      3: I write my own queries with joins and filters to answer a question and check the result.
+      4: I write complex queries over many tables, tune slow ones, and review others' queries.
+      5: I set how a finance team accesses and queries its data sources.
+  digital_business_model:
+    status: draft
+    basis:
+    - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+      url: https://sfia-online.org/en/sfia-9/responsibilities
+      read: '2026-10-30'
+    - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 38'
+      url: https://www.talentcorp.com.my
+      read: '2026-10-23'
+    anchors:
+      1: I can explain how digital channels or platforms change the way a business earns revenue.
+      2: I gather data and examples for a digital business case prepared by others.
+      3: I build a business case for a digital change in my area and test its assumptions.
+      4: I shape new digital service models for a business unit and guide the teams evaluating them.
+      5: I set the direction for how a function or service centre adopts new digital business models.
+  ehs:
+    status: draft
+    basis:
+    - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+      url: https://sfia-online.org/en/sfia-9/responsibilities
+      read: '2026-10-30'
+    - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+      url: https://www.talentcorp.com.my
+      read: '2026-10-23'
+    anchors:
+      1: I can explain the main environment, health and safety rules that apply to my workplace.
+      2: I follow EHS procedures and record incidents or checks using set forms.
+      3: I keep my own area's EHS records and checks complete and act on routine findings.
+      4: I investigate complex EHS issues, improve procedures, and train others on them.
+      5: I set the EHS policy and targets for a site, entity or region.
+  energy_management:
+    status: draft
+    basis:
+    - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+      url: https://sfia-online.org/en/sfia-9/responsibilities
+      read: '2026-10-30'
+    - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 39'
+      url: https://www.talentcorp.com.my
+      read: '2026-10-23'
+    anchors:
+      1: I can explain how energy use is measured and why it matters for cost and emissions.
+      2: I collect energy and utility data into a prepared template.
+      3: I analyse energy use and cost for my own area and report the findings on my own.
+      4: I lead energy audits across sites, propose savings with business cases, and guide others.
+      5: I set the energy management targets and programme for an entity or region.
+  erp:
+    status: draft
+    basis:
+    - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+      url: https://sfia-online.org/en/sfia-9/responsibilities
+      read: '2026-10-30'
+    - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+      url: https://www.talentcorp.com.my
+      read: '2026-10-23'
+    anchors:
+      1: I can explain what an ERP system does and how its finance modules connect.
+      2: I post and look up routine transactions in an ERP system with guidance.
+      3: I do my full set of tasks in an ERP system on my own, including fixing common posting errors.
+      4: I handle complex ERP issues, test changes or upgrades, and train other users.
+      5: I decide how a finance function configures and uses its ERP system.
+  esg:
+    status: draft
+    basis:
+    - title: ACRA and SkillsFuture Singapore, Skills Framework for Accountancy
+      url: https://www.acra.gov.sg/advancing-accountancy/skills-framework/
+      read: '2026-10-30'
+    - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+      url: https://sfia-online.org/en/sfia-9/responsibilities
+      read: '2026-10-30'
+    - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 38'
+      url: https://www.talentcorp.com.my
+      read: '2026-10-23'
+    anchors:
+      1: I can explain what environmental, social and governance reporting covers.
+      2: I collect ESG data from teams into a prepared template, checked by a reviewer.
+      3: I prepare the ESG data and disclosures for my area on my own, including routine queries.
+      4: I handle complex ESG reporting questions, improve the data process, and guide others.
+      5: I set the ESG reporting approach and standards for an entity or region.
+  financial_reporting:
+    status: draft
+    basis:
+    - title: ACRA and SkillsFuture Singapore, Skills Framework for Accountancy
+      url: https://www.acra.gov.sg/advancing-accountancy/skills-framework/
+      read: '2026-10-30'
+    - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+      url: https://sfia-online.org/en/sfia-9/responsibilities
+      read: '2026-10-30'
+    - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+      url: https://www.talentcorp.com.my
+      read: '2026-10-23'
+    anchors:
+      1: I can read a set of financial statements and explain what each one shows.
+      2: I prepare schedules and notes for financial reports with a reviewer checking them.
+      3: I prepare the financial reports for my entity or area on my own, including analysis of movements.
+      4: I handle complex reporting, such as consolidations or new standards, and review others' work.
+      5: I set the reporting approach and timetable for a group, function or region.
+  financial_systems:
+    status: draft
+    basis:
+    - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+      url: https://sfia-online.org/en/sfia-9/responsibilities
+      read: '2026-10-30'
+    - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+      url: https://www.talentcorp.com.my
+      read: '2026-10-23'
+    anchors:
+      1: I can explain which systems a finance function uses and how data flows between them.
+      2: I support a system change by testing scripts and logging issues for the project team.
+      3: I deliver a finance system change for my area end to end, including user acceptance testing.
+      4: I lead finance system implementations across teams, resolve design issues, and train key users.
+      5: I set the finance systems roadmap and design principles for a function or service centre.
+  fixed_assets:
+    status: draft
+    basis:
+    - title: ACRA and SkillsFuture Singapore, Skills Framework for Accountancy
+      url: https://www.acra.gov.sg/advancing-accountancy/skills-framework/
+      read: '2026-10-30'
+    - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+      url: https://sfia-online.org/en/sfia-9/responsibilities
+      read: '2026-10-30'
+    - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+      url: https://www.talentcorp.com.my
+      read: '2026-10-23'
+    anchors:
+      1: I can explain how assets are capitalised and depreciated.
+      2: I add assets and run depreciation in the register following a procedure.
+      3: I manage the fixed asset register for my entity on my own, including disposals and transfers.
+      4: I handle complex cases such as impairments or asset reviews, improve the process, and train others.
+      5: I set the fixed asset policy and controls for an entity or service centre.
+  fpa:
+    status: draft
+    basis:
+    - title: ACRA and SkillsFuture Singapore, Skills Framework for Accountancy
+      url: https://www.acra.gov.sg/advancing-accountancy/skills-framework/
+      read: '2026-10-30'
+    - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+      url: https://sfia-online.org/en/sfia-9/responsibilities
+      read: '2026-10-30'
+    - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+      url: https://www.talentcorp.com.my
+      read: '2026-10-23'
+    anchors:
+      1: I can explain how a forecast differs from a budget and what drives a plan.
+      2: I update forecast models with new actuals and inputs under a lead's direction.
+      3: I build and run the forecast for my area on my own and explain the main drivers.
+      4: I build planning models for a business unit, challenge assumptions, and coach analysts.
+      5: I set the planning and forecasting approach for an entity or region.
+  general_ledger:
+    status: draft
+    basis:
+    - title: ACRA and SkillsFuture Singapore, Skills Framework for Accountancy
+      url: https://www.acra.gov.sg/advancing-accountancy/skills-framework/
+      read: '2026-10-30'
+    - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+      url: https://sfia-online.org/en/sfia-9/responsibilities
+      read: '2026-10-30'
+    - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+      url: https://www.talentcorp.com.my
+      read: '2026-10-23'
+    anchors:
+      1: I can explain the chart of accounts and how journals reach the ledger.
+      2: I prepare routine journals and simple account reconciliations with review.
+      3: I run my own ledger close tasks end to end, including accruals and reconciliations.
+      4: I handle complex entries and close issues, improve the close process, and train others.
+      5: I own the ledger close design and controls for an entity or service centre.
+  green_asset_management:
+    status: draft
+    basis:
+    - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+      url: https://sfia-online.org/en/sfia-9/responsibilities
+      read: '2026-10-30'
+    - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+      url: https://www.talentcorp.com.my
+      read: '2026-10-23'
+    anchors:
+      1: I can explain what makes an asset green and why it is tracked separately.
+      2: I record green asset data, such as certifications or energy ratings, into a register.
+      3: I keep my own area's green asset records and reporting complete on my own.
+      4: I assess complex green asset cases, improve the tracking process, and guide others.
+      5: I set the green asset policy and criteria for an entity or region.
+  green_auditing:
+    status: draft
+    basis:
+    - title: ACRA and SkillsFuture Singapore, Skills Framework for Accountancy
+      url: https://www.acra.gov.sg/advancing-accountancy/skills-framework/
+      read: '2026-10-30'
+    - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+      url: https://sfia-online.org/en/sfia-9/responsibilities
+      read: '2026-10-30'
+    - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 24'
+      url: https://www.talentcorp.com.my
+      read: '2026-10-23'
+    anchors:
+      1: I can explain what a green audit checks and what evidence it needs.
+      2: I collect evidence for an environmental audit using a checklist.
+      3: I carry out green audit checks for my area on my own and report the findings.
+      4: I lead complex green audits, improve the audit approach, and train auditors.
+      5: I set the green audit programme and standards for an entity or region.
+  green_procurement:
+    status: draft
+    basis:
+    - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+      url: https://sfia-online.org/en/sfia-9/responsibilities
+      read: '2026-10-30'
+    - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+      url: https://www.talentcorp.com.my
+      read: '2026-10-23'
+    anchors:
+      1: I can explain what green procurement criteria are and why buyers use them.
+      2: I apply set green criteria when I raise or check purchase requests.
+      3: I run my own sourcing with green criteria, including assessing supplier evidence.
+      4: I write green criteria for complex categories, improve the policy's use, and guide buyers.
+      5: I set the green procurement policy and standards for an entity or region.
+  internal_controls:
+    status: draft
+    basis:
+    - title: ACRA and SkillsFuture Singapore, Skills Framework for Accountancy
+      url: https://www.acra.gov.sg/advancing-accountancy/skills-framework/
+      read: '2026-10-30'
+    - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+      url: https://sfia-online.org/en/sfia-9/responsibilities
+      read: '2026-10-30'
+    - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 24'
+      url: https://www.talentcorp.com.my
+      read: '2026-10-23'
+    anchors:
+      1: I can explain what an internal control is and why segregation of duties matters.
+      2: I perform set control checks and keep the evidence a reviewer asks for.
+      3: I test the controls in my own area on my own and report and follow up exceptions.
+      4: I evaluate controls across processes, design fixes for weaknesses, and train control owners.
+      5: I set the internal control framework for an entity or service centre.
+  invoice_processing:
+    status: draft
+    basis:
+    - title: ACRA and SkillsFuture Singapore, Skills Framework for Accountancy
+      url: https://www.acra.gov.sg/advancing-accountancy/skills-framework/
+      read: '2026-10-30'
+    - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+      url: https://sfia-online.org/en/sfia-9/responsibilities
+      read: '2026-10-30'
+    - title: 'University of Florida HR, TEAMS Titles competency: Accounts Payable (A-P)'
+      url: https://teams-titles.hr.ufl.edu/job-competency/accounts-payable-a-p/
+      read: '2026-10-30'
+    - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+      url: https://www.talentcorp.com.my
+      read: '2026-10-23'
+    anchors:
+      1: I can explain the steps from purchase order to payment, including a three-way match.
+      2: I enter and code invoices under review, and check goods were received before posting.
+      3: I handle my own invoice queue end to end, including credit notes and exceptions.
+      4: I resolve complex AP errors, reconcile AP to the ledger, and train other processors.
+      5: I design the AP process and controls for an entity or service centre.
+  process_automation:
+    status: draft
+    basis:
+    - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+      url: https://sfia-online.org/en/sfia-9/responsibilities
+      read: '2026-10-30'
+    - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+      url: https://www.talentcorp.com.my
+      read: '2026-10-23'
+    anchors:
+      1: I can explain what automation tools such as RPA or workflow flows can and cannot do.
+      2: I run and monitor automations built by others and report when they fail.
+      3: I build and maintain an automation for one of my own tasks, including handling its errors.
+      4: I build automations across processes, set build standards, and coach other builders.
+      5: I decide which processes a function automates and how automations are governed.
+  process_optimisation:
+    status: draft
+    basis:
+    - title: ACRA and SkillsFuture Singapore, Skills Framework for Accountancy
+      url: https://www.acra.gov.sg/advancing-accountancy/skills-framework/
+      read: '2026-10-30'
+    - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+      url: https://sfia-online.org/en/sfia-9/responsibilities
+      read: '2026-10-30'
+    - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 24'
+      url: https://www.talentcorp.com.my
+      read: '2026-10-23'
+    anchors:
+      1: I can explain how a process map shows steps, hand-offs and delays.
+      2: I map and measure steps of a process with guidance from a lead.
+      3: I redesign my own process on my own and show the time or error saved.
+      4: I optimise processes across teams, handle complex trade-offs, and coach others.
+      5: I set process design standards and priorities for a function or service centre.
+  reporting:
+    status: draft
+    basis:
+    - title: ACRA and SkillsFuture Singapore, Skills Framework for Accountancy
+      url: https://www.acra.gov.sg/advancing-accountancy/skills-framework/
+      read: '2026-10-30'
+    - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+      url: https://sfia-online.org/en/sfia-9/responsibilities
+      read: '2026-10-30'
+    - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+      url: https://www.talentcorp.com.my
+      read: '2026-10-23'
+    anchors:
+      1: 'I can explain what a business report needs: purpose, audience, sources and dates.'
+      2: I prepare routine reports from templates and check figures against the source.
+      3: I prepare my own reports and documentation end to end, including commentary on changes.
+      4: I build complex reports from several sources, improve the reporting pack, and train others.
+      5: I set the reporting and documentation standards for a team, function or region.
+  stakeholder_management:
+    status: draft
+    basis:
+    - title: ACRA and SkillsFuture Singapore, Skills Framework for Accountancy
+      url: https://www.acra.gov.sg/advancing-accountancy/skills-framework/
+      read: '2026-10-30'
+    - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+      url: https://sfia-online.org/en/sfia-9/responsibilities
+      read: '2026-10-30'
+    - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+      url: https://www.talentcorp.com.my
+      read: '2026-10-23'
+    anchors:
+      1: I can explain who my work's stakeholders are and what each one needs from it.
+      2: I keep stakeholders updated through set channels and pass on issues I cannot resolve.
+      3: I manage my own stakeholders on my own, including agreeing deadlines and handling routine conflicts.
+      4: I manage senior or difficult stakeholders across teams and coach others in doing it.
+      5: I set how a function engages its stakeholders and service levels.
+  standard_costing:
+    status: draft
+    basis:
+    - title: ACRA and SkillsFuture Singapore, Skills Framework for Accountancy
+      url: https://www.acra.gov.sg/advancing-accountancy/skills-framework/
+      read: '2026-10-30'
+    - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+      url: https://sfia-online.org/en/sfia-9/responsibilities
+      read: '2026-10-30'
+    - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+      url: https://www.talentcorp.com.my
+      read: '2026-10-23'
+    anchors:
+      1: I can explain what a standard cost is and how variances from it arise.
+      2: I update standard cost data and run variance reports following a procedure.
+      3: I set and maintain standard costs for my area and explain the variances on my own.
+      4: I review standards across products or sites, resolve complex variances, and train others.
+      5: I set the costing method and standard-setting policy for an entity or region.
+  statistical_analytics:
+    status: draft
+    basis:
+    - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+      url: https://sfia-online.org/en/sfia-9/responsibilities
+      read: '2026-10-30'
+    - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+      url: https://www.talentcorp.com.my
+      read: '2026-10-23'
+    anchors:
+      1: I can explain averages, spread and why a sample may not represent the whole.
+      2: I run prepared statistical analyses and check that the outputs look sensible.
+      3: I choose and run the right statistical method for a question and explain its limits.
+      4: I build statistical models for complex questions, check them, and guide other analysts.
+      5: I set how a finance function uses statistical methods and how results are checked.
+  system_performance:
+    status: draft
+    basis:
+    - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+      url: https://sfia-online.org/en/sfia-9/responsibilities
+      read: '2026-10-30'
+    - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 24'
+      url: https://www.talentcorp.com.my
+      read: '2026-10-23'
+    anchors:
+      1: I can explain how system speed, uptime and errors affect finance work.
+      2: I record system issues and performance figures using set monitoring tools.
+      3: I monitor my system's performance on my own and fix or escalate common problems.
+      4: I diagnose complex performance problems, improve monitoring, and guide support staff.
+      5: I set performance standards and service levels for finance systems.
+  systems_integration:
+    status: draft
+    basis:
+    - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+      url: https://sfia-online.org/en/sfia-9/responsibilities
+      read: '2026-10-30'
+    - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 24'
+      url: https://www.talentcorp.com.my
+      read: '2026-10-23'
+    anchors:
+      1: I can explain how finance systems pass data to each other through interfaces.
+      2: I check interface outputs and log errors for the technical team.
+      3: I configure and test an interface or system setting for my area on my own.
+      4: I design integrations across systems, resolve complex interface failures, and guide others.
+      5: I set the integration architecture and configuration standards for finance systems.
+  variance_analytics:
+    status: draft
+    basis:
+    - title: ACRA and SkillsFuture Singapore, Skills Framework for Accountancy
+      url: https://www.acra.gov.sg/advancing-accountancy/skills-framework/
+      read: '2026-10-30'
+    - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+      url: https://sfia-online.org/en/sfia-9/responsibilities
+      read: '2026-10-30'
+    - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+      url: https://www.talentcorp.com.my
+      read: '2026-10-23'
+    anchors:
+      1: I can explain what a variance is and how price and volume effects differ.
+      2: I calculate variances in a prepared template and flag large ones for review.
+      3: I analyse the variances for my area on my own and explain their causes to the business.
+      4: I analyse complex variances across units, improve the analysis method, and coach analysts.
+      5: I set how variances are measured and reported for an entity or region.
+  vendor_management:
+    status: draft
+    basis:
+    - title: ACRA and SkillsFuture Singapore, Skills Framework for Accountancy
+      url: https://www.acra.gov.sg/advancing-accountancy/skills-framework/
+      read: '2026-10-30'
+    - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+      url: https://sfia-online.org/en/sfia-9/responsibilities
+      read: '2026-10-30'
+    - title: 'University of Florida HR, TEAMS Titles competency: Accounts Payable (A-P)'
+      url: https://teams-titles.hr.ufl.edu/job-competency/accounts-payable-a-p/
+      read: '2026-10-30'
+    - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+      url: https://www.talentcorp.com.my
+      read: '2026-10-23'
+    anchors:
+      1: I can explain the vendor lifecycle from onboarding to payment and review.
+      2: I set up and update vendor records following an approval procedure.
+      3: I manage my own group of vendors on my own, including performance issues and queries.
+      4: I handle strategic or difficult vendors, improve the vendor process, and train others.
+      5: I set the vendor management policy and standards for an entity or service centre.
