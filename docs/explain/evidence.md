@@ -13,6 +13,13 @@ Rule: never invent statistics; every number cites a source.
 ## How it works
 1. **Registry** (`data/sources.yaml`): what each source shows and does not show, its terms and
    cadence. Only registered sources are collected.
+Forecasts (`src/evidence/forecast.py`, `GET /api/forecast`): each OpenDOSM group share is
+forecast one and two years ahead by the model that beat keeping the last value in a rolling
+backtest (naive, drift, linear, damped trend, smoothing, Theta, or a global gradient-boosting model
+trained across all groups); if none beats it, the forecast is the last value and says so.
+Intervals are the chosen model's own backtest errors. Role and skill outlooks reuse the group
+forecasts and keep demand and observed AI use as separate parts.
+
 2. **Collectors** (`src/collectors/`): OpenDOSM wages by occupation (API: employees per major
    group, used for employment shares, and the group's median and mean monthly pay, shown on role
    cards and never scored; share code reads only the `employees` series), DOSM Job Market
