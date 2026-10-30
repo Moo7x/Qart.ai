@@ -92,6 +92,31 @@ def finish(
         )
 
 
+def save(engine: Engine, run_id: str, status: str, result: dict[str, Any]) -> None:
+    """Store a run's state while it is still going (the progress check is several turns)."""
+    with engine.begin() as conn:
+        conn.execute(
+            update(agent_run_table)
+            .where(agent_run_table.c.id == run_id)
+            .values(status=status, result=result)
+        )
+
+
+def count_since(engine: Engine, kind: str, subject: str, profile_id: str, since: datetime) -> int:
+    # SQLite stores datetimes without a zone, so compare with a naive UTC value there.
+    moment = since.replace(tzinfo=None) if engine.dialect.name == "sqlite" else since
+    with engine.connect() as conn:
+        rows = conn.execute(
+            select(agent_run_table.c.id).where(
+                agent_run_table.c.kind == kind,
+                agent_run_table.c.subject == subject,
+                agent_run_table.c.profile_id == profile_id,
+                agent_run_table.c.started_at >= moment,
+            )
+        )
+        return len(rows.all())
+
+
 def read(engine: Engine, run_id: str) -> dict[str, Any] | None:
     with engine.connect() as conn:
         run = (

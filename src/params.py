@@ -99,6 +99,14 @@ SEGMENT_MAX_SECONDS = 90.0
 PASSAGE_MIN_CHARS = 300
 PASSAGE_MAX_CHARS = 900
 FRAGMENT_WORDS = 8  # words that open a passage, used as its #:~:text= link anchor
+# Progress check (src/agents/check.py): at least 2 and at most 4 questions before judging, enough
+# for a concrete answer and one follow-up; a check can raise a level by at most 2 at once; a
+# person can run 3 checks per skill per day, so the agent cannot be retried until it agrees.
+CHECK_MIN_QUESTIONS = 2
+CHECK_MAX_QUESTIONS = 4
+CHECK_MAX_RAISE = 2
+CHECKS_PER_SKILL_PER_DAY = 3
+CHECK_MIN_QUOTE_CHARS = 8  # a quote shorter than this cannot show anything
 
 # --- Matching (src/match/engine.py) ------------------------------------------------------------
 # Bump when the formula/planning algorithm changes, even if its numeric parameters do not.

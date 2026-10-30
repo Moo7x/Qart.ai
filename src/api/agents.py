@@ -14,7 +14,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field
 from sqlalchemy import Engine
 
-from src.agents import store
+from src.agents import check, store
 from src.agents.scout import run_scout
 from src.api.evidence import get_engine, get_settings
 from src.config import Settings
@@ -59,9 +59,64 @@ def start_scout(
     return RunStarted(run_id=run_id)
 
 
+class CheckIn(BaseModel):
+    skill: str = Field(min_length=1, max_length=64)
+
+
+class AnswerIn(BaseModel):
+    text: str = Field(min_length=1, max_length=2000)
+
+
+class DecideIn(BaseModel):
+    accept: bool
+
+
+def _checked(call: Any) -> dict[str, Any]:
+    try:
+        result: dict[str, Any] = call()
+        return result
+    except check.CheckError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+
+
+@router.post("/profiles/{profile_id}/checks", status_code=201)
+def start_check(
+    profile_id: str,
+    body: CheckIn,
+    engine: Engine = Depends(get_engine),
+    settings: Settings = Depends(get_settings),
+) -> dict[str, Any]:
+    """Progress check (C6): the first question about work the person did."""
+    return _checked(lambda: check.start(engine, settings, profile_id, body.skill))
+
+
+@router.post("/profiles/{profile_id}/checks/{session_id}/answer")
+def answer_check(
+    profile_id: str,
+    session_id: str,
+    body: AnswerIn,
+    engine: Engine = Depends(get_engine),
+    settings: Settings = Depends(get_settings),
+) -> dict[str, Any]:
+    """The next question, or the proposed level once there is enough to judge."""
+    return _checked(lambda: check.answer(engine, settings, profile_id, session_id, body.text))
+
+
+@router.post("/profiles/{profile_id}/checks/{session_id}/decide")
+def decide_check(
+    profile_id: str,
+    session_id: str,
+    body: DecideIn,
+    engine: Engine = Depends(get_engine),
+    settings: Settings = Depends(get_settings),
+) -> dict[str, Any]:
+    """The person accepts (the level becomes an agent_check claim) or declines (nothing changes)."""
+    return _checked(lambda: check.decide(engine, settings, profile_id, session_id, body.accept))
+
+
 @router.get("/agents/runs/{run_id}")
 def agent_run(run_id: str, engine: Engine = Depends(get_engine)) -> dict[str, Any]:
     found = store.read(engine, run_id)
-    if found is None:
+    if found is None or found["kind"] != "scout":  # a check holds the person's answers
         raise HTTPException(status_code=404, detail="unknown run")
     return found
