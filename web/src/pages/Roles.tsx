@@ -8,6 +8,7 @@ import { BestQuestion, MeterRow, WhatIf } from '../components/Decision'
 import { ExplainRole } from '../components/ExplainRole'
 import { ReportProblem } from '../components/Feedback'
 import { RoleTasks } from '../components/RoleTasks'
+import { PayLine, ScoreChip } from '../components/ScoreWhy'
 import { Loading, Problem } from '../components/ui'
 import { useJourney } from '../state'
 import type { GapColumn, MatchesResponse, PackInfo, ProfileData, RoleCard, SensitivityResponse, Situation } from '../types'
@@ -72,7 +73,7 @@ const TABS: [Tab, string][] = [
   ['whatif', 'What if'],
 ]
 
-function RoleDetail({ role, roles, onChoose, chosen, busy, situation, pack }: { role: RoleCard; roles: RoleCard[]; onChoose: () => void; chosen: boolean; busy: boolean; situation: Situation; pack: PackInfo | null }) {
+function RoleDetail({ role, roles, matches, onChoose, chosen, busy, situation, pack }: { role: RoleCard; roles: RoleCard[]; matches: MatchesResponse; onChoose: () => void; chosen: boolean; busy: boolean; situation: Situation; pack: PackInfo | null }) {
   const { t } = useT()
   const { ready, partly } = bars(role)
   const { profileId, scenario } = useJourney()
@@ -87,11 +88,9 @@ function RoleDetail({ role, roles, onChoose, chosen, busy, situation, pack }: { 
             {role.effort_hours} h of verified free courses · about {role.effort_weeks} week{role.effort_weeks === 1 ? '' : 's'} at your pace
           </span>
         </div>
-        <span className="flex items-baseline gap-1.5" aria-label={`Fit ${Math.round(role.fit)} out of 100`}>
-          <span className="font-mono text-[56px] leading-none tracking-[-0.05em]">{Math.round(role.fit)}</span>
-          <span className="font-mono text-[13px] text-graphite">/ 100 fit</span>
-        </span>
+        <ScoreChip role={role} matches={matches} />
       </div>
+      <PayLine pay={role.pay} />
       <div className="flex flex-col gap-1.5">
         <div className="flex h-2 overflow-hidden bg-mist" aria-hidden="true">
           <span style={{ width: `${ready}%` }} className="bg-rising" />
@@ -316,7 +315,10 @@ export function Roles() {
                       )}
                     </span>
                   </span>
-                  <span className="text-right font-mono text-xl tracking-tight">{Math.round(r.fit)}</span>
+                  <span className="flex flex-col items-end">
+                    <span className="font-mono text-xl tracking-tight">{Math.round(r.fit)}</span>
+                    {r.band && <span className="text-[11px] text-graphite">{r.band}</span>}
+                  </span>
                 </button>
                 <JobPosts title={r.title} className="job-link ml-11" />
                 </div>
@@ -329,7 +331,7 @@ export function Roles() {
 
           <div className="flex min-w-0 flex-col gap-6">
             <BestQuestion profileId={profileId} scenario={scenario} onAnswered={() => { current.reload(); baseline.reload(); stability.reload() }} />
-            <RoleDetail role={role} roles={data.roles} chosen={data.destination === role.role_id} busy={busy} onChoose={() => choose(role.role_id)} situation={profile.data?.profile.situation ?? 'working'} pack={pack.data} />
+            <RoleDetail role={role} roles={data.roles} matches={data} chosen={data.destination === role.role_id} busy={busy} onChoose={() => choose(role.role_id)} situation={profile.data?.profile.situation ?? 'working'} pack={pack.data} />
           </div>
         </div>
       )}

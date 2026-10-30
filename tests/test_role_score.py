@@ -156,7 +156,13 @@ def test_pay_uses_the_latest_year_of_the_roles_group_and_never_zero() -> None:
 def test_matches_cards_carry_c2_fields_and_pay_never_moves_fit(client: TestClient) -> None:
     body = {"situation": "working", "skills": {"reporting": {"level": 2, "source": "self"}}}
     pid = client.post("/api/profiles", json=body).json()["id"]
-    for card in client.get(f"/api/profiles/{pid}/matches").json()["roles"]:
+    body = client.get(f"/api/profiles/{pid}/matches").json()
+    assert body["bands"] == {
+        "thresholds": params.BAND_THRESHOLDS,
+        "below": params.BAND_BELOW,
+        "kind": "assumption",
+    }
+    for card in body["roles"]:
         assert card["band"] == band(card["fit"]) and card["band_basis"] == "assumption"
         assert {"low", "high", "basis"} <= set(card["fit_range"])
         assert card["fit_range"]["low"] <= card["fit"] <= card["fit_range"]["high"]

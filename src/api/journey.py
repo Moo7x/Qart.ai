@@ -328,6 +328,11 @@ def matches(
         "current_impact": IMPACT_MEANING[current.impact] if current else None,
         "destination": destination,
         "roles": cards,
+        "bands": {
+            "thresholds": params.BAND_THRESHOLDS,
+            "below": params.BAND_BELOW,
+            "kind": "assumption",
+        },
     }
 
 
