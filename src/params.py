@@ -52,6 +52,27 @@ RUN_STALE_AFTER_HOURS = 24
 # --- Agents and forecasting (owner A, docs/PHASE2_PLAN.md §7) ---------------------------------
 # Owner A adds parameters for the scout and progress-check agents, the change test, forecasting,
 # privacy retention and the load test here.
+# Forecasts (src/evidence/forecast.py). Horizons in steps of the series (years for OpenDOSM): one
+# and two years, the app's scenario horizon. Declared parameter.
+FORECAST_HORIZONS = (1, 2)
+# Interval: the 10th and 90th percentile of the chosen model's backtest errors at that horizon,
+# added to the forecast. Empirical, so it is only shown with at least this many errors.
+INTERVAL_QUANTILES = (0.1, 0.9)
+MIN_INTERVAL_ERRORS = 4
+# Rolling backtest needs at least this many points before its first origin; a series with fewer
+# points (e.g. job ads since the last coverage break) is shown without a forecast, and says why.
+FORECAST_MIN_HISTORY = 6
+# A model is used only if its error beats keeping the last value (relative error below 1);
+# otherwise the forecast is the last value, labelled as such.
+NAIVE_RATIO_TO_BEAT = 1.0
+# Global gradient-boosting model (scikit-learn): learns the next yearly change from the last three
+# changes and the level, across all occupation groups at once, so a short series borrows strength
+# from the others. Needs this many training rows; a small, shallow model for ~15 yearly points.
+GBR_LAGS = 3
+GBR_MIN_TRAIN_ROWS = 20
+GBR_MAX_DEPTH = 2
+GBR_MAX_ITER = 100
+GBR_RANDOM_STATE = 0  # fixed so the same data always gives the same forecast
 
 # --- Matching (src/match/engine.py) ------------------------------------------------------------
 # Bump when the formula/planning algorithm changes, even if its numeric parameters do not.

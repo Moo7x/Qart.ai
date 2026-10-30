@@ -11,10 +11,11 @@ from sqlalchemy import Engine
 from src import params
 from src.config import Settings
 from src.evidence import measures
+from src.evidence.forecast import forecasts
 from src.evidence.models import history
 from src.evidence.registry import registry
 from src.evidence.signals import Signal, build_signals
-from src.evidence.store import list_runs, query_observations
+from src.evidence.store import latest_observation_id, list_runs, query_observations
 from src.evidence.trends import trends
 from src.match.evidence import automation_evidence
 from src.pack import load_pack
@@ -155,6 +156,53 @@ def trend_series(engine: Engine = Depends(get_engine)) -> dict[str, Any]:
     """Rising and declining series for the Trends page, each labelled by kind in the UI."""
     rows = query_observations(engine)
     return trends(load_pack(), rows, automation_evidence(rows))
+
+
+class HistoryPoint(BaseModel):
+    period: str
+    value: float
+
+
+class ForecastPoint(BaseModel):
+    period: str
+    point: float
+    low: float | None
+    high: float | None
+
+
+class SeriesForecast(BaseModel):
+    """One forecast series or outlook (docs/PHASE2_PLAN.md C8); every value is an estimate."""
+
+    series_id: str
+    kind: Literal["employment_share", "job_ads", "role_outlook", "skill_outlook"]
+    title: str
+    history: list[HistoryPoint]
+    forecast: list[ForecastPoint]
+    model: str | None
+    baseline: str
+    backtest: dict[str, Any] | None
+    label: Literal["estimate"]
+    source: str
+    fetched_at: str | None
+    note: str
+    components: dict[str, Any] | None = None
+
+
+_forecast_cache: dict[int, list[SeriesForecast]] = {}
+
+
+@router.get("/forecast")
+def forecast_series(engine: Engine = Depends(get_engine)) -> list[SeriesForecast]:
+    """Forecasts with their backtest and the role and skill outlooks, recomputed on new data."""
+    latest = latest_observation_id(engine)
+    if latest not in _forecast_cache:
+        rows = query_observations(engine)
+        _forecast_cache.clear()  # only the newest data's forecasts are kept
+        _forecast_cache[latest] = [
+            SeriesForecast.model_validate(entry)
+            for entry in forecasts(load_pack(), rows, automation_evidence(rows))
+        ]
+    return _forecast_cache[latest]
 
 
 @router.get("/pipeline/forecast-check")
