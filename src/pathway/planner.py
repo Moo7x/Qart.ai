@@ -180,7 +180,7 @@ def _step_sdgs(pack: Pack, skills: list[str]) -> list[StepSdg]:
     """SDG targets of the gap skills a step's material serves (it counts toward their level)."""
     seen: dict[str, StepSdg] = {}
     for skill in skills:
-        for link in pack.sdg.skill_kinds[pack.skills[skill].kind]:
+        for link in pack.sdg.for_skill(skill, pack.skills[skill].kind):
             if link.target not in seen:
                 target = pack.sdg.targets[link.target]
                 seen[link.target] = StepSdg(link.target, target.title, link.how)
@@ -329,7 +329,7 @@ def plan_pathway(
             summary.setdefault(sdg.target, [])
             if sdg.how not in summary[sdg.target]:
                 summary[sdg.target].append(sdg.how)
-    for link in [*pack.sdg.pathway, *pack.sdg.destination]:
+    for link in [*pack.sdg.pathway, *pack.sdg.for_role(match.role_id)]:
         summary.setdefault(link.target, []).append(link.how)
     total = round(sum(s.hours for s in steps), 1)
     planned_study = {k: v for k, v in after_study.items() if v is not None}
@@ -347,7 +347,7 @@ def plan_pathway(
         fit_before=match.fit,
         fit_after=after.fit,
         sdg_summary=summary,
-        pathway_sdgs=[*pack.sdg.pathway, *pack.sdg.destination],
+        pathway_sdgs=[*pack.sdg.pathway, *pack.sdg.for_role(match.role_id)],
         practice_steps=practice_steps,
         study_hours=total,
         practice_weeks={

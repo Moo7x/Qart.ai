@@ -224,10 +224,10 @@ def _check_profile(pack: Pack, data: ProfileData) -> None:
 
 def _role_sdgs(pack: Pack, match: RoleMatch) -> list[dict[str, str]]:
     seen: dict[str, dict[str, str]] = {}
-    links = list(pack.sdg.destination)
+    links = list(pack.sdg.for_role(match.role_id))
     for req in match.requirements:
         if req.tier == "upskill":
-            links += pack.sdg.skill_kinds[pack.skills[req.skill].kind]
+            links += pack.sdg.for_skill(req.skill, pack.skills[req.skill].kind)
     for link in links:
         seen.setdefault(
             link.target,
