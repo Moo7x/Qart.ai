@@ -1,479 +1,1135 @@
 # Qart.ai Phase 2 (finalist) plan
 
-Scope and work split for the finalist round. It extends `docs/PLAN.md`; where the two differ, this
-file wins. Every coding agent reads `AGENTS.md`, then this file, then only the sections of
-`docs/PLAN.md` its task touches.
+The work plan for the finalist round: what is built, by whom, in which files, to which rules, and
+how the two branches merge without conflicts. It extends `docs/PLAN.md` (the product and system
+design); where the two differ, this file wins.
 
-Two branches are cut from `main` after Stage 0:
+**How a coding agent uses this file**
+1. Read `AGENTS.md`, then §0–§6 of this file, then your own branch's section (§7 for owner A, §8
+   for owner B). Read the other branch's section only for context.
+2. Work through your section's work packages in order. Each package lists its goal, the files you
+   may touch, the exact rules, the tests that prove it and what is out of scope.
+3. Touch only the files your branch owns (§5). Anything else is a request to the other owner,
+   written in the commit body and raised by the human. Never edit it yourself.
+4. When this plan is silent or two rules conflict, stop and ask the human. Do not guess, and do not
+   add, remove or reinterpret a feature. Record each answer in `docs/decision_log.md`.
+5. Stage 0 (§3) is **done**. Do not redo, move or "improve" it.
 
 | Branch | Owner | Theme |
 |---|---|---|
-| `p2-ai-experience` | Moo7x (A) | Evidence, forecasting, search, agents, Overview and trends screens, status, privacy, load test |
-| `p2-scoring-pathway` | Meiirman (B) | Skill levels, fit score, learning-gain model, pathway, SDG mapping, personas, onboarding, badges |
+| `p2-ai-experience` | Moo7x (A) | Navigation and Overview, trends and forecasting, change test and refresh, evidence robustness, search and RunPod, course catalogue pipeline, visible scout agent, progress-check agent, privacy, status, load test, cost |
+| `p2-scoring-pathway` | Meiirman (B) | Correctness fixes, 0–5 described levels, fit range and band, "what would raise it", study versus practice, adaptive plan, personas, SDG mapping and heatmap, progress events and badges, report figures |
 
-An agent works only inside its branch's files (§5). Anything outside them is a request to the other
-owner, written in the commit body or raised in chat, never an edit.
+---
+
+## 0. What the finalist round requires
+
+From the Domain 1 Finalist Guide and the finalist report template. Every work package below traces
+to one of these.
+
+- **One live journey, six stages, one synthetic user:**
+  1. profile intake (skills drive the results, nothing pre-filled);
+  2. Future Skills Radar (rising and declining skills **and roles**, with source and date);
+  3. ranked roles with reasons, plus "why this score, and what would raise it";
+  4. pathway with real, checkable courses;
+  5. SDG contribution;
+  6. compare futures (switch scenarios and show the shift).
+
+  A must-have that is missing, or only described, caps Problem–Solution Fit.
+- **Live checks by judges:**
+  - "Change the trend data now. What should change?"
+  - "Is this course, job or number real?"
+  - "Why this score, and what would raise it?"
+  - "How is the data kept current, and what does it cost?"
+  - "What if AI moves faster or slower?"
+  - "How do you stop the system inventing a job or a course?"
+- **Technical expectations:**
+  - a trend pipeline with the fetch date stored and shown, and a refresh possible during the demo;
+  - a decomposable score with "what would raise it";
+  - recommendations built from our own sourced tables, with the source cited on each, saying so
+    when no source exists, and naming the model;
+  - scenarios driven by explicit parameters;
+  - an SDG map with a one-line reason per link, added up into the person's path;
+  - robustness to a thin profile, an unknown skill and an unavailable source (last good snapshot).
+- **Final report Section 4 (every claim backed by numbers):**
+  - reach and channel;
+  - data freshness;
+  - cost per user or per month;
+  - learning cost (share free or low cost);
+  - measured SDG impact against our Phase 1 targets, with how it was verified;
+  - PDPA privacy;
+  - fairness checks;
+  - optional 4.1 proof (code, formula or logs that reflect what was built).
+- **Our Phase 1 commitments:**
+  - verified free-course coverage from 27/37 required skills (73%) to at least 34/37 (90%+);
+  - at least 80% of 10+ test users reach roles and a pathway in under 5 minutes;
+  - at least 70% can explain why their top role was recommended;
+  - 100% of displayed numbers keep their source and date.
+- **Process:**
+  - steady small commits through the 48-hour sprint (the report's §3.2 asks what was built in it);
+  - a backup (offline build or recording);
+  - more than one teammate able to answer each Q&A question.
 
 ---
 
 ## 1. Decisions for Phase 2
 
-What changed against `docs/PLAN.md` and `AGENTS.md`, decided by the team for the finalist round:
+Decided by the team. Each is logged in `docs/decision_log.md` (2026-10-30).
 
-1. **Users:** working adults, juniors / fresh graduates and students. **The HR / L&D view is out of
-   scope.** "Company" aggregates are dropped with it.
-2. **Levels are described, not numbered.** The proficiency scale becomes 0–5, aligned with SFIA's
-   lower five levels: 0 none · 1 novice · 2 aware · 3 working · 4 proficient · 5 expert. Every skill
-   has one "I can…" sentence per level (§4 C1). Three rules: done, not studied (level 3 and above
-   need work experience; a course alone reaches level 2 at most); pick the highest true sentence;
-   link a CV line where possible.
-3. **The progress-check agent may assess.** A finance-practitioner agent asks a person about the work
-   they did, judges it against the level descriptions and proposes a level. The person accepts or
-   declines; an accepted result is stored as a claim with source `agent_check`. The app still never
-   tutors or hints at answers, and never makes hiring, promotion or dismissal decisions.
-4. **Study and practice are separate.** Study time moves a skill to level 2 at most; level 3 needs a
-   practice task at work. Plans show two fit ranges: after study and after study and practice.
-   Course durations are labelled by what they measure (reading estimate, guided hours, practice
-   estimate).
-5. **Fit is shown as a range and a band**, with its components and what would raise it, in a large,
-   clickable panel, not small print.
+1. **Users:** working adults, juniors / fresh graduates and students. **No HR / L&D view**, and no
+   company-level aggregates.
+2. **Levels 0–5, each described by an "I can…" sentence per skill.** Labels: 0 none · 1 novice ·
+   2 aware · 3 working · 4 proficient · 5 expert, aligned with SFIA's lower five levels.
+   - **Rules:** done, not studied (level 3 and above need work experience; study alone reaches level 2
+     at most); pick the highest true sentence; link a CV line where possible.
+   - **Stored levels keep their numbers.** The old guide (1 mentioned or studied · 2 did it in a job ·
+     3 did it routinely or was responsible · 4 led, taught or improved it for others) matches the new
+     descriptions 1–4 one to one. Level 5 is new.
+   - **Role requirements keep their numbers:** core 3 ("working: handles the full task alone"),
+     upskill and support 2 ("aware: routine tasks with guidance").
+3. **A progress-check agent may assess.** A finance-practitioner agent asks about work the person
+   did, judges it against the level descriptions and proposes a level. The person accepts or
+   declines. Accepted results are claims with source `agent_check`, never "verified". The app never
+   tutors or hints at answers and never makes hiring, promotion or dismissal decisions.
+4. **Study and practice are separate.** Study moves a skill to level 2 at most; level 3 needs a
+   practice task at work, checked by a re-rate or the progress check. Plans show two fit ranges:
+   after study and after study and practice. Course durations show what they measure.
+5. **Fit is shown as a band with a range**, its components and what would raise it, in a large,
+   clickable panel, never small print.
 6. **The plan adapts to the person.** AI basics are skipped when the CV shows AI or automation
-   experience; course level follows the claimed level; advanced people get practice and project
-   steps instead of beginner courses.
-7. **SDG contribution is a heatmap** (skills or steps × SDG targets, cells = planned hours, a click
-   opens the one-line reason and source) plus a total per target.
+   work; no beginner course for a skill already at level 2 or above; advanced people get practice
+   and project steps.
+7. **SDG contribution is a heatmap** (skills × SDG targets, cells = planned study hours, a click
+   opens the one-line reason and source) with a total per target and a roles × targets view for
+   comparing roles.
 8. **Forecasting is part of the product.** The brief asks to *predict* emerging and declining skills
-   and jobs, so trends get forecasts with backtests against simple baselines, labelled estimates.
-9. **One visible agent workflow is attempted:** a resource scout that finds the exact part of a video
-   or article that teaches a gap, shown in an in-app agent window. If the visual part fails, the same
-   result is reported in a step log.
-10. **Models:** `gpt-4o-mini` stays for CV extraction and explanations. Agents use `AGENT_MODEL`
-    (default `gpt-4.1-mini`: a mid-tier model, not the most expensive). Both are named on screen
-    and in the declaration.
-11. **No login.** The profile stays an anonymous 128-bit id in the browser. Phase 2 adds a resume
-    code, data export and delete (§7 A8).
-12. **Later, not now:** the funding / training-request step (HRD Corp, PERKESO, MyMahir); weights
-    from job-post RCA; Chinese interface; route options; auto-generated video.
+   and jobs. Each series gets forecasts from several models, chosen by rolling-origin backtest
+   against a naive baseline; the baseline is kept and shown when it wins. Labelled estimates.
+9. **The visible resource-scout agent is attempted.** It finds the exact part of a video or article
+   that serves a gap, in an in-app agent window. Level 1 (must): a step log and a reader view with
+   highlights. Level 2 (stretch): real page screenshots.
+10. **Models:** `gpt-4o-mini` (`LLM_MODEL`) for CV extraction and explanations; `gpt-4.1-mini`
+    (`AGENT_MODEL`) for agents. Both are named on screen and in the declaration.
+11. **No login.** The anonymous 128-bit profile id stays; add a resume code, export, delete and a
+    90-day retention limit.
+12. **Later, not in this phase:**
+    - funding and training requests (HRD Corp, PERKESO, MyMahir);
+    - weights from job-post skill frequencies;
+    - Chinese interface;
+    - route options (shortest / flexible / targeted);
+    - an auto-generated video;
+    - a second field pack.
 
 ---
 
 ## 2. Branches and merging
 
-1. **Stage 0** (§3) is committed on `main` first. Both branches start from that commit:
-   `git switch -c p2-ai-experience` and `git switch -c p2-scoring-pathway`.
-2. Never merge one feature branch into the other directly. Never rebase, squash or force-push.
-3. **Merge points.** There are two: M1 after Stage 1 of both branches, M2 at the end. At each one:
-   1. B goes first: `git switch main` → `git merge --no-ff p2-scoring-pathway` → all checks → the
-      human pushes.
-   2. A takes `main` in: `git switch p2-ai-experience` → `git merge main` → fix → all checks.
-   3. A merges in: `git switch main` → `git merge --no-ff p2-ai-experience` → all checks → push.
-   4. B takes `main` in: `git switch p2-scoring-pathway` → `git merge main`.
-   B goes first because the level scale and the score fields change data that A only reads.
-4. **Checks before every commit and merge:** `ruff format . && ruff check . && mypy src && pytest -q`.
-   In `web/`: `npm run lint && npm run build`. A merge also needs the persona journey test (§7 B6).
-5. **Conflicts in docs** (`docs/decision_log.md`, `docs/DECLARATION_LOG.md`, `docs/explain/*`):
-   keep both entries. **Conflicts in code** go back to the owner of that file (§5).
-6. Commits stay small (`area: what changed`), with no AI attribution lines. Build steadily through
-   the 48-hour sprint: the final report (§3.2) asks what was built in it.
+**Starting**
+- Both branches start from `main` at or after commit `e123c72` (Stage 0).
+- If a branch was created before this plan was last updated, run `git merge main` on it to take
+  the update.
+
+**While working**
+- Commit small steps (`area: what changed`), no AI attribution lines.
+- Before each commit run all checks:
+  `ruff format . && ruff check . && mypy src && pytest -q`; in `web/`: `npm run lint && npm run build`.
+- Never merge one branch into the other. Never rebase, squash, force-push or `reset --hard`.
+- Agents never push; the human runs `git push origin <branch>`.
+
+**Merge points**
+- **M1, early merge:** after B1–B4 and A1–A4 are done. It catches incompatibilities while they are
+  small.
+- **M2, final merge:** when both branches are done. Integration (§9) follows on `main`.
+
+At each merge point, in this order:
+1. **B into main:**
+   ```
+   git switch main
+   git pull origin main
+   git merge --no-ff p2-scoring-pathway
+   ```
+   Run all checks, then `git push origin main`.
+2. **A takes main in:** `git switch p2-ai-experience`, then `git merge main`. Fix, then run all checks.
+3. **A into main:**
+   ```
+   git switch main
+   git merge --no-ff p2-ai-experience
+   ```
+   Run all checks, then `git push origin main`.
+4. **B takes main in:** `git switch p2-scoring-pathway`, then `git merge main`.
+
+B goes first because B changes data A only reads (the level scale and score fields).
+
+**Merge checks:** all checks above, plus a manual run of the six-stage journey with the four
+personas on a local build.
+
+**Conflicts**
+- In `docs/decision_log.md`, `docs/DECLARATION_LOG.md` and `docs/explain/*`: keep both entries.
+- In code: the owner of that file (§5) resolves it.
+
+**Deploying:** Replit deploys `main` only, at the human's request. Do not republish while a judge
+may be using the app.
 
 ---
 
-## 3. Stage 0: shared contracts on `main` (before branching)
+## 3. Stage 0: shared contracts (DONE on `main`)
 
-These edits touch files that both branches would otherwise change. Done once, on `main`.
+Committed before branching, so neither branch has to edit these shared files.
 
-| # | Change | Files |
-|---|---|---|
-| S0.1 | This plan; updated `AGENTS.md` and the `docs/PLAN.md` header | docs |
-| S0.2 | **One LLM client.** Add `src/llm.py`: `complete(settings, messages, schema, *, model=None, purpose: str) -> str`. It wraps the OpenAI call (time budget, JSON schema) and records usage. Move the three existing call sites (`intake/extract.py`, `match/explain.py`, `goal/posting.py`) onto it. Behaviour must not change, and tests stay green. | `src/llm.py`, 3 call sites |
-| S0.3 | **Usage counter.** Add `src/usage.py` with a `usage_event` table: `id, at, purpose, engine (openai/runpod/fallback), model, tokens_in, tokens_out, seconds, ok`. Add `record(...)`. Wire `src/llm.py` and `src/runpod_jobs.py` to it, and register the table in `src/app.py`. This is the measured input for cost per user (Section 4 of the report). | `src/usage.py`, `src/runpod_jobs.py`, `src/app.py` |
-| S0.4 | **Settings.** Add `agent_model` (env `AGENT_MODEL`, default `gpt-4.1-mini`) to `src/config.py`; add `AGENT_MODEL=` to `.env.example`. | `src/config.py`, `.env.example` |
-| S0.5 | **Claim sources.** `SkillClaim.source` gains `"agent_check"`. Add optional fields `checked_at: datetime \| None` and `model: str = ""`. Old rows still load. | `src/journey/store.py` |
-| S0.6 | **Course fields.** `Course` gains optional `time_basis: Literal["reading_estimate","guided_hours","stated"] = "reading_estimate"`, `hands_on: bool = False`, `checked: str = ""` and `verified: bool = True`. The pack loads every `courses*.yaml` in the pack folder (current file first), and the same for `resources*.yaml`. | `src/pack.py`, `src/resources.py` |
-| S0.7 | **Stub routers**, registered once in `src/app.py`, each an empty `APIRouter` with a module docstring naming its owner. A: `src/api/agents.py`, `src/api/evidence_test.py`, `src/api/status.py`, `src/api/privacy.py`. B: `src/api/sdg.py`, `src/api/badges.py`. | `src/app.py`, 6 new files |
-| S0.8 | **Split hot shared files.** New type files `web/src/typesAgents.ts` (A) and `web/src/typesScoring.ts` (B). In `src/params.py`, add two empty headed sections: `# --- Agents and forecasting (owner A) ---` after the pipeline-freshness section, and `# --- Levels and learning gain (owner B) ---` at the end. In `web/src/i18n.tsx`, add marked blocks `// phase2 A` and `// phase2 B` far apart in the `MS` dictionary. | 4 files |
-| S0.9 | All checks green; commit; the human pushes; both branches are created. | |
+| Commit | What it gave both branches |
+|---|---|
+| `bea812d` | This plan; `AGENTS.md` and the `docs/PLAN.md` header point to it |
+| `573cd2a` | `src/llm.py`: `openai_complete(settings, *, schema_name, purpose, timeout, temperature=0, model=None)`, the one JSON-schema LLM call; the three existing call sites use it. `src/usage.py`: the `usage_event` table and `record(...)`; every OpenAI and RunPod call stores purpose, engine, model, tokens, seconds and success (no content); `totals(engine)` sums them; bound at app and pipeline start-up |
+| `96d5432` | `Settings.agent_model` (`AGENT_MODEL`, default `gpt-4.1-mini`); `SkillClaim.source` accepts `"agent_check"`, with `checked_at` (ISO text) and `model` |
+| `428d474` | `Course` fields `time_basis` (`reading_estimate` / `guided_hours` / `stated`), `hands_on`, `checked`, `verified` (`False` = candidate, never planned); every `courses_*.yaml` and `resources_*.yaml` loads beside the hand-checked files (`pack_files(stem)`) |
+| `acc813f` | Empty routers registered in `src/app.py`. A: `src/api/agents.py` (`/api`), `src/api/evidence_test.py` (`/api/profiles/{profile_id}`), `src/api/status.py` (`/api`), `src/api/privacy.py` (`/api/profiles/{profile_id}`). B: `src/api/sdg.py`, `src/api/badges.py` (both `/api/profiles/{profile_id}`) |
+| `bd7c8b2` | `web/src/typesAgents.ts` (A) and `web/src/typesScoring.ts` (B); headed sections in `src/params.py` (A after pipeline freshness, B at the end); marked blocks `// phase2 A` and `// phase2 B` in `web/src/i18n.tsx` |
+| `e123c72` | Declaration-log entries for `AGENT_MODEL` and the Stage 0 tooling |
 
-After Stage 0, `src/app.py`, `src/config.py`, `src/llm.py`, `src/usage.py`, `src/pack.py` and
-`src/journey/store.py` are **frozen** until M1. A change to one of them is a request to the other
-owner.
+**Rules that follow from Stage 0**
+- Every new LLM call goes through `src/llm.py`, or, for tool-calling agents, through A's agent
+  client, which records usage with `src/usage.record`.
+- A new route goes into one of the owner's registered router modules. **No new router module**:
+  it would need an `src/app.py` edit.
+- A's extra profile routes go in `evidence_test.py` or `privacy.py`, global ones in `status.py`
+  or `evidence.py`, and agent routes in `agents.py`.
 
 ---
 
 ## 4. Contracts between the branches
 
-Each contract is fixed here. The producer builds it; the consumer codes against it, using
-fixtures until the merge. Fields are only added, never renamed or removed. New fields are optional
-in TypeScript until M1.
+The producer builds the contract; the consumer codes against it, using fixtures until M1.
+
+**Rules**
+- Fields are only added, never renamed or removed. New TypeScript fields are optional (`?`) until M1.
+- New endpoints return Pydantic models declared in the router module, mirrored exactly in the
+  owner's types file.
+- Every number carries its kind: observed (source and date), assumption or estimate.
 
 ### C1 Level descriptions (B produces; A's progress agent reads)
-`data/packs/gbs_fa/levels.yaml`:
+File `data/packs/gbs_fa/levels.yaml`:
 ```yaml
 checked: "YYYY-MM-DD"
-scale:            # 0..5, labels shown everywhere; never hard-coded in the UI
+scale:
   - {level: 0, label: none, meaning: "No exposure"}
   - {level: 1, label: novice, meaning: "Understands the basics and can follow along"}
-  # ... up to 5 expert
-rules: ["Done, not studied: ...", "Pick the highest true sentence", "Link a CV line where possible"]
+  - {level: 2, label: aware, meaning: "Does routine tasks with guidance or a template"}
+  - {level: 3, label: working, meaning: "Handles the full task alone, including common problems"}
+  - {level: 4, label: proficient, meaning: "Handles complex cases, improves the process, guides others"}
+  - {level: 5, label: expert, meaning: "Sets standards or direction for a team, function or region"}
+rules:
+  - "Done, not studied: levels 3 and above need work experience; study alone counts as level 2 at most."
+  - "Pick the highest sentence that is true for your work in the last two years."
+  - "Link a CV line where possible."
 skills:
   invoice_processing:
-    basis: [{title: "...", url: "...", read: "YYYY-MM-DD"}]   # SkillsFuture / SFIA / other, cited
-    anchors: {1: "I can ...", 2: "I ...", 3: "...", 4: "...", 5: "..."}
+    basis:
+      - {title: "SkillsFuture Skills Framework for Accountancy (May 2026)", url: "https://...", read: "YYYY-MM-DD"}
+    anchors:
+      1: "I can explain the steps from purchase order to payment, including a three-way match."
+      2: "I enter and code invoices under review, and check goods were received before posting."
+      3: "I handle my own invoice queue end to end, including credit notes and exceptions."
+      4: "I resolve complex AP errors, reconcile AP to the ledger, and train other processors."
+      5: "I design the AP process and controls for an entity or service centre."
 ```
-Python: `src/levels.py` → `load_levels() -> Levels`, `Levels.scale`, `Levels.anchor(skill, level) -> str`
-and `Levels.skills: dict[str, SkillLevels]`. API: `GET /api/pack` gains `levels` (scale, rules, and
-anchors per skill). The anchor wording is our own, based on the cited frameworks (SFIA text is
-copyrighted and is not copied).
+- **Python:** `src/levels.py` provides `load_levels() -> Levels`; `Levels.scale`; `Levels.rules`;
+  `Levels.anchor(skill_id, level) -> str`; `Levels.skills: dict[str, SkillLevels]`.
+- **API:** `GET /api/pack` gains `"levels": {"scale": [...], "rules": [...], "skills": {skill_id: {"anchors": {...}, "basis": [...]}}}`.
+  The existing `"proficiency"` list becomes the six labels.
+- **Wording:** anchors are our own sentences, based on the cited frameworks. SFIA text is copyrighted
+  and is never copied.
+- **UI:** level labels are never hard-coded; they always come from `/api/pack`.
 
-### C2 Role score (B produces in `/api/profiles/{id}/matches`, `/roles/{role_id}/explain`)
-Each role gains:
+### C2 Role score (B adds to every role in `GET /api/profiles/{id}/matches`)
+Existing fields stay (`fit`, `requirements`, `meters`, `fit_range`, …). `fit_range` gets the new
+definition below. Added:
 ```json
 {
-  "fit": 41.2,
-  "fit_range": {"low": 32.0, "high": 40.5, "basis": "unevidenced claims one level lower; unstated 0..3"},
+  "fit_range": {"low": 32.0, "high": 47.5,
+                "basis": "low: self-rated claims one level lower, unstated as none; high: unstated at working"},
   "band": "fair",
-  "band_label": "assumption",
-  "components": [{"skill": "erp", "skill_name": "ERP", "weight": 2.0, "claimed": 2, "required": 3,
-                  "points": 6.1, "evidenced": true, "evidence": "Applied receipts in SAP ...",
-                  "source": "cv"}],
-  "raise": [{"skill": "erp", "skill_name": "ERP", "from_level": 2, "to_level": 3,
-             "points": 6.1, "via": "practice"}],
-  "essentials_short": ["invoice_processing"]
+  "band_basis": "assumption",
+  "components": [{"skill": "erp", "skill_name": "Enterprise Resource Planning (ERP)", "weight": 1.0,
+                  "claimed": 2, "required": 2, "points": 6.1, "evidenced": true,
+                  "evidence": "Applied incoming customer receipts ... in SAP", "source": "cv"}],
+  "raise": [{"skill": "dashboards", "skill_name": "...", "from_level": 1, "to_level": 2,
+             "points": 7.4, "via": "study"}],
+  "essentials_short": ["financial_reporting"]
 }
 ```
-`evidenced` = source `cv` or `agent_check` with non-empty evidence. `raise` lists the top three
-single-skill changes, computed exactly with the fit formula.
+- `fit` stays exactly as computed today: as stated, with unstated counted as 0.
+- `fit_range.low` lowers each **unevidenced** claim (source `self` or `keyword`) by one level
+  (minimum 0), with unstated as 0. `fit_range.high` uses claims as stated, with unstated at
+  `UNSTATED_HIGH_LEVEL`.
+- `band` comes from `fit`: strong ≥ 75 · good ≥ 55 · fair ≥ 35 · low below. These are declared
+  parameters, labelled "assumption".
+- `evidenced` = source `cv` or `agent_check`, with non-empty evidence.
+- `raise` = the three single-skill changes with the most fit points, each computed exactly by
+  re-scoring. `via`: `study` if the target level is ≤ `STUDY_MAX_LEVEL`, `practice` if above, and
+  `check` if the skill is already at its level but unevidenced.
 
-### C3 Pathway steps (B produces in `/pathway`, `/tracks`)
-Each step: `kind: "course" | "practice"`; `target_level`;
-`time: {value, unit: "hours" | "weeks", basis: "reading_estimate" | "guided_hours" | "practice_estimate"}`;
-`locked: bool`; `unlock: "previous_step" | "level_check" | null`. Plan totals: `study_hours`,
-`practice_weeks`, `fit_after_study: {low, high}`, `fit_after_practice: {low, high}`, and
-`free_share` (share of study hours that are free).
+### C3 Pathway (B adds to `/pathway` and to the nodes of `/tracks`)
+Each step:
+```json
+{"order": 1, "kind": "course" | "practice", "id": "ms_core_data_concepts", "skill": "data_management",
+ "target_level": 2,
+ "time": {"value": 0.6, "unit": "hours" | "weeks", "basis": "reading_estimate" | "guided_hours" | "practice_estimate",
+          "low": null, "high": null},
+ "locked": false, "unlock": "previous_step" | "study_done" | "level_check" | null}
+```
+Plan totals:
+- `study_hours`;
+- `practice_weeks: {low, high}`;
+- `fit_after_study: {low, high}` and `fit_after_practice: {low, high}`;
+- `free_share` (share of study hours in free courses, 0–1);
+- `ai_basics: {"shown": bool, "reason": "..."}`.
+
+The existing `total_hours` stays and equals `study_hours`.
 
 ### C4 SDG matrix (B produces `GET /api/profiles/{id}/sdg?scenario=`)
 ```json
 {
-  "targets": [{"id": "4.4", "title": "...", "text": "..."}],
-  "rows": [{"skill": "erp", "skill_name": "ERP", "steps": ["ms_..."]}],
+  "targets": [{"id": "4.4", "title": "...", "text": "official UN wording"}],
+  "rows": [{"skill": "erp", "skill_name": "...", "steps": ["ms_..."], "practice": true}],
   "cells": [{"skill": "erp", "target": "4.4", "hours": 3.5,
-             "reasons": [{"text": "one line", "source": "TalentCorp 2024 p.23"}]}],
+             "reasons": [{"text": "one line", "source": "TalentCorp (2024) p. 23"}]}],
+  "path_links": [{"target": "4.3", "text": "...", "source": "..."}],
   "totals": [{"target": "4.4", "hours": 12.0}],
   "roles": [{"role_id": "...", "title": "...", "targets": [{"target": "8.5", "reason": "..."}]}],
-  "source": "United Nations SDG targets ..."
+  "note": "Hours count toward every target a skill serves, so totals are not added across targets.",
+  "source": "United Nations SDG targets, sdgs.un.org/goals (read ...)"
 }
 ```
+Pure function, also used by A's status page: `src/pathway/sdg.py: sdg_matrix(pack, pathway) -> SdgMatrix`.
 
-### C5 Badges (B produces `GET /api/profiles/{id}/badges`)
-`[{"id", "title", "earned_at", "rule", "evidence": {"kind": "course_done" | "level_up" | "essentials_met" | "plan_started", "ref": "..."}}]`.
-A badge exists only when its rule fired on a stored event. No random or time-based badges.
+### C5 Progress events and badges (B produces)
+- **Events:** table `journey_event` (`profile_id`, `at`, `kind`, `ref`, `before`, `after`). Kinds:
+  `course_done`, `course_undone`, `step_skipped`, `level_changed` (with source), `destination_chosen`.
+  Written by B's routes.
+- **Exception:** A's progress-check decide route writes `level_changed` through B's function
+  `src/journey/events.py: record_event(engine, profile_id, kind, ref, before, after)`.
+- **Badges:** `GET /api/profiles/{id}/badges` →
+  `[{"id", "title", "earned_at", "rule", "evidence": {"kind", "ref"}}]`, derived only from events.
+- **`PUT /progress`** gains `skipped: list[str]` (steps passed with "continue anyway", labelled).
 
 ### C6 Progress check (A produces; B's unlock rule reads the resulting claim)
-- `POST /api/profiles/{id}/checks {skill}` → `{session_id, skill, target_level, question}`
-- `POST /api/profiles/{id}/checks/{session_id}/answer {text}` → the next question, or `{result}`
-- `result`: `{skill, proposed_level, met_anchors: [level], quotes: [text from the person's answers], model, engine, note}`
-- `POST /api/profiles/{id}/checks/{session_id}/decide {accept: bool}` → on accept, the profile claim
-  is set to `source: "agent_check"` with the quotes as evidence (through `journey.store.update_profile`).
-
-The LLM never outputs a number. It returns, per anchor, `meets: yes | partly | no` plus quotes; code
-verifies each quote is in the answers and maps the result to the highest anchor met.
+- `POST /api/profiles/{id}/checks {skill}` → `{session_id, skill, current_level, target_level, question, model}`
+- `POST /api/profiles/{id}/checks/{session_id}/answer {text}` → `{question}` (next) or `{result}`
+- `result`: `{skill, proposed_level, met: [{level, verdict: "yes"|"partly"|"no", quote}], model, engine, note}`
+- `POST /api/profiles/{id}/checks/{session_id}/decide {accept: bool}`. On accept, the claim becomes
+  `{level: proposed_level, source: "agent_check", evidence: <joined quotes>, checked_at, model}`
+  through `journey.store.update_profile`, plus a `level_changed` event (C5).
 
 ### C7 Change test (A produces `POST /api/profiles/{id}/evidence-test`)
-Body: `{scenario, overrides: [{kind: "automation_share", key: "<soc or task id>", value: 0..100}]}`.
-Response: `{label: "test value, not real data", before: {roles: [{role_id, rank, fit}]},
-after: {...}, weights: [{skill, before, after}], pathway: {before: [course ids], after: [...]}}`.
-It reuses `score_role` and `plan_pathway` unchanged, saves nothing, and never touches stored evidence.
+- **Body:** `{scenario, overrides: [{kind: "occupation_share" | "task_share", key: "<SOC code or O*NET task id>", value: 0..100}]}`
+- **Response:**
+  `{label: "Test value, not real data", overrides, before: {roles: [{role_id, title, rank, fit}]}, after: {...}, weights: [{role_id, skill, before, after}], pathway: {role_id, before: [course ids], after: [...]}}`
+- It uses `dataclasses.replace` on `Evidence` and the unchanged `rank_roles`, `score_role` and
+  `plan_pathway`. Nothing is saved; stored evidence is never touched.
 
 ### C8 Forecast (A produces `GET /api/forecast`)
-`[{series_id, kind: "employment_share" | "job_ads" | "skill_outlook", horizon, point, low, high,
-model, backtest: {mase, baseline, baseline_mase}, label: "estimate", source, fetched_at}]`.
+```json
+[{"series_id": "employment_share:professionals", "kind": "employment_share" | "job_ads" | "skill_outlook" | "role_outlook",
+  "title": "...", "history": [{"period": "2025", "value": 13.9}],
+  "forecast": [{"period": "2027", "point": 14.3, "low": 13.6, "high": 15.0}],
+  "model": "damped_trend", "baseline": "naive",
+  "backtest": {"mase": 0.82, "baseline_mase": 1.0, "origins": 9},
+  "label": "estimate", "source": "OpenDOSM wages_occupation", "fetched_at": "..."}]
+```
 
 ### C9 Status (A produces `GET /api/status`)
-Freshness per source (last fetch, last change, next scheduled run), the last runs, fallback state
-per engine, usage totals from `usage_event`, cost estimates (labelled), the fairness-test result
-and date, and platform SDG totals (counts below 5 suppressed).
+- **Freshness per source:** `last_attempt_at`, `last_success_at`, `last_change_at` and
+  `serving_snapshot_from`.
+- **Runs:** the last 12, plus the next scheduled run.
+- **Fallback state** per engine.
+- **Usage totals** from `usage_event`, and labelled cost estimates.
+- **Fairness result** with its date (C10).
+- **Platform SDG totals** from C4 over all profiles with a destination, suppressed below 5 profiles.
+
+### C10 Fairness check (B produces; A displays)
+`src/match/fairness.py: paired_profile_check(pack, evidence) -> {"pairs", "identical", "max_fit_difference", "checked_at"}`.
+It is pure: the same synthetic pairs as `tests/test_fairness.py`, which differ only in protected
+attributes.
 
 ---
 
 ## 5. File ownership
 
-**A (`p2-ai-experience`)**
-- Backend: `src/evidence/**`, `src/collectors/**` (plus new collectors), `src/pipeline/**`,
-  `src/occupations/**`, `src/intake/skill_search.py`, `src/runpod_jobs.py`, `runpod/**`,
-  `src/agents/**` (new), `src/api/{agents,evidence_test,status,privacy,evidence,occupations,changes}.py`,
-  `src/changes/**`, `scripts/load/**` (new), `requirements.txt`.
-- Data: `data/sources.yaml`, generated `data/packs/gbs_fa/courses_*.yaml` and `resources_*.yaml`,
-  `data/eval/occupation_titles_holdout.yaml` (new).
-- Web: `App.tsx`, `Sidebar.tsx`, `index.css`, `i18n.tsx` (block `phase2 A`), `pages/{Overview,Trends,
-  LiveIntelligence,Changes,Future,Occupations}.tsx`, new pages (`Privacy`, `Status`), `components/
-  {Charts,LineChart,PipelineDiagram,Activity,EvidenceDrawer,Windows,OccupationEvidence}.tsx`, new
-  `components/{AgentWindow,ProgressCheck,ChangeTest,TrendsChart}.tsx`, `typesAgents.ts`,
-  `web/package.json`.
+**Owner A (`p2-ai-experience`)**
+- **Backend:**
+  - `src/evidence/**`, `src/collectors/**` (and new collectors), `src/pipeline/**`,
+    `src/occupations/**`, `src/changes/**`;
+  - `src/intake/skill_search.py`, `src/runpod_jobs.py`, `runpod/**`;
+  - new `src/agents/**`, new `src/privacy.py`;
+  - routers `src/api/{agents,evidence_test,status,privacy,evidence,occupations,changes,feedback}.py`;
+  - `src/feedback/**`, new `scripts/{load,cost,check_links,review_catalogue}*`, `requirements.txt`;
+  - the A section of `src/params.py` and the existing evidence and pipeline sections above it.
+- **Data:** `data/sources.yaml`, generated `data/packs/gbs_fa/courses_*.yaml` and
+  `resources_*.yaml`, new `data/eval/occupation_titles_holdout.yaml`.
+- **Web:**
+  - `App.tsx`, `main.tsx`, `index.css`, `i18n.tsx` (`phase2 A` block and the navigation strings),
+    `web/package.json`;
+  - pages `Overview`, `Trends`, `LiveIntelligence`, `Changes`, `Future`, `Occupations`, and new
+    `Status` and `Privacy`;
+  - components `Sidebar`, `Charts`, `LineChart`, `PipelineDiagram`, `Activity`, `EvidenceDrawer`,
+    `OccupationEvidence`, `Feedback`, and new `AgentWindow`, `ProgressCheck`, `ChangeTest`,
+    `TrendsChart`, `ResumeCode`;
+  - `typesAgents.ts`.
 
-**B (`p2-scoring-pathway`)**
-- Backend: `src/match/**`, `src/pathway/**`, `src/levels.py` (new), `src/intake/{extract,pii,files}.py`,
-  `src/cv/**`, `src/goal/**`, `src/journey/progress.py`, `src/api/{journey,decision,cv,goal,sdg,badges}.py`,
-  `src/params.py` matching / pathway / decision sections and the B section.
-- Data: `data/packs/gbs_fa/{levels,practice,sdg,roles,skills,tasks,courses}.yaml`, `data/samples/**`,
-  `data/eval/regression_profiles.yaml`.
-- Web: `pages/{Onboarding,Roles,Pathway,Cv,Goal}.tsx`, `components/{CompareRoles,Decision,ExplainRole,
-  PlanCompare,RouteCompare,TrackMap,SkillRadar,RoleTasks,journey}.tsx`, new
-  `components/{ScoreWhy,SdgHeatmap,LevelPicker,Badges}.tsx`, `typesScoring.ts`, `i18n.tsx` (block
-  `phase2 B`).
+**Owner B (`p2-scoring-pathway`)**
+- **Backend:**
+  - `src/match/**`, `src/pathway/**`, new `src/levels.py`, new `src/journey/events.py`,
+    `src/journey/progress.py`, `src/journey/store.py`;
+  - `src/intake/{extract,pii,files}.py`, `src/cv/**`, `src/goal/**`;
+  - `src/pack.py`, `src/resources.py`;
+  - routers `src/api/{journey,decision,cv,goal,sdg,badges}.py`;
+  - the B section and the matching, decision and pathway sections of `src/params.py`;
+  - `CALCULATION_VERSION`, and the policy list in `src/changes/store.py` `context_hash` (that one
+    list only);
+  - new `scripts/kpis.py`.
+- **Data:** `data/packs/gbs_fa/{levels,practice,sdg,roles,skills,tasks,courses,resources}.yaml`,
+  `data/samples/**`, `data/eval/regression_profiles.yaml`.
+- **Web:**
+  - pages `Onboarding`, `Roles`, `Pathway`, `Cv`, `Goal`;
+  - components `CompareRoles`, `Decision`, `ExplainRole`, `PlanCompare`, `RouteCompare`, `TrackMap`,
+    `SkillRadar`, `RoleTasks`, `journey`, and new `ScoreWhy`, `SdgHeatmap`, `LevelPicker`, `Badges`;
+  - `typesScoring.ts`, `i18n.tsx` (`phase2 B` block and the onboarding strings).
 
-**Shared and frozen after Stage 0:** `src/app.py`, `src/config.py`, `src/db.py`, `src/llm.py`,
-`src/usage.py`, `src/pack.py`, `src/journey/store.py`, `web/src/types.ts` (only the owner of an
-endpoint edits that endpoint's existing interface), `web/src/api.ts`, `web/src/state.tsx`,
-`components/ui.tsx`, `tests/conftest.py`.
+**Frozen for both** (a change needs both owners and the human):
+- `src/app.py`, `src/config.py`, `src/db.py`, `src/llm.py`, `src/usage.py`;
+- `web/src/api.ts`, `web/src/state.tsx`, `web/src/components/ui.tsx`, `web/src/components/Windows.tsx`;
+- `tests/conftest.py`, `.env.example`.
 
-**Rules both agents follow**
-- New code goes in new files where possible.
-- New tables live in the owner's new modules and are registered by importing that module from the
-  owner's router module, so `src/app.py` never changes.
-- A parameter that changes a calculation is added to `context_hash` in `src/changes/store.py`; that
-  one-line edit is allowed for B.
-- B alone bumps `CALCULATION_VERSION`.
-- Tests: each branch adds new files `tests/test_<area>.py`. Tests use fakes, never paid services.
-- Every new library, model, dataset or API goes in `docs/DECLARATION_LOG.md` with its licence.
-  Decisions go in `docs/decision_log.md`.
+**`web/src/types.ts`:** the owner of an endpoint edits only that endpoint's existing types.
+- B: `PackInfo`, `ProfileData`, `SkillClaim`, `MatchesResponse` and its role type, `PathwayResponse`,
+  `TracksResponse` and its node types, `ProgressResponse`, `FutureResponse`, `GoalResponse`,
+  `CvResponse`, `SensitivityResponse`.
+- A: everything for evidence, signals, trends, runs, sources, changes, occupations, feedback.
+
+**Shared rules**
+- Every new table holding a person's data names its key column `profile_id`. A's privacy
+  delete finds such tables automatically.
+- New tables are registered by importing their module from the owner's router module.
+- Tests: new files only, named `tests/test_<area>.py`. Use fakes for the LLM, RunPod and network.
+  Never call paid services.
+- Every new library, model, dataset or API goes in `docs/DECLARATION_LOG.md` with its licence, in
+  the same commit.
+- **The "Why?" control and panel look the same everywhere:**
+  - the control: a `btn` button with the lucide `Info` icon and the word "Why?", at least 44 px
+    high, next to the number it explains;
+  - the panel: the existing `Windows` component with one or more panes, each showing the number,
+    its kind (observed, assumption or estimate), the formula with the person's numbers, the
+    source and date, and the model when one was used.
 
 ---
 
-## 6. Branch B: scoring and pathway (Meiirman)
+## 6. The demo journey these packages build
 
-The order is the order of work. Stage 1 (B1–B4) comes before M1.
+Navigation follows the six stages. Overview is the landing page.
 
-**B1 Correctness fixes**
-- Scenario factor floor: `factor = max(SCENARIO_FACTOR_FLOOR, 1 + d·s·a)`, with
-  `SCENARIO_FACTOR_FLOOR = 0.1` as a declared parameter (a skill can lose most weight but never
-  vanish or go negative). Invariant tests: weights > 0 for every intensity in
-  `SENSITIVITY_INTENSITIES`; essentials are unchanged; results are reproducible.
-- ERP miss: a deterministic backstop in `intake/extract.py`. When the CV names SAP, Oracle, Dynamics,
-  NetSuite or similar, an `erp` claim is proposed with that CV sentence as evidence, even if the LLM
-  missed it. The alias list is declared in `src/params.py`. Test it with a synthetic CV that says
-  "SAP S/4HANA".
-- Totals mismatch (6.2 h vs 8.5 h on one screen): reproduce it with the test CV that showed it, find
-  the two sources of the totals, and keep one definition.
-- Thin profile (everything skipped) and an unknown skill: no crash, a clear "not stated" state, and
-  a fit range from 0 to the unstated-high level. Add tests.
+| Stage | Page (route) | Built by | What the judge sees |
+|---|---|---|---|
+| Overview | `/overview` | A | Top role with band and range, what changed for you, next step this week, scenario switch, trends snapshot, SDG totals, freshness line |
+| 1 Profile | `/start` (onboarding), `/cv` | B | Situation, CV with quoted evidence, level sentences, consent |
+| 2 Future skills radar | `/trends` | A | One chart (Skills / Roles) with forecasts, the change test, the refresh |
+| 3 Ranked roles | `/roles` | B | Band, range, `ScoreWhy`, what would raise it, roles × SDG view |
+| 4 Pathway | `/pathway` | B (A's agents mounted after M2) | Study and practice steps, two fit ranges, badges, scout and progress check |
+| 5 SDG contribution | `/pathway#sdg` | B | Heatmap with reasons, totals per target |
+| 6 Compare futures | `/future` | A | Moderate and fast side by side, rank shifts, weight changes, sensitivity |
+| Evidence | `/live`, `/occupations`, `/changes`, `/status`, `/privacy` | A | Runs, sources, replay, status, privacy |
 
-**B2 Level scale 0–5 and descriptions (C1)**
-- `levels.yaml` for every skill used by the destination roles. Draft from the team's level-description
-  research (SkillsFuture Accountancy job tasks, SFIA, UF AP competency), then review. `src/levels.py` loader with tests (every skill a role
-  needs has five anchors; levels are complete).
-- Scale change: `PROFICIENCY_LABELS` (6 labels), `MAX_LEVEL = 5`, and the extraction prompt uses the
-  anchors as its rubric. `ROLE_TIER_LEVEL` stays core 3 / upskill 2 / support 2, now meaning
-  "working: full task alone" and "aware: routine tasks with guidance". Bump `CALCULATION_VERSION`.
-  Log the decision.
-- Onboarding skills step: `LevelPicker` shows the anchor sentences (highest true one) instead of
-  numbers, with the CV line beside it when one exists.
+**Personas** (synthetic, B6):
+- Hafiz (graduate, beginner);
+- Mei (retail supervisor switching in);
+- Nur (cash application analyst at risk);
+- Kavitha (senior reporting analyst, advanced).
 
-**B3 Fit range, band, components, what would raise it (C2)**
-- Range: compute fit as claimed, and again with each unevidenced claim one level lower. Combine
-  with the existing unstated range in `match/decision.py`.
-- Band thresholds as declared parameters (for example strong ≥ 75, good ≥ 55, fair ≥ 35, else low),
-  labelled as an assumption.
-- `ScoreWhy` panel: opened from a large score chip on every role. It shows the formula with the
-  person's numbers, each component's points, evidence or "self-rated", the source and date, the
-  label, and "what would raise it". Essentials still short are always visible.
-
-**B4 Study versus practice (C3)**
-- Parameters: `STUDY_MAX_LEVEL = 2`; `LEVEL1_MIN_HOURS = 1`; `LEVEL2_MIN_HOURS = 20` with at least
-  one `hands_on` course; practice tasks for level 3 with a weeks estimate. Each one carries its basis
-  (MQF 40 notional hours per credit, AAT, WSQ, PL-300 guidance) and is labelled an estimate.
-- `data/packs/gbs_fa/practice.yaml`: per skill, the work tasks that move it from 2 to 3 (for example
-  "reconcile a supplier statement end to end"), each with weeks and a basis. They are suggestions,
-  not courses.
-- Planner: study steps, then practice steps. Two fit ranges (after study, after practice). Durations
-  show their `time_basis`. Practice steps unlock after the study steps on that skill; level-3 credit
-  needs a re-rate or a progress check (C6).
-
-**B5 Plan adapts to the person**
-- Skip AI basics when the profile has evidenced data or AI skills at level 3 or above, or AI and
-  automation work in the CV (declared rule). Say why on screen.
-- Course choice follows the claimed level: no beginner course for a skill already at 2 or above.
-  Advanced people get practice and project steps.
-
-**B6 Personas and the journey test**
-- Add a fourth synthetic CV, `data/samples/kavitha.txt` (senior reporting analyst, 9 years: Power
-  Automate flows, Python scripts, S/4HANA migration UAT, multi-source Power BI). It is labelled
-  synthetic like the others.
-- `tests/test_personas.py`: Hafiz, Mei, Nur and Kavitha through the API produce different top
-  roles or routes. AI basics appear for Hafiz and not for Kavitha; Kavitha's plan has practice steps
-  and no beginner courses. This is the "not hard-coded" proof.
-
-**B7 SDG mapping and heatmap (C4)**
-- Extend `sdg.yaml` with per-skill and per-role links, each with a one-line reason and its source.
-  Every role and skill has at least one link.
-- `GET /sdg` sums planned hours per target along the person's path.
-- `SdgHeatmap` on the plan page (skills × targets; a click opens the reason and source) and a compact
-  version on the roles list (roles × targets), so a person can compare roles by contribution. Use the
-  sequential colour rules of the dataviz skill; values are labelled "planned hours".
-
-**B8 Progress and badges (C5)**
-- Badges from stored events only: first step done, a skill level raised (re-rate or check), all
-  essentials met, plan started. A `Badges` strip on the plan page.
-
-**B9 Data for the report**
-- `scripts/kpis.py` computes, from the pack and API: free-course coverage of required skills (Phase 1
-  baseline 27/37, 73%; target ≥ 90%), the free share of a typical pathway, and the share of displayed
-  numbers that carry a source and a date.
-- Surface the paired-profile fairness test result as JSON for `/api/status`.
+Each must produce a visibly different result.
 
 ---
 
 ## 7. Branch A: AI and experience (Moo7x)
 
-Stage 1 (A1–A4) comes before M1.
+Stage 1 (before M1) = A1–A4.
 
-**A1 Navigation and Overview**
-- Sidebar follows the demo's six stages: Profile → Future skills radar → Ranked roles → Pathway →
-  SDG contribution → Compare futures. Evidence pages stay under "Evidence".
-- Overview is the landing page: top role with band and range, what changed for you with its date,
-  next step this week, scenario switch, the combined trends chart, and the SDG totals. It codes
-  against C2–C5 (fields optional until M1). Visual direction comes from the reference screenshots.
-- Every number has a large "Why?" control that opens `EvidenceDrawer`, which is extended into the
-  shared explanation panel.
+### A1 Navigation, Overview and the "Why?" panels
+**Goal:** the six-stage journey is obvious, and Overview is the landing page.
 
-**A2 One trends chart, plus forecasts (C8)**
-- `TrendsChart`: one chart with a Skills / Roles toggle. Rising goes right, declining goes left,
-  each bar carries its source and date, and a click opens the detail. It replaces the scattered charts.
-- Forecasting in `src/evidence/forecast.py`. Candidate models per series are seasonal-naive and
-  naive baselines, damped trend and exponential smoothing (already in the repo), plus
-  `statsforecast` AutoETS / AutoARIMA. A model is used only if rolling-origin backtest MASE beats
-  the baseline; otherwise the baseline is shown and says so. Prediction intervals are shown.
-- Series: OpenDOSM employment shares by occupation group (annual), and DOSM job-ad counts
-  (quarterly; series breaks per `JOB_AD_BREAK_RATIO` are respected).
-- Skill outlook: the demand forecast of the occupations that need a skill, combined with its
-  observed AI-use direction, kept as separate components and labelled an estimate. Never an
-  "automated" verdict.
+**Files:** `App.tsx`, `Sidebar.tsx`, `Overview.tsx`, `index.css`, `i18n.tsx` (A), `EvidenceDrawer.tsx`.
 
-**A3 Change test and refresh (C7)**
-- `ChangeTest` panel on the radar stage: choose an occupation or task, move its AI-use share, and
-  see before → after for weights, role ranks and pathway order. Labelled "test value, not real
-  data"; a reset button.
-- Refresh in the demo: a "Run now" button on Live intelligence that asks for the admin token, plus
-  the existing replay of earlier releases.
+**Rules**
+- Sidebar groups:
+  - **"Your journey":** Overview, 1 Profile, 2 Future skills radar, 3 Ranked roles, 4 Pathway,
+    5 SDG contribution (`/pathway#sdg`), 6 Compare futures;
+  - **"Evidence":** Live intelligence, Any occupation, What changed, Status;
+  - My goal and My CV stay reachable from Profile.
+- **Overview cards, top to bottom:**
+  1. top role: title, band, range and essentials short (C2), with a "Why?" that opens the
+     components;
+  2. what changed for you (latest proposal from `/changes`, with its date);
+  3. next step this week (`/progress` `this_week`), with "Check my progress" opening A8;
+  4. scenario switch;
+  5. trends snapshot: the top three rising and declining skills and roles from A2, each with source
+     and date;
+  6. SDG totals (C4 `totals`);
+  7. freshness line: the last pipeline run, and the newest fetch date per source kind.
+- Fields from B are optional until M1. With a field missing, the card shows its existing content,
+  never a placeholder number.
+- Every number on Overview has a "Why?" (§5 shared rules).
+- **Visual direction:** taken from the reference screenshots the owner provides. Keep the existing
+  colour tokens until then. Changes stay in `index.css` and A's pages. Mobile: no horizontal
+  overflow at 375 px.
 
-**A4 Robustness of the evidence layer**
-- Source down: each collector failure keeps the last good snapshot, which the screen labels with
-  its fetch date. Add tests with a failing fake source.
-- Watchdog: a run still marked "running" after a declared timeout is closed as failed.
-- Web: after a redeploy, a failed lazy-loaded page reloads once instead of showing a blank page.
-- Every remote call (LLM, RunPod) has a time budget and a labelled fallback, recorded in `usage_event`.
+**Tests:** `tsc`, lint, build. A manual check on `/overview` with each persona, and on a phone width.
 
-**A5 Search and RunPod**
-- Hybrid retrieval in `occupations/detect.py` and `intake/skill_search.py`: BM25 and BGE-M3 dense
-  results fused by reciprocal rank fusion, then reranked by bge-reranker-v2-m3. BM25-only stays as
-  the labelled fallback.
-- A fresh held-out evaluation set `data/eval/occupation_titles_holdout.yaml` (English and Malay),
-  frozen before tuning. Report top-1 / top-3 for keyword, dense, hybrid and hybrid+rerank in
-  `docs/RUNPOD_EVAL.md`.
-- RunPod also embeds and reranks catalogue items (A6) and video/article passages (A7).
+**Out of scope:** B's pages.
 
-**A6 Course and resource catalogue as a pipeline job**
-- A collector for the Microsoft Learn Catalog API (free, no key). Modules and paths with level,
-  duration and URL are mapped to pack skills by BGE-M3 plus the reranker, and written as candidates
-  (`verified: false`) to `data/packs/gbs_fa/courses_mslearn.yaml`, `time_basis: reading_estimate`.
-- A reviewer promotes a candidate to `verified: true` only after opening it. Only verified items are
-  recommended.
-- Add OpenLearn and checked YouTube and articles the same way. More intermediate and advanced
-  material is needed for B5.
-- `scripts/check_links.py`: every course, video and article URL answers; it runs in the pipeline and
-  before the pitch.
+### A2 One trends chart, plus forecasts
+**Goal:** stage 2 shows rising and declining skills **and roles**, with source, date and a
+forecast.
 
-**A7 Visible resource-scout agent (attempt; fallback is the step log)**
-- `src/agents/`: a coordinator with two tools-only scouts.
-  - **Video scout:** captions with timestamps (`youtube-transcript-api`) → 30–90 s chunks → RunPod
-    rerank against the person's gap skill and level → top segments with start and end times and a
-    one-line reason → `https://youtu.be/<id>?t=<s>`.
-  - **Article scout:** fetch the page (`trafilatura`) → passages → rerank → quote check (each quote
-    must exist in the page text) → a deep link with a text fragment (`#:~:text=`) that opens the
-    original scrolled to and highlighting the passage.
-- Only registered or catalogue resources are scouted. Results are cached in the pipeline, and a live
-  run has a time budget.
-- `AgentWindow`: an in-app window that streams the agent's steps (server-sent events) and shows
-  what it is reading. With Playwright, it shows real page screenshots with the passage highlighted;
-  without it, a reader view with highlights. It closes into a results card on the plan step.
-- The agent finds and points; it does not teach. Its results are labelled with `AGENT_MODEL`, the
-  engine and the time.
+**Files:**
+- `src/evidence/forecast.py` (new), `src/evidence/trends.py`, `src/api/evidence.py`;
+- `TrendsChart.tsx` (new), `Trends.tsx`, `typesAgents.ts`, `requirements.txt`.
 
-**A8 Progress-check agent (C6)**
-- `ProgressCheck` chat window, opened from a plan step. A finance-practitioner persona (system
-  prompt plus retrieval of the skill's anchors, O*NET tasks and the step's practice task; not
-  fine-tuned).
-- It asks 2–4 concrete questions about work the person did, judges against the anchors as in C6,
-  and proposes a level. The person accepts or declines. An accepted check unlocks the next steps
-  (B4). Declining keeps the plan as it was. "Continue anyway" is allowed and labelled.
-- Tests use a fake LLM: quotes that are not in the answers are rejected, and numbers from the model
-  are never used.
+**Forecast series**
+- OpenDOSM employment share per MASCO major group (annual; already collected).
+- DOSM online job ads (quarterly): the total and the Professionals share. Quarters flagged by
+  `JOB_AD_BREAK_RATIO` are series breaks; models fit only the segment after the last break.
 
-**A9 Privacy, status, load test**
-- Privacy: `DELETE /api/profiles/{id}` (profile, progress, checks, goal), `GET /api/profiles/{id}/export`,
-  a resume code (the id as text and QR), and retention: profiles idle longer than a declared number
-  of days are deleted by the pipeline. A Privacy page maps the PDPA's seven principles to what the
-  app does (PII stripped before the LLM, no names stored, anonymous id, export, delete, retention).
-  Onboarding's consent step is built by B with this wording.
-- Status page (C9): freshness, runs, fallbacks, usage and cost, fairness result, platform SDG totals.
-- Load test: `scripts/load/locustfile.py` runs the full journey (profile → matches → pathway → sdg →
-  forecast) at 25, 50 and 100 users against the deployed app. LLM and RunPod calls are capped or use
-  cached paths. p50 / p95, error rate and fallback behaviour go into `docs/LOAD_TEST.md`.
-- Cost model `scripts/cost.py`: measured usage per journey × prices → RM per user and RM per month
-  at 1k and 10k users. Measured and projected values are kept separate.
+**Models** (each one declared and logged)
+- Baselines: naive (last value) and drift (linear).
+- Existing: damped trend and simple exponential smoothing.
+- New: Theta (`statsmodels`, BSD-3), and a global gradient-boosting model
+  (`scikit-learn` `HistGradientBoostingRegressor`, BSD-3) on lags 1–3 plus a group indicator,
+  trained across all groups of one series kind.
 
-**A10 Stay and adapt (stretch)**
-- On "Today → Future you": the person's current tasks, the AI-use evidence for each (observed,
-  kept separate from exposure), the responsibilities that grow, and the skills shared with the
-  destination roles. No time-saved percentages unless declared and labelled (the team's AI
-  time-savings research is the basis if added).
+**Model choice**
+- Run a rolling-origin backtest for each series (`ROLLING_FIRST_ORIGIN`, horizons 1 and 2) and
+  compute each model's MASE against naive.
+- Use the lowest-MASE model only if it beats naive (MASE < 1). Otherwise show naive and say
+  "no model beat keeping the last value".
+- Intervals: the 10th–90th percentiles of the chosen model's backtest errors at that horizon,
+  added to the point. They are empirical, not a model assumption.
+- New parameters (A section of `params.py`): `FORECAST_HORIZONS = (1, 2)`, `INTERVAL_QUANTILES = (0.1, 0.9)`,
+  `GBR_LAGS = 3`, `GBR_MIN_TRAIN_POINTS = 8`.
+
+**Outlooks**
+- `role_outlook` (per destination role): the forecast for its occupation's major group (via
+  `src/match/outlook.py MAJOR_GROUP`), plus TalentCorp's emerging-role and impact view (expert,
+  with page). They are shown as separate components.
+- `skill_outlook` (per skill), with two separate components:
+  - the demand forecast averaged over the destination roles that need the skill;
+  - the observed AI-use direction on its linked tasks (Economic Index).
+
+  Never combined into one "automated" verdict.
+
+**`TrendsChart`**
+- One diverging horizontal bar chart with a **Skills / Roles** toggle.
+- **Skills mode:** the % weight change under the selected scenario (an assumption applied to
+  observed AI use), with the skill outlook in the tooltip.
+- **Roles mode:** the forecast change, in percentage points, of the role's group share over 2 years
+  (estimate), with an interval whisker.
+- Rising to the right, declining to the left. Each bar shows its kind tag and has a tooltip
+  (value, source, date). A click opens `Windows` with the history, forecast, model, backtest and
+  sources.
+- Follow the dataviz rules: one axis, no dual axis, a validated palette, a table view.
+
+**Tests:** `tests/test_forecast.py`:
+- the backtest picks naive when no model beats it;
+- intervals contain the point;
+- forecasts never start inside a series break;
+- the API shape matches C8.
+
+**Out of scope:** forecasting the fit score itself.
+
+### A3 Change test and refresh
+**Goal:** a judge can change trend data live and see what changes, and a real refresh can run
+during the demo.
+
+**Files:** `src/api/evidence_test.py`, `ChangeTest.tsx` (new), `Trends.tsx`, `LiveIntelligence.tsx`,
+`typesAgents.ts`.
+
+**Rules**
+- **Change test:** implement C7. The `ChangeTest` panel sits on the radar stage:
+  1. Pick one of the person's top role's skills. It shows the linked tasks and occupation share,
+     with source and period.
+  2. Move a slider (0–100) and press "Apply test value".
+  3. See before → after: weights, role ranks (arrows), and the pathway order.
+  4. "Reset" restores the stored evidence.
+
+  The banner "Test value, not real data" stays visible while a test is applied.
+- **Refresh:** on Live intelligence, a "Run now" button asks for the admin token in a password
+  field (kept in memory only, never stored), calls `POST /api/pipeline/run`, and polls runs every
+  5 s until finished.
+- The replay of earlier releases stays as it is.
+
+**Tests:** `tests/test_evidence_test.py`:
+- raising a routine skill's share lowers its weight, and raising a complementing skill's share
+  raises it;
+- essentials are unchanged;
+- stored observations are unchanged after the call;
+- an unknown key gives 422.
+
+### A4 Robustness of the evidence layer
+**Goal:** no crash and no blank page; an outage shows the last good snapshot with its date.
+
+**Files:** `src/pipeline/run.py`, `src/evidence/store.py`, `src/api/evidence.py`, `App.tsx`,
+`LiveIntelligence.tsx`.
+
+**Rules**
+- **Source state:** per source, expose `last_attempt_at`, `last_attempt_status`, `last_success_at`
+  and `serving_snapshot_from` (the newest stored observation's `fetched_at`). When the last attempt
+  failed, screens using that source show "Showing the last good data from <date>".
+- **Watchdog:** a run still `running` after `RUN_WATCHDOG_MINUTES = 30` is closed as
+  `failed (interrupted)`, with a note, when runs are listed or a new run starts.
+- **Lazy pages:** a failed lazy import reloads the page once (a `sessionStorage` flag), then shows
+  a clear error with a reload button.
+- **Remote calls:** every remote call keeps a time budget and a labelled fallback, and is recorded
+  in `usage_event` (already true for OpenAI and RunPod).
+
+**Tests:** a failing fake collector keeps earlier observations and reports the failure; the watchdog
+closes a stale run; the API exposes the state fields.
+
+### A5 Search and RunPod, measured
+**Goal:** better occupation and skill search, with RunPod doing real work and the gain measured
+on data we never tuned on.
+
+**Files:** `src/occupations/detect.py`, `src/occupations/evaluate.py`, `src/intake/skill_search.py`,
+`data/eval/occupation_titles_holdout.yaml` (new), `docs/RUNPOD_EVAL.md`.
+
+**Rules**
+- **Hybrid retrieval:**
+  1. BM25 top `HYBRID_CANDIDATES = 50` and BGE-M3 dense top 50;
+  2. fuse them by reciprocal rank fusion (`RRF_K = 60`);
+  3. rerank the fused top 10 with bge-reranker-v2-m3.
+- **Fallbacks:** BM25 alone when RunPod is unavailable (labelled); dense+BM25 without rerank when
+  the rerank job fails (labelled).
+- **Hold-out set:** commit it **before** any tuning. Contents: 40 new queries (at least 15 in Malay,
+  5 mixed English/Malay, 5 with typos), each with the accepted O*NET-SOC codes, labelled by the
+  team and dated.
+- **Report:** in `docs/RUNPOD_EVAL.md`, top-1, top-3 and MRR for keyword, dense, hybrid and
+  hybrid+rerank, on the old set and the hold-out set separately. The hold-out numbers are the
+  ones quoted.
+
+**Tests:** RRF ordering on a fixed example; the fallback labels; the evaluation script runs offline
+with fakes.
+
+### A6 Course and resource catalogue as a pipeline job
+**Goal:** more real, checkable content, including intermediate and advanced material, collected
+by the pipeline rather than typed by hand.
+
+**Files:** `src/collectors/mslearn.py` (new), `src/pipeline/run.py`, `data/sources.yaml`,
+`data/packs/gbs_fa/courses_mslearn.yaml` (generated), `scripts/review_catalogue.py`,
+`scripts/check_links.py`.
+
+**Rules**
+- **Collector:** the Microsoft Learn Catalog API (`https://learn.microsoft.com/api/catalog/`, free,
+  no key), modules and learning paths in English.
+- **Pre-filter:** keep items whose `roles`, `products` or `subjects` relate to finance, data and
+  automation: business-analyst, data-analyst, functional-consultant; power-bi, power-automate,
+  excel, dynamics-finance, dynamics-365; data-analytics, finance.
+- **Mapping to skills:**
+  1. Embed `title + summary` with BGE-M3.
+  2. Rerank each candidate against each pack skill's name and description.
+  3. Keep pairs with a rerank score ≥ `CATALOGUE_MIN_RERANK = 0.5` (declared; checked by hand on
+     20 pairs before use).
+- **Output entries:** `level` from the API (`beginner` / `intermediate` / `advanced`),
+  `minutes = duration_in_minutes`, `time_basis: reading_estimate`, `checked: <fetch date>`,
+  `verified: false`.
+- **`hands_on`:** true only when the item has a unit whose title starts with "Exercise".
+- **Review:** `scripts/review_catalogue.py` lists candidates. A reviewer opens each one and sets
+  `verified: true`. Only verified items are ever planned (Stage 0 already enforces this).
+- **OpenLearn and checked YouTube and articles:** added the same way to `resources_*.yaml`.
+- **Link check:** `scripts/check_links.py` checks that every course, video and article URL answers
+  200 (or a redirect to the same host). It runs as a pipeline step and before the pitch, and writes
+  failures to the run log.
+
+**Tests:** the collector parses a fixture response; mapping uses fakes; unverified items are not
+planned; the link checker reports a fake 404.
+
+### A7 Visible resource-scout agent (attempt)
+**Goal:** for a gap skill, an agent finds the exact part of a video or article that serves it,
+shown working in an in-app window. It finds and points; it does not teach.
+
+**Files:**
+- `src/agents/{client,scout,video,article,store}.py` (new), `src/api/agents.py`;
+- `AgentWindow.tsx` (new), `typesAgents.ts`, `requirements.txt`.
+
+**Flow**
+1. **Coordinator:** a tool-calling loop on `AGENT_MODEL` (`src/agents/client.py`, usage recorded).
+   Tools: `list_resources(skill)`, `video_segments(video_id, skill, level)` and
+   `article_passages(url, skill, level)`. At most `AGENT_MAX_STEPS = 8` tool calls, with
+   `AGENT_TIME_BUDGET_SECONDS = 45`.
+2. **Video scout:**
+   1. captions with timestamps from `youtube-transcript-api` (MIT);
+   2. chunks of 30–90 s cut at sentence ends;
+   3. RunPod rerank against "<skill name> at level <n>: <anchor sentence>";
+   4. the top 3 segments; `AGENT_MODEL` writes a one-line reason per segment from the chunk text
+      only;
+   5. a link `https://youtu.be/<id>?t=<start seconds>`.
+3. **Article scout:**
+   1. fetch and extract the text with `trafilatura` (Apache-2.0);
+   2. split it into passages and rerank them;
+   3. code checks that each quoted passage appears in the extracted text (otherwise it is dropped);
+   4. a deep link with a text fragment: `<url>#:~:text=<start>,<end>`.
+4. **Scope:** only resources already in the catalogue (A6) or `resources.yaml` are scouted. No open
+   web search.
+5. **Pre-computing:** results for the four personas' gap skills are computed in advance and stored
+   in `data/packs/gbs_fa/resources_scout.yaml`, with the date checked. YouTube often blocks caption
+   requests from cloud servers, so this runs on a local machine. A live run in the demo has the time
+   budget; on failure it shows the cached result, labelled.
+6. **`AgentWindow`:**
+   - a `Windows`-style dialog that streams steps by server-sent events from
+     `GET /api/agents/runs/{run_id}/events` (steps stored in `agent_run` and `agent_step`);
+   - each step shows what the agent is doing ("Reading captions", "Ranking 42 passages",
+     "Checking quotes");
+   - **Level 1:** a reader view of the passage with the match highlighted;
+   - **Level 2 (stretch, flag `AGENT_SCREENSHOTS=1`):** Playwright screenshots of the real page with
+     the passage highlighted;
+   - on finish it collapses into a results card with the links.
+7. **Labels:** results name `AGENT_MODEL`, the engine and the time.
+
+**Good enough for the demo:** Level 1 completes for a cached resource in under 5 s, and a live
+video run in under 45 s. Otherwise the cached result shows, labelled.
+
+**Tests:** fake captions and pages; a quote not in the text is dropped; the step limit and budget
+stop the loop; the events endpoint streams steps in order.
+
+### A8 Progress-check agent
+**Goal:** the person tells a finance practitioner what they did; the agent judges it against the
+level descriptions and proposes a level, which the person accepts or declines.
+
+**Files:** `src/agents/check.py` (new), `src/api/agents.py`, `ProgressCheck.tsx` (new),
+`Overview.tsx`, `typesAgents.ts`.
+
+**Agent setup**
+- **Persona:** a system prompt for a senior GBS finance practitioner who asks about real work.
+- **Context retrieved:** the skill's anchors (C1), the role's linked O*NET tasks, and the practice
+  task of the step (B4).
+- **Not fine-tuned.**
+
+**Flow**
+1. The agent asks 2–4 concrete questions, one at a time (what, which tool, how often, what went
+   wrong, who used the result). It never teaches, gives answers or hints at what to say.
+   `CHECK_MAX_QUESTIONS = 4`.
+2. **Schema:** `{done: bool, next_question: str, judgements: [{level: 1..5, verdict: "yes"|"partly"|"no", quote: str}]}`.
+   The model returns verdicts and quotes, never a number of its own beyond the level being judged.
+3. **Code:**
+   1. drops any judgement whose quote is not in the person's answers;
+   2. sets `proposed_level` to the highest level L where every level from the current level + 1 up
+      to L is "yes" ("partly" does not count);
+   3. caps it at `current_level + 2`.
+4. **Decide (C6):** accept → claim `agent_check` and a `level_changed` event; decline → nothing
+   changes. If B's `record_event` (B8) is not on `main` yet, the decide route writes the claim
+   only, and the event call is added during integration (§9 step 1).
+5. **Limits and fallback:**
+   - `CHECKS_PER_SKILL_PER_DAY = 3`;
+   - with no LLM, the check is shown as unavailable (labelled), and the person can still re-rate
+     themselves.
+6. **Before M2:** "Check my progress" opens from Overview's next-step card. After M2 it also opens
+   from each plan step (§9).
+
+**Tests:** fake LLM:
+- a quote missing from the answers is rejected;
+- "partly" does not raise the level;
+- the cap holds;
+- decline changes nothing;
+- accept writes the claim and the event.
+
+### A9 Privacy, status, load test, cost
+**Goal:** answer "privacy, reach, cost, freshness" with real features and measured numbers.
+
+**Files:**
+- `src/privacy.py` (new), `src/api/privacy.py`, `src/api/status.py`, `src/pipeline/run.py`;
+- `Privacy.tsx`, `Status.tsx`, `ResumeCode.tsx` (new);
+- `scripts/load/locustfile.py`, `scripts/cost.py`;
+- `docs/LOAD_TEST.md`, `docs/COST.md`.
+
+**Privacy**
+- **Endpoints:**
+  - `GET /api/profiles/{id}/export` returns every stored row for the profile;
+  - `DELETE /api/profiles/{id}` deletes the profile row and every row in any table with a
+    `profile_id` column (found from `metadata.tables`).
+- **Retention:** `PROFILE_RETENTION_DAYS = 90`; the pipeline deletes profiles not updated for that
+  long.
+- **Resume code:** the profile id as text and QR (npm `qrcode`, MIT), with copy and paste to
+  continue on another device.
+- **Privacy page:** maps the PDPA's seven principles (General, Notice and Choice, Disclosure,
+  Security, Retention, Data Integrity, Access) to what the app does:
+  - PII stripped before any model;
+  - no name, contact or CV text stored;
+  - anonymous id;
+  - export, delete, retention;
+  - what goes to OpenAI and RunPod.
+
+  It states that the app is a prototype, not a PDPA compliance certification.
+- **Consent wording** (B places it in onboarding, word for word): "Qart.ai keeps only what matching
+  needs: your situation, current role, skill levels with the CV sentence behind each, hours,
+  budget and interests. Names, IC numbers, phone numbers and emails are removed before anything
+  reads your CV, and the CV text is not stored. Your profile opens only with the private code kept
+  in this browser. You can export or delete it at any time; profiles unused for 90 days are
+  deleted."
+
+**Status page (C9):** freshness, runs, fallbacks, usage and cost, the fairness result (C10), and
+platform SDG totals (C4, suppressed below 5).
+
+**Load test** (`scripts/load/locustfile.py`, Locust, MIT)
+- **Journey:** `POST /profiles` with a persona's levels (no CV parsing), then `/matches`,
+  `/pathway`, `/tracks`, `/sdg`, `/api/forecast` and `/api/trends`.
+- **Paid calls:** 5% of virtual users also run `/intake/parse` on a sample CV (real LLM, capped at
+  `LOAD_MAX_LLM_CALLS = 50` per run).
+- **Steps:** 25, 50 and 100 users, 5 minutes each, against the deployed URL, run from a laptop.
+- **Results** in `docs/LOAD_TEST.md`: p50 and p95 per endpoint, error rate, requests per second,
+  fallback counts, and the date and commit.
+
+**Cost** (`scripts/cost.py`)
+- Reads `usage.totals`. The prices are declared parameters with source and date: OpenAI per-token
+  prices for both models, RunPod per-second price, Replit plan.
+- Output in `docs/COST.md`, with measured and projected values in separate tables:
+  - measured cost per journey and per month;
+  - projected cost at 1,000 and 10,000 users per month, with the ringgit rate's source and date.
+
+**Tests:** delete removes rows from every `profile_id` table; export returns them; retention deletes
+only idle profiles; the status shape matches C9.
+
+### A10 Compare futures, then stay and adapt (stretch)
+**Goal:** stage 6 shows the shift between scenarios clearly. If time allows, working adults also
+see how their current role changes.
+
+**Files:** `Future.tsx`, `typesAgents.ts`, `src/api/evidence_test.py` (if a route is needed).
+
+**Compare futures**
+- Moderate and fast side by side from `/matches?scenario=...` (C2), with rank-shift arrows and
+  each skill's weight before → after for the chosen role.
+- The sensitivity ranks from `/sensitivity` as a small table (intensities 0 to 1.5).
+- Labelled estimates, with the scenario parameters shown (`SCENARIO_INTENSITY`, horizon).
+
+**Stay and adapt (stretch):** the person's current role tasks (O*NET), the observed AI use for each
+(kept separate from exposure), the responsibilities that grow, and the skills shared with the
+destination roles. No time-saved percentages.
 
 ---
 
-## 8. Integration on `main` after M2
+## 8. Branch B: scoring and pathway (Meiirman)
 
-1. Mount A's `AgentWindow` and `ProgressCheck` on B's plan steps (`TrackMap`), using the props
-   fixed in C6/C7.
-2. Overview reads the real C2–C5 fields; drop the fixtures.
-3. Put the `SdgHeatmap` summary on Overview.
-4. Full persona journey test, load test, link check, `scripts/kpis.py`; record the results.
+Stage 1 (before M1) = B1–B4.
+
+### B1 Correctness fixes
+**Goal:** the numbers a judge checks first are right.
+
+**Files:** `src/match/engine.py`, `src/intake/extract.py`, `src/pathway/tracks.py`,
+`src/params.py` (B), `data/samples/kavitha.txt` (new), tests.
+
+**Rules**
+- **Scenario floor:** `factor = max(SCENARIO_FACTOR_FLOOR, 1 + d·s·a)`, with
+  `SCENARIO_FACTOR_FLOOR = 0.1` (declared: a skill can lose most of its weight but never vanish or
+  go negative, even at the 1.5 sensitivity intensity).
+- **ERP backstop:** after the LLM, if the scrubbed CV names an ERP system (`ERP_ALIASES` in
+  `params.py`: SAP, S/4HANA, Oracle, Dynamics 365, NetSuite, Workday Financials, Infor, Sage X3,
+  SQL Accounting, AutoCount) and no `erp` claim exists, add one at level 2 with that sentence as
+  evidence and `source: "cv"`. The note says "added by rule". The same applies in the keyword
+  fallback.
+- **Totals:** one definition only.
+  - Plan hours = the planned study steps.
+  - AI-basics hours are shown separately as "+ X h AI basics", never added silently.
+  - The with-AI comparison names both parts.
+  - Likely source of the 6.2 h versus 8.5 h mismatch: `comparison()` adds AI basics, the plan
+    total does not. Confirm it with the CV that showed it.
+- **Thin profile and unknown skill:**
+  - every skip in onboarding still gives ranked roles, fit 0 with a range, and a plan;
+  - an unknown skill in a request gives 422 with its name;
+  - a CV phrase that matches no skill is listed as "not in our skill list", never dropped silently.
+- **Kavitha:** add her synthetic CV now, so both branches can demo her:
+  - 9 years; senior reporting analyst at a GBS centre;
+  - Power Automate flows for invoice intake;
+  - Python scripts for reconciliations;
+  - S/4HANA migration UAT;
+  - multi-source Power BI with Power Query;
+  - trains new analysts.
+
+  Labelled synthetic like the others, and added to `SAMPLES`.
+
+**Tests:**
+- weights > 0 at every intensity in `SENSITIVITY_INTENSITIES`;
+- essentials are unchanged;
+- the ERP alias adds a claim with its sentence;
+- the plan total equals the sum of its steps;
+- a thin profile returns roles and a plan.
+
+### B2 Level scale 0–5 and the level descriptions (C1)
+**Goal:** levels mean something observable, and the person picks a sentence, not a number.
+
+**Files:**
+- `src/levels.py` (new), `data/packs/gbs_fa/levels.yaml` (new);
+- `src/params.py` (`PROFICIENCY_LABELS`), `src/journey/store.py` (`MAX_LEVEL = 5`);
+- `src/intake/extract.py` (`LEVEL_GUIDE`, schema enum 1–5), `src/goal/posting.py` (level enum 1–5);
+- `src/api/journey.py` (`/pack`), `LevelPicker.tsx` (new), `Onboarding.tsx`, `Roles.tsx`,
+  `typesScoring.ts`.
+
+**Rules**
+- **Anchors:** five per skill for every skill any destination role requires. `python -m src.levels --missing`
+  lists the gaps.
+- **Basis:** start from the team's research (SkillsFuture Accountancy job tasks, SFIA skill
+  levels, University of Florida AP competency), write our own sentences, cite the basis, and review
+  with the team.
+- **Extraction:** the prompt's level guide uses the scale meanings, plus the skill's anchors when
+  short enough (otherwise the meanings only).
+- **`LevelPicker`:** shows the skill's sentences from 1 to 5. The person picks the highest true one;
+  "None of these" = 0; "Not sure" = unstated. The CV line shows beside it when one exists.
+- **Existing claims:** keep their numbers (§1 decision 2). Bump `CALCULATION_VERSION` to
+  `journey-3` and log it.
+
+**Tests:**
+- every required skill has anchors 1–5;
+- the API exposes six labels;
+- a stored level-4 claim still loads;
+- the extraction schema accepts 5.
+
+### B3 Fit range, band, components, what would raise it (C2)
+**Goal:** "why this score, and what would raise it" is answered on screen in one click.
+
+**Files:** `src/match/decision.py`, `src/api/journey.py`, `src/params.py` (B), `ScoreWhy.tsx`
+(new), `Roles.tsx`, `typesScoring.ts`.
+
+**Rules**
+- Implement C2 exactly, with `BAND_THRESHOLDS = {"strong": 75, "good": 55, "fair": 35}`.
+- **Score chip:** each role card shows a large chip: band, `fit`, range ("Fair · 41 (32–48)").
+  Its "Why?" opens `ScoreWhy`.
+- **`ScoreWhy` panes:**
+  1. **The formula** with the person's own numbers:
+     `fit = 100 × Σ w·min(c/r, 1) ÷ Σ w`, a row per requirement (weight, claimed, required, points),
+     and evidence quote or "self-rated" per claim.
+  2. **Why each weight is what it is:** the existing `shift_reason`, with its source and period.
+  3. **What would raise it:** C2 `raise`, each with its route (study, practice, check).
+  4. **Essentials still short:** always visible.
+  5. **Labels:** the band thresholds are an assumption; the range basis.
+
+**Tests:**
+- the range for a fully evidenced profile has low = fit with unstated 0;
+- unevidenced claims lower `low`;
+- `raise` points equal a re-score;
+- the band follows the thresholds.
+
+### B4 Study versus practice (C3)
+**Goal:** plans are honest about what study can do; level 3 comes from work.
+
+**Files:** `src/pathway/planner.py`, `src/pathway/practice.py` (new),
+`data/packs/gbs_fa/practice.yaml` (new), `src/pathway/tracks.py`, `src/api/journey.py`,
+`src/journey/progress.py`, `src/params.py` (B), `TrackMap.tsx`, `Pathway.tsx`, `typesScoring.ts`.
+
+**Parameters** (B section, each with basis)
+- `STUDY_MAX_LEVEL = 2`: study alone reaches "aware" at most (MQF counts 40 notional hours per
+  credit including practice; vendors expect months of use).
+- `LEVEL1_MIN_HOURS = 1`.
+- `LEVEL2_MIN_HOURS = 20` of material covering the skill, including at least one `hands_on` item
+  (the shortest recognised programme found was 19 h: WSQ Vendor Performance Management).
+
+These replace `COURSE_LEVEL_REACH`, `COURSE_MAX_GAIN_*` and `COURSE_SHORT_MINUTES` in the planner.
+Remove the old ones with a decision-log entry.
+
+**`practice.yaml`**
+- Per skill: tasks for 2→3 and 3→4, each with `text`, `weeks_low`, `weeks_high`, `basis` (title,
+  url, read) and `show_by` (what the person describes in the progress check).
+- Practice tasks are suggestions to agree with a manager, not courses; their weeks are estimates.
+
+**Planner**
+1. Order gaps as today: essentials first, then by weight.
+2. Study steps: add verified courses covering the skill, shortest first, until the level rule is
+   met or the courses run out. Respect prerequisites.
+3. If the required level is 3 or more, add one practice step per level above 2.
+4. Plan time:
+   - study hours at the person's weekly hours;
+   - practice weeks in sequence after the study steps for that skill, shown as a range.
+5. `fit_after_study` uses levels after study; `fit_after_practice` assumes the practice targets
+   are reached. Both are ranges by the C2 rule (planned levels count as unevidenced).
+
+**Unlocking**
+- A study step unlocks when the step before it is done (as today).
+- A practice step unlocks when that skill's study steps are done.
+- A practice step is complete when the skill's claim reaches its target, through an accepted
+  progress check (`agent_check`) or a self re-rate (labelled "self-rated").
+- "Continue anyway" marks it `skipped` (C5), labelled.
+
+**Tests:**
+- study never takes a skill above 2;
+- 20 h without hands-on material stays at 1;
+- practice steps appear only for levels above 2;
+- totals and ranges are consistent;
+- unlocking follows the rules, using fixture `agent_check` claims (A8 is not needed for this test).
+
+### B5 The plan adapts to the person
+**Goal:** an experienced person does not get beginner content; a beginner gets the basics first.
+
+**Files:** `src/pathway/tracks.py`, `src/pathway/planner.py`, `src/params.py` (B), `Pathway.tsx`.
+
+**Rules**
+- **AI basics:** skipped when any of `prompt_engineering`, `process_automation`,
+  `advanced_technology_integration` or `data_management` is claimed at level 3 or above with
+  evidence (`cv` or `agent_check`). Set `AI_BASICS_SKIP_LEVEL = 3`.
+  - The plan says why ("Skipped: your CV shows ‘<quote>’") and offers "Show AI basics anyway".
+  - Students and switchers always see AI basics.
+- **Course level:** no `beginner` course for a skill claimed at 2 or above. A skill at or above
+  `STUDY_MAX_LEVEL` goes straight to practice.
+- **Show the reason:** every adaptation is visible as a short "Adjusted for you" note with its rule.
+
+**Tests:** Kavitha has no AI basics and no beginner courses; Hafiz has AI basics first; removing
+Kavitha's evidence brings AI basics back.
+
+### B6 Personas and the journey test
+**Goal:** different people get visibly different results; this is the proof that nothing is
+hard-coded.
+
+**Files:** `data/samples/*.txt`, `src/api/journey.py` (`SAMPLES`), `tests/test_personas.py` (new).
+
+**Rules**
+- **Four personas:** Hafiz (graduate), Mei (switcher), Nur (working, at risk), Kavitha (working,
+  advanced). Each CV is labelled synthetic.
+- **The test** builds each profile through the API from fixed levels (no LLM) and asserts:
+  - top roles differ between at least three personas;
+  - Kavitha's top-role fit exceeds Nur's;
+  - AI basics are shown for Hafiz and not for Kavitha;
+  - Kavitha's plan has practice steps and no beginner courses;
+  - every persona's response has no number without a source or a label in C2 and C3.
+
+### B7 SDG mapping and heatmap (C4)
+**Goal:** the SDG link is specific, explained and changes what a person can compare.
+
+**Files:** `data/packs/gbs_fa/sdg.yaml`, `src/pack.py` (`SdgMap`), `src/pathway/sdg.py` (new),
+`src/api/sdg.py`, `SdgHeatmap.tsx` (new), `Pathway.tsx`, `Roles.tsx`, `typesScoring.ts`.
+
+**Mapping**
+- `sdg.yaml` gains:
+  - `skills: {skill_id: [{target, how, source}]}`;
+  - `roles: {role_id: [{target, how, source}]}`.
+
+  Keep `skill_kinds` as the fallback.
+- **Pack check:** every skill and destination role has at least one link, every link has a
+  one-line `how`, and every target is in `targets`.
+- **Targets:** 4.3, 4.4, 8.2, 8.5 and 12.6 (already defined). Add others only with a written
+  mechanism and source.
+
+**Hours**
+- A study step's hours are split equally over the skills it raises.
+- A skill's hours count toward every target it serves.
+- Practice steps show as a marker, not hours.
+- The path-level links (4.3 for free learning, 8.5 for the destination move) appear as
+  `path_links`.
+
+**Heatmap**
+- On `/pathway#sdg`: rows are the plan's skills, columns are targets; a cell is planned study hours.
+- One sequential hue, with values printed in cells and a table view (dataviz rules).
+- A click on a cell opens the reasons and sources in `Windows`. The totals row is labelled "not
+  additive across targets".
+- **Roles view:** on `/roles`, a compact roles × targets grid (linked or not, with the reason on
+  click), so roles can be compared by contribution.
+
+**Tests:** every skill and role is linked; cell hours equal the step split; totals equal the column
+sums; the API shape matches C4.
+
+### B8 Progress events and badges (C5)
+**Goal:** progress is tracked from real events, and badges reward only what happened.
+
+**Files:** `src/journey/events.py` (new), `src/journey/progress.py`, `src/api/decision.py`,
+`src/api/badges.py`, `Badges.tsx` (new), `Pathway.tsx`, `typesScoring.ts`.
+
+**Rules**
+- **Events:** write `journey_event` rows from the progress, destination and profile routes, and
+  expose `record_event` for A8.
+- **Badges** (each derived only from events):
+  - "First step" (first `course_done`);
+  - "Skill up" (each `level_changed` that increases a required skill);
+  - "Essentials ready" (all essentials of the destination at their level);
+  - "Halfway" (half the study hours done);
+  - "Plan complete".
+- **Display:** a `Badges` strip on the plan page, each badge with the event that earned it and its
+  date.
+
+**Tests:** no event, no badge; undoing a course does not keep "Halfway" if no longer true;
+`level_changed` from `agent_check` earns "Skill up".
+
+### B9 Report figures and the fairness function
+**Goal:** the Section 4 numbers come from code, not prose.
+
+**Files:** `scripts/kpis.py` (new), `src/match/fairness.py` (new), `docs/KPI_RESULTS.md` (generated).
+
+**`scripts/kpis.py` computes:**
+- verified free-course coverage of the required skills, using the Phase 1 denominator (27/37 at
+  73%, target ≥ 90%), with catalogue changes disclosed separately;
+- the free share of each persona's plan;
+- the share of displayed numbers in the C2 and C3 responses that carry a source or a label.
+
+**Fairness:** `paired_profile_check` (C10), sharing its pairs with `tests/test_fairness.py`.
+
+---
+
+## 9. Integration on `main` after M2
+
+1. Mount A's `AgentWindow` ("Find the best part") and `ProgressCheck` ("Check my progress") on
+   each node of B's `TrackMap`. Practice steps use `ProgressCheck` to complete. The progress
+   check's decide route calls `record_event` if it does not yet.
+2. Overview reads the real C2–C5 fields; remove the fixtures.
+3. Confirm that the Sidebar's "5 SDG contribution" link reaches `/pathway#sdg`.
+4. Run the full journey with the four personas, the load test, the link check, `scripts/kpis.py`
+   and `scripts/cost.py`. Record the outputs.
 5. Update `docs/explain/*`, `README.md`, the declaration log and the decision log.
 
 ---
 
-## 9. Evidence for the final report (Section 4) and the judges
+## 10. Measuring against the Phase 1 targets (both)
 
-| Requirement | Where it comes from | Owner |
-|---|---|---|
-| Reach: who first, which channel, how many | Report text: TVET and university career centres, then employers' L&D; realistic numbers with the reasoning | Moo7x |
-| Data freshness | `/api/status` freshness, run history, scheduled job | A |
-| Cost per user / month | `usage_event` + `scripts/cost.py`, load test | A |
-| Learning cost | `free_share` (C3), `scripts/kpis.py`; HRD Corp: none verified yet, said openly | B |
-| Measured SDG impact vs Phase 1 targets | `scripts/kpis.py` (coverage, traceability), a timed test with 10+ people using synthetic personas (time to a plan < 5 min; ≥ 70% can explain their top role), platform SDG totals | both |
-| Privacy (PDPA) | Privacy page, delete/export/retention, PII stripping | A |
-| Fairness | Paired-profile test result surfaced on status | B |
-| 4.1 proof | Fit formula, scenario factor, learning-gain rule, forecast backtest table, load-test log | both |
+**User test** (`docs/USER_TEST.md`)
+- **Participants:** 10 or more classmates, each given one persona card (synthetic data only), on
+  the deployed app.
+- **Time:** from "Start" to seeing ranked roles **and** a pathway (target: 80% under 5 minutes).
+- **Understanding:** then ask, without help, "Why was your top role recommended?". A pass names at
+  least two of: a matched skill, a gap, the score's components or the evidence behind a weight
+  (target: 70%).
+- **Records:** times, pass or fail, persona, date and app commit. No names or personal data.
 
-**Demo questions and what answers each one**
-
-| Question | Answer on screen | Who answers |
-|---|---|---|
-| Change the trend data now. What should change? | Change test (A3) and the replay | Moo7x |
-| Where does this come from? Is this course or number real? | "Why?" panel, source and date, link check, catalogue `verified` | Meiirman |
-| Why this score, and what would raise it? | `ScoreWhy` (B3) | Meiirman |
-| How is the data kept current, and what does it cost? | Status page (A9) | Moo7x |
-| What if AI moves faster or slower? | Compare futures and the sensitivity view | Meiirman |
-| How do you stop invented jobs or courses? | Pack plus verified catalogue, quote checks, `verified: false` never recommended | Moo7x |
+**Other targets**
+- **Coverage and traceability:** from `scripts/kpis.py` (B9).
+- **Freshness, cost, load:** from the status page, `docs/COST.md` and `docs/LOAD_TEST.md` (A9).
 
 ---
 
-## 10. Definition of done (every work package)
+## 11. Report Section 4 and Q&A: where each answer comes from
 
-- It works through the real API on the deployed app, not only with mocks; frontend types match the
-  server shapes.
-- Every number shown is labelled observed, assumption or estimate, with its source and date; a
-  missing value shows "not stated", never 0.
-- New parameters are named and commented (what, why, which kind) and logged in
+| Requirement | Evidence | Owner |
+|---|---|---|
+| Reach and channel | Report text: university and TVET career centres first (QR to the app, resume codes), then employers' L&D; numbers with their reasoning | Moo7x |
+| Data freshness | Status page, run history, schedule | A |
+| Cost per user / month | `docs/COST.md`, `usage_event`, load test | A |
+| Learning cost | `free_share`, `scripts/kpis.py`; HRD Corp: none verified, said openly | B |
+| SDG impact against Phase 1 | `docs/KPI_RESULTS.md`, `docs/USER_TEST.md`, platform SDG totals | both |
+| Privacy (PDPA) | Privacy page, export, delete, retention, PII stripping | A |
+| Fairness | `paired_profile_check` on the status page | B |
+| 4.1 proof | Fit formula with the floor, study / practice rule, forecast backtest table, load-test log | both |
+
+| Q&A question | Answer on screen | Who answers |
+|---|---|---|
+| Change the trend data now. What should change? | Change test (A3), replay | Moo7x |
+| Where does this come from? Is this course or number real? | "Why?" panels, link check, `verified` catalogue | Meiirman |
+| Why this score, and what would raise it? | `ScoreWhy` (B3) | Meiirman |
+| How is the data kept current, and what does it cost? | Status page, `docs/COST.md` (A9) | Moo7x |
+| What if AI moves faster or slower? | Compare futures, sensitivity (A10) | Meiirman |
+| How do you stop invented jobs or courses? | Pack and verified catalogue only, quote checks, `verified: false` never planned, the model never writes numbers | Moo7x |
+
+---
+
+## 12. Definition of done (every work package)
+
+- Works through the real API on a local build with the four personas, not only with mocks.
+  Frontend types match the server models.
+- Every number shown is labelled observed (source and date), assumption or estimate. Missing shows
+  "not stated", never 0.
+- New parameters are named and commented (what, why this value, which kind) and logged in
   `docs/decision_log.md`.
-- Tests cover the rule, including the edge cases (thin profile, missing data, failing source,
-  fallback).
-- Checks are green; the commits are small; `docs/explain/<module>.md` is updated.
+- Tests cover the rule and its edge cases. All checks are green.
+- Commits are small. `docs/explain/<module>.md` is updated. New libraries and models are declared.
+- **Nothing outside the package:**
+  - no renamed fields;
+  - no formula changes outside the package;
+  - no edits to the other owner's files;
+  - no invented data;
+  - no removed features.
