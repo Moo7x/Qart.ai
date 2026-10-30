@@ -107,6 +107,9 @@ CHECK_MAX_QUESTIONS = 4
 CHECK_MAX_RAISE = 2
 CHECKS_PER_SKILL_PER_DAY = 3
 CHECK_MIN_QUOTE_CHARS = 8  # a quote shorter than this cannot show anything
+# Privacy (src/privacy.py): a profile not updated for 90 days is deleted by the pipeline. Declared:
+# long enough to come back to a plan after a quarter, short enough not to keep data for nothing.
+PROFILE_RETENTION_DAYS = 90
 
 # --- Matching (src/match/engine.py) ------------------------------------------------------------
 # Bump when the formula/planning algorithm changes, even if its numeric parameters do not.

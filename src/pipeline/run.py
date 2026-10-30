@@ -22,7 +22,7 @@ from typing import Any
 import httpx
 from sqlalchemy import Engine
 
-from src import params
+from src import params, privacy
 from src.changes.service import refresh_proposals
 from src.collectors import aei, dosm_jmi, dosm_wages, ilo, mycol, onet, talentcorp
 from src.collectors.base import Collect
@@ -214,6 +214,21 @@ def _run_all(
             results.append(links.link_step(client))
     except Exception as exc:  # noqa: BLE001  a link check problem never affects the evidence
         results.append(_failed_step("link_check", exc))
+    try:
+        removed = privacy.purge_idle(engine, params.PROFILE_RETENTION_DAYS)
+        results.append(
+            {
+                "source_id": "retention",
+                "status": "ok",
+                "fetched": 0,
+                "new": 0,
+                "note": (
+                    f"{removed} profile(s) unused for {params.PROFILE_RETENTION_DAYS} days deleted"
+                ),
+            }
+        )
+    except Exception as exc:  # noqa: BLE001
+        results.append(_failed_step("retention", exc))
     # Also retry publication after a previous run stored evidence but failed before publication.
     refresh_proposals(engine, previous_cutoff, run_id)
     finish_run(engine, run_id, status, new_total, results)
