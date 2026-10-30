@@ -417,6 +417,11 @@ export function Onboarding() {
                 </div>
               ))}
             </div>
+            {extraction?.unmatched?.length ? (
+              <p className="m-0 text-sm text-graphite">
+                <span className="font-medium">Not in our skill list</span> (found in your CV, not used in any score): {extraction.unmatched.map((p) => `“${p}”`).join(', ')}
+              </p>
+            ) : null}
             <label className="flex flex-col gap-1.5 text-[13px] font-medium">
               Add a skill
               <input value={addQuery} onChange={(e) => setAddQuery(e.target.value)} placeholder="e.g. SQL, budget, ESG" className="min-h-[44px] rounded-md border border-hairline bg-fog px-3 text-[15px]" />

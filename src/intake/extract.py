@@ -26,6 +26,11 @@ LLM_TIME_BUDGET_SECONDS = 25.0
 MAX_CV_CHARS = 12_000  # longer text is cut: a CV, not a book
 KEYWORD_MIN_SCORE = 2.0  # BM25 score a sentence must reach to count as mentioning a skill
 MIN_QUOTE_CHARS = 8  # a quote shorter than this cannot show anything (e.g. a lone word)
+# A phrase outside our skill list is a short name ("Python", "Tableau"), so it may be short.
+MIN_UNMATCHED_CHARS = 2
+MAX_UNMATCHED_CHARS = 80  # longer than a skill or tool name: a sentence, not a phrase
+MAX_UNMATCHED = 20  # a CV, not a list of every word
+KEYWORD_UNMATCHED_NOTE = "keywords cannot list CV phrases outside our skill list"
 SENTENCE = re.compile(r"(?<=[.!?])\s+|\n+")
 ERP_PATTERN = re.compile(
     r"(?<!\w)(" + "|".join(re.escape(a) for a in params.ERP_ALIASES) + r")(?!\w)", re.IGNORECASE
@@ -60,6 +65,9 @@ class Extraction:
     note: str
     removed: dict[str, int]
     rejected: list[dict[str, str]] = field(default_factory=list)
+    # Skills or tools the CV names that are not in our skill list, word for word from the CV.
+    # Listed as "not in our skill list", never dropped silently; they do not change any score.
+    unmatched: list[str] = field(default_factory=list)
     stages: list[dict[str, Any]] = field(default_factory=list)  # measured, for the activity panel
 
 
@@ -71,7 +79,7 @@ def schema(pack: Pack) -> dict[str, Any]:
     return {
         "type": "object",
         "additionalProperties": False,
-        "required": ["current_role", "years_experience", "skills", "interests"],
+        "required": ["current_role", "years_experience", "skills", "interests", "unmatched"],
         "properties": {
             "current_role": {"type": "string", "enum": [*pack.current_roles, "other"]},
             "years_experience": {"type": ["number", "null"]},
@@ -89,6 +97,7 @@ def schema(pack: Pack) -> dict[str, Any]:
                 },
             },
             "interests": {"type": "array", "items": {"type": "string", "enum": KINDS}},
+            "unmatched": {"type": "array", "items": {"type": "string"}},
         },
     }
 
@@ -106,7 +115,10 @@ def messages(pack: Pack, cv_text: str) -> list[dict[str, str]]:
                 "Tools named in the CV count as evidence for the matching skill (e.g. an ERP "
                 "system such as SAP for Enterprise Resource Planning). "
                 f"{LEVEL_GUIDE} Pick the current role from the list, or 'other'. Interests are the "
-                "kinds of work the person says they want more of.\n\nAllowed skills:\n"
+                "kinds of work the person says they want more of. Under unmatched, copy word for "
+                "word the short name of each skill or tool the CV shows that fits none of the "
+                "allowed skills (e.g. a programming language); never a whole sentence."
+                "\n\nAllowed skills:\n"
                 f"{skills}\n\nCurrent roles:\n{roles}"
             ),
         },
@@ -141,6 +153,21 @@ def _validate(
         if skill not in kept or level > (kept[skill].level or 0):
             kept[skill] = ClaimedSkill(skill, pack.skills[skill].name, level, quote.strip())
     return list(kept.values()), rejected
+
+
+def _unmatched(answer: dict[str, Any], cv_text: str) -> list[str]:
+    """Keep only short phrases that are really in the CV, each once."""
+    haystack = _normalise(cv_text)
+    kept: dict[str, str] = {}
+    for item in answer.get("unmatched", []):
+        phrase = str(item).strip()
+        if not MIN_UNMATCHED_CHARS <= len(phrase) <= MAX_UNMATCHED_CHARS:
+            continue
+        key = _normalise(phrase)
+        # Whole words only, so "SQ" never counts as found inside "SQL".
+        if re.search(rf"(?<!\w){re.escape(key)}(?!\w)", haystack):
+            kept.setdefault(key, phrase)
+    return list(kept.values())[:MAX_UNMATCHED]
 
 
 def keyword_extract(pack: Pack, cv_text: str) -> tuple[str, list[ClaimedSkill]]:
@@ -200,6 +227,7 @@ def extract(
                     f"{len(rejected)} claim(s) rejected by the evidence check" if rejected else ""
                 )
                 skills, checked = _with_erp_rule(pack, text, skills, checked)
+                unmatched = _unmatched(answer, text)
             role = answer.get("current_role")
             return Extraction(
                 current_role=role if role in pack.current_roles else "other",
@@ -210,6 +238,7 @@ def extract(
                 note=checked,
                 removed=cleaned.removed,
                 rejected=rejected,
+                unmatched=unmatched,
                 stages=stages.items,
             )
         except Exception as exc:  # noqa: BLE001  any model or parsing failure → labelled fallback
@@ -219,6 +248,7 @@ def extract(
     with stages.step("Match CV sentences to skills", "BM25 keywords"):
         role, skills = keyword_extract(pack, text)
         skills, note = _with_erp_rule(pack, text, skills, note)
+    note = f"{note}; {KEYWORD_UNMATCHED_NOTE}"
     return Extraction(
         current_role=role,
         years_experience=None,

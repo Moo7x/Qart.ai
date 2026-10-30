@@ -135,6 +135,7 @@ export type Extraction = {
   note: string
   removed: Record<string, number>
   rejected: { skill: string; reason: string }[]
+  unmatched?: string[]
   stages?: Stage[]
 }
 
