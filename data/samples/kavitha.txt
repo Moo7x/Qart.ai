@@ -1,0 +1,36 @@
+Kavitha A/P Subramaniam
+Email: kavitha.sample@example.com
+Phone: +60 13-456 7890
+IC No: 880412-10-6142
+
+SYNTHETIC SAMPLE CV FOR THE QART.AI DEMO. THIS PERSON DOES NOT EXIST.
+
+Profile
+Senior Reporting Analyst with 9 years in a GBS centre in Kuala Lumpur, producing month-end and
+management reporting for entities across Asia Pacific. I automate routine finance work and want
+to move into finance systems or reporting leadership.
+
+Experience
+Senior Reporting Analyst, regional GBS centre, Kuala Lumpur (2020 – present)
+- Built Power Automate flows that read supplier invoices from a shared mailbox and log them for AP review.
+- Wrote Python scripts that reconcile intercompany balances and bank statements and list the breaks.
+- Ran user acceptance testing for the S/4HANA migration of the general ledger and reporting.
+- Built multi-source Power BI dashboards with Power Query, combining SAP, Excel and payroll data.
+- Prepared the monthly management reporting pack and variance commentary for regional finance leads.
+- Train and review the work of new reporting analysts joining the team.
+
+Financial Analyst, regional GBS centre, Kuala Lumpur (2017 – 2020)
+- Prepared month-end journals and balance sheet reconciliations in SAP.
+- Checked data quality of ledger extracts before reporting.
+
+Accounts Executive, manufacturing company, Shah Alam (2016 – 2017)
+- Posted supplier invoices and prepared monthly accruals.
+
+Education
+Bachelor of Accounting (Hons), 2016
+
+Skills
+Power BI, Power Query, Power Automate, Python, SAP S/4HANA, Microsoft Excel, month-end close.
+
+Interests
+Automation and data in finance; mentoring new analysts.

@@ -42,7 +42,7 @@ def test_pack_lists_skills_roles_and_synthetic_samples(client: TestClient) -> No
     body = client.get("/api/pack").json()
     assert len(body["destination_roles"]) == 9
     assert body["task_examples"] and all(x["url"] for x in body["task_examples"])
-    assert {s["id"] for s in body["samples"]} == {"nur", "hafiz", "mei"}
+    assert {s["id"] for s in body["samples"]} == {"nur", "hafiz", "mei", "kavitha"}
     assert "THIS PERSON DOES NOT EXIST" in client.get("/api/samples/nur").json()["text"]
 
 

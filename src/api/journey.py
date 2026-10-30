@@ -45,6 +45,7 @@ SAMPLES = {
     "nur": "Nur · cash application analyst",
     "hafiz": "Hafiz · accounting graduate",
     "mei": "Mei · retail supervisor",
+    "kavitha": "Kavitha · senior reporting analyst",
 }
 MAX_TEXT_CHARS = 20_000
 SCENARIO_LABEL = {"moderate": "Moderate AI adoption", "fast": "Fast AI adoption"}
