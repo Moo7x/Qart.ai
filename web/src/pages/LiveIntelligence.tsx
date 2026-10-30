@@ -85,7 +85,7 @@ function RunNow({ onStarted }: { onStarted: () => void }) {
 }
 
 // Steps logged with a run that are not sources.
-export const STEPS = ['trend_models', 'occupation_index']
+export const STEPS = ['trend_models', 'occupation_index', 'link_check']
 
 // Plain names for the DOSM occupation groups and the three simple forecast methods.
 const GROUP_NAME: Record<string, string> = {

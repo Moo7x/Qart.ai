@@ -42,6 +42,7 @@ from src.evidence.store import (
 )
 from src.occupations.catalogue import build_index, refresh_catalogue
 from src.occupations.preview import fill_isco
+from src.pipeline import links
 
 logger = logging.getLogger(__name__)
 
@@ -208,6 +209,11 @@ def _run_all(
         )
     except Exception as exc:  # noqa: BLE001  RunPod or O*NET down: previous index and BM25 stay
         results.append(_failed_step("occupation_index", exc))
+    try:
+        with (client_factory or links.client)() as client:
+            results.append(links.link_step(client))
+    except Exception as exc:  # noqa: BLE001  a link check problem never affects the evidence
+        results.append(_failed_step("link_check", exc))
     # Also retry publication after a previous run stored evidence but failed before publication.
     refresh_proposals(engine, previous_cutoff, run_id)
     finish_run(engine, run_id, status, new_total, results)
