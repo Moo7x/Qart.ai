@@ -1,4 +1,4 @@
-import { lazy, Suspense } from 'react'
+import { lazy, Suspense, useEffect } from 'react'
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { Sidebar } from './components/Sidebar'
 import { Cv } from './pages/Cv'
@@ -17,9 +17,29 @@ import { JourneyProvider, useJourney } from './state'
 const Trends = lazy(() => import('./pages/Trends').then((m) => ({ default: m.Trends })))
 const Overview = lazy(() => import('./pages/Overview').then((m) => ({ default: m.Overview })))
 
+// Pages load their sections from the API, so a "#section" link waits for the section to appear.
+const HASH_WAIT_MS = 3000
+const HASH_POLL_MS = 150
+
+function useScrollToHash(pathname: string, hash: string) {
+  useEffect(() => {
+    if (!hash) return
+    const started = Date.now()
+    const id = window.setInterval(() => {
+      const target = document.getElementById(hash.slice(1))
+      if (target || Date.now() - started > HASH_WAIT_MS) {
+        window.clearInterval(id)
+        target?.scrollIntoView({ block: 'start' })
+      }
+    }, HASH_POLL_MS)
+    return () => window.clearInterval(id)
+  }, [pathname, hash])
+}
+
 function Shell() {
   const location = useLocation()
   const { profileId } = useJourney()
+  useScrollToHash(location.pathname, location.hash)
   if (location.pathname === '/start') return <Onboarding key={location.search} />
   if (location.pathname === '/') return <Navigate to="/start" replace />
   if (location.pathname === '/overview' && !profileId) return <Navigate to="/start" replace />
