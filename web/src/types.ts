@@ -138,7 +138,13 @@ export type Extraction = {
   stages?: Stage[]
 }
 
-export type SkillClaim = { level: number | null; evidence: string; source: 'cv' | 'self' | 'keyword' }
+export type SkillClaim = {
+  level: number | null
+  evidence: string
+  source: 'cv' | 'self' | 'keyword' | 'agent_check'
+  checked_at?: string
+  model?: string
+}
 export type ProfileData = {
   situation: Situation
   current_role: string

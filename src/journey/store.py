@@ -36,8 +36,14 @@ Situation = Literal["working", "student", "switcher"]
 
 class SkillClaim(BaseModel):
     level: int | None = Field(default=None, ge=0, le=MAX_LEVEL)  # None = not stated
-    evidence: str = ""  # the CV sentence, or "" when the person set it themselves
-    source: Literal["cv", "self", "keyword"] = "self"
+    # The CV sentence, the person's own words quoted by an accepted progress check, or "" when the
+    # person set the level themselves.
+    evidence: str = ""
+    source: Literal["cv", "self", "keyword", "agent_check"] = "self"
+    # When an accepted progress check set this claim (ISO 8601, UTC), "" otherwise. Text, not a
+    # datetime, because the profile is stored and fingerprinted as plain JSON.
+    checked_at: str = ""
+    model: str = ""  # the model that ran that check (AGENT_MODEL), named on screen
 
 
 class ProfileData(BaseModel):
