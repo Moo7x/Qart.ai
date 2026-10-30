@@ -21,7 +21,8 @@ The organisers can inspect commit history. *"One giant last-minute commit gets r
 - Don't change git identity or config.
 
 ## Branches
-- `main` = integrated, working state. Feature work happens on `v3` (the current product).
+- `main` = integrated, working state. Phase 2 work happens on `p2-ai-experience` and
+  `p2-scoring-pathway`, merged through `main` in the order of `docs/PHASE2_PLAN.md` §2.
 - Merge into `main` slice by slice via a pull request or `git merge --no-ff` so the branch history stays visible. **Don't squash-merge.**
 
 ## Pushing (once the GitHub remote exists)

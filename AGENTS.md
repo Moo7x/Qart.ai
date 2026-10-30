@@ -7,13 +7,14 @@ evidence into task-level change, skill emphasis per scenario, ranked future role
 explainable fit score and skills gap, and an ordered reskilling pathway where every role, skill and
 step is tagged to an SDG target. People make the decisions.
 
-Read first: `docs/PLAN.md` (product and system design). It is the only source of truth for scope.
-Build the **MVP scope** listed at its top first; items marked improvement phase or on hold are not
-built until the human says so.
+Read first: `docs/PHASE2_PLAN.md` (finalist scope, work split, contracts, file ownership), then
+the sections of `docs/PLAN.md` (product and system design) your task touches. Together they are the
+only source of truth for scope; where they differ, `docs/PHASE2_PLAN.md` wins. Work only inside
+your branch's files (`docs/PHASE2_PLAN.md` §5).
 
 ## Scope
-- Users: working adults at risk of displacement, fresh graduates / students (also via TVET and
-  university career centres), career switchers; later HR / L&D managers (aggregate team view only).
+- Users: working adults at risk of displacement, juniors / fresh graduates / students (also via
+  TVET and university career centres), career switchers. The HR / L&D view is out of scope.
 - Field: Malaysian Global Business Services (GBS), finance & accounting only.
 - Six must-haves (brief §4): profile intake (CV / form / questionnaire) · updatable AI and job-market
   signal layer showing source and date (hard-coded lists do not count) · ranked future roles with an
@@ -21,7 +22,9 @@ built until the human says so.
   every role and skill tagged to at least one SDG with how the chosen path contributes · more than
   one future scenario, labelled as estimates.
 - Core SDG targets: 4.4, 4.3, 8.2, 8.5. Others (5, 9, 10, 13 ...) only where the work supports them.
-- The app never tutors, hints at answers or grades the user; it shows evidence and options.
+- The app never tutors or hints at answers; it shows evidence and options. The progress-check
+  agent may assess work a person describes against the published level descriptions; its result
+  is a labelled proposal the person accepts or declines.
 - Out of scope (brief §6): full course content, payments, real recruitment integrations.
 - Any change of product direction or scope is a question for the human before it goes into code
   or the plan. Do not add, remove or reinterpret features on your own.
@@ -33,7 +36,8 @@ built until the human says so.
   stored observations. Every recommendation, role, skill, course and claim shown to users carries
   its source and date. Anything that cannot be verified is stored with `verified: false` and is
   never recommended.
-- Name the LLM wherever it is used (OpenAI gpt-4o-mini) and in the declaration log.
+- Name the LLM wherever it is used and in the declaration log: OpenAI gpt-4o-mini (`LLM_MODEL`)
+  for extraction and explanations, `AGENT_MODEL` (default gpt-4.1-mini) for agents.
 - Humans decide. The system recommends; it never makes hiring, promotion or dismissal decisions.
   New evidence only proposes revisions with a diff; the user accepts or declines.
 - Label every number shown as **observed** (source + date), **assumption** (scenario rule or
@@ -42,9 +46,10 @@ built until the human says so.
   potential exposure, expert impact. No "being automated" verdict from usage alone.
 - Essential skills and prerequisites keep their required level in every scenario; scenarios only
   shift emphasis weights.
-- A person's skill level is always a claim (CV span or self-rating), never shown as verified.
+- A person's skill level is always a claim (CV span, self-rating or accepted agent check), never
+  shown as verified.
 - PII is stripped before matching. Protected attributes never change a result (paired-profile test).
-- HR sees aggregates only; groups under 5 are suppressed.
+- Aggregates across people (platform SDG totals) suppress groups under 5.
 - No secrets in code or commits. Keys come from environment variables; `.env.example` holds names
   only.
 
@@ -72,5 +77,7 @@ built until the human says so.
   (no "Co-Authored-By" for tools).
 - Never push, force-push, rebase shared branches, `reset --hard`, `clean`, delete branches, or
   change git config or remotes. The human pushes.
+- Phase 2 runs on two branches from `main` (`p2-ai-experience`, `p2-scoring-pathway`). Never merge
+  one into the other; merges go through `main` in the order of `docs/PHASE2_PLAN.md` §2.
 - Never commit `.env`, keys, `data/raw/`, databases, `node_modules/`, `web/dist/` or `notes/`.
 - Nothing addressed to the human goes in the repository; the repo is written for readers and judges.

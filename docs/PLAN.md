@@ -8,6 +8,10 @@ that acts for the user (opens tabs, navigates, highlights, explains), inspired b
 researches and shows; it never tutors, hints at answers or grades. Agent look: a simple Qart icon;
 voice off by default, one click to turn on.
 
+**Phase 2 (finalist round):** `docs/PHASE2_PLAN.md` sets the current scope and supersedes the MVP,
+improvement-phase and on-hold lists below where they differ (the HR view is dropped; the on-screen
+agent, progress check and forecasting are in).
+
 ## MVP scope (decided 23 Oct 2026)
 Build the baseline first, verify it against the brief, then improve. Sections below marked
 *(improvement phase)* or *(on hold)* are designed but not part of the MVP.
