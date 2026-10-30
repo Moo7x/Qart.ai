@@ -8,6 +8,7 @@ import { Sparkline } from '../components/LineChart'
 import { TimeSeriesChart, type ChartSeries } from '../components/Charts'
 import { JobPosts } from '../components/CompareRoles'
 import { OccupationEvidence } from '../components/OccupationEvidence'
+import { OverviewGlance } from '../components/OverviewGlance'
 import { SkillRadar } from '../components/SkillRadar'
 import { DIRECTION_LABEL, Empty, Loading, Problem } from '../components/ui'
 import { useJourney } from '../state'
@@ -216,6 +217,7 @@ export function Overview() {
         <Link to="/start" className="text-sm text-graphite underline underline-offset-4" onClick={() => { setProfileId(null); setScenario('moderate') }}>Start over</Link>
       </div>
 
+      <OverviewGlance />
       <PersonalSummary />
       <PersonalRadar onPick={setSelected} />
       <CurrentJob />
