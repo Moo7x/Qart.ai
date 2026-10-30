@@ -37,6 +37,5 @@ def test_with_ai_hours_name_both_parts(role_id: str) -> None:
     path = plan_pathway(pack, match, NUR, 6, "moderate", EVIDENCE)
     with_ai = comparison(pack, load_resources(), NUR, role_id, 6, EVIDENCE)["with_ai"]
     assert with_ai["plan_hours"] == path.total_hours
-    assert with_ai["hours"] == pytest.approx(
-        with_ai["plan_hours"] + with_ai["ai_basics_hours"], abs=0.1
-    )
+    # Exact to the shown decimal: the screen prints "X h plan + Y h AI basics" beside the total.
+    assert with_ai["hours"] == round(with_ai["plan_hours"] + with_ai["ai_basics_hours"], 1)

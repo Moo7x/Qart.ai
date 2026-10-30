@@ -176,7 +176,8 @@ def comparison(
     # AI-basics courses not already in the full plan add their hours to the "with AI" route.
     in_plan = {st.course.id for st in full["moderate"].steps}
     basics = {c for t in res.ai_basics for c in t.courses} - in_plan
-    basics_hours = sum(pack.courses[c].minutes for c in basics) / MINUTES_PER_HOUR
+    # Rounded before adding, so the two parts shown always add up to the with-AI total.
+    basics_hours = round(sum(pack.courses[c].minutes for c in basics) / MINUTES_PER_HOUR, 1)
     w = without["moderate"]
     f = full["moderate"]
     return {
@@ -200,7 +201,7 @@ def comparison(
             ),
             # The two parts of the with-AI hours, named so no screen adds them silently.
             "plan_hours": f.total_hours,
-            "ai_basics_hours": round(basics_hours, 1),
+            "ai_basics_hours": basics_hours,
         },
         "note": (
             "Both routes use the same free courses, planner and course rules; fit is scored by "
