@@ -25,6 +25,32 @@ export type EvidenceTestOut = {
   }
 }
 
+// ---- A7 resource scout (POST /api/agents/scout, GET /api/agents/runs/{id}, src/api/agents.py) ----
+
+export type ScoutPick = {
+  resource_id: string
+  kind: 'video' | 'article'
+  title: string
+  url: string
+  start: number | null
+  end: number | null
+  anchor: string
+  score: number
+  reason: string
+  source: string
+}
+export type AgentRun = {
+  id: string
+  kind: string
+  subject: string
+  status: 'running' | 'done' | 'failed'
+  engine: string
+  started_at: string
+  finished_at: string | null
+  result: null | { skill: string; skill_name?: string; picks: ScoutPick[]; engine?: string; note: string }
+  steps: { id: number; at: string; kind: 'think' | 'tool' | 'result' | 'note' | 'error'; text: string }[]
+}
+
 // ---- C8 forecast (GET /api/forecast, src/api/evidence.py SeriesForecast) ----
 
 export type ForecastPoint = { period: string; point: number; low: number | null; high: number | null }

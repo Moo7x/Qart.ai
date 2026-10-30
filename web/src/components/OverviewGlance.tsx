@@ -1,4 +1,6 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { ScoutButton } from './AgentWindow'
 import { formatWhen, useApi } from '../api'
 import { useJourney } from '../state'
 import type { ChangesResponse, MatchesResponse, PathwayResponse, ProgressResponse, RoleCard, Run, SourceStatus, TrendsResponse } from '../types'
@@ -84,7 +86,30 @@ function TopRoleCard({ matches }: { matches: MatchesResponse }) {
         />
         <Link className="text-[13px]" to="/roles">All ranked roles →</Link>
       </div>
+      <GapScout role={role} />
     </section>
+  )
+}
+
+// The resource scout for one of the role's gaps, chosen by the person (essentials first).
+function GapScout({ role }: { role: ScoredRole }) {
+  const { profileId } = useJourney()
+  const gaps = role.requirements
+    .filter((r) => r.column !== 'ready')
+    .sort((a, b) => Number(b.essential) - Number(a.essential) || b.weight - a.weight)
+  const [pick, setPick] = useState(gaps[0]?.skill ?? '')
+  const chosen = gaps.find((g) => g.skill === pick) ?? gaps[0]
+  if (!chosen) return null
+  return (
+    <div className="flex flex-col gap-2 border-t border-line pt-3">
+      <label className="flex flex-col gap-1 text-[12px]">
+        <span className="cap">Find learning material for a gap</span>
+        <select className="min-h-[40px] rounded-md border border-hairline bg-paper px-2 text-[13px]" value={chosen.skill} onChange={(e) => setPick(e.target.value)}>
+          {gaps.map((g) => <option key={g.skill} value={g.skill}>{g.skill_name}{g.essential ? ' · essential' : ''}</option>)}
+        </select>
+      </label>
+      <ScoutButton key={chosen.skill} skill={chosen.skill} skillName={chosen.skill_name} profileId={profileId} />
+    </div>
   )
 }
 
