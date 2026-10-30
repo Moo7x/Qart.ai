@@ -69,7 +69,7 @@ to one of these.
   - 100% of displayed numbers keep their source and date.
 - **Process:**
   - steady small commits through the 48-hour sprint (the report's §3.2 asks what was built in it);
-  - a backup (offline build or recording);
+  - a backup (offline build or recording), prepared later, after the UI phase (§1 decision 15);
   - more than one teammate able to answer each Q&A question.
 
 ---
@@ -130,7 +130,14 @@ Decided by the team. Each is logged in `docs/decision_log.md` (2026-10-30).
     - Chinese interface;
     - route options (shortest / flexible / targeted);
     - an auto-generated video;
-    - a second field pack.
+    - a second field pack;
+    - the final report, deck, declaration update, backup recording and offline build (after the UI
+      phase).
+16. **Not built at all:**
+    - an agent team (several AI agents working together); the scout is one agent with code tools;
+    - simulated AI users walking the app; concurrency is proven by the load test only (A9);
+    - a personal evidence graph; the existing Live intelligence diagram stays as it is;
+    - "stay and adapt" (current-role task changes) and AI time-saving estimates.
 
 ---
 
@@ -211,10 +218,12 @@ Committed before branching, so neither branch has to edit these shared files.
 
 ## 4. Contracts between the branches
 
-The producer builds the contract; the consumer codes against it, using fixtures until M1.
+The producer builds the contract; the consumer codes against it, using fixtures until the merge
+that delivers it.
 
 **Rules**
-- Fields are only added, never renamed or removed. New TypeScript fields are optional (`?`) until M1.
+- Fields are only added, never renamed or removed. New TypeScript fields stay optional (`?`) until
+  the merge that delivers them: C2, C3 and C11 at M1; C4, C5, C6, C9 and C10 at M2.
 - New endpoints return Pydantic models declared in the router module, mirrored exactly in the
   owner's types file.
 - Every number carries its kind: observed (source and date), assumption or estimate.
@@ -359,6 +368,11 @@ Pure function, also used by A's status page: `src/pathway/sdg.py: sdg_matrix(pac
 - **Fairness result** with its date (C10).
 - **Platform SDG totals** from C4 over all profiles with a destination, suppressed below 5 profiles.
 
+### C10 Fairness check (B produces; A displays)
+`src/match/fairness.py: paired_profile_check(pack, evidence) -> {"pairs", "identical", "max_fit_difference", "checked_at"}`.
+It is pure: the same synthetic pairs as `tests/test_fairness.py`, which differ only in protected
+attributes.
+
 ### C11 Pay by occupation group (A collects; B shows on role cards)
 - **A stores**, in the `dosm_wages_occupation` collector (both sexes, per major group and year,
   next to the existing `employees` series):
@@ -377,11 +391,6 @@ Pure function, also used by A's status page: `src/pathway/sdg.py: sdg_matrix(pac
   The group comes from the role's ISCO code through `src/match/outlook.py MAJOR_GROUP`.
   `"pay": null` when the group or the year is missing (shown as "not published", never 0).
 
-### C10 Fairness check (B produces; A displays)
-`src/match/fairness.py: paired_profile_check(pack, evidence) -> {"pairs", "identical", "max_fit_difference", "checked_at"}`.
-It is pure: the same synthetic pairs as `tests/test_fairness.py`, which differ only in protected
-attributes.
-
 ---
 
 ## 5. File ownership
@@ -396,7 +405,8 @@ attributes.
   - `src/feedback/**`, new `scripts/{load,cost,check_links,review_catalogue}*`, `requirements.txt`;
   - the A section of `src/params.py` and the existing evidence and pipeline sections above it.
 - **Data:** `data/sources.yaml`, generated `data/packs/gbs_fa/courses_*.yaml` and
-  `resources_*.yaml`, new `data/eval/occupation_titles_holdout.yaml`.
+  `resources_*.yaml`, new `data/eval/occupation_titles_holdout.yaml`, new `data/agents/**`
+  (character files).
 - **Web:**
   - `App.tsx`, `main.tsx`, `index.css`, `i18n.tsx` (`phase2 A` block and the navigation strings),
     `web/package.json`;
@@ -494,7 +504,8 @@ Stage 1 (before M1) = A1–A4.
 - Sidebar groups:
   - **"Your journey":** Overview, 1 Profile, 2 Future skills radar, 3 Ranked roles, 4 Pathway,
     5 SDG contribution (`/pathway#sdg`), 6 Compare futures;
-  - **"Evidence":** Live intelligence, Any occupation, What changed, Status;
+  - **"Evidence":** Live intelligence, Any occupation, What changed, and Status (the link is added
+    in A9 together with the page, never before it exists);
   - My goal and My CV stay reachable from Profile.
 - **Overview cards, top to bottom:**
   1. top role: title, band, range and essentials short (C2), with a "Why?" that opens the
@@ -506,8 +517,9 @@ Stage 1 (before M1) = A1–A4.
      and date;
   6. SDG totals (C4 `totals`);
   7. freshness line: the last pipeline run, and the newest fetch date per source kind.
-- Fields from B are optional until M1. With a field missing, the card shows its existing content,
-  never a placeholder number.
+- Fields from B stay optional until the merge that delivers them (§4 rules). With a field missing,
+  the card shows its existing content or hides that line, never a placeholder number. Card 3's
+  "Check my progress" appears once A8 exists.
 - Every number on Overview has a "Why?" (§5 shared rules).
 - **Look:** keep the current colours, type, spacing and section designs; the redesign is the last
   phase (§10). New cards and components reuse the existing classes (`card`, `btn`, `tag`, `h1`,
@@ -692,11 +704,14 @@ planned; the link checker reports a fake 404.
 shown working in an in-app window. It finds and points; it does not teach.
 
 **Files:**
-- `src/agents/{client,scout,video,article,store}.py` (new), `src/api/agents.py`;
+- `src/agents/{client,scout,video,article,store}.py` (new), `src/agents/character.py` (shared
+  with A8), `data/agents/scout.character.yaml` (new), `src/api/agents.py`;
 - `AgentWindow.tsx` (new), `typesAgents.ts`, `requirements.txt`.
 
 **Flow**
-1. **Coordinator:** a tool-calling loop on `AGENT_MODEL` (`src/agents/client.py`, usage recorded).
+1. **One agent, not an agent team** (§1 decision 16): a single tool-calling loop on `AGENT_MODEL`
+   (`src/agents/client.py`, usage recorded); the scouts below are code tools it calls. Its voice
+   and rules come from `data/agents/scout.character.yaml` (same format as A8's character file).
    Tools: `list_resources(skill)`, `video_segments(video_id, skill, level)` and
    `article_passages(url, skill, level)`. At most `AGENT_MAX_STEPS = 8` tool calls, with
    `AGENT_TIME_BUDGET_SECONDS = 45`.
@@ -739,14 +754,37 @@ stop the loop; the events endpoint streams steps in order.
 **Goal:** the person tells a finance practitioner what they did; the agent judges it against the
 level descriptions and proposes a level, which the person accepts or declines.
 
-**Files:** `src/agents/check.py` (new), `src/api/agents.py`, `ProgressCheck.tsx` (new),
+**Files:** `src/agents/check.py` and `src/agents/character.py` (new),
+`data/agents/progress_check.character.yaml` (new), `src/api/agents.py`, `ProgressCheck.tsx` (new),
 `Overview.tsx`, `typesAgents.ts`.
 
-**Agent setup**
-- **Persona:** a system prompt for a senior GBS finance practitioner who asks about real work.
-- **Context retrieved:** the skill's anchors (C1), the role's linked O*NET tasks, and the practice
-  task of the step (B4).
-- **Not fine-tuned.**
+**Agent setup: a character file**
+
+The agent's character lives in a file, in the spirit of ElizaOS character files, not in code. The
+model is not fine-tuned and ElizaOS itself is not used. `data/agents/progress_check.character.yaml`
+holds:
+- `name` and `role` ("Senior GBS finance reviewer");
+- `bio`: who the character is, as a list of short lines, e.g. ten years in shared-services
+  finance, has reviewed many analysts' work, plain and respectful;
+- `style.all` and `style.chat`: how it speaks, e.g. one question at a time, concrete, no jargon
+  without explaining it, Malaysian workplace context, never condescending;
+- `adjectives`: e.g. practical, fair, precise;
+- `topics`: the finance processes it can ask about (O2C, P2P, R2R, reporting, systems);
+- `rules.must` and `rules.never`:
+  - must: ask about real work done; ask for the tool, the frequency, the volume, the problem
+    solved and who used the result; judge only against the level sentences given;
+  - never: teach; give answers or hints; reveal which answer would pass; write a number; judge
+    anything but the described work; comment on the person's background or identity;
+- `message_examples`: 3–5 synthetic exchanges showing a good question, a follow-up on a vague
+  answer, and a polite close.
+
+**Loading and use**
+- `src/agents/character.py` loads the file into a Pydantic model and fails loudly if a required
+  field or rule is missing. It builds the system prompt from the file.
+- At run time the prompt is joined with the retrieved context: the skill's anchors (C1), the
+  role's linked O*NET tasks and the step's practice task (B4).
+- Changing the character means editing the YAML, with a decision-log entry. The file is
+  reader-facing, like the rest of the repo.
 
 **Flow**
 1. The agent asks 2–4 concrete questions, one at a time (what, which tool, how often, what went
@@ -770,6 +808,8 @@ level descriptions and proposes a level, which the person accepts or declines.
    from each plan step (§9).
 
 **Tests:** fake LLM:
+- the character file loads; a file missing a `never` rule is refused;
+- the built prompt contains every `must` and `never` rule;
 - a quote missing from the answers is rejected;
 - "partly" does not raise the level;
 - the cap holds;
@@ -811,7 +851,8 @@ level descriptions and proposes a level, which the person accepts or declines.
   deleted."
 
 **Status page (C9):** freshness, runs, fallbacks, usage and cost, the fairness result (C10), and
-platform SDG totals (C4, suppressed below 5).
+platform SDG totals (C4, suppressed below 5). Add the "Status" link to the Sidebar's Evidence group
+in the same commit as the page, and a "Privacy" link in the Sidebar footer with the Privacy page.
 
 **Load test** (`scripts/load/locustfile.py`, Locust, MIT)
 - **Journey:** `POST /profiles` with a persona's levels (no CV parsing), then `/matches`,
@@ -819,6 +860,9 @@ platform SDG totals (C4, suppressed below 5).
 - **Paid calls:** 5% of virtual users also run `/intake/parse` on a sample CV (real LLM, capped at
   `LOAD_MAX_LLM_CALLS = 50` per run).
 - **Steps:** 25, 50 and 100 users, 5 minutes each, against the deployed URL, run from a laptop.
+- **When:** a first run before M2 skips endpoints that do not exist yet (`/sdg`); the recorded run
+  is after M2 (§9 step 4).
+- **Scope:** the load test is the only concurrency proof; no simulated AI users (§1 decision 16).
 - **Results** in `docs/LOAD_TEST.md`: p50 and p95 per endpoint, error rate, requests per second,
   fallback counts, and the date and commit.
 
@@ -832,21 +876,23 @@ platform SDG totals (C4, suppressed below 5).
 **Tests:** delete removes rows from every `profile_id` table; export returns them; retention deletes
 only idle profiles; the status shape matches C9.
 
-### A10 Compare futures, then stay and adapt (stretch)
-**Goal:** stage 6 shows the shift between scenarios clearly. If time allows, working adults also
-see how their current role changes.
+### A10 Compare futures
+**Goal:** stage 6 shows the shift between scenarios clearly.
 
-**Files:** `Future.tsx`, `typesAgents.ts`, `src/api/evidence_test.py` (if a route is needed).
+**Files:** `Future.tsx`, `typesAgents.ts`. No backend change: it uses `/matches` and
+`/sensitivity`.
 
 **Compare futures**
 - Moderate and fast side by side from `/matches?scenario=...` (C2), with rank-shift arrows and
   each skill's weight before → after for the chosen role.
 - The sensitivity ranks from `/sensitivity` as a small table (intensities 0 to 1.5).
 - Labelled estimates, with the scenario parameters shown (`SCENARIO_INTENSITY`, horizon).
+- The existing "Today → Future you" content on this page stays; compare futures is added to it.
 
-**Stay and adapt (stretch):** the person's current role tasks (O*NET), the observed AI use for each
-(kept separate from exposure), the responsibilities that grow, and the skills shared with the
-destination roles. No time-saved percentages.
+**Tests:** `tsc`, lint, build; a manual check with Nur and Kavitha that the arrows match the two
+`/matches` responses.
+
+**Out of scope:** "stay and adapt" (§1 decision 16).
 
 ---
 
@@ -1182,7 +1228,9 @@ Most sections stay; the phase removes, changes and restyles.
 
 ---
 
-## 11. Measuring against the Phase 1 targets (both)
+## 11. Measuring against the Phase 1 targets (both, after the UI phase)
+
+No branch work package; this runs on the finished app.
 
 **User test** (`docs/USER_TEST.md`)
 - **Participants:** 10 or more classmates, each given one persona card (synthetic data only), on
@@ -1200,6 +1248,9 @@ Most sections stay; the phase removes, changes and restyles.
 ---
 
 ## 12. Report Section 4 and Q&A: where each answer comes from
+
+Reference for the submission work after the UI phase (§1 decision 15). It shows which feature
+answers which requirement; it is not a work package.
 
 | Requirement | Evidence | Owner |
 |---|---|---|
