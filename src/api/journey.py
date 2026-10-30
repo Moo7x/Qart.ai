@@ -368,7 +368,14 @@ def pathway(
     evidence = evidence_for(engine, profile_id)
     match = score_role(pack, pack.destination_roles[chosen], data.levels(), scenario, evidence)
     path = plan_pathway(
-        pack, match, data.levels(), data.weekly_hours, scenario, evidence, data.skills
+        pack,
+        match,
+        data.levels(),
+        data.weekly_hours,
+        scenario,
+        evidence,
+        data.skills,
+        data.situation,
     )
     saved = get_progress(engine, profile_id)
     apply_progress(path, saved["done"], saved["skipped"], data.skills)
@@ -394,7 +401,14 @@ def tracks(
     evidence = evidence_for(engine, profile_id)
     match = score_role(pack, pack.destination_roles[chosen], data.levels(), scenario, evidence)
     path = plan_pathway(
-        pack, match, data.levels(), data.weekly_hours, scenario, evidence, data.skills
+        pack,
+        match,
+        data.levels(),
+        data.weekly_hours,
+        scenario,
+        evidence,
+        data.skills,
+        data.situation,
     )
     saved = get_progress(engine, profile_id)
     done = saved["done"]
@@ -405,7 +419,15 @@ def tracks(
         "scenario": scenario,
         "weekly_hours": data.weekly_hours,
         "tracks": build_tracks(pack, res, match, path, done),
-        "comparison": comparison(pack, res, data.levels(), chosen, data.weekly_hours, evidence),
+        "comparison": comparison(
+            pack,
+            res,
+            data.levels(),
+            chosen,
+            data.weekly_hours,
+            evidence,
+            path.ai_basics["shown"],
+        ),
         "resources_checked": res.checked,
         "courses_checked": pack.courses_checked,
     }

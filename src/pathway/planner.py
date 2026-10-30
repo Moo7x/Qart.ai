@@ -13,6 +13,10 @@ Rules (all explainable, no optimiser needed for a catalogue this size; docs/PHAS
    (estimate). Practice tasks are suggestions to agree with a manager, not courses.
 4. Study steps are laid out week by week at the person's weekly hours; a course is taken once.
 5. Every step names the skills it raises and the SDG targets those skills serve, with the reason.
+6. The plan adapts to the person (B5), and says so in `adjustments`: AI basics are skipped when
+   the person shows AI or automation work with evidence (`ai_basics_choice`); no beginner course
+   is planned for a skill already at NO_BEGINNER_FROM_LEVEL; a skill already at what study gives
+   goes straight to practice.
 Fits after the plan are estimates: after study assumes the person finishes the courses; after
 practice also assumes the practice targets are reached. Both are ranges by the C2 rule, with
 planned levels counted as unevidenced (src/match/decision.py fit_range).
@@ -25,14 +29,15 @@ from typing import Any
 
 from src import params
 from src.journey.store import SkillClaim
-from src.match.decision import fit_range
+from src.match.decision import fit_range, is_evidenced
 from src.match.engine import Evidence, RoleMatch, Scenario, score_role
 from src.pack import Course, Pack, SdgLink
 from src.pathway.practice import load_practice
 
 MINUTES_PER_HOUR = 60
-AI_BASICS_REASON = (
-    "AI basics come first for everyone: adapting to AI starts with knowing how to use it safely."
+AI_BASICS_REASON = "AI basics come first: adapting to AI starts with knowing how to use it safely."
+AI_BASICS_ALWAYS_REASON = (
+    "AI basics come first for students and career switchers, whatever the CV shows."
 )
 FREE_SHARE_BASIS = "Every verified course in the catalogue is free to study."
 
@@ -118,6 +123,30 @@ class Pathway:
     free_share_basis: str = FREE_SHARE_BASIS
     ai_basics: dict[str, Any] = field(default_factory=dict)
     study_levels: dict[str, int] = field(default_factory=dict)  # skill -> level after study
+    # B5: every way this plan was adjusted for the person, each with the rule behind it.
+    adjustments: list[dict[str, str]] = field(default_factory=list)
+
+
+def ai_basics_choice(
+    pack: Pack, claims: Mapping[str, SkillClaim] | None, situation: str | None
+) -> dict[str, Any]:
+    """Show AI basics unless an evidenced claim shows AI or automation work (B5)."""
+    if situation in params.AI_BASICS_ALWAYS:
+        return {"shown": True, "reason": AI_BASICS_ALWAYS_REASON, "quote": ""}
+    for skill in params.AI_BASICS_SKILLS:
+        claim = (claims or {}).get(skill)
+        if (
+            claim is not None
+            and (claim.level or 0) >= params.AI_BASICS_SKIP_LEVEL
+            and is_evidenced(claim)
+        ):
+            name = pack.skills[skill].name
+            return {
+                "shown": False,
+                "reason": f"Skipped: your CV shows ‘{claim.evidence}’ ({name}).",
+                "quote": claim.evidence,
+            }
+    return {"shown": True, "reason": AI_BASICS_REASON, "quote": ""}
 
 
 def study_level(hours: float, hands_on: bool) -> int:
@@ -187,6 +216,7 @@ def plan_pathway(
     scenario: Scenario,
     evidence: Evidence,
     claims: Mapping[str, SkillClaim] | None = None,
+    situation: str | None = None,
 ) -> Pathway:
     if weekly_hours <= 0:
         raise ValueError("weekly hours must be positive")
@@ -204,8 +234,24 @@ def plan_pathway(
 
     uncovered: list[str] = []
     partly: list[str] = []
+    adjustments: list[dict[str, str]] = []
+    basics = ai_basics_choice(pack, claims, situation)
+    if not basics["shown"]:
+        adjustments.append({"rule": "ai_basics_skipped", "text": basics["reason"]})
     for gap in gaps:
+        if start.get(gap.skill, 0) >= params.STUDY_MAX_LEVEL:
+            adjustments.append(
+                {
+                    "rule": "straight_to_practice",
+                    "text": f"Straight to practice for {gap.skill_name}: you are at level "
+                    f"{start[gap.skill]}, the most study can give.",
+                }
+            )
         options = pack.courses_for(gap.skill)
+        # A guard: with STUDY_MAX_LEVEL at 2 such a skill gets no study at all (straight to
+        # practice), so no "no beginner" note is needed today.
+        if start.get(gap.skill, 0) >= params.NO_BEGINNER_FROM_LEVEL:
+            options = [c for c in options if c.level != "beginner"]
         if not options:
             uncovered.append(gap.skill_name)
             continue
@@ -325,8 +371,9 @@ def plan_pathway(
             _planned_claims(claims, levels, planned_practice),
         ),
         free_share=1.0 if total else None,
-        ai_basics={"shown": True, "reason": AI_BASICS_REASON},
+        ai_basics={"shown": basics["shown"], "reason": basics["reason"]},
         study_levels={g.skill: current.get(g.skill, 0) for g in gaps},
+        adjustments=adjustments,
     )
 
 

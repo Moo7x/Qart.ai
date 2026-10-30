@@ -113,6 +113,14 @@ skill's study steps. A practice step is complete when the skill's claim reaches 
 labelled "checked" (accepted progress check) or "self-rated"; "continue anyway" stores it as
 skipped (`journey_skipped`), shown as "continued anyway, not done".
 
+**The plan adapts to the person.** AI basics are skipped when the person shows AI or automation
+work with evidence: any of prompt engineering, automation, advanced technology integration or
+data management claimed at level 3 or above from a CV sentence or an accepted progress check
+(`AI_BASICS_SKILLS`, `AI_BASICS_SKIP_LEVEL`); the plan says "Skipped: your CV shows ‘…’" and
+keeps the track for "Show AI basics anyway". Students and switchers always see them. No beginner
+course is planned for a skill at level 2 or above, and such a skill goes straight to practice.
+Every adjustment is listed under "Adjusted for you" with its rule.
+
 **My plan as three tracks.** `src/pathway/tracks.py` (GET `/api/profiles/{id}/tracks`) shows the
 plan as three rows: (1) AI basics, a declared foundation everyone sees first (what generative AI
 is, prompting at work, using AI responsibly, data basics); (2) reskilling without AI, the role's

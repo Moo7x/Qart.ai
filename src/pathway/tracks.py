@@ -1,7 +1,8 @@
 """My plan as three tracks, and the comparison of reskilling with and without AI.
 
-1. AI basics: a declared foundation everyone sees first (src/resources.py topics), because
-   adapting to AI starts with knowing how to use it safely.
+1. AI basics: a declared foundation shown first (src/resources.py topics), because adapting to
+   AI starts with knowing how to use it safely; skipped, with the reason, when the person shows
+   AI or automation work with evidence (B5, planner.ai_basics_choice), and shown on request.
 2. Reskilling without AI: the role's gaps in finance, business and green skills.
 3. Reskilling with AI: the role's gaps in data and digital skills (params.AI_TRACK_KINDS).
 
@@ -163,6 +164,7 @@ def comparison(
     role_id: str,
     weekly_hours: float,
     evidence: Evidence,
+    ai_basics_shown: bool = True,
 ) -> dict[str, Any]:
     role = pack.destination_roles[role_id]
     fit_now: dict[str, float] = {}
@@ -178,7 +180,8 @@ def comparison(
         full[s] = plan_pathway(pack, match, levels, weekly_hours, s, evidence)
     # AI-basics courses not already in the full plan add their hours to the "with AI" route.
     in_plan = {st.course.id for st in full["moderate"].steps}
-    basics = {c for t in res.ai_basics for c in t.courses} - in_plan
+    # Skipped AI basics (B5) add nothing to the with-AI route.
+    basics = {c for t in res.ai_basics for c in t.courses} - in_plan if ai_basics_shown else set()
     # Rounded before adding, so the two parts shown always add up to the with-AI total.
     basics_hours = round(sum(pack.courses[c].minutes for c in basics) / MINUTES_PER_HOUR, 1)
     w = without["moderate"]
@@ -229,6 +232,9 @@ def build_tracks(
             "why": "Start here: adapting to AI begins with knowing what it is and how to use it "
             "safely.",
             "nodes": _basics_nodes(pack, res, done),
+            # B5: false when skipped for this person; the nodes stay for "Show AI basics anyway".
+            "shown": path.ai_basics.get("shown", True),
+            "reason": path.ai_basics.get("reason", ""),
         },
         {
             "id": "without_ai",

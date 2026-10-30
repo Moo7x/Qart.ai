@@ -168,3 +168,20 @@ RAISE_SHOWN = 3  # single-skill changes listed under "what would raise it"
 # Study never goes above STUDY_MAX_LEVEL (above); levels 3 and 4 come from practice tasks.
 LEVEL1_MIN_HOURS = 1
 LEVEL2_MIN_HOURS = 20
+
+# The plan adapts to the person (src/pathway/planner.py, B5). AI basics are skipped when the
+# person already shows AI or automation work: any of these skills claimed at AI_BASICS_SKIP_LEVEL
+# ("working") or above with evidence (a CV sentence or an accepted progress check). Declared: at
+# that level they use these tools in their own work, which is what AI basics teach. Students and
+# switchers always see them, since their claims rarely come from finance work yet.
+AI_BASICS_SKILLS = (
+    "prompt_engineering",
+    "process_automation",
+    "advanced_technology_integration",
+    "data_management",
+)
+AI_BASICS_SKIP_LEVEL = 3
+AI_BASICS_ALWAYS = ("student", "switcher")
+# No course labelled beginner is planned for a skill claimed at this level or above. Declared:
+# "aware" (2) already covers what a beginner course teaches.
+NO_BEGINNER_FROM_LEVEL = 2
