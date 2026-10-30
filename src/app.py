@@ -30,14 +30,20 @@ import src.journey.progress  # noqa: E402, F401  (registers the progress table)
 import src.journey.store  # noqa: E402, F401  (registers the profile table)
 import src.occupations.catalogue  # noqa: E402, F401  (registers the occupation tables)
 from src import usage  # noqa: E402  (registers the usage table)
+from src.api.agents import router as agents_router  # noqa: E402
+from src.api.badges import router as badges_router  # noqa: E402
 from src.api.changes import router as changes_router  # noqa: E402
 from src.api.cv import router as cv_router  # noqa: E402
 from src.api.decision import router as decision_router  # noqa: E402
 from src.api.evidence import router as evidence_router  # noqa: E402
+from src.api.evidence_test import router as evidence_test_router  # noqa: E402
 from src.api.feedback import router as feedback_router  # noqa: E402
 from src.api.goal import router as goal_router  # noqa: E402
 from src.api.journey import router as journey_router  # noqa: E402
 from src.api.occupations import router as occupations_router  # noqa: E402
+from src.api.privacy import router as privacy_router  # noqa: E402
+from src.api.sdg import router as sdg_router  # noqa: E402
+from src.api.status import router as status_router  # noqa: E402
 from src.config import Settings, load_settings  # noqa: E402
 from src.db import init_db, make_engine, ping  # noqa: E402
 from src.feedback.service import load_released  # noqa: E402  (registers the feedback tables)
@@ -135,6 +141,17 @@ def create_app(settings: Settings | None = None, first_run: bool = True) -> Fast
     application.include_router(feedback_router)
     application.include_router(goal_router)
     application.include_router(occupations_router)
+    # Phase 2 routers (docs/PHASE2_PLAN.md §5): A owns agents, evidence_test, status and privacy;
+    # B owns sdg and badges. Registered here once so neither branch edits this file.
+    for phase2 in (
+        agents_router,
+        evidence_test_router,
+        status_router,
+        privacy_router,
+        sdg_router,
+        badges_router,
+    ):
+        application.include_router(phase2)
     if WEB_DIST.is_dir():
         application.mount("/", SinglePageApp(directory=WEB_DIST, html=True), name="web")
     else:
