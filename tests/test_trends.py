@@ -38,6 +38,27 @@ def test_long_and_recent_change_can_point_different_ways() -> None:
     assert all(s["change"] == 0 for s in out["skills"] if s["ai_role"] == "neutral")
 
 
+def test_fast_adoption_moves_skill_weights_further_than_moderate() -> None:
+    evidence = Evidence(
+        automation_share={"13-2011.00": 45.0}, automation_period="2026-05", automation_source="t"
+    )
+    out = trends(load_pack(), share_rows(), evidence)
+    moderate = {s["skill"]: s["change"] for s in out["skills_by_scenario"]["moderate"]}
+    fast = {s["skill"]: s["change"] for s in out["skills_by_scenario"]["fast"]}
+    assert out["skills"] == out["skills_by_scenario"]["fast"]  # the existing field is unchanged
+    assert all(abs(fast[k]) >= abs(moderate[k]) for k in fast)
+    assert out["evidence_period"] == "2026-05"
+
+
 def test_trends_route(client: TestClient) -> None:
     body = client.get("/api/trends").json()
-    assert set(body) == {"employment", "recent_from", "job_ads", "skills", "exposure"}
+    assert set(body) == {
+        "employment",
+        "recent_from",
+        "job_ads",
+        "skills",
+        "skills_by_scenario",
+        "evidence_period",
+        "evidence_source",
+        "exposure",
+    }

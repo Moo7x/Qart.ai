@@ -18,7 +18,7 @@ from src import params
 from src.collectors.ilo import OCCUPATION_SERIES, gradient_of
 from src.evidence import measures
 from src.evidence.field import field_profile
-from src.match.engine import Evidence, requirement_automation, scenario_weight
+from src.match.engine import Evidence, Scenario, requirement_automation, scenario_weight
 from src.pack import Pack
 
 Row = dict[str, Any]
@@ -34,6 +34,7 @@ MAJOR_GROUPS = {
     "operators": ("8", "Plant and machine operators and assemblers"),
     "elementary": ("9", "Elementary occupations"),
 }
+SCENARIOS: tuple[Scenario, ...] = ("moderate", "fast")
 # The recent window starts after the backtest's training years, so it matches the test years.
 RECENT_FROM = str(params.BACKTEST_TRAIN_END)
 
@@ -92,8 +93,8 @@ def _job_ads(rows: list[Row]) -> dict[str, Any]:
     }
 
 
-def _skills(pack: Pack, evidence: Evidence) -> list[dict[str, Any]]:
-    """Fast-scenario weight factor per skill, averaged over the destination roles that need it."""
+def _skills(pack: Pack, evidence: Evidence, scenario: Scenario = "fast") -> list[dict[str, Any]]:
+    """Scenario weight factor per skill, averaged over the destination roles that need it."""
     factors: dict[str, list[float]] = {}
     bases: dict[str, set[str]] = {}
     for role in pack.destination_roles.values():
@@ -102,7 +103,7 @@ def _skills(pack: Pack, evidence: Evidence) -> list[dict[str, Any]]:
                 continue  # essentials never shift
             skill = pack.skills[req.skill]
             share, basis, _ = requirement_automation(pack, role, req.skill, evidence)
-            weight, _ = scenario_weight(req, skill.ai_role, "fast", share)
+            weight, _ = scenario_weight(req, skill.ai_role, scenario, share)
             factors.setdefault(req.skill, []).append(weight / params.ROLE_TIER_WEIGHT[req.tier])
             bases.setdefault(req.skill, set()).add(basis)
     return sorted(
@@ -144,5 +145,9 @@ def trends(pack: Pack, rows: list[Row], evidence: Evidence) -> dict[str, Any]:
         "recent_from": RECENT_FROM,
         "job_ads": _job_ads(rows),
         "skills": _skills(pack, evidence),
+        # Both declared scenarios, for the Skills / Roles chart's scenario switch.
+        "skills_by_scenario": {s: _skills(pack, evidence, s) for s in SCENARIOS},
+        "evidence_period": evidence.automation_period,
+        "evidence_source": evidence.automation_source,
         "exposure": _exposure(rows),
     }
