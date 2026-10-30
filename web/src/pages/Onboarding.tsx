@@ -3,7 +3,7 @@ import { useT } from '../i18n'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { getJSON, sendJSON, uploadFile, useApi } from '../api'
 import { ProcessLog, RunLog, type LogLine } from '../components/Activity'
-import { LevelPicker } from '../components/journey'
+import { LevelPicker } from '../components/LevelPicker'
 import { useJourney } from '../state'
 import type { Extraction, MatchesResponse, PackInfo, PathwayResponse, ProfileData, SignalsResponse, Situation, SkillClaim, SkillKind, Stage } from '../types'
 
@@ -134,7 +134,7 @@ export function Onboarding() {
       setActivityResult(result.hits.length ? `${result.hits.length} matching skill${result.hits.length === 1 ? '' : 's'} to choose from below` : 'No matching skill found; try a more specific task')
     })
 
-  function setLevel(id: string, level: number) {
+  function setLevel(id: string, level: number | null) {
     setSkills((prev) => {
       return { ...prev, [id]: { ...(prev[id] ?? { evidence: '', source: 'self' }), level, source: prev[id]?.source === 'cv' ? 'cv' : 'self' } }
     })
@@ -391,7 +391,7 @@ export function Onboarding() {
           <section className="flex flex-col gap-4">
             <h1 className="h1">{t('Check your skills')}</h1>
             <p className="m-0 text-graphite">
-              Rate each skill from 1 (none) to 5 (expert). A level is your own claim, not a test.
+              For each skill, pick the highest sentence that is true for your work in the last two years. Levels 3 and above need work you did, not only study. A level is your own claim, not a test.
             </p>
             {extraction && (
               <p className="m-0 font-mono text-[11px] text-graphite">
@@ -411,7 +411,7 @@ export function Onboarding() {
                     </span>
                   </span>
                   <span className="flex flex-col items-end gap-1">
-                    <LevelPicker level={claim.level} label={`Your level in ${skillName(id)}`} onChange={(level) => setLevel(id, level)} />
+                    <LevelPicker skill={id} level={claim.level} label={`Your level in ${skillName(id)}`} onChange={(level) => setLevel(id, level)} />
                     {claim.level === null && <span className="text-[11px] text-graphite">Not rated yet</span>}
                   </span>
                 </div>

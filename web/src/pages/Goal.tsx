@@ -5,7 +5,7 @@ import { sendJSON, useApi } from '../api'
 import { Activity } from '../components/Activity'
 import { JobPosts } from '../components/CompareRoles'
 import { ReportProblem } from '../components/Feedback'
-import { LEVEL_NAMES, levelText, JourneyRoute, NextStep } from '../components/journey'
+import { levelName, levelText, JourneyRoute, NextStep } from '../components/journey'
 import { Loading, Problem } from '../components/ui'
 import { useJourney } from '../state'
 import type { GoalInput, GoalResponse, PostingRequirement, PackInfo } from '../types'
@@ -36,6 +36,7 @@ export function Goal() {
   const { t } = useT()
   const { profileId, scenario } = useJourney()
   const pack = useApi<PackInfo>('/api/pack')
+  const levels = pack.data?.levels ?? null
   const view = useApi<GoalResponse>(profileId ? `/api/profiles/${profileId}/goal?scenario=${scenario}` : null)
   const [form, setForm] = useState<GoalInput>(EMPTY)
   const [result, setResult] = useState<GoalResponse | null>(null)
@@ -110,7 +111,7 @@ export function Goal() {
           </div>
           <p className="m-0 text-xs text-graphite">
             {result?.goal?.company ? `${result.goal.company} · ` : ''}{result?.goal?.posting_date ? `posting dated ${result.goal.posting_date} · ` : ''}
-            Read by {cov.engine}{cov.note ? ` (${cov.note})` : ''}. Each line quotes the posting. Where it states no level, &ldquo;{LEVEL_NAMES[cov.default_level]} ({levelText(cov.default_level)})&rdquo; is assumed.{' '}
+            Read by {cov.engine}{cov.note ? ` (${cov.note})` : ''}. Each line quotes the posting. Where it states no level, &ldquo;{levelName(levels, cov.default_level)} ({levelText(cov.default_level)})&rdquo; is assumed.{' '}
             {[cov.not_stated > 0 ? `${cov.not_stated} not stated in your profile yet` : '', cov.outside_catalogue > 0 ? `${cov.outside_catalogue} outside our skill catalogue` : ''].filter(Boolean).join('; ')}
             {cov.not_stated + cov.outside_catalogue > 0 ? '.' : ''}
           </p>

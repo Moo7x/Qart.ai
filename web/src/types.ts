@@ -1,6 +1,8 @@
 // Shapes returned by the FastAPI server (src/api/evidence.py, src/evidence/signals.py).
 // Keep these exactly in step with the server models.
 
+import type { LevelsInfo } from './typesScoring'
+
 export type Direction = 'rising' | 'weakening' | 'stable' | 'insufficient' | 'expert'
 
 export type Point = { period: string; value: number }
@@ -122,6 +124,7 @@ export type PackInfo = {
   destination_roles: { id: string; title: string }[]
   samples: { id: string; label: string }[]
   proficiency: string[]
+  levels?: LevelsInfo
   courses_checked: string
 }
 

@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { sendJSON, useApi } from '../api'
 import type { Meters, Question, RoleCard, Scenario, WhatIfResponse } from '../types'
-import { LEVEL_NAMES, LevelPicker } from './journey'
+import { LevelPicker } from './LevelPicker'
+import { LEVEL_MAX, levelName, useLevels } from './journey'
 import { Loading, Problem } from './ui'
 
 // Coverage, essentials and profile completeness kept apart, so one number never hides them.
@@ -61,7 +62,7 @@ export function BestQuestion({ profileId, scenario, onAnswered }: { profileId: s
       <h2 className="h2">How would you rate your {first.skill_name}?</h2>
       <p className="m-0 text-[13px] text-graphite">{first.effect}</p>
       <div className="max-w-[360px]">
-        <LevelPicker level={null} label={`Your level in ${first.skill_name}`} disabled={busy} onChange={answer} />
+        <LevelPicker skill={first.skill} level={null} label={`Your level in ${first.skill_name}`} disabled={busy} allowUnsure={false} onChange={(level) => { if (level !== null) void answer(level) }} />
       </div>
       {error && <p role="alert" className="m-0 text-xs text-weak">{error}</p>}
       <p className="m-0 text-xs text-graphite">
@@ -74,6 +75,7 @@ export function BestQuestion({ profileId, scenario, onAnswered }: { profileId: s
 
 // Hypothetical levels → exact rank and fit changes; nothing is saved.
 export function WhatIf({ profileId, scenario, role }: { profileId: string; scenario: Scenario; role: RoleCard }) {
+  const levels = useLevels()
   const [skill, setSkill] = useState(role.requirements[0]?.skill ?? '')
   const [level, setLevel] = useState(3)
   const [result, setResult] = useState<WhatIfResponse | null>(null)
@@ -102,7 +104,7 @@ export function WhatIf({ profileId, scenario, role }: { profileId: string; scena
         <label className="flex flex-col gap-1">
           <span className="cap">were</span>
           <select className="rounded-md border border-hairline px-2 py-1.5" value={level} onChange={(e) => setLevel(Number(e.target.value))}>
-            {LEVEL_NAMES.map((label, i) => <option key={label} value={i}>{i + 1} · {label}</option>)}
+            {Array.from({ length: LEVEL_MAX + 1 }, (_, i) => <option key={i} value={i}>{levelName(levels, i)}</option>)}
           </select>
         </label>
         <button type="button" className="btn btn-v" onClick={run}>Recompute</button>

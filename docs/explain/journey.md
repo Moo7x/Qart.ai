@@ -28,7 +28,7 @@ the level structure of SFIA 9 and, for finance skills, the Skills Framework for 
 and SkillsFuture Singapore) and UF's accounts payable competency; each skill cites its basis and
 its TalentCorp page, and stays `status: draft` until the team reviews it. Stored levels keep their
 numbers: core requirements stay at 3 ("working"), upskill and support at 2 ("aware").
-`python -m src.levels --missing` lists required skills without five sentences.
+`python -m src.levels --missing` lists required skills without five sentences. On screen (`web/src/components/LevelPicker.tsx`, onboarding and the best-question box) the person picks a sentence, "None of these" (0) or "Not sure" (unstated, never 0); levels show as stored ("3/5") with labels from `GET /api/pack`, never hard-coded.
 
 **Calculation.** `src/match/engine.py` computes
 `fit = 100 × sum(weight × min(claimed / required, 1)) / sum(weight)`.

@@ -1,7 +1,8 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { useApi } from '../api'
-import type { ProgressResponse } from '../types'
+import { getJSON, useApi } from '../api'
+import type { PackInfo, ProgressResponse } from '../types'
+import type { LevelsInfo } from '../typesScoring'
 import { useJourney } from '../state'
 
 // Official UN SDG colours (un.org brand guidelines) for the goals the pack uses.
@@ -20,51 +21,49 @@ export function SdgTag({ target }: { target: string }) {
   )
 }
 
-// Skill levels are stored 0–4 (none … expert) and always shown on a 1–5 scale, so people read
-// "3 of 5". Only the display changes: the engine, API and stored claims keep 0–4.
-export const LEVEL_NAMES = ['None', 'Aware', 'Working', 'Proficient', 'Expert']
-export const LEVEL_STEPS = LEVEL_NAMES.length
+// Skill levels run 0–5 (docs/PHASE2_PLAN.md §1 decision 2) and are shown as stored: "3/5". Their
+// labels and "I can…" sentences come from GET /api/pack (levels.yaml), never from this file.
+export const LEVEL_MAX = 5 // mirrors src/journey/store.py MAX_LEVEL
 
 export function levelText(level: number | null | undefined): string {
-  return level === null || level === undefined ? '—' : `${level + 1}/${LEVEL_STEPS}`
+  return level === null || level === undefined ? '—' : `${level}/${LEVEL_MAX}`
+}
+
+// The pack's level scale, fetched once and shared by every picker and level display.
+let levelsRequest: Promise<LevelsInfo | null> | null = null
+
+export function useLevels(): LevelsInfo | null {
+  const [levels, setLevels] = useState<LevelsInfo | null>(null)
+  useEffect(() => {
+    levelsRequest ??= getJSON<PackInfo>('/api/pack').then((p) => p.levels ?? null, () => {
+      levelsRequest = null // retry on the next mount instead of caching a failure
+      return null
+    })
+    let live = true
+    levelsRequest.then((value) => { if (live) setLevels(value) })
+    return () => { live = false }
+  }, [])
+  return levels
+}
+
+// "3 · working" once the scale has loaded, the number alone before.
+export function levelName(levels: LevelsInfo | null, level: number): string {
+  const label = levels?.scale.find((s) => s.level === level)?.label
+  return label ? `${level} · ${label}` : String(level)
 }
 
 export function Dots({ level, tone = 'violet' }: { level: number | null; tone?: 'violet' | 'stone' | 'light' }) {
-  const filled = level === null ? 0 : level + 1
+  const levels = useLevels()
+  const filled = level ?? 0
   const on = tone === 'violet' ? 'bg-violet' : tone === 'light' ? 'bg-violet-light' : 'bg-stone'
   const off = tone === 'light' ? 'bg-surface' : 'bg-hairline'
   return (
-    <span className="inline-flex items-center gap-2" aria-label={level === null ? 'not stated' : `${filled} of ${LEVEL_STEPS}, ${LEVEL_NAMES[level]}`}>
+    <span className="inline-flex items-center gap-2" aria-label={level === null ? 'not stated' : `${level} of ${LEVEL_MAX}, ${levelName(levels, level)}`}>
       <span aria-hidden="true" className="inline-flex gap-[3px]">
-        {LEVEL_NAMES.map((name, i) => <span key={name} className={`h-1.5 w-3 ${i < filled ? on : off}`} />)}
+        {Array.from({ length: LEVEL_MAX }, (_, i) => <span key={i} className={`h-1.5 w-3 ${i < filled ? on : off}`} />)}
       </span>
       <span aria-hidden="true" className="font-mono text-[11px]">{levelText(level)}</span>
     </span>
-  )
-}
-
-// Five-step rating control: each step is a radio, filled up to the chosen level.
-export function LevelPicker({ level, onChange, label, disabled = false }: { level: number | null; onChange: (level: number) => void; label: string; disabled?: boolean }) {
-  return (
-    <div role="radiogroup" aria-label={label} className="grid grid-cols-5 gap-px border border-hairline bg-hairline">
-      {LEVEL_NAMES.map((name, i) => {
-        const on = level !== null && i <= level
-        return (
-          <button
-            key={name}
-            type="button"
-            role="radio"
-            aria-checked={level === i}
-            disabled={disabled}
-            onClick={() => onChange(i)}
-            className={`flex min-h-[44px] min-w-[54px] cursor-pointer flex-col items-center justify-center border-0 px-1 text-[11px] leading-tight transition-colors disabled:cursor-default ${on ? 'bg-violet text-white' : 'bg-white text-graphite hover:bg-fog'} ${level === i ? 'font-semibold' : ''}`}
-          >
-            <span className="font-mono text-[13px]">{i + 1}</span>
-            {name}
-          </button>
-        )
-      })}
-    </div>
   )
 }
 
