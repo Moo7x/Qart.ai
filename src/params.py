@@ -72,6 +72,9 @@ AI_ROLE_DIRECTION = {"complement": 1, "routine": -1, "neutral": 0}
 # assumed to reach these tasks. Moderate = half, fast = all of it. Declared, not estimated.
 SCENARIO_INTENSITY = {"moderate": 0.5, "fast": 1.0}
 SCENARIO_HORIZON_YEARS = 2
+# Lowest scenario factor a weight can get. Declared: a routine skill can lose most of its weight
+# but never vanish or turn negative, even at the 1.5 sensitivity intensity with 100% automation.
+SCENARIO_FACTOR_FLOOR = 0.1
 # Roles whose fit differs by less than this are near-ties: the person's interests may order them.
 NEAR_TIE_POINTS = 3.0
 

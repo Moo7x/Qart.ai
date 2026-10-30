@@ -23,9 +23,11 @@ keyword/form fallbacks. `src/pack.py` validates the curated skill, role, resourc
 **Calculation.** `src/match/engine.py` computes
 `fit = 100 × sum(weight × min(claimed / required, 1)) / sum(weight)`.
 Unknown levels contribute zero but remain "not stated"; essential gaps mean "longer route".
-A scenario shifts a non-essential weight by `w' = w × (1 + d × s × a)`: d is the skill's
+A scenario shifts a non-essential weight by `w' = w × max(0.1, 1 + d × s × a)`: d is the skill's
 declared direction (routine −1, AI-complementing +1), s the scenario intensity (moderate 0.5,
-fast 1.0) and a the observed automation-style share of AI use. a is task-level where it can be:
+fast 1.0) and a the observed automation-style share of AI use. The floor of 0.1
+(`SCENARIO_FACTOR_FLOOR`, declared) keeps a routine weight from vanishing or turning negative at
+the strongest sensitivity case (s = 1.5). a is task-level where it can be:
 the O*NET tasks linked to that skill in the role's occupation (`data/packs/gbs_fa/tasks.yaml`),
 averaged with O*NET importance as the weight; otherwise the occupation's share, and the screen
 says which. The transfer from global Claude usage to Malaysian work, the levels and the weights
