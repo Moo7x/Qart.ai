@@ -30,6 +30,19 @@ its TalentCorp page, and stays `status: draft` until the team reviews it. Stored
 numbers: core requirements stay at 3 ("working"), upskill and support at 2 ("aware").
 `python -m src.levels --missing` lists required skills without five sentences. On screen (`web/src/components/LevelPicker.tsx`, onboarding and the best-question box) the person picks a sentence, "None of these" (0) or "Not sure" (unstated, never 0); levels show as stored ("3/5") with labels from `GET /api/pack`, never hard-coded.
 
+**Why this score, and what would raise it.** Each role card on `/matches` (C2) adds a band from
+the fit (strong ≥ 75 · good ≥ 55 · fair ≥ 35 · low, `BAND_THRESHOLDS`, an assumption), a range
+(low: self-rated and keyword claims one level lower, unstated as none; high: claims as stated,
+unstated at working), one component row per requirement (weight, claimed, required, points, and
+the CV or check evidence behind the claim), the essentials still short, and "raise": the three
+single-skill changes worth the most points, each re-scored exactly. A skill below its need is
+tested at the required level, by study if that is within `STUDY_MAX_LEVEL` (2) and by practice
+above; a skill already at its level but self-rated is raised by a check, whose points are the rise
+in the bottom of the range. Pay (`src/match/pay.py`, C11) shows the OpenDOSM median and mean
+monthly wage of the role's occupation group with its year and source, labelled observed and
+"not an offer for this role"; it never changes fit, band or rank, and is "not published" until
+the series is collected.
+
 **Calculation.** `src/match/engine.py` computes
 `fit = 100 × sum(weight × min(claimed / required, 1)) / sum(weight)`.
 Unknown levels contribute zero but remain "not stated"; essential gaps mean "longer route".

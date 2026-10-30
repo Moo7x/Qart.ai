@@ -155,3 +155,16 @@ ERP_RULE_LEVEL = 2
 # Measured 2026-10-30: the 37 skills' sentences are about 16,500 characters, so today the prompt
 # carries the meanings and rules only, and the person refines each level with its sentences.
 LEVEL_GUIDE_MAX_CHARS = 8_000
+
+# Fit band and "what would raise it" (src/match/decision.py, B3, docs/PHASE2_PLAN.md §4 C2).
+# Band of a role's fit, from the fit itself. Declared thresholds, shown as an assumption: a fit of
+# 75+ meets three quarters of the weighted requirements; below 35, most of the role is still to
+# learn. Lower bound inclusive, checked from the top: strong ≥ 75 · good ≥ 55 · fair ≥ 35 · low.
+BAND_THRESHOLDS = {"strong": 75, "good": 55, "fair": 35}
+BAND_BELOW = "low"
+# Highest level study alone can reach: "aware" (2). Levels 3 and above need work done (levels.yaml
+# rule "done, not studied"). Declared: MQF counts 40 notional hours per credit including practice,
+# and vendors expect months of use before working-level skill. Used by "raise" now and by the
+# planner in B4.
+STUDY_MAX_LEVEL = 2
+RAISE_SHOWN = 3  # single-skill changes listed under "what would raise it"

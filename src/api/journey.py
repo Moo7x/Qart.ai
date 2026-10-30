@@ -26,11 +26,19 @@ from src.journey.store import (
     update_profile,
 )
 from src.levels import load_levels
-from src.match.decision import fit_range, meters
+from src.match.decision import (
+    band,
+    components,
+    essentials_short,
+    fit_range,
+    meters,
+    raise_options,
+)
 from src.match.engine import Evidence, RoleMatch, Scenario, rank_roles, score_role
 from src.match.evidence import automation_evidence
 from src.match.explain import explain, facts
 from src.match.outlook import role_outlook
+from src.match.pay import role_pay
 from src.match.radar import radar
 from src.match.tasks import task_view
 from src.occupations.catalogue import catalogue_table
@@ -236,8 +244,10 @@ def _card(
     evidence: Evidence,
     demand: list[dict[str, str]],
     scenario: Scenario,
+    rows: list[dict[str, Any]],
 ) -> dict[str, Any]:
     role = pack.destination_roles[match.role_id]
+    levels = data.levels()
     current = pack.current_roles.get(data.current_role)
     outlook = [
         {
@@ -262,7 +272,13 @@ def _card(
         "impact": role.impact,
         "outlook": outlook + demand,
         "meters": meters(match),
-        "fit_range": fit_range(pack, match, data.levels(), scenario, evidence),
+        "fit_range": fit_range(pack, match, levels, scenario, evidence, data.skills),
+        "band": band(match.fit),
+        "band_basis": "assumption",
+        "components": components(match, data.skills),
+        "raise": raise_options(pack, match, levels, scenario, evidence, data.skills),
+        "essentials_short": essentials_short(match),
+        "pay": role_pay(role, rows),
         "listed_transition": bool(current and match.role_id in current.transitions),
         "effort_hours": path.total_hours,
         "effort_weeks": path.weeks,
@@ -293,6 +309,7 @@ def matches(
             evidence,
             role_outlook(pack, pack.destination_roles[m.role_id], rows, signals),
             scenario,
+            rows,
         )
         for m in ranked
     ]
