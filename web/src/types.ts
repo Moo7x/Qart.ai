@@ -1,7 +1,7 @@
 // Shapes returned by the FastAPI server (src/api/evidence.py, src/evidence/signals.py).
 // Keep these exactly in step with the server models.
 
-import type { Band, BandRules, FitRange, LevelsInfo, RaiseOption, RoleComponent, RolePay } from './typesScoring'
+import type { Band, BandRules, EstimateRange, FitRange, LevelsInfo, PracticeStep, RaiseOption, RoleComponent, RolePay, StepTime, StepUnlock } from './typesScoring'
 
 export type Direction = 'rising' | 'weakening' | 'stable' | 'insufficient' | 'expert'
 
@@ -245,6 +245,14 @@ export type PathwayStep = {
   gains: { skill: string; skill_name: string; before: number; after: number }[]
   sdgs: SdgRef[]
   prerequisite_for: string[]
+  kind?: 'course'
+  id?: string
+  skill?: string
+  target_level?: number
+  time?: StepTime
+  locked?: boolean
+  unlock?: StepUnlock
+  done?: boolean
 }
 export type PathwayResponse = {
   role_id: string
@@ -264,6 +272,15 @@ export type PathwayResponse = {
   sdg_source: string
   courses_checked: string
   scenario: Scenario
+  practice_steps?: PracticeStep[]
+  study_hours?: number
+  practice_weeks?: { low: number; high: number }
+  fit_after_study?: EstimateRange
+  fit_after_practice?: EstimateRange
+  free_share?: number | null
+  free_share_basis?: string
+  ai_basics?: { shown: boolean; reason: string }
+  study_levels?: Record<string, number>
 }
 
 export type FutureScenario = {
@@ -567,6 +584,7 @@ export type GoalResponse = {
 export type ProgressResponse = {
   done: string[]
   paused: boolean
+  skipped?: string[]
   updated_at: string | null
   plan: null | {
     role_id: string
@@ -600,6 +618,8 @@ export type TrackNode = {
   videos: TrackVideo[]
   articles: TrackArticle[]
   status: 'done' | 'open' | 'no_course'
+  study_after?: number | null
+  practice?: PracticeStep[]
 }
 export type Track = { id: 'ai_basics' | 'without_ai' | 'with_ai'; title: string; why: string; nodes: TrackNode[] }
 export type RouteMetrics = {

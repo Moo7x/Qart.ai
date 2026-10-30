@@ -39,12 +39,15 @@ function ProfilePathway({ profileId, scenario }: { profileId: string; scenario: 
   const current = state ?? progress.data
   const done = current?.done ?? []
 
-  async function save(next: { done: string[]; paused: boolean }) {
+  async function save(next: { done: string[]; paused: boolean; skipped?: string[] }) {
     setSaving(true)
     setSaveError(null)
     try {
       setState(await sendJSON<ProgressResponse>(`/api/profiles/${profileId}/progress?scenario=${scenario}`, { method: 'PUT', body: next }))
       window.dispatchEvent(new Event(PROGRESS_EVENT))
+      // Lock and skip states are computed by the server, so the plan is read again.
+      path.reload()
+      tracks.reload()
       return true
     } catch (reason) {
       setSaveError(reason instanceof Error ? reason.message : String(reason))
@@ -60,6 +63,11 @@ function ProfilePathway({ profileId, scenario }: { profileId: string; scenario: 
       void save({ done: legacy, paused: progress.data.paused }).then((saved) => { if (saved) window.localStorage.removeItem(`qart.done.${profileId}`) })
     }
   }, [progress.data]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  function skip(stepId: string) {
+    const skipped = current?.skipped ?? []
+    void save({ done, paused: current?.paused ?? false, skipped: [...skipped, stepId] })
+  }
 
   function toggle(courseId: string) {
     const next = done.includes(courseId) ? done.filter((d) => d !== courseId) : [...done, courseId]
@@ -93,6 +101,7 @@ function ProfilePathway({ profileId, scenario }: { profileId: string; scenario: 
                 {data.total_hours} h{tracks.data?.comparison.with_ai.ai_basics_hours ? ` + ${tracks.data.comparison.with_ai.ai_basics_hours} h AI basics` : ''} · RM 0 · {data.weekly_hours} h a week · about {data.weeks} week{data.weeks === 1 ? '' : 's'} · {finished} of {data.steps.length} steps done
               </p>
             </div>
+            <PlanTotals data={data} />
             <div className="flex flex-col items-end gap-2">
               <ScenarioSwitch />
               <Link to="/roles" className="text-[13px]">Change destination</Link>
@@ -116,7 +125,7 @@ function ProfilePathway({ profileId, scenario }: { profileId: string; scenario: 
             {tracks.error && <Problem what="your roadmap" message={tracks.error} onRetry={tracks.reload} />}
             {saveError && <p role="alert" className="m-0 text-weak">Progress was not saved: {saveError}. Try the action again.</p>}
             {/* Drawn only once saved progress is known, so steps never flash the wrong state. */}
-            {tracks.data && (current || progress.error) && <TrackMap tracks={tracks.data.tracks} done={done} onToggle={toggle} paused={saving || progress.loading || (current?.paused ?? false)} checked={tracks.data.resources_checked} />}
+            {tracks.data && (current || progress.error) && <TrackMap tracks={tracks.data.tracks} done={done} onToggle={toggle} onSkip={skip} paused={saving || progress.loading || (current?.paused ?? false)} checked={tracks.data.resources_checked} />}
           </section>
 
           {tracks.data && <RouteCompare data={tracks.data.comparison} scenario={scenario} />}
@@ -188,3 +197,36 @@ function ProfilePathway({ profileId, scenario }: { profileId: string; scenario: 
     </main>
   )
 }
+
+const BASIS_TEXT: Record<string, string> = {
+  reading_estimate: 'reading estimates',
+  guided_hours: 'guided hours',
+  stated: 'stated lengths',
+}
+
+// Study and practice kept apart (B4): hours of study, weeks of practice as a range, and the fit
+// after each, every one an estimate. Study reaches level 2 at most.
+function PlanTotals({ data }: { data: PathwayResponse }) {
+  if (data.study_hours === undefined || !data.fit_after_study || !data.fit_after_practice) return null
+  const bases = [...new Set(data.steps.map((s) => s.time?.basis).filter((b): b is NonNullable<typeof b> => !!b && b in BASIS_TEXT))]
+  const range = (r: { low: number; high: number }) => `${Math.round(r.low)}–${Math.round(r.high)}`
+  const weeks = data.practice_weeks
+  return (
+    <div className="flex w-full flex-col gap-1.5 text-[13px]">
+      <span className="flex flex-wrap items-center gap-2">
+        <span className="tag bg-estimate-bg text-estimate">Estimate</span>
+        Study {data.study_hours} h{bases.length ? ` (${bases.map((b) => BASIS_TEXT[b]).join(', ')})` : ''}
+        {weeks && weeks.high > 0 ? ` · practice at work ${weeks.low}–${weeks.high} weeks` : ''}
+      </span>
+      <span>
+        Fit after study <b>{range(data.fit_after_study)}</b>
+        {weeks && weeks.high > 0 ? <> · after study and practice <b>{range(data.fit_after_practice)}</b></> : null}
+        <span className="text-graphite"> (now {Math.round(data.fit_before)}; planned levels count as self-rated)</span>
+      </span>
+      {data.partly_covered.length > 0 && (
+        <span className="text-graphite">Study stops below level 2 for {data.partly_covered.join(', ')}: not enough verified hands-on material yet. Level 2 needs 20 h including hands-on work.</span>
+      )}
+    </div>
+  )
+}
+

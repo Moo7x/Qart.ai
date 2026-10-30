@@ -57,3 +57,31 @@ export type RolePay = {
   cited_span: string
   note: string
 }
+
+// C3: plan steps and totals (GET /api/profiles/{id}/pathway and the nodes of /tracks).
+export type StepTime = {
+  value: number
+  unit: 'hours' | 'weeks'
+  basis: 'reading_estimate' | 'guided_hours' | 'stated' | 'practice_estimate'
+  low: number | null
+  high: number | null
+}
+export type StepUnlock = 'previous_step' | 'study_done' | 'level_check' | null
+export type PracticeStep = {
+  order: number
+  kind: 'practice'
+  id: string
+  skill: string
+  skill_name: string
+  target_level: number
+  text: string
+  show_by: string
+  time: StepTime
+  week_start: { low: number; high: number }
+  basis: { title: string; url: string; read: string }[]
+  locked: boolean
+  unlock: StepUnlock
+  status: 'open' | 'done' | 'skipped'
+  status_label: string
+}
+export type EstimateRange = { low: number; high: number; kind: 'estimate' }
