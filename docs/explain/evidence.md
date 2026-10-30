@@ -13,6 +13,12 @@ Rule: never invent statistics; every number cites a source.
 ## How it works
 1. **Registry** (`data/sources.yaml`): what each source shows and does not show, its terms and
    cadence. Only registered sources are collected.
+Course catalogue (`src/collectors/mslearn.py`): the Microsoft Learn Catalog API is screened for
+finance, data and process items, which BGE-M3 and the reranker map to pack skills on RunPod. The
+results are written as unverified candidates (`courses_mslearn.yaml`) that the planner ignores
+until a reviewer opens and verifies each one (`scripts/review_catalogue.py`). Every pipeline run
+also checks that each course, video and article link still opens (`src/pipeline/links.py`).
+
 Robustness: a source that fails keeps its stored observations, so screens keep showing the last
 good data, and `/api/sources` says when it was fetched (`serving_snapshot_from`) and when the
 source last succeeded. A run left "running" by a process that stopped is closed as
