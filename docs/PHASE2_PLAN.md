@@ -17,8 +17,10 @@ design); where the two differ, this file wins.
 
 | Branch | Owner | Theme |
 |---|---|---|
-| `p2-ai-experience` | Moo7x (A) | Navigation and Overview, trends and forecasting, change test and refresh, evidence robustness, search and RunPod, course catalogue pipeline, visible scout agent, progress-check agent, privacy, status, load test, cost |
-| `p2-scoring-pathway` | Meiirman (B) | Correctness fixes, 0–5 described levels, fit range and band, "what would raise it", study versus practice, adaptive plan, personas, SDG mapping and heatmap, progress events and badges, report figures |
+| `p2-ai-experience` | Moo7x (A) | Navigation and Overview, trends and forecasting, pay data, change test and refresh, evidence robustness, search and RunPod, course catalogue pipeline, visible scout agent, progress-check agent, privacy, status, load test, cost |
+| `p2-scoring-pathway` | Meiirman (B) | Correctness fixes, 0–5 described levels, fit range and band, "what would raise it", pay on role cards, study versus practice, adaptive plan, personas, SDG mapping and heatmap, progress events and badges, report figures, more GBS finance roles |
+
+The UI redesign is a separate last phase (§10), after both branches are merged.
 
 ---
 
@@ -112,7 +114,17 @@ Decided by the team. Each is logged in `docs/decision_log.md` (2026-10-30).
     (`AGENT_MODEL`) for agents. Both are named on screen and in the declaration.
 11. **No login.** The anonymous 128-bit profile id stays; add a resume code, export, delete and a
     90-day retention limit.
-12. **Later, not in this phase:**
+12. **Pay on every role card.** The OpenDOSM median and mean monthly wage of the role's MASCO major
+    group, observed, with year and source. It is labelled "pay of all employees in this
+    occupation group, not an offer for this role". Pay never changes fit or rank.
+13. **More GBS finance roles.** The pack grows beyond 9 destination roles with every finance-function
+    role the TalentCorp (2024) study names with a skill list (B10). Nothing is added without a
+    cited page.
+14. **The UI redesign is the last phase (§10).** Until then, both branches keep the current look
+    and sections and change structure only where a package requires it. After M2 the owner walks
+    through the app; the agreed changes are written into §10 and applied page by page by the page
+    owner.
+15. **Later, not in this phase:**
     - funding and training requests (HRD Corp, PERKESO, MyMahir);
     - weights from job-post skill frequencies;
     - Chinese interface;
@@ -139,7 +151,8 @@ Decided by the team. Each is logged in `docs/decision_log.md` (2026-10-30).
 **Merge points**
 - **M1, early merge:** after B1–B4 and A1–A4 are done. It catches incompatibilities while they are
   small.
-- **M2, final merge:** when both branches are done. Integration (§9) follows on `main`.
+- **M2, final merge:** when both branches are done. Integration (§9) follows on `main`, then the
+  UI phase (§10).
 
 At each merge point, in this order:
 1. **B into main:**
@@ -346,6 +359,24 @@ Pure function, also used by A's status page: `src/pathway/sdg.py: sdg_matrix(pac
 - **Fairness result** with its date (C10).
 - **Platform SDG totals** from C4 over all profiles with a destination, suppressed below 5 profiles.
 
+### C11 Pay by occupation group (A collects; B shows on role cards)
+- **A stores**, in the `dosm_wages_occupation` collector (both sexes, per major group and year,
+  next to the existing `employees` series):
+  - series `wages_median`, unit `RM per month`;
+  - series `wages_mean`, unit `RM per month`.
+
+  Same `entity` names as today (`professionals`, `technicians`, `clerical`, `overall`), and the
+  cited span is the published row. Bump the collector's `METHOD_VERSION` to `dosm_wages/2`.
+- **B adds to each role card** in `/matches`:
+  ```json
+  {"pay": {"group": "professionals", "group_title": "Professionals", "year": "2025",
+           "median": 5200, "mean": 6100, "overall_median": 2900, "unit": "RM per month",
+           "kind": "observed", "source": "OpenDOSM wages_occupation", "fetched_at": "...",
+           "note": "Pay of all employees in this occupation group, not an offer for this role."}}
+  ```
+  The group comes from the role's ISCO code through `src/match/outlook.py MAJOR_GROUP`.
+  `"pay": null` when the group or the year is missing (shown as "not published", never 0).
+
 ### C10 Fairness check (B produces; A displays)
 `src/match/fairness.py: paired_profile_check(pack, evidence) -> {"pairs", "identical", "max_fit_difference", "checked_at"}`.
 It is pure: the same synthetic pairs as `tests/test_fairness.py`, which differ only in protected
@@ -387,8 +418,10 @@ attributes.
   - `CALCULATION_VERSION`, and the policy list in `src/changes/store.py` `context_hash` (that one
     list only);
   - new `scripts/kpis.py`.
-- **Data:** `data/packs/gbs_fa/{levels,practice,sdg,roles,skills,tasks,courses,resources}.yaml`,
-  `data/samples/**`, `data/eval/regression_profiles.yaml`.
+- **Data:** `data/packs/gbs_fa/{levels,practice,sdg,roles,skills,tasks,courses,resources,field}.yaml`,
+  `data/samples/**`, `data/eval/regression_profiles.yaml`. `field.yaml` lists the occupations the
+  collectors follow, so B tells A when B10 adds one: the next pipeline run collects its evidence
+  with no code change.
 - **Web:**
   - pages `Onboarding`, `Roles`, `Pathway`, `Cv`, `Goal`;
   - components `CompareRoles`, `Decision`, `ExplainRole`, `PlanCompare`, `RouteCompare`, `TrackMap`,
@@ -476,9 +509,10 @@ Stage 1 (before M1) = A1–A4.
 - Fields from B are optional until M1. With a field missing, the card shows its existing content,
   never a placeholder number.
 - Every number on Overview has a "Why?" (§5 shared rules).
-- **Visual direction:** taken from the reference screenshots the owner provides. Keep the existing
-  colour tokens until then. Changes stay in `index.css` and A's pages. Mobile: no horizontal
-  overflow at 375 px.
+- **Look:** keep the current colours, type, spacing and section designs; the redesign is the last
+  phase (§10). New cards and components reuse the existing classes (`card`, `btn`, `tag`, `h1`,
+  `h2`, `cap`, `eyebrow`) and need no new design tokens. Mobile: no horizontal overflow at
+  375 px.
 
 **Tests:** `tsc`, lint, build. A manual check on `/overview` with each persona, and on a phone width.
 
@@ -490,7 +524,12 @@ forecast.
 
 **Files:**
 - `src/evidence/forecast.py` (new), `src/evidence/trends.py`, `src/api/evidence.py`;
+- `src/collectors/dosm_wages.py` (pay series, C11);
 - `TrendsChart.tsx` (new), `Trends.tsx`, `typesAgents.ts`, `requirements.txt`.
+
+**Pay series first (C11):** store `wages_median` and `wages_mean` per group and year, before M1,
+so B can show pay on role cards. Test the parser with the existing fixture, which already has both
+fields.
 
 **Forecast series**
 - OpenDOSM employment share per MASCO major group (annual; already collected).
@@ -894,6 +933,11 @@ Stage 1 (before M1) = B1–B4.
 
 **Rules**
 - Implement C2 exactly, with `BAND_THRESHOLDS = {"strong": 75, "good": 55, "fair": 35}`.
+- **Pay (C11):** each role card shows the group's median monthly pay, with the national median
+  beside it, the year and source, its "observed" tag and the note "pay of all employees in this
+  occupation group, not an offer for this role". Its "Why?" shows the published row. Pay is never
+  used in fit, band or rank. Until A's pay series is on `main`, the card shows "not published"
+  (the field is `null`). Test with fixture observations.
 - **Score chip:** each role card shows a large chip: band, `fit`, range ("Fair · 41 (32–48)").
   Its "Why?" opens `ScoreWhy`.
 - **`ScoreWhy` panes:**
@@ -1061,6 +1105,45 @@ sums; the API shape matches C4.
 
 **Fairness:** `paired_profile_check` (C10), sharing its pairs with `tests/test_fairness.py`.
 
+### B10 More GBS finance roles
+**Goal:** more, and more specific, destination roles. Every one is traceable to the TalentCorp
+study and fully wired (requirements, tasks, evidence, levels, practice, SDG, courses), so
+suggestions are never generic.
+
+**When:** after B7 (it needs the levels, practice and SDG formats), before M2.
+
+**Files:** `data/packs/gbs_fa/{roles,skills,tasks,field,levels,practice,sdg}.yaml`,
+`src/collectors/talentcorp.py` extraction data if a page is newly cited (ask A first: it is A's
+code), tests.
+
+**Rules**
+1. **Candidates:** every finance-and-accounting role in TalentCorp (2024), *Impact Study of AI,
+   Digital and Green Economy: GBS*, that is not yet a destination role and has a skill list in the
+   study. That includes the emerging roles it names and the medium- or low-impact roles the study
+   gives as transitions from current roles. List them with their pages in the commit body before
+   adding any.
+2. **A role is added only when all of these exist:**
+   - its title and impact level, with page;
+   - its requirements from the study's skill lists, with pages, tiers and at least one essential;
+   - an O*NET-SOC code from the ESCO–O*NET crosswalk in `field.yaml`;
+   - O*NET tasks linked to its skills in `tasks.yaml`;
+   - SDG links with reasons;
+   - level anchors and practice tasks for any new skill.
+
+   A role missing any of these is not added; it is listed in `docs/decision_log.md` with the
+   reason.
+3. **New skills:** only ones the study names (with page). A new skill without a verified course
+   stays "no verified free course yet". A's catalogue (A6) is asked to cover it, never filled with
+   a guess.
+4. **Current roles:** if the study gives a current role new transitions, add them with pages.
+5. **After adding:** `load_pack()` checks pass; the persona test (B6) still shows different
+   results; the occupation evidence for new SOC codes arrives in the next pipeline run (no code
+   change); `scripts/kpis.py` re-reports coverage, keeping the Phase 1 denominator and showing new
+   skills separately.
+
+**Tests:** the pack check rejects a role missing a page, an essential, a SOC code or an SDG link;
+each new role appears in `/matches` with components, pay (when published) and an SDG row.
+
 ---
 
 ## 9. Integration on `main` after M2
@@ -1076,7 +1159,30 @@ sums; the API shape matches C4.
 
 ---
 
-## 10. Measuring against the Phase 1 targets (both)
+## 10. UI phase (last, after M2 and integration)
+
+The redesign comes after all features work, so it is done once, on the final set of screens.
+Most sections stay; the phase removes, changes and restyles.
+
+1. **Walkthrough:** the owner (Moo7x) opens the integrated app and goes page by page. For each
+   page, he states what to remove, what to change, and an example of how it should look
+   (screenshots or references).
+2. **Spec:** the walkthrough is written into this section as a table per page (item, change,
+   owner), plus a global style part (colours, type, spacing, buttons, cards) with its tokens. It is
+   committed on `main` before any UI code.
+3. **Global style first (A):** tokens and shared classes in `index.css`, plus the Sidebar.
+   Committed and pushed so both branches build on it.
+4. **Pages by owner:** both work on fresh branches from `main` (`ui-a`, `ui-b`) with the same file
+   ownership (§5) and the same merge order (B first). A page item never moves to the other owner.
+5. **Rules:**
+   - The redesign never removes a must-have from §0, a source, a date, a label or a "Why?" panel.
+   - No new numbers.
+   - Mobile at 375 px and keyboard focus are checked on every page.
+   - Dataviz rules apply to every chart.
+
+---
+
+## 11. Measuring against the Phase 1 targets (both)
 
 **User test** (`docs/USER_TEST.md`)
 - **Participants:** 10 or more classmates, each given one persona card (synthetic data only), on
@@ -1093,7 +1199,7 @@ sums; the API shape matches C4.
 
 ---
 
-## 11. Report Section 4 and Q&A: where each answer comes from
+## 12. Report Section 4 and Q&A: where each answer comes from
 
 | Requirement | Evidence | Owner |
 |---|---|---|
@@ -1117,7 +1223,7 @@ sums; the API shape matches C4.
 
 ---
 
-## 12. Definition of done (every work package)
+## 13. Definition of done (every work package)
 
 - Works through the real API on a local build with the four personas, not only with mocks.
   Frontend types match the server models.
