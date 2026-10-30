@@ -57,7 +57,7 @@ def answer(profile_id: str, body: Answer, engine: Engine = Depends(get_engine)) 
     """The person's own answer to a question: a self-rated claim, never a verified level."""
     data, _ = require_profile(engine, profile_id)
     if body.skill not in load_pack().skills:
-        raise HTTPException(status_code=422, detail="unknown skill")
+        raise HTTPException(status_code=422, detail=f"unknown skill: {body.skill}")
     data.skills[body.skill] = SkillClaim(level=body.level, source="self")
     update_profile(engine, profile_id, data)
     return {"skill": body.skill, "level": str(body.level)}
