@@ -49,6 +49,10 @@ MIN_POINTS_SINGLE_OFFICIAL_SERIES = 8
 # so one check a day is enough to notice a new release on the day it appears.
 RUN_STALE_AFTER_HOURS = 24
 
+# --- Agents and forecasting (owner A, docs/PHASE2_PLAN.md §7) ---------------------------------
+# Owner A adds parameters for the scout and progress-check agents, the change test, forecasting,
+# privacy retention and the load test here.
+
 # --- Matching (src/match/engine.py) ------------------------------------------------------------
 # Bump when the formula/planning algorithm changes, even if its numeric parameters do not.
 # Used with pack/parameter fingerprints to invalidate proposals computed under different rules.
@@ -113,3 +117,8 @@ FUTURE_ROLES_SHOWN = 3
 # green skills form "Reskilling without AI". Declared parameter: the split follows TalentCorp's
 # own skill clusters rather than a new judgement per skill.
 AI_TRACK_KINDS = ("data_digital",)
+
+# --- Levels and learning gain (owner B, docs/PHASE2_PLAN.md §6) -------------------------------
+# Owner B adds parameters for the 0–5 level scale, fit range and bands, study versus practice,
+# the adaptive plan, SDG totals and badges here (and edits the matching, decision and pathway
+# sections above).

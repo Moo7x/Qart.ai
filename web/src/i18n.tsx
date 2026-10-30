@@ -24,6 +24,8 @@ const MS: Record<string, string> = {
   'Live intelligence': 'Risikan langsung',
   'Start again with a new profile': 'Mula semula dengan profil baharu',
   'Start · tell us about yourself': 'Mula · ceritakan tentang diri anda',
+  // phase2 A (owner A adds its strings in this block only, docs/PHASE2_PLAN.md §5)
+  // end phase2 A
   // onboarding
   'Your situation': 'Situasi anda',
   'Your CV': 'CV anda',
@@ -100,6 +102,8 @@ const MS: Record<string, string> = {
   'Report a problem': 'Laporkan masalah',
   Send: 'Hantar',
   'Download as text': 'Muat turun sebagai teks',
+  // phase2 B (owner B adds its strings in this block only, docs/PHASE2_PLAN.md §5)
+  // end phase2 B
 }
 
 type Ctx = { lang: Lang; setLang: (l: Lang) => void; t: (text: string) => string }
