@@ -205,6 +205,13 @@ def insert_observations(engine: Engine, observations: list[Observation], run_id:
     return new
 
 
+# Most pages read the whole evidence set. Observations are only ever added (a revision is a new
+# row), so the result for a given high-water id never changes: it is kept in memory and reused
+# until a new observation arrives. A small cache: one entry per profile cutoff and filter in use.
+QUERY_CACHE_SIZE = 32
+_query_cache: dict[tuple[int, str, str | None, str | None, int], list[dict[str, Any]]] = {}
+
+
 def query_observations(
     engine: Engine,
     source_id: str | None = None,
@@ -212,9 +219,21 @@ def query_observations(
     through_id: int | None = None,
 ) -> list[dict[str, Any]]:
     """Latest version of each fact (by source, series, entity, geography, period)."""
+    upto = through_id if through_id is not None else latest_observation_id(engine)
+    # The engine object is part of the key: two in-memory SQLite databases share one URL.
+    key = (id(engine), str(engine.url), source_id, series, upto)
+    if key not in _query_cache:
+        if len(_query_cache) >= QUERY_CACHE_SIZE:
+            _query_cache.pop(next(iter(_query_cache)))
+        _query_cache[key] = _query(engine, source_id, series, upto)
+    return [dict(row) for row in _query_cache[key]]  # copies: callers may change their rows
+
+
+def _query(
+    engine: Engine, source_id: str | None, series: str | None, through_id: int
+) -> list[dict[str, Any]]:
     stmt = select(observation_table).order_by(observation_table.c.id)
-    if through_id is not None:
-        stmt = stmt.where(observation_table.c.id <= through_id)
+    stmt = stmt.where(observation_table.c.id <= through_id)
     if source_id:
         stmt = stmt.where(observation_table.c.source_id == source_id)
     if series:
