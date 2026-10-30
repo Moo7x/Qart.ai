@@ -110,6 +110,17 @@ CHECK_MIN_QUOTE_CHARS = 8  # a quote shorter than this cannot show anything
 # Privacy (src/privacy.py): a profile not updated for 90 days is deleted by the pipeline. Declared:
 # long enough to come back to a plan after a quarter, short enough not to keep data for nothing.
 PROFILE_RETENTION_DAYS = 90
+# Prices for the cost estimate (status page, scripts/cost.py), USD per million tokens. Declared:
+# the OpenAI list prices as the team knew them on 2026-10-30; check the provider's price page
+# before quoting a cost. RunPod is billed per GPU-second and depends on the GPU the endpoint uses,
+# so its price is left unset (the estimate then shows seconds only) until the team sets it from
+# the RunPod console.
+PRICES_PER_MILLION_TOKENS = {
+    "gpt-4o-mini": {"in": 0.15, "out": 0.60},
+    "gpt-4.1-mini": {"in": 0.40, "out": 1.60},
+}
+PRICES_CHECKED = "2026-10-30"
+RUNPOD_USD_PER_SECOND: float | None = None
 
 # --- Matching (src/match/engine.py) ------------------------------------------------------------
 # Bump when the formula/planning algorithm changes, even if its numeric parameters do not.

@@ -74,6 +74,31 @@ export type CheckState = {
   model: string
 }
 
+// ---- C9 status (GET /api/status, src/api/status.py) ----
+
+export type UsageRow = {
+  purpose: string
+  engine: string
+  model: string
+  calls: number
+  failed: number
+  tokens_in: number
+  tokens_out: number
+  seconds: number
+  cost_usd: number | null
+}
+export type EngineState = { configured: boolean; models: string[]; calls: number; failed: number }
+export type StatusResponse = {
+  sources: import('./types').SourceStatus[]
+  runs: import('./types').Run[]
+  schedule: string
+  engines: { language_model: EngineState; gpu: EngineState }
+  usage: UsageRow[]
+  cost: { label: 'estimate'; total_usd: number; prices_checked: string; gpu_price_set: boolean; note: string }
+  fairness: { available: boolean }
+  platform_sdg: { available: boolean }
+}
+
 // ---- C8 forecast (GET /api/forecast, src/api/evidence.py SeriesForecast) ----
 
 export type ForecastPoint = { period: string; point: number; low: number | null; high: number | null }

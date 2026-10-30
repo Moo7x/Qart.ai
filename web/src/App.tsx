@@ -9,6 +9,7 @@ import { LiveIntelligence } from './pages/LiveIntelligence'
 import { Onboarding } from './pages/Onboarding'
 import { Pathway } from './pages/Pathway'
 import { Privacy } from './pages/Privacy'
+import { Status } from './pages/Status'
 import { Occupations } from './pages/Occupations'
 import { Roles } from './pages/Roles'
 import { LanguageProvider } from './i18n'
@@ -115,6 +116,7 @@ function Shell() {
         <Route path="/occupations" element={<Occupations />} />
         <Route path="/live" element={<LiveIntelligence />} />
         <Route path="/privacy" element={<Privacy />} />
+        <Route path="/status" element={<Status />} />
         <Route
           path="*"
           element={

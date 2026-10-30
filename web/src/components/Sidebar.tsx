@@ -1,4 +1,4 @@
-import { Activity, FileText, Flag, Radar, Search } from 'lucide-react'
+import { Activity, FileText, Flag, Gauge, Radar, Search } from 'lucide-react'
 import { LanguageSwitch, useT } from '../i18n'
 import { useEffect, useState } from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
@@ -116,6 +116,10 @@ export function Sidebar() {
       <NavLink to="/live" className={navClass}>
         <Activity size={16} aria-hidden="true" className="text-cyan" />
         {t('Live intelligence')}
+      </NavLink>
+      <NavLink to="/status" className={navClass}>
+        <Gauge size={16} aria-hidden="true" className="text-cyan" />
+        {t('Status')}
       </NavLink>
       <div className="flex-1" />
       <NavLink to="/privacy" className={subClass}>{t('Privacy')}</NavLink>
