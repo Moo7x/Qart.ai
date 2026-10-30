@@ -69,10 +69,10 @@ def context_hash(profile: ProfileData, destination: str | None) -> str:
         "SCENARIO_INTENSITY",
         "SCENARIO_HORIZON_YEARS",
         "NEAR_TIE_POINTS",
-        "COURSE_LEVEL_REACH",
-        "COURSE_SHORT_MINUTES",
-        "COURSE_MAX_GAIN_SHORT",
-        "COURSE_MAX_GAIN_LONG",
+        "SCENARIO_FACTOR_FLOOR",
+        "STUDY_MAX_LEVEL",
+        "LEVEL1_MIN_HOURS",
+        "LEVEL2_MIN_HOURS",
     )
     policy = {name: getattr(params, name) for name in policy_names}
     raw = json.dumps(

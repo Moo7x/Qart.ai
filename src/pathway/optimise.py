@@ -1,7 +1,7 @@
 """Compare learning plans for one role within the same time budget (PLAN §4.6).
 
 Budget = weekly hours × PLAN_BUDGET_WEEKS. Three plans, all scored by the same rules as the
-planner (course gains are the declared estimates in src/params.py, not measured learning):
+planner (the study rule `level_after_study` and its declared parameters, not measured learning):
 
 * greedy  – today's planner order (essentials first, shortest useful course each), cut where the
             budget runs out: the baseline.
@@ -21,7 +21,7 @@ from typing import Any
 from src import params
 from src.match.engine import Evidence, RoleMatch, Scenario, score_role
 from src.pack import Course, Pack
-from src.pathway.planner import MINUTES_PER_HOUR, _level_after, plan_pathway
+from src.pathway.planner import MINUTES_PER_HOUR, level_after_study, plan_pathway
 
 LEVEL_ORDER = {"beginner": 0, "intermediate": 1, "advanced": 2}
 Levels = Mapping[str, int | None]
@@ -50,13 +50,12 @@ def _closed(pack: Pack, ids: set[str]) -> bool:
 
 
 def simulate(pack: Pack, match: RoleMatch, levels: Levels, ids: set[str]) -> dict[str, int]:
-    """Levels after taking these courses, by the planner's gain rules."""
+    """Levels after taking these courses, by the planner's study rule."""
     needed = {r.skill: r.required for r in match.requirements}
     current = {k: (v or 0) for k, v in levels.items()}
-    for course in _ordered(pack, ids):
-        for skill in course.covers:
-            if skill in needed:
-                current[skill] = _level_after(course, current.get(skill, 0), needed[skill])
+    courses = _ordered(pack, ids)
+    for skill, required in needed.items():
+        current[skill] = level_after_study(courses, skill, current.get(skill, 0), required)
     return current
 
 

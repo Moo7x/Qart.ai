@@ -99,14 +99,6 @@ QUESTION_WEIGHT_TOP_CHANGE = 100.0
 SENSITIVITY_INTENSITIES = (0.0, 0.25, 0.5, 0.75, 1.0, 1.5)
 
 # --- Pathway (src/pathway/planner.py) ----------------------------------------------------------
-# Highest level a course's material can take a skill to, by its stated level.
-COURSE_LEVEL_REACH = {"beginner": 2, "intermediate": 3, "advanced": 3}
-# Most levels a single course can add to a skill, by its length. Short modules introduce a topic;
-# only longer material can move someone two levels. Several courses on one skill add up, capped by
-# each course's level reach. Declared to keep plans honest about what a few hours can do.
-COURSE_SHORT_MINUTES = 180
-COURSE_MAX_GAIN_SHORT = 1
-COURSE_MAX_GAIN_LONG = 2
 # Plan comparison (src/pathway/optimise.py): the time budget is the person's weekly hours over
 # this many weeks, about one quarter; plans are compared within the same budget.
 PLAN_BUDGET_WEEKS = 12
@@ -168,3 +160,11 @@ BAND_BELOW = "low"
 # planner in B4.
 STUDY_MAX_LEVEL = 2
 RAISE_SHOWN = 3  # single-skill changes listed under "what would raise it"
+
+# Study versus practice (src/pathway/planner.py, B4). These replace the old per-course gains.
+# Material covering a skill gives level 1 ("novice") from LEVEL1_MIN_HOURS: enough to know the
+# basics. Level 2 ("aware") needs LEVEL2_MIN_HOURS including at least one hands-on item: the
+# shortest recognised programme found was 19 h (WSQ Vendor Performance Management). Declared.
+# Study never goes above STUDY_MAX_LEVEL (above); levels 3 and 4 come from practice tasks.
+LEVEL1_MIN_HOURS = 1
+LEVEL2_MIN_HOURS = 20

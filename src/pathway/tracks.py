@@ -16,7 +16,7 @@ not studying with an AI tutor.
 """
 
 import math
-from dataclasses import replace
+from dataclasses import asdict, replace
 from typing import Any
 
 from src import params
@@ -95,6 +95,9 @@ def _skill_nodes(
                 "now": r.claimed,
                 "required": r.required,
                 "after": after.get(r.skill, r.claimed),
+                # B4: the level study can give here, and the practice steps above it (C3).
+                "study_after": path.study_levels.get(r.skill, r.claimed),
+                "practice": [asdict(p) for p in path.practice_steps if p.skill == r.skill],
                 "courses": courses,
                 "videos": [_video(v) for v in res.videos_for(skill=r.skill)],
                 "articles": [_article(a) for a in res.articles_for(skill=r.skill)],

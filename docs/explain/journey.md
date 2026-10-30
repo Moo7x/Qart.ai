@@ -98,6 +98,17 @@ plan completion (self-reported, saved per profile in `src/journey/progress.py`),
 coverage (changes only when the person edits their levels) and skills still to tell; plus this
 week's steps within the weekly hours, and pause/resume that never lowers anything.
 
+**Study versus practice.** `src/pathway/planner.py` gives study a declared ceiling: material
+covering a skill reaches level 1 from 1 h (`LEVEL1_MIN_HOURS`) and level 2 only from 20 h with a
+hands-on item (`LEVEL2_MIN_HOURS`; the shortest recognised programme found was 19 h), never above
+`STUDY_MAX_LEVEL` (2). Courses are added shortest first until study reaches the most it can give;
+courses that would not change that level are left out. Levels 3 and 4 come from practice steps
+(`data/packs/gbs_fa/practice.yaml`): a work task per level with a declared week range (estimate,
+to agree with a manager) and what to describe in a progress check. Each plan reports study hours,
+practice weeks as a range, and two fit ranges (after study; after study and practice) by the C2
+rule with planned levels counted as unevidenced. With today's catalogue no course is marked
+hands-on, so study reaches level 1 and the plan says the rest needs more material or practice.
+
 **My plan as three tracks.** `src/pathway/tracks.py` (GET `/api/profiles/{id}/tracks`) shows the
 plan as three rows: (1) AI basics, a declared foundation everyone sees first (what generative AI
 is, prompting at work, using AI responsibly, data basics); (2) reskilling without AI, the role's
