@@ -1,5 +1,6 @@
 import { useT } from '../i18n'
 import { useApi } from '../api'
+import { ChangeTest } from '../components/ChangeTest'
 import { SmallMultiples } from '../components/Charts'
 import { ScenarioSwitch } from '../components/journey'
 import { TrendsChart } from '../components/TrendsChart'
@@ -40,6 +41,7 @@ export function Trends() {
         <ScenarioSwitch />
       </div>
       <TrendsChart />
+      <ChangeTest />
       {view.loading && <Loading what="the trends" />}
       {view.error && <Problem what="the trends" message={view.error} onRetry={view.reload} />}
       {data && (

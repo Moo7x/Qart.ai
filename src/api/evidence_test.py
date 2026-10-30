@@ -64,6 +64,7 @@ class PathwayChange(BaseModel):
     title: str
     before: list[str]
     after: list[str]
+    titles: dict[str, str]  # course id -> title, for every course in either plan
     fit_after_before: float
     fit_after_after: float
 
@@ -167,6 +168,7 @@ def evidence_test(
             title=match_before.title,
             before=[s.course.id for s in path_before.steps],
             after=[s.course.id for s in path_after.steps],
+            titles={s.course.id: s.course.title for s in [*path_before.steps, *path_after.steps]},
             fit_after_before=path_before.fit_after,
             fit_after_after=path_after.fit_after,
         ),
