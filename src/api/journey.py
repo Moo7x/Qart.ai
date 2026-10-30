@@ -44,6 +44,7 @@ from src.match.tasks import task_view
 from src.occupations.catalogue import catalogue_table
 from src.pack import Pack, load_pack
 from src.pathway.planner import Pathway, apply_progress, plan_pathway
+from src.pathway.sdg import role_targets
 from src.pathway.tracks import build_tracks, comparison
 from src.resources import load_resources
 
@@ -328,6 +329,8 @@ def matches(
         "current_impact": IMPACT_MEANING[current.impact] if current else None,
         "destination": destination,
         "roles": cards,
+        # B7: roles × SDG targets with reasons, so roles can be compared by contribution.
+        "sdg_roles": [r.model_dump() for r in role_targets(pack)],
         "bands": {
             "thresholds": params.BAND_THRESHOLDS,
             "below": params.BAND_BELOW,

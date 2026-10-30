@@ -4,11 +4,13 @@ import { Link } from 'react-router-dom'
 import { sendJSON, useApi } from '../api'
 import { PlanCompare } from '../components/PlanCompare'
 import { RouteCompare } from '../components/RouteCompare'
+import { SdgHeatmap } from '../components/SdgHeatmap'
 import { TrackMap } from '../components/TrackMap'
 import { ScenarioSwitch, SdgTag, sdgColour, JourneyRoute, NextStep, PROGRESS_EVENT } from '../components/journey'
 import { Loading, Problem } from '../components/ui'
 import { useJourney } from '../state'
 import type { PathwayResponse, ProgressResponse, Scenario, TracksResponse } from '../types'
+import type { SdgMatrix } from '../typesScoring'
 import { NeedProfile } from './Roles'
 
 // Older builds kept completion in this browser; it is moved to the server once.
@@ -31,6 +33,7 @@ function ProfilePathway({ profileId, scenario }: { profileId: string; scenario: 
   const { t } = useT()
   const path = useApi<PathwayResponse>(`/api/profiles/${profileId}/pathway?scenario=${scenario}`)
   const tracks = useApi<TracksResponse>(`/api/profiles/${profileId}/tracks?scenario=${scenario}`)
+  const sdg = useApi<SdgMatrix>(`/api/profiles/${profileId}/sdg?scenario=${scenario}`)
   // Self-reported completion, saved per profile on the server; it never changes skills or fit.
   const progress = useApi<ProgressResponse>(`/api/profiles/${profileId}/progress?scenario=${scenario}`)
   const [state, setState] = useState<ProgressResponse | null>(null)
@@ -135,6 +138,16 @@ function ProfilePathway({ profileId, scenario }: { profileId: string; scenario: 
           </section>
 
           {tracks.data && <RouteCompare data={tracks.data.comparison} scenario={scenario} />}
+
+          <section id="sdg" aria-label="SDG contribution" className="panel min-w-0 gap-4">
+            <div className="flex flex-col gap-1">
+              <h2 className="h2">How your plan contributes to the SDGs</h2>
+              <p className="m-0 max-w-[720px] text-[13px] text-graphite">Each cell is the study hours a skill takes in your plan, counted toward every target that skill serves. Click a cell for the reason and its source.</p>
+            </div>
+            {sdg.loading && <Loading what="the SDG map" />}
+            {sdg.error && <Problem what="the SDG map" message={sdg.error} onRetry={sdg.reload} />}
+            {sdg.data && <SdgHeatmap data={sdg.data} />}
+          </section>
 
           {current?.plan && (
             <section aria-label="Your progress" className="panel gap-4">

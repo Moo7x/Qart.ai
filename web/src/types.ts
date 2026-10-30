@@ -1,7 +1,7 @@
 // Shapes returned by the FastAPI server (src/api/evidence.py, src/evidence/signals.py).
 // Keep these exactly in step with the server models.
 
-import type { Band, BandRules, EstimateRange, FitRange, LevelsInfo, PracticeStep, RaiseOption, RoleComponent, RolePay, StepTime, StepUnlock } from './typesScoring'
+import type { Band, BandRules, EstimateRange, SdgMatrix, FitRange, LevelsInfo, PracticeStep, RaiseOption, RoleComponent, RolePay, StepTime, StepUnlock } from './typesScoring'
 
 export type Direction = 'rising' | 'weakening' | 'stable' | 'insufficient' | 'expert'
 
@@ -224,6 +224,7 @@ export type MatchesResponse = {
   destination: string | null
   roles: RoleCard[]
   bands?: BandRules
+  sdg_roles?: SdgMatrix['roles']
 }
 
 export type Course = {

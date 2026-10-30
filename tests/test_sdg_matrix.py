@@ -42,7 +42,10 @@ def test_totals_are_the_column_sums_and_not_added_across_targets(role_id: str) -
         column = sum(c.hours for c in m.cells if c.target == total.target)
         assert total.hours == pytest.approx(column, abs=0.01)
     assert m.note == NOTE
-    assert {t.id for t in m.targets} == {t.target for t in m.totals}
+    assert [t.target for t in m.totals] == sorted(
+        {c.target for c in m.cells}, key=lambda t: [int(x) for x in t.split(".")]
+    )
+    assert {t.target for t in m.totals} <= {t.id for t in m.targets}  # titles for path links too
 
 
 def test_practice_is_a_marker_without_hours() -> None:
@@ -79,3 +82,10 @@ def test_api_shape_matches_c4(client: TestClient) -> None:
     assert {link["target"] for link in body["path_links"]} >= {"4.3", "8.5"}
     assert len(body["roles"]) == len(load_pack().destination_roles)
     assert set(body["roles"][0]["targets"][0]) == {"target", "reason", "source"}
+
+
+def test_matches_lists_every_role_with_its_sdg_targets(client: TestClient) -> None:
+    pid = client.post("/api/profiles", json={"situation": "working"}).json()["id"]
+    roles = client.get(f"/api/profiles/{pid}/matches").json()["sdg_roles"]
+    assert {r["role_id"] for r in roles} == set(load_pack().destination_roles)
+    assert all(r["targets"] and all(t["reason"] for t in r["targets"]) for r in roles)

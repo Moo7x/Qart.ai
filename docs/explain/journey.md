@@ -193,6 +193,16 @@ prerequisites once and schedules at the weekly-hours budget. Duration/level rule
 hypothetical gains, not measured learning outcomes. Some gaps have no verified free resource.
 `src/journey/store.py` persists claims and destination, not the full CV or contact fields.
 
+**SDG contribution.** Every skill and destination role has its own SDG links in
+`data/packs/gbs_fa/sdg.yaml` (target, one-line mechanism, source). `src/pathway/sdg.py`
+(`GET /api/profiles/{id}/sdg`, C4) turns the plan into skills × targets: a study step's hours are
+split equally over the gap skills it serves and count toward every target a skill serves, so
+per-target totals are not added across targets; practice is a marker, not hours. On
+`/pathway#sdg` the heatmap is a table in one violet hue with the hours printed in each cell and
+a click opening the reason and source; free learning (4.3) and the role move (8.5) are listed as
+path links below it. On `/roles` a roles × targets grid (`sdg_roles` on `/matches`) shows which
+targets each role serves, linked or not, with the reason on click.
+
 **Personas.** Four synthetic people (`data/samples/`): Hafiz (graduate), Mei (retail supervisor
 switching in), Nur (cash application analyst at risk) and Kavitha (senior reporting analyst).
 `tests/test_personas.py` builds each through the API from fixed levels, each quoting their CV,

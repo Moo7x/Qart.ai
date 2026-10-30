@@ -85,3 +85,16 @@ export type PracticeStep = {
   status_label: string
 }
 export type EstimateRange = { low: number; high: number; kind: 'estimate' }
+
+// C4: GET /api/profiles/{id}/sdg (src/pathway/sdg.py SdgMatrix).
+export type SdgReason = { text: string; source: string }
+export type SdgMatrix = {
+  targets: { id: string; title: string; text: string }[]
+  rows: { skill: string; skill_name: string; steps: string[]; practice: boolean }[]
+  cells: { skill: string; target: string; hours: number; reasons: SdgReason[] }[]
+  path_links: { target: string; text: string; source: string }[]
+  totals: { target: string; hours: number }[]
+  roles: { role_id: string; title: string; targets: { target: string; reason: string; source: string }[] }[]
+  note: string
+  source: string
+}

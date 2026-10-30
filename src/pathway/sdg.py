@@ -79,6 +79,21 @@ class SdgMatrix(BaseModel):
     source: str
 
 
+def role_targets(pack: Pack) -> list[SdgRole]:
+    """Every destination role with the SDG targets it serves and why (the roles × targets view)."""
+    return [
+        SdgRole(
+            role_id=r.id,
+            title=r.title,
+            targets=[
+                SdgRoleTarget(target=link.target, reason=link.how, source=link.source)
+                for link in pack.sdg.for_role(r.id)
+            ],
+        )
+        for r in pack.destination_roles.values()
+    ]
+
+
 def sdg_matrix(pack: Pack, pathway: Pathway) -> SdgMatrix:
     role = pack.destination_roles[pathway.role_id]
     gap_skills = [r.skill for r in role.requires if r.skill in pathway.study_levels]
@@ -112,25 +127,18 @@ def sdg_matrix(pack: Pack, pathway: Pathway) -> SdgMatrix:
         SdgPathLink(target=link.target, text=link.how, source=link.source or pack.sdg.source)
         for link in [*pack.sdg.pathway, *pack.sdg.for_role(role.id)]
     ]
-    used = sorted(
-        {c.target for c in cells} | {link.target for link in path_links},
-        key=lambda t: [int(x) for x in t.split(".")],
-    )
+
+    def order(t: str) -> list[int]:
+        return [int(x) for x in t.split(".")]
+
+    # Totals are per heatmap column (targets skills serve); path-level targets carry no hours.
+    columns = sorted({c.target for c in cells}, key=order)
+    used = sorted(set(columns) | {link.target for link in path_links}, key=order)
     totals = [
         SdgTotal(target=t, hours=round(sum(c.hours for c in cells if c.target == t), 2))
-        for t in used
+        for t in columns
     ]
-    roles = [
-        SdgRole(
-            role_id=r.id,
-            title=r.title,
-            targets=[
-                SdgRoleTarget(target=link.target, reason=link.how, source=link.source)
-                for link in pack.sdg.for_role(r.id)
-            ],
-        )
-        for r in pack.destination_roles.values()
-    ]
+    roles = role_targets(pack)
     targets = [
         SdgTargetOut(id=t, title=pack.sdg.targets[t].title, text=pack.sdg.targets[t].text)
         for t in used

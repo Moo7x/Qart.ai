@@ -9,6 +9,7 @@ import { ExplainRole } from '../components/ExplainRole'
 import { ReportProblem } from '../components/Feedback'
 import { RoleTasks } from '../components/RoleTasks'
 import { PayLine, ScoreChip } from '../components/ScoreWhy'
+import { SdgRolesGrid } from '../components/SdgHeatmap'
 import { Loading, Problem } from '../components/ui'
 import { useJourney } from '../state'
 import type { GapColumn, MatchesResponse, PackInfo, ProfileData, RoleCard, SensitivityResponse, Situation } from '../types'
@@ -205,6 +206,12 @@ function RoleDetail({ role, roles, matches, onChoose, chosen, busy, situation, p
                 <span key={g.target} title={g.how}><SdgTag target={g.target} /></span>
               ))}
             </div>
+            {matches.sdg_roles && (
+              <div className="flex flex-col gap-2 border-t border-line pt-3">
+                <h3 className="m-0 text-[15px] font-semibold">Compare roles by SDG contribution</h3>
+                <SdgRolesGrid roles={matches.sdg_roles} />
+              </div>
+            )}
             <Openings title={role.title} />
           </>
         )}
