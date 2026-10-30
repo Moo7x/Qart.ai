@@ -38,6 +38,11 @@ class Segment:
     starts_after_break: bool
 
 
+def is_headcount(row: Row) -> bool:
+    """An OpenDOSM employees row (the same source also publishes pay per group)."""
+    return bool(row["source_id"] == "dosm_wages_occupation" and row["series"] == "employees")
+
+
 def occupation_shares(rows: list[Row]) -> dict[str, list[Point]]:
     """Share of employees (%) per occupation group and year, from the first comparable year.
 
@@ -45,7 +50,7 @@ def occupation_shares(rows: list[Row]) -> dict[str, list[Point]]:
     """
     by_year: dict[str, dict[int, float]] = defaultdict(dict)
     for row in rows:
-        if row["source_id"] == "dosm_wages_occupation" and row["value"] is not None:
+        if is_headcount(row) and row["value"] is not None:
             by_year[row["entity"]][int(row["period"])] = float(row["value"])
     overall = by_year.pop("overall", {})
     shares: dict[str, list[Point]] = {}
@@ -59,7 +64,7 @@ def headcounts(rows: list[Row], group: str) -> list[Point]:
     points = [
         (str(r["period"]), float(r["value"]))
         for r in rows
-        if r["source_id"] == "dosm_wages_occupation"
+        if is_headcount(r)
         and r["entity"] == group
         and r["value"] is not None
         and int(r["period"]) >= params.DOSM_FIRST_COMPARABLE_YEAR

@@ -380,7 +380,10 @@ attributes.
   - series `wages_mean`, unit `RM per month`.
 
   Same `entity` names as today (`professionals`, `technicians`, `clerical`, `overall`), and the
-  cited span is the published row. Bump the collector's `METHOD_VERSION` to `dosm_wages/2`.
+  cited span is the published row. The collector's `METHOD_VERSION` stays `dosm_wages/1`: the pay
+  comes from the same rows, read the same way, and a new version would store every headcount row
+  again. Code that computes employment shares reads only the `employees` series
+  (`measures.is_headcount`).
 - **B adds to each role card** in `/matches`:
   ```json
   {"pay": {"group": "professionals", "group_title": "Professionals", "year": "2025",

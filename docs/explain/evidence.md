@@ -13,7 +13,9 @@ Rule: never invent statistics; every number cites a source.
 ## How it works
 1. **Registry** (`data/sources.yaml`): what each source shows and does not show, its terms and
    cadence. Only registered sources are collected.
-2. **Collectors** (`src/collectors/`): OpenDOSM wages by occupation (API), DOSM Job Market
+2. **Collectors** (`src/collectors/`): OpenDOSM wages by occupation (API: employees per major
+   group, used for employment shares, and the group's median and mean monthly pay, shown on role
+   cards and never scored; share code reads only the `employees` series), DOSM Job Market
    Insights (quarterly release pages), Anthropic Economic Index (Hugging Face release, streamed and
    filtered: occupation rows and the rows of each linked O*NET task), TalentCorp GBS study (hand
    extraction with page numbers), O*NET database (task wording and importance for the linked
