@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ScoutButton } from './AgentWindow'
+import { ProgressCheckButton } from './ProgressCheck'
 import { formatWhen, useApi } from '../api'
 import { useJourney } from '../state'
 import type { ChangesResponse, MatchesResponse, PathwayResponse, ProgressResponse, RoleCard, Run, SourceStatus, TrendsResponse } from '../types'
@@ -109,6 +110,7 @@ function GapScout({ role }: { role: ScoredRole }) {
         </select>
       </label>
       <ScoutButton key={chosen.skill} skill={chosen.skill} skillName={chosen.skill_name} profileId={profileId} />
+      <ProgressCheckButton key={`check-${chosen.skill}`} skill={chosen.skill} skillName={chosen.skill_name} profileId={profileId} />
     </div>
   )
 }

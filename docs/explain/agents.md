@@ -30,6 +30,24 @@ from cloud servers, so `python -m src.agents.scout --cache` pre-checks every ski
 connection and stores times, link anchors and reasons in `data/agents/scout_cache.yaml`; a refused
 live run uses them, labelled "checked on <date>". No caption or article text is stored.
 
+## The progress check
+
+**What it does.** A senior GBS finance reviewer (character:
+`data/agents/progress_check.character.yaml`) asks two to four questions, one at a time, about work
+the person has done, then proposes a level. Open it from Overview ("Check my progress in …").
+
+**How a level is proposed** (`src/agents/check.py`). The model judges each level above the
+current one as yes / partly / no and quotes the person's words; it never writes the level. Code
+keeps a judgement only if its quote really is in the answers, then rises one level at a time
+while the next level is "yes" ("partly" stops the climb), at most two levels. The person keeps
+the proposed level or their current one; a kept level is stored as a claim with source
+`agent_check`, the quotes as evidence, the time and the model, never as "verified". Three checks
+per skill per day, so it cannot be retried until it agrees. Until owner B publishes per-skill
+level descriptions (`levels.yaml`), it judges against the general level meanings and says so.
+
+**Measured.** A live check on Reporting and Documentation (claimed level 2) asked four questions,
+judged level 3 "partly" and level 4 "no" with the person's own quotes, so the level stayed at 2.
+
 **Judge questions.** *Is this real?* Every link opens the original resource at that point; the
 resources are the pack's checked list. *Can it invent a video or a timestamp?* No: picks the
 tools did not return are dropped, and times and links come from code. *Measured?* A live run on
