@@ -1,6 +1,7 @@
 """Checked supplementary resources (YouTube videos, articles) and the AI-basics topics.
 
-Loaded from data/packs/gbs_fa/resources.yaml. Videos and articles are links only: they are shown
+Loaded from data/packs/gbs_fa/resources.yaml and any resources_*.yaml beside it (videos and
+articles only). Videos and articles are links only: they are shown
 next to the courses on My plan and are never counted in planned hours or projected fit.
 """
 
@@ -9,8 +10,7 @@ from functools import cache
 import yaml
 from pydantic import BaseModel
 
-from src.evidence.field import PACK_DIR
-from src.pack import PackError, load_pack
+from src.pack import PackError, load_pack, pack_files
 
 
 class Video(BaseModel):
@@ -59,10 +59,20 @@ class Resources(BaseModel):
         ]
 
 
+def _read() -> Resources:
+    """resources.yaml, plus the videos and articles of any resources_*.yaml (pipeline-built)."""
+    first, *extra = pack_files("resources")
+    res = Resources.model_validate(yaml.safe_load(first.read_text(encoding="utf-8")))
+    for path in extra:
+        raw = yaml.safe_load(path.read_text(encoding="utf-8"))
+        res.videos += [Video.model_validate(v) for v in raw.get("videos", [])]
+        res.articles += [Article.model_validate(a) for a in raw.get("articles", [])]
+    return res
+
+
 @cache
 def load_resources() -> Resources:
-    raw = yaml.safe_load((PACK_DIR / "resources.yaml").read_text(encoding="utf-8"))
-    res = Resources.model_validate(raw)
+    res = _read()
     pack = load_pack()
     topics = {t.id for t in res.ai_basics}
     items: list[Video | Article] = [*res.videos, *res.articles]

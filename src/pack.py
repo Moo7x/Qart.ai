@@ -5,6 +5,7 @@ silently drop a requirement.
 """
 
 from functools import cache
+from pathlib import Path
 from typing import Literal
 
 import yaml
@@ -75,6 +76,12 @@ class Course(BaseModel):
     level: Literal["beginner", "intermediate", "advanced"]
     covers: list[str]
     requires: list[str] = []  # courses to take first (prerequisites)
+    # What `minutes` measures: a provider's reading estimate (Microsoft Learn), guided study hours
+    # stated by a programme, or a length the provider states without saying how it was counted.
+    time_basis: Literal["reading_estimate", "guided_hours", "stated"] = "reading_estimate"
+    hands_on: bool = False  # the material includes exercises the learner does, not only reading
+    checked: str = ""  # date the entry was opened and checked, when it differs from its file's
+    verified: bool = True  # False: a pipeline candidate not yet opened by a reviewer; never planned
 
 
 class SdgTarget(BaseModel):
@@ -126,7 +133,9 @@ class Pack(BaseModel):
 
     def courses_for(self, skill_id: str) -> list[Course]:
         return [
-            c for c in self.courses.values() if skill_id in c.covers and c.id not in _UNAVAILABLE
+            c
+            for c in self.courses.values()
+            if skill_id in c.covers and c.verified and c.id not in _UNAVAILABLE
         ]
 
     def tasks_for(self, soc: str, skill_id: str) -> list[TaskLink]:
@@ -208,11 +217,31 @@ def _check(pack: Pack) -> None:
         raise PackError("; ".join(problems))
 
 
+def pack_files(stem: str) -> list[Path]:
+    """`<stem>.yaml` first, then any `<stem>_*.yaml` (e.g. a pipeline-built catalogue), by name."""
+    return [PACK_DIR / f"{stem}.yaml", *sorted(PACK_DIR.glob(f"{stem}_*.yaml"))]
+
+
+def _load_courses() -> tuple[dict[str, Course], str]:
+    """Every course file merged; the hand-checked courses.yaml gives the catalogue's date."""
+    courses: dict[str, Course] = {}
+    checked = ""
+    for path in pack_files("courses"):
+        raw = yaml.safe_load(path.read_text(encoding="utf-8"))
+        checked = checked or str(raw["checked"])
+        for item in raw["courses"]:
+            course = Course.model_validate(item)
+            if course.id in courses:
+                raise PackError(f"{path.name}: course {course.id} is already defined")
+            courses[course.id] = course
+    return courses, checked
+
+
 @cache
 def load_pack() -> Pack:
     skills = yaml.safe_load((PACK_DIR / "skills.yaml").read_text(encoding="utf-8"))
     roles = yaml.safe_load((PACK_DIR / "roles.yaml").read_text(encoding="utf-8"))
-    courses = yaml.safe_load((PACK_DIR / "courses.yaml").read_text(encoding="utf-8"))
+    courses, courses_checked = _load_courses()
     sdg = yaml.safe_load((PACK_DIR / "sdg.yaml").read_text(encoding="utf-8"))
     pack = Pack(
         skills={s["id"]: Skill.model_validate(s) for s in skills},
@@ -220,8 +249,8 @@ def load_pack() -> Pack:
         destination_roles={
             r["id"]: DestinationRole.model_validate(r) for r in roles["destination_roles"]
         },
-        courses={c["id"]: Course.model_validate(c) for c in courses["courses"]},
-        courses_checked=str(courses["checked"]),
+        courses=courses,
+        courses_checked=courses_checked,
         sdg=SdgMap.model_validate(sdg),
         tasks=TaskCrosswalk.model_validate(
             yaml.safe_load((PACK_DIR / "tasks.yaml").read_text(encoding="utf-8"))
