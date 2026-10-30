@@ -193,6 +193,14 @@ prerequisites once and schedules at the weekly-hours budget. Duration/level rule
 hypothetical gains, not measured learning outcomes. Some gaps have no verified free resource.
 `src/journey/store.py` persists claims and destination, not the full CV or contact fields.
 
+**Personas.** Four synthetic people (`data/samples/`): Hafiz (graduate), Mei (retail supervisor
+switching in), Nur (cash application analyst at risk) and Kavitha (senior reporting analyst).
+`tests/test_personas.py` builds each through the API from fixed levels, each quoting their CV,
+with no model, and proves results are not hard-coded: at least three different top roles,
+Kavitha's top fit above Nur's, AI basics for Hafiz and not for Kavitha, practice for Kavitha
+wherever a core skill is short, and every number in the role score (C2) and plan (C3) carrying a
+source or a label, including any number added later.
+
 **Fairness.** `tests/test_fairness.py` runs three synthetic versions of one CV that differ only
 in name, gender, religion, race, date of birth, marital status and contact details. It checks
 that the scrubbed text, the exact messages the language model would receive, the keyword
