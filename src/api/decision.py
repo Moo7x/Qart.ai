@@ -20,7 +20,7 @@ from src.journey.store import (
 from src.match.decision import best_questions, sensitivity, what_if
 from src.match.engine import Scenario, score_role
 from src.match.evidence import automation_evidence
-from src.pack import load_pack
+from src.pack import Pack, load_pack
 from src.pathway.optimise import compare_plans
 from src.pathway.planner import plan_pathway
 
@@ -138,6 +138,17 @@ def plans(
 class ProgressIn(BaseModel):
     done: list[str] = Field(default=[], max_length=200)
     paused: bool = False
+    # Steps passed with "continue anyway" (C5). None keeps what is stored.
+    skipped: list[str] | None = Field(default=None, max_length=200)
+
+
+def _known_step(pack: Pack, step_id: str) -> bool:
+    """A course id, or a practice step id for a pack skill and a practice level."""
+    if step_id in pack.courses:
+        return True
+    kind, _, rest = step_id.partition(":")
+    skill, _, level = rest.partition(":")
+    return kind == "practice" and skill in pack.skills and level in ("3", "4")
 
 
 def _progress_view(engine: Engine, profile_id: str, scenario: Scenario) -> dict[str, Any]:
@@ -192,6 +203,9 @@ def set_progress(
     engine: Engine = Depends(get_engine),
 ) -> dict[str, Any]:
     require_profile(engine, profile_id)
-    known = load_pack().courses
-    save_progress(engine, profile_id, [c for c in body.done if c in known], body.paused)
+    pack = load_pack()
+    skipped = None if body.skipped is None else [s for s in body.skipped if _known_step(pack, s)]
+    save_progress(
+        engine, profile_id, [c for c in body.done if c in pack.courses], body.paused, skipped
+    )
     return _progress_view(engine, profile_id, scenario)

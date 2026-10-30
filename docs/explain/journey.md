@@ -107,7 +107,11 @@ courses that would not change that level are left out. Levels 3 and 4 come from 
 to agree with a manager) and what to describe in a progress check. Each plan reports study hours,
 practice weeks as a range, and two fit ranges (after study; after study and practice) by the C2
 rule with planned levels counted as unevidenced. With today's catalogue no course is marked
-hands-on, so study reaches level 1 and the plan says the rest needs more material or practice.
+hands-on, so study reaches level 1 and the plan says the rest needs more material or practice. Steps unlock
+in order (`apply_progress`): a course after the one before it is done; a practice step after its
+skill's study steps. A practice step is complete when the skill's claim reaches its target,
+labelled "checked" (accepted progress check) or "self-rated"; "continue anyway" stores it as
+skipped (`journey_skipped`), shown as "continued anyway, not done".
 
 **My plan as three tracks.** `src/pathway/tracks.py` (GET `/api/profiles/{id}/tracks`) shows the
 plan as three rows: (1) AI basics, a declared foundation everyone sees first (what generative AI

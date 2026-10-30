@@ -70,6 +70,7 @@ class Step:
     time: dict[str, Any] = field(default_factory=dict)
     locked: bool = False
     unlock: str | None = None
+    done: bool = False
 
 
 @dataclass
@@ -87,6 +88,9 @@ class PracticeStep:
     basis: list[dict[str, str]]
     locked: bool = False
     unlock: str | None = "study_done"
+    # open · done (the claim reached the target) · skipped ("continue anyway"), each labelled.
+    status: str = "open"
+    status_label: str = ""
 
 
 @dataclass
@@ -326,6 +330,40 @@ def plan_pathway(
     )
 
 
+def apply_progress(
+    path: Pathway,
+    done: list[str],
+    skipped: list[str],
+    claims: Mapping[str, SkillClaim],
+) -> Pathway:
+    """Lock and complete steps from the person's own records (B4 unlocking rules).
+
+    A course step unlocks when the step before it is done. A practice step unlocks when the
+    study steps for its skill are done, and is complete when the skill's claim reaches its
+    target: "checked" through an accepted progress check, "self-rated" otherwise. A step passed
+    with "continue anyway" is skipped, labelled, and never counted as done.
+    """
+    finished = set(done)
+    for i, step in enumerate(path.steps):
+        step.done = step.course.id in finished
+        step.locked = i > 0 and not path.steps[i - 1].done
+    for p in path.practice_steps:
+        study = [s for s in path.steps if s.skill == p.skill or p.skill in s.course.covers]
+        p.locked = not all(s.done for s in study)
+        claim = claims.get(p.skill)
+        if claim is not None and (claim.level or 0) >= p.target_level:
+            p.status = "done"
+            p.status_label = "checked" if claim.source == "agent_check" else "self-rated"
+            p.locked = False
+        elif p.id in skipped:
+            p.status, p.status_label = "skipped", "continued anyway, not done"
+    return path
+
+
+def practice_step_id(skill: str, level: int) -> str:
+    return f"practice:{skill}:{level}"
+
+
 def _range(
     pack: Pack,
     match: RoleMatch,
@@ -359,7 +397,7 @@ def _practice_steps(
                 PracticeStep(
                     order=first_order + len(out) + 1,
                     kind="practice",
-                    id=f"practice:{gap.skill}:{level}",
+                    id=practice_step_id(gap.skill, level),
                     skill=gap.skill,
                     skill_name=gap.skill_name,
                     target_level=level,

@@ -43,7 +43,7 @@ from src.match.radar import radar
 from src.match.tasks import task_view
 from src.occupations.catalogue import catalogue_table
 from src.pack import Pack, load_pack
-from src.pathway.planner import Pathway, plan_pathway
+from src.pathway.planner import Pathway, apply_progress, plan_pathway
 from src.pathway.tracks import build_tracks, comparison
 from src.resources import load_resources
 
@@ -367,7 +367,11 @@ def pathway(
     pack = load_pack()
     evidence = evidence_for(engine, profile_id)
     match = score_role(pack, pack.destination_roles[chosen], data.levels(), scenario, evidence)
-    path = plan_pathway(pack, match, data.levels(), data.weekly_hours, scenario, evidence)
+    path = plan_pathway(
+        pack, match, data.levels(), data.weekly_hours, scenario, evidence, data.skills
+    )
+    saved = get_progress(engine, profile_id)
+    apply_progress(path, saved["done"], saved["skipped"], data.skills)
     out = asdict(path)
     out["sdg_targets"] = {k: v.model_dump() for k, v in pack.sdg.targets.items()}
     out["sdg_source"] = pack.sdg.source
@@ -389,8 +393,12 @@ def tracks(
     res = load_resources()
     evidence = evidence_for(engine, profile_id)
     match = score_role(pack, pack.destination_roles[chosen], data.levels(), scenario, evidence)
-    path = plan_pathway(pack, match, data.levels(), data.weekly_hours, scenario, evidence)
-    done = get_progress(engine, profile_id)["done"]
+    path = plan_pathway(
+        pack, match, data.levels(), data.weekly_hours, scenario, evidence, data.skills
+    )
+    saved = get_progress(engine, profile_id)
+    done = saved["done"]
+    apply_progress(path, done, saved["skipped"], data.skills)
     return {
         "role_id": chosen,
         "role_title": match.title,
