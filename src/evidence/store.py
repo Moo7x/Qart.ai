@@ -266,6 +266,35 @@ def finish_run(
         )
 
 
+def close_stale_runs(engine: Engine, older_than: timedelta) -> int:
+    """Close runs left "running" by a process that stopped (a redeploy, a crash).
+
+    A live run always finishes or records its own failure; one still marked running after
+    `older_than` (longer than the pipeline lock) can no longer be running, so it is closed as
+    "failed (interrupted)" with a note. Returns how many runs were closed.
+    """
+    now = datetime.now(UTC)
+    note = [
+        {
+            "source_id": "pipeline",
+            "status": "failed",
+            "fetched": 0,
+            "new": 0,
+            "error": "the run stopped before finishing (the process ended); closed by the watchdog",
+        }
+    ]
+    with engine.begin() as conn:
+        result = conn.execute(
+            update(run_table)
+            .where(
+                run_table.c.status == "running",
+                run_table.c.started_at < _naive_or_aware(engine, now - older_than),
+            )
+            .values(status="failed (interrupted)", finished_at=now, sources=note)
+        )
+    return int(result.rowcount or 0)
+
+
 def list_runs(engine: Engine, limit: int) -> list[dict[str, Any]]:
     stmt = select(run_table).order_by(run_table.c.id.desc()).limit(limit)
     with engine.connect() as conn:

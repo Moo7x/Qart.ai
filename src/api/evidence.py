@@ -1,7 +1,7 @@
 """Evidence routes: registered sources, signals, observations, pipeline runs and the backtest."""
 
 import hmac
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 from typing import Any, Literal
 
 from fastapi import APIRouter, BackgroundTasks, Depends, Header, HTTPException, Query, Request
@@ -15,7 +15,12 @@ from src.evidence.forecast import forecasts
 from src.evidence.models import history
 from src.evidence.registry import registry
 from src.evidence.signals import Signal, build_signals
-from src.evidence.store import latest_observation_id, list_runs, query_observations
+from src.evidence.store import (
+    close_stale_runs,
+    latest_observation_id,
+    list_runs,
+    query_observations,
+)
 from src.evidence.trends import trends
 from src.match.evidence import automation_evidence
 from src.pack import load_pack
@@ -56,6 +61,14 @@ class SourceStatus(BaseModel):
     last_fetched: str | None
     last_status: str | None  # ok / failed in the latest run that included this source
     last_note: str | None
+    # Robustness (docs/PHASE2_PLAN.md A4): when the latest attempt failed, the screens keep using
+    # the stored data, fetched at `serving_snapshot_from`, and say so.
+    last_attempt_at: str | None  # start of the latest run that included this source
+    last_success_at: str | None  # end of the latest run in which this source succeeded
+    serving_snapshot_from: str | None  # newest stored observation's fetch time
+
+
+SOURCE_HISTORY_RUNS = 50  # runs searched for a source's last success
 
 
 class SignalsResponse(BaseModel):
@@ -80,13 +93,15 @@ class RunStarted(BaseModel):
 @router.get("/sources")
 def sources(engine: Engine = Depends(get_engine)) -> list[SourceStatus]:
     rows = query_observations(engine)
-    latest_run = next(iter(list_runs(engine, 1)), None)
-    by_source = {r["source_id"]: r for r in (latest_run or {}).get("sources", [])}
+    close_stale_runs(engine, timedelta(minutes=params.RUN_WATCHDOG_MINUTES))
+    history = list_runs(engine, SOURCE_HISTORY_RUNS)
     out = []
     for source in registry().values():
         mine = [r for r in rows if r["source_id"] == source.id]
         fetched = max((r["fetched_at"] for r in mine), default=None)
-        result = by_source.get(source.id, {})
+        tried = [(run, s) for run in history for s in run["sources"] if s["source_id"] == source.id]
+        attempt, result = tried[0] if tried else (None, {})
+        success = next((run for run, s in tried if s["status"] == "ok"), None)
         out.append(
             SourceStatus(
                 **source.model_dump(exclude={"collector", "docs_url"}),
@@ -94,6 +109,13 @@ def sources(engine: Engine = Depends(get_engine)) -> list[SourceStatus]:
                 last_fetched=fetched.isoformat() if fetched else None,
                 last_status=result.get("status"),
                 last_note=result.get("note") or result.get("error"),
+                last_attempt_at=attempt["started_at"].isoformat() if attempt else None,
+                last_success_at=(
+                    success["finished_at"].isoformat()
+                    if success and success["finished_at"]
+                    else None
+                ),
+                serving_snapshot_from=fetched.isoformat() if fetched else None,
             )
         )
     return out
@@ -128,6 +150,7 @@ def observations(
 def runs(
     engine: Engine = Depends(get_engine), limit: int = Query(default=20, ge=1, le=MAX_RUNS)
 ) -> list[dict[str, Any]]:
+    close_stale_runs(engine, timedelta(minutes=params.RUN_WATCHDOG_MINUTES))
     return list_runs(engine, limit)
 
 

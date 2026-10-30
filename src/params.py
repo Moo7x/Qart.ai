@@ -73,6 +73,9 @@ GBR_MIN_TRAIN_ROWS = 20
 GBR_MAX_DEPTH = 2
 GBR_MAX_ITER = 100
 GBR_RANDOM_STATE = 0  # fixed so the same data always gives the same forecast
+# Watchdog: a run still marked "running" this long after it started is closed as interrupted.
+# Longer than the pipeline lock (30 min, src/pipeline/run.py), so a live run is never closed.
+RUN_WATCHDOG_MINUTES = 45
 
 # --- Matching (src/match/engine.py) ------------------------------------------------------------
 # Bump when the formula/planning algorithm changes, even if its numeric parameters do not.

@@ -34,6 +34,7 @@ const RESULT_STYLE: Record<string, string> = {
   'no change': 'bg-mist text-graphite',
   partial: 'bg-weak-bg text-weak',
   failed: 'bg-weak-bg text-weak',
+  'failed (interrupted)': 'bg-weak-bg text-weak',
   running: 'bg-[#e6fbff] text-[#0a6b7d]',
 }
 
@@ -358,6 +359,11 @@ export function LiveIntelligence() {
                         {s.last_status ?? 'not run'}
                       </span>
                       {s.last_note && <span className="mt-1 block max-w-[260px] font-mono text-[11px] text-ash">{s.last_note}</span>}
+                      {s.last_status === 'failed' && s.serving_snapshot_from && (
+                        <span className="mt-1 block max-w-[260px] text-[12px] text-weak">
+                          Showing the last good data, fetched {formatWhen(s.serving_snapshot_from)}{s.last_success_at ? ` (last successful run ${formatWhen(s.last_success_at)})` : ''}.
+                        </span>
+                      )}
                     </td>
                   </tr>
                 ))}

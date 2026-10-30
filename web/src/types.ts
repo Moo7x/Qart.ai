@@ -65,6 +65,9 @@ export type SourceStatus = {
   last_fetched: string | null
   last_status: string | null
   last_note: string | null
+  last_attempt_at: string | null
+  last_success_at: string | null
+  serving_snapshot_from: string | null
 }
 
 export type RunSource = {

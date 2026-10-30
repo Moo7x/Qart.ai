@@ -255,7 +255,7 @@ function FreshnessLine() {
           body: (
             <dl className="m-0 grid grid-cols-[96px_minmax(0,1fr)] gap-x-3 gap-y-1">
               <dt className="cap">Fetched</dt><dd className="m-0">{s.last_fetched ? formatWhen(s.last_fetched) : 'not yet'}</dd>
-              <dt className="cap">Last run</dt><dd className="m-0">{s.last_status ?? '—'}</dd>
+              <dt className="cap">Last run</dt><dd className="m-0">{s.last_status ?? '—'}{s.last_status === 'failed' && s.serving_snapshot_from ? ` · showing the last good data, fetched ${formatWhen(s.serving_snapshot_from)}` : ''}</dd>
               <dt className="cap">Shows</dt><dd className="m-0">{s.shows}</dd>
               <dt className="cap">Cadence</dt><dd className="m-0">{s.cadence}</dd>
             </dl>

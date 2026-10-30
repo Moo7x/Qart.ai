@@ -32,6 +32,7 @@ from src.evidence.registry import registry
 from src.evidence.store import (
     DbSourceState,
     acquire_lock,
+    close_stale_runs,
     finish_run,
     insert_observations,
     latest_observation_id,
@@ -131,6 +132,7 @@ def run_pipeline(
     if not acquire_lock(engine, LOCK_NAME, holder, LOCK_TTL):
         return RunSummary(run_id=None, status="skipped: locked")
     try:
+        close_stale_runs(engine, timedelta(minutes=params.RUN_WATCHDOG_MINUTES))
         run_id = start_run(engine, trigger)
         try:
             return _run_all(engine, run_id, client_factory, retry_pause)
