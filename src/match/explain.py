@@ -15,9 +15,9 @@ words, with its sources, next to the explanation.
 import json
 import re
 from collections import OrderedDict
-from collections.abc import Callable
 from typing import Any
 
+from src import llm
 from src.config import Settings
 from src.match.engine import RoleMatch
 from src.pathway.planner import Pathway
@@ -42,7 +42,7 @@ FORECAST_WORD = re.compile(
     re.I,
 )
 
-Complete = Callable[[list[dict[str, str]], dict[str, Any]], str]
+Complete = llm.Complete
 _cache: OrderedDict[str, dict[str, Any]] = OrderedDict()
 
 
@@ -140,28 +140,13 @@ def messages(fact_list: list[dict[str, str]]) -> list[dict[str, str]]:
 
 
 def openai_complete(settings: Settings) -> Complete:
-    def complete(msgs: list[dict[str, str]], json_schema: dict[str, Any]) -> str:
-        from openai import OpenAI
-
-        client = OpenAI(
-            api_key=settings.llm_api_key,
-            base_url=settings.llm_base_url,
-            timeout=LLM_TIME_BUDGET_SECONDS,
-            max_retries=0,
-        )
-        request: dict[str, Any] = {
-            "model": settings.llm_model,
-            "messages": msgs,
-            "response_format": {
-                "type": "json_schema",
-                "json_schema": {"name": "role_explanation", "strict": True, "schema": json_schema},
-            },
-            "temperature": 0.2,
-        }
-        response = client.chat.completions.create(**request)
-        return response.choices[0].message.content or ""
-
-    return complete
+    return llm.openai_complete(
+        settings,
+        schema_name="role_explanation",
+        purpose="role_explanation",
+        timeout=LLM_TIME_BUDGET_SECONDS,
+        temperature=0.2,
+    )
 
 
 def _validate(answer: dict[str, Any], by_id: dict[str, str]) -> tuple[list[dict[str, Any]], int]:

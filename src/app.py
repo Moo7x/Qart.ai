@@ -29,6 +29,7 @@ import src.goal.store  # noqa: E402, F401  (registers the goal table)
 import src.journey.progress  # noqa: E402, F401  (registers the progress table)
 import src.journey.store  # noqa: E402, F401  (registers the profile table)
 import src.occupations.catalogue  # noqa: E402, F401  (registers the occupation tables)
+from src import usage  # noqa: E402  (registers the usage table)
 from src.api.changes import router as changes_router  # noqa: E402
 from src.api.cv import router as cv_router  # noqa: E402
 from src.api.decision import router as decision_router  # noqa: E402
@@ -76,6 +77,7 @@ def create_app(settings: Settings | None = None, first_run: bool = True) -> Fast
     settings = settings or load_settings()
     engine = make_engine(settings.database_url)
     init_db(engine)
+    usage.bind(engine)  # model and GPU calls are counted from here on (cost per user)
     load_released(engine)  # released feedback corrections apply from start-up
     if first_run:
         start_catch_up_if_stale(engine)  # a fresh deployment fills itself in the background

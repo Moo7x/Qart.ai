@@ -11,6 +11,7 @@ from typing import Any
 
 import httpx
 
+from src import usage
 from src.config import Settings
 
 API = "https://api.runpod.ai/v2/{endpoint}"
@@ -19,6 +20,7 @@ DONE = {"COMPLETED", "FAILED", "CANCELLED", "TIMED_OUT"}
 BACKGROUND_BUDGET_SECONDS = 240.0  # first job of a cold worker, with room for model loading
 INTERACTIVE_BUDGET_SECONDS = 30.0  # a person waits for this; the page shows the stage
 BATCH = 128  # texts per embedding job (the worker accepts up to 256)
+MODELS = {"embed": "BAAI/bge-m3", "rerank": "BAAI/bge-reranker-v2-m3"}  # runpod/handler.py
 
 
 class RunPodError(RuntimeError):
@@ -34,9 +36,29 @@ def run_job(
 ) -> dict[str, Any]:
     if not settings.runpod_configured:
         raise RunPodError("RunPod is not configured")
+    started = time.monotonic()
+    ok = False
+    try:
+        output = _run(settings, payload, budget, client, sleep, started)
+        ok = True
+        return output
+    finally:
+        task = str(payload.get("task", ""))
+        usage.record(
+            f"runpod_{task}", "runpod", MODELS.get(task, task), time.monotonic() - started, ok
+        )
+
+
+def _run(
+    settings: Settings,
+    payload: dict[str, Any],
+    budget: float,
+    client: httpx.Client,
+    sleep: Any,
+    started: float,
+) -> dict[str, Any]:
     base = API.format(endpoint=settings.runpod_endpoint_id)
     headers = {"Authorization": f"Bearer {settings.runpod_api_key}"}
-    started = time.monotonic()
     submitted = client.post(f"{base}/run", headers=headers, json={"input": payload}, timeout=30)
     submitted.raise_for_status()
     job = submitted.json()

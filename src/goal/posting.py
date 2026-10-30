@@ -15,10 +15,11 @@ No scraping, no application, no contact with the employer.
 
 import json
 import re
-from collections.abc import Callable, Mapping
+from collections.abc import Mapping
 from dataclasses import asdict, dataclass, field
 from typing import Any
 
+from src import llm
 from src.config import Settings
 from src.intake.extract import KEYWORD_MIN_SCORE, MIN_QUOTE_CHARS, _normalise
 from src.intake.pii import scrub
@@ -36,7 +37,7 @@ ESSENTIAL_WORDS = re.compile(r"\b(must|required|requirement|minimum|mandatory|es
 LINE = re.compile(r"\n+|(?<=[.;])\s+")
 MAX_STEPPING_STONES = 3
 
-Complete = Callable[[list[dict[str, str]], dict[str, Any]], str]
+Complete = llm.Complete
 
 
 @dataclass
@@ -103,31 +104,12 @@ def _messages(pack: Pack, posting: str) -> list[dict[str, str]]:
 
 
 def _openai(settings: Settings) -> Complete:
-    def complete(msgs: list[dict[str, str]], json_schema: dict[str, Any]) -> str:
-        from openai import OpenAI
-
-        client = OpenAI(
-            api_key=settings.llm_api_key,
-            base_url=settings.llm_base_url,
-            timeout=LLM_TIME_BUDGET_SECONDS,
-            max_retries=0,
-        )
-        request: dict[str, Any] = {
-            "model": settings.llm_model,
-            "messages": msgs,
-            "response_format": {
-                "type": "json_schema",
-                "json_schema": {
-                    "name": "posting_requirements",
-                    "strict": True,
-                    "schema": json_schema,
-                },
-            },
-            "temperature": 0,
-        }
-        return client.chat.completions.create(**request).choices[0].message.content or ""
-
-    return complete
+    return llm.openai_complete(
+        settings,
+        schema_name="posting_requirements",
+        purpose="posting_requirements",
+        timeout=LLM_TIME_BUDGET_SECONDS,
+    )
 
 
 def _keyword(pack: Pack, posting: str) -> list[PostingRequirement]:

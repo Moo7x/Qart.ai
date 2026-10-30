@@ -243,6 +243,7 @@ def start_catch_up_if_stale(engine: Engine) -> bool:
 
 
 def main() -> None:
+    from src import usage
     from src.config import load_settings
     from src.db import init_db, make_engine
     from src.envfile import load_env_file
@@ -254,6 +255,7 @@ def main() -> None:
     load_env_file()
     engine = make_engine(load_settings().database_url)
     init_db(engine)
+    usage.bind(engine)  # GPU indexing calls in the run are counted like the app's
     summary = run_pipeline(engine, args.trigger)
     logger.info(
         "run %s: %s, %d new observations", summary.run_id, summary.status, summary.new_observations

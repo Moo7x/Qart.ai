@@ -10,10 +10,10 @@ Levels are always the person's claims as read from their CV, never verified skil
 
 import json
 import re
-from collections.abc import Callable
 from dataclasses import dataclass, field
 from typing import Any
 
+from src import llm
 from src.config import Settings
 from src.intake.pii import scrub
 from src.intake.skill_search import bm25
@@ -27,7 +27,7 @@ MIN_QUOTE_CHARS = 8  # a quote shorter than this cannot show anything (e.g. a lo
 SENTENCE = re.compile(r"(?<=[.!?])\s+|\n+")
 KINDS = ["finance_core", "data_digital", "green", "business"]
 
-Complete = Callable[[list[dict[str, str]], dict[str, Any]], str]
+Complete = llm.Complete
 
 LEVEL_GUIDE = (
     "Levels: 1 = aware (mentioned, studied or trained), 2 = working (did it in a job), "
@@ -109,29 +109,12 @@ def messages(pack: Pack, cv_text: str) -> list[dict[str, str]]:
 
 
 def openai_complete(settings: Settings) -> Complete:
-    def complete(msgs: list[dict[str, str]], json_schema: dict[str, Any]) -> str:
-        from openai import OpenAI
-
-        client = OpenAI(
-            api_key=settings.llm_api_key,
-            base_url=settings.llm_base_url,
-            timeout=LLM_TIME_BUDGET_SECONDS,
-            max_retries=0,
-        )
-        # Plain dicts are what the API takes; the SDK's TypedDicts add nothing checkable here.
-        request: dict[str, Any] = {
-            "model": settings.llm_model,
-            "messages": msgs,
-            "response_format": {
-                "type": "json_schema",
-                "json_schema": {"name": "cv_extraction", "strict": True, "schema": json_schema},
-            },
-            "temperature": 0,
-        }
-        response = client.chat.completions.create(**request)
-        return response.choices[0].message.content or ""
-
-    return complete
+    return llm.openai_complete(
+        settings,
+        schema_name="cv_extraction",
+        purpose="cv_extraction",
+        timeout=LLM_TIME_BUDGET_SECONDS,
+    )
 
 
 def _validate(
