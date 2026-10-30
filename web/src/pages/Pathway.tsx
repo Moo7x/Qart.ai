@@ -115,6 +115,12 @@ function ProfilePathway({ profileId, scenario }: { profileId: string; scenario: 
                 Three tracks: AI basics first, then the skills this role needs without AI and with AI. Each step opens its courses, YouTube videos and articles; a step unlocks when the one before it in its track is done.
               </p>
             </div>
+            {data.adjustments && data.adjustments.length > 0 && (
+              <div className="flex flex-col gap-1 border-l-4 border-observed bg-observed-bg px-4 py-3 text-[13px]">
+                <span className="font-semibold text-observed">Adjusted for you</span>
+                <ul className="m-0 pl-5">{data.adjustments.map((a) => <li key={`${a.rule}-${a.text}`}>{a.text}</li>)}</ul>
+              </div>
+            )}
             {(data.essentials_unmet.length > 0 || data.uncovered.length > 0) && (
               <div className="flex flex-col gap-1 border-l-4 border-weak bg-weak-bg px-4 py-3 text-[13px]">
                 {data.essentials_unmet.length > 0 && <span className="font-semibold text-weak">Essential skills still below the level after this plan: {data.essentials_unmet.join(', ')}.</span>}

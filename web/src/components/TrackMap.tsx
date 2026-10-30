@@ -193,6 +193,7 @@ function Stop({ node, state, index, tone, blocker, onOpen }: { node: TrackNode; 
 // reskilling stops; the coloured part of the road is what the person has completed.
 export function TrackMap({ tracks, done, onToggle, onSkip, paused, checked }: { tracks: Track[]; done: string[]; onToggle: (id: string) => void; onSkip: (id: string) => void; paused: boolean; checked: string }) {
   const [open, setOpen] = useState<{ track: number; node: number } | null>(null)
+  const [showSkipped, setShowSkipped] = useState(false)
   const close = useCallback(() => setOpen(null), [])
   const all = tracks.map((t) => states(t, done))
   const selected = open ? tracks[open.track].nodes[open.node] : null
@@ -228,7 +229,13 @@ export function TrackMap({ tracks, done, onToggle, onSkip, paused, checked }: { 
                 </span>
               </div>
             </header>
-            {n === 0 ? (
+            {track.shown === false && !showSkipped ? (
+              <div className="flex flex-wrap items-center gap-3 text-[13px]">
+                <span className="tag bg-observed-bg text-observed">Adjusted for you</span>
+                <span className="text-graphite">{track.reason}</span>
+                <button type="button" className="btn min-h-[44px]" onClick={() => setShowSkipped(true)}>Show AI basics anyway</button>
+              </div>
+            ) : n === 0 ? (
               <p className="m-0 text-[13px] text-graphite">Nothing to build on this road: you already meet these skills for this role.</p>
             ) : (
               <div className="road-scroll">

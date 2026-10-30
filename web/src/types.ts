@@ -281,6 +281,7 @@ export type PathwayResponse = {
   free_share_basis?: string
   ai_basics?: { shown: boolean; reason: string }
   study_levels?: Record<string, number>
+  adjustments?: { rule: string; text: string }[]
 }
 
 export type FutureScenario = {
@@ -621,7 +622,7 @@ export type TrackNode = {
   study_after?: number | null
   practice?: PracticeStep[]
 }
-export type Track = { id: 'ai_basics' | 'without_ai' | 'with_ai'; title: string; why: string; nodes: TrackNode[] }
+export type Track = { id: 'ai_basics' | 'without_ai' | 'with_ai'; title: string; why: string; nodes: TrackNode[]; shown?: boolean; reason?: string }
 export type RouteMetrics = {
   hours: number
   weeks: number
