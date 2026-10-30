@@ -21,6 +21,9 @@ python-multipart==0.0.32
 # Forecasts (src/evidence/forecast.py): the global gradient-boosting model and its arrays
 scikit-learn==1.9.1
 numpy==2.5.4
+# Resource scout (src/agents/): public YouTube captions and article text extraction
+youtube-transcript-api==1.2.4
+trafilatura==2.3.1
 # Pulled in by httpx and pytest without a pin; pinned so dependency scans see the installed
 # versions, not the oldest ones the ranges allow.
 certifi==2026.10.23

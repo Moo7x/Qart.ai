@@ -86,6 +86,19 @@ CATALOGUE_SHORTLIST = 15  # items per skill sent to the reranker
 CATALOGUE_TOP_PER_SKILL = 5
 CATALOGUE_MIN_RERANK = 0.01
 CATALOGUE_MAX_SKILLS_PER_ITEM = 3  # an item is listed under at most its three best skills
+# Resource scout (src/agents/scout.py). The agent may call at most 8 tools within 45 s, so a live
+# run in the demo always ends; it reads at most 3 resources and keeps the 3 best segments of each.
+# Video segments are 30–90 s of captions, cut at the end of a sentence: long enough to explain one
+# idea, short enough to point at. Article passages are 300–900 characters.
+AGENT_MAX_STEPS = 8
+AGENT_TIME_BUDGET_SECONDS = 45.0
+SCOUT_MAX_RESOURCES = 3
+SCOUT_TOP_SEGMENTS = 3
+SEGMENT_MIN_SECONDS = 30.0
+SEGMENT_MAX_SECONDS = 90.0
+PASSAGE_MIN_CHARS = 300
+PASSAGE_MAX_CHARS = 900
+FRAGMENT_WORDS = 8  # words that open a passage, used as its #:~:text= link anchor
 
 # --- Matching (src/match/engine.py) ------------------------------------------------------------
 # Bump when the formula/planning algorithm changes, even if its numeric parameters do not.
