@@ -56,12 +56,15 @@ RUN_STALE_AFTER_HOURS = 24
 # --- Matching (src/match/engine.py) ------------------------------------------------------------
 # Bump when the formula/planning algorithm changes, even if its numeric parameters do not.
 # Used with pack/parameter fingerprints to invalidate proposals computed under different rules.
-CALCULATION_VERSION = "journey-2"  # journey-2: task-level AI-use evidence per requirement
-# Proficiency scale used everywhere: 0 none · 1 aware · 2 working · 3 proficient · 4 expert.
-PROFICIENCY_LABELS = ("none", "aware", "working", "proficient", "expert")
+CALCULATION_VERSION = "journey-3"  # journey-3: 0–5 described levels (C1); stored numbers kept
+# Proficiency scale used everywhere (docs/PHASE2_PLAN.md §1 decision 2, aligned with SFIA's lower
+# five levels): 0 none · 1 novice · 2 aware · 3 working · 4 proficient · 5 expert. Each level of
+# each skill is described by an "I can…" sentence in data/packs/gbs_fa/levels.yaml.
+PROFICIENCY_LABELS = ("none", "novice", "aware", "working", "proficient", "expert")
 # Level a destination role needs, by requirement tier. Core skills are the role's defining work, so
-# they need "proficient"; skills TalentCorp names for the move (upskill) and supporting tools need
-# "working" level: enough to do the job while growing in it.
+# they need "working" (handles the full task alone); skills TalentCorp names for the move (upskill)
+# and supporting tools need "aware" (routine tasks with guidance): enough to do the job while
+# growing in it.
 ROLE_TIER_LEVEL = {"core": 3, "upskill": 2, "support": 2}
 # How much each tier counts in the fit score: defining work counts most, tools least.
 ROLE_TIER_WEIGHT = {"core": 3.0, "upskill": 2.0, "support": 1.0}
@@ -79,11 +82,11 @@ SCENARIO_FACTOR_FLOOR = 0.1
 NEAR_TIE_POINTS = 3.0
 
 # --- Decision support (src/match/decision.py) ----------------------------------------------------
-# Level an unstated skill is assumed to have at the top of the fit range: "proficient", the
+# Level an unstated skill is assumed to have at the top of the fit range: "working", the
 # highest level any requirement needs, so the range shows the most an answer could add. The bottom
 # of the range is 0 (not stated counts as none, as in the fit itself).
 UNSTATED_HIGH_LEVEL = 3
-# Answers compared when choosing the most valuable question: none (0) versus proficient (3).
+# Answers compared when choosing the most valuable question: none (0) versus working (3).
 QUESTION_ANSWERS = (0, 3)
 QUESTIONS_SHOWN = 3
 # Ranking of questions: an essential of the person's chosen (else best-fitting) role matters most,
@@ -145,3 +148,10 @@ ERP_ALIASES = (
 )
 # Level of the rule's claim: "did it in a job" (2), the most a tool mention alone shows. Declared.
 ERP_RULE_LEVEL = 2
+
+# Level guide in the CV-reading prompt (src/intake/extract.py, B2). The scale meanings always go
+# in; each skill's five sentences go in too when the whole guide stays under this many characters,
+# otherwise the meanings only. Declared: about 2,000 tokens, so the prompt stays small and fast.
+# Measured 2026-10-30: the 37 skills' sentences are about 16,500 characters, so today the prompt
+# carries the meanings and rules only, and the person refines each level with its sentences.
+LEVEL_GUIDE_MAX_CHARS = 8_000

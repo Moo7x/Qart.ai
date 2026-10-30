@@ -19,6 +19,7 @@ from src import llm, params
 from src.config import Settings
 from src.intake.pii import scrub
 from src.intake.skill_search import bm25
+from src.levels import Levels, load_levels
 from src.pack import Pack
 from src.stages import Stages
 
@@ -40,11 +41,19 @@ KINDS = ["finance_core", "data_digital", "green", "business"]
 
 Complete = llm.Complete
 
-LEVEL_GUIDE = (
-    "Levels: 1 = aware (mentioned, studied or trained), 2 = working (did it in a job), "
-    "3 = proficient (did it routinely or was responsible for it, usually 2+ years), "
-    "4 = expert (led it, taught it or improved it for others)."
-)
+LEVELS = (1, 2, 3, 4, 5)  # a claim needs evidence, so "none" (0) is never read from a CV
+
+
+def level_guide(levels: Levels) -> str:
+    """The scale meanings and rules, plus each skill's sentences when they fit the budget."""
+    meanings = "; ".join(f"{s.level} = {s.label} ({s.meaning})" for s in levels.scale if s.level)
+    guide = f"Levels: {meanings}. Rules: {' '.join(levels.rules)}"
+    sentences = "\n".join(
+        f"- {skill_id}: " + " | ".join(f"{n}: {text}" for n, text in sorted(s.anchors.items()))
+        for skill_id, s in levels.skills.items()
+    )
+    with_sentences = f"{guide}\nLevel sentences per skill:\n{sentences}"
+    return with_sentences if len(with_sentences) <= params.LEVEL_GUIDE_MAX_CHARS else guide
 
 
 @dataclass(frozen=True)
@@ -91,7 +100,7 @@ def schema(pack: Pack) -> dict[str, Any]:
                     "required": ["skill", "level", "evidence"],
                     "properties": {
                         "skill": {"type": "string", "enum": list(pack.skills)},
-                        "level": {"type": "integer", "enum": [1, 2, 3, 4]},
+                        "level": {"type": "integer", "enum": list(LEVELS)},
                         "evidence": {"type": "string"},
                     },
                 },
@@ -114,7 +123,8 @@ def messages(pack: Pack, cv_text: str) -> list[dict[str, str]]:
                 "word for word as evidence. Never add a skill without such a sentence. "
                 "Tools named in the CV count as evidence for the matching skill (e.g. an ERP "
                 "system such as SAP for Enterprise Resource Planning). "
-                f"{LEVEL_GUIDE} Pick the current role from the list, or 'other'. Interests are the "
+                f"{level_guide(load_levels())} Pick the current role from the list, or "
+                "'other'. Interests are the "
                 "kinds of work the person says they want more of. Under unmatched, copy word for "
                 "word the short name of each skill or tool the CV shows that fits none of the "
                 "allowed skills (e.g. a programming language); never a whole sentence."
@@ -144,7 +154,7 @@ def _validate(
     rejected = []
     for item in answer.get("skills", []):
         skill, level, quote = item.get("skill"), item.get("level"), str(item.get("evidence", ""))
-        if skill not in pack.skills or level not in (1, 2, 3, 4):
+        if skill not in pack.skills or level not in LEVELS:
             rejected.append({"skill": str(skill), "reason": "not an allowed skill or level"})
             continue
         if len(quote) < MIN_QUOTE_CHARS or _normalise(quote) not in haystack:

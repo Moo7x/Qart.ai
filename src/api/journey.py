@@ -25,6 +25,7 @@ from src.journey.store import (
     get_profile,
     update_profile,
 )
+from src.levels import load_levels
 from src.match.decision import fit_range, meters
 from src.match.engine import Evidence, RoleMatch, Scenario, rank_roles, score_role
 from src.match.evidence import automation_evidence
@@ -106,6 +107,24 @@ def _task_examples(pack: Pack, engine: Engine) -> list[dict[str, str]]:
     return examples
 
 
+def _levels_out() -> dict[str, Any]:
+    """C1: the 0–5 scale, its rules, and each skill's "I can…" sentences with their basis."""
+    levels = load_levels()
+    return {
+        "checked": levels.checked,
+        "scale": [s.model_dump() for s in levels.scale],
+        "rules": levels.rules,
+        "skills": {
+            skill_id: {
+                "anchors": {str(n): text for n, text in s.anchors.items()},
+                "basis": [b.model_dump() for b in s.basis],
+                "status": s.status,
+            }
+            for skill_id, s in levels.skills.items()
+        },
+    }
+
+
 @router.get("/pack")
 def pack_info(engine: Engine = Depends(get_engine)) -> dict[str, Any]:
     pack = load_pack()
@@ -118,6 +137,7 @@ def pack_info(engine: Engine = Depends(get_engine)) -> dict[str, Any]:
         ],
         "samples": [{"id": k, "label": v} for k, v in SAMPLES.items()],
         "proficiency": list(params.PROFICIENCY_LABELS),
+        "levels": _levels_out(),
         "courses_checked": pack.courses_checked,
         "task_examples": _task_examples(pack, engine),
     }

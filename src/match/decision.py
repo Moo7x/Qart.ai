@@ -114,14 +114,16 @@ def best_questions(
         )
         name = pack.skills[skill].name
         title = pack.destination_roles[swing_role].title
+        low_word, high_word = (params.PROFICIENCY_LABELS[a] for a in params.QUESTION_ANSWERS)
         if changes:
             effect = (
-                f"At 'none' your best fit is {low[0].title}; at 'proficient' it becomes "
+                f"At '{low_word}' your best fit is {low[0].title}; at '{high_word}' it becomes "
                 f"{high[0].title}."
             )
         else:
             effect = (
-                f"Moves {title} by up to {swing:.1f} fit points between 'none' and 'proficient'."
+                f"Moves {title} by up to {swing:.1f} fit points between '{low_word}' and "
+                f"'{high_word}'."
             )
         if focus_essential:
             effect += f" It is essential for {pack.destination_roles[focus].title}."

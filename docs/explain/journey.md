@@ -141,7 +141,7 @@ sideways scrolling.
 
 **Decision support.** `src/match/decision.py`: meters keep coverage (the fit), essential readiness
 (below level versus not stated) and profile completeness apart; the fit range recomputes with
-unstated skills at proficient (assumption-based, not a statistical interval); the most valuable
+unstated skills at working, level 3 (assumption-based, not a statistical interval); the most valuable
 question answers each unstated skill both ways and ranks them (essential of the person's goal,
 then a change of best-fitting role, then the largest fit swing; weights in `src/params.py`);
 sensitivity re-ranks under adoption intensities 0–1.5; what-if recomputes without saving. An
