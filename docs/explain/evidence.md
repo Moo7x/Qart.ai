@@ -13,6 +13,11 @@ Rule: never invent statistics; every number cites a source.
 ## How it works
 1. **Registry** (`data/sources.yaml`): what each source shows and does not show, its terms and
    cadence. Only registered sources are collected.
+Robustness: a source that fails keeps its stored observations, so screens keep showing the last
+good data, and `/api/sources` says when it was fetched (`serving_snapshot_from`) and when the
+source last succeeded. A run left "running" by a process that stopped is closed as
+"failed (interrupted)" once it is older than the pipeline lock (`close_stale_runs`).
+
 Forecasts (`src/evidence/forecast.py`, `GET /api/forecast`): each OpenDOSM group share is
 forecast one and two years ahead by the model that beat keeping the last value in a rolling
 backtest (naive, drift, linear, damped trend, smoothing, Theta, or a global gradient-boosting model

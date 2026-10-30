@@ -635,7 +635,8 @@ during the demo.
 - **Source state:** per source, expose `last_attempt_at`, `last_attempt_status`, `last_success_at`
   and `serving_snapshot_from` (the newest stored observation's `fetched_at`). When the last attempt
   failed, screens using that source show "Showing the last good data from <date>".
-- **Watchdog:** a run still `running` after `RUN_WATCHDOG_MINUTES = 30` is closed as
+- **Watchdog:** a run still `running` after `RUN_WATCHDOG_MINUTES = 45` (longer than the 30-minute
+  pipeline lock, so a live run is never closed) is closed as
   `failed (interrupted)`, with a note, when runs are listed or a new run starts.
 - **Lazy pages:** a failed lazy import reloads the page once (a `sessionStorage` flag), then shows
   a clear error with a reload button.
