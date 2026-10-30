@@ -76,6 +76,16 @@ GBR_RANDOM_STATE = 0  # fixed so the same data always gives the same forecast
 # Watchdog: a run still marked "running" this long after it started is closed as interrupted.
 # Longer than the pipeline lock (30 min, src/pipeline/run.py), so a live run is never closed.
 RUN_WATCHDOG_MINUTES = 45
+# Course catalogue (src/collectors/mslearn.py). For each pack skill the reranker scores the most
+# similar catalogue items by meaning (query: the skill name alone) and the best few are kept.
+# Read on 6 skills × 8 items (2026-10-30): the order was right, but good matches scored anywhere
+# from 0.01 (SQL modules) to 0.95 (invoice processing), and clear mismatches scored below 0.01.
+# So a skill keeps its top 5 above a 0.01 floor rather than everything above one fixed score.
+# Every kept item is still a candidate (verified: false) until a reviewer opens it.
+CATALOGUE_SHORTLIST = 15  # items per skill sent to the reranker
+CATALOGUE_TOP_PER_SKILL = 5
+CATALOGUE_MIN_RERANK = 0.01
+CATALOGUE_MAX_SKILLS_PER_ITEM = 3  # an item is listed under at most its three best skills
 
 # --- Matching (src/match/engine.py) ------------------------------------------------------------
 # Bump when the formula/planning algorithm changes, even if its numeric parameters do not.
