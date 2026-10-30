@@ -34,3 +34,5 @@ pytest==9.1.1
 ruff==0.17.1
 mypy==2.4.0
 types-PyYAML==6.0.12.20260906
+# Load test (scripts/load/locustfile.py), run from a laptop against the deployed app
+locust==2.47.0
