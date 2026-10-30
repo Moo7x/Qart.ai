@@ -274,7 +274,7 @@ export type PathwayResponse = {
   scenario: Scenario
   practice_steps?: PracticeStep[]
   study_hours?: number
-  practice_weeks?: { low: number; high: number }
+  practice_weeks?: { low: number; high: number; kind?: 'estimate' }
   fit_after_study?: EstimateRange
   fit_after_practice?: EstimateRange
   free_share?: number | null

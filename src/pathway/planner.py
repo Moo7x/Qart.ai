@@ -116,7 +116,7 @@ class Pathway:
     # C3 totals.
     practice_steps: list[PracticeStep] = field(default_factory=list)
     study_hours: float = 0.0
-    practice_weeks: dict[str, int] = field(default_factory=dict)
+    practice_weeks: dict[str, Any] = field(default_factory=dict)  # {low, high, kind: estimate}
     fit_after_study: dict[str, Any] = field(default_factory=dict)
     fit_after_practice: dict[str, Any] = field(default_factory=dict)
     free_share: float | None = None  # share of study hours in free courses; None = no study
@@ -353,6 +353,7 @@ def plan_pathway(
         practice_weeks={
             "low": sum(p.time["low"] for p in practice_steps),
             "high": sum(p.time["high"] for p in practice_steps),
+            "kind": "estimate",
         },
         fit_after_study=_range(
             pack,

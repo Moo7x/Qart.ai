@@ -57,6 +57,7 @@ def test_practice_steps_only_for_levels_above_2_and_totals_are_consistent(role_i
     assert path.practice_weeks == {
         "low": sum(p.time["low"] for p in path.practice_steps),
         "high": sum(p.time["high"] for p in path.practice_steps),
+        "kind": "estimate",
     }
     for fit in (path.fit_after_study, path.fit_after_practice):
         assert fit["low"] <= fit["high"] and fit["kind"] == "estimate"
