@@ -11,6 +11,19 @@ export type AiBasics = {
   reason: string
 }
 
+export type AiResource = {
+  kind: "course" | "video"
+  id: string
+  title: string
+  provider: string
+  url: string
+  minutes: number
+  published: string
+  skill_quote: string
+  ai_quote: string
+  score: number
+}
+
 export type AiUse = {
   automation_share: number | null
   basis: string
@@ -775,6 +788,7 @@ export type TrackArticle = {
   title: string
   publisher: string
   url: string
+  is_article: boolean
 }
 
 export type TrackCourse = {
@@ -807,6 +821,7 @@ export type TrackNode = {
   mode: "basics" | "oversee" | "use_ai" | "learn" | null
   ai_use: number | null
   ai_basis: string | null
+  ai_resources: AiResource[] | null
 }
 
 export type TrackVideo = {

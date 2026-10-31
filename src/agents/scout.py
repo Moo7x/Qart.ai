@@ -118,7 +118,11 @@ class Scout:
         by = {"topic": skill} if topic and skill not in pack.skills else {"skill": skill}
         self.captions = captions
         self.resources = {v.id: ("video", v.title, v.url) for v in res.videos_for(**by)}
-        self.resources |= {a.id: ("article", a.title, a.url) for a in res.articles_for(**by)}
+        self.resources |= {
+            a.id: ("article", a.title, a.url)
+            for a in res.articles_for(**by)
+            if a.kind == "article"  # web pages and pages that refuse readers are not pointed into
+        }
         if resource_id in self.resources:  # the person asked about one video or article
             self.resources = {resource_id: self.resources[resource_id]}
         self.parts: dict[str, Part] = {}
@@ -232,6 +236,9 @@ class Scout:
             "start": part.start,
             "end": part.end,
             "anchor": " ".join(anchor_words(part.text)) if kind == "article" else "",
+            # The passage itself, shortened, shown in the agent window: the person sees the part
+            # even when their browser does not highlight text-fragment links.
+            "excerpt": excerpt(part.text) if kind == "article" else "",
             "score": part.score,
             "reason": reason,
             "source": f"checked on {self.cache['checked']}" if cached else "live",
@@ -314,6 +321,12 @@ def _agent(scout: Scout, chat: Chat) -> list[dict[str, Any]] | None:
             )
     scout.step("note", "Step limit reached; stopping the agent")
     return None
+
+
+def excerpt(text: str) -> str:
+    words = text.split()
+    cut = " ".join(words[: params.SCOUT_EXCERPT_WORDS])
+    return cut + ("…" if len(words) > params.SCOUT_EXCERPT_WORDS else "")
 
 
 def run_scout(

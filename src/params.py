@@ -327,3 +327,21 @@ YOUTUBE_TARGET_PER_SKILL = 4  # stop adding once a skill or topic has this many 
 # sitting; full-length courses are left to the course catalogue.
 YOUTUBE_MIN_MINUTES = 3
 YOUTUBE_MAX_MINUTES = 60
+
+# --- AI-for-this-skill resources (src/collectors/ai_resources.py) --------------------------------
+AI_TARGET_TASKS = 3  # a skill's most AI-used linked tasks that define its AI-era work (declared)
+AI_SHORTLIST = 20  # candidates per skill sent to the reranker after dense search
+AI_JUDGED = 6  # best candidates per skill (by the lower reranker score) given to the judge
+AI_SHOWN = 3  # resources shown per plan step; also the k of the reported precision at k
+AI_RECENT_YEARS = 3  # published or updated within this many years counts as recent (AI tools move)
+AI_MIN_LABELS = 30  # fewer judged candidates than this: no ranker is fitted, the rule orders them
+AI_FETCH_SECONDS = 30.0  # longest wait for one page or caption fetch before it counts as no text
+# A video outside the trusted channels is eligible only with real reach (declared): a channel with
+# at least this many subscribers and a video with at least this many views. Reach is not quality,
+# so every video must still pass the quote-checked judgement before it is shown.
+AI_MIN_SUBSCRIBERS = 20_000
+AI_MIN_VIEWS = 5_000
+ARTICLE_MIN_WORDS = 300  # extracted body words for a page to count as an article the scout can read
+AI_PARALLEL = 4  # skills processed at once; the job waits on network calls, not on the CPU
+SCOUT_EXCERPT_WORDS = 45  # words of a chosen article passage shown in the agent window
+AI_MAX_SKILLS_PER_ITEM = 2  # a resource counts for at most this many skills (its best-scoring ones)

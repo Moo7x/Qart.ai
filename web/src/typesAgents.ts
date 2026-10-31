@@ -40,6 +40,8 @@ export type ScoutPick = {
   source: string
   // Articles: one link that highlights every chosen passage of the page at once.
   page_url?: string
+  // Articles: the chosen passage, shortened, shown in the agent window.
+  excerpt?: string
 }
 export type AgentRun = {
   id: string

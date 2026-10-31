@@ -75,6 +75,30 @@ const WHY_TAG: Record<SkillBasis['kind'], [string, string]> = {
   ai_trend: ['Where AI is taking this skill', 'bg-estimate-bg text-estimate'],
 }
 
+// Adapt steps: resources on doing this skill's work with AI, each with the two checked quotes.
+function aiPane(node: TrackNode): Pane[] {
+  if (!node.mode || (node.mode !== 'oversee' && node.mode !== 'use_ai')) return []
+  const items = node.ai_resources ?? []
+  return [{
+    key: 'ai',
+    title: 'Doing this with AI',
+    hint: 'Checked: each one shows this skill’s work and AI used on it (quotes from the page or video).',
+    body: items.length === 0 ? (
+      <p className="m-0 text-graphite">No checked resource on doing this with AI yet. Start with the AI basics stops; the courses here cover the skill itself.</p>
+    ) : (
+      <ul className="m-0 flex list-none flex-col gap-3 p-0">
+        {items.map((r) => (
+          <li key={r.id} className="flex flex-col gap-1 border-b border-line pb-2.5 last:border-0">
+            <a href={r.url} target="_blank" rel="noopener noreferrer" className="font-medium text-void">{r.title} ↗</a>
+            <span className="font-mono text-[11px] text-graphite">{r.provider} · {r.kind === 'video' ? 'video' : 'course'} · {r.minutes} min</span>
+            <span className="text-[12px] text-[#404040]">AI on this work: &ldquo;{r.ai_quote}&rdquo;</span>
+          </li>
+        ))}
+      </ul>
+    ),
+  }]
+}
+
 // Why this skill is on the plan at all, with its source (src/match/basis.py).
 function whyPane(node: TrackNode): Pane[] {
   if (!node.why) return []
@@ -98,6 +122,7 @@ function panes(node: TrackNode, state: State, blocker: string | null, done: stri
   const practice = node.practice?.length ? [practicePane(node.practice, onSkip, paused)] : []
   return [
     ...whyPane(node),
+    ...aiPane(node),
     ...practice,
     {
       key: 'courses',
@@ -167,9 +192,9 @@ function panes(node: TrackNode, state: State, blocker: string | null, done: stri
             <li key={a.id} className="flex items-start gap-3 border-b border-line pb-2.5 last:border-0">
               <span className="min-w-0 flex-auto">
                 <a href={a.url} target="_blank" rel="noopener noreferrer" className="font-medium text-void">{a.title} ↗</a>
-                <span className="block font-mono text-[11px] text-graphite">{a.publisher}</span>
+                <span className="block font-mono text-[11px] text-graphite">{a.publisher}{a.is_article === false ? ' · web page' : ''}</span>
               </span>
-              <BrainButton label={`AI agent: open “${a.title}” with its important passages highlighted`} onClick={() => onAgent(a.id, a.title)} />
+              {a.is_article !== false && <BrainButton label={`AI agent: show the important passages of “${a.title}”`} onClick={() => onAgent(a.id, a.title)} />}
             </li>
           ))}
         </ul>

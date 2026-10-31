@@ -29,9 +29,10 @@ from src.match.engine import RoleMatch
 from src.pack import Pack
 from src.pathway.planner import AiBasics, Pathway
 from src.pathway.tracks import _article, _basics_nodes, _course, _skill_nodes, _status, _video
-from src.resources import Resources
+from src.resources import Resources, load_ai_resources
 
 Row = dict[str, Any]
+NO_AI_TITLE = "AI is changing this work"  # no checked AI resource for the skill yet
 MODE_TITLE = {
     "oversee": "check and steer AI-run work",
     "use_ai": "do it faster with AI",
@@ -159,10 +160,19 @@ def adapt_nodes(
             )
             continue
         courses = [_course(c, set(), done or []) for c in pack.courses_for(skill_id)]
+        # Resources about doing this skill's work with AI (checked; src/collectors/ai_resources.py).
+        # Without one the step says so instead of promising an AI version it cannot show.
+        ai_items = load_ai_resources().get(skill_id, [])
+        why = _why(mode, effective, basis, model_version)
+        if not ai_items:
+            why["text"] += (
+                " No checked resource on doing this with AI yet: start with the AI basics."
+            )
         steps.append(
             {
                 "id": f"adapt:{skill_id}",
-                "title": f"{skill.name}: {MODE_TITLE[mode]}",
+                "title": f"{skill.name}: {MODE_TITLE[mode] if ai_items else NO_AI_TITLE}",
+                "ai_resources": ai_items,
                 "skill": skill_id,
                 "essential": False,
                 "now": claim.level,
@@ -172,7 +182,7 @@ def adapt_nodes(
                 "videos": [_video(v) for v in res.videos_for(skill=skill_id)],
                 "articles": [_article(a) for a in res.articles_for(skill=skill_id)],
                 "status": _status(courses),
-                "why": _why(mode, effective, basis, model_version),
+                "why": why,
                 "mode": mode,
                 "ai_use": effective,
                 "ai_basis": basis,
