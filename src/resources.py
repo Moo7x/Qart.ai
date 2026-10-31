@@ -22,6 +22,8 @@ class Video(BaseModel):
     published: str
     skills: list[str] = []
     topics: list[str] = []
+    # Set for videos added by the YouTube job: how the fit was checked (src/collectors/youtube.py).
+    fit_check: dict[str, str] | None = None
 
 
 class Article(BaseModel):

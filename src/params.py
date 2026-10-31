@@ -320,3 +320,10 @@ OUTLOOK_FACTOR = {
 # it is a "stretch" (declared).
 DIRECTION_ADJACENT_TIER = 2
 DIRECTION_ADJACENT_FIT = 50.0
+
+# --- YouTube catalogue job (src/collectors/youtube.py) -------------------------------------------
+YOUTUBE_TARGET_PER_SKILL = 4  # stop adding once a skill or topic has this many checked videos
+# Video length kept (minutes, declared): long enough to teach something, short enough for one
+# sitting; full-length courses are left to the course catalogue.
+YOUTUBE_MIN_MINUTES = 3
+YOUTUBE_MAX_MINUTES = 60
