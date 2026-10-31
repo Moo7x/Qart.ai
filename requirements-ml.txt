@@ -1,0 +1,6 @@
+# Optional training extras for the task-level AI-use model (src/forecast/task_model.py). The app and
+# the pipeline run without them (scikit-learn's own models are always compared); with them the
+# comparison also includes LightGBM and XGBoost.
+-r requirements.txt
+lightgbm==4.6.0
+xgboost==3.0.2

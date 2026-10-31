@@ -37,12 +37,15 @@ from src.evidence.store import (
     insert_observations,
     latest_observation_id,
     list_runs,
+    query_observations,
     release_lock,
     start_run,
 )
+from src.forecast import task_model
 from src.occupations.catalogue import build_index, refresh_catalogue
 from src.occupations.preview import fill_isco
 from src.pipeline import links
+from src.runpod_jobs import BACKGROUND_BUDGET_SECONDS, embed
 
 logger = logging.getLogger(__name__)
 
@@ -203,6 +206,7 @@ def _run_all(
 
     follow_ups: list[tuple[str, Callable[[], dict[str, Any]]]] = [
         ("trend_models", lambda: record_versions(engine, run_id)),
+        ("task_model", lambda: _task_model(engine, run_id)),
         ("occupation_index", occupation_index),
         ("link_check", link_check),
         ("retention", retention),
@@ -217,6 +221,24 @@ def _run_all(
         results.append(_failed_step("proposals", exc))
     finish_run(engine, run_id, status, new_total, results)
     return RunSummary(run_id, status, new_total, results)
+
+
+def _task_model(engine: Engine, run_id: int | None) -> dict[str, Any]:
+    """Re-fit the task-level AI-use model when its data changed (src/forecast/task_model.py).
+    Embeddings come from RunPod when it is configured; otherwise the model says it used TF-IDF."""
+    rows = query_observations(engine, source_id="anthropic_economic_index")
+    rows += query_observations(engine, source_id="onet_database", series=task_model.STATEMENTS)
+    settings = load_settings()
+    with http.client("task model", timeout=60) as client:
+        embedder = None
+        if settings.runpod_api_key and settings.runpod_endpoint_id:
+
+            def remote(texts: list[str]) -> list[list[float]]:
+                return embed(settings, texts, BACKGROUND_BUDGET_SECONDS, client)
+
+            embedder = task_model.cached_embedder(engine, remote)
+        result = task_model.run(engine, rows, embedder, run_id)
+    return _ok("task_model", result["note"]) | {"status": result["status"]}
 
 
 def _occupation_index(engine: Engine, client: httpx.Client) -> dict[str, Any]:

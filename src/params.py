@@ -272,3 +272,34 @@ AI_BASICS_SKILLS = (
 )
 AI_BASICS_SKIP_LEVEL = 3
 AI_BASICS_ALWAYS = ("student", "switcher")
+
+# --- Task-level AI-use model (src/forecast/task_model.py) ---------------------------------------
+TASK_MODEL_VERSION = "task_model/1"  # bump when features or candidates change: forces a re-fit
+TASK_MODEL_SEED = 7  # fixed seed so a re-run with the same data gives the same version
+TASK_MODEL_FOLDS = 5  # cross-validation folds; 5 is the common default for a few thousand rows
+TASK_MODEL_MIN_TRAIN = 200  # fewer observed tasks than this: too little to learn from, skip
+# The best model must beat the mean baseline's error by this share (declared): a model that is
+# barely better than guessing the average is not worth showing as a prediction.
+TASK_MODEL_MIN_GAIN = 0.05
+TASK_EMBEDDING_MODEL = "BAAI/bge-m3"  # served by the RunPod worker (runpod/handler.py)
+TFIDF_COMPONENTS = 256  # fallback features when RunPod is unavailable
+TREE_COMPONENTS = 64  # tree models see this many PCA components of the embedding (see candidates)
+RIDGE_ALPHAS = (0.1, 1.0, 10.0, 100.0, 1000.0)  # ridge picks its penalty by internal CV
+
+# --- Industry forecast categories (src/forecast/industry.py) ------------------------------------
+# A forecast change in a job group's share of employees smaller than this, in percentage points
+# over the horizon, is treated as no change. Evidence: in DOSM 2016-2025 the finance-related groups
+# move by 0.19-0.28 points in an average year (mean absolute year-on-year change: managers 0.20,
+# professionals 0.25, clerical 0.28), so a smaller forecast change is within normal noise.
+INDUSTRY_DEMAND_EPS_PP = 0.2
+# "AI already does much of this work in practice": the importance-weighted automation-style share
+# of AI use on the occupation's tasks, after the scenario intensity, at or above this (declared).
+INDUSTRY_USE_HIGH = 25.0
+# ILO mean GenAI exposure of the occupation's tasks at or above this (0-1 scale; declared: the
+# upper half of the scale, where the ILO places its higher exposure gradients).
+INDUSTRY_EXPOSURE_HIGH = 0.5
+INDUSTRY_EXPERT_HIGH = 3.0  # TalentCorp impact level "high" (0 emerging, 1 low, 2 medium, 3 high)
+# How many of the three AI evidence kinds (use, exposure, expert) must agree before a role is called
+# transforming: two, so no verdict ever rests on one kind of evidence alone (AGENTS.md).
+INDUSTRY_AI_AGREE = 2
+INDUSTRY_DEFAULT_IMPORTANCE = 3.0  # weight for an O*NET task with no importance rating (mid-scale)
