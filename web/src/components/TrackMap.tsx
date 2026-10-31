@@ -14,10 +14,14 @@ function videoId(url: string): string {
 }
 
 // A node is done when every course planned for it is marked done (the person's own record).
+// A step is done when the person marks it done, or when every course planned for it is done.
 function nodeDone(node: TrackNode, done: string[]): boolean {
+  if (done.includes(stepId(node))) return true
   const planned = node.courses.filter((c) => c.planned)
   return planned.length > 0 && planned.every((c) => done.includes(c.id))
 }
+
+const stepId = (node: TrackNode) => `step:${node.id}`
 
 // Steps are never locked: each is a different skill, so the person can start with any of them.
 // A step with no free course still opens (videos and articles); it is marked so.
@@ -138,8 +142,10 @@ function panes(node: TrackNode, done: string[], onToggle: (id: string) => void, 
     ...practice,
     {
       key: 'courses',
-      title: 'Courses',
-      hint: 'Free and checked. Courses marked “In your plan” count towards your hours and fit.',
+      // On a step that adapts a skill to AI, the AI part is "Doing this with AI"; these courses
+      // cover the skill as it is done today, to refresh it.
+      title: node.mode === 'oversee' || node.mode === 'use_ai' ? 'The skill itself (without AI)' : 'Courses',
+      hint: node.mode === 'oversee' || node.mode === 'use_ai' ? 'Free and checked: the skill as it is done today. The AI version is in “Doing this with AI”.' : 'Free and checked. Courses marked “In your plan” count towards your hours and fit.',
       body: node.courses.length === 0 ? (
         <p className="m-0 text-graphite">No verified free course for this yet. The videos and articles are a start; ask your L&amp;D team about paid options.</p>
       ) : (
@@ -150,7 +156,7 @@ function panes(node: TrackNode, done: string[], onToggle: (id: string) => void, 
               <li key={c.id} className="flex flex-col gap-1.5 border-b border-line pb-3 last:border-0">
                 <a href={c.url} target="_blank" rel="noopener noreferrer" className="font-medium text-void">{c.title} ↗</a>
                 <span className="font-mono text-[11px] text-graphite">{c.provider} · {c.minutes < 60 ? `${c.minutes} min` : `${(c.minutes / 60).toFixed(1)} h`} · {c.level}</span>
-                {c.fit_check?.result === 'fits' && (
+                {c.fit_check?.result === 'fits' && c.fit_check.quote && (
                   <span className="text-[11px] text-graphite">Fit checked automatically ({c.fit_check.by}, {c.fit_check.checked}) from the course page: &ldquo;{c.fit_check.quote}&rdquo;</span>
                 )}
                 <span className="flex flex-wrap items-center gap-2">
@@ -239,7 +245,7 @@ function Hours({ minutes }: { minutes: number }) {
 
 // One step as a module card on the timeline. Progress is the person's own record: planned courses
 // marked done over planned courses. The button opens the step's courses, videos and articles.
-function Module({ node, state, index, next, done, last, onOpen }: { node: TrackNode; state: State; index: number; next: boolean; done: string[]; last: boolean; onOpen: () => void }) {
+function Module({ node, state, index, next, done, last, onOpen, onMark, paused }: { node: TrackNode; state: State; index: number; next: boolean; done: string[]; last: boolean; onOpen: () => void; onMark: () => void; paused: boolean }) {
   const planned = node.courses.filter((c) => c.planned)
   const finished = planned.filter((c) => done.includes(c.id)).length
   const pct = planned.length ? Math.round((100 * finished) / planned.length) : 0
@@ -277,6 +283,7 @@ function Module({ node, state, index, next, done, last, onOpen }: { node: TrackN
             <>
               <span className="inline-flex items-center justify-center gap-2 self-end rounded-full bg-violet px-4 py-2 text-[13px] font-semibold text-white"><Check size={16} strokeWidth={3} aria-hidden="true" />Completed</span>
               <button type="button" className="q-btn min-h-[40px] self-end border-[#d9d9de] px-4 text-[13px]" onClick={onOpen}>Review the resources</button>
+              {done.includes(stepId(node)) && <button type="button" className="self-end border-0 bg-transparent p-0 text-[12px] text-muted underline" disabled={paused} onClick={onMark}>Undo done</button>}
             </>
           ) : (
             <>
@@ -289,6 +296,9 @@ function Module({ node, state, index, next, done, last, onOpen }: { node: TrackN
               <button type="button" onClick={onOpen} className="q-btn q-btn-dark justify-between py-2 pl-5 pr-2 text-[14px]">
                 {pct > 0 ? 'Continue learning' : 'Start this step'}
                 <span className="q-btn-arrow"><ArrowRight size={16} aria-hidden="true" /></span>
+              </button>
+              <button type="button" className="q-btn min-h-[38px] justify-center gap-2 border-[#d9d0ff] text-[13px]" disabled={paused} onClick={onMark}>
+                <Check size={15} strokeWidth={3} aria-hidden="true" />Mark step done
               </button>
             </>
           )}
@@ -348,7 +358,7 @@ export function TrackMap({ tracks, done, onToggle, onSkip, paused, checked }: { 
               <div tabIndex={0} role="region" aria-label={`${track.title}: ${n} steps, scrolls`} className="max-h-[70vh] overflow-y-auto overscroll-contain rounded-[20px] bg-tray p-3 sm:max-h-[600px] sm:p-4">
                 <ol className="m-0 flex list-none flex-col gap-4 p-0">
                   {track.nodes.map((node, ni) => (
-                    <Module key={node.id} node={node} state={st[ni]} index={ni} next={ni === next} done={done} last={ni === n - 1} onOpen={() => setOpen({ track: ti, node: ni })} />
+                    <Module key={node.id} node={node} state={st[ni]} index={ni} next={ni === next} done={done} last={ni === n - 1} paused={paused} onMark={() => onToggle(stepId(node))} onOpen={() => setOpen({ track: ti, node: ni })} />
                   ))}
                 </ol>
               </div>

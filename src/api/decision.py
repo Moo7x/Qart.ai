@@ -185,6 +185,10 @@ def _progress_view(engine: Engine, profile_id: str, scenario: Scenario) -> dict[
     return out
 
 
+def _step_done_id(pack: Pack, item: str) -> bool:
+    return item.startswith("step:") and item.rsplit(":", 1)[-1] in pack.skills
+
+
 @router.get("/progress")
 def progress(
     profile_id: str,
@@ -204,7 +208,9 @@ def set_progress(
     require_profile(engine, profile_id)
     pack = load_pack()
     skipped = None if body.skipped is None else [s for s in body.skipped if _known_step(pack, s)]
-    done = [c for c in body.done if c in pack.courses]
+    # A course id, or "step:<step id>" for a whole step the person marks done themselves (a step
+    # that adapts a skill to AI has no planned course of its own).
+    done = [c for c in body.done if c in pack.courses or _step_done_id(pack, c)]
     saved = get_progress(engine, profile_id)
     save_progress(engine, profile_id, done, body.paused, skipped)
     for course in sorted(set(done) - set(saved["done"])):
