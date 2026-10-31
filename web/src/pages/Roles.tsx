@@ -5,7 +5,6 @@ import { Link, useNavigate } from 'react-router-dom'
 import { sendJSON, useApi } from '../api'
 import { Dots, SdgTag, levelText } from '../components/journey'
 import { DarkButton, Label, Legend, PageHead, ScenarioSwitch, Segmented, Serif } from '../components/atoms'
-import { FlowSteps } from '../components/FlowSteps'
 import { FitGauge } from '../components/MiniCharts'
 import { CompareRoles, JobPosts, Openings } from '../components/CompareRoles'
 import { BestQuestion, MeterRow, WhatIf } from '../components/Decision'
@@ -328,7 +327,6 @@ export function Roles() {
 
   return (
     <main className="page gap-6">
-      <FlowSteps current="roles" skip={profile.data?.profile.current_role === 'other' ? ['work'] : []} />
       <PageHead
         badge="My options · every destination role is scored"
         title={<>Roles that fit you <Serif>next</Serif></>}

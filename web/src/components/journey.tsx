@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
-import { getJSON, useApi } from '../api'
-import type { PackInfo, ProgressResponse } from '../types'
+import { Link } from 'react-router-dom'
+import { getJSON } from '../api'
+import type { PackInfo } from '../types'
 import type { LevelsInfo } from '../typesScoring'
-import { useJourney } from '../state'
 import { Label, ScenarioSwitch as AtomScenarioSwitch } from './atoms'
 
 // Official UN SDG colours (un.org brand guidelines) for the goals the pack uses.
@@ -78,75 +77,9 @@ export function ScenarioSwitch() {
   )
 }
 
-// ---- Career route: where the person is in the journey (the app's signature element) ----
-
-type Station = { key: string; label: string; to: string; paths: string[] }
-
-// Sent after plan progress is saved, so the route redraws without a page reload.
+// Sent after plan progress is saved, so pages that show progress read it again.
 export const PROGRESS_EVENT = 'qart:progress'
 
-const STATIONS: Station[] = [
-  { key: 'profile', label: 'Your profile', to: '/start?edit=1', paths: ['/start'] },
-  { key: 'picture', label: 'Your picture', to: '/overview', paths: ['/overview'] },
-  { key: 'options', label: 'Choose a role', to: '/roles', paths: ['/roles', '/goal'] },
-  { key: 'plan', label: 'Your plan', to: '/pathway', paths: ['/pathway'] },
-  { key: 'future', label: 'Future you', to: '/future', paths: ['/future'] },
-]
-
-// Each station's state comes from saved data: a profile exists, a destination is chosen, plan
-// steps are marked done. Nothing is marked done for having opened a page.
-export function JourneyRoute() {
-  const { profileId, scenario } = useJourney()
-  const { pathname } = useLocation()
-  const saved = useApi<{ destination: string | null }>(profileId ? `/api/profiles/${profileId}` : null)
-  const progress = useApi<ProgressResponse>(profileId ? `/api/profiles/${profileId}/progress?scenario=${scenario}` : null)
-  const { reload } = progress
-  useEffect(() => {
-    window.addEventListener(PROGRESS_EVENT, reload)
-    return () => window.removeEventListener(PROGRESS_EVENT, reload)
-  }, [reload])
-  if (!profileId) return null
-  const chosen = Boolean(saved.data?.destination)
-  const plan = progress.data?.plan
-  const note: Record<string, string> = {
-    profile: 'saved',
-    picture: 'ready',
-    options: chosen ? 'role chosen' : 'pick one',
-    plan: plan ? `${plan.steps_done}/${plan.steps} steps` : chosen ? 'not started' : 'after a role',
-    future: chosen ? 'compare' : 'after a role',
-  }
-  const done: Record<string, boolean> = {
-    profile: true,
-    picture: true,
-    options: chosen,
-    plan: Boolean(plan && plan.steps > 0 && plan.steps_done === plan.steps),
-    future: false,
-  }
-  const current = STATIONS.findIndex((s) => s.paths.includes(pathname))
-  return (
-    <nav aria-label="Your journey">
-      <ol className="q-steps">
-        {STATIONS.map((s, i) => {
-          const isCurrent = i === current
-          return (
-            <li key={s.key} className="flex-none">
-              <Link to={s.to} aria-current={isCurrent ? 'step' : undefined} className="!pl-3">
-                <span aria-hidden="true" className={`h-2.5 w-2.5 flex-none rounded-full ${done[s.key] || isCurrent ? 'bg-violet' : 'border-2 border-[#a3a3a3]'}`} />
-                <span className="flex flex-col leading-tight">
-                  <span className="text-[13px] font-semibold">{s.label}</span>
-                  <span className="text-[11px] font-normal text-muted">{done[s.key] ? '✓ ' : ''}{note[s.key]}</span>
-                </span>
-                <span className="sr-only">{done[s.key] ? 'done' : isCurrent ? 'you are here' : 'not done yet'}</span>
-              </Link>
-            </li>
-          )
-        })}
-      </ol>
-    </nav>
-  )
-}
-
-// The one action that moves the person on, at the end of a journey page.
 export function NextStep({ to, label, hint }: { to: string; label: string; hint?: string }) {
   return (
     <div className="section flex-row flex-wrap items-center justify-between gap-3">

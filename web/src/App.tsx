@@ -12,7 +12,6 @@ import { Status } from './pages/Status'
 import { Occupations } from './pages/Occupations'
 import { Roles } from './pages/Roles'
 import { Time } from './pages/Time'
-import { Work } from './pages/Work'
 import { LanguageProvider } from './i18n'
 import { JourneyProvider, useJourney } from './state'
 
@@ -108,7 +107,6 @@ function Shell() {
       <Routes>
         <Route path="/overview" element={<PageError><Suspense fallback={<main className="page"><span role="status" className="cap">Loading your overview…</span></main>}><Overview /></Suspense></PageError>} />
         <Route path="/goal" element={<Goal />} />
-        <Route path="/work" element={<Work />} />
         <Route path="/time" element={<Time />} />
         <Route path="/roles" element={<Roles />} />
         <Route path="/pathway" element={<Pathway />} />

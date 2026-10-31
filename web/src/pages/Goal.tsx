@@ -5,7 +5,7 @@ import { sendJSON, useApi } from '../api'
 import { Activity } from '../components/Activity'
 import { JobPosts } from '../components/CompareRoles'
 import { ReportProblem } from '../components/Feedback'
-import { levelName, levelText, JourneyRoute, NextStep } from '../components/journey'
+import { levelName, levelText, NextStep } from '../components/journey'
 import { Loading, Problem } from '../components/ui'
 import { useJourney } from '../state'
 import type { GoalInput, GoalResponse, PostingRequirement, PackInfo } from '../types'
@@ -69,7 +69,6 @@ export function Goal() {
   const cov = result?.coverage
   return (
     <main className="page">
-      <JourneyRoute />
       <header className="flex flex-col gap-1.5">
         <span className="eyebrow">My goal · the role you are aiming for</span>
         <h1 className="h1">{t('Where do you want to be?')}</h1>

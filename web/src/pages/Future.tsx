@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import { useApi } from '../api'
 import { CompareFutures } from '../components/CompareFutures'
 import { JobPosts } from '../components/CompareRoles'
-import { Dots, ScenarioSwitch, JourneyRoute, NextStep, levelText } from '../components/journey'
+import { Dots, ScenarioSwitch, NextStep, levelText } from '../components/journey'
 import { Loading, Problem } from '../components/ui'
 import { useJourney } from '../state'
 import type { FutureResponse, FutureRole } from '../types'
@@ -41,7 +41,6 @@ export function Future() {
 
   return (
     <main className="page">
-      <JourneyRoute />
       {noDestination && (
         <div className="flex flex-col gap-3">
           <span className="eyebrow">Today → Future you</span>

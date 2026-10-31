@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import { Link, Navigate, useNavigate } from 'react-router-dom'
 import { sendJSON, useApi } from '../api'
 import { Card, DarkButton, Serif } from '../components/atoms'
-import { FlowSteps } from '../components/FlowSteps'
 import { Loading, Problem } from '../components/ui'
 import { useT } from '../i18n'
 import { useJourney } from '../state'
@@ -52,7 +51,6 @@ export function Time() {
 
   return (
     <main className="page gap-5">
-      <FlowSteps current="time" skip={saved.data?.profile.current_role === 'other' ? ['work'] : []} />
       <div className="q-tray flex flex-wrap items-start gap-4 p-5">
         <Card label="Time and budget" className="flex-[1.6_1_560px] gap-4">
           {saved.loading && <Loading what="your profile" />}

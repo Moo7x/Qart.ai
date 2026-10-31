@@ -93,7 +93,7 @@ export function Onboarding() {
       }
       if (editing && profileId) await sendJSON(`/api/profiles/${profileId}`, { method: 'PUT', body: profile })
       else setProfileId((await sendJSON<{ id: string }>('/api/profiles', { body: profile })).id)
-      navigate(profile.current_role !== 'other' ? '/work' : '/roles')
+      navigate('/overview')
     })
 
   const help = HELP[step]

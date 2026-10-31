@@ -8,7 +8,6 @@ import { Badges } from '../components/Badges'
 import { TrackMap } from '../components/TrackMap'
 import { ScenarioSwitch, NextStep, PROGRESS_EVENT } from '../components/journey'
 import { PageHead, Serif, VividTile } from '../components/atoms'
-import { FlowSteps } from '../components/FlowSteps'
 import { LevelBars } from '../components/MiniCharts'
 import type { RadarOut } from '../apiTypes'
 import { Loading, Problem } from '../components/ui'
@@ -91,7 +90,6 @@ function ProfilePathway({ profileId, scenario }: { profileId: string; scenario: 
 
   return (
     <main className="page">
-      <FlowSteps current="plan" skip={profile.data?.profile.current_role === 'other' ? ['work'] : []} />
       {noDestination && (
         <div className="flex flex-col gap-3">
           <span className="eyebrow">My plan · pathway</span>
