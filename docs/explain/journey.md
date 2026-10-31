@@ -1,5 +1,19 @@
 # Personal journey
 
+**Why you need this (software evidence):** `src/match/basis.py` prefers a role-specific
+TalentCorp page, then linked O*NET tasks, then accepted `onet_technology` observations mapped
+through `data/packs/gbs_fa/technology.yaml`; otherwise it says "our assumption". The optional map
+loads with the pack and rejects unknown skill ids, repeated categories or missing reasons.
+O*NET 31.0 calls its file `software_skills.csv`; older `technology_skills.csv` releases still work.
+Each observation groups one US occupation and software category: 2 means at least one example
+is flagged In Demand for that occupation, 1 means Hot Technology across occupations only, and
+0 means listed without either flag. These codes are not demand percentages or scoring weights.
+The explanation names the release, occupation and US scope; a displayed example need not itself
+carry the category's strongest flag. Software use does not prove implementation expertise,
+Malaysian demand or a learner's proficiency. A new profile starts with the latest snapshot;
+existing profiles keep their accepted snapshot until a revision is accepted. Both role gaps
+and plan stops use that same snapshot. Nothing here changes requirements, fit scores or levels.
+
 **First-run flow:** `/` always sends visitors to `/start`, including saved-profile users. After building,
 the final action opens Overview. Overview's edit action loads existing answers and updates the
 same profile without clearing its destination. Start over forgets the browser's profile key and

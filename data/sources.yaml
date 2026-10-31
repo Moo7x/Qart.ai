@@ -72,21 +72,21 @@
   notes: Extracted once by hand into data/packs/gbs_fa/talentcorp_2024.yaml; each fact carries its page.
 
 - id: onet_database
-  name: O*NET Database · task statements and importance
+  name: O*NET Database · tasks, importance and software skills
   publisher: U.S. Department of Labor, Employment and Training Administration (USDOL/ETA)
   family: occupation_tasks
   url: https://www.onetcenter.org/database.html
   docs_url: https://www.onetcenter.org/database.html
   terms: CC BY 4.0
   terms_url: https://www.onetcenter.org/license_db.html
-  terms_checked: "2026-10-23"
-  attribution: "This page includes information from the O*NET 31.0 Database by the U.S. Department of Labor, Employment and Training Administration (USDOL/ETA). Used under the CC BY 4.0 license. O*NET® is a trademark of USDOL/ETA."
+  terms_checked: "2026-10-31"
+  attribution: "This page includes information from the O*NET 31.0 Database by the U.S. Department of Labor, Employment and Training Administration (USDOL/ETA). Used under the CC BY 4.0 license. Qart.ai groups software examples and maps categories to its skills; USDOL/ETA has not approved, endorsed or tested these modifications. O*NET® is a trademark of USDOL/ETA."
   tier: A
   cadence: about twice a year
   collector: onet
-  shows: The tasks of a US occupation, worded by O*NET, with how important incumbents rate each task
-  does_not_show: Malaysian job content, how often a task is done in GBS centres, or whether AI performs it
-  notes: Only tasks linked in data/packs/gbs_fa/tasks.yaml are kept. The links are a declared mapping reviewed by the team.
+  shows: The tasks of a US occupation with importance ratings, and software examples with occupation-specific In Demand or cross-occupation Hot Technology flags from job postings
+  does_not_show: Malaysian software demand, individual proficiency, implementation expertise, how often a task is done in GBS centres, or whether AI performs it
+  notes: Linked tasks and software categories for followed occupations are kept. tasks.yaml and technology.yaml are declared mappings; software flags are categorical, never percentages or scoring weights.
 
 - id: ilo_genai_exposure_2025
   name: ILO · Generative AI and Jobs, refined global index of occupational exposure

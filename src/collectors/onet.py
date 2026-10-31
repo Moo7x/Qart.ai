@@ -36,7 +36,8 @@ IMPORTANCE_SCALE = "IM"
 # for this occupation, 1 = an example is a hot technology, 0 = listed without either flag.
 TECH_SERIES = "onet_technology"
 TECH_UNIT = "employer demand in job postings (O*NET): 2 in demand, 1 hot technology, 0 listed"
-TECH_FILE = "technology_skills.csv"
+# Release 31.0 renamed Technology Skills to Software Skills; retain the older archive name.
+TECH_FILES = ("software_skills.csv", "technology_skills.csv")
 TECH_EXAMPLES_CITED = 5
 
 
@@ -116,20 +117,32 @@ def _technology(archive: zipfile.ZipFile, version: str, url: str) -> list[Observ
     """One row per followed occupation and software commodity; none if the release lacks it."""
     followed = {o.code for o in field_profile().soc_occupations}
     groups: dict[tuple[str, str], dict[str, Any]] = {}
-    try:
-        handle = _member(archive, TECH_FILE)
-    except StopIteration:
+    handle = None
+    for name in TECH_FILES:
+        try:
+            handle = _member(archive, name)
+            break
+        except StopIteration:
+            continue
+    if handle is None:
         return []
     with handle:
-        for row in csv.DictReader(handle):
+        reader = csv.DictReader(handle)
+        # 31.0 replaced UNSPSC commodity columns with O*NET software elements, and renamed
+        # Example to Workplace Example. Keep the original source's category id and exact name.
+        software_elements = "Element ID" in (reader.fieldnames or [])
+        code_column = "Element ID" if software_elements else "Commodity Code"
+        title_column = "Element Name" if software_elements else "Commodity Title"
+        example_column = "Workplace Example" if software_elements else "Example"
+        for row in reader:
             soc = row["O*NET-SOC Code"]
             if soc not in followed:
                 continue
             group = groups.setdefault(
-                (soc, row["Commodity Code"]),
-                {"title": row["Commodity Title"], "examples": [], "hot": False, "demand": False},
+                (soc, row[code_column]),
+                {"title": row[title_column], "examples": [], "hot": False, "demand": False},
             )
-            group["examples"].append(row["Example"])
+            group["examples"].append(row[example_column])
             group["hot"] = group["hot"] or row.get("Hot Technology") == "Y"
             group["demand"] = group["demand"] or row.get("In Demand") == "Y"
     out = []
@@ -160,7 +173,7 @@ def collect(client: httpx.Client, state: SourceState) -> CollectorResult:
     major, minor = found
     version = f"{major}.{minor}"
     # A changed crosswalk must re-read the same release, so the linked tasks are part of the key.
-    seen_key = f"{version}|tech|{','.join(sorted(load_pack().task_ids(), key=int))}"
+    seen_key = f"{version}|software-v1|{','.join(sorted(load_pack().task_ids(), key=int))}"
     if state.get(STATE_KEY) == seen_key:
         return CollectorResult([], note=f"no new release since O*NET {version}")
     url = DOWNLOAD.format(major=major, minor=minor)
@@ -168,5 +181,9 @@ def collect(client: httpx.Client, state: SourceState) -> CollectorResult:
     response.raise_for_status()
     observations, problems = parse_archive(response.content, version, url)
     state.set(STATE_KEY, seen_key)
-    note = f"O*NET {version}: {len(observations)} linked tasks"
+    technology_count = sum(row.series == TECH_SERIES for row in observations)
+    note = (
+        f"O*NET {version}: {len(observations) - technology_count} linked tasks, "
+        f"{technology_count} software categories"
+    )
     return CollectorResult(observations, note=f"{note}; {problems}" if problems else note)

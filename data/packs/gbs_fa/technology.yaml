@@ -1,0 +1,22 @@
+# Exact Element Name values from O*NET 31.0 software_skills.csv, checked 2026-10-31.
+# Source: https://www.onetcenter.org/dl_files/database/db_31_0_csv/software_skills.csv
+# USDOL/ETA, CC BY 4.0: https://www.onetcenter.org/license_db.html
+# Qart.ai's declared category-to-skill crosswalk; not a proficiency or Malaysian-demand measure.
+# `commodity` is retained as the mapping key for compatibility; 31.0 uses software elements.
+commodities:
+  - commodity: Enterprise resource planning ERP software
+    skills: [erp]
+    reason: ERP software is the tool family named by the pack's ERP skill (O*NET element 2.E.2.b).
+  - commodity: Business intelligence and data analysis software
+    skills: [dashboards, data_visualisation]
+    reason: This category lists Power BI and Tableau, tools for dashboards and visualisation (2.E.6.m).
+  - commodity: Data base user interface and query software
+    skills: [database_querying, sql]
+    reason: The category covers database queries and explicitly lists Structured query language SQL (2.E.6.f).
+
+# Deliberately not mapped:
+# - No robotic process automation software category or RPA examples were found among followed
+#   occupations. Enterprise application integration software is broader than RPA.
+# - Accounting software and Financial analysis software describe software use, not Financial
+#   Systems Implementation or Accounting Principles. Do not turn these broader skills into
+#   evidenced requirements merely because accounting tools appear in an occupation's list.

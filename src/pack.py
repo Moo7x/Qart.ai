@@ -146,6 +146,14 @@ class TaskCrosswalk(BaseModel):
     occupations: dict[str, TaskOccupation]  # O*NET-SOC code -> links
 
 
+class TechnologyCommodity(BaseModel):
+    """A declared link from an exact O*NET software category to pack skills."""
+
+    commodity: str
+    skills: list[str]
+    reason: str
+
+
 class Pack(BaseModel):
     skills: dict[str, Skill]
     current_roles: dict[str, CurrentRole]
@@ -154,6 +162,7 @@ class Pack(BaseModel):
     courses_checked: str
     sdg: SdgMap
     tasks: TaskCrosswalk
+    technology: list[TechnologyCommodity] = []
 
     def courses_for(self, skill_id: str) -> list[Course]:
         return [
@@ -182,6 +191,17 @@ class PackError(ValueError):
 
 def _check(pack: Pack) -> None:
     problems = []
+    commodities = [entry.commodity for entry in pack.technology]
+    for entry in pack.technology:
+        if not entry.commodity.strip() or commodities.count(entry.commodity) > 1:
+            problems.append(f"technology: empty or duplicate commodity {entry.commodity!r}")
+        if not entry.skills or not entry.reason.strip():
+            problems.append(f"technology {entry.commodity}: needs skills and a reason")
+        problems += [
+            f"technology {entry.commodity}: unknown skill {skill}"
+            for skill in entry.skills
+            if skill not in pack.skills
+        ]
     for role in pack.current_roles.values():
         problems += [
             f"{role.id}: unknown skill {s}" for s in role.typical_skills if s not in pack.skills
@@ -310,6 +330,12 @@ def load_pack() -> Pack:
     roles = yaml.safe_load((PACK_DIR / "roles.yaml").read_text(encoding="utf-8"))
     courses, courses_checked = _load_courses()
     sdg = yaml.safe_load((PACK_DIR / "sdg.yaml").read_text(encoding="utf-8"))
+    technology_path = PACK_DIR / "technology.yaml"
+    technology = (
+        yaml.safe_load(technology_path.read_text(encoding="utf-8")) or {}
+        if technology_path.exists()
+        else {}
+    )
     pack = Pack(
         skills={s["id"]: Skill.model_validate(s) for s in skills},
         current_roles={r["id"]: CurrentRole.model_validate(r) for r in roles["current_roles"]},
@@ -322,6 +348,9 @@ def load_pack() -> Pack:
         tasks=TaskCrosswalk.model_validate(
             yaml.safe_load((PACK_DIR / "tasks.yaml").read_text(encoding="utf-8"))
         ),
+        technology=[
+            TechnologyCommodity.model_validate(entry) for entry in technology.get("commodities", [])
+        ],
     )
     _check(pack)
     return pack

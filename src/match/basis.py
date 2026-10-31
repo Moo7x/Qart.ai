@@ -10,40 +10,35 @@ A requirement is evidenced in one of three ways, or it is our assumption, and th
 Nothing here changes a score; it explains why the skill is counted at all.
 """
 
-from functools import cache
 from typing import Any, Literal
 
-import yaml
-
-from src.evidence.field import PACK_DIR, field_profile
+from src.evidence.field import field_profile
 from src.pack import Pack
 
 TASKS_QUOTED = 1  # one task statement is enough to show the link; the rest stay one click away
 TIER_TEXT = {"core": "main work of the role", "upskill": "skill to build", "support": "useful tool"}
 Kind = Literal["talentcorp", "onet", "onet_tech", "assumption"]
 TECH_SERIES = "onet_technology"  # src/collectors/onet.py
-DEMAND_TEXT = {2.0: "in demand in job postings", 1.0: "often named in job postings", 0.0: "listed"}
+DEMAND_TEXT = {
+    2.0: "at least one tool in this category is in demand in US postings for this occupation",
+    1.0: "at least one tool is hot across US occupations, not necessarily in demand for this one",
+    0.0: "listed for this occupation; no job-posting demand flag",
+}
 
 
-@cache
-def technology_map() -> dict[str, list[str]]:
-    """O*NET software commodity title → the pack skills it is about (declared, with reasons)."""
-    path = PACK_DIR / "technology.yaml"
-    if not path.exists():
-        return {}
-    data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
-    return {entry["commodity"]: list(entry["skills"]) for entry in data.get("commodities", [])}
-
-
-def _technology(soc: str, skill_id: str, rows: list[dict[str, Any]]) -> dict[str, Any] | None:
+def _technology(
+    pack: Pack, soc: str, skill_id: str, rows: list[dict[str, Any]]
+) -> dict[str, Any] | None:
     """The strongest O*NET Technology Skills row for this occupation that is about the skill."""
-    mapping = technology_map()
+    mapping = {entry.commodity: entry.skills for entry in pack.technology}
     best: dict[str, Any] | None = None
     for row in rows:
         if row.get("series") != TECH_SERIES or not str(row.get("entity", "")).startswith(soc + " "):
             continue
         span = str(row.get("cited_span", ""))
         title, _, examples = span.split(" · ", 2)[-1].partition(": ")
+        if row.get("value") not in DEMAND_TEXT:
+            continue
         if skill_id in mapping.get(title, []) and (best is None or row["value"] > best["value"]):
             best = {
                 "value": row["value"],
@@ -77,17 +72,17 @@ def requirement_basis(
             "text": f"The job's own tasks use it ({tier}): {quoted}",
             "source": f"O*NET 31.0, {name} ({role.soc}), {len(tasks)} linked task(s)",
         }
-    tech = _technology(role.soc, skill_id, rows or [])
+    tech = _technology(pack, role.soc, skill_id, rows or [])
     if tech:
         occupation = field_profile().occupation(role.soc)
         name = occupation.name if occupation else role.soc
         return {
             "kind": "onet_tech",
             "text": (
-                f"Employers of {name} ask for {tech['title'].lower()} such as "
-                f"{tech['examples'].split('; ')[0]} ({DEMAND_TEXT.get(tech['value'], 'listed')})."
+                f"O*NET lists {tech['title']} for {name}, for example "
+                f"{tech['examples'].split('; ')[0]} ({DEMAND_TEXT[tech['value']]})."
             ),
-            "source": f"O*NET {tech['period']} Technology Skills, {name} ({role.soc})",
+            "source": f"O*NET {tech['period']} Technology Skills, US, {name} ({role.soc})",
         }
     return {
         "kind": "assumption",
