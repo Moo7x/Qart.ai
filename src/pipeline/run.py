@@ -22,7 +22,7 @@ from typing import Any
 import httpx
 from sqlalchemy import Engine
 
-from src import params, privacy
+from src import http, params, privacy
 from src.changes.service import refresh_proposals
 from src.collectors import aei, dosm_jmi, dosm_wages, ilo, mycol, onet, talentcorp
 from src.collectors.base import Collect
@@ -166,7 +166,7 @@ def _run_all(
     retry_pause: float,
 ) -> RunSummary:
     previous_cutoff = latest_observation_id(engine)
-    factory = client_factory or (lambda: httpx.Client(timeout=HTTP_TIMEOUT))
+    factory = client_factory or (lambda: http.client("evidence pipeline", HTTP_TIMEOUT))
     results: list[dict[str, Any]] = []
     with factory() as client:
         for source in registry().values():

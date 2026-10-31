@@ -23,6 +23,7 @@ from sqlalchemy import Engine, select
 
 from src.config import Settings
 from src.evidence.field import field_profile
+from src.http import client as http_client
 from src.occupations.catalogue import MODEL, catalogue, search_text, vector_table, vectors
 from src.runpod_jobs import INTERACTIVE_BUDGET_SECONDS, RunPodError, embed, rerank
 from src.stages import Stages
@@ -156,7 +157,7 @@ def detect(
     index = {soc: v for soc, v in _cached_vectors(engine).items() if soc in by_soc}
     if settings.runpod_configured and index:
         own = client is None
-        http = client or httpx.Client(timeout=30)
+        http = client or http_client("occupation search", 30)
         try:
             with stages.step("Embed your words on the GPU", "BGE-M3 on RunPod"):
                 [qv] = embed(settings, [query], INTERACTIVE_BUDGET_SECONDS, http)

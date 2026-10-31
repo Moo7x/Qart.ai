@@ -24,7 +24,6 @@ SOURCE_ID = "dosm_job_market_insights"
 BASE = "https://www.dosm.gov.my/portal-main/release-content/"
 SEED_SLUG = "big-data-analytics-job-market-insights-q22026"
 METHOD_VERSION = "dosm_jmi/1"
-USER_AGENT = "Qart.ai evidence pipeline (SDC Hackathon 2026; public data)"
 SLUG_PATTERN = re.compile(
     r"/portal-main/release-content/(big-data-analytics-job-market-insights[\w-]*)"
 )
@@ -220,7 +219,7 @@ def discover_slugs(page_html: str) -> set[str]:
 
 
 def fetch_page(client: httpx.Client, slug: str) -> str:
-    response = client.get(BASE + slug, headers={"User-Agent": USER_AGENT})
+    response = client.get(BASE + slug)
     response.raise_for_status()
     return response.text
 
@@ -238,9 +237,7 @@ def next_quarter_slug(quarter: str) -> str:
 
 def probe_next_release(client: httpx.Client, latest_quarter: str) -> Release | None:
     """The next quarter's release if its page exists (it may still be an announced placeholder)."""
-    response = client.get(
-        BASE + next_quarter_slug(latest_quarter), headers={"User-Agent": USER_AGENT}
-    )
+    response = client.get(BASE + next_quarter_slug(latest_quarter))
     if response.status_code != HTTP_OK:
         return None
     try:

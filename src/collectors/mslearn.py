@@ -30,7 +30,7 @@ from typing import Any
 import httpx
 import yaml
 
-from src import params
+from src import http, params
 from src.config import Settings, load_settings
 from src.envfile import load_env_file
 from src.evidence.field import PACK_DIR
@@ -216,7 +216,7 @@ def main() -> None:
     pack = load_pack()
     known = {c.url for c in pack.courses.values() if c.provider != PROVIDER or c.verified}
     checked = f"{datetime.now(UTC):%Y-%m-%d}"
-    with httpx.Client(timeout=120, follow_redirects=True) as client:
+    with http.client("course catalogue", 120, follow_redirects=True) as client:
         items = candidates(fetch(client), known)
         mapped = map_skills(settings, pack, items, client)
     existing = yaml.safe_load(OUT.read_text(encoding="utf-8")) if OUT.exists() else None

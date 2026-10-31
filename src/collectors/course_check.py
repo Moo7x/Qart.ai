@@ -24,7 +24,7 @@ from typing import Any
 import httpx
 import yaml
 
-from src import llm, params
+from src import http, llm, params
 from src.config import Settings, load_settings
 from src.envfile import load_env_file
 from src.evidence.field import PACK_DIR
@@ -32,7 +32,6 @@ from src.pack import load_pack
 
 # The candidate files this check may change (both written by owner A's catalogue work).
 CANDIDATE_FILES = ("courses_mslearn.yaml", "courses_open.yaml")
-USER_AGENT = "Qart.ai course check (SDC Hackathon 2026; public pages)"
 SCHEMA: dict[str, Any] = {
     "type": "object",
     "additionalProperties": False,
@@ -69,10 +68,8 @@ def quote_found(quote: str, page: str) -> bool:
 def read_page(url: str) -> str:
     import trafilatura
 
-    with httpx.Client(
-        timeout=params.COURSE_CHECK_FETCH_SECONDS,
-        follow_redirects=True,
-        headers={"User-Agent": USER_AGENT},
+    with http.client(
+        "course check", params.COURSE_CHECK_FETCH_SECONDS, follow_redirects=True
     ) as client:
         response = client.get(url)
         response.raise_for_status()

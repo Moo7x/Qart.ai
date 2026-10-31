@@ -20,6 +20,7 @@ from typing import Any
 import httpx
 import yaml
 
+from src import http
 from src.config import REPO_ROOT, load_settings
 from src.db import make_engine
 from src.envfile import load_env_file
@@ -72,7 +73,7 @@ def _rank_all(
         times["rerank"].append(time.monotonic() - started)
         return [s for s, _ in sorted(zip(socs, scores, strict=True), key=lambda x: -x[1])]
 
-    with httpx.Client(timeout=60) as client:
+    with http.client("occupation evaluation", 60) as client:
         started = time.monotonic()
         vectors = embed(settings, [c["q"] for c in cases], BACKGROUND_BUDGET_SECONDS, client)
         times["embed batch"].append(time.monotonic() - started)

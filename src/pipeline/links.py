@@ -11,6 +11,7 @@ from typing import Any
 
 import httpx
 
+from src import http
 from src.pack import load_pack
 from src.resources import load_resources
 
@@ -22,7 +23,6 @@ OK_LOW, OK_HIGH = 200, 300
 BLOCKED = {401, 403, 429}
 OEMBED = "https://www.youtube.com/oembed"
 YOUTUBE_HOSTS = ("youtube.com/watch", "youtu.be/")
-USER_AGENT = "Qart.ai link check (SDC Hackathon 2026; public pages)"
 
 
 def catalogue_urls() -> list[tuple[str, str]]:
@@ -79,6 +79,4 @@ def link_step(client: httpx.Client) -> dict[str, Any]:
 
 
 def client() -> httpx.Client:
-    return httpx.Client(
-        timeout=TIMEOUT_SECONDS, follow_redirects=True, headers={"User-Agent": USER_AGENT}
-    )
+    return http.client("link check", TIMEOUT_SECONDS, follow_redirects=True)

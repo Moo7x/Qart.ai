@@ -35,7 +35,6 @@ from src.agents import store
 from src.agents.character import AGENTS_DIR, load_character
 from src.agents.client import Chat, arguments, openai_chat, tool
 from src.agents.segments import (
-    USER_AGENT,
     Part,
     anchor_words,
     article_parts,
@@ -46,6 +45,7 @@ from src.agents.segments import (
     video_parts,
 )
 from src.config import Settings
+from src.http import client as http_client
 from src.pack import load_pack
 from src.resources import load_resources
 
@@ -300,9 +300,7 @@ def run_scout(
     resource_id: str | None = None,
 ) -> dict[str, Any]:
     own = http is None
-    client = http or httpx.Client(
-        timeout=20, follow_redirects=True, headers={"User-Agent": USER_AGENT}
-    )
+    client = http or http_client("resource scout", 20, follow_redirects=True)
     scout = Scout(engine, settings, run_id, skill, client, captions, resource_id)
     scout.step("think", f"Looking for the parts that serve {scout.skill_name}")
     agent_engine = "ranking only (no language model)"

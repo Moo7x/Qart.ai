@@ -25,7 +25,6 @@ WORD = re.compile(r"[a-z0-9]+")
 BOILERPLATE = re.compile(
     r"\b(subscribe|newsletter|sign up|cookie|privacy statement|stay up to date)\b", re.I
 )
-USER_AGENT = "Qart.ai resource scout (SDC Hackathon 2026; public pages)"
 
 
 @dataclass
@@ -97,7 +96,7 @@ def video_parts(resource_id: str, snippets: list[tuple[float, float, str]]) -> l
 def article_text(url: str, client: httpx.Client) -> str:
     import trafilatura
 
-    response = client.get(url, headers={"User-Agent": USER_AGENT})
+    response = client.get(url)
     response.raise_for_status()
     return trafilatura.extract(response.text, include_comments=False, include_tables=False) or ""
 

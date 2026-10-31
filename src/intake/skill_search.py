@@ -16,6 +16,7 @@ from typing import Any
 import httpx
 
 from src.config import Settings
+from src.http import client as http_client
 from src.pack import Pack
 from src.runpod_jobs import (
     BACKGROUND_BUDGET_SECONDS,
@@ -109,7 +110,7 @@ def warm(pack: Pack, settings: Settings) -> bool:
 
     def work() -> None:
         try:
-            with httpx.Client() as http:
+            with http_client("skill search") as http:
                 texts = [_skill_text(pack, sid) for sid in missing]
                 vectors = embed(settings, texts, BACKGROUND_BUDGET_SECONDS, http)
                 if len(vectors) == len(texts):
@@ -142,7 +143,7 @@ def search(
     if not settings.runpod_configured:
         return fallback("RunPod is not configured; keyword suggestions need your confirmation.")
     own = client is None
-    http = client or httpx.Client()
+    http = client or http_client("skill search")
     try:
         cached = _SKILL_VECTORS
         keys = {sid: (sid, _skill_text(pack, sid)) for sid in pack.skills}

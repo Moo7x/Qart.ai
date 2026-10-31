@@ -3,11 +3,11 @@
 from dataclasses import asdict
 from typing import Any
 
-import httpx
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field
 from sqlalchemy import Engine, func, select
 
+from src import http
 from src.api.evidence import get_engine, get_settings
 from src.config import Settings
 from src.evidence.signals import occupation_signals
@@ -61,7 +61,7 @@ def detect_occupation(
 @router.get("/{soc}")
 def occupation_preview(soc: str, engine: Engine = Depends(get_engine)) -> dict[str, Any]:
     rows = query_observations(engine)
-    with httpx.Client() as client:
+    with http.client("occupation preview") as client:
         found = preview(engine, soc, rows, occupation_signals(rows), client)
     if found is None:
         raise HTTPException(status_code=404, detail="unknown occupation")
