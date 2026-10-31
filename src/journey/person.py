@@ -104,6 +104,7 @@ def load_person(engine: Engine, profile_id: str) -> Person | None:
     if found is None:
         return None
     data, destination = found
-    _, task_rows = task_model.latest(engine)
     rows = accepted_rows(engine, profile_id)
+    # The task model the person's accepted evidence supports (never one trained on newer data).
+    _, task_rows = task_model.latest(engine, task_model.evidence_period(rows))
     return Person(profile_id, data, destination, load_pack(), rows, task_rows)

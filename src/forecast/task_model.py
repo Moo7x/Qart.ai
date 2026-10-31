@@ -47,6 +47,12 @@ class Task:
     importance: float | None = None
 
 
+def evidence_period(rows: list[Row]) -> str | None:
+    """The newest Economic Index month among these (accepted) observations, if any."""
+    periods = [r["period"] for r in rows if r["series"] == TARGET]
+    return max(periods) if periods else None
+
+
 def training_set(rows: list[Row]) -> tuple[list[Task], np.ndarray, str]:
     """Every task with an observed automation share in the latest month, and that month."""
     target = [r for r in rows if r["series"] == TARGET and r["geography"] == "GLOBAL"]
@@ -209,6 +215,7 @@ def run(
         json.dumps([[t.task, v] for t, v in zip(train, y.tolist(), strict=True)])
         + json.dumps([[t.soc, t.task] for t in predict])
         + params.TASK_MODEL_VERSION
+        + period
     )
     with engine.connect() as conn:
         last = conn.execute(select(version_table).order_by(version_table.c.id.desc())).first()
@@ -272,10 +279,17 @@ def run(
     }
 
 
-def latest(engine: Engine) -> tuple[Row | None, list[Row]]:
-    """The newest model version and its per-task rows (observed and predicted shares)."""
+def latest(engine: Engine, period: str | None = None) -> tuple[Row | None, list[Row]]:
+    """The newest model version and its per-task rows (observed and predicted shares).
+
+    With `period` (the newest Economic Index month in a person's accepted evidence), only a
+    version trained on that month or an earlier one: a model fitted on a newer month reaches the
+    person when they accept that month's evidence, like any other new evidence."""
+    query = select(version_table).order_by(version_table.c.id.desc())
+    if period is not None:
+        query = query.where(version_table.c.period <= period)
     with engine.connect() as conn:
-        version = conn.execute(select(version_table).order_by(version_table.c.id.desc())).first()
+        version = conn.execute(query).first()
         if version is None:
             return None, []
         tasks = conn.execute(

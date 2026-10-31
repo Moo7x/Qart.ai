@@ -114,3 +114,17 @@ def test_change_test_overrides_are_checked_per_kind() -> None:
         Override(kind="group_change", key="clerical", value=9)
     with pytest.raises(ValidationError):
         Override(kind="task_share", key="1", value=-5)
+
+
+def test_a_person_only_gets_a_model_trained_on_evidence_they_accepted(tmp_path) -> None:
+    engine = make_engine(f"sqlite:///{tmp_path / 'f.sqlite'}")
+    init_db(engine)
+    rows = _rows(params.TASK_MODEL_MIN_TRAIN + 20)
+    task_model.run(engine, rows, _fake_embedder, None)  # trained on 2026-05
+    newer = [{**r, "period": "2026-06"} if r["series"] == task_model.TARGET else r for r in rows]
+    task_model.run(engine, newer, _fake_embedder, None)  # trained on 2026-06
+    assert task_model.latest(engine)[0]["period"] == "2026-06"
+    assert task_model.latest(engine, "2026-05")[0]["period"] == "2026-05"
+    assert task_model.latest(engine, "2026-04")[0] is None
+    assert task_model.evidence_period(rows) == "2026-05"
+    engine.dispose()
