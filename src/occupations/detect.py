@@ -2,9 +2,14 @@
 
 Primary: embed the query with BGE-M3 on RunPod, take the DENSE_CANDIDATES most similar
 occupations (cosine; vectors are normalised), then reorder them with the BGE cross-encoder
-reranker on RunPod. Fallback (RunPod not configured, cold beyond the budget, or no index yet):
-BM25 keyword search over the same occupation texts, labelled as such. Either way the person
-confirms the occupation; a match is a suggestion, not a classification of the person.
+reranker on RunPod.
+A hybrid search (BM25 and dense lists merged by reciprocal rank fusion, then reranked) was built
+and measured on a hold-out set frozen beforehand (docs/RUNPOD_EVAL.md): it did not beat
+dense+rerank (top-1 68% vs 70%) and was no better on the development set (68% vs 72%), so the app
+keeps dense+rerank; `rrf` stays for the evaluation.
+Fallbacks, each labelled: the dense list without reranking when only the rerank job fails; BM25
+alone when RunPod is not configured, cold beyond the budget, or has no index yet. Either way the
+person confirms the occupation; a match is a suggestion, not a classification of the person.
 """
 
 import math
@@ -23,6 +28,12 @@ from src.runpod_jobs import INTERACTIVE_BUDGET_SECONDS, RunPodError, embed, rera
 from src.stages import Stages
 
 DENSE_CANDIDATES = 10  # passed to the reranker: enough to recover a near miss, cheap to score
+# Hybrid search, measured in the evaluation only. Each list contributes its 50 best occupations
+# (about 5% of the 1,016). RRF_K = 60 is the constant of the original reciprocal rank fusion paper
+# (Cormack, Clarke & Büttcher 2009), not tuned. The reranker scores the 10 best fused occupations.
+HYBRID_CANDIDATES = 50
+RRF_K = 60
+RERANK_CANDIDATES = 10
 SHOWN = 3
 BM25_K1, BM25_B = 1.5, 0.75  # standard BM25 constants
 TOKEN = re.compile(r"[a-z0-9]+")
@@ -107,6 +118,20 @@ def dense_candidates(
     return scored[:top]
 
 
+def rrf(rankings: list[list[str]], k: int = RRF_K) -> list[tuple[str, float]]:
+    """Reciprocal rank fusion: score(d) = Σ over lists of 1 / (k + rank of d in that list)."""
+    scores: dict[str, float] = {}
+    for ranking in rankings:
+        for rank, soc in enumerate(ranking, 1):
+            scores[soc] = scores.get(soc, 0.0) + 1.0 / (k + rank)
+    return sorted(scores.items(), key=lambda x: (-x[1], x[0]))
+
+
+def keyword_query(query: str) -> str:
+    """The query BM25 searches: a team-reviewed Malay example is translated, others as typed."""
+    return MALAY_QUERIES.get(query.strip().lower(), query)
+
+
 def detect(
     engine: Engine,
     settings: Settings,
@@ -139,10 +164,15 @@ def detect(
                 dense = dense_candidates(qv, index, DENSE_CANDIDATES)
             if not use_reranker:
                 return result(f"{MODEL} dense (RunPod)", "", dense)
-            passages = [search_text(by_soc[soc]) for soc, _ in dense]
-            with stages.step(f"Re-rank the closest {len(passages)}", "bge-reranker on RunPod"):
-                scores = rerank(settings, query, passages, INTERACTIVE_BUDGET_SECONDS, http)
-            ranked = sorted(zip([s for s, _ in dense], scores, strict=True), key=lambda x: -x[1])
+            shortlist = [soc for soc, _ in dense]
+            passages = [search_text(by_soc[soc]) for soc in shortlist]
+            try:
+                with stages.step(f"Re-rank the closest {len(passages)}", "bge-reranker on RunPod"):
+                    scores = rerank(settings, query, passages, INTERACTIVE_BUDGET_SECONDS, http)
+            except (RunPodError, httpx.HTTPError, ValueError, KeyError, TypeError) as exc:
+                note = f"re-ranker unavailable ({type(exc).__name__}); closest by meaning shown"
+                return result(f"{MODEL} dense (RunPod, no re-rank)", note, dense)
+            ranked = sorted(zip(shortlist, scores, strict=True), key=lambda x: -x[1])
             return result(f"{MODEL} + bge-reranker-v2-m3 (RunPod)", "", ranked)
         except (RunPodError, httpx.HTTPError, ValueError, KeyError, TypeError) as exc:
             note = f"RunPod unavailable ({type(exc).__name__}); keyword search used"
@@ -156,7 +186,7 @@ def detect(
             else "RunPod not configured; keyword search used"
         )
     with stages.step("Keyword search over occupations", "BM25"):
-        expanded = MALAY_QUERIES.get(query.strip().lower(), query)
+        expanded = keyword_query(query)
         ranked_kw = bm25(rows, expanded, SHOWN)
     if expanded != query:
         note += "; team-reviewed example translation: accounts clerk"

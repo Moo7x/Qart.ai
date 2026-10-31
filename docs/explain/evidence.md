@@ -13,7 +13,27 @@ Rule: never invent statistics; every number cites a source.
 ## How it works
 1. **Registry** (`data/sources.yaml`): what each source shows and does not show, its terms and
    cadence. Only registered sources are collected.
-2. **Collectors** (`src/collectors/`): OpenDOSM wages by occupation (API), DOSM Job Market
+Course catalogue (`src/collectors/mslearn.py`): the Microsoft Learn Catalog API is screened for
+finance, data and process items, which BGE-M3 and the reranker map to pack skills on RunPod. The
+results are written as unverified candidates (`courses_mslearn.yaml`) that the planner ignores
+until a reviewer opens and verifies each one (`scripts/review_catalogue.py`). Every pipeline run
+also checks that each course, video and article link still opens (`src/pipeline/links.py`).
+
+Robustness: a source that fails keeps its stored observations, so screens keep showing the last
+good data, and `/api/sources` says when it was fetched (`serving_snapshot_from`) and when the
+source last succeeded. A run left "running" by a process that stopped is closed as
+"failed (interrupted)" once it is older than the pipeline lock (`close_stale_runs`).
+
+Forecasts (`src/evidence/forecast.py`, `GET /api/forecast`): each OpenDOSM group share is
+forecast one and two years ahead by the model that beat keeping the last value in a rolling
+backtest (naive, drift, linear, damped trend, smoothing, Theta, or a global gradient-boosting model
+trained across all groups); if none beats it, the forecast is the last value and says so.
+Intervals are the chosen model's own backtest errors. Role and skill outlooks reuse the group
+forecasts and keep demand and observed AI use as separate parts.
+
+2. **Collectors** (`src/collectors/`): OpenDOSM wages by occupation (API: employees per major
+   group, used for employment shares, and the group's median and mean monthly pay, shown on role
+   cards and never scored; share code reads only the `employees` series), DOSM Job Market
    Insights (quarterly release pages), Anthropic Economic Index (Hugging Face release, streamed and
    filtered: occupation rows and the rows of each linked O*NET task), TalentCorp GBS study (hand
    extraction with page numbers), O*NET database (task wording and importance for the linked

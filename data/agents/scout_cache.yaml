@@ -1,0 +1,850 @@
+# Pre-checked scout parts: times, link anchors and reasons only (no caption or article text).
+checked: '2026-10-30'
+skills:
+  accounting_principles:
+  - resource_id: ar_ifrs_conceptual
+    kind: article
+    start: null
+    end: null
+    anchor: The Conceptual Framework also assists companies in developing
+    reason: Explains the Conceptual Framework's role in developing accounting policies
+      and understanding standards.
+  - resource_id: ar_ifrs_conceptual
+    kind: article
+    start: null
+    end: null
+    anchor: IFRS Accounting Standards are developed by the International
+    reason: Describes IFRS Accounting Standards as a global accounting language set
+      by IASB.
+  - resource_id: yt_accountingstuff_fs
+    kind: video
+    start: 532.68
+    end: 625.5189999999999
+    anchor: ''
+    reason: Defines the balance sheet as a snapshot of assets, liabilities, and equity
+      at a point in time.
+  advanced_technology_integration:
+  - resource_id: yt_ai_impact_accounting
+    kind: video
+    start: 370.48
+    end: 410.8
+    anchor: ''
+    reason: Describes future integrated systems linking accounting, payroll, tax,
+      and financial planning with AI as a financial co-pilot.
+  - resource_id: yt_ai_impact_accounting
+    kind: video
+    start: 141.84
+    end: 173.56
+    anchor: ''
+    reason: Explains AI automating bank reconciliation by pattern matching and flagging
+      anomalies for review.
+  - resource_id: ar_ms_integration
+    kind: article
+    start: null
+    end: null
+    anchor: Both OData and custom services are synchronous integration
+    reason: Details synchronous integration patterns using OData and custom services
+      for immediate business logic execution.
+  big_data_analytics:
+  - resource_id: ar_ibm_big_data
+    kind: article
+    start: null
+    end: null
+    anchor: Big data analytics refers to the systematic processing
+    reason: Defines big data analytics as processing large complex data sets to extract
+      insights for data-informed decisions.
+  - resource_id: ar_ibm_big_data
+    kind: article
+    start: null
+    end: null
+    anchor: Big data analytics aims to extract actionable insights
+    reason: Explains big data analytics turns vast data into strategic insights using
+      advanced analytics, machine learning, and AI.
+  - resource_id: yt_ibm_big_data
+    kind: video
+    start: 308.86
+    end: 353.38
+    anchor: ''
+    reason: Describes big data analytics as analyzing and processing data with cloud
+      services like SQL as a Service on object storage.
+  budget_management:
+  - resource_id: yt_cfi_fpa
+    kind: video
+    start: 362.96
+    end: 422.8
+    anchor: ''
+    reason: Explains agile rolling forecasts that update budgets continuously for
+      better responsiveness.
+  - resource_id: yt_oconnell_variance
+    kind: video
+    start: 128.679
+    end: 213.56
+    anchor: ''
+    reason: Defines variance as the difference between actual results and budget,
+      key for budget management.
+  - resource_id: ar_ms_budgeting
+    kind: article
+    start: null
+    end: null
+    anchor: Using workspaces and inquiry pages to track budget
+    reason: Shows how to track budget vs actuals using workspaces and inquiry pages
+      in budgeting software.
+  business_environment_analytics:
+  - resource_id: yt_b2u_pestel
+    kind: video
+    start: 0.03
+    end: 91.95
+    anchor: ''
+    reason: Introduces PESTEL analysis as a tool to map the external environment of
+      an organization, useful for new businesses or market entry.
+  - resource_id: ar_cipd_pestle
+    kind: article
+    start: null
+    end: null
+    anchor: 'Advantages and disadvantages of a PESTLE analysis Advantages:'
+    reason: Lists advantages of PESTLE analysis, highlighting its simplicity and role
+      in understanding the wider business environment.
+  - resource_id: ar_cipd_pestle
+    kind: article
+    start: null
+    end: null
+    anchor: By auditing the external environment, a PESTLE analysis
+    reason: Explains how PESTLE analysis supports strategic business planning by detecting
+      long-term trends and assessing business context.
+  compliance_reporting:
+  - resource_id: yt_wwise_sox
+    kind: video
+    start: 3.68
+    end: 55.480000000000004
+    anchor: ''
+    reason: Explains SOX as a regulatory framework ensuring accuracy and transparency
+      in financial reporting for compliance.
+  - resource_id: yt_wwise_sox
+    kind: video
+    start: 54.12
+    end: 107.476
+    anchor: ''
+    reason: Describes SOX implementation steps including documenting processes, testing
+      controls, and ensuring accountability for compliance.
+  - resource_id: ar_ifrs_sustainability
+    kind: article
+    start: null
+    end: null
+    anchor: IFRS Accounting Standards are developed by the International
+    reason: Details IFRS standards as global accounting language for consistent financial
+      and sustainability reporting compliance.
+  continuous_improvement:
+  - resource_id: yt_clayton_kaizen
+    kind: video
+    start: 266.56
+    end: 359.28
+    anchor: ''
+    reason: Explains the continuous cycle of planning, trying, checking, and acting
+      to improve processes.
+  - resource_id: yt_clayton_kaizen
+    kind: video
+    start: 356.16
+    end: 439.44
+    anchor: ''
+    reason: Describes kaizen blitz as a focused effort for multiple small improvements
+      to boost performance and reduce costs.
+  - resource_id: ar_ibm_bpm
+    kind: article
+    start: null
+    end: null
+    anchor: A successful BPM project requires careful planning and
+    reason: Shows how BPM improves processes by removing redundancies and bottlenecks,
+      increasing efficiency and agility.
+  credit_collections:
+  - resource_id: yt_finducation_ar
+    kind: video
+    start: 371.84
+    end: 428.88
+    anchor: ''
+    reason: Explains recording bad debts and allowance for doubtful accounts in credit
+      management.
+  - resource_id: yt_finducation_ar
+    kind: video
+    start: 654.08
+    end: 703.0400000000001
+    anchor: ''
+    reason: Covers measuring receivables, DSO, aging schedule, and write-offs in collections
+      management.
+  dashboards:
+  - resource_id: yt_stratvert_power_bi
+    kind: video
+    start: 578.56
+    end: 657.6
+    anchor: ''
+    reason: Shows how to change visuals in Power BI, adding a card and a table for
+      dashboard creation.
+  - resource_id: ar_ms_power_bi
+    kind: article
+    start: null
+    end: null
+    anchor: 'Model and combine data: Create relationships, add calculations,'
+    reason: Describes building reports and dashboards with drag-and-drop tools and
+      sharing them for collaboration.
+  - resource_id: ar_ibm_data_viz
+    kind: article
+    start: null
+    end: null
+    anchor: Data visualization is a critical step in the
+    reason: Explains data visualization's role in reporting and using templates to
+      monitor performance.
+  data_management:
+  - resource_id: ar_ibm_data_management
+    kind: article
+    start: null
+    end: null
+    anchor: The latest tech news, backed by expert insights
+    reason: Defines data management as collecting, processing, and using data securely
+      and efficiently for better business outcomes.
+  - resource_id: yt_ibm_mdm
+    kind: video
+    start: 0.64
+    end: 92.0
+    anchor: ''
+    reason: Explains master data management to create a single view of a person, place,
+      or thing for personalization and compliance.
+  - resource_id: ar_ibm_data_management
+    kind: article
+    start: null
+    end: null
+    anchor: Modern data management solutions provide an efficient way
+    reason: Describes modern data management solutions with data lakes, warehouses,
+      governance, lineage, and master data management.
+  data_migration:
+  - resource_id: yt_etl_elt
+    kind: video
+    start: 72.24
+    end: 116.03999999999999
+    anchor: ''
+    reason: Explains ETL use for data migration from old to new systems, extracting,
+      transforming, and loading data quickly.
+  - resource_id: ar_ibm_data_migration
+    kind: article
+    start: null
+    end: null
+    anchor: The latest tech news, backed by expert insights
+    reason: Defines data migration as transferring data between storage or computing
+      environments, key for cloud migration.
+  - resource_id: ar_ibm_data_migration
+    kind: article
+    start: null
+    end: null
+    anchor: Typically, the first step in the database migration
+    reason: 'Describes first step in database migration: converting source schema
+      to be compatible with target database.'
+  data_visualisation:
+  - resource_id: yt_stratvert_power_bi
+    kind: video
+    start: 491.28
+    end: 530.64
+    anchor: ''
+    reason: Shows how to start building a visual in Power BI by selecting data fields
+      and choosing a chart type.
+  - resource_id: yt_stratvert_power_bi
+    kind: video
+    start: 530.64
+    end: 578.56
+    anchor: ''
+    reason: Explains dragging data fields to axes to create and customize a line chart
+      visual in Power BI.
+  - resource_id: ar_ibm_data_viz
+    kind: article
+    start: null
+    end: null
+    anchor: Data visualization is the representation of data through
+    reason: Defines data visualization and its use to communicate complex data relationships
+      clearly.
+  database_querying:
+  - resource_id: yt_fcc_sql
+    kind: video
+    start: 1338.8
+    end: 1372.6000000000001
+    anchor: ''
+    reason: Explains relational vs non-relational databases and defines what a query
+      is in database context.
+  - resource_id: yt_fcc_sql
+    kind: video
+    start: 2998.2
+    end: 3031.2000000000003
+    anchor: ''
+    reason: Describes querying as instructions in SQL to retrieve specific information
+      from large databases.
+  - resource_id: yt_fcc_sql
+    kind: video
+    start: 4597.0
+    end: 4630.2
+    anchor: ''
+    reason: Shows how to create physical tables in a database using SQL Create Table
+      command and define data types.
+  digital_business_model:
+  - resource_id: yt_strategyzer_bmc
+    kind: video
+    start: 88.84
+    end: 136.699
+    anchor: ''
+    reason: Explains key resources, activities, partners, and cost structure in a
+      business model's infrastructure.
+  - resource_id: yt_strategyzer_bmc
+    kind: video
+    start: 0.09
+    end: 90.159
+    anchor: ''
+    reason: Introduces the nine building blocks of a business model and the Business
+      Model Canvas tool.
+  - resource_id: ar_strategyzer_bmc
+    kind: article
+    start: null
+    end: null
+    anchor: The Business Model Canvas comes from the best-selling
+    reason: Describes the Business Model Canvas as a top tool for innovation and entrepreneurship.
+  ehs: []
+  energy_management:
+  - resource_id: yt_sea_energy_audit
+    kind: video
+    start: 0.16
+    end: 86.2
+    anchor: ''
+    reason: Defines energy management as ongoing energy use control and energy auditing
+      as identifying savings opportunities with costs and benefits.
+  - resource_id: yt_sea_energy_audit
+    kind: video
+    start: 465.039
+    end: 551.36
+    anchor: ''
+    reason: Explains the energy auditor's technical expertise and role in advising
+      on capital projects and process redesign for savings.
+  - resource_id: yt_sea_energy_audit
+    kind: video
+    start: 608.36
+    end: 670.16
+    anchor: ''
+    reason: Describes the energy management system's need for leadership commitment
+      and investments to reduce energy use long-term.
+  erp:
+  - resource_id: yt_clayton_erp
+    kind: video
+    start: 0.299
+    end: 91.38
+    anchor: ''
+    reason: Defines ERP as software controlling core activities like finance, HR,
+      procurement, and explains cloud-based ERP benefits.
+  - resource_id: ar_ibm_erp
+    kind: article
+    start: null
+    end: null
+    anchor: Enterprise resource planning (ERP) is a business management
+    reason: Explains ERP as business management software integrating finance, HR,
+      manufacturing, supply chain, and more.
+  - resource_id: ar_ibm_erp
+    kind: article
+    start: null
+    end: null
+    anchor: The best way an enterprise resource planning system
+    reason: Describes ERP modules integration and how ERP cuts data silos for a single
+      source of truth.
+  esg:
+  - resource_id: yt_thisrock_esg_reporting
+    kind: video
+    start: 0.08
+    end: 90.79899999999999
+    anchor: ''
+    reason: 'Explains what an ESG report covers: environmental, social, governance
+      aspects and company disclosures.'
+  - resource_id: yt_thisrock_esg_reporting
+    kind: video
+    start: 88.799
+    end: 181.04
+    anchor: ''
+    reason: Describes how to evaluate ESG reports by checking data presence, metrics,
+      and plans for improvement.
+  - resource_id: ar_ifrs_sustainability
+    kind: article
+    start: null
+    end: null
+    anchor: IFRS Sustainability Disclosure Standards are developed by the
+    reason: Details IFRS Sustainability Disclosure Standards and their role in investor-company
+      sustainability dialogue.
+  financial_reporting:
+  - resource_id: yt_candimentor_close_reporting
+    kind: video
+    start: 253.44
+    end: 291.96
+    anchor: ''
+    reason: Shows how FP&A creates management packs with explanations, trends, risks,
+      and forecasts for decision-making.
+  - resource_id: yt_candimentor_close_reporting
+    kind: video
+    start: 70.48
+    end: 103.47999999999999
+    anchor: ''
+    reason: Explains cleaning and mapping trial balance data into usable reporting
+      categories for analysis.
+  - resource_id: yt_accountingstuff_fs
+    kind: video
+    start: 532.68
+    end: 625.5189999999999
+    anchor: ''
+    reason: Describes the balance sheet as a snapshot of assets, liabilities, and
+      equity at a point in time.
+  financial_systems:
+  - resource_id: yt_clayton_erp
+    kind: video
+    start: 529.98
+    end: 626.3389999999999
+    anchor: ''
+    reason: Explains the importance of understanding and controlling ERP implementation
+      choices, not leaving it all to consultants.
+  - resource_id: yt_thinkeduca_erp
+    kind: video
+    start: 533.56
+    end: 624.68
+    anchor: ''
+    reason: Describes how Nike's ERP implementation improved supply chain visibility,
+      collaboration, and financial decision-making.
+  - resource_id: ar_ibm_erp
+    kind: article
+    start: null
+    end: null
+    anchor: The best way an enterprise resource planning system
+    reason: Highlights ERP implementation value by integrating all business functions
+      into a single data source, reducing silos and duplication.
+  fixed_assets:
+  - resource_id: yt_finducation_fixed_assets
+    kind: video
+    start: 405.76
+    end: 468.56
+    anchor: ''
+    reason: Explains IFRS and US GAAP models, depreciation, amortization, upgrades,
+      and impairment testing for fixed assets.
+  - resource_id: yt_fnege_depreciation
+    kind: video
+    start: 139.36
+    end: 176.879
+    anchor: ''
+    reason: Describes different depreciation methods and when depreciation starts
+      for fixed assets.
+  - resource_id: ar_ms_fixed_assets
+    kind: article
+    start: null
+    end: null
+    anchor: You can set up and enter acquisition information
+    reason: Details fixed asset setup, acquisition, depreciation, capitalization threshold,
+      adjustments, disposal, and integration with General Ledger.
+  fpa:
+  - resource_id: ar_cfi_fpa
+    kind: article
+    start: null
+    end: null
+    anchor: Financial Planning and Analysis (FP&A) teams play crucial
+    reason: Explains FP&A's role in budgeting, forecasting, and supporting major corporate
+      decisions.
+  - resource_id: ar_cfi_fpa
+    kind: article
+    start: null
+    end: null
+    anchor: Who are FP&A Professionals? Corporate financial planning and
+    reason: Describes how FP&A professionals analyze company performance and forecast
+      future financial results.
+  - resource_id: yt_cfi_fpa
+    kind: video
+    start: 200.8
+    end: 250.79899999999998
+    anchor: ''
+    reason: Covers variance analysis to compare actual financials to forecasts and
+      understand deviations.
+  general_ledger:
+  - resource_id: yt_accountingstuff_gl
+    kind: video
+    start: 0.16
+    end: 65.04
+    anchor: ''
+    reason: Explains the general ledger as a database storing all accounts and journal
+      entries, fitting it into the accounting cycle.
+  - resource_id: ar_cfi_gl
+    kind: article
+    start: null
+    end: null
+    anchor: In accounting, a General Ledger (GL) is a
+    reason: Defines the general ledger as a record of all past transactions organized
+      by accounts with detailed transaction info.
+  - resource_id: ar_cfi_gl
+    kind: article
+    start: null
+    end: null
+    anchor: General Ledgers and Double-Entry Bookkeeping A general ledger
+    reason: Describes the general ledger's role in double-entry bookkeeping, ensuring
+      debits equal credits in transactions.
+  green_asset_management:
+  - resource_id: yt_circular_economy
+    kind: video
+    start: 91.68
+    end: 173.36
+    anchor: ''
+    reason: Shows how materials like timber can be reused, recycled, and biodegraded
+      in a circular system.
+  - resource_id: ar_emf_circular
+    kind: article
+    start: null
+    end: null
+    anchor: The circular economy is a system where materials
+    reason: Defines circular economy as a system where materials never become waste
+      and nature is regenerated.
+  - resource_id: ar_emf_circular
+    kind: article
+    start: null
+    end: null
+    anchor: In our current economy, we take materials from
+    reason: Explains the shift from a linear to a circular economy by stopping waste
+      production and transforming resource management.
+  green_auditing:
+  - resource_id: yt_iso14001_internal_audit
+    kind: video
+    start: 0.69
+    end: 91.96
+    anchor: ''
+    reason: ''
+  - resource_id: yt_iso14001_internal_audit
+    kind: video
+    start: 89.479
+    end: 180.0
+    anchor: ''
+    reason: Explains establishing an audit program including scope, frequency, and
+      objectives for environmental audits.
+  - resource_id: yt_iso14001_internal_audit
+    kind: video
+    start: 176.28
+    end: 266.44
+    anchor: ''
+    reason: Describes conducting the audit and reporting findings to assess EMS implementation
+      and compliance.
+  green_procurement:
+  - resource_id: yt_ism_sustainable_procurement
+    kind: video
+    start: 635.44
+    end: 696.88
+    anchor: ''
+    reason: Explains integrating sustainability into procurement policy and strategy,
+      essential for green procurement standards.
+  - resource_id: yt_ism_sustainable_procurement
+    kind: video
+    start: 2661.839
+    end: 2698.8799999999997
+    anchor: ''
+    reason: Describes ISO standards for eco labels and third-party verification relevant
+      to green procurement policies.
+  - resource_id: yt_ism_sustainable_procurement
+    kind: video
+    start: 1616.4
+    end: 1696.96
+    anchor: ''
+    reason: Covers securing leadership commitment and governance framework for sustainable
+      procurement.
+  internal_controls:
+  - resource_id: yt_fei_internal_controls
+    kind: video
+    start: 179.25
+    end: 258.65000000000003
+    anchor: ''
+    reason: Explains segregation of duties as a key internal control to reduce organizational
+      risk.
+  - resource_id: yt_fei_internal_controls
+    kind: video
+    start: 1.78
+    end: 92.81
+    anchor: ''
+    reason: Introduces control activities as actions based on policies to mitigate
+      risks and achieve objectives.
+  - resource_id: ar_coso_internal_control
+    kind: article
+    start: null
+    end: null
+    anchor: COSO has also issued Illustrative Tools for Assessing
+    reason: Describes COSO tools for assessing effectiveness of internal control systems
+      and financial reporting controls.
+  invoice_processing:
+  - resource_id: ar_ms_invoice_matching
+    kind: article
+    start: null
+    end: null
+    anchor: Note Access to this page requires authorization. You
+    reason: ''
+  - resource_id: yt_d365_invoice_matching
+    kind: video
+    start: 94.72
+    end: 187.92
+    anchor: ''
+    reason: ''
+  - resource_id: yt_procurementacademy_3way
+    kind: video
+    start: 45.383
+    end: 99.384
+    anchor: ''
+    reason: ''
+  process_automation:
+  - resource_id: yt_ibm_rpa
+    kind: video
+    start: 134.82
+    end: 166.79999999999998
+    anchor: ''
+    reason: Explains how robotic process automation integrates AI and interfaces with
+      applications in a low code way to automate tasks.
+  - resource_id: yt_ibm_rpa
+    kind: video
+    start: 413.94
+    end: 434.579
+    anchor: ''
+    reason: Shows benefits of applying robotic process automation infused with AI
+      for faster, cleaner, and more efficient work.
+  - resource_id: yt_ibm_rpa
+    kind: video
+    start: 103.53
+    end: 134.528
+    anchor: ''
+    reason: Defines robotic process automation as software robots executing tedious
+      business and IT tasks to reduce employee frustration.
+  process_optimisation:
+  - resource_id: ar_ibm_process_optimization
+    kind: article
+    start: null
+    end: null
+    anchor: Process optimization is the act of improving business
+    reason: Defines process optimization as improving business processes using structured
+      methods and technologies to remove inefficiencies and increase quality.
+  - resource_id: yt_clayton_kaizen
+    kind: video
+    start: 89.28
+    end: 180.0
+    anchor: ''
+    reason: Explains Kaizen as a long-term approach to small incremental improvements
+      that accumulate to significant change.
+  - resource_id: ar_ibm_bpm
+    kind: article
+    start: null
+    end: null
+    anchor: A successful BPM project requires careful planning and
+    reason: Describes how BPM optimizes processes by removing redundancies and bottlenecks,
+      improving efficiency and productivity.
+  prompt_engineering:
+  - resource_id: yt_assemblyai_prompting
+    kind: video
+    start: 0.0
+    end: 91.08
+    anchor: ''
+    reason: Introduces basics and fundamentals of prompt engineering for better results
+      with large language models.
+  - resource_id: yt_assemblyai_prompting
+    kind: video
+    start: 618.66
+    end: 708.959
+    anchor: ''
+    reason: Shows how to give the model room to think before responding to improve
+      prompt effectiveness and reduce hallucinations.
+  - resource_id: ar_ibm_prompting
+    kind: article
+    start: null
+    end: null
+    anchor: In addition to a breadth of communication skills,
+    reason: Explains prompt engineer roles, skills, and techniques like zero-shot
+      and few-shot prompting for optimizing AI model performance.
+  reporting:
+  - resource_id: yt_candimentor_close_reporting
+    kind: video
+    start: 253.44
+    end: 291.96
+    anchor: ''
+    reason: Shows how FP&A builds and publishes a management pack with explanations,
+      trends, and risks for reporting.
+  - resource_id: yt_candimentor_close_reporting
+    kind: video
+    start: 289.28
+    end: 329.08
+    anchor: ''
+    reason: 'Explains good commentary in reports: what changed, causes, forecasts,
+      and documented approvals.'
+  - resource_id: yt_candimentor_close_reporting
+    kind: video
+    start: 38.4
+    end: 72.24
+    anchor: ''
+    reason: Describes the reporting process from data gathering to senior review and
+      the difference between accounting and FP&A reporting.
+  sql:
+  - resource_id: yt_fcc_sql
+    kind: video
+    start: 996.6
+    end: 1031.8
+    anchor: ''
+    reason: Explains SQL as a standardized language to interact with relational database
+      management systems.
+  - resource_id: yt_fcc_sql
+    kind: video
+    start: 2602.3
+    end: 2635.7
+    anchor: ''
+    reason: Introduces SQL basics and its role in defining tables and relationships
+      in a relational database.
+  - resource_id: yt_fcc_sql
+    kind: video
+    start: 2706.8
+    end: 2743.2999999999997
+    anchor: ''
+    reason: Describes SQL as the language to create, retrieve, update, and delete
+      data in a database.
+  stakeholder_management:
+  - resource_id: yt_coursera_stakeholders
+    kind: video
+    start: 61.76
+    end: 101.91999999999999
+    anchor: ''
+    reason: 'Covers a three-step approach to stakeholder engagement: mapping, prioritizing,
+      and developing stakeholders for project success.'
+  - resource_id: yt_coursera_stakeholders
+    kind: video
+    start: 132.879
+    end: 223.76
+    anchor: ''
+    reason: Explains creating personalized plans and using the power-interest grid
+      to develop key stakeholders and ensure their commitment.
+  - resource_id: yt_coursera_stakeholders
+    kind: video
+    start: 0.32
+    end: 63.92
+    anchor: ''
+    reason: Introduces the importance of early and effective stakeholder engagement
+      across the project life cycle.
+  standard_costing:
+  - resource_id: yt_edspira_standard_costs
+    kind: video
+    start: 92.159
+    end: 184.239
+    anchor: ''
+    reason: Explains variance as the difference between actual and standard costs,
+      highlighting its use for cost control.
+  - resource_id: yt_chegg_standard_costs
+    kind: video
+    start: 129.713
+    end: 163.74699999999999
+    anchor: ''
+    reason: Defines standard cost per unit as standard quantity times standard price,
+      showing how budgets are based on these standards.
+  - resource_id: ar_accountingtools_standard_costing
+    kind: article
+    start: null
+    end: null
+    anchor: Standard costing involves the creation of estimated (i.e.,
+    reason: Describes standard costing as estimated costs used for efficiency when
+      actual costs are too time-consuming to collect.
+  statistical_analytics:
+  - resource_id: yt_khan_average
+    kind: video
+    start: 32.64
+    end: 71.39
+    anchor: ''
+    reason: Explains descriptive and inferential statistics, key concepts in statistical
+      analytics.
+  - resource_id: yt_statquest_histograms
+    kind: video
+    start: 91.63
+    end: 124.769
+    anchor: ''
+    reason: Shows how histograms predict probabilities of future measurements, useful
+      in statistical analytics.
+  - resource_id: yt_statquest_histograms
+    kind: video
+    start: 125.71
+    end: 216.64000000000001
+    anchor: ''
+    reason: Discusses using distributions to approximate data and the importance of
+      bin width in histograms.
+  system_performance:
+  - resource_id: ar_ibm_apm
+    kind: article
+    start: null
+    end: null
+    anchor: The latest tech news, backed by expert insights
+    reason: Defines Application Performance Management and its role in optimizing
+      app performance and user experience.
+  - resource_id: ar_ibm_apm
+    kind: article
+    start: null
+    end: null
+    anchor: In addition to monitoring, APM uses data analysis
+    reason: Explains how APM uses data analysis, troubleshooting, and optimization
+      to manage system performance.
+  - resource_id: ar_ms_lcs_monitoring
+    kind: article
+    start: null
+    end: null
+    anchor: Overview This tab provides a summary of the
+    reason: Describes monitoring tools showing environment health, user and system
+      activities for performance tracking.
+  systems_integration:
+  - resource_id: ar_ms_integration
+    kind: article
+    start: null
+    end: null
+    anchor: Occasionally, many new or modified production configurations occur
+    reason: Shows using OData service endpoints to create and update product info
+      in finance and operations for integration.
+  - resource_id: ar_ibm_api
+    kind: article
+    start: null
+    end: null
+    anchor: It’s a preferred approach for integration-heavy organizations, favored
+    reason: Explains API as a source of truth for integration-heavy organizations,
+      enabling consistent interaction across systems.
+  - resource_id: ar_ibm_data_integration
+    kind: article
+    start: null
+    end: null
+    anchor: Application integration (API) involves integrating data between different
+    reason: Describes application integration via APIs to ensure seamless data flow
+      and interoperability between software apps.
+  variance_analytics:
+  - resource_id: yt_oconnell_variance
+    kind: video
+    start: 0.0
+    end: 76.24
+    anchor: ''
+    reason: Explains variance analysis by separating effects of sales volume, price,
+      and costs on operating profit.
+  - resource_id: yt_fnege_variance
+    kind: video
+    start: 10.559
+    end: 49.68
+    anchor: ''
+    reason: Describes variance analysis as reconciling actual results with budgeted
+      figures to identify sources of differences.
+  - resource_id: yt_edspira_standard_costs
+    kind: video
+    start: 92.159
+    end: 184.239
+    anchor: ''
+    reason: Defines variance and introduces the need to investigate price and quantity
+      causes behind the variance.
+  vendor_management:
+  - resource_id: yt_srm_intro
+    kind: video
+    start: 0.48
+    end: 48.900000000000006
+    anchor: ''
+    reason: Defines supplier relationship management and its importance in managing
+      third-party suppliers effectively.
+  - resource_id: yt_srm_intro
+    kind: video
+    start: 81.54
+    end: 112.25999999999999
+    anchor: ''
+    reason: Explains the impact of critical suppliers and the need for proactive management
+      with interventions.
+  - resource_id: ar_cips_srm
+    kind: article
+    start: null
+    end: null
+    anchor: Supplier relationship management is a core soft skill
+    reason: Lists key activities in managing suppliers, including assessing capability,
+      measuring performance, and improving relationships.

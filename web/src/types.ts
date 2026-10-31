@@ -67,6 +67,9 @@ export type SourceStatus = {
   last_fetched: string | null
   last_status: string | null
   last_note: string | null
+  last_attempt_at: string | null
+  last_success_at: string | null
+  serving_snapshot_from: string | null
 }
 
 export type RunSource = {
@@ -514,9 +517,13 @@ export type TrendsResponse = {
   }[]
   recent_from: string
   job_ads: { quarters: string[]; breaks: string[]; professionals: Point[]; named: { entity: string; points: Point[] }[] }
-  skills: { skill: string; name: string; ai_role: string; change: number; roles: number; basis: string[] }[]
+  skills: TrendSkill[]
+  skills_by_scenario: Record<Scenario, TrendSkill[]>
+  evidence_period: string
+  evidence_source: string
   exposure: { isco: string; title: string; mean: number | null; gradient: string | null }[]
 }
+export type TrendSkill = { skill: string; name: string; ai_role: string; change: number; roles: number; basis: string[] }
 
 // ---- Occupations (src/occupations/) ----
 

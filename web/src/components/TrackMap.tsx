@@ -1,8 +1,11 @@
 import { useCallback, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useJourney } from '../state'
 import type { Track, TrackNode } from '../types'
 import type { PracticeStep } from '../typesScoring'
+import { ScoutInline } from './AgentWindow'
 import { levelText } from './journey'
+import { Chat } from './ProgressCheck'
 import { Windows, type Pane } from './Windows'
 
 type State = 'done' | 'current' | 'locked' | 'no_course'
@@ -50,7 +53,7 @@ function practicePane(steps: PracticeStep[], onSkip: (id: string) => void, pause
               <span className="tag bg-estimate-bg text-estimate">Estimate</span>
               {p.time.low}–{p.time.high} weeks · to agree with your manager
             </span>
-            <span className="text-[12px] text-graphite">To complete it, describe: {p.show_by} A progress check or your own re-rating moves the level.</span>
+            <span className="text-[12px] text-graphite">To complete it, describe: {p.show_by} The progress check in the Agents window, or your own re-rating, moves the level.</span>
             <span className="flex flex-wrap items-center gap-2">
               <span className={`tag ${STATUS_TAG[p.status]}`}>{p.status === 'open' ? (p.locked ? 'Locked: finish this skill’s courses first' : 'Open') : `${p.status === 'done' ? 'Done' : 'Skipped'} · ${p.status_label}`}</span>
               {p.status === 'open' && <button type="button" className="btn min-h-[44px] text-[13px]" disabled={paused} onClick={() => onSkip(p.id)}>Continue anyway</button>}
@@ -62,7 +65,30 @@ function practicePane(steps: PracticeStep[], onSkip: (id: string) => void, pause
   }
 }
 
-function panes(node: TrackNode, state: State, blocker: string | null, done: string[], onToggle: (id: string) => void, onSkip: (id: string) => void, paused: boolean, checked: string): Pane[] {
+// Owner A's two agents on a skill stop (docs/PHASE2_PLAN.md §9): the scout points to the parts of
+// the checked resources that teach the skill; the progress check proposes a level from work the
+// person describes, which is how a practice step is completed. Both start only when asked.
+function agentsPane(node: TrackNode, profileId: string | null): Pane[] {
+  if (!node.skill) return []
+  return [{
+    key: 'agents',
+    title: 'Agents',
+    hint: 'Optional. Each starts only when you ask; you decide what to keep.',
+    body: (
+      <div className="flex flex-col gap-4">
+        <ScoutInline skill={node.skill} skillName={node.title} profileId={profileId} />
+        {profileId && (
+          <div className="flex flex-col gap-2 border-t border-line pt-3">
+            <span className="cap">Check my progress in {node.title}</span>
+            <Chat profileId={profileId} skill={node.skill} />
+          </div>
+        )}
+      </div>
+    ),
+  }]
+}
+
+function panes(node: TrackNode, state: State, blocker: string | null, done: string[], onToggle: (id: string) => void, onSkip: (id: string) => void, paused: boolean, checked: string, profileId: string | null): Pane[] {
   const practice = node.practice?.length ? [practicePane(node.practice, onSkip, paused)] : []
   return [
     ...practice,
@@ -136,6 +162,7 @@ function panes(node: TrackNode, state: State, blocker: string | null, done: stri
         </ul>
       ),
     },
+    ...agentsPane(node, profileId),
   ]
 }
 
@@ -192,6 +219,7 @@ function Stop({ node, state, index, tone, blocker, onOpen }: { node: TrackNode; 
 // My plan as three roads stacked top to bottom. Each road runs from Start to Finish through its
 // reskilling stops; the coloured part of the road is what the person has completed.
 export function TrackMap({ tracks, done, onToggle, onSkip, paused, checked }: { tracks: Track[]; done: string[]; onToggle: (id: string) => void; onSkip: (id: string) => void; paused: boolean; checked: string }) {
+  const { profileId } = useJourney()
   const [open, setOpen] = useState<{ track: number; node: number } | null>(null)
   const [showSkipped, setShowSkipped] = useState(false)
   const close = useCallback(() => setOpen(null), [])
@@ -258,7 +286,7 @@ export function TrackMap({ tracks, done, onToggle, onSkip, paused, checked }: { 
         <Windows
           key={`${open.track}-${open.node}`}
           title={`${tracks[open.track].title} · ${selected.title}`}
-          panes={panes(selected, selectedState, blockerOf(open.track), done, onToggle, onSkip, paused, checked)}
+          panes={panes(selected, selectedState, blockerOf(open.track), done, onToggle, onSkip, paused, checked, profileId)}
           onClose={close}
         />
       )}

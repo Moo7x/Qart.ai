@@ -18,11 +18,41 @@ def jmi_page(name: str) -> str:
 
 def test_wages_keeps_both_sexes_rows_with_exact_headcounts() -> None:
     rows = json.loads((FIXTURES / "dosm_wages_occupation.json").read_text(encoding="utf-8"))
-    observations = {(o.entity, o.period): o for o in dosm_wages.parse(rows)}
+    parsed = dosm_wages.parse(rows)
+    observations = {(o.entity, o.period): o for o in parsed if o.series == "employees"}
     assert observations[("clerical", "2011")].value == 1108.6
     assert observations[("clerical", "2025")].value == 1360.1
     assert observations[("overall", "2025")].value == 10381.6
-    assert all("sex=both" in o.cited_span for o in observations.values())
+    assert all("sex=both" in o.cited_span for o in parsed)
+
+
+def test_wages_stores_published_median_and_mean_pay_per_group() -> None:
+    rows = json.loads((FIXTURES / "dosm_wages_occupation.json").read_text(encoding="utf-8"))
+    both = [r for r in rows if r["sex"] == "both"]
+    pay = {
+        (o.series, o.entity, o.period): o for o in dosm_wages.parse(rows) if o.series != "employees"
+    }
+    for row in both:
+        year = row["date"][:4]
+        median = pay[("wages_median", row["occupation"], year)]
+        mean = pay[("wages_mean", row["occupation"], year)]
+        assert median.value == row["wages_median"] and mean.value == row["wages_mean"]
+        assert (
+            median.unit == "RM per month"
+            and f"wages_median={row['wages_median']}" in median.cited_span
+        )
+    # Same rows, same reading: the headcounts keep their method version, so they are not re-stored.
+    assert {o.method_version for o in dosm_wages.parse(rows)} == {dosm_wages.METHOD_VERSION}
+
+
+def test_pay_rows_never_enter_employment_shares() -> None:
+    from src.evidence import measures
+
+    rows = json.loads((FIXTURES / "dosm_wages_occupation.json").read_text(encoding="utf-8"))
+    parsed = dosm_wages.parse(rows)
+    as_rows = [{**o.__dict__} for o in parsed]
+    headcount_only = [r for r in as_rows if r["series"] == "employees"]
+    assert measures.occupation_shares(as_rows) == measures.occupation_shares(headcount_only)
 
 
 def test_wages_collect_calls_the_open_api() -> None:
@@ -33,7 +63,9 @@ def test_wages_collect_calls_the_open_api() -> None:
         return httpx.Response(200, json=rows)
 
     with httpx.Client(transport=httpx.MockTransport(handler)) as client:
-        assert len(dosm_wages.collect(client, MemoryState()).observations) == 15
+        result = dosm_wages.collect(client, MemoryState())
+    assert sum(o.series == "employees" for o in result.observations) == 15
+    assert len(result.observations) == 45  # headcount, median and mean pay per row
 
 
 def test_jmi_reads_quarter_dates_total_and_accountants() -> None:

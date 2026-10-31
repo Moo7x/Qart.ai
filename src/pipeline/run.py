@@ -22,7 +22,7 @@ from typing import Any
 import httpx
 from sqlalchemy import Engine
 
-from src import params
+from src import params, privacy
 from src.changes.service import refresh_proposals
 from src.collectors import aei, dosm_jmi, dosm_wages, ilo, mycol, onet, talentcorp
 from src.collectors.base import Collect
@@ -32,6 +32,7 @@ from src.evidence.registry import registry
 from src.evidence.store import (
     DbSourceState,
     acquire_lock,
+    close_stale_runs,
     finish_run,
     insert_observations,
     latest_observation_id,
@@ -41,6 +42,7 @@ from src.evidence.store import (
 )
 from src.occupations.catalogue import build_index, refresh_catalogue
 from src.occupations.preview import fill_isco
+from src.pipeline import links
 
 logger = logging.getLogger(__name__)
 
@@ -131,6 +133,7 @@ def run_pipeline(
     if not acquire_lock(engine, LOCK_NAME, holder, LOCK_TTL):
         return RunSummary(run_id=None, status="skipped: locked")
     try:
+        close_stale_runs(engine, timedelta(minutes=params.RUN_WATCHDOG_MINUTES))
         run_id = start_run(engine, trigger)
         try:
             return _run_all(engine, run_id, client_factory, retry_pause)
@@ -206,6 +209,26 @@ def _run_all(
         )
     except Exception as exc:  # noqa: BLE001  RunPod or O*NET down: previous index and BM25 stay
         results.append(_failed_step("occupation_index", exc))
+    try:
+        with (client_factory or links.client)() as client:
+            results.append(links.link_step(client))
+    except Exception as exc:  # noqa: BLE001  a link check problem never affects the evidence
+        results.append(_failed_step("link_check", exc))
+    try:
+        removed = privacy.purge_idle(engine, params.PROFILE_RETENTION_DAYS)
+        results.append(
+            {
+                "source_id": "retention",
+                "status": "ok",
+                "fetched": 0,
+                "new": 0,
+                "note": (
+                    f"{removed} profile(s) unused for {params.PROFILE_RETENTION_DAYS} days deleted"
+                ),
+            }
+        )
+    except Exception as exc:  # noqa: BLE001
+        results.append(_failed_step("retention", exc))
     # Also retry publication after a previous run stored evidence but failed before publication.
     refresh_proposals(engine, previous_cutoff, run_id)
     finish_run(engine, run_id, status, new_total, results)

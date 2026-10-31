@@ -29,6 +29,15 @@ declared possible job-ad coverage break are rejected. Apr/May may be months in t
 so the UI calls this observation replay, not two historical publication vintages. Replay does not
 write a baseline or proposal. The page is `web/src/pages/Changes.tsx`; the sidebar flags proposals.
 
+**Change test.** POST `/api/profiles/{id}/evidence-test` (`src/api/evidence_test.py`) answers a
+judge's "change the trend data now": it copies the stored evidence, replaces one occupation's or
+one task's automation-style AI-use share with a test value, and runs the unchanged ranking and
+pathway engines on both. The response is labelled "Test value, not real data" and nothing is
+stored. The panel sits on the Future skills radar page (`web/src/components/ChangeTest.tsx`). With
+the local data, setting the P2P Reporting Analyst occupation's share from 66% to 100% under
+moderate adoption moved the routine Invoice Processing weight 2.01 → 1.50 and the role's fit
+27.5 → 28.9; the plan's steps stayed the same.
+
 **Example.** In the live stored AEI Apr→May data, a synthetic reporting-level-2 graduate's
 Procurement Analyst fit under the fast scenario moved 8.4→8.3. The page shows the source passage
 and changed contributions. The Finance Systems pathway stayed the same; it is not forced to change.

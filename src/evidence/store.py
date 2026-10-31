@@ -205,6 +205,13 @@ def insert_observations(engine: Engine, observations: list[Observation], run_id:
     return new
 
 
+# Most pages read the whole evidence set. Observations are only ever added (a revision is a new
+# row), so the result for a given high-water id never changes: it is kept in memory and reused
+# until a new observation arrives. A small cache: one entry per profile cutoff and filter in use.
+QUERY_CACHE_SIZE = 32
+_query_cache: dict[tuple[int, str, str | None, str | None, int], list[dict[str, Any]]] = {}
+
+
 def query_observations(
     engine: Engine,
     source_id: str | None = None,
@@ -212,9 +219,21 @@ def query_observations(
     through_id: int | None = None,
 ) -> list[dict[str, Any]]:
     """Latest version of each fact (by source, series, entity, geography, period)."""
+    upto = through_id if through_id is not None else latest_observation_id(engine)
+    # The engine object is part of the key: two in-memory SQLite databases share one URL.
+    key = (id(engine), str(engine.url), source_id, series, upto)
+    if key not in _query_cache:
+        if len(_query_cache) >= QUERY_CACHE_SIZE:
+            _query_cache.pop(next(iter(_query_cache)))
+        _query_cache[key] = _query(engine, source_id, series, upto)
+    return [dict(row) for row in _query_cache[key]]  # copies: callers may change their rows
+
+
+def _query(
+    engine: Engine, source_id: str | None, series: str | None, through_id: int
+) -> list[dict[str, Any]]:
     stmt = select(observation_table).order_by(observation_table.c.id)
-    if through_id is not None:
-        stmt = stmt.where(observation_table.c.id <= through_id)
+    stmt = stmt.where(observation_table.c.id <= through_id)
     if source_id:
         stmt = stmt.where(observation_table.c.source_id == source_id)
     if series:
@@ -264,6 +283,35 @@ def finish_run(
                 sources=sources,
             )
         )
+
+
+def close_stale_runs(engine: Engine, older_than: timedelta) -> int:
+    """Close runs left "running" by a process that stopped (a redeploy, a crash).
+
+    A live run always finishes or records its own failure; one still marked running after
+    `older_than` (longer than the pipeline lock) can no longer be running, so it is closed as
+    "failed (interrupted)" with a note. Returns how many runs were closed.
+    """
+    now = datetime.now(UTC)
+    note = [
+        {
+            "source_id": "pipeline",
+            "status": "failed",
+            "fetched": 0,
+            "new": 0,
+            "error": "the run stopped before finishing (the process ended); closed by the watchdog",
+        }
+    ]
+    with engine.begin() as conn:
+        result = conn.execute(
+            update(run_table)
+            .where(
+                run_table.c.status == "running",
+                run_table.c.started_at < _naive_or_aware(engine, now - older_than),
+            )
+            .values(status="failed (interrupted)", finished_at=now, sources=note)
+        )
+    return int(result.rowcount or 0)
 
 
 def list_runs(engine: Engine, limit: int) -> list[dict[str, Any]]:

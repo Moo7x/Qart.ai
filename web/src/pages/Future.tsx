@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { useApi } from '../api'
+import { CompareFutures } from '../components/CompareFutures'
 import { JobPosts } from '../components/CompareRoles'
 import { Dots, ScenarioSwitch, SdgTag, JourneyRoute, NextStep, levelText } from '../components/journey'
 import { Loading, Problem } from '../components/ui'
@@ -112,6 +113,8 @@ export function Future() {
             </section>
           </div>
 
+
+          <CompareFutures />
 
           <section className="section" aria-label="SDG contribution">
             <div className="flex flex-wrap items-center gap-2">

@@ -1,7 +1,7 @@
 """Evidence routes: registered sources, signals, observations, pipeline runs and the backtest."""
 
 import hmac
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 from typing import Any, Literal
 
 from fastapi import APIRouter, BackgroundTasks, Depends, Header, HTTPException, Query, Request
@@ -11,10 +11,16 @@ from sqlalchemy import Engine
 from src import params
 from src.config import Settings
 from src.evidence import measures
+from src.evidence.forecast import forecasts
 from src.evidence.models import history
 from src.evidence.registry import registry
 from src.evidence.signals import Signal, build_signals
-from src.evidence.store import list_runs, query_observations
+from src.evidence.store import (
+    close_stale_runs,
+    latest_observation_id,
+    list_runs,
+    query_observations,
+)
 from src.evidence.trends import trends
 from src.match.evidence import automation_evidence
 from src.pack import load_pack
@@ -55,6 +61,14 @@ class SourceStatus(BaseModel):
     last_fetched: str | None
     last_status: str | None  # ok / failed in the latest run that included this source
     last_note: str | None
+    # Robustness (docs/PHASE2_PLAN.md A4): when the latest attempt failed, the screens keep using
+    # the stored data, fetched at `serving_snapshot_from`, and say so.
+    last_attempt_at: str | None  # start of the latest run that included this source
+    last_success_at: str | None  # end of the latest run in which this source succeeded
+    serving_snapshot_from: str | None  # newest stored observation's fetch time
+
+
+SOURCE_HISTORY_RUNS = 50  # runs searched for a source's last success
 
 
 class SignalsResponse(BaseModel):
@@ -79,13 +93,15 @@ class RunStarted(BaseModel):
 @router.get("/sources")
 def sources(engine: Engine = Depends(get_engine)) -> list[SourceStatus]:
     rows = query_observations(engine)
-    latest_run = next(iter(list_runs(engine, 1)), None)
-    by_source = {r["source_id"]: r for r in (latest_run or {}).get("sources", [])}
+    close_stale_runs(engine, timedelta(minutes=params.RUN_WATCHDOG_MINUTES))
+    history = list_runs(engine, SOURCE_HISTORY_RUNS)
     out = []
     for source in registry().values():
         mine = [r for r in rows if r["source_id"] == source.id]
         fetched = max((r["fetched_at"] for r in mine), default=None)
-        result = by_source.get(source.id, {})
+        tried = [(run, s) for run in history for s in run["sources"] if s["source_id"] == source.id]
+        attempt, result = tried[0] if tried else (None, {})
+        success = next((run for run, s in tried if s["status"] == "ok"), None)
         out.append(
             SourceStatus(
                 **source.model_dump(exclude={"collector", "docs_url"}),
@@ -93,6 +109,13 @@ def sources(engine: Engine = Depends(get_engine)) -> list[SourceStatus]:
                 last_fetched=fetched.isoformat() if fetched else None,
                 last_status=result.get("status"),
                 last_note=result.get("note") or result.get("error"),
+                last_attempt_at=attempt["started_at"].isoformat() if attempt else None,
+                last_success_at=(
+                    success["finished_at"].isoformat()
+                    if success and success["finished_at"]
+                    else None
+                ),
+                serving_snapshot_from=fetched.isoformat() if fetched else None,
             )
         )
     return out
@@ -127,6 +150,7 @@ def observations(
 def runs(
     engine: Engine = Depends(get_engine), limit: int = Query(default=20, ge=1, le=MAX_RUNS)
 ) -> list[dict[str, Any]]:
+    close_stale_runs(engine, timedelta(minutes=params.RUN_WATCHDOG_MINUTES))
     return list_runs(engine, limit)
 
 
@@ -155,6 +179,53 @@ def trend_series(engine: Engine = Depends(get_engine)) -> dict[str, Any]:
     """Rising and declining series for the Trends page, each labelled by kind in the UI."""
     rows = query_observations(engine)
     return trends(load_pack(), rows, automation_evidence(rows))
+
+
+class HistoryPoint(BaseModel):
+    period: str
+    value: float
+
+
+class ForecastPoint(BaseModel):
+    period: str
+    point: float
+    low: float | None
+    high: float | None
+
+
+class SeriesForecast(BaseModel):
+    """One forecast series or outlook (docs/PHASE2_PLAN.md C8); every value is an estimate."""
+
+    series_id: str
+    kind: Literal["employment_share", "job_ads", "role_outlook", "skill_outlook"]
+    title: str
+    history: list[HistoryPoint]
+    forecast: list[ForecastPoint]
+    model: str | None
+    baseline: str
+    backtest: dict[str, Any] | None
+    label: Literal["estimate"]
+    source: str
+    fetched_at: str | None
+    note: str
+    components: dict[str, Any] | None = None
+
+
+_forecast_cache: dict[int, list[SeriesForecast]] = {}
+
+
+@router.get("/forecast")
+def forecast_series(engine: Engine = Depends(get_engine)) -> list[SeriesForecast]:
+    """Forecasts with their backtest and the role and skill outlooks, recomputed on new data."""
+    latest = latest_observation_id(engine)
+    if latest not in _forecast_cache:
+        rows = query_observations(engine)
+        _forecast_cache.clear()  # only the newest data's forecasts are kept
+        _forecast_cache[latest] = [
+            SeriesForecast.model_validate(entry)
+            for entry in forecasts(load_pack(), rows, automation_evidence(rows))
+        ]
+    return _forecast_cache[latest]
 
 
 @router.get("/pipeline/forecast-check")

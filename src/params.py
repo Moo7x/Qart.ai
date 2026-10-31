@@ -52,6 +52,78 @@ RUN_STALE_AFTER_HOURS = 24
 # --- Agents and forecasting (owner A, docs/PHASE2_PLAN.md §7) ---------------------------------
 # Owner A adds parameters for the scout and progress-check agents, the change test, forecasting,
 # privacy retention and the load test here.
+# Forecasts (src/evidence/forecast.py). Horizons in steps of the series (years for OpenDOSM): one
+# and two years, the app's scenario horizon. Declared parameter.
+FORECAST_HORIZONS = (1, 2)
+# Interval: the 10th and 90th percentile of the chosen model's backtest errors at that horizon,
+# added to the forecast. Empirical, so it is only shown with at least this many errors.
+INTERVAL_QUANTILES = (0.1, 0.9)
+MIN_INTERVAL_ERRORS = 4
+# Rolling backtest needs at least this many points before its first origin; a series with fewer
+# points (e.g. job ads since the last coverage break) is shown without a forecast, and says why.
+FORECAST_MIN_HISTORY = 6
+# A model is used only if its error beats keeping the last value (relative error below 1);
+# otherwise the forecast is the last value, labelled as such.
+NAIVE_RATIO_TO_BEAT = 1.0
+# Global gradient-boosting model (scikit-learn): learns the next yearly change from the last three
+# changes and the level, across all occupation groups at once, so a short series borrows strength
+# from the others. Needs this many training rows; a small, shallow model for ~15 yearly points.
+GBR_LAGS = 3
+GBR_MIN_TRAIN_ROWS = 20
+GBR_MAX_DEPTH = 2
+GBR_MAX_ITER = 100
+GBR_RANDOM_STATE = 0  # fixed so the same data always gives the same forecast
+# Watchdog: a run still marked "running" this long after it started is closed as interrupted.
+# Longer than the pipeline lock (30 min, src/pipeline/run.py), so a live run is never closed.
+RUN_WATCHDOG_MINUTES = 45
+# Course catalogue (src/collectors/mslearn.py). For each pack skill the reranker scores the most
+# similar catalogue items by meaning (query: the skill name alone) and the best few are kept.
+# Read on 6 skills × 8 items (2026-10-30): the order was right, but good matches scored anywhere
+# from 0.01 (SQL modules) to 0.95 (invoice processing), and clear mismatches scored below 0.01.
+# So a skill keeps its top 5 above a 0.01 floor rather than everything above one fixed score.
+# Every kept item is still a candidate (verified: false) until a reviewer opens it.
+CATALOGUE_SHORTLIST = 15  # items per skill sent to the reranker
+CATALOGUE_TOP_PER_SKILL = 5
+CATALOGUE_MIN_RERANK = 0.01
+CATALOGUE_MAX_SKILLS_PER_ITEM = 3  # an item is listed under at most its three best skills
+# Resource scout (src/agents/scout.py). The agent may call at most 8 tools within 45 s, so a live
+# run in the demo always ends; it reads at most 3 resources and keeps the 3 best segments of each.
+# Video segments are 30–90 s of captions, cut at the end of a sentence: long enough to explain one
+# idea, short enough to point at. Article passages are 300–900 characters.
+AGENT_MAX_STEPS = 8
+AGENT_TIME_BUDGET_SECONDS = 45.0
+SCOUT_MAX_RESOURCES = 3
+SCOUT_TOP_SEGMENTS = 3
+SEGMENT_MIN_SECONDS = 30.0
+SEGMENT_MAX_SECONDS = 90.0
+PASSAGE_MIN_CHARS = 300
+PASSAGE_MAX_CHARS = 900
+FRAGMENT_WORDS = 8  # words that open a passage, used as its #:~:text= link anchor
+# Progress check (src/agents/check.py): at least 2 and at most 4 questions before judging, enough
+# for a concrete answer and one follow-up; a check can raise a level by at most 2 at once; a
+# person can run 3 checks per skill per day, so the agent cannot be retried until it agrees.
+CHECK_MIN_QUESTIONS = 2
+CHECK_MAX_QUESTIONS = 4
+CHECK_MAX_RAISE = 2
+CHECKS_PER_SKILL_PER_DAY = 3
+CHECK_MIN_QUOTE_CHARS = 8  # a quote shorter than this cannot show anything
+# Privacy (src/privacy.py): a profile not updated for 90 days is deleted by the pipeline. Declared:
+# long enough to come back to a plan after a quarter, short enough not to keep data for nothing.
+PROFILE_RETENTION_DAYS = 90
+# Status page: platform SDG totals are withheld while fewer people than this have a destination.
+# Declared, from the project rule that aggregates across people suppress groups under 5.
+PLATFORM_SDG_MIN_PROFILES = 5
+# Prices for the cost estimate (status page, scripts/cost.py), USD per million tokens. Declared:
+# the OpenAI list prices as the team knew them on 2026-10-30; check the provider's price page
+# before quoting a cost. RunPod is billed per GPU-second and depends on the GPU the endpoint uses,
+# so its price is left unset (the estimate then shows seconds only) until the team sets it from
+# the RunPod console.
+PRICES_PER_MILLION_TOKENS = {
+    "gpt-4o-mini": {"in": 0.15, "out": 0.60},
+    "gpt-4.1-mini": {"in": 0.40, "out": 1.60},
+}
+PRICES_CHECKED = "2026-10-30"
+RUNPOD_USD_PER_SECOND: float | None = None
 
 # --- Matching (src/match/engine.py) ------------------------------------------------------------
 # Bump when the formula/planning algorithm changes, even if its numeric parameters do not.

@@ -1,0 +1,63 @@
+# Hold-out queries for occupation matching (synthetic; no real CVs). Written and frozen BEFORE the
+# hybrid search was built or tuned, and never used to choose its parameters, so its results are
+# the ones quoted (docs/PHASE2_PLAN.md A5). None repeats a query in occupation_titles.yaml.
+# Each query lists the O*NET-SOC codes a careful reader would accept; every code was checked
+# against its O*NET 31.0 title in the stored catalogue. Labels drafted with AI assistance (Claude
+# Code) for the team to review; any label changed after a run is recorded in docs/decision_log.md.
+labelled_by: AI-assisted draft, team review pending
+date: "2026-10-30"
+queries:
+  # English
+  - {q: "Accounts executive in a GBS shared services centre", ok: ["13-2011.00", "43-3031.00"]}
+  - {q: "AR specialist handling customer receipts", ok: ["43-3031.00", "43-3011.00"]}
+  - {q: "Collections officer", ok: ["43-3011.00"]}
+  - {q: "Invoice processing clerk", ok: ["43-3021.00", "43-3031.00"]}
+  - {q: "Payroll officer", ok: ["43-3051.00"]}
+  - {q: "Financial analyst", ok: ["13-2051.00"]}
+  - {q: "Financial planning officer for budgets", ok: ["13-2031.00"]}
+  - {q: "Finance controller for a regional hub", ok: ["11-3031.01"]}
+  - {q: "Head of finance", ok: ["11-3031.00", "11-3031.01"]}
+  - {q: "Credit risk analyst", ok: ["13-2041.00", "13-2054.00"]}
+  - {q: "Buyer for indirect procurement", ok: ["13-1023.00", "43-3061.00"]}
+  - {q: "Business intelligence analyst for finance reporting", ok: ["15-2051.01"]}
+  - {q: "ERP systems analyst", ok: ["15-1211.00"]}
+  - {q: "Management consultant", ok: ["13-1111.00"]}
+  - {q: "Tax assistant", ok: ["13-2082.00"]}
+  - {q: "General office clerk", ok: ["43-9061.00"]}
+  - {q: "Compliance officer", ok: ["13-1041.00"]}
+  - {q: "Risk analyst in a bank", ok: ["13-2054.00"]}
+  - {q: "Bank teller", ok: ["43-3071.00"]}
+  - {q: "Loan officer", ok: ["13-2072.00"]}
+  - {q: "Internal auditor", ok: ["13-2011.00"]}
+  - {q: "Call centre agent handling billing queries", ok: ["43-4051.00"]}
+  - {q: "Retail store supervisor", ok: ["41-1011.00"]}
+  - {q: "Statistician", ok: ["15-2041.00"]}
+  - {q: "Database administrator", ok: ["15-1242.00"]}
+  # English with typos
+  - {q: "acountant", ok: ["13-2011.00"], kind: typo}
+  - {q: "payrol clerk", ok: ["43-3051.00"], kind: typo}
+  - {q: "finacial analyst", ok: ["13-2051.00"], kind: typo}
+  - {q: "procurment clerk", ok: ["43-3061.00"], kind: typo}
+  - {q: "bookeeper", ok: ["43-3031.00"], kind: typo}
+  # Malay
+  - {q: "Eksekutif akaun", ok: ["13-2011.00", "43-3031.00"], lang: ms}
+  - {q: "Kerani gaji", ok: ["43-3051.00"], lang: ms}
+  - {q: "Pegawai kutipan hutang", ok: ["43-3011.00"], lang: ms}
+  - {q: "Juruwang bank", ok: ["43-3071.00"], lang: ms}
+  - {q: "Pegawai pinjaman", ok: ["13-2072.00"], lang: ms}
+  - {q: "Pengurus kewangan", ok: ["11-3031.00", "11-3031.01"], lang: ms}
+  - {q: "Penganalisis belanjawan", ok: ["13-2031.00"], lang: ms}
+  - {q: "Pegawai pematuhan", ok: ["13-1041.00"], lang: ms}
+  - {q: "Kerani kemasukan data", ok: ["43-9021.00"], lang: ms}
+  - {q: "Penyelia kedai runcit", ok: ["41-1011.00"], lang: ms}
+  - {q: "Juruaudit", ok: ["13-2011.00"], lang: ms}
+  - {q: "Kerani am pejabat", ok: ["43-9061.00"], lang: ms}
+  - {q: "Pegawai perolehan", ok: ["13-1023.00", "43-3061.00"], lang: ms}
+  - {q: "Ahli statistik", ok: ["15-2041.00"], lang: ms}
+  - {q: "Pentadbir pangkalan data", ok: ["15-1242.00"], lang: ms}
+  # Mixed English and Malay
+  - {q: "Eksekutif AP, invoice processing", ok: ["43-3021.00", "43-3031.00"], lang: mixed}
+  - {q: "Senior akauntan, month-end closing", ok: ["13-2011.00"], lang: mixed}
+  - {q: "Pegawai credit control", ok: ["43-3011.00", "13-2041.00"], lang: mixed}
+  - {q: "Analyst kewangan FP&A", ok: ["13-2051.00", "13-2031.00"], lang: mixed}
+  - {q: "Kerani payroll", ok: ["43-3051.00"], lang: mixed}

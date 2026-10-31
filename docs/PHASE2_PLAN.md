@@ -380,7 +380,10 @@ attributes.
   - series `wages_mean`, unit `RM per month`.
 
   Same `entity` names as today (`professionals`, `technicians`, `clerical`, `overall`), and the
-  cited span is the published row. Bump the collector's `METHOD_VERSION` to `dosm_wages/2`.
+  cited span is the published row. The collector's `METHOD_VERSION` stays `dosm_wages/1`: the pay
+  comes from the same rows, read the same way, and a new version would store every headcount row
+  again. Code that computes employment shares reads only the `employees` series
+  (`measures.is_headcount`).
 - **B adds to each role card** in `/matches`:
   ```json
   {"pay": {"group": "professionals", "group_title": "Professionals", "year": "2025",
@@ -632,7 +635,8 @@ during the demo.
 - **Source state:** per source, expose `last_attempt_at`, `last_attempt_status`, `last_success_at`
   and `serving_snapshot_from` (the newest stored observation's `fetched_at`). When the last attempt
   failed, screens using that source show "Showing the last good data from <date>".
-- **Watchdog:** a run still `running` after `RUN_WATCHDOG_MINUTES = 30` is closed as
+- **Watchdog:** a run still `running` after `RUN_WATCHDOG_MINUTES = 45` (longer than the 30-minute
+  pipeline lock, so a live run is never closed) is closed as
   `failed (interrupted)`, with a note, when runs are listed or a new run starts.
 - **Lazy pages:** a failed lazy import reloads the page once (a `sessionStorage` flag), then shows
   a clear error with a reload button.
@@ -656,6 +660,9 @@ on data we never tuned on.
   3. rerank the fused top 10 with bge-reranker-v2-m3.
 - **Fallbacks:** BM25 alone when RunPod is unavailable (labelled); dense+BM25 without rerank when
   the rerank job fails (labelled).
+- **Outcome (measured):** hybrid+rerank did not beat dense+rerank on the hold-out set (top-1 68%
+  vs 70%) or the development set (68% vs 72%), so the app keeps dense+rerank and the hybrid stays
+  in the evaluation only; skill search is unchanged for the same reason (docs/RUNPOD_EVAL.md).
 - **Hold-out set:** commit it **before** any tuning. Contents: 40 new queries (at least 15 in Malay,
   5 mixed English/Malay, 5 with typos), each with the accepted O*NET-SOC codes, labelled by the
   team and dated.

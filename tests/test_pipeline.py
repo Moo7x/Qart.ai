@@ -115,6 +115,57 @@ def test_an_unexpected_error_in_one_source_does_not_stop_the_others(
     assert list_runs(engine, 1)[0]["status"] == "partial"  # the run record is closed
 
 
+def test_watchdog_closes_a_run_left_running_but_not_a_live_one(engine: Engine) -> None:
+    from datetime import UTC, datetime
+
+    from sqlalchemy import update
+
+    from src.evidence.store import close_stale_runs, run_table, start_run
+
+    stuck, live = start_run(engine, "schedule"), start_run(engine, "admin")
+    long_ago = datetime.now(UTC) - timedelta(minutes=params.RUN_WATCHDOG_MINUTES + 5)
+    with engine.begin() as conn:
+        conn.execute(update(run_table).where(run_table.c.id == stuck).values(started_at=long_ago))
+    assert close_stale_runs(engine, timedelta(minutes=params.RUN_WATCHDOG_MINUTES)) == 1
+    runs = {r["id"]: r for r in list_runs(engine, 5)}
+    assert runs[stuck]["status"] == "failed (interrupted)" and runs[stuck]["finished_at"]
+    assert "watchdog" in runs[stuck]["sources"][0]["error"]
+    assert runs[live]["status"] == "running"
+
+
+def test_a_source_that_fails_later_keeps_serving_its_last_good_data(
+    engine: Engine, offline: ClientFactory, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    from fastapi.testclient import TestClient
+
+    from src.app import create_app
+    from src.config import Settings
+
+    monkeypatch.setattr(pipeline, "COLLECTORS", all_fakes())
+    pipeline.run_pipeline(engine, "manual", offline, retry_pause=0)
+    collectors = all_fakes()
+    collectors["aei"] = broken
+    monkeypatch.setattr(pipeline, "COLLECTORS", collectors)
+    pipeline.run_pipeline(engine, "schedule", offline, retry_pause=0)
+    settings = Settings(
+        database_url=str(engine.url),
+        llm_api_key=None,
+        llm_base_url=None,
+        llm_model="gpt-4o-mini",
+        runpod_api_key=None,
+        runpod_endpoint_id=None,
+        admin_token=None,
+    )
+    with TestClient(create_app(settings, first_run=False)) as client:
+        aei = next(
+            s for s in client.get("/api/sources").json() if s["id"] == "anthropic_economic_index"
+        )
+    assert aei["last_status"] == "failed"
+    assert aei["observations"] == 1  # the stored row from the good run is still served
+    assert aei["serving_snapshot_from"] and aei["last_success_at"]
+    assert aei["last_attempt_at"] > aei["last_success_at"]
+
+
 def test_evidence_is_stale_without_runs_and_after_a_day(
     engine: Engine, offline: ClientFactory, monkeypatch: pytest.MonkeyPatch
 ) -> None:

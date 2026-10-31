@@ -25,6 +25,15 @@ const MS: Record<string, string> = {
   'Start again with a new profile': 'Mula semula dengan profil baharu',
   'Start · tell us about yourself': 'Mula · ceritakan tentang diri anda',
   // phase2 A (owner A adds its strings in this block only, docs/PHASE2_PLAN.md §5)
+  Profile: 'Profil',
+  'Future skills radar': 'Radar kemahiran masa depan',
+  'Ranked roles': 'Peranan mengikut kesesuaian',
+  Pathway: 'Laluan',
+  'SDG contribution': 'Sumbangan SDG',
+  'Compare futures': 'Bandingkan masa depan',
+  'Your picture at a glance': 'Gambaran anda secara ringkas',
+  Privacy: 'Privasi',
+  Status: 'Status',
   // end phase2 A
   // onboarding
   'Your situation': 'Situasi anda',

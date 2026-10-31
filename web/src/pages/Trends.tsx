@@ -1,6 +1,9 @@
 import { useT } from '../i18n'
 import { useApi } from '../api'
+import { ChangeTest } from '../components/ChangeTest'
 import { SmallMultiples } from '../components/Charts'
+import { ScenarioSwitch } from '../components/journey'
+import { TrendsChart } from '../components/TrendsChart'
 import { Loading, Problem } from '../components/ui'
 import type { TrendsResponse } from '../types'
 
@@ -12,31 +15,6 @@ const KIND = {
 
 function Kind({ kind }: { kind: keyof typeof KIND }) {
   return <span className={`tag ${KIND[kind][1]}`}>{KIND[kind][0]}</span>
-}
-
-// Horizontal bars around zero: rising to the right in green, declining to the left in amber.
-function Diverging({ rows, unit }: { rows: { label: string; value: number | null; hint?: string }[]; unit: string }) {
-  const max = Math.max(...rows.map((r) => Math.abs(r.value ?? 0)), 0.01)
-  return (
-    <ul className="m-0 flex list-none flex-col gap-1.5 p-0 text-[12px]">
-      {rows.map((r) => {
-        const v = r.value ?? 0
-        const width = `${(50 * Math.abs(v)) / max}%`
-        return (
-          <li key={r.label} className="grid grid-cols-[minmax(0,1.1fr)_minmax(0,1.4fr)_64px] items-center gap-2" title={r.hint}>
-            <span className="truncate">{r.label}</span>
-            <span className="relative h-3 rounded bg-mist">
-              <span className="absolute inset-y-0 left-1/2 w-px bg-hairline" />
-              {r.value !== null && (
-                <span className={`absolute inset-y-0 rounded ${v >= 0 ? 'left-1/2 bg-[#12a372]' : 'right-1/2 bg-[#e0892f]'}`} style={{ width }} />
-              )}
-            </span>
-            <span className="text-right font-mono">{r.value === null ? '—' : `${v > 0 ? '+' : ''}${v}${unit}`}</span>
-          </li>
-        )
-      })}
-    </ul>
-  )
 }
 
 export function Trends() {
@@ -58,6 +36,12 @@ export function Trends() {
           Every chart says what kind of number it shows: observed (measured by the source), assumption (our declared scenario rule) or estimate (a model of potential). History is not a forecast.
         </p>
       </header>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <h2 className="h2">What is rising and declining</h2>
+        <ScenarioSwitch />
+      </div>
+      <TrendsChart />
+      <ChangeTest />
       {view.loading && <Loading what="the trends" />}
       {view.error && <Problem what="the trends" message={view.error} onRetry={view.reload} />}
       {data && (
@@ -74,19 +58,6 @@ export function Trends() {
             </p>
           </section>
 
-            <section className="section">
-              <div className="flex flex-wrap items-center justify-between gap-2">
-                <h2 className="h2">Skills gaining or losing emphasis</h2>
-                <Kind kind="assumption" />
-              </div>
-              <Diverging
-                unit="%"
-                rows={data.skills.filter((s) => s.change !== 0).map((s) => ({ label: s.name, value: s.change, hint: `${s.ai_role} skill · ${s.basis.join(', ')}-level AI use · in ${s.roles} role(s)` }))}
-              />
-              <p className="m-0 text-xs text-graphite">
-                Weight change under fast adoption, averaged over the destination roles that need the skill: the declared scenario rule applied to observed AI use (task-level where published). Essentials and neutral skills do not shift. Not a forecast.
-              </p>
-            </section>
 
           <section className="section">
             <div className="flex flex-wrap items-center justify-between gap-2">

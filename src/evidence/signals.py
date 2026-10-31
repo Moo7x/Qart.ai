@@ -121,7 +121,7 @@ def occupation_signals(rows: list[dict[str, Any]]) -> list[Signal]:
         cited = [
             r
             for r in rows
-            if r["source_id"] == "dosm_wages_occupation"
+            if measures.is_headcount(r)
             and r["entity"] in (group, "overall")
             and r["period"] in (first_p, last_p)
         ]
