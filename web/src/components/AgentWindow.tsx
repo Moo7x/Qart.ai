@@ -160,16 +160,6 @@ export function AgentRunWindow({ skill, skillName, profileId, resourceId, resour
   )
 }
 
-// A clear, always-visible way to start the agent for one resource or a whole skill.
-export function AgentButton({ label, onClick, compact = false }: { label: string; onClick: () => void; compact?: boolean }) {
-  return (
-    <button type="button" onClick={onClick} className={`agent-button inline-flex cursor-pointer items-center gap-2 rounded-full border-0 font-semibold text-white ${compact ? 'min-h-[34px] px-3 text-[12px]' : 'min-h-[44px] px-4 text-[14px]'}`}>
-      <Bot size={compact ? 14 : 16} aria-hidden="true" />
-      {label}
-    </button>
-  )
-}
-
 /** The small AI-brain button beside a video or article: the scout opens the video at the key
  *  minute, or the article with its important passages highlighted. */
 export function BrainButton({ label, onClick }: { label: string; onClick: () => void }) {
@@ -177,15 +167,5 @@ export function BrainButton({ label, onClick }: { label: string; onClick: () => 
     <button type="button" onClick={onClick} title={label} aria-label={label} className="agent-button inline-flex h-9 w-9 flex-none cursor-pointer items-center justify-center rounded-full border-0 text-white">
       <Brain size={18} aria-hidden="true" />
     </button>
-  )
-}
-
-export function ScoutButton({ skill, skillName, profileId }: { skill: string; skillName: string; profileId: string | null }) {
-  const [open, setOpen] = useState(false)
-  return (
-    <>
-      <AgentButton label={`Find the best parts for ${skillName}`} onClick={() => setOpen(true)} />
-      {open && <AgentRunWindow skill={skill} skillName={skillName} profileId={profileId} onClose={() => setOpen(false)} />}
-    </>
   )
 }

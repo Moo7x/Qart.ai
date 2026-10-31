@@ -76,32 +76,3 @@ export function TimeSeriesChart({ series, unit, axis, source, height = 260 }: { 
     </figure>
   )
 }
-
-/** One small chart per series, each with its own y-axis (stated), for more series than colours. */
-export function SmallMultiples({ series, unit, source }: { series: (ChartSeries & { note?: string })[]; unit: string; source: string }) {
-  return (
-    <div className="grid gap-x-6 gap-y-5 sm:grid-cols-2 xl:grid-cols-3">
-      {series.map((s) => {
-        const last = s.points.at(-1)
-        return (
-          <figure key={s.label} className="m-0 flex min-w-0 flex-col gap-1 border-t border-line pt-2">
-            <figcaption className="flex items-baseline justify-between gap-2">
-              <span className="min-w-0 truncate text-[13px] font-medium" title={s.label}>{s.label}</span>
-              {last && <span className="font-mono text-[13px]">{fmt(last.value, unit)}<span className="text-[10px] text-graphite"> · {last.period}</span></span>}
-            </figcaption>
-            {s.note && <span className="font-mono text-[11px] text-graphite">{s.note}</span>}
-            <ResponsiveContainer width="100%" height={110}>
-              <LineChart data={s.points} margin={{ top: 6, right: 6, bottom: 0, left: 0 }}>
-                <CartesianGrid stroke={GRID} vertical={false} />
-                <XAxis dataKey="period" tick={AXIS_FONT} tickLine={false} axisLine={{ stroke: GRID }} interval="preserveStartEnd" minTickGap={40} />
-                <YAxis tick={AXIS_FONT} tickLine={false} axisLine={false} width={36} domain={['auto', 'auto']} tickCount={3} />
-                <Tooltip content={<Tip unit={unit} source={source} />} cursor={{ stroke: MUTED, strokeDasharray: '3 3' }} />
-                <Line type="linear" dataKey="value" name={s.label} stroke={SERIES[0]} strokeWidth={2} dot={false} activeDot={{ r: 4, strokeWidth: 2, stroke: '#ffffff' }} isAnimationActive={false} />
-              </LineChart>
-            </ResponsiveContainer>
-          </figure>
-        )
-      })}
-    </div>
-  )
-}

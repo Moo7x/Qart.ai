@@ -7,10 +7,6 @@ import { Windows, type Pane } from './Windows'
 
 const VIA_TEXT = { study: 'study', practice: 'practice at work', check: 'a progress check' } as const
 
-function capitalise(text: string): string {
-  return text.charAt(0).toUpperCase() + text.slice(1)
-}
-
 // The "Why?" control (docs/PHASE2_PLAN.md §5): a btn with the Info icon, at least 44 px high.
 export function WhyButton({ onClick, label }: { onClick: () => void; label: string }) {
   return (
@@ -18,27 +14,6 @@ export function WhyButton({ onClick, label }: { onClick: () => void; label: stri
       <Info size={16} aria-hidden="true" />
       Why?
     </button>
-  )
-}
-
-// "Fair · 41 (32–48)": the band, the fit and its range, large, with its "Why?" beside it.
-export function ScoreChip({ role, matches, size = 'large' }: { role: RoleCard; matches: MatchesResponse; size?: 'large' | 'small' }) {
-  const [open, setOpen] = useState(false)
-  const band = role.band ? capitalise(role.band) : 'Fit'
-  const range = `${Math.round(role.fit_range.low)}–${Math.round(role.fit_range.high)}`
-  return (
-    <span className="flex flex-wrap items-center gap-3">
-      <span
-        className={`inline-flex items-baseline gap-2 rounded-md border border-violet bg-violet-soft px-3 py-1.5 font-mono ${size === 'large' ? 'text-[28px]' : 'text-[15px]'}`}
-        aria-label={`${band}, fit ${Math.round(role.fit)} out of 100, range ${range}`}
-      >
-        <span className="font-sans font-semibold">{band}</span>
-        <span>· {Math.round(role.fit)}</span>
-        <span className="text-[0.6em] text-graphite">({range})</span>
-      </span>
-      <WhyButton onClick={() => setOpen(true)} label={`Why this score for ${role.title}?`} />
-      {open && <ScoreWhy role={role} matches={matches} onClose={() => setOpen(false)} />}
-    </span>
   )
 }
 

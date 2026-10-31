@@ -152,7 +152,6 @@ function groupRows(data: TrendsResponse, forecasts: SeriesForecast[]): Row[] {
 export function TrendsChart() {
   const { scenario } = useJourney()
   const [mode, setMode] = useState<Mode>('skills')
-  const [asTable, setAsTable] = useState(false)
   const [open, setOpen] = useState<Pane | null>(null)
   const trends = useApi<TrendsResponse>('/api/trends')
   const forecasts = useApi<SeriesForecast[]>('/api/forecast')
@@ -171,7 +170,6 @@ export function TrendsChart() {
         </div>
         <div className="flex items-center gap-2">
           {mode === 'skills' ? <KindLabel kind="assumption" /> : <><KindLabel kind="observed" /><KindLabel kind="estimate" /></>}
-          <button type="button" className="btn min-h-[36px]" aria-pressed={asTable} onClick={() => setAsTable((t) => !t)}>{asTable ? 'Show chart' : 'Show table'}</button>
         </div>
       </div>
       <p className="m-0 text-[13px] text-graphite">
@@ -186,37 +184,22 @@ export function TrendsChart() {
           <span className="flex items-center gap-1.5"><span aria-hidden="true" className="inline-block h-2.5 w-2.5 rounded-full" style={{ background: FORECAST }} />forecast and range (estimate)</span>
         </div>
       )}
-      {asTable ? (
-        <table className="w-full border-collapse text-[13px]">
-          <thead><tr className="text-left text-graphite"><th className="py-1 pr-3 font-normal">{mode === 'skills' ? 'Skill' : 'Job group'}</th><th className="py-1 pr-3 font-normal">{mode === 'skills' ? 'Weight change' : 'Observed change'}</th>{mode === 'roles' && <th className="py-1 font-normal">Forecast change (range)</th>}</tr></thead>
-          <tbody>
-            {rows.map((r) => (
-              <tr key={r.id} className="border-t border-line">
-                <td className="py-1.5 pr-3">{r.label}{r.sub && <span className="block text-[12px] text-graphite">{r.sub}</span>}</td>
-                <td className="py-1.5 pr-3 font-mono">{signed(r.value, unit)}</td>
-                {mode === 'roles' && <td className="py-1.5 font-mono">{r.forecast ? `${signed(r.forecast.point, unit)}${r.forecast.low !== null && r.forecast.high !== null ? ` (${signed(r.forecast.low, unit)} to ${signed(r.forecast.high, unit)})` : ''}` : '—'}</td>}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      ) : (
-        <ul className="m-0 flex list-none flex-col p-0">
-          {rows.map((r) => (
-            <li key={r.id} className="border-t border-line first:border-t-0">
-              <button
-                type="button"
-                onClick={() => setOpen(r.detail)}
-                className="grid min-h-[44px] w-full cursor-pointer grid-cols-[minmax(0,1fr)_minmax(0,1.3fr)_72px] items-center gap-3 border-0 bg-transparent px-1 py-1.5 text-left text-[13px] hover:bg-fog focus-visible:bg-fog"
-                aria-label={`${r.label}: ${signed(r.value, unit)}${r.forecast ? `, forecast ${signed(r.forecast.point, unit)}` : ''}. Open details`}
-              >
-                <span className="min-w-0">{r.label}{r.sub && <span className="block text-[11px] text-graphite">{r.sub}</span>}</span>
-                <Bar row={r} max={max} unit={unit} />
-                <span className={`text-right font-mono ${r.value >= 0 ? 'text-rising' : 'text-weak'}`}>{signed(r.value, unit)}</span>
-              </button>
-            </li>
-          ))}
-        </ul>
-      )}
+      <ul className="m-0 flex list-none flex-col p-0">
+        {rows.map((r) => (
+          <li key={r.id} className="border-t border-line first:border-t-0">
+            <button
+              type="button"
+              onClick={() => setOpen(r.detail)}
+              className="grid min-h-[44px] w-full cursor-pointer grid-cols-[minmax(0,1fr)_minmax(0,1.3fr)_72px] items-center gap-3 border-0 bg-transparent px-1 py-1.5 text-left text-[13px] hover:bg-fog focus-visible:bg-fog"
+              aria-label={`${r.label}: ${signed(r.value, unit)}${r.forecast ? `, forecast ${signed(r.forecast.point, unit)}` : ''}. Open details`}
+            >
+              <span className="min-w-0">{r.label}{r.sub && <span className="block text-[11px] text-graphite">{r.sub}</span>}</span>
+              <Bar row={r} max={max} unit={unit} />
+              <span className={`text-right font-mono ${r.value >= 0 ? 'text-rising' : 'text-weak'}`}>{signed(r.value, unit)}</span>
+            </button>
+          </li>
+        ))}
+      </ul>
       {mode === 'roles' && forecasts.loading && <span role="status" className="cap">Loading the forecasts…</span>}
       {open && <Windows title={open.title} panes={[open]} onClose={() => setOpen(null)} />}
     </section>

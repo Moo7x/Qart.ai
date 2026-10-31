@@ -53,29 +53,6 @@ export type AgentRun = {
   steps: { id: number; at: string; kind: 'think' | 'tool' | 'result' | 'note' | 'error'; text: string }[]
 }
 
-// ---- C6 progress check (POST /api/profiles/{id}/checks …, src/agents/check.py) ----
-
-export type CheckState = {
-  session_id?: string
-  skill: string
-  skill_name: string
-  current_level: number
-  target_level: number
-  question: string | null
-  asked: number
-  result: null | {
-    skill: string
-    proposed_level: number
-    met: { level: number; verdict: 'yes' | 'partly' | 'no'; quote: string }[]
-    model: string
-    engine: string
-    note: string
-  }
-  decided: null | 'accepted' | 'declined'
-  levels_source: string
-  model: string
-}
-
 // ---- C9 status (GET /api/status, src/api/status.py) ----
 
 export type UsageRow = {
