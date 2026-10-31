@@ -105,21 +105,28 @@ def hypothetical(
         role = pack.destination_roles[destination]
         hours = body.weekly_hours or data.weekly_hours
         then = {**levels, **body.changes}
+        # A what-if level is the person's own hypothesis: an unevidenced claim.
+        then_claims = {
+            **data.skills,
+            **{k: SkillClaim(level=v, source="self") for k, v in body.changes.items()},
+        }
         now_path = plan_pathway(
             pack,
             score_role(pack, role, levels, body.scenario, evidence),
-            levels,
+            data.skills,
             data.weekly_hours,
             body.scenario,
             evidence,
+            data.situation,
         )
         then_path = plan_pathway(
             pack,
             score_role(pack, role, then, body.scenario, evidence),
-            then,
+            then_claims,
             hours,
             body.scenario,
             evidence,
+            data.situation,
         )
         out["pathway"] = {
             "role_id": destination,
@@ -142,7 +149,9 @@ def plans(
     evidence = automation_evidence(accepted_rows(engine, profile_id))
     levels = data.levels()
     match = score_role(pack, pack.destination_roles[chosen], levels, scenario, evidence)
-    return compare_plans(pack, match, levels, data.weekly_hours, scenario, evidence)
+    return compare_plans(
+        pack, match, data.skills, data.weekly_hours, scenario, evidence, data.situation
+    )
 
 
 class ProgressIn(BaseModel):
@@ -172,7 +181,9 @@ def _progress_view(engine: Engine, profile_id: str, scenario: Scenario) -> dict[
     evidence = automation_evidence(accepted_rows(engine, profile_id))
     levels = data.levels()
     match = score_role(pack, pack.destination_roles[destination], levels, scenario, evidence)
-    path = plan_pathway(pack, match, levels, data.weekly_hours, scenario, evidence)
+    path = plan_pathway(
+        pack, match, data.skills, data.weekly_hours, scenario, evidence, data.situation
+    )
     steps = [(s.course.id, s.course.title, s.hours) for s in path.steps]
     done = [c for c, _, _ in steps if c in saved["done"]]
     left = [(c, t, h) for c, t, h in steps if c not in saved["done"]]

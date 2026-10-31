@@ -236,7 +236,15 @@ def compare(
         previous = old_by_id[destination][1]
         current = next(r for r in new if r.role_id == destination)
         paths = [
-            plan_pathway(pack, match, levels, profile.weekly_hours, scenario, evidence)
+            plan_pathway(
+                pack,
+                match,
+                profile.skills,
+                profile.weekly_hours,
+                scenario,
+                evidence,
+                profile.situation,
+            )
             for match, evidence in ((previous, old_evidence), (current, new_evidence))
         ]
         summaries = [

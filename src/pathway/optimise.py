@@ -19,6 +19,7 @@ from itertools import combinations
 from typing import Any
 
 from src import params
+from src.journey.store import SkillClaim, levels_of
 from src.match.engine import Evidence, RoleMatch, Scenario, score_role
 from src.pack import Course, Pack
 from src.pathway.planner import MINUTES_PER_HOUR, level_after_study, plan_pathway
@@ -110,13 +111,15 @@ def _with_prerequisites(pack: Pack, course_id: str) -> set[str]:
 def compare_plans(
     pack: Pack,
     match: RoleMatch,
-    levels: Levels,
+    claims: Mapping[str, SkillClaim],
     weekly_hours: float,
     scenario: Scenario,
     evidence: Evidence,
+    situation: str | None = None,
 ) -> dict[str, Any]:
     budget = round(weekly_hours * params.PLAN_BUDGET_WEEKS, 1)
-    full = plan_pathway(pack, match, levels, weekly_hours, scenario, evidence)
+    levels = levels_of(claims)
+    full = plan_pathway(pack, match, claims, weekly_hours, scenario, evidence, situation)
     greedy: set[str] = set()
     for step in full.steps:  # the planner's own order, cut at the budget
         if _hours(pack, greedy | {step.course.id}) > budget:

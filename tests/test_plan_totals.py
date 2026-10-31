@@ -2,6 +2,7 @@
 
 import pytest
 
+from src.journey.store import claims_from_levels
 from src.match.engine import Evidence, score_role
 from src.pack import load_pack
 from src.pathway.planner import plan_pathway
@@ -26,7 +27,7 @@ ROLES = list(load_pack().destination_roles)
 def test_plan_total_is_the_sum_of_its_steps(role_id: str) -> None:
     pack = load_pack()
     match = score_role(pack, pack.destination_roles[role_id], NUR, "moderate", EVIDENCE)
-    path = plan_pathway(pack, match, NUR, 6, "moderate", EVIDENCE)
+    path = plan_pathway(pack, match, claims_from_levels(NUR), 6, "moderate", EVIDENCE)
     assert path.total_hours == pytest.approx(sum(s.hours for s in path.steps))
 
 
@@ -34,8 +35,9 @@ def test_plan_total_is_the_sum_of_its_steps(role_id: str) -> None:
 def test_with_ai_hours_name_both_parts(role_id: str) -> None:
     pack = load_pack()
     match = score_role(pack, pack.destination_roles[role_id], NUR, "moderate", EVIDENCE)
-    path = plan_pathway(pack, match, NUR, 6, "moderate", EVIDENCE)
-    with_ai = comparison(pack, load_resources(), NUR, role_id, 6, EVIDENCE)["with_ai"]
+    claims = claims_from_levels(NUR)
+    path = plan_pathway(pack, match, claims, 6, "moderate", EVIDENCE)
+    with_ai = comparison(pack, load_resources(), claims, role_id, 6, EVIDENCE)["with_ai"]
     assert with_ai["plan_hours"] == path.total_hours
     # Exact to the shown decimal: the screen prints "X h plan + Y h AI basics" beside the total.
     assert with_ai["hours"] == round(with_ai["plan_hours"] + with_ai["ai_basics_hours"], 1)

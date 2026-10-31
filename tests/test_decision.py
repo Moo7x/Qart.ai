@@ -2,6 +2,7 @@
 
 from fastapi.testclient import TestClient
 
+from src.journey.store import claims_from_levels
 from src.match.decision import best_questions, fit_range, meters, sensitivity, what_if
 from src.match.engine import Evidence, score_role
 from src.pack import load_pack
@@ -39,12 +40,12 @@ def test_fit_range_spans_unstated_skills_and_is_exact_when_all_known() -> None:
     pack = load_pack()
     role = pack.destination_roles["o2c_reporting_analyst"]
     match = score_role(pack, role, LEVELS, "moderate", EVIDENCE)
-    r = fit_range(pack, match, LEVELS, "moderate", EVIDENCE)
+    r = fit_range(pack, match, claims_from_levels(LEVELS), "moderate", EVIDENCE)
     assert r["low"] == match.fit < r["high"]
     known = {req.skill: 2 for req in role.requires}
     full = score_role(pack, role, known, "moderate", EVIDENCE)
     # C2 adds a "basis" sentence beside the two numbers (B3).
-    r_full = fit_range(pack, full, known, "moderate", EVIDENCE)
+    r_full = fit_range(pack, full, claims_from_levels(known), "moderate", EVIDENCE)
     assert (r_full["low"], r_full["high"]) == (full.fit, full.fit)
 
 
@@ -75,7 +76,7 @@ def test_exact_plan_is_never_worse_than_greedy_within_the_same_budget() -> None:
     exact_roles = 0
     for role_id in ("finance_systems_analyst", "budget_analyst", "cost_accountant"):
         match = score_role(pack, pack.destination_roles[role_id], LEVELS, "fast", EVIDENCE)
-        result = compare_plans(pack, match, LEVELS, 1, "fast", EVIDENCE)
+        result = compare_plans(pack, match, claims_from_levels(LEVELS), 1, "fast", EVIDENCE)
         plans = result["plans"]
         assert result["budget_hours"] == 12
         assert all(p["hours"] <= 12 for p in plans.values())

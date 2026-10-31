@@ -147,8 +147,12 @@ def evidence_test(
     focus = destination or before[0].role_id
     match_before = next(m for m in before if m.role_id == focus)
     match_after = next(m for m in after if m.role_id == focus)
-    path_before = plan_pathway(pack, match_before, levels, data.weekly_hours, body.scenario, stored)
-    path_after = plan_pathway(pack, match_after, levels, data.weekly_hours, body.scenario, tested)
+    path_before = plan_pathway(
+        pack, match_before, data.skills, data.weekly_hours, body.scenario, stored, data.situation
+    )
+    path_after = plan_pathway(
+        pack, match_after, data.skills, data.weekly_hours, body.scenario, tested, data.situation
+    )
     previous = {
         o.key: (
             stored.automation_share if o.kind == "occupation_share" else stored.task_automation

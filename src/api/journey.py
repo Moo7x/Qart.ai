@@ -272,7 +272,6 @@ def _card(
     rows: list[dict[str, Any]],
 ) -> dict[str, Any]:
     role = pack.destination_roles[match.role_id]
-    levels = data.levels()
     current = pack.current_roles.get(data.current_role)
     outlook = [
         {
@@ -297,11 +296,11 @@ def _card(
         "impact": role.impact,
         "outlook": outlook + demand,
         "meters": meters(match),
-        "fit_range": fit_range(pack, match, levels, scenario, evidence, data.skills),
+        "fit_range": fit_range(pack, match, data.skills, scenario, evidence),
         "band": band(match.fit),
         "band_basis": "assumption",
         "components": components(match, data.skills),
-        "raise": raise_options(pack, match, levels, scenario, evidence, data.skills),
+        "raise": raise_options(pack, match, data.skills, scenario, evidence),
         "essentials_short": essentials_short(match),
         "pay": role_pay(role, rows),
         "listed_transition": bool(current and match.role_id in current.transitions),
@@ -347,7 +346,9 @@ def matches(
             pack,
             m,
             data,
-            plan_pathway(pack, m, levels, data.weekly_hours, scenario, evidence),
+            plan_pathway(
+                pack, m, data.skills, data.weekly_hours, scenario, evidence, data.situation
+            ),
             evidence,
             role_outlook(pack, pack.destination_roles[m.role_id], rows, signals),
             scenario,
@@ -416,11 +417,10 @@ def pathway(
     path = plan_pathway(
         pack,
         match,
-        data.levels(),
+        data.skills,
         data.weekly_hours,
         scenario,
         evidence,
-        data.skills,
         data.situation,
     )
     saved = get_progress(engine, profile_id)
@@ -449,11 +449,10 @@ def tracks(
     path = plan_pathway(
         pack,
         match,
-        data.levels(),
+        data.skills,
         data.weekly_hours,
         scenario,
         evidence,
-        data.skills,
         data.situation,
     )
     saved = get_progress(engine, profile_id)
@@ -468,11 +467,11 @@ def tracks(
         "comparison": comparison(
             pack,
             res,
-            data.levels(),
+            data.skills,
             chosen,
             data.weekly_hours,
             evidence,
-            path.ai_basics["shown"],
+            data.situation,
         ),
         "resources_checked": res.checked,
         "courses_checked": pack.courses_checked,
@@ -497,7 +496,9 @@ def explain_role(
     evidence = automation_evidence(rows)
     levels = data.levels()
     match = score_role(pack, role, levels, scenario, evidence)
-    path = plan_pathway(pack, match, levels, data.weekly_hours, scenario, evidence)
+    path = plan_pathway(
+        pack, match, data.skills, data.weekly_hours, scenario, evidence, data.situation
+    )
     return explain(facts(match, path, SCENARIO_LABEL[scenario]), settings)
 
 
@@ -517,7 +518,9 @@ def personal_radar(
         match = score_role(pack, pack.destination_roles[destination], levels, scenario, evidence)
     else:
         match = rank_roles(pack, levels, scenario, evidence, set(data.interests) or None)[0]
-    path = plan_pathway(pack, match, levels, data.weekly_hours, scenario, evidence)
+    path = plan_pathway(
+        pack, match, data.skills, data.weekly_hours, scenario, evidence, data.situation
+    )
     out = radar(pack, match, path, bool(destination), rows, build_signals(rows), data.current_role)
     return {**out, "scenario": scenario, "scenario_label": SCENARIO_LABEL[scenario]}
 
@@ -573,7 +576,9 @@ def future(
     scenarios: tuple[Scenario, ...] = ("moderate", "fast")
     for scenario in scenarios:
         match = score_role(pack, role, levels, scenario, evidence)
-        path = plan_pathway(pack, match, levels, data.weekly_hours, scenario, evidence)
+        path = plan_pathway(
+            pack, match, data.skills, data.weekly_hours, scenario, evidence, data.situation
+        )
         after = {g.skill: g.after for step in path.steps for g in step.gains}
         # Projected levels if the plan is finished (estimate): the higher of claim and plan.
         levels_after = {**levels, **{k: max(v, levels.get(k) or 0) for k, v in after.items()}}

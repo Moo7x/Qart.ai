@@ -37,6 +37,7 @@ from sqlalchemy import (
 from src import params
 from src.config import REPO_ROOT
 from src.db import metadata
+from src.journey.store import claims_from_levels
 from src.match.engine import Evidence, score_role
 from src.pack import load_pack, set_unavailable, unavailable
 from src.pathway.planner import plan_pathway
@@ -165,9 +166,8 @@ def evaluate_course_removal(course_id: str) -> dict[str, Any]:
         for case in cases:
             for role in pack.destination_roles.values():
                 match = score_role(pack, role, case["levels"], "moderate", evidence)
-                path = plan_pathway(
-                    pack, match, case["levels"], case["weekly_hours"], "moderate", evidence
-                )
+                claims = claims_from_levels(case["levels"])
+                path = plan_pathway(pack, match, claims, case["weekly_hours"], "moderate", evidence)
                 out[(case["id"], role.id)] = ([s.course.id for s in path.steps], path.uncovered)
         return out
 

@@ -15,6 +15,7 @@ from typing import Any
 from src.config import REPO_ROOT
 from src.intake.extract import keyword_extract
 from src.intake.pii import scrub
+from src.journey.store import claims_from_levels
 from src.match.engine import Evidence, Scenario, rank_roles
 from src.pack import Pack
 from src.pathway.planner import plan_pathway
@@ -74,7 +75,9 @@ def _results(pack: Pack, evidence: Evidence, cv: str) -> dict[str, Any]:
     out: dict[str, Any] = {"current_role": role}
     for scenario in SCENARIOS:
         ranked = rank_roles(pack, levels, scenario, evidence)
-        plan = plan_pathway(pack, ranked[0], levels, WEEKLY_HOURS, scenario, evidence)
+        plan = plan_pathway(
+            pack, ranked[0], claims_from_levels(levels), WEEKLY_HOURS, scenario, evidence
+        )
         out[scenario] = {
             "fits": {m.role_id: m.fit for m in ranked},
             "order": [m.role_id for m in ranked],

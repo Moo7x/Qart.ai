@@ -7,6 +7,7 @@ list profiles, so a profile can only be read by whoever holds its id.
 """
 
 import secrets
+from collections.abc import Mapping
 from datetime import UTC, datetime
 from typing import Literal
 
@@ -46,6 +47,22 @@ class SkillClaim(BaseModel):
     model: str = ""  # the model that ran that check (AGENT_MODEL), named on screen
 
 
+SYNTHETIC_EVIDENCE = "synthetic profile"
+
+
+def levels_of(claims: Mapping[str, SkillClaim]) -> dict[str, int | None]:
+    return {skill: claim.level for skill, claim in claims.items()}
+
+
+def claims_from_levels(levels: Mapping[str, int | None]) -> dict[str, SkillClaim]:
+    """Evidenced claims for a level map with no person behind it: synthetic and regression
+    profiles, whose levels are fixed facts of the test case, not self-ratings."""
+    return {
+        skill: SkillClaim(level=level, evidence=SYNTHETIC_EVIDENCE, source="cv")
+        for skill, level in levels.items()
+    }
+
+
 class ProfileData(BaseModel):
     situation: Situation
     current_role: str = "other"
@@ -61,7 +78,7 @@ class ProfileData(BaseModel):
     intake_seconds: float | None = Field(default=None, ge=0, le=86_400)
 
     def levels(self) -> dict[str, int | None]:
-        return {skill: claim.level for skill, claim in self.skills.items()}
+        return levels_of(self.skills)
 
 
 def new_profile_id() -> str:

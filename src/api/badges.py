@@ -48,7 +48,7 @@ def list_badges(
         evidence = evidence_for(engine, profile_id)
         match = score_role(pack, pack.destination_roles[destination], levels, scenario, evidence)
         plan = plan_pathway(
-            pack, match, levels, data.weekly_hours, scenario, evidence, data.skills, data.situation
+            pack, match, data.skills, data.weekly_hours, scenario, evidence, data.situation
         )
     found = badges(pack, list_events(engine, profile_id), destination, plan)
     return [Badge.model_validate(b) for b in found]

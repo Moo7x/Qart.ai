@@ -49,7 +49,7 @@ def _plans(claims: dict[str, SkillClaim], situation: str):  # type: ignore[no-un
     pack = load_pack()
     levels = {k: c.level for k, c in claims.items()}
     return [
-        plan_pathway(pack, m, levels, 6, "moderate", EVIDENCE, claims, situation)
+        plan_pathway(pack, m, claims, 6, "moderate", EVIDENCE, situation)
         for m in rank_roles(pack, levels, "moderate", EVIDENCE)
     ]
 

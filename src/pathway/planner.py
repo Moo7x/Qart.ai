@@ -27,7 +27,7 @@ from dataclasses import dataclass, field
 from typing import Any
 
 from src import params
-from src.journey.store import SkillClaim
+from src.journey.store import SkillClaim, levels_of
 from src.match.decision import fit_range, is_evidenced
 from src.match.engine import Evidence, RoleMatch, Scenario, score_role
 from src.pack import Course, Pack, SdgLink
@@ -187,22 +187,12 @@ def _step_sdgs(pack: Pack, skills: list[str]) -> list[StepSdg]:
 
 
 def _planned_claims(
-    claims: Mapping[str, SkillClaim] | None,
-    levels: Mapping[str, int | None],
-    planned: Mapping[str, int],
+    claims: Mapping[str, SkillClaim], planned: Mapping[str, int]
 ) -> dict[str, SkillClaim]:
-    """Today's claims (evidenced unless told otherwise), with planned levels as unevidenced."""
-    out = (
-        dict(claims)
-        if claims is not None
-        else {
-            k: SkillClaim(level=v, evidence="claimed", source="cv")
-            for k, v in levels.items()
-            if v is not None
-        }
-    )
+    """Today's claims, with each level the plan changes as an unevidenced claim."""
+    out, today = dict(claims), levels_of(claims)
     for skill, level in planned.items():
-        if level != levels.get(skill):
+        if level != today.get(skill):
             out[skill] = SkillClaim(level=level, source="self")
     return out
 
@@ -210,15 +200,17 @@ def _planned_claims(
 def plan_pathway(
     pack: Pack,
     match: RoleMatch,
-    levels: Mapping[str, int | None],
+    claims: Mapping[str, SkillClaim],
     weekly_hours: float,
     scenario: Scenario,
     evidence: Evidence,
-    claims: Mapping[str, SkillClaim] | None = None,
     situation: str | None = None,
 ) -> Pathway:
+    """The person's plan to `match`'s role. `claims` are the person's claims (for synthetic
+    level maps, src/journey/store.py `claims_from_levels`)."""
     if weekly_hours <= 0:
         raise ValueError("weekly hours must be positive")
+    levels = levels_of(claims)
     role = pack.destination_roles[match.role_id]
     gaps = [r for r in match.requirements if (r.claimed or 0) < r.required]
     gaps.sort(key=lambda r: (not r.essential, -r.weight))
@@ -330,6 +322,8 @@ def plan_pathway(
     total = round(sum(s.hours for s in steps), 1)
     planned_study = {k: v for k, v in after_study.items() if v is not None}
     planned_practice = {k: v for k, v in after_practice.items() if v is not None}
+    claims_after_study = _planned_claims(claims, planned_study)
+    claims_after_practice = _planned_claims(claims, planned_practice)
     return Pathway(
         role_id=match.role_id,
         role_title=match.title,
@@ -351,22 +345,8 @@ def plan_pathway(
             "high": sum(p.time["high"] for p in practice_steps),
             "kind": "estimate",
         },
-        fit_after_study=_range(
-            pack,
-            after,
-            after_study,
-            scenario,
-            evidence,
-            _planned_claims(claims, levels, planned_study),
-        ),
-        fit_after_practice=_range(
-            pack,
-            practiced,
-            after_practice,
-            scenario,
-            evidence,
-            _planned_claims(claims, levels, planned_practice),
-        ),
+        fit_after_study=_range(pack, after, claims_after_study, scenario, evidence),
+        fit_after_practice=_range(pack, practiced, claims_after_practice, scenario, evidence),
         free_share=1.0 if total else None,
         ai_basics={"shown": basics["shown"], "reason": basics["reason"]},
         study_levels={g.skill: current.get(g.skill, 0) for g in gaps},
@@ -411,12 +391,11 @@ def practice_step_id(skill: str, level: int) -> str:
 def _range(
     pack: Pack,
     match: RoleMatch,
-    levels: Mapping[str, int | None],
+    claims: Mapping[str, SkillClaim],
     scenario: Scenario,
     evidence: Evidence,
-    claims: Mapping[str, SkillClaim],
 ) -> dict[str, Any]:
-    found = fit_range(pack, match, levels, scenario, evidence, claims)
+    found = fit_range(pack, match, claims, scenario, evidence)
     return {"low": found["low"], "high": found["high"], "kind": "estimate"}
 
 

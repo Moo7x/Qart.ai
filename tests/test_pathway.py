@@ -2,6 +2,7 @@
 
 import pytest
 
+from src.journey.store import claims_from_levels
 from src.match.engine import score_role
 from src.pack import load_pack
 from src.pathway.planner import plan_pathway
@@ -11,7 +12,7 @@ from tests.test_match import EVIDENCE, NUR
 def nur_path(role_id: str, weekly_hours: float = 6) -> object:
     pack = load_pack()
     match = score_role(pack, pack.destination_roles[role_id], NUR, "moderate", EVIDENCE)
-    return plan_pathway(pack, match, NUR, weekly_hours, "moderate", EVIDENCE)
+    return plan_pathway(pack, match, claims_from_levels(NUR), weekly_hours, "moderate", EVIDENCE)
 
 
 def test_every_step_is_a_verified_course_and_prerequisites_come_first() -> None:

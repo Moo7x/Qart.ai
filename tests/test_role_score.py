@@ -34,14 +34,14 @@ def _score(claims: dict[str, SkillClaim]) -> tuple[Any, dict[str, int | None]]:
 def test_fully_evidenced_profile_has_low_equal_to_the_fit() -> None:
     claims = _claims("cv")
     match, levels = _score(claims)
-    r = fit_range(load_pack(), match, levels, "moderate", EVIDENCE, claims)
+    r = fit_range(load_pack(), match, claims, "moderate", EVIDENCE)
     assert r["low"] == match.fit and r["basis"]
 
 
 def test_self_rated_claims_lower_the_low_end() -> None:
     claims = _claims("self")
     match, levels = _score(claims)
-    r = fit_range(load_pack(), match, levels, "moderate", EVIDENCE, claims)
+    r = fit_range(load_pack(), match, claims, "moderate", EVIDENCE)
     lowered, _ = _score({k: SkillClaim(level=1, source="self") for k in claims})
     assert r["low"] == lowered.fit < match.fit
 
@@ -52,7 +52,7 @@ def test_raise_points_equal_a_re_score_and_follow_the_route_rule() -> None:
         "reporting": SkillClaim(level=1, evidence="Prepared monthly ageing reports.", source="cv")
     }
     match, levels = _score(claims)
-    options = raise_options(pack, match, levels, "moderate", EVIDENCE, claims)
+    options = raise_options(pack, match, claims, "moderate", EVIDENCE)
     assert 0 < len(options) <= params.RAISE_SHOWN
     assert [o["points"] for o in options] == sorted((o["points"] for o in options), reverse=True)
     for o in options:
@@ -74,20 +74,17 @@ def test_a_self_rated_skill_at_its_level_is_raised_by_a_check() -> None:
     claims[first] = SkillClaim(level=3, source="self")
     match, levels = _score(claims)
     checks = [
-        o
-        for o in raise_options(pack, match, levels, "moderate", EVIDENCE, claims)
-        if o["via"] == "check"
+        o for o in raise_options(pack, match, claims, "moderate", EVIDENCE) if o["via"] == "check"
     ]
     assert [c["skill"] for c in checks] == [first]
     evidenced = fit_range(
         pack,
         match,
-        levels,
+        {**claims, first: SkillClaim(level=3, source="cv", evidence="Did it.")},
         "moderate",
         EVIDENCE,
-        {**claims, first: SkillClaim(level=3, source="cv", evidence="Did it.")},
     )
-    now = fit_range(pack, match, levels, "moderate", EVIDENCE, claims)
+    now = fit_range(pack, match, claims, "moderate", EVIDENCE)
     assert checks[0]["points"] == pytest.approx(evidenced["low"] - now["low"], abs=0.05)
 
 

@@ -3,6 +3,7 @@
 import pytest
 
 from src import params
+from src.journey.store import claims_from_levels
 from src.match.engine import Evidence, score_role
 from src.pack import Course, load_pack
 from src.pathway.planner import level_after_study, plan_pathway, study_level
@@ -40,7 +41,7 @@ def test_twenty_hours_without_hands_on_material_stays_at_level_1() -> None:
 def _plan(role_id: str, levels: dict[str, int | None]):  # type: ignore[no-untyped-def]
     pack = load_pack()
     match = score_role(pack, pack.destination_roles[role_id], levels, "moderate", EVIDENCE)
-    return match, plan_pathway(pack, match, levels, 6, "moderate", EVIDENCE)
+    return match, plan_pathway(pack, match, claims_from_levels(levels), 6, "moderate", EVIDENCE)
 
 
 @pytest.mark.parametrize("role_id", ROLES)

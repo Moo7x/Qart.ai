@@ -32,6 +32,6 @@ def sdg(
     levels = data.levels()
     match = score_role(pack, pack.destination_roles[chosen], levels, scenario, evidence)
     path = plan_pathway(
-        pack, match, levels, data.weekly_hours, scenario, evidence, data.skills, data.situation
+        pack, match, data.skills, data.weekly_hours, scenario, evidence, data.situation
     )
     return sdg_matrix(pack, path)

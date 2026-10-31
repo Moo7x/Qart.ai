@@ -6,6 +6,7 @@ from typing import Any
 from fastapi.testclient import TestClient
 
 from src.config import Settings
+from src.journey.store import claims_from_levels
 from src.match.engine import Evidence, score_role
 from src.match.explain import explain, facts
 from src.pack import load_pack
@@ -20,7 +21,7 @@ def fact_list() -> list[dict[str, str]]:
     match = score_role(
         pack, pack.destination_roles["cost_accountant"], LEVELS, "moderate", EVIDENCE
     )
-    path = plan_pathway(pack, match, LEVELS, 6, "moderate", EVIDENCE)
+    path = plan_pathway(pack, match, claims_from_levels(LEVELS), 6, "moderate", EVIDENCE)
     return facts(match, path, "Moderate")
 
 

@@ -17,10 +17,12 @@ not studying with an AI tutor.
 """
 
 import math
+from collections.abc import Mapping
 from dataclasses import asdict, replace
 from typing import Any
 
 from src import params
+from src.journey.store import SkillClaim, levels_of
 from src.match.basis import requirement_basis
 from src.match.engine import Evidence, RoleMatch, Scenario, score_role
 from src.pack import Course, Pack
@@ -171,13 +173,14 @@ def _metrics(
 def comparison(
     pack: Pack,
     res: Resources,
-    levels: dict[str, int | None],
+    claims: Mapping[str, SkillClaim],
     role_id: str,
     weekly_hours: float,
     evidence: Evidence,
-    ai_basics_shown: bool = True,
+    situation: str | None = None,
 ) -> dict[str, Any]:
     role = pack.destination_roles[role_id]
+    levels = levels_of(claims)
     fit_now: dict[str, float] = {}
     without: dict[Scenario, Pathway] = {}
     full: dict[Scenario, Pathway] = {}
@@ -187,12 +190,13 @@ def comparison(
         domain = replace(
             match, requirements=[r for r in match.requirements if not is_ai_skill(pack, r.skill)]
         )
-        without[s] = plan_pathway(pack, domain, levels, weekly_hours, s, evidence)
-        full[s] = plan_pathway(pack, match, levels, weekly_hours, s, evidence)
+        without[s] = plan_pathway(pack, domain, claims, weekly_hours, s, evidence, situation)
+        full[s] = plan_pathway(pack, match, claims, weekly_hours, s, evidence, situation)
     # AI-basics courses not already in the full plan add their hours to the "with AI" route.
     in_plan = {st.course.id for st in full["moderate"].steps}
     # Skipped AI basics (B5) add nothing to the with-AI route.
-    basics = {c for t in res.ai_basics for c in t.courses} - in_plan if ai_basics_shown else set()
+    shown = full["moderate"].ai_basics["shown"]
+    basics = {c for t in res.ai_basics for c in t.courses} - in_plan if shown else set()
     # Rounded before adding, so the two parts shown always add up to the with-AI total.
     basics_hours = round(sum(pack.courses[c].minutes for c in basics) / MINUTES_PER_HOUR, 1)
     w = without["moderate"]

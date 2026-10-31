@@ -120,11 +120,10 @@ def _platform_totals(engine: Engine) -> list[dict[str, Any]]:
         plan = plan_pathway(
             pack,
             match,
-            levels,
+            data.skills,
             data.weekly_hours,
             "moderate",
             evidence,
-            data.skills,
             data.situation,
         )
         for total in sdg_matrix(pack, plan).totals:
