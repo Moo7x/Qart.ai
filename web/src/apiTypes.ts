@@ -104,6 +104,15 @@ export type CourseRef = {
   url: string
 }
 
+export type CurrentJob = {
+  id: string
+  title: string
+  soc: string
+  impact: "high" | "medium" | "low"
+  impact_text: string
+  source: string
+}
+
 export type CurrentRole = {
   id: string
   title: string
@@ -157,6 +166,15 @@ export type EvidenceTestOut = {
   after: Ranking
   weights: WeightChange[]
   pathway: PathwayChange | null
+}
+
+export type Exposure = {
+  isco: string
+  title: string
+  mean: number
+  gradient: string
+  url: string
+  published: string | null
 }
 
 export type FitCheck = {
@@ -277,6 +295,15 @@ export type Meters = {
   completeness: number
   stated: number
   requirements: number
+}
+
+export type Occupation = {
+  code: string
+  name: string
+  isco: string | null
+  esco: string | null
+  esco_match: string | null
+  esco_uri: string | null
 }
 
 export type Override = {
@@ -718,6 +745,15 @@ export type TaskEvidence = {
   importance: number | null
 }
 
+export type TaskUse = {
+  share: number | null
+  automation: number | null
+  augmentation: number | null
+  share_local: number | null
+  period: string
+  url: string
+}
+
 export type TimeEstimate = {
   value: number
   unit: "hours" | "weeks"
@@ -823,6 +859,36 @@ export type WeightDelta = {
   share_after: number | null
   basis_before: string
   basis_after: string
+}
+
+export type WorkSources = {
+  tasks: string
+  observed_use: string
+  exposure: string
+  expert: string
+  skill_match: string
+}
+
+export type WorkTask = {
+  text: string
+  task: string | null
+  skill: string | null
+  skill_name: string | null
+  observed_use: TaskUse | null
+  exposure_score: number | null
+  you_do_this: boolean
+  quote: string
+  importance: number | null
+}
+
+export type WorkTodayOut = {
+  role: CurrentJob
+  occupation: Occupation | null
+  exposure: Exposure | null
+  deployment: null
+  tasks: WorkTask[]
+  task_source: "onet" | "ilo"
+  sources: WorkSources
 }
 
 export type src__api__agents__RunStarted = {
