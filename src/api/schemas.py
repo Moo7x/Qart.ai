@@ -25,6 +25,14 @@ class Labelled(BaseModel):
     source: str
 
 
+class SkillBasis(BaseModel):
+    """Why a skill counts for a role (src/match/basis.py)."""
+
+    kind: Literal["talentcorp", "onet", "onet_tech", "assumption"]
+    text: str
+    source: str
+
+
 class Meters(BaseModel):
     coverage: float
     essentials_ready: bool
@@ -112,7 +120,7 @@ class RoleCard(BaseModel):
     effort_weeks: int
     uncovered: list[str]
     sdgs: list[SdgRef]
-    requirement_basis: dict[str, Labelled]
+    requirement_basis: dict[str, SkillBasis]
     serves_goals: list[str]
 
 
@@ -190,7 +198,7 @@ class TrackNode(BaseModel):
     status: Literal["done", "open", "no_course"]
     study_after: int | None = None
     practice: list[PracticeStep] | None = None
-    why: Labelled | None = None
+    why: SkillBasis | None = None
 
 
 class Track(BaseModel):

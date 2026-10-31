@@ -1,7 +1,8 @@
 // Shapes returned by the FastAPI server (src/api/evidence.py, src/evidence/signals.py).
 // Keep these exactly in step with the server models.
 
-import type { Band, BandRules, EstimateRange, SdgMatrix, FitRange, LevelsInfo, PracticeStep, RaiseOption, RoleComponent, RolePay, StepTime, StepUnlock } from './typesScoring'
+import type * as api from './apiTypes'
+import type { LevelsInfo } from './typesScoring'
 
 export type Direction = 'rising' | 'weakening' | 'stable' | 'insufficient' | 'expert'
 
@@ -169,71 +170,11 @@ export type ProfileData = {
 
 export type GapColumn = 'ready' | 'bridgeable' | 'missing' | 'not_stated'
 export type AutomationBasis = 'task' | 'occupation' | 'none'
-export type TaskEvidence = {
-  task: string
-  text: string
-  automation_share: number | null
-  importance: number | null
-}
-export type RequirementScore = {
-  skill: string
-  skill_name: string
-  tier: 'core' | 'upskill' | 'support'
-  essential: boolean
-  required: number
-  claimed: number | null
-  base_weight: number
-  weight: number
-  shift_reason: string
-  contribution: number
-  column: GapColumn
-  evidence_pages: number[]
-  automation_share: number | null
-  automation_basis: AutomationBasis
-  tasks: TaskEvidence[]
-}
+export type TaskEvidence = api.TaskEvidence
+export type RequirementScore = api.RequirementScore
 export type SdgRef = { target: string; title: string; how: string }
-export type RoleCard = {
-  role_id: string
-  title: string
-  fit: number
-  longer_route: boolean
-  essential_gaps: string[]
-  requirements: RequirementScore[]
-  automation_share: number | null
-  soc: string
-  gap: Record<GapColumn, string[]>
-  impact: string
-  outlook: { kind: 'observed' | 'expert'; text: string; source: string }[]
-  listed_transition: boolean
-  effort_hours: number
-  effort_weeks: number
-  uncovered: string[]
-  sdgs: SdgRef[]
-  meters: Meters
-  fit_range: FitRange
-  band?: Band
-  band_basis?: 'assumption'
-  components?: RoleComponent[]
-  raise?: RaiseOption[]
-  essentials_short?: string[]
-  pay?: RolePay | null
-  serves_goals?: string[]
-  requirement_basis?: Record<string, SkillBasis>
-}
-export type MatchesResponse = {
-  scenario: Scenario
-  scenario_label: string
-  horizon_years: number
-  intensity: number
-  evidence: { source: string; period: string; occupations: number }
-  current_role: CurrentRole | null
-  current_impact: string | null
-  destination: string | null
-  roles: RoleCard[]
-  bands?: BandRules
-  sdg_roles?: SdgMatrix['roles']
-}
+export type RoleCard = api.RoleCard
+export type MatchesResponse = api.MatchesOut
 
 export type Course = {
   id: string
@@ -245,82 +186,12 @@ export type Course = {
   covers: string[]
   requires: string[]
 }
-export type PathwayStep = {
-  order: number
-  course: Course
-  hours: number
-  week_start: number
-  week_end: number
-  gains: { skill: string; skill_name: string; before: number; after: number }[]
-  sdgs: SdgRef[]
-  prerequisite_for: string[]
-  kind?: 'course'
-  id?: string
-  skill?: string
-  target_level?: number
-  time?: StepTime
-  locked?: boolean
-  unlock?: StepUnlock
-  done?: boolean
-}
-export type PathwayResponse = {
-  role_id: string
-  role_title: string
-  weekly_hours: number
-  steps: PathwayStep[]
-  total_hours: number
-  weeks: number
-  uncovered: string[]
-  partly_covered: string[]
-  essentials_unmet: string[]
-  fit_before: number
-  fit_after: number
-  sdg_summary: Record<string, string[]>
-  pathway_sdgs: { target: string; how: string }[]
-  sdg_targets: Record<string, { goal: number; title: string; text: string }>
-  sdg_source: string
-  courses_checked: string
-  scenario: Scenario
-  practice_steps?: PracticeStep[]
-  study_hours?: number
-  practice_weeks?: { low: number; high: number; kind?: 'estimate' }
-  fit_after_study?: EstimateRange
-  fit_after_practice?: EstimateRange
-  free_share?: number | null
-  free_share_basis?: string
-  ai_basics?: { shown: boolean; reason: string }
-  study_levels?: Record<string, number>
-  adjustments?: { rule: string; text: string }[]
-}
+export type PathwayStep = api.Step
+export type PathwayResponse = api.PathwayOut
 
-export type FutureScenario = {
-  fit_now: number
-  fit_after: number
-  hours: number
-  weeks: number
-  skills: { skill: string; name: string; required: number; now: number | null; after: number; essential: boolean }[]
-  sdg_targets: string[]
-  uncovered: string[]
-  roles_now: FutureRole[]
-  roles_after: FutureRole[]
-}
-export type FutureRole = { role_id: string; title: string; fit: number }
-export type FutureResponse = {
-  skills_now: { skill: string; name: string; level: number }[]
-  market: {
-    source: string
-    published: string
-    in_demand: { ai_digital: string[]; green: string[] }
-    in_demand_page: number
-    emerging_roles: string[]
-    emerging_page: number
-  }
-  destination: { id: string; title: string }
-  current_role: string | null
-  situation: Situation
-  years_experience: number | null
-  scenarios: Record<Scenario, FutureScenario>
-}
+export type FutureScenario = api.FutureScenario
+export type FutureRole = api.FutureRole
+export type FutureResponse = api.FutureOut
 
 export type EvidenceDelta = {
   source_id: string; entity: string; metric: string; geography: string
@@ -399,31 +270,8 @@ export type RoleTasksResponse = {
 
 // ---- Personal radar (src/match/radar.py) ----
 
-export type RadarAxis = {
-  skill: string
-  name: string
-  kind: SkillKind
-  essential: boolean
-  claimed: number | null
-  required: number
-  after: number
-  emphasis: 'rising' | 'weakening' | 'stable' | 'fixed'
-  weight_factor: number
-  reason: string
-  ai_use: { automation_share: number | null; basis: AutomationBasis; tasks_observed: number; tasks_linked: number } | null
-  in_demand: boolean | null
-}
-export type RadarResponse = {
-  role_id: string
-  title: string
-  chosen: boolean
-  fit: number
-  fit_after: number
-  axes: RadarAxis[]
-  field_signals: Signal[]
-  scenario: Scenario
-  scenario_label: string
-}
+export type RadarAxis = api.RadarAxis
+export type RadarResponse = api.RadarOut
 
 // ---- Role explanation (src/match/explain.py) ----
 
@@ -618,44 +466,11 @@ export type Stage = { name: string; engine: string; outcome: string; seconds: nu
 // ---- My plan tracks (src/pathway/tracks.py, GET /api/profiles/{id}/tracks) ----
 
 export type CourseFitCheck = { result: 'fits' | 'does_not_fit' | 'unclear'; by: string; quote: string; checked: string }
-export type TrackCourse = { id: string; title: string; provider: string; url: string; minutes: number; level: string; planned: boolean; done: boolean; fit_check?: CourseFitCheck | null }
-export type TrackVideo = { id: string; title: string; channel: string; url: string; minutes: number; published: string }
-export type TrackArticle = { id: string; title: string; publisher: string; url: string }
+export type TrackCourse = api.TrackCourse
+export type TrackVideo = api.TrackVideo
+export type TrackArticle = api.TrackArticle
 export type SkillBasis = { kind: 'talentcorp' | 'onet' | 'onet_tech' | 'assumption'; text: string; source: string }
-export type TrackNode = {
-  id: string
-  title: string
-  skill: string | null
-  essential: boolean
-  now: number | null
-  required: number | null
-  after: number | null
-  courses: TrackCourse[]
-  videos: TrackVideo[]
-  articles: TrackArticle[]
-  status: 'done' | 'open' | 'no_course'
-  study_after?: number | null
-  practice?: PracticeStep[]
-  why?: SkillBasis
-}
-export type Track = { id: 'ai_basics' | 'without_ai' | 'with_ai'; title: string; why: string; nodes: TrackNode[]; shown?: boolean; reason?: string }
-export type RouteMetrics = {
-  hours: number
-  weeks: number
-  courses: number
-  fit_after: Record<Scenario, number>
-  points_per_10h: Record<Scenario, number>
-  essentials_unmet: string[]
-  ai_basics_hours?: number
-  plan_hours?: number
-}
-export type TracksResponse = {
-  role_id: string
-  role_title: string
-  scenario: Scenario
-  weekly_hours: number
-  tracks: Track[]
-  comparison: { fit_now: Record<Scenario, number>; without_ai: RouteMetrics; with_ai: RouteMetrics; note: string }
-  resources_checked: string
-  courses_checked: string
-}
+export type TrackNode = api.TrackNode
+export type Track = api.Track
+export type RouteMetrics = api.RouteMetrics
+export type TracksResponse = api.TracksOut

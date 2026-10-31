@@ -19,7 +19,7 @@ from dataclasses import dataclass, field
 from typing import Literal
 
 from src import params
-from src.pack import DestinationRole, Pack, Requirement
+from src.pack import DestinationRole, Pack, Requirement, Tier
 
 Scenario = Literal["moderate", "fast"]
 GapColumn = Literal["ready", "bridgeable", "missing", "not_stated"]
@@ -55,7 +55,7 @@ class TaskEvidence:
 class RequirementScore:
     skill: str
     skill_name: str
-    tier: str
+    tier: Tier
     essential: bool
     required: int
     claimed: int | None  # None = not stated

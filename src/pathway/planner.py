@@ -25,15 +25,18 @@ import math
 from collections.abc import Mapping
 from dataclasses import dataclass, field
 from dataclasses import fields as dataclass_fields
+from typing import Literal
 
 from src import params
 from src.journey.store import SkillClaim, levels_of
+from src.levels import Basis
 from src.match.decision import fit_range, is_evidenced
 from src.match.engine import Evidence, RequirementScore, RoleMatch, Scenario, score_role
 from src.pack import Course, Pack, SdgLink, SdgTarget
 from src.pathway.practice import load_practice
 
 MINUTES_PER_HOUR = 60
+Unlock = Literal["previous_step", "study_done", "level_check"] | None
 AI_BASICS_REASON = "AI basics come first: adapting to AI starts with knowing how to use it safely."
 AI_BASICS_ALWAYS_REASON = (
     "AI basics come first for students and career switchers, whatever the CV shows."
@@ -61,8 +64,8 @@ class TimeEstimate:
     """A step's time (C3): hours for a course; a week range (estimate) for practice."""
 
     value: float
-    unit: str  # "hours" or "weeks"
-    basis: str
+    unit: Literal["hours", "weeks"]
+    basis: Literal["reading_estimate", "guided_hours", "stated", "practice_estimate"]
     low: float | None = None
     high: float | None = None
 
@@ -72,6 +75,14 @@ class WeekRange:
     low: int
     high: int
     kind: str = "estimate"
+
+
+@dataclass(frozen=True)
+class WeekSpan:
+    """The week a practice step can start: a range, after its skill's study."""
+
+    low: int
+    high: int
 
 
 @dataclass(frozen=True)
@@ -108,8 +119,8 @@ class Step:
     skill: str  # the gap this course was added for
     target_level: int
     time: TimeEstimate
-    unlock: str | None
-    kind: str = "course"
+    unlock: Unlock
+    kind: Literal["course"] = "course"
     locked: bool = False
     done: bool = False
 
@@ -124,13 +135,13 @@ class PracticeStep:
     text: str
     show_by: str
     time: TimeEstimate
-    week_start: dict[str, int]  # after the skill's study steps, as a range
-    basis: list[dict[str, str]]
-    kind: str = "practice"
+    week_start: WeekSpan  # after the skill's study steps, as a range
+    basis: list[Basis]
+    kind: Literal["practice"] = "practice"
     locked: bool = False
-    unlock: str | None = "study_done"
+    unlock: Unlock = "study_done"
     # open · done (the claim reached the target) · skipped ("continue anyway"), each labelled.
-    status: str = "open"
+    status: Literal["open", "done", "skipped"] = "open"
     status_label: str = ""
 
 
@@ -166,23 +177,21 @@ class Pathway:
         return set(self.study_levels)
 
 
-@dataclass
+@dataclass(kw_only=True)
 class PathwayOut(Pathway):
     """The plan as `/pathway` returns it (C3): the plan, its study hours under their C3 name,
     and the SDG targets, sources and catalogue date the page cites."""
 
-    study_hours: float = 0.0
-    sdg_targets: dict[str, SdgTarget] = field(default_factory=dict)
-    sdg_source: str = ""
-    courses_checked: str = ""
-    scenario: str = "moderate"
+    study_hours: float
+    sdg_targets: dict[str, SdgTarget]
+    sdg_source: str
+    courses_checked: str
+    scenario: str
 
 
-def pathway_out(path: Pathway, pack: Pack | None = None, scenario: str = "moderate") -> PathwayOut:
+def pathway_out(path: Pathway, pack: Pack, scenario: str) -> PathwayOut:
     """The plan as the API returns it, with the C3 field names unchanged."""
     fields = {f.name: getattr(path, f.name) for f in dataclass_fields(Pathway)}
-    if pack is None:
-        return PathwayOut(**fields, study_hours=path.total_hours, scenario=scenario)
     return PathwayOut(
         **fields,
         study_hours=path.total_hours,
@@ -515,8 +524,8 @@ def _practice_steps(
                         task.weeks_low,
                         task.weeks_high,
                     ),
-                    week_start={"low": low + 1, "high": high + 1},
-                    basis=[b.model_dump() for b in task.basis],
+                    week_start=WeekSpan(low + 1, high + 1),
+                    basis=list(task.basis),
                 )
             )
             low += task.weeks_low
