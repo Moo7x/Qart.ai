@@ -647,3 +647,87 @@ skills:
       3: I manage my own group of vendors on my own, including performance issues and queries.
       4: I handle strategic or difficult vendors, improve the vendor process, and train others.
       5: I set the vendor management policy and standards for an entity or service centre.
+  tax_preparation:
+    status: draft
+    basis:
+    - title: ACRA and SkillsFuture Singapore, Skills Framework for Accountancy
+      url: https://www.acra.gov.sg/advancing-accountancy/skills-framework/
+      read: '2026-10-30'
+    - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+      url: https://sfia-online.org/en/sfia-9/responsibilities
+      read: '2026-10-30'
+    - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+      url: https://www.talentcorp.com.my
+      read: '2026-10-31'
+    anchors:
+      1: I can explain how taxable income, deductions and tax payable are worked out for a company.
+      2: I prepare tax schedules and returns from a template, with a reviewer checking them.
+      3: I prepare my entity's tax computations and returns on my own, including common adjustments.
+      4: I handle complex tax positions, review others' returns, and improve the preparation process.
+      5: I set the tax preparation process and controls for an entity or service centre.
+  green_tax_strategies:
+    status: draft
+    basis:
+    - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+      url: https://sfia-online.org/en/sfia-9/responsibilities
+      read: '2026-10-30'
+    - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+      url: https://www.talentcorp.com.my
+      read: '2026-10-31'
+    anchors:
+      1: I can explain what green tax incentives and carbon-related taxes are and why they matter.
+      2: I collect the data a green tax incentive or allowance claim needs, with guidance.
+      3: I prepare green tax incentive claims for my entity on my own and check they qualify.
+      4: I assess complex green tax options for the business and guide others on them.
+      5: I set how an entity or region uses green tax incentives in its tax strategy.
+  e_invoicing_standards:
+    status: draft
+    basis:
+    - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+      url: https://sfia-online.org/en/sfia-9/responsibilities
+      read: '2026-10-30'
+    - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+      url: https://www.talentcorp.com.my
+      read: '2026-10-31'
+    anchors:
+      1: I can explain what an e-invoice is and why tax authorities require a standard format.
+      2: I check e-invoices against the required format and fix routine rejections with guidance.
+      3: I handle my area's e-invoicing on my own, including validation errors and credit notes.
+      4: I resolve complex e-invoicing issues across systems and train others on the standard.
+      5: I set how an entity or service centre meets e-invoicing standards across its systems.
+  attention_to_detail:
+    status: draft
+    basis:
+    - title: ACRA and SkillsFuture Singapore, Skills Framework for Accountancy
+      url: https://www.acra.gov.sg/advancing-accountancy/skills-framework/
+      read: '2026-10-30'
+    - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+      url: https://sfia-online.org/en/sfia-9/responsibilities
+      read: '2026-10-30'
+    - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 24'
+      url: https://www.talentcorp.com.my
+      read: '2026-10-31'
+    anchors:
+      1: I can explain why small errors in finance records matter and where they usually arise.
+      2: I check my routine work against a checklist and catch most errors before review.
+      3: I deliver my own work accurately without close review, including tracing what does not tie.
+      4: I design checks that catch errors in complex work and coach others to use them.
+      5: I set the review and quality standards a team or function works to.
+  ethical_judgement:
+    status: draft
+    basis:
+    - title: ACRA and SkillsFuture Singapore, Skills Framework for Accountancy
+      url: https://www.acra.gov.sg/advancing-accountancy/skills-framework/
+      read: '2026-10-30'
+    - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+      url: https://sfia-online.org/en/sfia-9/responsibilities
+      read: '2026-10-30'
+    - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 24'
+      url: https://www.talentcorp.com.my
+      read: '2026-10-31'
+    anchors:
+      1: I can explain the professional ethics rules that apply to finance work.
+      2: I follow the code of conduct in routine work and raise concerns through set channels.
+      3: I resolve routine ethical questions in my own work on my own and document my reasoning.
+      4: I handle difficult ethical cases, advise colleagues, and help improve policies.
+      5: I set the ethical standards and escalation routes for a team, function or region.

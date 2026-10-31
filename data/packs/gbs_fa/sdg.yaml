@@ -304,6 +304,33 @@ skills:
   - target: '12.6'
     how: EHS records are part of the sustainability information companies report.
     source: TalentCorp (2024) GBS study, PDF p. 23; UN target 12.6
+  tax_preparation:
+  - target: '4.4'
+    how: 'Tax Preparation prepares tax computations and returns accurately: a relevant skill TalentCorp names for GBS finance roles, for decent jobs.'
+    source: TalentCorp (2024) GBS study, PDF p. 23
+  green_tax_strategies:
+  - target: '4.4'
+    how: 'Green Tax Strategies uses tax incentives that reward greener business: a relevant skill TalentCorp names for GBS finance roles, for decent jobs.'
+    source: TalentCorp (2024) GBS study, PDF p. 23
+  - target: '12.6'
+    how: Using green tax incentives helps companies adopt sustainable practices and report them.
+    source: TalentCorp (2024) GBS study, PDF p. 23; UN target 12.6
+  e_invoicing_standards:
+  - target: '4.4'
+    how: 'Knowledge of e-Invoicing Standards keeps invoices in the format tax authorities require: a relevant skill TalentCorp names for GBS finance roles, for decent jobs.'
+    source: TalentCorp (2024) GBS study, PDF p. 23
+  - target: '8.2'
+    how: 'Standard e-invoices replace manual invoice handling with system checks: technological upgrading.'
+    source: TalentCorp (2024) GBS study, PDF p. 23; UN target 8.2
+  attention_to_detail:
+  - target: '4.4'
+    how: 'Attention to Detail keeps finance work accurate: a relevant skill TalentCorp names for GBS finance roles, for decent jobs.'
+    source: TalentCorp (2024) GBS study, PDF p. 24
+  ethical_judgement:
+  - target: '4.4'
+    how: 'Ethical Judgement keeps finance work honest and compliant: a relevant skill TalentCorp names for GBS finance roles, for decent jobs.'
+    source: TalentCorp (2024) GBS study, PDF p. 24
+
 roles:
   o2c_reporting_analyst:
   - target: '8.5'
