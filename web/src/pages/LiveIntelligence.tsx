@@ -1,26 +1,30 @@
-import { Lock } from 'lucide-react'
+import { History, Lock } from 'lucide-react'
 import { useT } from '../i18n'
 import { type FormEvent, useState } from 'react'
 import { formatWhen, parseUtc, sendJSON, useApi } from '../api'
+import { ChangeTest } from '../components/ChangeTest'
+import { EvidenceDrawer } from '../components/EvidenceDrawer'
+import { Sparkline } from '../components/LineChart'
 import { PipelineDiagram, type StepId } from '../components/PipelineDiagram'
-import { Empty, Loading, Problem } from '../components/ui'
-import { FeedbackReview } from '../components/Feedback'
-import type { BacktestEntry, ForecastCheck, ModelVersion, Run, SourceStatus } from '../types'
+import { KindLabel } from '../components/Why'
+import { Windows, type Pane } from '../components/Windows'
+import { DIRECTION_LABEL, Empty, Loading, Problem } from '../components/ui'
+import type { Direction, Run, Signal, SignalsResponse, SourceStatus } from '../types'
+import type { SeriesForecast } from '../typesAgents'
 
 const RUNS_POLL_MS = 5_000
 const SECONDS_PER_MINUTE = 60
 
 const STEP_TEXT: Record<StepId, [string, string]> = {
-  schedule: ['SCHEDULE', 'A scheduled job runs the whole pipeline; an admin can also start it with Run now. A lock stops two runs overlapping, and every run is logged, including runs with no change.'],
-  sources: ['REGISTERED SOURCES', 'Four public sources, each with its terms and what it can and cannot show. A source that fails keeps its last good data and is marked in the run log.'],
+  schedule: ['SCHEDULE', 'A scheduled job runs the whole pipeline every day; an admin can also start it with Run now. A lock stops two runs overlapping, and every run is logged, including runs with no change.'],
+  sources: ['REGISTERED SOURCES', 'Seven public sources. Click a source to see what it shows, its terms and its last run. A source that fails keeps its last good data.'],
   fetch: ['FETCH', 'Each source gets two attempts with a time limit. Releases already read are not downloaded again, so a quiet day costs a few requests.'],
-  validate: ['VALIDATE', 'Release dates and quarters are checked; pages announced before their release day are skipped; a count that is not stated stays missing, never zero; a jump in total job ads is treated as a coverage break.'],
-  measure: ['MEASURE', 'Shares and changes between comparable periods, at the precision each source publishes. The DOSM trend backtest below decides whether a trend may be projected.'],
-  label: ['LABEL', 'Rising or weakening needs two independent sources, or one official series with at least eight comparable points; otherwise the signal is "not enough evidence yet".'],
-  forecast: ['SCENARIOS · DECLARED ASSUMPTIONS', 'Moderate and fast AI-adoption scenarios shift nonessential emphasis using observed occupation-level AI use. They are conditional estimates, not measured Malaysian adoption forecasts. Essentials stay fixed.'],
-  match: ['MATCH', 'The engine scores every destination against the person’s claimed skills. New evidence produces a stored comparison; the accepted journey stays fixed until the person chooses an update.'],
-  notify: ['IN-APP PROPOSALS', 'The scheduled pipeline publishes profile-specific evidence, score and pathway comparisons. What changed shows those proposals and a separate read-only historical replay. Telegram is deferred.'],
-  telegram: ['TELEGRAM · LATER', 'Planned for the improvement phase: change notifications, then answers drawn only from the app, with sources.'],
+  validate: ['VALIDATE', 'Release dates and quarters are checked; a count that is not stated stays missing, never zero; a jump in total job ads is treated as a coverage break.'],
+  measure: ['MEASURE', 'Shares and changes between comparable periods, at the precision each source publishes, then the forecast backtest below.'],
+  label: ['LABEL', 'Rising or weakening needs two independent sources, or one official series with enough comparable points; otherwise "not enough evidence yet".'],
+  forecast: ['SCENARIOS', 'Moderate and fast AI adoption shift the weight of non-essential skills using observed AI use. They are estimates, not predictions. Essentials stay fixed.'],
+  match: ['MATCH', 'Every destination role is scored against each person\'s claimed skills. New evidence produces a stored before-and-after comparison.'],
+  notify: ['IN THE APP', 'When new evidence changes a person\'s scores or plan, What changed shows the before and after. The person accepts or declines.'],
 }
 
 function duration(run: Run): string {
@@ -47,7 +51,7 @@ function RunNow({ onStarted }: { onStarted: () => void }) {
     event.preventDefault()
     try {
       await sendJSON('/api/pipeline/run', { headers: { 'X-Admin-Token': token } })
-      setMessage('Run started. Progress appears below.')
+      setMessage('Run started. Watch the pipeline above.')
       setOpen(false)
       onStarted()
     } catch (reason) {
@@ -66,15 +70,7 @@ function RunNow({ onStarted }: { onStarted: () => void }) {
       {open && (
         <form onSubmit={submit} className="flex flex-wrap items-center gap-2">
           <label className="sr-only" htmlFor="admin-token">Admin token</label>
-          <input
-            id="admin-token"
-            type="password"
-            autoComplete="off"
-            value={token}
-            onChange={(e) => setToken(e.target.value)}
-            placeholder="Admin token"
-            className="min-h-[38px] rounded-md border border-hairline bg-fog px-3 font-mono text-sm"
-          />
+          <input id="admin-token" type="password" autoComplete="off" value={token} onChange={(e) => setToken(e.target.value)} placeholder="Admin token" className="min-h-[38px] rounded-md border border-hairline bg-fog px-3 font-mono text-sm" />
           <button type="submit" className="btn btn-v" disabled={!token}>Start run</button>
           <button type="button" className="btn" onClick={() => setOpen(false)}>Cancel</button>
         </form>
@@ -86,24 +82,6 @@ function RunNow({ onStarted }: { onStarted: () => void }) {
 
 // Steps logged with a run that are not sources.
 export const STEPS = ['trend_models', 'occupation_index', 'link_check', 'retention']
-
-// Plain names for the DOSM occupation groups and the three simple forecast methods.
-const GROUP_NAME: Record<string, string> = {
-  agriculture: 'Skilled agricultural workers',
-  clerical: 'Clerical support workers',
-  craft: 'Craft and trades workers',
-  elementary: 'Elementary occupations',
-  managers: 'Managers',
-  operators: 'Plant and machine operators',
-  professionals: 'Professionals',
-  service_sales: 'Service and sales workers',
-  technicians: 'Technicians and associate professionals',
-}
-const METHOD: Record<'naive' | 'linear' | 'damped', [string, string]> = {
-  naive: ['Keep last value', '#5e5f6e'],
-  linear: ['Straight-line trend', '#d9771f'],
-  damped: ['Slowing trend', '#6c47ff'],
-}
 const TRIGGER: Record<string, string> = { schedule: 'Scheduled', manual: 'Run by admin', 'catch-up': 'Catch-up on start', admin: 'Run by admin' }
 
 function RunCard({ run, names }: { run: Run; names: Record<string, string> }) {
@@ -117,7 +95,7 @@ function RunCard({ run, names }: { run: Run; names: Record<string, string> }) {
         ? `${run.new_observations.toLocaleString()} new data points: ${grew.slice(0, 3).map((s) => `${names[s.source_id] ?? s.source_id} +${s.new.toLocaleString()}`).join(', ')}${grew.length > 3 ? '…' : ''}`
         : `${ok} of ${collected.length} sources checked: nothing new published since the last run`
   return (
-    <li className="flex flex-col gap-3 border-t border-line py-4 first:border-t-0 first:pt-0">
+    <li className="flex flex-col gap-2 border-t border-line py-3 first:border-t-0 first:pt-0">
       <div className="flex flex-wrap items-baseline justify-between gap-2">
         <span className="font-semibold">{formatWhen(run.started_at)}</span>
         <span className="flex items-center gap-2 text-[12px] text-graphite">
@@ -126,51 +104,91 @@ function RunCard({ run, names }: { run: Run; names: Record<string, string> }) {
           <span className={`tag ${RESULT_STYLE[run.status] ?? 'bg-mist text-graphite'}`}>{run.status}</span>
         </span>
       </div>
-      <p className="m-0 text-[14px]">{headline}</p>
-      <ul className="m-0 flex list-none flex-wrap gap-1.5 p-0" aria-label="Sources in this run">
-        {collected.map((s) => (
-          <li key={s.source_id} title={[s.note, s.error].filter(Boolean).join(' · ') || undefined} className={`rounded border px-2 py-1 text-[11px] ${s.status === 'ok' ? 'border-line bg-paper' : 'border-weak bg-weak-bg text-weak'}`}>
-            <span aria-hidden="true">{s.status === 'ok' ? '✓' : '✗'}</span> {names[s.source_id] ?? s.source_id}
-            <span className="ml-1 font-mono text-graphite">{s.new > 0 ? `+${s.new.toLocaleString()}` : 'no change'}</span>
-          </li>
-        ))}
-      </ul>
+      <p className="m-0 text-[13px]">{headline}</p>
     </li>
   )
 }
 
-// The backtest in words and bars: shorter bar = smaller average miss.
-function ModelCheck({ rows, rolling }: { rows: BacktestEntry[]; rolling: ForecastCheck[] }) {
-  const max = Math.max(...rows.flatMap((r) => [r.naive, r.linear, r.damped]), 0.01)
-  const naiveWins = rows.filter((r) => r.best === 'naive').length
-  // The stricter rolling check: flat forecasts (no change, smoothing) against trend methods.
-  const flatWins = rolling.filter((r) => r.best === 'naive' || r.best === 'smoothing').length
+function sourcePane(s: SourceStatus): Pane {
+  return {
+    key: s.id,
+    title: s.name,
+    hint: `${s.publisher} · ${s.cadence}`,
+    body: (
+      <dl className="m-0 grid grid-cols-[110px_minmax(0,1fr)] gap-x-3 gap-y-2 text-[13px]">
+        <dt className="cap">Shows</dt><dd className="m-0">{s.shows}</dd>
+        <dt className="cap">Does not show</dt><dd className="m-0">{s.does_not_show}</dd>
+        <dt className="cap">Stored rows</dt><dd className="m-0 font-mono">{s.observations.toLocaleString()}</dd>
+        <dt className="cap">Last run</dt><dd className="m-0">{s.last_status ?? 'not run'}{s.last_fetched ? ` · fetched ${formatWhen(s.last_fetched)}` : ''}{s.last_status === 'failed' && s.serving_snapshot_from ? ` · showing the last good data, fetched ${formatWhen(s.serving_snapshot_from)}` : ''}</dd>
+        {s.last_note && <><dt className="cap">Note</dt><dd className="m-0 text-graphite">{s.last_note}</dd></>}
+        <dt className="cap">Terms</dt><dd className="m-0"><a href={s.terms_url} target="_blank" rel="noopener noreferrer">{s.terms}</a></dd>
+        <dt className="cap">Open</dt><dd className="m-0 break-all"><a href={s.url} target="_blank" rel="noopener noreferrer">{s.url}</a></dd>
+      </dl>
+    ),
+  }
+}
+
+// "Do our forecasts beat a simple guess?": for each job group, how much smaller the chosen model's
+// past error was than just repeating last year's value. No bar: nothing beat it, so the forecast
+// is last year's value.
+function ForecastScore({ entries }: { entries: SeriesForecast[] }) {
+  const rows = entries
+    .filter((e) => e.kind === 'employment_share' && e.backtest)
+    .sort((a, b) => (a.backtest?.ratio ?? 1) - (b.backtest?.ratio ?? 1))
+  const beat = rows.filter((r) => (r.backtest?.ratio ?? 1) < 1).length
   return (
-    <div className="flex flex-col gap-5">
-      <p className="m-0 max-w-[820px] text-[14px] leading-relaxed">
-        We hid the years 2022–2025, asked three simple methods to predict each group&rsquo;s share of Malaysian employees from the years before, and compared with what really happened. The result is mixed: keeping the last value won in {naiveWins} of {rows.length} groups.{rolling.length > 0 && <> A stricter check, restarting from every year since 2015, found a flat forecast best in <span className="font-semibold">{flatWins} of {rolling.length}</span> comparisons, and the trend wins were small.</>} <span className="font-semibold">With evidence this weak, Qart shows the history and does not draw forecast lines.</span>
+    <div className="flex flex-col gap-3">
+      <p className="m-0 max-w-[760px] text-[14px]">
+        For each job group we hid past years, let each model predict them, and compared with what really happened. A model is used only if it beat simply repeating last year: <b>{beat} of {rows.length} groups</b>.
       </p>
-      <div className="flex flex-wrap gap-4 text-[12px] text-graphite">
-        {(Object.keys(METHOD) as (keyof typeof METHOD)[]).map((m) => (
-          <span key={m} className="flex items-center gap-1.5"><span aria-hidden="true" className="inline-block h-2.5 w-5 rounded-sm" style={{ background: METHOD[m][1] }} />{METHOD[m][0]}</span>
-        ))}
-        <span>Bar = average miss in percentage points of the workforce (0.5 means predicting 13.1% when it was 13.6%). Shorter is better.</span>
-      </div>
-      <div className="grid gap-x-10 gap-y-5 md:grid-cols-2 xl:grid-cols-3">
-        {rows.map((r) => (
-          <div key={r.group} className="flex flex-col gap-1.5">
-            <span className="text-[13px] font-semibold">{GROUP_NAME[r.group] ?? r.group}</span>
-            {(Object.keys(METHOD) as (keyof typeof METHOD)[]).map((m) => (
-              <div key={m} className="grid grid-cols-[minmax(0,1fr)_64px] items-center gap-2" title={METHOD[m][0]}>
-                <span className="h-2.5 rounded-sm bg-mist">
-                  <span className="block h-full rounded-sm" style={{ width: `${(100 * r[m]) / max}%`, background: METHOD[m][1] }} />
-                </span>
-                <span className={`text-right font-mono text-[11px] ${r.best === m ? 'font-semibold text-rising' : 'text-graphite'}`}>{r[m].toFixed(2)}{r.best === m ? ' ✓' : ''}</span>
-              </div>
+      <ul className="m-0 flex list-none flex-col gap-2 p-0">
+        {rows.map((r) => {
+          const gain = Math.max(0, Math.round(100 * (1 - (r.backtest?.ratio ?? 1))))
+          return (
+            <li key={r.series_id} className="grid grid-cols-[minmax(0,220px)_minmax(0,1fr)_minmax(0,190px)] items-center gap-3 text-[13px]">
+              <span className="truncate font-medium">{r.title.replace(': share of employees (%)', '')}</span>
+              <span className="h-4 rounded-full bg-mist">
+                {gain > 0 && <span className="block h-4 rounded-full bg-rising transition-[width] duration-700" style={{ width: `${Math.min(100, gain * 2)}%` }} />}
+              </span>
+              <span className={gain > 0 ? 'font-semibold text-rising' : 'text-graphite'}>{gain > 0 ? `${gain}% smaller miss · forecast drawn` : 'repeating last year wins'}</span>
+            </li>
+          )
+        })}
+      </ul>
+      <p className="m-0 text-[12px] text-graphite">Models tried: repeat last year, drift, straight line, slowing trend, smoothing, Theta and gradient boosting. Re-run on every new DOSM release.</p>
+    </div>
+  )
+}
+
+const LIST_ORDER: Direction[] = ['rising', 'weakening', 'stable', 'insufficient', 'expert']
+const ARROW: Record<Direction, [string, string]> = {
+  rising: ['↑', 'text-rising'],
+  weakening: ['↓', 'text-weak'],
+  stable: ['→', 'text-graphite'],
+  insufficient: ['?', 'text-graphite'],
+  expert: ['◆', 'text-observed'],
+}
+
+function Signals({ signals, onPick }: { signals: Signal[]; onPick: (s: Signal) => void }) {
+  const listed = signals.filter((s) => s.family !== 'ai_task_use')
+  return (
+    <div className="grid gap-x-8 md:grid-cols-2">
+      {LIST_ORDER.map((d) => {
+        const items = listed.filter((s) => s.direction === d)
+        if (!items.length) return null
+        return (
+          <div key={d} className="flex flex-col">
+            <span className={`cap pb-1 pt-3 ${ARROW[d][1]}`}>{DIRECTION_LABEL[d]}</span>
+            {items.map((s) => (
+              <button key={s.id} type="button" onClick={() => onPick(s)} className="grid cursor-pointer grid-cols-[22px_minmax(0,1fr)_auto] items-center gap-3 border-0 border-t border-line bg-transparent py-2.5 text-left hover:bg-fog">
+                <span aria-hidden="true" className={`text-[18px] font-semibold ${ARROW[d][1]}`}>{ARROW[d][0]}</span>
+                <span className="min-w-0"><span className="block truncate font-medium">{s.title}</span><span className="block truncate text-[12px] text-graphite">{s.headline}</span></span>
+                <Sparkline points={s.points} color="#6c47ff" />
+              </button>
             ))}
           </div>
-        ))}
-      </div>
+        )
+      })}
     </div>
   )
 }
@@ -179,16 +197,38 @@ export function LiveIntelligence() {
   const { t } = useT()
   const runs = useApi<Run[]>('/api/pipeline/runs?limit=12', RUNS_POLL_MS)
   const sources = useApi<SourceStatus[]>('/api/sources')
-  const backtest = useApi<BacktestEntry[]>('/api/pipeline/backtest')
-  const models = useApi<ModelVersion[]>('/api/pipeline/models')
-  const rolling = useApi<ForecastCheck[]>('/api/pipeline/forecast-check')
-  const [step, setStep] = useState<StepId>('validate')
+  const signals = useApi<SignalsResponse>('/api/signals')
+  const forecast = useApi<SeriesForecast[]>('/api/forecast')
+  const [step, setStep] = useState<StepId>('schedule')
+  const [win, setWin] = useState<{ title: string; panes: Pane[] } | null>(null)
+  const [picked, setPicked] = useState<Signal | null>(null)
 
   const latest = runs.data?.[0]
   const running = latest?.status === 'running'
   const finished = runs.data?.find((r) => r.status !== 'running')
   const [stepTitle, stepText] = STEP_TEXT[step]
   const names = Object.fromEntries((sources.data ?? []).map((src) => [src.id, src.name.split(' · ')[0].split(' (')[0]]))
+  const openSource = (id: string) => {
+    const s = sources.data?.find((x) => x.id === id)
+    if (s) setWin({ title: 'Registered source', panes: [sourcePane(s)] })
+  }
+  const openHistory = () =>
+    setWin({
+      title: 'Run history',
+      panes: [
+        {
+          key: 'runs',
+          title: 'Every run, newest first',
+          hint: 'Sources publish quarterly or yearly, so most runs rightly find nothing new.',
+          body:
+            runs.data && runs.data.length > 0 ? (
+              <ol className="m-0 flex list-none flex-col p-0">{runs.data.map((run) => <RunCard key={run.id} run={run} names={names} />)}</ol>
+            ) : (
+              <Empty>No run yet. A new deployment starts its first run on its own.</Empty>
+            ),
+        },
+      ],
+    })
 
   return (
     <main className="page">
@@ -196,10 +236,7 @@ export function LiveIntelligence() {
         <div className="flex flex-col gap-1.5">
           <span className="eyebrow">Live intelligence · open to everyone</span>
           <h1 className="h1">{t('Where every number comes from')}</h1>
-          <p className="m-0 max-w-[640px] text-graphite">
-            The pipeline runs on a schedule even when nobody is using the app. Every run is logged, including runs where
-            nothing changed.
-          </p>
+          <p className="m-0 max-w-[640px] text-graphite">A scheduled pipeline collects seven public sources every day, even when nobody uses the app. Click any part to see what it does.</p>
         </div>
         <div className="flex items-start gap-3">
           <span className={`tag mt-2 ${RESULT_STYLE[running ? 'running' : 'no change']}`}>
@@ -210,169 +247,45 @@ export function LiveIntelligence() {
       </header>
 
       <section className="card-dark flex flex-col gap-3.5 bg-[radial-gradient(60%_60%_at_50%_0%,rgba(93,227,255,0.08),rgba(33,33,38,0)_70%)] p-5">
-        <PipelineDiagram run={running ? latest : finished} running={running} selected={step} onSelect={setStep} />
+        <div className="flex flex-wrap items-center gap-3">
+          <button type="button" onClick={openHistory} className="inline-flex min-h-[40px] cursor-pointer items-center gap-2 rounded-lg border-0 bg-[#ffa86b] px-4 font-semibold text-void shadow-[0_4px_16px_rgba(255,168,107,0.35)] hover:brightness-105">
+            <History size={16} aria-hidden="true" />
+            Run history{runs.data ? ` · ${runs.data.length}` : ''}
+          </button>
+          <span className="text-[12px] text-stone">Last run: {finished ? `${formatWhen(finished.started_at)} · ${finished.status}` : '—'}</span>
+        </div>
+        {runs.error && <Problem what="runs" message={runs.error} onRetry={runs.reload} />}
+        <PipelineDiagram run={running ? latest : finished} running={running} selected={step} onSelect={setStep} onSource={openSource} />
         <div className="flex flex-col gap-1 rounded-lg bg-surface px-3.5 py-3" aria-live="polite">
           <span className="font-mono text-[11px] tracking-widest text-cyan">{stepTitle}</span>
           <span className="text-[13px]">{stepText}</span>
         </div>
       </section>
 
-      <section className="panel">
-        <div className="flex flex-wrap items-baseline justify-between gap-2">
-          <h2 className="h2">Run history</h2>
-          <span className="text-[12px] text-graphite">Every collection run, newest first. Sources publish quarterly or yearly, so most runs rightly find nothing new.</span>
+      <section className="section">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <h2 className="h2">Signals from the market</h2>
+          <span className="text-[12px] text-graphite">Click one for its evidence</span>
         </div>
-        {runs.loading && <Loading what="runs" />}
-        {runs.error && <Problem what="runs" message={runs.error} onRetry={runs.reload} />}
-        {runs.data && runs.data.length === 0 && <Empty>No run yet. A new deployment starts its first run on its own.</Empty>}
-        {runs.data && runs.data.length > 0 && (
-          <ol className="m-0 grid list-none gap-x-10 p-0 xl:grid-cols-2">
-            {runs.data.slice(0, 8).map((run) => <RunCard key={run.id} run={run} names={names} />)}
-          </ol>
-        )}
+        {signals.loading && <Loading what="the signals" />}
+        {signals.error && <Problem what="the signals" message={signals.error} onRetry={signals.reload} />}
+        {signals.data && <Signals signals={signals.data.signals} onPick={setPicked} />}
       </section>
 
-        <section className="panel">
-          <div className="flex flex-col gap-1">
-            <span className="eyebrow">Model check</span>
-            <h2 className="m-0 text-[22px] font-semibold tracking-tight">Can Qart predict where jobs are heading? We tested it.</h2>
-          </div>
-          {backtest.error && <Problem what="the backtest" message={backtest.error} onRetry={backtest.reload} />}
-          {backtest.data && backtest.data.length > 0 && <ModelCheck rows={backtest.data} rolling={rolling.data ?? []} />}
-          {backtest.data && (
-            <details className="text-[13px]">
-            <summary className="cursor-pointer text-graphite">Details for analysts: the same test as a table</summary>
-            <table className="mt-2 w-full border-collapse text-[13px]">
-              <thead>
-                <tr className="cap text-left">
-                  <th className="py-2 pr-2 font-medium">Group</th>
-                  <th className="px-2 py-2 text-right font-medium">No change</th>
-                  <th className="px-2 py-2 text-right font-medium">Straight line</th>
-                  <th className="px-2 py-2 text-right font-medium">Damped</th>
-                </tr>
-              </thead>
-              <tbody>
-                {backtest.data.map((row) => (
-                  <tr key={row.group} className="border-t border-mist">
-                    <td className="py-2 pr-2">{GROUP_NAME[row.group] ?? row.group}</td>
-                    {(['naive', 'linear', 'damped'] as const).map((model) => (
-                      <td key={model} className={`px-2 py-2 text-right font-mono ${row.best === model ? 'font-semibold text-rising' : ''}`}>
-                        {row[model].toFixed(2)}
-                      </td>
-                    ))}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            </details>
-          )}
-          {rolling.data && rolling.data.length > 0 && (
-            <details className="text-[13px]">
-              <summary className="cursor-pointer text-graphite">Rolling check: every forecast origin from 2015, one and two years ahead</summary>
-              <div className="mt-2 overflow-x-auto"><table className="w-full min-w-[360px] border-collapse text-xs">
-                <thead>
-                  <tr className="cap text-left">
-                    <th className="py-1.5 pr-2 font-medium">Group · horizon</th>
-                    {['naive', 'drift', 'linear', 'damped', 'smoothing'].map((m) => <th key={m} className="px-1.5 py-1.5 text-right font-medium">{m === 'naive' ? 'no change' : m}</th>)}
-                  </tr>
-                </thead>
-                <tbody>
-                  {rolling.data.filter((r) => ['clerical', 'professionals', 'technicians'].includes(r.group)).map((r) => (
-                    <tr key={`${r.group}-${r.horizon}`} className="border-t border-mist">
-                      <td className="py-1.5 pr-2">{r.group} · {r.horizon} y <span className="text-ash">({r.origins.length} origins)</span></td>
-                      {['naive', 'drift', 'linear', 'damped', 'smoothing'].map((m) => (
-                        <td key={m} className={`px-1.5 py-1.5 text-right font-mono ${r.best === m ? 'font-semibold text-rising' : ''}`}>{r.mae[m]?.toFixed(2) ?? '—'}</td>
-                      ))}
-                    </tr>
-                  ))}
-                </tbody>
-              </table></div>
-              <p className="m-0 mt-1.5 text-xs text-graphite">
-                Mean error in percentage points; each method sees only the years before its origin. A trend is projected only if a trend method (drift, line, damped) beats no change; smoothing is a flat forecast. Retrospective on today's published series.
-              </p>
-            </details>
-          )}
-          {models.data && models.data.length > 0 && (
-            <details className="text-[13px]">
-              <summary className="cursor-pointer text-graphite">
-                Model versions: re-scored each time new DOSM data arrives ({models.data.length} stored)
-              </summary>
-              <div className="mt-2 overflow-x-auto"><table className="w-full min-w-[360px] border-collapse text-xs">
-                <thead>
-                  <tr className="cap text-left">
-                    <th className="py-1.5 pr-2 font-medium">Group · data to</th>
-                    <th className="px-2 py-1.5 font-medium">Scored on</th>
-                    <th className="px-2 py-1.5 text-right font-medium">No change</th>
-                    <th className="px-2 py-1.5 text-right font-medium">Line</th>
-                    <th className="py-1.5 pl-2 font-medium">Stored</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {models.data.map((v) => (
-                    <tr key={v.id} className="border-t border-mist">
-                      <td className="py-1.5 pr-2">{v.group_id.replace('_', ' & ')} · {v.last_year}</td>
-                      <td className="px-2 py-1.5 font-mono">{v.test_years}</td>
-                      <td className={`px-2 py-1.5 text-right font-mono ${v.best === 'naive' ? 'font-semibold text-rising' : ''}`}>{v.naive.toFixed(2)}</td>
-                      <td className={`px-2 py-1.5 text-right font-mono ${v.best === 'linear' ? 'font-semibold text-rising' : ''}`}>{v.linear.toFixed(2)}</td>
-                      <td className="py-1.5 pl-2 text-graphite">{formatWhen(v.created_at)}{v.run_id ? ` · run ${v.run_id}` : ''}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table></div>
-              <p className="m-0 mt-1.5 text-xs text-graphite">A run with no new DOSM data stores no version; its log says the models are unchanged.</p>
-            </details>
-          )}
-        </section>
-
-      <FeedbackReview />
-
-      <section className="card-light flex flex-col gap-2.5 px-6 py-5">
-        <h2 className="h2">Registered sources</h2>
-        {sources.error && <Problem what="sources" message={sources.error} onRetry={sources.reload} />}
-        {sources.data && (
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-[760px] border-collapse text-[13px]">
-              <thead>
-                <tr className="cap text-left">
-                  <th className="py-2 pr-2 font-medium">Source</th>
-                  <th className="px-2 py-2 font-medium">Shows · does not show</th>
-                  <th className="px-2 py-2 font-medium">Terms</th>
-                  <th className="px-2 py-2 font-medium">Rows</th>
-                  <th className="py-2 pl-2 font-medium">Last run</th>
-                </tr>
-              </thead>
-              <tbody>
-                {sources.data.map((s) => (
-                  <tr key={s.id} className="border-t border-mist align-top">
-                    <td className="py-2.5 pr-2">
-                      <a href={s.url} target="_blank" rel="noopener noreferrer" className="font-medium text-void">{s.name}</a>
-                      <span className="block text-xs text-graphite">{s.publisher} · {s.cadence}</span>
-                    </td>
-                    <td className="px-2 py-2.5 text-graphite">{s.shows}<span className="block text-xs">Not: {s.does_not_show}</span></td>
-                    <td className="px-2 py-2.5">
-                      <a href={s.terms_url} target="_blank" rel="noopener noreferrer">{s.terms}</a>
-                      <span className="block font-mono text-[11px] text-ash">checked {s.terms_checked ?? 'not yet'}</span>
-                    </td>
-                    <td className="px-2 py-2.5 font-mono">{s.observations}</td>
-                    <td className="py-2.5 pl-2">
-                      <span className={`tag ${s.last_status === 'ok' ? 'bg-rising-bg text-rising' : s.last_status ? 'bg-weak-bg text-weak' : 'bg-mist text-graphite'}`}>
-                        {s.last_status ?? 'not run'}
-                      </span>
-                      {s.last_note && <span className="mt-1 block max-w-[260px] font-mono text-[11px] text-ash">{s.last_note}</span>}
-                      {s.last_status === 'failed' && s.serving_snapshot_from && (
-                        <span className="mt-1 block max-w-[260px] text-[12px] text-weak">
-                          Showing the last good data, fetched {formatWhen(s.serving_snapshot_from)}{s.last_success_at ? ` (last successful run ${formatWhen(s.last_success_at)})` : ''}.
-                        </span>
-                      )}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
+      <section className="section">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <h2 className="h2">Do our forecasts beat a simple guess?</h2>
+          <KindLabel kind="estimate" />
+        </div>
+        {forecast.loading && <Loading what="the forecast check" />}
+        {forecast.error && <Problem what="the forecast check" message={forecast.error} onRetry={forecast.reload} />}
+        {forecast.data && <ForecastScore entries={forecast.data} />}
       </section>
+
+      <ChangeTest />
+
+      {picked && <EvidenceDrawer signal={picked} onClose={() => setPicked(null)} />}
+      {win && <Windows title={win.title} panes={win.panes} onClose={() => setWin(null)} />}
     </main>
   )
 }
-

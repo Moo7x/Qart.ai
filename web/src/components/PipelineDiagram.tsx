@@ -1,4 +1,4 @@
-import { BarChart3, Bell, Clock, Database, Download, FileText, ListChecks, Send, ShieldCheck, Target, TrendingUp } from 'lucide-react'
+import { BarChart3, Bell, Clock, Database, Download, FileText, ListChecks, ShieldCheck, Target, TrendingUp } from 'lucide-react'
 import type { CSSProperties, ReactNode } from 'react'
 import type { Run } from '../types'
 
@@ -18,7 +18,7 @@ const SOURCE_NODES = [
 const SOURCE_TOP = [118, 170, 222, 274, 326, 378, 430]
 const SOURCE_H = 44
 
-export type StepId = 'schedule' | 'sources' | 'fetch' | 'validate' | 'measure' | 'label' | 'forecast' | 'match' | 'notify' | 'telegram'
+export type StepId = 'schedule' | 'sources' | 'fetch' | 'validate' | 'measure' | 'label' | 'forecast' | 'match' | 'notify'
 
 type NodeProps = {
   x: number
@@ -89,17 +89,15 @@ const LINES: [number, number, number, number, boolean][] = [
   [500, 460, 648, 460, true],
   [740, 428, 740, 366, true],
   [740, 300, 740, 238, true],
-  [830, 204, 875, 204, false],
-  [875, 164, 875, 296, false],
-  [875, 164, 912, 164, true],
-  [875, 296, 912, 296, true],
+  [830, 204, 912, 204, true],
 ]
 
-export function PipelineDiagram({ run, running, selected, onSelect }: {
+export function PipelineDiagram({ run, running, selected, onSelect, onSource }: {
   run: Run | undefined
   running: boolean
   selected: StepId
   onSelect: (step: StepId) => void
+  onSource: (sourceId: string) => void
 }) {
   const collected = (run?.sources ?? []).filter((s) => !['trend_models', 'occupation_index'].includes(s.source_id))  // steps, not sources
   const bySource = new Map(collected.map((s) => [s.source_id, s]))
@@ -139,7 +137,7 @@ export function PipelineDiagram({ run, running, selected, onSelect }: {
           const result = bySource.get(s.id)
           const status = result ? (result.status === 'ok' ? `ok · ${result.new} new` : 'failed · kept last good') : s.sub
           return (
-            <Node key={s.id} x={40} y={SOURCE_TOP[i]} w={200} h={SOURCE_H} icon={<s.icon size={16} />} title={s.label} sub={status} tone="cyan" selected={selected === 'sources'} onClick={() => onSelect('sources')} />
+            <Node key={s.id} x={40} y={SOURCE_TOP[i]} w={200} h={SOURCE_H} icon={<s.icon size={16} />} title={s.label} sub={status} tone="cyan" selected={selected === 'sources'} onClick={() => { onSelect('sources'); onSource(s.id) }} />
           )
         })}
         <Node x={320} y={172} w={180} h={64} icon={<Download size={16} />} title="Fetch" sub={run ? `${ok} of ${total} sources ok` : 'waiting'} tone="violet" selected={selected === 'fetch'} onClick={() => onSelect('fetch')} />
@@ -148,8 +146,7 @@ export function PipelineDiagram({ run, running, selected, onSelect }: {
         <Node x={650} y={428} w={180} h={64} icon={<ListChecks size={16} />} title="Label" sub="rules, not opinions" tone="mint" selected={selected === 'label'} onClick={() => onSelect('label')} />
         <Node x={650} y={300} w={180} h={64} icon={<TrendingUp size={16} />} title="Scenarios" sub="declared assumptions" tone="amber" selected={selected === 'forecast'} onClick={() => onSelect('forecast')} />
         <Node x={650} y={172} w={180} h={64} icon={<Target size={16} />} title="Match" sub="scores + explanations" tone="violet" selected={selected === 'match'} onClick={() => onSelect('match')} />
-        <Node x={914} y={138} w={142} h={52} icon={<Bell size={16} />} title="In the app" sub="review changes" tone="mint" selected={selected === 'notify'} onClick={() => onSelect('notify')} />
-        <Node x={914} y={270} w={142} h={52} icon={<Send size={16} />} title="Telegram" sub="later" tone="planned" selected={selected === 'telegram'} onClick={() => onSelect('telegram')} />
+        <Node x={914} y={178} w={142} h={52} icon={<Bell size={16} />} title="In the app" sub="review changes" tone="mint" selected={selected === 'notify'} onClick={() => onSelect('notify')} />
       </div>
     </div>
   )

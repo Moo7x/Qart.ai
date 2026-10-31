@@ -69,7 +69,7 @@ export function TimeSeriesChart({ series, unit, axis, source, height = 260 }: { 
           <Tooltip content={<Tip unit={unit} source={source} />} cursor={{ stroke: MUTED, strokeDasharray: '3 3' }} />
           {shown.length > 1 && <Legend verticalAlign="bottom" align="left" iconType="plainline" wrapperStyle={{ fontSize: 12, color: INK, paddingTop: 6 }} />}
           {shown.map((s, i) => (
-            <Line key={s.label} type="linear" dataKey={s.label} name={s.label} stroke={SERIES[i]} strokeWidth={2} dot={false} activeDot={{ r: 4, strokeWidth: 2, stroke: '#ffffff' }} connectNulls={false} isAnimationActive={false} />
+            <Line key={s.label} type="linear" dataKey={s.label} name={s.label} stroke={SERIES[i]} strokeWidth={2} dot={false} activeDot={{ r: 4, strokeWidth: 2, stroke: '#ffffff' }} connectNulls={false} isAnimationActive animationDuration={900} />
           ))}
         </LineChart>
       </ResponsiveContainer>
