@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom'
 import { useApi } from '../api'
 import { ScenarioSwitch, NextStep } from '../components/journey'
 import { Legend, PageHead, Serif } from '../components/atoms'
-import { OverviewTiles } from '../components/OverviewTiles'
 import { SkillSurvey } from '../components/SkillSurvey'
 import { JobHub } from '../components/JobHub'
 import { OverviewGlance } from '../components/OverviewGlance'
@@ -104,7 +103,6 @@ export function Overview() {
       </header>
       <PersonalRadar key={`radar-${refresh}`} />
       <SkillSurvey onDone={() => setRefresh((r) => r + 1)} />
-      <div className="q-tray"><OverviewTiles key={`tiles-${refresh}`} /></div>
       <OverviewGlance key={`glance-${refresh}`} />
       <CurrentJob />
       <NextStep to="/roles" label="See the roles that fit you" hint="Next: compare the roles your skills lead to" />

@@ -106,10 +106,8 @@ export function ViewSwitch({ value, onChange }: { value: 'chart' | 'table'; onCh
   return <Segmented label="Show as" value={value} onChange={onChange} options={[{ id: 'chart', text: 'Chart' }, { id: 'table', text: 'Table' }]} />
 }
 
-type Vivid = 'lavender' | 'sky' | 'lime'
+type Vivid = 'lime' // the plan's badges tile; the other themes went with the Overview tiles
 const BLOB: Record<Vivid, [string, string, string]> = {
-  lavender: ['rgba(214,206,255,.75)', 'rgba(132,112,214,.55)', 'rgba(70,52,150,.55)'],
-  sky: ['rgba(255,170,190,.8)', 'rgba(226,92,128,.55)', 'rgba(150,40,80,.45)'],
   lime: ['rgba(250,255,215,.85)', 'rgba(170,205,60,.6)', 'rgba(90,130,20,.45)'],
 }
 
@@ -151,8 +149,4 @@ export function VividTile({ theme, pill, to, toLabel, label, className = '', chi
       </div>
     </article>
   )
-}
-
-export function VividNumber({ value, size = 72 }: { value: ReactNode; size?: number }) {
-  return <span className="v-num" style={{ fontSize: size }}>{value}</span>
 }

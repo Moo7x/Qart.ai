@@ -4,34 +4,6 @@ import { Legend, ViewSwitch } from './atoms'
 // Small charts in the redesign's dashboard style. Each has one axis, says in words what the
 // colours mean, and the larger ones switch to a table (docs/PHASE2_PLAN.md §10 rules).
 
-/** A tiny trend line for an observed series; the value it ends on is always written beside it. */
-export function Sparkline({ points, width = 72, height = 24, label }: { points: { period: string; value: number }[]; width?: number; height?: number; label: string }) {
-  if (points.length < 2) return null
-  const values = points.map((p) => p.value)
-  const lo = Math.min(...values)
-  const hi = Math.max(...values)
-  const span = hi - lo || 1
-  const path = points
-    .map((p, i) => `${i === 0 ? 'M' : 'L'}${((i / (points.length - 1)) * (width - 4) + 2).toFixed(1)} ${(height - 2 - ((p.value - lo) / span) * (height - 4)).toFixed(1)}`)
-    .join(' ')
-  const up = values[values.length - 1] >= values[0]
-  return (
-    <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} role="img" aria-label={`${label}: ${points[0].period} ${values[0]} to ${points[points.length - 1].period} ${values[values.length - 1]}`} className="flex-none">
-      <path d={path} fill="none" stroke={up ? '#157a4a' : '#c2410c'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  )
-}
-
-/** The change between the last two observations, with its sign spelled out. */
-export function ChangePill({ points, unit }: { points: { value: number }[]; unit: string }) {
-  if (points.length < 2) return null
-  const delta = points[points.length - 1].value - points[points.length - 2].value
-  const rounded = Math.round(delta * 100) / 100
-  const text = `${rounded > 0 ? '+' : rounded < 0 ? '−' : '±'}${Math.abs(rounded)}${unit.startsWith('%') ? ' pt' : ''}`
-  const tone = rounded > 0 ? 'bg-rising-bg text-rising' : rounded < 0 ? 'bg-weak-bg text-weak' : 'bg-mist text-muted'
-  return <span className={`whitespace-nowrap rounded-md px-1.5 py-0.5 text-xs font-semibold ${tone}`}>{text}</span>
-}
-
 const BAND_COLOUR: Record<string, string> = { low: '#d1495b', fair: '#e9a23b', good: '#9bbf3a', strong: '#2e9e5b' }
 
 /** The fit as a half dial split into the four bands (an assumption), with a marker at the fit. */
