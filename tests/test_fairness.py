@@ -9,7 +9,6 @@ sentence is not removed (documented in docs/explain/journey.md).
 """
 
 import json
-from pathlib import Path
 from typing import Any
 
 from fastapi.testclient import TestClient
@@ -17,51 +16,14 @@ from fastapi.testclient import TestClient
 from src.config import Settings
 from src.intake import extract as extract_mod
 from src.intake.pii import scrub
+from src.match.fairness import VARIANTS, variant_cv
 from src.pack import load_pack
 
-SAMPLE = Path(__file__).parent.parent / "data" / "samples" / "nur.txt"
-
-# Synthetic identities only. Each replaces the four contact lines at the top of the sample CV.
-VARIANTS = [
-    [
-        "Nur Aisyah Binti Kamal",
-        "Gender: Female",
-        "Religion: Islam",
-        "Race: Malay",
-        "Date of birth: 01/01/1990",
-        "Marital status: Married",
-        "Email: nur.aisyah.sample@example.com",
-        "Phone: +60 12-345 6789",
-        "IC No: 900101-14-5678",
-    ],
-    [
-        "Tan Wei Ming",
-        "Gender: Male",
-        "Religion: Buddhism",
-        "Race: Chinese",
-        "Date of birth: 15/06/1975",
-        "Marital status: Single",
-        "Email: tan.weiming.sample@example.com",
-        "Phone: 019-876 5432",
-        "IC No: 750615-10-1234",
-    ],
-    [
-        "Rajesh A/L Kumar",
-        "Gender: Male",
-        "Religion: Hinduism",
-        "Race: Indian",
-        "Date of birth: 20/03/2001",
-        "Marital status: Divorced",
-        "Email: rajesh.kumar.sample@example.com",
-        "Phone: +6011 2233 4455",
-        "IC No: 010320-08-4321",
-    ],
-]
+# The synthetic identities live in src/match/fairness.py, shared with paired_profile_check (C10).
 
 
 def variant(header: list[str]) -> str:
-    body = SAMPLE.read_text(encoding="utf-8").split("\n")[4:]  # drop the original identity lines
-    return "\n".join([*header, *body])
+    return variant_cv(header)
 
 
 def cvs() -> list[str]:

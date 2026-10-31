@@ -1,0 +1,1288 @@
+# Practice tasks (docs/PHASE2_PLAN.md §8 B4): what to do at work to move a skill from
+# level 2 to 3 ("working") and from 3 to 4 ("proficient"). Study reaches level 2 at
+# most; these levels come from work done. Tasks are suggestions to agree with a manager,
+# not courses. Weeks are declared estimates, the same for every skill (2→3: 8–16, about
+# one to two quarters of doing the full task alone; 3→4: 26–52, about a half to a full
+# year of complex cases), not measured durations. `show_by` is what the person describes
+# in a progress check. Each task is `status: draft` until the team has reviewed it; its
+# basis is the skill's level frameworks (levels.yaml).
+checked: '2026-10-30'
+skills:
+  accounting_principles:
+    3:
+      text: Take over the accounting treatment for one transaction type in your area, with a reviewer checking only the exceptions.
+      weeks_low: 8
+      weeks_high: 16
+      show_by: A treatment you decided on your own and how you applied the standard.
+      status: draft
+      basis:
+      - title: ACRA and SkillsFuture Singapore, Skills Framework for Accountancy
+        url: https://www.acra.gov.sg/advancing-accountancy/skills-framework/
+        read: '2026-10-30'
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-23'
+    4:
+      text: Write the accounting position for a judgement case and walk a colleague through it.
+      weeks_low: 26
+      weeks_high: 52
+      show_by: The case, the position you wrote and what the colleague or reviewer changed.
+      status: draft
+      basis:
+      - title: ACRA and SkillsFuture Singapore, Skills Framework for Accountancy
+        url: https://www.acra.gov.sg/advancing-accountancy/skills-framework/
+        read: '2026-10-30'
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-23'
+  advanced_technology_integration:
+    3:
+      text: Bring one new tool into a team process yourself, from testing to training its users.
+      weeks_low: 8
+      weeks_high: 16
+      show_by: The tool, how you tested it and what users now do differently.
+      status: draft
+      basis:
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 43'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-23'
+    4:
+      text: Lead the rollout of a tool across two or more processes and fix what it breaks.
+      weeks_low: 26
+      weeks_high: 52
+      show_by: The processes, the problems you found and how you solved them.
+      status: draft
+      basis:
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 43'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-23'
+  big_data_analytics:
+    3:
+      text: Answer one business question from a large data set you prepared yourself.
+      weeks_low: 8
+      weeks_high: 16
+      show_by: The question, the data, your method and the answer you gave.
+      status: draft
+      basis:
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-23'
+    4:
+      text: Design an analysis over several sources, deal with their quality issues, and guide another analyst on it.
+      weeks_low: 26
+      weeks_high: 52
+      show_by: The sources, the quality issues and what you taught the other analyst.
+      status: draft
+      basis:
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-23'
+  budget_management:
+    3:
+      text: Own the budget and one reforecast for a cost centre.
+      weeks_low: 8
+      weeks_high: 16
+      show_by: The budget you built, the reforecast and the variances you explained.
+      status: draft
+      basis:
+      - title: ACRA and SkillsFuture Singapore, Skills Framework for Accountancy
+        url: https://www.acra.gov.sg/advancing-accountancy/skills-framework/
+        read: '2026-10-30'
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-23'
+    4:
+      text: Run a budget cycle for a business unit and challenge budget holders' assumptions.
+      weeks_low: 26
+      weeks_high: 52
+      show_by: An assumption you challenged and what changed as a result.
+      status: draft
+      basis:
+      - title: ACRA and SkillsFuture Singapore, Skills Framework for Accountancy
+        url: https://www.acra.gov.sg/advancing-accountancy/skills-framework/
+        read: '2026-10-30'
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-23'
+  business_environment_analytics:
+    3:
+      text: Analyse how one external change, such as rates or a new rule, affects your area's numbers.
+      weeks_low: 8
+      weeks_high: 16
+      show_by: The change, your analysis and the impact you reported.
+      status: draft
+      basis:
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 45'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-23'
+    4:
+      text: Build a scenario analysis of external drivers for leadership and coach a colleague doing one.
+      weeks_low: 26
+      weeks_high: 52
+      show_by: The scenarios, the decision they informed and the coaching you gave.
+      status: draft
+      basis:
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 45'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-23'
+  compliance_reporting:
+    3:
+      text: Prepare and submit one recurring compliance report yourself and answer its queries.
+      weeks_low: 8
+      weeks_high: 16
+      show_by: The report, its deadline and a query you resolved.
+      status: draft
+      basis:
+      - title: ACRA and SkillsFuture Singapore, Skills Framework for Accountancy
+        url: https://www.acra.gov.sg/advancing-accountancy/skills-framework/
+        read: '2026-10-30'
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 24'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-23'
+    4:
+      text: Handle a new or changed reporting requirement and update the process for other preparers.
+      weeks_low: 26
+      weeks_high: 52
+      show_by: The requirement, the process change and how preparers were trained.
+      status: draft
+      basis:
+      - title: ACRA and SkillsFuture Singapore, Skills Framework for Accountancy
+        url: https://www.acra.gov.sg/advancing-accountancy/skills-framework/
+        read: '2026-10-30'
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 24'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-23'
+  continuous_improvement:
+    3:
+      text: Run one improvement on your own process end to end and measure the result.
+      weeks_low: 8
+      weeks_high: 16
+      show_by: The problem, its root cause, the change and the measured result.
+      status: draft
+      basis:
+      - title: ACRA and SkillsFuture Singapore, Skills Framework for Accountancy
+        url: https://www.acra.gov.sg/advancing-accountancy/skills-framework/
+        read: '2026-10-30'
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-23'
+    4:
+      text: Lead an improvement across teams and coach others in the method.
+      weeks_low: 26
+      weeks_high: 52
+      show_by: The project, the teams involved and the people you coached.
+      status: draft
+      basis:
+      - title: ACRA and SkillsFuture Singapore, Skills Framework for Accountancy
+        url: https://www.acra.gov.sg/advancing-accountancy/skills-framework/
+        read: '2026-10-30'
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-23'
+  credit_collections:
+    3:
+      text: Manage a portfolio of customer accounts on your own, including disputes and payment plans.
+      weeks_low: 8
+      weeks_high: 16
+      show_by: Your portfolio, a dispute you resolved and a payment plan you agreed.
+      status: draft
+      basis:
+      - title: ACRA and SkillsFuture Singapore, Skills Framework for Accountancy
+        url: https://www.acra.gov.sg/advancing-accountancy/skills-framework/
+        read: '2026-10-30'
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-23'
+    4:
+      text: Handle escalated high-value accounts and improve the collection process.
+      weeks_low: 26
+      weeks_high: 52
+      show_by: An escalated account, its outcome and the process change you made.
+      status: draft
+      basis:
+      - title: ACRA and SkillsFuture Singapore, Skills Framework for Accountancy
+        url: https://www.acra.gov.sg/advancing-accountancy/skills-framework/
+        read: '2026-10-30'
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-23'
+  dashboards:
+    3:
+      text: Build and publish one dashboard from data you prepared, for real users.
+      weeks_low: 8
+      weeks_high: 16
+      show_by: The dashboard, its users and the choices you made about charts.
+      status: draft
+      basis:
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-23'
+    4:
+      text: Build dashboards over several sources and set layout standards others follow.
+      weeks_low: 26
+      weeks_high: 52
+      show_by: The sources, the standards you set and who now follows them.
+      status: draft
+      basis:
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-23'
+  data_management:
+    3:
+      text: Own the definitions, quality checks and access requests for your area's data.
+      weeks_low: 8
+      weeks_high: 16
+      show_by: The data you own, a quality check you run and an issue you fixed.
+      status: draft
+      basis:
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-23'
+    4:
+      text: Design data controls across processes and train data stewards.
+      weeks_low: 26
+      weeks_high: 52
+      show_by: The controls, the processes covered and the stewards you trained.
+      status: draft
+      basis:
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-23'
+  data_migration:
+    3:
+      text: Migrate one data set end to end, including reconciling what moved.
+      weeks_low: 8
+      weeks_high: 16
+      show_by: The data set, the mapping and your reconciliation result.
+      status: draft
+      basis:
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 47'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-23'
+    4:
+      text: Plan a migration across entities or systems and guide the migration team.
+      weeks_low: 26
+      weeks_high: 52
+      show_by: The plan, a risk you handled and how you guided the team.
+      status: draft
+      basis:
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 47'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-23'
+  database_querying:
+    3:
+      text: Write your own queries with joins and filters to answer recurring questions.
+      weeks_low: 8
+      weeks_high: 16
+      show_by: A query you wrote, what it answers and how you checked the result.
+      status: draft
+      basis:
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-23'
+    4:
+      text: Write complex queries over many tables, tune a slow one and review others' queries.
+      weeks_low: 26
+      weeks_high: 52
+      show_by: The query you tuned, the gain, and a review you gave.
+      status: draft
+      basis:
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-23'
+  digital_business_model:
+    3:
+      text: Build a business case for one digital change in your area and test its assumptions.
+      weeks_low: 8
+      weeks_high: 16
+      show_by: The change, the case and the assumption you tested.
+      status: draft
+      basis:
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 38'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-23'
+    4:
+      text: Shape a new digital service model for a business unit with the teams evaluating it.
+      weeks_low: 26
+      weeks_high: 52
+      show_by: The model, the evaluation and your part in it.
+      status: draft
+      basis:
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 38'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-23'
+  ehs:
+    3:
+      text: Keep your area's EHS records and checks complete and act on routine findings.
+      weeks_low: 8
+      weeks_high: 16
+      show_by: The checks you own and a finding you acted on.
+      status: draft
+      basis:
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-23'
+    4:
+      text: Investigate a complex EHS issue and improve the procedure.
+      weeks_low: 26
+      weeks_high: 52
+      show_by: The issue, your investigation and the procedure change.
+      status: draft
+      basis:
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-23'
+  energy_management:
+    3:
+      text: Analyse energy use and cost for your area and report the findings yourself.
+      weeks_low: 8
+      weeks_high: 16
+      show_by: The data, your analysis and what you reported.
+      status: draft
+      basis:
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 39'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-23'
+    4:
+      text: Lead an energy audit across sites and propose savings with a business case.
+      weeks_low: 26
+      weeks_high: 52
+      show_by: The audit, the savings you proposed and the case behind them.
+      status: draft
+      basis:
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 39'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-23'
+  erp:
+    3:
+      text: Do your full set of tasks in the ERP system alone, including fixing common posting errors.
+      weeks_low: 8
+      weeks_high: 16
+      show_by: Your tasks in the system and an error you fixed yourself.
+      status: draft
+      basis:
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-23'
+    4:
+      text: Test an ERP change or upgrade and train other users on it.
+      weeks_low: 26
+      weeks_high: 52
+      show_by: The change you tested, a defect you found and the users you trained.
+      status: draft
+      basis:
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-23'
+  esg:
+    3:
+      text: Prepare your area's ESG data and disclosure on your own and answer its queries.
+      weeks_low: 8
+      weeks_high: 16
+      show_by: The data, the disclosure and a query you resolved.
+      status: draft
+      basis:
+      - title: ACRA and SkillsFuture Singapore, Skills Framework for Accountancy
+        url: https://www.acra.gov.sg/advancing-accountancy/skills-framework/
+        read: '2026-10-30'
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 38'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-23'
+    4:
+      text: Handle a complex ESG reporting question and improve the data process.
+      weeks_low: 26
+      weeks_high: 52
+      show_by: The question, your answer and the process change.
+      status: draft
+      basis:
+      - title: ACRA and SkillsFuture Singapore, Skills Framework for Accountancy
+        url: https://www.acra.gov.sg/advancing-accountancy/skills-framework/
+        read: '2026-10-30'
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 38'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-23'
+  financial_reporting:
+    3:
+      text: Prepare one set of financial reports yourself, including the analysis of movements.
+      weeks_low: 8
+      weeks_high: 16
+      show_by: The reports, a movement you explained and the reviewer's feedback.
+      status: draft
+      basis:
+      - title: ACRA and SkillsFuture Singapore, Skills Framework for Accountancy
+        url: https://www.acra.gov.sg/advancing-accountancy/skills-framework/
+        read: '2026-10-30'
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-23'
+    4:
+      text: Handle a complex report, such as a consolidation or a new standard, and review others' work.
+      weeks_low: 26
+      weeks_high: 52
+      show_by: The report, the complex point and a review you gave.
+      status: draft
+      basis:
+      - title: ACRA and SkillsFuture Singapore, Skills Framework for Accountancy
+        url: https://www.acra.gov.sg/advancing-accountancy/skills-framework/
+        read: '2026-10-30'
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-23'
+  financial_systems:
+    3:
+      text: Deliver one finance system change for your area, including user acceptance testing.
+      weeks_low: 8
+      weeks_high: 16
+      show_by: The change, your test cases and the result.
+      status: draft
+      basis:
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-23'
+    4:
+      text: Lead an implementation across teams, resolve a design issue and train key users.
+      weeks_low: 26
+      weeks_high: 52
+      show_by: The implementation, the design issue and the users you trained.
+      status: draft
+      basis:
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-23'
+  fixed_assets:
+    3:
+      text: Manage the fixed asset register for an entity, including disposals and transfers.
+      weeks_low: 8
+      weeks_high: 16
+      show_by: The register, a disposal or transfer you handled and your reconciliation.
+      status: draft
+      basis:
+      - title: ACRA and SkillsFuture Singapore, Skills Framework for Accountancy
+        url: https://www.acra.gov.sg/advancing-accountancy/skills-framework/
+        read: '2026-10-30'
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-23'
+    4:
+      text: Handle an impairment or asset review and improve the asset process.
+      weeks_low: 26
+      weeks_high: 52
+      show_by: The case, your assessment and the process change.
+      status: draft
+      basis:
+      - title: ACRA and SkillsFuture Singapore, Skills Framework for Accountancy
+        url: https://www.acra.gov.sg/advancing-accountancy/skills-framework/
+        read: '2026-10-30'
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-23'
+  fpa:
+    3:
+      text: Build and run the forecast for your area and explain its main drivers.
+      weeks_low: 8
+      weeks_high: 16
+      show_by: The forecast, its drivers and how it compared with actuals.
+      status: draft
+      basis:
+      - title: ACRA and SkillsFuture Singapore, Skills Framework for Accountancy
+        url: https://www.acra.gov.sg/advancing-accountancy/skills-framework/
+        read: '2026-10-30'
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-23'
+    4:
+      text: Build a planning model for a business unit and coach analysts using it.
+      weeks_low: 26
+      weeks_high: 52
+      show_by: The model, an assumption you challenged and the analysts you coached.
+      status: draft
+      basis:
+      - title: ACRA and SkillsFuture Singapore, Skills Framework for Accountancy
+        url: https://www.acra.gov.sg/advancing-accountancy/skills-framework/
+        read: '2026-10-30'
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-23'
+  general_ledger:
+    3:
+      text: Run your own close tasks end to end, including accruals and reconciliations.
+      weeks_low: 8
+      weeks_high: 16
+      show_by: Your close tasks, an accrual and a reconciliation you completed.
+      status: draft
+      basis:
+      - title: ACRA and SkillsFuture Singapore, Skills Framework for Accountancy
+        url: https://www.acra.gov.sg/advancing-accountancy/skills-framework/
+        read: '2026-10-30'
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-23'
+    4:
+      text: Fix close issues for complex entries and improve the close process.
+      weeks_low: 26
+      weeks_high: 52
+      show_by: The issue, the fix and the close improvement.
+      status: draft
+      basis:
+      - title: ACRA and SkillsFuture Singapore, Skills Framework for Accountancy
+        url: https://www.acra.gov.sg/advancing-accountancy/skills-framework/
+        read: '2026-10-30'
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-23'
+  green_asset_management:
+    3:
+      text: Keep your area's green asset records and reporting complete yourself.
+      weeks_low: 8
+      weeks_high: 16
+      show_by: The records you keep and a report you produced.
+      status: draft
+      basis:
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-23'
+    4:
+      text: Assess complex green asset cases and improve the tracking process.
+      weeks_low: 26
+      weeks_high: 52
+      show_by: A case you assessed and the process change.
+      status: draft
+      basis:
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-23'
+  green_auditing:
+    3:
+      text: Carry out the green audit checks for your area and report the findings.
+      weeks_low: 8
+      weeks_high: 16
+      show_by: The checks, the evidence and the findings you reported.
+      status: draft
+      basis:
+      - title: ACRA and SkillsFuture Singapore, Skills Framework for Accountancy
+        url: https://www.acra.gov.sg/advancing-accountancy/skills-framework/
+        read: '2026-10-30'
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 24'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-23'
+    4:
+      text: Lead a complex green audit and improve the audit approach.
+      weeks_low: 26
+      weeks_high: 52
+      show_by: The audit, a complex finding and the change to the approach.
+      status: draft
+      basis:
+      - title: ACRA and SkillsFuture Singapore, Skills Framework for Accountancy
+        url: https://www.acra.gov.sg/advancing-accountancy/skills-framework/
+        read: '2026-10-30'
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 24'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-23'
+  green_procurement:
+    3:
+      text: Run your own sourcing with green criteria, including checking supplier evidence.
+      weeks_low: 8
+      weeks_high: 16
+      show_by: A sourcing event, the criteria and the supplier evidence you checked.
+      status: draft
+      basis:
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-23'
+    4:
+      text: Write green criteria for a complex category and guide buyers in using them.
+      weeks_low: 26
+      weeks_high: 52
+      show_by: The category, the criteria and the buyers you guided.
+      status: draft
+      basis:
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-23'
+  internal_controls:
+    3:
+      text: Test the controls in your area and follow up the exceptions.
+      weeks_low: 8
+      weeks_high: 16
+      show_by: The controls you tested, an exception and its follow-up.
+      status: draft
+      basis:
+      - title: ACRA and SkillsFuture Singapore, Skills Framework for Accountancy
+        url: https://www.acra.gov.sg/advancing-accountancy/skills-framework/
+        read: '2026-10-30'
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 24'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-23'
+    4:
+      text: Evaluate controls across processes and design a fix for a weakness.
+      weeks_low: 26
+      weeks_high: 52
+      show_by: The weakness, your fix and who now owns the control.
+      status: draft
+      basis:
+      - title: ACRA and SkillsFuture Singapore, Skills Framework for Accountancy
+        url: https://www.acra.gov.sg/advancing-accountancy/skills-framework/
+        read: '2026-10-30'
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 24'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-23'
+  invoice_processing:
+    3:
+      text: Handle your own invoice queue end to end, including credit notes and exceptions.
+      weeks_low: 8
+      weeks_high: 16
+      show_by: Your queue, an exception and how you resolved it.
+      status: draft
+      basis:
+      - title: ACRA and SkillsFuture Singapore, Skills Framework for Accountancy
+        url: https://www.acra.gov.sg/advancing-accountancy/skills-framework/
+        read: '2026-10-30'
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'University of Florida HR, TEAMS Titles competency: Accounts Payable (A-P)'
+        url: https://teams-titles.hr.ufl.edu/job-competency/accounts-payable-a-p/
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-23'
+    4:
+      text: Resolve complex AP errors, reconcile AP to the ledger and train other processors.
+      weeks_low: 26
+      weeks_high: 52
+      show_by: An error you resolved, your reconciliation and the processors you trained.
+      status: draft
+      basis:
+      - title: ACRA and SkillsFuture Singapore, Skills Framework for Accountancy
+        url: https://www.acra.gov.sg/advancing-accountancy/skills-framework/
+        read: '2026-10-30'
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'University of Florida HR, TEAMS Titles competency: Accounts Payable (A-P)'
+        url: https://teams-titles.hr.ufl.edu/job-competency/accounts-payable-a-p/
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-23'
+  process_automation:
+    3:
+      text: Build and maintain an automation for one of your own tasks, including its error handling.
+      weeks_low: 8
+      weeks_high: 16
+      show_by: The automation, what it handles and a failure you fixed.
+      status: draft
+      basis:
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-23'
+    4:
+      text: Build automations across processes and set build standards for others.
+      weeks_low: 26
+      weeks_high: 52
+      show_by: The automations, the standards and who builds to them.
+      status: draft
+      basis:
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-23'
+  process_optimisation:
+    3:
+      text: Redesign your own process and show the time or errors saved.
+      weeks_low: 8
+      weeks_high: 16
+      show_by: The process map before and after and the measured saving.
+      status: draft
+      basis:
+      - title: ACRA and SkillsFuture Singapore, Skills Framework for Accountancy
+        url: https://www.acra.gov.sg/advancing-accountancy/skills-framework/
+        read: '2026-10-30'
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 24'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-23'
+    4:
+      text: Optimise a process across teams and handle the trade-offs.
+      weeks_low: 26
+      weeks_high: 52
+      show_by: The process, a trade-off you decided and the result.
+      status: draft
+      basis:
+      - title: ACRA and SkillsFuture Singapore, Skills Framework for Accountancy
+        url: https://www.acra.gov.sg/advancing-accountancy/skills-framework/
+        read: '2026-10-30'
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 24'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-23'
+  reporting:
+    3:
+      text: Prepare your own reports end to end, including commentary on changes.
+      weeks_low: 8
+      weeks_high: 16
+      show_by: A report, its sources and the commentary you wrote.
+      status: draft
+      basis:
+      - title: ACRA and SkillsFuture Singapore, Skills Framework for Accountancy
+        url: https://www.acra.gov.sg/advancing-accountancy/skills-framework/
+        read: '2026-10-30'
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-23'
+    4:
+      text: Build a report from several sources and improve the reporting pack for others.
+      weeks_low: 26
+      weeks_high: 52
+      show_by: The report, the sources and the change to the pack.
+      status: draft
+      basis:
+      - title: ACRA and SkillsFuture Singapore, Skills Framework for Accountancy
+        url: https://www.acra.gov.sg/advancing-accountancy/skills-framework/
+        read: '2026-10-30'
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-23'
+  stakeholder_management:
+    3:
+      text: Manage your own stakeholders, agreeing deadlines and handling routine conflicts.
+      weeks_low: 8
+      weeks_high: 16
+      show_by: A stakeholder, a deadline you agreed and a conflict you handled.
+      status: draft
+      basis:
+      - title: ACRA and SkillsFuture Singapore, Skills Framework for Accountancy
+        url: https://www.acra.gov.sg/advancing-accountancy/skills-framework/
+        read: '2026-10-30'
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-23'
+    4:
+      text: Manage a senior or difficult stakeholder across teams and coach others in it.
+      weeks_low: 26
+      weeks_high: 52
+      show_by: The stakeholder, your approach and the coaching you gave.
+      status: draft
+      basis:
+      - title: ACRA and SkillsFuture Singapore, Skills Framework for Accountancy
+        url: https://www.acra.gov.sg/advancing-accountancy/skills-framework/
+        read: '2026-10-30'
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-23'
+  standard_costing:
+    3:
+      text: Set and maintain the standard costs for your area and explain the variances.
+      weeks_low: 8
+      weeks_high: 16
+      show_by: The standards you set and a variance you explained.
+      status: draft
+      basis:
+      - title: ACRA and SkillsFuture Singapore, Skills Framework for Accountancy
+        url: https://www.acra.gov.sg/advancing-accountancy/skills-framework/
+        read: '2026-10-30'
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-23'
+    4:
+      text: Review standards across products or sites and resolve a complex variance.
+      weeks_low: 26
+      weeks_high: 52
+      show_by: The review, the variance and the change you made.
+      status: draft
+      basis:
+      - title: ACRA and SkillsFuture Singapore, Skills Framework for Accountancy
+        url: https://www.acra.gov.sg/advancing-accountancy/skills-framework/
+        read: '2026-10-30'
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-23'
+  statistical_analytics:
+    3:
+      text: Choose and run the right statistical method for a real question and explain its limits.
+      weeks_low: 8
+      weeks_high: 16
+      show_by: The question, the method and the limits you stated.
+      status: draft
+      basis:
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-23'
+    4:
+      text: Build a statistical model for a complex question, check it and guide other analysts.
+      weeks_low: 26
+      weeks_high: 52
+      show_by: The model, how you checked it and who you guided.
+      status: draft
+      basis:
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-23'
+  system_performance:
+    3:
+      text: Monitor a system's performance yourself and fix or escalate common problems.
+      weeks_low: 8
+      weeks_high: 16
+      show_by: What you monitor and a problem you fixed or escalated.
+      status: draft
+      basis:
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 24'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-23'
+    4:
+      text: Diagnose a complex performance problem and improve the monitoring.
+      weeks_low: 26
+      weeks_high: 52
+      show_by: The problem, your diagnosis and the monitoring change.
+      status: draft
+      basis:
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 24'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-23'
+  systems_integration:
+    3:
+      text: Configure and test an interface or system setting for your area yourself.
+      weeks_low: 8
+      weeks_high: 16
+      show_by: The interface or setting, your tests and the result.
+      status: draft
+      basis:
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 24'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-23'
+    4:
+      text: Design an integration across systems and resolve a complex interface failure.
+      weeks_low: 26
+      weeks_high: 52
+      show_by: The design, the failure and how you resolved it.
+      status: draft
+      basis:
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 24'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-23'
+  variance_analytics:
+    3:
+      text: Analyse your area's variances and explain their causes to the business.
+      weeks_low: 8
+      weeks_high: 16
+      show_by: A variance, its cause and how you explained it.
+      status: draft
+      basis:
+      - title: ACRA and SkillsFuture Singapore, Skills Framework for Accountancy
+        url: https://www.acra.gov.sg/advancing-accountancy/skills-framework/
+        read: '2026-10-30'
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-23'
+    4:
+      text: Analyse complex variances across units and improve the analysis method.
+      weeks_low: 26
+      weeks_high: 52
+      show_by: The analysis, a complex variance and the method change.
+      status: draft
+      basis:
+      - title: ACRA and SkillsFuture Singapore, Skills Framework for Accountancy
+        url: https://www.acra.gov.sg/advancing-accountancy/skills-framework/
+        read: '2026-10-30'
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-23'
+  vendor_management:
+    3:
+      text: Manage your own group of vendors, including performance issues and queries.
+      weeks_low: 8
+      weeks_high: 16
+      show_by: Your vendors, a performance issue and how you handled it.
+      status: draft
+      basis:
+      - title: ACRA and SkillsFuture Singapore, Skills Framework for Accountancy
+        url: https://www.acra.gov.sg/advancing-accountancy/skills-framework/
+        read: '2026-10-30'
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'University of Florida HR, TEAMS Titles competency: Accounts Payable (A-P)'
+        url: https://teams-titles.hr.ufl.edu/job-competency/accounts-payable-a-p/
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-23'
+    4:
+      text: Handle a strategic or difficult vendor and improve the vendor process.
+      weeks_low: 26
+      weeks_high: 52
+      show_by: The vendor, the outcome and the process change.
+      status: draft
+      basis:
+      - title: ACRA and SkillsFuture Singapore, Skills Framework for Accountancy
+        url: https://www.acra.gov.sg/advancing-accountancy/skills-framework/
+        read: '2026-10-30'
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'University of Florida HR, TEAMS Titles competency: Accounts Payable (A-P)'
+        url: https://teams-titles.hr.ufl.edu/job-competency/accounts-payable-a-p/
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-23'
+  tax_preparation:
+    3:
+      text: Prepare your entity's tax computation and return yourself, with a reviewer checking only the result.
+      weeks_low: 8
+      weeks_high: 16
+      show_by: The computation, an adjustment you made and the reviewer's feedback.
+      status: draft
+      basis:
+      - title: ACRA and SkillsFuture Singapore, Skills Framework for Accountancy
+        url: https://www.acra.gov.sg/advancing-accountancy/skills-framework/
+        read: '2026-10-30'
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-31'
+    4:
+      text: Handle a complex tax position and review a colleague's return.
+      weeks_low: 26
+      weeks_high: 52
+      show_by: The position, your treatment and the review you gave.
+      status: draft
+      basis:
+      - title: ACRA and SkillsFuture Singapore, Skills Framework for Accountancy
+        url: https://www.acra.gov.sg/advancing-accountancy/skills-framework/
+        read: '2026-10-30'
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-31'
+  green_tax_strategies:
+    3:
+      text: Prepare one green tax incentive or allowance claim yourself and check it qualifies.
+      weeks_low: 8
+      weeks_high: 16
+      show_by: The incentive, the evidence you gathered and the outcome.
+      status: draft
+      basis:
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-31'
+    4:
+      text: Assess the green tax options for a business decision and guide colleagues on them.
+      weeks_low: 26
+      weeks_high: 52
+      show_by: The decision, the options you compared and your advice.
+      status: draft
+      basis:
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-31'
+  e_invoicing_standards:
+    3:
+      text: Run your area's e-invoicing yourself, including fixing validation errors.
+      weeks_low: 8
+      weeks_high: 16
+      show_by: Your e-invoicing work, an error you fixed and how.
+      status: draft
+      basis:
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-31'
+    4:
+      text: Resolve an e-invoicing issue across systems and train others on the standard.
+      weeks_low: 26
+      weeks_high: 52
+      show_by: The issue, the fix and the people you trained.
+      status: draft
+      basis:
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-31'
+  attention_to_detail:
+    3:
+      text: Deliver a recurring piece of work without close review and trace every difference yourself.
+      weeks_low: 8
+      weeks_high: 16
+      show_by: The work, a difference you traced and its cause.
+      status: draft
+      basis:
+      - title: ACRA and SkillsFuture Singapore, Skills Framework for Accountancy
+        url: https://www.acra.gov.sg/advancing-accountancy/skills-framework/
+        read: '2026-10-30'
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 24'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-31'
+    4:
+      text: Design a check that catches errors in complex work and coach others to use it.
+      weeks_low: 26
+      weeks_high: 52
+      show_by: The check, an error it caught and who now uses it.
+      status: draft
+      basis:
+      - title: ACRA and SkillsFuture Singapore, Skills Framework for Accountancy
+        url: https://www.acra.gov.sg/advancing-accountancy/skills-framework/
+        read: '2026-10-30'
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 24'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-31'
+  ethical_judgement:
+    3:
+      text: Resolve an ethical question in your own work and document your reasoning.
+      weeks_low: 8
+      weeks_high: 16
+      show_by: The question, your decision and how you documented it.
+      status: draft
+      basis:
+      - title: ACRA and SkillsFuture Singapore, Skills Framework for Accountancy
+        url: https://www.acra.gov.sg/advancing-accountancy/skills-framework/
+        read: '2026-10-30'
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 24'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-31'
+    4:
+      text: Advise a colleague on a difficult ethical case or help improve a policy.
+      weeks_low: 26
+      weeks_high: 52
+      show_by: The case or policy and the advice you gave.
+      status: draft
+      basis:
+      - title: ACRA and SkillsFuture Singapore, Skills Framework for Accountancy
+        url: https://www.acra.gov.sg/advancing-accountancy/skills-framework/
+        read: '2026-10-30'
+      - title: SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)
+        url: https://sfia-online.org/en/sfia-9/responsibilities
+        read: '2026-10-30'
+      - title: 'TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 24'
+        url: https://www.talentcorp.com.my
+        read: '2026-10-31'

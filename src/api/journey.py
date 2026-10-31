@@ -4,6 +4,7 @@ import json
 from dataclasses import asdict
 from typing import Any
 
+import yaml
 from fastapi import APIRouter, Depends, File, HTTPException, Query, UploadFile
 from pydantic import BaseModel, Field
 from sqlalchemy import Engine, select
@@ -17,6 +18,7 @@ from src.evidence.signals import build_signals, job_ad_signals, occupation_signa
 from src.intake.extract import extract
 from src.intake.files import UnsupportedFileError, read_cv
 from src.intake.skill_search import search
+from src.journey.events import record_claim_changes, record_event
 from src.journey.progress import get_progress
 from src.journey.store import (
     ProfileData,
@@ -25,16 +27,26 @@ from src.journey.store import (
     get_profile,
     update_profile,
 )
-from src.match.decision import fit_range, meters
+from src.levels import load_levels
+from src.match.decision import (
+    band,
+    components,
+    essentials_short,
+    fit_range,
+    meters,
+    raise_options,
+)
 from src.match.engine import Evidence, RoleMatch, Scenario, rank_roles, score_role
 from src.match.evidence import automation_evidence
 from src.match.explain import explain, facts
 from src.match.outlook import role_outlook
+from src.match.pay import role_pay
 from src.match.radar import radar
 from src.match.tasks import task_view
 from src.occupations.catalogue import catalogue_table
 from src.pack import Pack, load_pack
-from src.pathway.planner import Pathway, plan_pathway
+from src.pathway.planner import Pathway, apply_progress, plan_pathway
+from src.pathway.sdg import role_targets
 from src.pathway.tracks import build_tracks, comparison
 from src.resources import load_resources
 
@@ -45,7 +57,9 @@ SAMPLES = {
     "nur": "Nur · cash application analyst",
     "hafiz": "Hafiz · accounting graduate",
     "mei": "Mei · retail supervisor",
+    "kavitha": "Kavitha · senior reporting analyst",
 }
+PERSONAS_FILE = SAMPLES_DIR / "personas.yaml"  # fixed levels for the persona test and KPIs
 MAX_TEXT_CHARS = 20_000
 SCENARIO_LABEL = {"moderate": "Moderate AI adoption", "fast": "Fast AI adoption"}
 IMPACT_MEANING = {  # TalentCorp (2024) PDF p. 25, "Role and Skills Analysis by Impact Level"
@@ -61,6 +75,14 @@ class TextIn(BaseModel):
 
 class ProfileCreated(BaseModel):
     id: str
+
+
+def load_personas() -> dict[str, dict[str, Any]]:
+    """The four personas' situation and fixed levels, each quoting their synthetic CV."""
+    personas: dict[str, dict[str, Any]] = yaml.safe_load(PERSONAS_FILE.read_text(encoding="utf-8"))[
+        "personas"
+    ]
+    return personas
 
 
 def evidence_for(engine: Engine, profile_id: str) -> Evidence:
@@ -105,6 +127,24 @@ def _task_examples(pack: Pack, engine: Engine) -> list[dict[str, str]]:
     return examples
 
 
+def _levels_out() -> dict[str, Any]:
+    """C1: the 0–5 scale, its rules, and each skill's "I can…" sentences with their basis."""
+    levels = load_levels()
+    return {
+        "checked": levels.checked,
+        "scale": [s.model_dump() for s in levels.scale],
+        "rules": levels.rules,
+        "skills": {
+            skill_id: {
+                "anchors": {str(n): text for n, text in s.anchors.items()},
+                "basis": [b.model_dump() for b in s.basis],
+                "status": s.status,
+            }
+            for skill_id, s in levels.skills.items()
+        },
+    }
+
+
 @router.get("/pack")
 def pack_info(engine: Engine = Depends(get_engine)) -> dict[str, Any]:
     pack = load_pack()
@@ -117,6 +157,7 @@ def pack_info(engine: Engine = Depends(get_engine)) -> dict[str, Any]:
         ],
         "samples": [{"id": k, "label": v} for k, v in SAMPLES.items()],
         "proficiency": list(params.PROFICIENCY_LABELS),
+        "levels": _levels_out(),
         "courses_checked": pack.courses_checked,
         "task_examples": _task_examples(pack, engine),
     }
@@ -166,6 +207,7 @@ def new_profile(data: ProfileData, engine: Engine = Depends(get_engine)) -> Prof
     _check_profile(load_pack(), data)
     profile_id = create_profile(engine, data)
     baseline_cutoff(engine, profile_id)
+    record_claim_changes(engine, profile_id, {}, _claim_states(data))
     return ProfileCreated(id=profile_id)
 
 
@@ -179,10 +221,15 @@ def read_profile(profile_id: str, engine: Engine = Depends(get_engine)) -> dict[
 def edit_profile(
     profile_id: str, data: ProfileData, engine: Engine = Depends(get_engine)
 ) -> dict[str, Any]:
-    require_profile(engine, profile_id)
+    old, _ = require_profile(engine, profile_id)
     _check_profile(load_pack(), data)
     update_profile(engine, profile_id, data)
+    record_claim_changes(engine, profile_id, _claim_states(old), _claim_states(data))
     return {"profile": data.model_dump()}
+
+
+def _claim_states(data: ProfileData) -> dict[str, tuple[int | None, str]]:
+    return {skill: (claim.level, claim.source) for skill, claim in data.skills.items()}
 
 
 def _check_profile(pack: Pack, data: ProfileData) -> None:
@@ -195,10 +242,10 @@ def _check_profile(pack: Pack, data: ProfileData) -> None:
 
 def _role_sdgs(pack: Pack, match: RoleMatch) -> list[dict[str, str]]:
     seen: dict[str, dict[str, str]] = {}
-    links = list(pack.sdg.destination)
+    links = list(pack.sdg.for_role(match.role_id))
     for req in match.requirements:
         if req.tier == "upskill":
-            links += pack.sdg.skill_kinds[pack.skills[req.skill].kind]
+            links += pack.sdg.for_skill(req.skill, pack.skills[req.skill].kind)
     for link in links:
         seen.setdefault(
             link.target,
@@ -215,8 +262,10 @@ def _card(
     evidence: Evidence,
     demand: list[dict[str, str]],
     scenario: Scenario,
+    rows: list[dict[str, Any]],
 ) -> dict[str, Any]:
     role = pack.destination_roles[match.role_id]
+    levels = data.levels()
     current = pack.current_roles.get(data.current_role)
     outlook = [
         {
@@ -241,7 +290,13 @@ def _card(
         "impact": role.impact,
         "outlook": outlook + demand,
         "meters": meters(match),
-        "fit_range": fit_range(pack, match, data.levels(), scenario, evidence),
+        "fit_range": fit_range(pack, match, levels, scenario, evidence, data.skills),
+        "band": band(match.fit),
+        "band_basis": "assumption",
+        "components": components(match, data.skills),
+        "raise": raise_options(pack, match, levels, scenario, evidence, data.skills),
+        "essentials_short": essentials_short(match),
+        "pay": role_pay(role, rows),
         "listed_transition": bool(current and match.role_id in current.transitions),
         "effort_hours": path.total_hours,
         "effort_weeks": path.weeks,
@@ -272,6 +327,7 @@ def matches(
             evidence,
             role_outlook(pack, pack.destination_roles[m.role_id], rows, signals),
             scenario,
+            rows,
         )
         for m in ranked
     ]
@@ -290,6 +346,13 @@ def matches(
         "current_impact": IMPACT_MEANING[current.impact] if current else None,
         "destination": destination,
         "roles": cards,
+        # B7: roles × SDG targets with reasons, so roles can be compared by contribution.
+        "sdg_roles": [r.model_dump() for r in role_targets(pack)],
+        "bands": {
+            "thresholds": params.BAND_THRESHOLDS,
+            "below": params.BAND_BELOW,
+            "kind": "assumption",
+        },
     }
 
 
@@ -297,11 +360,13 @@ def matches(
 def set_destination(
     profile_id: str, body: dict[str, str], engine: Engine = Depends(get_engine)
 ) -> dict[str, str]:
-    require_profile(engine, profile_id)
+    _, before = require_profile(engine, profile_id)
     role_id = body.get("role_id", "")
     if role_id not in load_pack().destination_roles:
         raise HTTPException(status_code=422, detail="unknown destination role")
     choose_destination(engine, profile_id, role_id)
+    if role_id != before:
+        record_event(engine, profile_id, "destination_chosen", role_id, before, role_id)
     return {"destination": role_id}
 
 
@@ -324,7 +389,18 @@ def pathway(
     pack = load_pack()
     evidence = evidence_for(engine, profile_id)
     match = score_role(pack, pack.destination_roles[chosen], data.levels(), scenario, evidence)
-    path = plan_pathway(pack, match, data.levels(), data.weekly_hours, scenario, evidence)
+    path = plan_pathway(
+        pack,
+        match,
+        data.levels(),
+        data.weekly_hours,
+        scenario,
+        evidence,
+        data.skills,
+        data.situation,
+    )
+    saved = get_progress(engine, profile_id)
+    apply_progress(path, saved["done"], saved["skipped"], data.skills)
     out = asdict(path)
     out["sdg_targets"] = {k: v.model_dump() for k, v in pack.sdg.targets.items()}
     out["sdg_source"] = pack.sdg.source
@@ -346,15 +422,34 @@ def tracks(
     res = load_resources()
     evidence = evidence_for(engine, profile_id)
     match = score_role(pack, pack.destination_roles[chosen], data.levels(), scenario, evidence)
-    path = plan_pathway(pack, match, data.levels(), data.weekly_hours, scenario, evidence)
-    done = get_progress(engine, profile_id)["done"]
+    path = plan_pathway(
+        pack,
+        match,
+        data.levels(),
+        data.weekly_hours,
+        scenario,
+        evidence,
+        data.skills,
+        data.situation,
+    )
+    saved = get_progress(engine, profile_id)
+    done = saved["done"]
+    apply_progress(path, done, saved["skipped"], data.skills)
     return {
         "role_id": chosen,
         "role_title": match.title,
         "scenario": scenario,
         "weekly_hours": data.weekly_hours,
         "tracks": build_tracks(pack, res, match, path, done),
-        "comparison": comparison(pack, res, data.levels(), chosen, data.weekly_hours, evidence),
+        "comparison": comparison(
+            pack,
+            res,
+            data.levels(),
+            chosen,
+            data.weekly_hours,
+            evidence,
+            path.ai_basics["shown"],
+        ),
         "resources_checked": res.checked,
         "courses_checked": pack.courses_checked,
     }

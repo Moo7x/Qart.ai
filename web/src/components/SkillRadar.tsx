@@ -1,11 +1,11 @@
 import type { RadarAxis } from '../types'
 
 // Radar of one role's skills: needed level, your claimed level, and the level after the pathway.
-// Levels use the app's 0–4 scale (none · aware · working · proficient · expert).
+// Levels use the app's 0–5 scale (none · novice · aware · working · proficient · expert).
 const SIZE = 320
 const CENTRE = SIZE / 2
 const RADIUS = 102
-const MAX_LEVEL = 4
+const MAX_LEVEL = 5
 
 function point(i: number, n: number, level: number): [number, number] {
   const angle = -Math.PI / 2 + (2 * Math.PI * i) / n

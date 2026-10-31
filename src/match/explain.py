@@ -17,7 +17,7 @@ import re
 from collections import OrderedDict
 from typing import Any
 
-from src import llm
+from src import llm, params
 from src.config import Settings
 from src.match.engine import RoleMatch
 from src.pathway.planner import Pathway
@@ -46,6 +46,12 @@ Complete = llm.Complete
 _cache: OrderedDict[str, dict[str, Any]] = OrderedDict()
 
 
+def _level(level: int) -> str:
+    """A level on the 0–5 scale with its label, e.g. "3 of 5 (working)"."""
+    top = len(params.PROFICIENCY_LABELS) - 1
+    return f"{level} of {top} ({params.PROFICIENCY_LABELS[level]})"
+
+
 def facts(match: RoleMatch, path: Pathway, scenario_label: str) -> list[dict[str, str]]:
     """Computed results as short sentences with ids; the only material the model may use."""
     out = [
@@ -55,14 +61,13 @@ def facts(match: RoleMatch, path: Pathway, scenario_label: str) -> list[dict[str
         }
     ]
     for i, req in enumerate(match.requirements, 1):
-        # Levels are stored 0-4 and shown to people on the 1-5 scale the screens use.
-        claimed = "not stated" if req.claimed is None else f"{req.claimed + 1} of 5"
+        claimed = "not stated" if req.claimed is None else _level(req.claimed)
         out.append(
             {
                 "id": f"skill{i}",
                 "text": (
                     f"{req.skill_name}{' (essential)' if req.essential else ''}: you {claimed}, "
-                    f"the role needs {req.required + 1} of 5; it adds {req.contribution:.1f} fit "
+                    f"the role needs {_level(req.required)}; it adds {req.contribution:.1f} fit "
                     f"points. {req.shift_reason}"
                 ),
             }

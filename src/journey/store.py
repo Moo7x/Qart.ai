@@ -18,7 +18,7 @@ from src.db import metadata
 PROFILE_ID_BYTES = 16  # 128-bit random id: unguessable, so it can act as the access key
 MIN_WEEKLY_HOURS = 1
 MAX_WEEKLY_HOURS = 40
-MAX_LEVEL = 4
+MAX_LEVEL = 5  # the 0–5 scale of data/packs/gbs_fa/levels.yaml
 
 profile_table = Table(
     "profile",

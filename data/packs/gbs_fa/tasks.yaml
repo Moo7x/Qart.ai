@@ -132,3 +132,12 @@ occupations:
         - {task: 1150, text: "Evaluate and monitor contract performance to ensure compliance with contractual obligations and to determine need for changes."}
       data_management:
         - {task: 1151, text: "Maintain and review computerized or manual records of purchased items, costs, deliveries, product performance, and inventories."}
+  "13-2082.00":  # B10: Tax Analyst. Ids and wording checked in O*NET 30.1 task statements on
+    # 2026-10-31; the 68 links above have the same ids and wording there as in 31.0.
+    title: "Tax Preparers"
+    skills:
+      tax_preparation:
+        - {task: 7359, text: "Prepare or assist in preparing simple to complex tax returns for individuals or small businesses."}
+        - {task: 7358, text: "Compute taxes owed or overpaid, using adding machines or personal computers, and complete entries on forms, following tax form instructions and tax tables."}
+      attention_to_detail:
+        - {task: 7366, text: "Check data input or verify totals on forms prepared by others to detect errors in arithmetic, data entry, or procedures."}

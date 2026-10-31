@@ -11,7 +11,7 @@ from typing import Literal
 import yaml
 from pydantic import BaseModel
 
-from src.evidence.field import PACK_DIR
+from src.evidence.field import PACK_DIR, field_profile
 
 Tier = Literal["core", "upskill", "support"]
 
@@ -63,6 +63,9 @@ class DestinationRole(BaseModel):
     id: str
     title: str
     impact: Literal["high", "medium", "low"]
+    pages: list[
+        int
+    ] = []  # TalentCorp (2024) PDF pages naming the role; the pack check requires one
     soc: str
     requires: list[Requirement]
 
@@ -93,6 +96,7 @@ class SdgTarget(BaseModel):
 class SdgLink(BaseModel):
     target: str
     how: str  # the mechanism shown to the user
+    source: str = ""  # where the link's basis is read (per-skill and per-role links, B7)
 
 
 class SdgMap(BaseModel):
@@ -101,6 +105,15 @@ class SdgMap(BaseModel):
     skill_kinds: dict[str, list[SdgLink]]
     pathway: list[SdgLink]
     destination: list[SdgLink]
+    # B7: each skill's and each destination role's own links; skill_kinds is the fallback.
+    skills: dict[str, list[SdgLink]] = {}
+    roles: dict[str, list[SdgLink]] = {}
+
+    def for_skill(self, skill_id: str, kind: str) -> list[SdgLink]:
+        return self.skills.get(skill_id) or self.skill_kinds[kind]
+
+    def for_role(self, role_id: str) -> list[SdgLink]:
+        return self.roles.get(role_id) or self.destination
 
 
 class TaskLink(BaseModel):
@@ -193,6 +206,8 @@ def _check(pack: Pack) -> None:
         *pack.sdg.pathway,
         *pack.sdg.destination,
         *(link for kind in pack.sdg.skill_kinds.values() for link in kind),
+        *(link for links in pack.sdg.skills.values() for link in links),
+        *(link for links in pack.sdg.roles.values() for link in links),
     ]
     problems += [
         f"SDG link to unknown target {link.target}"
@@ -209,12 +224,53 @@ def _check(pack: Pack) -> None:
             for s in occupation.skills
             if s not in needed
         ]
+    problems += _sdg_link_problems(pack)
+    problems += _role_problems(pack)
     kinds = {s.kind for s in pack.skills.values()}
     problems += [
         f"skill kind {k} has no SDG mapping" for k in kinds if not pack.sdg.skill_kinds.get(k)
     ]
     if problems:
         raise PackError("; ".join(problems))
+
+
+def _role_problems(pack: Pack) -> list[str]:
+    """B10: a destination role is fully sourced: a study page, an essential and a known SOC code."""
+    followed = {o.code for o in field_profile().soc_occupations}
+    problems = []
+    for role in pack.destination_roles.values():
+        if not role.pages:
+            problems.append(f"destination role {role.id} cites no study page")
+        if not any(r.essential for r in role.requires):
+            problems.append(f"destination role {role.id} has no essential requirement")
+        if role.soc not in followed:
+            problems.append(f"destination role {role.id}: SOC {role.soc} is not in field.yaml")
+    return problems
+
+
+def _sdg_link_problems(pack: Pack) -> list[str]:
+    """B7: every skill and destination role has its own link, each with a reason and a source."""
+    problems = [f"skill {s} has no SDG link" for s in pack.skills if not pack.sdg.skills.get(s)]
+    problems += [
+        f"destination role {r} has no SDG link"
+        for r in pack.destination_roles
+        if not pack.sdg.roles.get(r)
+    ]
+    problems += [
+        f"SDG links name unknown skill {s}" for s in pack.sdg.skills if s not in pack.skills
+    ]
+    problems += [
+        f"SDG links name unknown role {r}"
+        for r in pack.sdg.roles
+        if r not in pack.destination_roles
+    ]
+    for owner, links in [*pack.sdg.skills.items(), *pack.sdg.roles.items()]:
+        problems += [
+            f"SDG link {owner} → {link.target} needs a one-line reason and a source"
+            for link in links
+            if not link.how.strip() or "\n" in link.how.strip() or not link.source.strip()
+        ]
+    return problems
 
 
 def pack_files(stem: str) -> list[Path]:

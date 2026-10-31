@@ -4,8 +4,12 @@ All pure recomputation with the same engine; nothing here stores anything or cal
 
 * meters        – coverage (the fit), essential readiness, and profile completeness kept apart,
                   so one number never hides an unmet essential or a mostly unstated profile.
-* fit_range     – fit if every unstated skill were 0 (the fit itself) up to UNSTATED_HIGH_LEVEL:
-                  an assumption-based range, not a statistical interval.
+* fit_range     – low: unevidenced claims one level lower, unstated as none; high: claims as
+                  stated, unstated at UNSTATED_HIGH_LEVEL. Assumption-based, not a statistical
+                  interval (docs/PHASE2_PLAN.md §4 C2).
+* band          – strong / good / fair / low from the fit (BAND_THRESHOLDS, an assumption).
+* components    – each requirement's weight, claim, need, points and the evidence behind it.
+* raise_options – the RAISE_SHOWN single-skill changes worth the most points, each re-scored.
 * best_questions – the unstated skills whose answer would change this person's options most:
                   every candidate is answered both ways (QUESTION_ANSWERS) and the roles re-ranked.
 * sensitivity   – each role's rank as the adoption intensity varies (SENSITIVITY_INTENSITIES).
@@ -17,10 +21,19 @@ from dataclasses import dataclass
 from typing import Any
 
 from src import params
+from src.journey.store import SkillClaim
 from src.match.engine import Evidence, RoleMatch, Scenario, rank_roles, score_role
 from src.pack import Pack
 
 Levels = Mapping[str, int | None]
+Claims = Mapping[str, SkillClaim]
+RANGE_BASIS = "low: self-rated claims one level lower, unstated as none; high: unstated at working"
+EVIDENCED_SOURCES = ("cv", "agent_check")
+
+
+def is_evidenced(claim: SkillClaim | None) -> bool:
+    """A claim backed by a CV sentence or an accepted progress check (still a claim)."""
+    return claim is not None and claim.source in EVIDENCED_SOURCES and bool(claim.evidence)
 
 
 def meters(match: RoleMatch) -> dict[str, Any]:
@@ -45,15 +58,109 @@ def meters(match: RoleMatch) -> dict[str, Any]:
     }
 
 
+def _low_levels(levels: Levels, claims: Claims) -> dict[str, int | None]:
+    """Unevidenced claims one level lower (minimum 0); unstated stays unstated (scored as 0)."""
+    return {
+        skill: level if level is None or is_evidenced(claims.get(skill)) else max(level - 1, 0)
+        for skill, level in levels.items()
+    }
+
+
 def fit_range(
-    pack: Pack, match: RoleMatch, levels: Levels, scenario: Scenario, evidence: Evidence
-) -> dict[str, float]:
+    pack: Pack,
+    match: RoleMatch,
+    levels: Levels,
+    scenario: Scenario,
+    evidence: Evidence,
+    claims: Claims | None = None,
+) -> dict[str, Any]:
+    """C2 range. Without `claims` every claim counts as evidenced, so low equals the fit."""
+    role = pack.destination_roles[match.role_id]
+    low_levels = _low_levels(levels, claims) if claims is not None else dict(levels)
     filled = dict(levels)
     for req in match.requirements:
         if req.claimed is None:
             filled[req.skill] = params.UNSTATED_HIGH_LEVEL
-    high = score_role(pack, pack.destination_roles[match.role_id], filled, scenario, evidence)
-    return {"low": match.fit, "high": high.fit}
+    low = score_role(pack, role, low_levels, scenario, evidence)
+    high = score_role(pack, role, filled, scenario, evidence)
+    return {"low": low.fit, "high": high.fit, "basis": RANGE_BASIS}
+
+
+def band(fit: float) -> str:
+    for name, threshold in params.BAND_THRESHOLDS.items():
+        if fit >= threshold:
+            return name
+    return params.BAND_BELOW
+
+
+def components(match: RoleMatch, claims: Claims) -> list[dict[str, Any]]:
+    """The fit, one row per requirement: fit = 100 × Σ w·min(c/r, 1) ÷ Σ w."""
+    rows = []
+    for req in match.requirements:
+        claim = claims.get(req.skill)
+        rows.append(
+            {
+                "skill": req.skill,
+                "skill_name": req.skill_name,
+                "weight": round(req.weight, 2),
+                "claimed": req.claimed,
+                "required": req.required,
+                "points": round(req.contribution, 1),
+                "evidenced": is_evidenced(claim),
+                "evidence": claim.evidence if claim else "",
+                "source": claim.source if claim and req.claimed is not None else "",
+            }
+        )
+    return rows
+
+
+def essentials_short(match: RoleMatch) -> list[str]:
+    return [r.skill for r in match.requirements if r.essential and (r.claimed or 0) < r.required]
+
+
+def raise_options(
+    pack: Pack,
+    match: RoleMatch,
+    levels: Levels,
+    scenario: Scenario,
+    evidence: Evidence,
+    claims: Claims,
+) -> list[dict[str, Any]]:
+    """The single-skill changes worth the most fit points, each computed by re-scoring.
+
+    A skill below its need is tested at the required level: "study" if that level is within
+    STUDY_MAX_LEVEL, "practice" above it. A skill at its level but unevidenced is a "check": its
+    points are how much the bottom of the range rises once the claim is evidenced.
+    """
+    role = pack.destination_roles[match.role_id]
+    low_now = fit_range(pack, match, levels, scenario, evidence, claims)["low"]
+    options: list[dict[str, Any]] = []
+    for req in match.requirements:
+        now = req.claimed or 0
+        if now < req.required:
+            after = score_role(pack, role, {**levels, req.skill: req.required}, scenario, evidence)
+            points = after.fit - match.fit
+            via = "study" if req.required <= params.STUDY_MAX_LEVEL else "practice"
+            target = req.required
+        elif not is_evidenced(claims.get(req.skill)):
+            checked = {**claims, req.skill: SkillClaim(level=now, evidence="check", source="cv")}
+            points = fit_range(pack, match, levels, scenario, evidence, checked)["low"] - low_now
+            via, target = "check", now
+        else:
+            continue
+        if points > 0:
+            options.append(
+                {
+                    "skill": req.skill,
+                    "skill_name": req.skill_name,
+                    "from_level": req.claimed,
+                    "to_level": target,
+                    "points": round(points, 1),
+                    "via": via,
+                }
+            )
+    options.sort(key=lambda o: -float(o["points"]))
+    return options[: params.RAISE_SHOWN]
 
 
 @dataclass(frozen=True)
@@ -114,14 +221,16 @@ def best_questions(
         )
         name = pack.skills[skill].name
         title = pack.destination_roles[swing_role].title
+        low_word, high_word = (params.PROFICIENCY_LABELS[a] for a in params.QUESTION_ANSWERS)
         if changes:
             effect = (
-                f"At 'none' your best fit is {low[0].title}; at 'proficient' it becomes "
+                f"At '{low_word}' your best fit is {low[0].title}; at '{high_word}' it becomes "
                 f"{high[0].title}."
             )
         else:
             effect = (
-                f"Moves {title} by up to {swing:.1f} fit points between 'none' and 'proficient'."
+                f"Moves {title} by up to {swing:.1f} fit points between '{low_word}' and "
+                f"'{high_word}'."
             )
         if focus_essential:
             effect += f" It is essential for {pack.destination_roles[focus].title}."

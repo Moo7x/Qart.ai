@@ -15,11 +15,12 @@ from typing import Any
 
 from sqlalchemy import Column, DateTime, Engine, Integer, String, Table, Text, insert, select
 
+from src import params
 from src.db import metadata
-from src.journey.store import ProfileData
+from src.journey.store import MAX_LEVEL, ProfileData
 from src.pack import Pack
 
-LEVEL_WORDS = ("none", "aware", "working", "proficient", "expert")
+LEVEL_WORDS = params.PROFICIENCY_LABELS
 SITUATION_WORDS = {
     "working": "Finance professional",
     "student": "Accounting and finance graduate",
@@ -70,7 +71,7 @@ def build_draft(
     return {
         "headline": [headline],
         "skills": [
-            f"{name} — own rating: {level + 1} of 5 ({LEVEL_WORDS[level]})"
+            f"{name} — own rating: {level} of {MAX_LEVEL} ({LEVEL_WORDS[level]})"
             for level, name in skills
         ],
         "experience": quotes,

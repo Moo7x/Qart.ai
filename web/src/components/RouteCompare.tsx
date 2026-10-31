@@ -9,6 +9,11 @@ function FitBar({ now, after, tone }: { now: number; after: number; tone: string
   )
 }
 
+// "6.2 h plan + 2.3 h AI basics" for the with-AI route, so its total never looks like the plan's.
+function hoursText(m: RouteMetrics): string {
+  return m.ai_basics_hours && m.plan_hours !== undefined ? `${m.plan_hours} h plan + ${m.ai_basics_hours} h AI basics` : `${m.hours} h`
+}
+
 function signed(v: number, unit = ''): string {
   return `${v > 0 ? '+' : ''}${v.toFixed(1)}${unit}`
 }
@@ -23,7 +28,7 @@ export function RouteCompare({ data, scenario }: { data: TracksResponse['compari
   const w = data.without_ai
   const a = data.with_ai
   const rows: [string, (m: RouteMetrics) => string, string][] = [
-    ['Study time', (m) => `${m.hours} h · ${m.weeks} wk`, signed(a.hours - w.hours, ' h')],
+    ['Study time', (m) => `${hoursText(m)} · ${m.weeks} wk`, signed(a.hours - w.hours, ' h')],
     ['Courses', (m) => String(m.courses), signed(a.courses - w.courses)],
     [`Fit after · ${scenario}`, (m) => `${Math.round(m.fit_after[scenario])}/100`, signed(a.fit_after[scenario] - w.fit_after[scenario], ' pts')],
     [`Fit after · ${other}`, (m) => `${Math.round(m.fit_after[other])}/100`, signed(a.fit_after[other] - w.fit_after[other], ' pts')],
@@ -41,7 +46,7 @@ export function RouteCompare({ data, scenario }: { data: TracksResponse['compari
           <div key={key} className={`flex flex-col gap-2 border-t-2 pt-3 ${key === 'with' ? 'border-violet' : 'border-[#e0892f]'}`}>
             <div className="flex items-baseline justify-between gap-2">
               <h3 className="m-0 text-base font-semibold">{title}</h3>
-              <span className="font-mono text-[12px] text-graphite">{m.hours} h · {m.courses} courses</span>
+              <span className="font-mono text-[12px] text-graphite">{hoursText(m)} · {m.courses} courses</span>
             </div>
             {([scenario, other] as Scenario[]).map((s) => (
               <div key={s} className="flex flex-col gap-1">
@@ -75,7 +80,7 @@ export function RouteCompare({ data, scenario }: { data: TracksResponse['compari
         </table>
       </div>
       <p className="m-0 text-[12px] text-graphite">
-        &ldquo;With AI&rdquo; means also learning the AI basics and the data and digital skills the role needs, not studying with an AI tutor. {a.ai_basics_hours ? `It includes ${a.ai_basics_hours} h of AI basics. ` : ''}{data.note}
+        &ldquo;With AI&rdquo; means also learning the AI basics and the data and digital skills the role needs, not studying with an AI tutor. {a.ai_basics_hours ? `Its ${a.hours} h are ${a.plan_hours ?? (a.hours - a.ai_basics_hours).toFixed(1)} h of plan steps plus ${a.ai_basics_hours} h of AI basics. ` : ''}{data.note}
       </p>
     </section>
   )

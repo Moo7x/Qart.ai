@@ -54,3 +54,8 @@
 - {id: energy_management, name: Energy Management and Audit, kind: green, ai_role: neutral, page: 39}
 - {id: green_procurement, name: Green Procurement Policies and Standards, kind: green, ai_role: neutral, page: 23}
 - {id: ehs, name: "Environment, Health and Safety", kind: green, ai_role: neutral, page: 23}
+- {id: tax_preparation, name: Tax Preparation, kind: finance_core, ai_role: routine, page: 23}
+- {id: green_tax_strategies, name: Green Tax Strategies, kind: green, ai_role: neutral, page: 23}
+- {id: e_invoicing_standards, name: Knowledge of e-Invoicing Standards, kind: data_digital, ai_role: complement, page: 23}
+- {id: attention_to_detail, name: Attention to Detail, kind: business, ai_role: neutral, page: 24}
+- {id: ethical_judgement, name: Ethical Judgement, kind: business, ai_role: neutral, page: 24}

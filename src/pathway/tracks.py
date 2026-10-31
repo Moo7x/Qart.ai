@@ -1,20 +1,23 @@
 """My plan as three tracks, and the comparison of reskilling with and without AI.
 
-1. AI basics: a declared foundation everyone sees first (src/resources.py topics), because
-   adapting to AI starts with knowing how to use it safely.
+1. AI basics: a declared foundation shown first (src/resources.py topics), because adapting to
+   AI starts with knowing how to use it safely; skipped, with the reason, when the person shows
+   AI or automation work with evidence (B5, planner.ai_basics_choice), and shown on request.
 2. Reskilling without AI: the role's gaps in finance, business and green skills.
 3. Reskilling with AI: the role's gaps in data and digital skills (params.AI_TRACK_KINDS).
 
 Each skill is a node with its planned courses (from the pathway planner, unchanged), other free
 courses, and the checked videos and articles. The comparison plans the role twice with the same
 planner and the same course rules: once over the non-AI skills only, once over every skill plus
-the AI-basics courses. Fit is scored by the same engine; every number here is an estimate from
+the AI-basics courses. Plan hours are only the planned study steps; the AI-basics hours are
+reported apart (`plan_hours` + `ai_basics_hours` = the with-AI `hours`), never added silently.
+Fit is scored by the same engine; every number here is an estimate from
 declared rules, not a measured learning result. "With AI" means learning the AI-related skills,
 not studying with an AI tutor.
 """
 
 import math
-from dataclasses import replace
+from dataclasses import asdict, replace
 from typing import Any
 
 from src import params
@@ -93,6 +96,9 @@ def _skill_nodes(
                 "now": r.claimed,
                 "required": r.required,
                 "after": after.get(r.skill, r.claimed),
+                # B4: the level study can give here, and the practice steps above it (C3).
+                "study_after": path.study_levels.get(r.skill, r.claimed),
+                "practice": [asdict(p) for p in path.practice_steps if p.skill == r.skill],
                 "courses": courses,
                 "videos": [_video(v) for v in res.videos_for(skill=r.skill)],
                 "articles": [_article(a) for a in res.articles_for(skill=r.skill)],
@@ -158,6 +164,7 @@ def comparison(
     role_id: str,
     weekly_hours: float,
     evidence: Evidence,
+    ai_basics_shown: bool = True,
 ) -> dict[str, Any]:
     role = pack.destination_roles[role_id]
     fit_now: dict[str, float] = {}
@@ -173,8 +180,10 @@ def comparison(
         full[s] = plan_pathway(pack, match, levels, weekly_hours, s, evidence)
     # AI-basics courses not already in the full plan add their hours to the "with AI" route.
     in_plan = {st.course.id for st in full["moderate"].steps}
-    basics = {c for t in res.ai_basics for c in t.courses} - in_plan
-    basics_hours = sum(pack.courses[c].minutes for c in basics) / MINUTES_PER_HOUR
+    # Skipped AI basics (B5) add nothing to the with-AI route.
+    basics = {c for t in res.ai_basics for c in t.courses} - in_plan if ai_basics_shown else set()
+    # Rounded before adding, so the two parts shown always add up to the with-AI total.
+    basics_hours = round(sum(pack.courses[c].minutes for c in basics) / MINUTES_PER_HOUR, 1)
     w = without["moderate"]
     f = full["moderate"]
     return {
@@ -196,12 +205,15 @@ def comparison(
                 len(f.steps) + len(basics),
                 f.essentials_unmet,
             ),
-            "ai_basics_hours": round(basics_hours, 1),
+            # The two parts of the with-AI hours, named so no screen adds them silently.
+            "plan_hours": f.total_hours,
+            "ai_basics_hours": basics_hours,
         },
         "note": (
             "Both routes use the same free courses, planner and course rules; fit is scored by "
-            "the same engine. AI-basics hours are added to the with-AI route and change fit only "
-            "where the role lists those skills. Estimates, not measured learning results."
+            "the same engine. The with-AI time is the plan's study steps plus the AI-basics "
+            "courses, named separately; AI basics change fit only where the role lists those "
+            "skills. Estimates, not measured learning results."
         ),
     }
 
@@ -220,6 +232,9 @@ def build_tracks(
             "why": "Start here: adapting to AI begins with knowing what it is and how to use it "
             "safely.",
             "nodes": _basics_nodes(pack, res, done),
+            # B5: false when skipped for this person; the nodes stay for "Show AI basics anyway".
+            "shown": path.ai_basics.get("shown", True),
+            "reason": path.ai_basics.get("reason", ""),
         },
         {
             "id": "without_ai",
