@@ -4,6 +4,7 @@ import json
 from dataclasses import asdict
 from typing import Any
 
+import yaml
 from fastapi import APIRouter, Depends, File, HTTPException, Query, UploadFile
 from pydantic import BaseModel, Field
 from sqlalchemy import Engine, select
@@ -58,6 +59,7 @@ SAMPLES = {
     "mei": "Mei · retail supervisor",
     "kavitha": "Kavitha · senior reporting analyst",
 }
+PERSONAS_FILE = SAMPLES_DIR / "personas.yaml"  # fixed levels for the persona test and KPIs
 MAX_TEXT_CHARS = 20_000
 SCENARIO_LABEL = {"moderate": "Moderate AI adoption", "fast": "Fast AI adoption"}
 IMPACT_MEANING = {  # TalentCorp (2024) PDF p. 25, "Role and Skills Analysis by Impact Level"
@@ -73,6 +75,14 @@ class TextIn(BaseModel):
 
 class ProfileCreated(BaseModel):
     id: str
+
+
+def load_personas() -> dict[str, dict[str, Any]]:
+    """The four personas' situation and fixed levels, each quoting their synthetic CV."""
+    personas: dict[str, dict[str, Any]] = yaml.safe_load(PERSONAS_FILE.read_text(encoding="utf-8"))[
+        "personas"
+    ]
+    return personas
 
 
 def evidence_for(engine: Engine, profile_id: str) -> Evidence:

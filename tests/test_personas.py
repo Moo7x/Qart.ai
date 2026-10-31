@@ -5,127 +5,21 @@ sentence of their synthetic CV in data/samples/. The test also checks that every
 C2 role score and the C3 plan carries a source or a label (docs/PHASE2_PLAN.md §4).
 """
 
-import re
 from typing import Any
 
 import pytest
 from fastapi.testclient import TestClient
 
 from src import params
+from src.api.journey import load_personas
+from src.match.labels import C2_LABELS, C3_LABELS, c2_numbers, c3_numbers, unlabelled
 
-MEI_CASH = (
-    "Counted and reconciled the daily cash and card takings against the point-of-sale system."
-)
-NUR_SAP = (
-    "Applied incoming customer receipts to open invoices in SAP "
-    "for four entities, about 1,200 lines a month."
-)
-KAVITHA_FLOWS = (
-    "Built Power Automate flows that read supplier invoices from a "
-    "shared mailbox and log them for AP review."
-)
-KAVITHA_BI = (
-    "Built multi-source Power BI dashboards with Power Query, "
-    "combining SAP, Excel and payroll data."
-)
-# skill: (level, the CV sentence behind it). Situation as the person states it.
-HAFIZ = {
-    "variance_analytics": (
-        1,
-        "Final-year project: variance analysis of a manufacturing company's standard costs.",
-    ),
-    "standard_costing": (
-        1,
-        "Final-year project: variance analysis of a manufacturing company's standard costs.",
-    ),
-    "accounting_principles": (
-        2,
-        "Courses in financial accounting, management accounting, auditing and taxation.",
-    ),
-    "database_querying": (
-        1,
-        "Learned SQL basics and built simple dashboards in Power BI for a class project.",
-    ),
-    "dashboards": (
-        1,
-        "Learned SQL basics and built simple dashboards in Power BI for a class project.",
-    ),
-    "internal_controls": (
-        2,
-        "Helped prepare working papers and tested internal controls over purchases.",
-    ),
-    "invoice_processing": (2, "Matched supplier invoices to purchase orders and delivery notes."),
-}
-MEI = {
-    "reconciliation": (
-        2,
-        MEI_CASH,
-    ),
-    "vendor_management": (
-        2,
-        "Managed stock orders with suppliers and checked deliveries against invoices.",
-    ),
-    "invoice_processing": (
-        1,
-        "Managed stock orders with suppliers and checked deliveries against invoices.",
-    ),
-    "reporting": (2, "Prepared the weekly sales report for the area manager."),
-    "stakeholder_management": (2, "Trained and scheduled a team of eight staff."),
-}
-NUR = {
-    "cash_application": (
-        3,
-        NUR_SAP,
-    ),
-    "reconciliation": (
-        3,
-        "Reconciled daily bank statements to the cash ledger and cleared unapplied cash.",
-    ),
-    "credit_collections": (
-        3,
-        "Worked with the credit team on overdue accounts and collection follow-ups.",
-    ),
-    "erp": (
-        2,
-        NUR_SAP,
-    ),
-    "reporting": (2, "Built the daily cash position report in Excel for the AR manager."),
-    "accounting_principles": (2, "Prepared monthly ageing reports."),
-}
-UAT = "Ran user acceptance testing for the S/4HANA migration of the general ledger and reporting."
-PACK_REPORT = (
-    "Prepared the monthly management reporting pack and variance commentary for regional finance "
-    "leads."
-)
-KAVITHA = {
-    "process_automation": (
-        3,
-        KAVITHA_FLOWS,
-    ),
-    "reporting": (4, "Train and review the work of new reporting analysts joining the team."),
-    "dashboards": (
-        3,
-        KAVITHA_BI,
-    ),
-    "data_validation": (3, "Checked data quality of ledger extracts before reporting."),
-    "data_management": (3, "Checked data quality of ledger extracts before reporting."),
-    "financial_reporting": (3, PACK_REPORT),
-    "variance_analytics": (3, PACK_REPORT),
-    "general_ledger": (3, "Prepared month-end journals and balance sheet reconciliations in SAP."),
-    "accounting_principles": (
-        3,
-        "Prepared month-end journals and balance sheet reconciliations in SAP.",
-    ),
-    "erp": (3, UAT),
-    "financial_systems": (3, UAT),
-    "data_migration": (2, UAT),
-}
+# persona: (situation, {skill: (level, the CV sentence behind it)}), from data/samples/personas.yaml
 PERSONAS = {
-    "hafiz": ("student", HAFIZ),
-    "mei": ("switcher", MEI),
-    "nur": ("working", NUR),
-    "kavitha": ("working", KAVITHA),
+    name: (p["situation"], {k: (c["level"], c["evidence"]) for k, c in p["skills"].items()})
+    for name, p in load_personas().items()
 }
+KAVITHA = PERSONAS["kavitha"][1]
 
 
 def journey(client: TestClient, persona: str) -> dict[str, Any]:
@@ -201,96 +95,10 @@ def test_kavitha_gets_practice_wherever_a_core_skill_is_short(
         assert kavitha["pathway"]["practice_steps"] == []
 
 
-# --- Every number in C2 and C3 carries a source or a label ---------------------------------------
-# Each numeric field (as a path pattern) and the check that its label is present.
-
-
-def _requirement(card: dict[str, Any], skill: str) -> dict[str, Any]:
-    return next(r for r in card["requirements"] if r["skill"] == skill)
-
-
-C2_LABELS: list[tuple[str, Any]] = [
-    (r"fit", lambda card, _: card["band_basis"] == "assumption" and card["components"]),
-    (r"fit_range\.(low|high)", lambda card, _: card["fit_range"]["basis"]),
-    (
-        r"components\[(\d+)\]\.weight",
-        lambda card, m: _requirement(card, card["components"][int(m[1])]["skill"])["shift_reason"],
-    ),
-    (r"components\[(\d+)\]\.points", lambda card, _: card["band_basis"]),
-    (r"components\[(\d+)\]\.claimed", lambda card, m: card["components"][int(m[1])]["source"]),
-    (r"components\[(\d+)\]\.required", lambda card, _: True),  # TalentCorp tier level, cited pages
-    (r"raise\[(\d+)\]\.points", lambda card, m: card["raise"][int(m[1])]["via"]),
-    (r"raise\[(\d+)\]\.(from_level|to_level)", lambda card, m: card["raise"][int(m[1])]["via"]),
-    (r"pay\.\w+", lambda card, _: card["pay"]["kind"] == "observed" and card["pay"]["source"]),
-]
-C3_LABELS: list[tuple[str, Any]] = [
-    (
-        r"steps\[(\d+)\]\.time\.(value|low|high)",
-        lambda p, m: p["steps"][int(m[1])]["time"]["basis"],
-    ),
-    (r"steps\[(\d+)\]\.(order|target_level)", lambda p, _: True),  # positions and levels
-    (
-        r"practice_steps\[(\d+)\]\.time\.(value|low|high)",
-        lambda p, m: p["practice_steps"][int(m[1])]["time"]["basis"] == "practice_estimate",
-    ),
-    (
-        r"practice_steps\[(\d+)\]\.week_start\.(low|high)",
-        lambda p, m: p["practice_steps"][int(m[1])]["time"]["basis"] == "practice_estimate",
-    ),
-    (r"practice_steps\[(\d+)\]\.(order|target_level)", lambda p, _: True),
-    (r"study_hours", lambda p, _: all(s["time"]["basis"] for s in p["steps"])),
-    (r"practice_weeks\.(low|high)", lambda p, _: p["practice_weeks"]["kind"] == "estimate"),
-    (
-        r"fit_after_(study|practice)\.(low|high)",
-        lambda p, m: p[f"fit_after_{m[1]}"]["kind"] == "estimate",
-    ),
-    (r"free_share", lambda p, _: p["free_share_basis"]),
-]
-C2_FIELDS = ("fit", "fit_range", "band", "components", "raise", "essentials_short", "pay")
-C3_STEP_FIELDS = ("order", "target_level", "time")
-C3_TOTALS = (
-    "practice_steps",
-    "study_hours",
-    "practice_weeks",
-    "fit_after_study",
-    "fit_after_practice",
-    "free_share",
-)
-
-
-def _numbers(value: Any, path: str = "") -> list[str]:
-    if isinstance(value, bool) or value is None:
-        return []
-    if isinstance(value, int | float):
-        return [path]
-    if isinstance(value, dict):
-        return [n for k, v in value.items() for n in _numbers(v, f"{path}.{k}" if path else k)]
-    if isinstance(value, list):
-        return [n for i, v in enumerate(value) for n in _numbers(v, f"{path}[{i}]")]
-    return []
-
-
-def _unlabelled(doc: dict[str, Any], numbers: list[str], table: list[tuple[str, Any]]) -> list[str]:
-    missing = []
-    for path in numbers:
-        for pattern, label in table:
-            match = re.fullmatch(pattern, path)
-            if match:
-                if not label(doc, match):
-                    missing.append(path)
-                break
-        else:
-            missing.append(path)  # a number with no declared label
-    return missing
-
-
 def test_every_c2_and_c3_number_carries_a_source_or_a_label(results: dict[str, Any]) -> None:
     for persona, r in results.items():
         card, path = r["top"], r["pathway"]
-        c2 = _numbers({k: card[k] for k in C2_FIELDS})
-        c3 = _numbers({k: path[k] for k in C3_TOTALS}) + _numbers(
-            {"steps": [{k: s[k] for k in C3_STEP_FIELDS} for s in path["steps"]]}
-        )
+        c2, c3 = c2_numbers(card), c3_numbers(path)
         assert c2 and c3
-        assert _unlabelled(card, c2, C2_LABELS) == [], persona
-        assert _unlabelled(path, c3, C3_LABELS) == [], persona
+        assert unlabelled(card, c2, C2_LABELS) == [], persona
+        assert unlabelled(path, c3, C3_LABELS) == [], persona
