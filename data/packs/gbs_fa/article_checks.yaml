@@ -1,0 +1,166 @@
+checked: '2026-10-31'
+articles:
+  ar_ibm_genai:
+    kind: article
+    words: 3266
+    checked: '2026-10-31'
+  ar_ibm_prompting:
+    kind: article
+    words: 1712
+    checked: '2026-10-31'
+  ar_ms_responsible_ai:
+    kind: article
+    words: 808
+    checked: '2026-10-31'
+  ar_ibm_data_management:
+    kind: article
+    words: 3326
+    checked: '2026-10-31'
+  ar_coso_internal_control:
+    kind: article
+    words: 1099
+    checked: '2026-10-31'
+  ar_iso_14000:
+    kind: unreachable
+    words: 0
+    checked: '2026-10-31'
+  ar_iso_50001:
+    kind: unreachable
+    words: 0
+    checked: '2026-10-31'
+  ar_iso_45001:
+    kind: unreachable
+    words: 0
+    checked: '2026-10-31'
+  ar_ifrs_sustainability:
+    kind: web page
+    words: 281
+    checked: '2026-10-31'
+  ar_ifrs_conceptual:
+    kind: article
+    words: 427
+    checked: '2026-10-31'
+  ar_cipd_pestle:
+    kind: article
+    words: 1484
+    checked: '2026-10-31'
+  ar_cips_srm:
+    kind: article
+    words: 794
+    checked: '2026-10-31'
+  ar_strategyzer_bmc:
+    kind: article
+    words: 537
+    checked: '2026-10-31'
+  ar_ms_power_bi:
+    kind: article
+    words: 751
+    checked: '2026-10-31'
+  ar_ibm_data_viz:
+    kind: article
+    words: 1131
+    checked: '2026-10-31'
+  ar_ms_power_automate:
+    kind: article
+    words: 1317
+    checked: '2026-10-31'
+  ar_ms_tsql:
+    kind: article
+    words: 405
+    checked: '2026-10-31'
+  ar_emf_circular:
+    kind: article
+    words: 436
+    checked: '2026-10-31'
+  ar_ibm_big_data:
+    kind: article
+    words: 1729
+    checked: '2026-10-31'
+  ar_ibm_data_migration:
+    kind: article
+    words: 1275
+    checked: '2026-10-31'
+  ar_ms_gl:
+    kind: article
+    words: 404
+    checked: '2026-10-31'
+  ar_cfi_gl:
+    kind: article
+    words: 636
+    checked: '2026-10-31'
+  ar_ms_fixed_assets:
+    kind: web page
+    words: 268
+    checked: '2026-10-31'
+  ar_ifrs_ias16:
+    kind: article
+    words: 442
+    checked: '2026-10-31'
+  ar_ms_invoice_matching:
+    kind: article
+    words: 2029
+    checked: '2026-10-31'
+  ar_ms_budgeting:
+    kind: article
+    words: 1322
+    checked: '2026-10-31'
+  ar_ms_financial_reporting:
+    kind: article
+    words: 1764
+    checked: '2026-10-31'
+  ar_ms_integration:
+    kind: article
+    words: 1728
+    checked: '2026-10-31'
+  ar_ibm_api:
+    kind: article
+    words: 2903
+    checked: '2026-10-31'
+  ar_ms_lcs_monitoring:
+    kind: article
+    words: 309
+    checked: '2026-10-31'
+  ar_ibm_apm:
+    kind: article
+    words: 1576
+    checked: '2026-10-31'
+  ar_ibm_erp:
+    kind: article
+    words: 1576
+    checked: '2026-10-31'
+  ar_ibm_process_optimization:
+    kind: article
+    words: 1620
+    checked: '2026-10-31'
+  ar_ibm_bpm:
+    kind: article
+    words: 562
+    checked: '2026-10-31'
+  ar_asq_continuous_improvement:
+    kind: unreachable
+    words: 0
+    checked: '2026-10-31'
+  ar_cips_sustainability:
+    kind: web page
+    words: 137
+    checked: '2026-10-31'
+  ar_pmi_stakeholders:
+    kind: unreachable
+    words: 0
+    checked: '2026-10-31'
+  ar_cfi_variance:
+    kind: article
+    words: 767
+    checked: '2026-10-31'
+  ar_accountingtools_standard_costing:
+    kind: article
+    words: 2329
+    checked: '2026-10-31'
+  ar_cfi_fpa:
+    kind: article
+    words: 2753
+    checked: '2026-10-31'
+  ar_ibm_data_integration:
+    kind: article
+    words: 1094
+    checked: '2026-10-31'

@@ -4,7 +4,8 @@
 
 // ---- C7 change test (POST /api/profiles/{id}/evidence-test, src/api/evidence_test.py) ----
 
-export type Override = { kind: 'occupation_share' | 'task_share'; key: string; value: number }
+export type Override = { kind: 'occupation_share' | 'task_share' | 'group_change'; key: string; value: number }
+export type CategoryChange = { role_id: string; title: string; before: string; after: string; current_job: boolean }
 export type RoleRank = { role_id: string; title: string; rank: number; fit: number }
 export type EvidenceTestOut = {
   label: string
@@ -13,6 +14,7 @@ export type EvidenceTestOut = {
   previous: Record<string, number | null>
   before: { roles: RoleRank[] }
   after: { roles: RoleRank[] }
+  forecast?: CategoryChange[]
   weights: { role_id: string; skill: string; skill_name: string; before: number; after: number }[]
   pathway: null | {
     role_id: string
@@ -38,6 +40,10 @@ export type ScoutPick = {
   score: number
   reason: string
   source: string
+  // Articles: one link that highlights every chosen passage of the page at once.
+  page_url?: string
+  // Articles: the chosen passage, shortened, shown in the agent window.
+  excerpt?: string
 }
 export type AgentRun = {
   id: string
@@ -49,29 +55,6 @@ export type AgentRun = {
   finished_at: string | null
   result: null | { skill: string; skill_name?: string; picks: ScoutPick[]; engine?: string; note: string }
   steps: { id: number; at: string; kind: 'think' | 'tool' | 'result' | 'note' | 'error'; text: string }[]
-}
-
-// ---- C6 progress check (POST /api/profiles/{id}/checks …, src/agents/check.py) ----
-
-export type CheckState = {
-  session_id?: string
-  skill: string
-  skill_name: string
-  current_level: number
-  target_level: number
-  question: string | null
-  asked: number
-  result: null | {
-    skill: string
-    proposed_level: number
-    met: { level: number; verdict: 'yes' | 'partly' | 'no'; quote: string }[]
-    model: string
-    engine: string
-    note: string
-  }
-  decided: null | 'accepted' | 'declined'
-  levels_source: string
-  model: string
 }
 
 // ---- C9 status (GET /api/status, src/api/status.py) ----

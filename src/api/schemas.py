@@ -28,7 +28,7 @@ class Labelled(BaseModel):
 class SkillBasis(BaseModel):
     """Why a skill counts for a role (src/match/basis.py)."""
 
-    kind: Literal["talentcorp", "onet", "onet_tech", "assumption"]
+    kind: Literal["talentcorp", "onet", "onet_tech", "assumption", "ai_trend"]
     text: str
     source: str
 
@@ -91,6 +91,19 @@ class SdgRef(BaseModel):
     how: str
 
 
+class RoleForecast(BaseModel):
+    """Where a role is heading (src/forecast/industry.py), an estimate with its reasons."""
+
+    category: str
+    label: str
+    meaning: str
+    reasons: list[str]
+    change_pp: float | None
+    critical: bool | None
+    ai_use: float | None
+    kind: str
+
+
 class RoleCard(BaseModel):
     """C2: one ranked role with its fit, range, band, components and what would raise it."""
 
@@ -122,6 +135,10 @@ class RoleCard(BaseModel):
     sdgs: list[SdgRef]
     requirement_basis: dict[str, SkillBasis]
     in_demand: list[str]  # skill ids TalentCorp names as in demand (expert view)
+    forecast: RoleForecast | None = None
+    direction: str = "stretch"  # "adjacent" or "stretch" (src/match/directions.py)
+    related_tier: int | None = None  # 0 same occupation, 1-3 O*NET relatedness tier
+    direction_score: float = 0.0  # fit x outlook factor: the order roles are shown in
     serves_goals: list[str]
 
 
@@ -145,6 +162,7 @@ class MatchesOut(BaseModel):
     evidence: EvidenceInfo
     current_role: CurrentRole | None
     current_impact: str | None
+    current_forecast: RoleForecast | None = None
     destination: str | None
     roles: list[RoleCard]
     sdg_roles: list[SdgRole]
@@ -180,6 +198,33 @@ class TrackArticle(BaseModel):
     title: str
     publisher: str
     url: str
+    is_article: bool = True  # False: a web page or a page that refuses readers (no agent)
+
+
+class BasicsItem(BaseModel):
+    """An AI-basics course or video carried inside a step (prompting, responsible use)."""
+
+    kind: Literal["course", "video"]
+    topic: str
+    title: str
+    provider: str
+    url: str
+    minutes: int
+
+
+class AiResource(BaseModel):
+    """A checked resource on doing a skill's work with AI (src/collectors/ai_resources.py)."""
+
+    kind: Literal["course", "video"]
+    id: str
+    title: str
+    provider: str
+    url: str
+    minutes: int
+    published: str
+    skill_quote: str
+    ai_quote: str
+    score: float
 
 
 class TrackNode(BaseModel):
@@ -200,10 +245,16 @@ class TrackNode(BaseModel):
     study_after: int | None = None
     practice: list[PracticeStep] | None = None
     why: SkillBasis | None = None
+    # The one path (src/pathway/reskill.py): basics, adapt a held skill, or learn a gap skill.
+    mode: Literal["basics", "oversee", "use_ai", "learn"] | None = None
+    ai_use: float | None = None  # effective automation-style AI use on the skill's tasks
+    ai_basis: str | None = None  # observed, predicted, mixed, occupation or none
+    ai_resources: list[AiResource] | None = None  # adapt steps: doing the skill with AI
+    basics: list[BasicsItem] | None = None  # adapt steps without AI resources: AI basics inside
 
 
 class Track(BaseModel):
-    id: Literal["ai_basics", "without_ai", "with_ai"]
+    id: Literal["ai_basics", "without_ai", "with_ai", "path"]
     title: str
     why: str
     nodes: list[TrackNode]
@@ -235,9 +286,30 @@ class TracksOut(BaseModel):
     scenario: str
     weekly_hours: float
     tracks: list[Track]
+    path: Track | None = None
     comparison: RouteComparison
     resources_checked: str
     courses_checked: str
+
+
+class Strength(BaseModel):
+    skill: str
+    name: str
+    level: int | None
+    ai_use: float | None
+    ai_basis: str
+    text: str
+
+
+class ReskillOut(BaseModel):
+    """GET /reskill: the person's job's AI-era path, shown before a destination is chosen."""
+
+    scenario: str
+    current_role: str | None
+    current_forecast: RoleForecast | None
+    track: Track
+    strengths: list[Strength]
+    destination: str | None
 
 
 # --- /future: today against after the plan, in both scenarios -------------------------------

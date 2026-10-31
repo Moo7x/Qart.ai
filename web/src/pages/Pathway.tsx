@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import { useT } from '../i18n'
 import { Link } from 'react-router-dom'
 import { sendJSON, useApi } from '../api'
-import { RouteCompare } from '../components/RouteCompare'
 import { SdgPlan } from '../components/SdgPlan'
 import { Badges } from '../components/Badges'
 import { TrackMap } from '../components/TrackMap'
@@ -12,7 +11,7 @@ import { LevelBars } from '../components/MiniCharts'
 import type { RadarOut } from '../apiTypes'
 import { Loading, Problem } from '../components/ui'
 import { useJourney } from '../state'
-import type { PathwayResponse, ProfileData, ProgressResponse, Scenario, TracksResponse } from '../types'
+import type { PathwayResponse, ProfileData, ProgressResponse, ReskillResponse, Scenario, TracksResponse } from '../types'
 import type { Badge, SdgMatrix } from '../typesScoring'
 import { NeedProfile } from './Roles'
 
@@ -90,13 +89,7 @@ function ProfilePathway({ profileId, scenario }: { profileId: string; scenario: 
 
   return (
     <main className="page">
-      {noDestination && (
-        <div className="flex flex-col gap-3">
-          <span className="eyebrow">My plan · pathway</span>
-          <h1 className="h1">Choose a destination role first</h1>
-          <Link className="btn btn-v self-start" to="/roles">See roles that fit me</Link>
-        </div>
-      )}
+      {noDestination && <CurrentJobPath profileId={profileId} scenario={scenario} />}
       {path.loading && <Loading what="your pathway" />}
       {path.error && !noDestination && <Problem what="your pathway" message={path.error} onRetry={path.reload} />}
 
@@ -138,7 +131,7 @@ function ProfilePathway({ profileId, scenario }: { profileId: string; scenario: 
             <div className="flex flex-col gap-1">
               <h2 className="h2">Your roadmap</h2>
               <p className="m-0 max-w-[720px] text-[13px] text-graphite">
-                Three tracks: AI basics first, then the skills this role needs without AI and with AI. Each step opens its courses, YouTube videos and articles; a step unlocks when the one before it in its track is done.
+                One path: the skills you already have that AI is reshaping, then the skills this role needs. Each step opens how to do it with AI, its courses, YouTube videos and articles; start with any step.
               </p>
             </div>
             {data.adjustments && data.adjustments.length > 0 && (
@@ -157,10 +150,9 @@ function ProfilePathway({ profileId, scenario }: { profileId: string; scenario: 
             {tracks.error && <Problem what="your roadmap" message={tracks.error} onRetry={tracks.reload} />}
             {saveError && <p role="alert" className="m-0 text-weak">Progress was not saved: {saveError}. Try the action again.</p>}
             {/* Drawn only once saved progress is known, so steps never flash the wrong state. */}
-            {tracks.data && (current || progress.error) && <TrackMap tracks={tracks.data.tracks} done={done} onToggle={toggle} onSkip={skip} paused={saving || progress.loading || (current?.paused ?? false)} checked={tracks.data.resources_checked} />}
+            {tracks.data && (current || progress.error) && <TrackMap tracks={tracks.data.path ? [tracks.data.path] : tracks.data.tracks} done={done} onToggle={toggle} onSkip={skip} paused={saving || progress.loading || (current?.paused ?? false)} checked={tracks.data.resources_checked} />}
           </section>
 
-          {tracks.data && <RouteCompare data={tracks.data.comparison} scenario={scenario} />}
 
           {sdg.loading && <Loading what="the SDG contribution" />}
           {sdg.error && <Problem what="the SDG contribution" message={sdg.error} onRetry={sdg.reload} />}
@@ -172,6 +164,14 @@ function ProfilePathway({ profileId, scenario }: { profileId: string; scenario: 
               <span className="text-graphite">If your employer pays the HRD Corp levy, it can claim the cost of approved training. HRD Corp&rsquo;s e-LATiH platform also offers free courses. Qart.ai does not mark any programme as claimable until HRD Corp&rsquo;s own listing confirms it.</span>
             </span>
             <a className="btn min-h-[40px]" href="https://hrdcorp.gov.my" target="_blank" rel="noopener noreferrer">HRD Corp ↗</a>
+          </section>
+
+          <section aria-label="Talk to a person" className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-line bg-paper px-5 py-4">
+            <span className="flex max-w-[760px] flex-col gap-1 text-[13px]">
+              <span className="text-[15px] font-semibold">A big decision? Talk to a person</span>
+              <span className="text-graphite">Qart.ai shows evidence and options; it does not decide for you. Before you change jobs or studies, talk it through with a career adviser: MYFutureJobs (PERKESO) offers free career services, and your university or TVET career centre can help too. Your employer&rsquo;s HR or L&amp;D team knows which training it will fund.</span>
+            </span>
+            <a className="btn min-h-[40px]" href="https://www.myfuturejobs.gov.my" target="_blank" rel="noopener noreferrer">MYFutureJobs ↗</a>
           </section>
 
           {current?.plan && (
@@ -252,3 +252,41 @@ function PlanTotals({ data }: { data: PathwayResponse }) {
   )
 }
 
+
+// Before a destination is chosen: the one path is the person's own job's AI-era path
+// (GET /reskill). Choosing a role on My options replaces it with that role's path.
+function CurrentJobPath({ profileId, scenario }: { profileId: string; scenario: Scenario }) {
+  const view = useApi<ReskillResponse>(`/api/profiles/${profileId}/reskill?scenario=${scenario}`)
+  if (view.loading) return <Loading what="your path" />
+  if (view.error) return <Problem what="your path" message={view.error} onRetry={view.reload} />
+  const data = view.data
+  if (!data) return null
+  return (
+    <>
+      <PageHead
+        badge="My plan · your job's AI-era path"
+        title={<>Reskill for where <Serif>your job</Serif> is heading</>}
+        sub={data.current_role ? `${data.current_role}${data.current_forecast ? ` · Qart forecast: ${data.current_forecast.label} (estimate)` : ''}` : 'Based on the skills in your profile'}
+        right={
+          <div className="flex flex-col items-start gap-2 md:items-end">
+            <ScenarioSwitch />
+            <Link to="/roles" className="text-[13px]">Choose a role to aim for instead</Link>
+          </div>
+        }
+      />
+      {data.current_forecast && (
+        <p className="m-0 max-w-[760px] text-[13px] text-graphite">{data.current_forecast.meaning} {data.current_forecast.reasons.join('; ')}.</p>
+      )}
+      <section aria-label="Your path" className="panel min-w-0 gap-5">
+        <TrackMap tracks={[data.track]} done={[]} onToggle={() => undefined} onSkip={() => undefined} paused checked="" />
+      </section>
+      {data.strengths.length > 0 && (
+        <section aria-label="Your human strengths" className="q-card gap-2 px-5 py-4">
+          <h2 className="q-h3">Your human strengths</h2>
+          <p className="m-0 text-[13px] text-graphite">Little AI use on the tasks behind these skills so far. Keep them visible on your CV.</p>
+          <ul className="m-0 pl-5 text-[13px]">{data.strengths.map((s) => <li key={s.skill}>{s.name}{s.ai_use != null ? ` · ${s.ai_use.toFixed(0)}% AI use on its tasks` : ''}</li>)}</ul>
+        </section>
+      )}
+    </>
+  )
+}

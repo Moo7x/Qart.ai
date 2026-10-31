@@ -19,12 +19,20 @@ and plan stops use that same snapshot. Nothing here changes requirements, fit sc
 `/start` is the landing page (`pages/onboarding/Landing.tsx`, the decorative landscape in
 `components/HeroScene.tsx`) with a one-step CV popup over it (`CvPopup.tsx`, `CvStep.tsx`): upload a
 CV or use the form, see what was read (every level a claim), and "Continue" saves the profile and
-opens the Overview. The Overview opens with "Your skills as AI moves": the radar, and beside it
-"What is changing in your current job" (`components/JobHub.tsx`, compact: the job card above four
-evidence cards, each opening its source; not shown without a current job). Then "Increase the accuracy of your results" (`components/SkillSurvey.tsx`): a popup asks
-the up to three unrated skills whose answer would change the person's options most
-(`GET /questions`); each answer is saved as their own rating (`POST /answer`) and the radar, tiles
-and My options use it at once. Then "Trends" (`components/OverviewTrends.tsx`, from `GET /api/trends`):
+opens the Overview (`pages/Overview.tsx`, always the moderate scenario, `OVERVIEW_SCENARIO`). A
+summary line (current role → destination) with fit, skills rated and plan steps done, then three
+columns that end level. (1) "Where you are" (`components/JobHub.tsx`, not shown without a current
+job): the job on a dark card (TalentCorp impact with the O*NET tasks, the pack's summary, routes
+out) and four small charts (AI use donut, ILO exposure gradient, DOSM employment line, MyCOL list),
+each opening its source. (2) "Your skills" (`components/SkillRadar.tsx`): a radar of the role's
+skills on the 0–5 scale, the claimed level against the needed level; an unrated skill's label (on
+a phone, the list under the radar) rates it, and "Rate next skill" opens a popup
+(`components/SkillSurvey.tsx`) with the up to three unrated skills whose answer would change the
+person's options most (`GET /questions`). Each answer is saved as their own rating (`POST /answer`)
+and the whole Overview reloads with it. Below it, the page's main action: "Next step: compare the
+roles that fit you" (My options). (3) "Where you're heading" (`components/OverviewGlance.tsx`): the
+destination's fit ring with its range, essentials still short, Why? and All ranked roles, and the
+biggest raise with the other ways to raise the fit. Then "Trends" (`components/OverviewTrends.tsx`, from `GET /api/trends`):
 skills rising or declining under the chosen scenario (their weight change, an assumption applied to
 observed AI use) and job groups rising or declining in DOSM's shares of employees and of online job
 ads (observed). "More" opens a popup with the numbers behind the row: for a skill, its weight change
@@ -32,7 +40,8 @@ under each scenario (a scenario estimate, not a time series, since skills have n
 job group, the published DOSM series as a line chart, with a table view. The full Trends page
 (forecasts, change test) moved under the Evidence menu as "Trends and forecasts". On My options, roles are compact ranked rows with a fit range bar; the open row
 has a fit dial, Why?, evidence links and "Choose and continue", which leads to `/time` (hours and
-budget, saved on the profile) and then My plan. "What matters to you" (interests, SDG goals) only orders near-tie roles. Shared
+budget, saved on the profile) and then My plan. Interests and SDG goals saved on older profiles
+still order near-tie roles; the page no longer asks for them. Shared
 pieces (labels, Why?, cards, segmented controls, vivid tiles, small charts) are in
 `components/atoms.tsx`, `components/MiniCharts.tsx` and `index.css`; all motion is inside
 `prefers-reduced-motion: no-preference`.
@@ -110,8 +119,9 @@ of employees for the role's MASCO major group (reached through its ISCO-08 code)
 backtest result, the DOSM job-ad share where DOSM names the occupation, which of the role's skills
 TalentCorp lists as in demand, and whether MyCOL 2024/2025 lists the occupation as critical.
 
-**Radar.** `src/match/radar.py` (Overview) draws the person's chosen role, or best-fitting role
-until one is chosen: claimed level, needed level and level after the pathway (estimate) per skill,
+**Skill levels.** `src/match/radar.py` (`GET /radar`, shown on the Overview as a level table, no
+longer a radar chart) gives the person's chosen role, or best-fitting role until one is chosen:
+claimed level, needed level and level after the pathway (estimate) per skill,
 with the scenario emphasis (assumption), the observed AI use behind it and TalentCorp's in-demand
 flag (expert) kept apart. Below it are the existing field signals for the person's current
 occupation (its DOSM major group, job ads, AI use), so two CVs get a different radar focus.
@@ -135,8 +145,11 @@ changed, with Trends, Any occupation and Live intelligence under Evidence. Overv
 changing in the person's current job (its occupation's evidence). Roles compares two roles side by
 side, links each role to external job searches (JobStreet by title, the MYFutureJobs search page;
 Qart does not read or check openings), and tailors one line by situation: graduates see TalentCorp's
-listed ways in, switchers see which stated skills carry over. Pathway shows a clickable
-prerequisite roadmap (done, ready, needs a prerequisite) and three progress measures kept apart:
+listed ways in, switchers see which stated skills carry over. Pathway shows the path as a vertical
+list of step cards on a timeline, in a box that scrolls on its own (`components/TrackMap.tsx`):
+each card has the step's kind and level move, its resources and planned hours, its progress
+(planned courses marked done) or "Completed", and Start / Continue learning, which opens its
+courses, videos, articles and AI resources. Three progress measures are kept apart:
 plan completion (self-reported, saved per profile in `src/journey/progress.py`), requirement
 coverage (changes only when the person edits their levels) and skills still to tell; plus this
 week's steps within the weekly hours, and pause/resume that never lowers anything.
@@ -314,3 +327,12 @@ My plan opens with three connected track stations. Full skill labels and explici
 5. **Keep control:** course completion is self-reported, never an automatic proficiency increase. New collected evidence proposes a revision; the person accepts it. Role search windows link out to job boards and guarantee no vacancy.
 
 Overview starts with the current role, ranked options, a prioritised essential/weighted gap and the next uncompleted course. Light charts share the Trends components; full radar labels wrap. Job-search windows are available beside role options, future lists, goal alternatives and Overview recommendations. Long source badges wrap on phones. Learning progress saves show failures and block duplicate pending writes; switching scenarios remounts the plan state to avoid displaying an old scenario response.
+
+## One reskilling path (src/pathway/reskill.py)
+
+The plan screen shows one path. With no destination it is **your job's AI-era path**: every skill
+you hold is measured by how much AI is already used on its tasks (Economic Index, else the Qart
+task model's prediction), and becomes "check and steer AI-run work", "do it faster with AI", or a
+human strength to keep. When you choose a role, that path is replaced by **your path to the role**:
+AI basics, your skills that AI is reshaping and the role also needs, then the role's new skills.
+Steps are never locked; start with any skill.

@@ -27,6 +27,10 @@ trafilatura==2.3.1
 # Pulled in by httpx and pytest without a pin; pinned so dependency scans see the installed
 # versions, not the oldest ones the ranges allow.
 certifi==2026.10.23
+# Pulled in by openai without a pin (its HTTP client); pinned for the same reason. Older builds
+# (2.9.x) are flagged by Replit's scan.
+httpx2==2.15.1
+httpcore2==2.15.1
 pygments==2.21.0
 
 # Development and tests

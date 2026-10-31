@@ -31,7 +31,7 @@ function videoThumb(url: string): string | null {
 function PickCard({ pick }: { pick: ScoutPick }) {
   const thumb = pick.kind === 'video' ? videoThumb(pick.url) : null
   return (
-    <a href={pick.url} target="_blank" rel="noopener noreferrer" className="agent-pick group flex gap-3 rounded-xl border border-[rgba(157,134,255,0.35)] bg-[rgba(255,255,255,0.04)] p-3 text-white no-underline hover:border-violet-light hover:bg-[rgba(157,134,255,0.12)]">
+    <a href={pick.kind === 'article' && pick.page_url ? pick.page_url : pick.url} target="_blank" rel="noopener noreferrer" className="agent-pick group flex gap-3 rounded-xl border border-[rgba(157,134,255,0.35)] bg-[rgba(255,255,255,0.04)] p-3 text-white no-underline hover:border-violet-light hover:bg-[rgba(157,134,255,0.12)]">
       {thumb ? (
         <span className="relative h-[72px] w-[128px] shrink-0 overflow-hidden rounded-lg bg-surface">
           <img src={thumb} alt="" width={128} height={72} className="h-full w-full object-cover" loading="lazy" />
@@ -42,7 +42,8 @@ function PickCard({ pick }: { pick: ScoutPick }) {
       )}
       <span className="flex min-w-0 flex-col gap-1">
         <span className="flex items-start justify-between gap-2 text-[14px] font-semibold leading-snug">{pick.title}<ExternalLink size={14} aria-hidden="true" className="mt-0.5 shrink-0 text-violet-light" /></span>
-        <span className="font-mono text-[11px] text-stone">{pick.kind === 'video' ? `Opens the video at ${clock(pick.start)}` : `Opens the article at “${pick.anchor}…”`} · {pick.source}</span>
+        <span className="font-mono text-[11px] text-stone">{pick.kind === 'video' ? `Opens the video at ${clock(pick.start)}` : 'Opens the article with the important passages highlighted'} · {pick.source}</span>
+        {pick.excerpt && <mark className="rounded bg-[rgba(157,134,255,0.22)] px-1.5 py-1 text-[13px] leading-relaxed text-white">&ldquo;{pick.excerpt}&rdquo;</mark>}
         {pick.reason && <span className="text-[13px] text-[#d9dae3]">{pick.reason}</span>}
       </span>
     </a>
@@ -160,22 +161,12 @@ export function AgentRunWindow({ skill, skillName, profileId, resourceId, resour
   )
 }
 
-// A clear, always-visible way to start the agent for one resource or a whole skill.
-export function AgentButton({ label, onClick, compact = false }: { label: string; onClick: () => void; compact?: boolean }) {
+/** The small AI-brain button beside a video or article: the scout opens the video at the key
+ *  minute, or the article with its important passages highlighted. */
+export function BrainButton({ label, onClick }: { label: string; onClick: () => void }) {
   return (
-    <button type="button" onClick={onClick} className={`agent-button inline-flex cursor-pointer items-center gap-2 rounded-full border-0 font-semibold text-white ${compact ? 'min-h-[34px] px-3 text-[12px]' : 'min-h-[44px] px-4 text-[14px]'}`}>
-      <Bot size={compact ? 14 : 16} aria-hidden="true" />
-      {label}
+    <button type="button" onClick={onClick} title={label} aria-label={label} className="agent-button inline-flex h-9 w-9 flex-none cursor-pointer items-center justify-center rounded-full border-0 text-white">
+      <Brain size={18} aria-hidden="true" />
     </button>
-  )
-}
-
-export function ScoutButton({ skill, skillName, profileId }: { skill: string; skillName: string; profileId: string | null }) {
-  const [open, setOpen] = useState(false)
-  return (
-    <>
-      <AgentButton label={`Find the best parts for ${skillName}`} onClick={() => setOpen(true)} />
-      {open && <AgentRunWindow skill={skill} skillName={skillName} profileId={profileId} onClose={() => setOpen(false)} />}
-    </>
   )
 }

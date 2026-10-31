@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { useApi } from '../api'
+import { useJourney } from '../state'
 import type { OccupationPreview } from '../types'
 import { Loading, Problem } from './ui'
 
@@ -15,6 +16,7 @@ function Kind({ kind }: { kind: keyof typeof KIND }) {
 
 export function OccupationEvidence({ soc, compact = false }: { soc: string; compact?: boolean }) {
   const view = useApi<OccupationPreview>(`/api/occupations/${soc}`)
+  const { profileId } = useJourney()
   if (view.loading) return <Loading what="the evidence for this occupation" />
   if (view.error) return <Problem what="the evidence" message={view.error} onRetry={view.reload} />
   const p = view.data
@@ -26,7 +28,9 @@ export function OccupationEvidence({ soc, compact = false }: { soc: string; comp
         <h2 className="h2">{p.title}</h2>
         <p className="m-0 text-[13px] text-graphite">{p.description}</p>
         <p className="m-0 text-[13px] font-medium">{p.coverage}</p>
-        {p.in_field && !compact && <Link className="btn btn-v self-start" to="/start">Start your full journey</Link>}
+        {p.in_field && !compact && (profileId
+          ? <Link className="btn btn-v self-start" to="/overview">Open my overview</Link>
+          : <Link className="btn btn-v self-start" to="/start">Start your full journey</Link>)}
       </div>
 
       <div className="grid gap-4 [grid-template-columns:repeat(auto-fit,minmax(260px,1fr))]">

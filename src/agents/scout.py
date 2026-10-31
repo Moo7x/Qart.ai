@@ -40,6 +40,7 @@ from src.agents.segments import (
     article_parts,
     article_text,
     caption_snippets,
+    combined_link,
     rank,
     video_id,
     video_parts,
@@ -108,10 +109,20 @@ class Scout:
     ) -> None:
         pack, res = load_pack(), load_resources()
         self.engine, self.settings, self.run_id, self.http = engine, settings, run_id, http
-        self.skill, self.skill_name = skill, pack.skills[skill].name
+        # A pack skill, or an AI-basics topic (its stops have checked videos and articles too).
+        topic = next((t for t in res.ai_basics if t.id == skill), None)
+        self.skill = skill
+        self.skill_name = (
+            pack.skills[skill].name if skill in pack.skills else topic.title if topic else skill
+        )
+        by = {"topic": skill} if topic and skill not in pack.skills else {"skill": skill}
         self.captions = captions
-        self.resources = {v.id: ("video", v.title, v.url) for v in res.videos_for(skill=skill)}
-        self.resources |= {a.id: ("article", a.title, a.url) for a in res.articles_for(skill=skill)}
+        self.resources = {v.id: ("video", v.title, v.url) for v in res.videos_for(**by)}
+        self.resources |= {
+            a.id: ("article", a.title, a.url)
+            for a in res.articles_for(**by)
+            if a.kind == "article"  # web pages and pages that refuse readers are not pointed into
+        }
         if resource_id in self.resources:  # the person asked about one video or article
             self.resources = {resource_id: self.resources[resource_id]}
         self.parts: dict[str, Part] = {}
@@ -225,10 +236,33 @@ class Scout:
             "start": part.start,
             "end": part.end,
             "anchor": " ".join(anchor_words(part.text)) if kind == "article" else "",
+            # The passage itself, shortened, shown in the agent window: the person sees the part
+            # even when their browser does not highlight text-fragment links.
+            "excerpt": excerpt(part.text) if kind == "article" else "",
             "score": part.score,
             "reason": reason,
             "source": f"checked on {self.cache['checked']}" if cached else "live",
         }
+
+    def with_page_links(self, picks: list[dict[str, Any]]) -> list[dict[str, Any]]:
+        """Each article pick also gets `page_url`: one link that highlights every chosen passage
+        of that article at once, so the person sees all the important parts, not only one."""
+        texts: dict[str, list[str]] = {}
+        for part in self.parts.values():
+            chosen = any(
+                p["resource_id"] == part.resource_id
+                and p.get("anchor")
+                and " ".join(anchor_words(part.text)) == p["anchor"]
+                for p in picks
+            )
+            if chosen and part.text:
+                texts.setdefault(part.resource_id, []).append(part.text)
+        out = []
+        for pick in picks:
+            url = self.resources[pick["resource_id"]][2]
+            extra = texts.get(pick["resource_id"], [])
+            out.append({**pick, "page_url": combined_link(url, extra) if extra else pick["url"]})
+        return out
 
     def ranked_only(self) -> list[dict[str, Any]]:
         """Fallback: read the first resources and keep the best part of each."""
@@ -289,6 +323,12 @@ def _agent(scout: Scout, chat: Chat) -> list[dict[str, Any]] | None:
     return None
 
 
+def excerpt(text: str) -> str:
+    words = text.split()
+    cut = " ".join(words[: params.SCOUT_EXCERPT_WORDS])
+    return cut + ("…" if len(words) > params.SCOUT_EXCERPT_WORDS else "")
+
+
 def run_scout(
     engine: Engine,
     settings: Settings,
@@ -324,7 +364,7 @@ def run_scout(
         result = {
             "skill": skill,
             "skill_name": scout.skill_name,
-            "picks": picks,
+            "picks": scout.with_page_links(picks),
             "engine": f"{agent_engine}; ranked by {scout.rank_engine}",
             "note": "Some parts come from an earlier check." if scout.cached_used else "",
         }

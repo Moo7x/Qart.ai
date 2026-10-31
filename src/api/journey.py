@@ -11,7 +11,7 @@ from sqlalchemy import Engine, select
 
 from src import params
 from src.api.evidence import get_engine, get_settings
-from src.api.schemas import FutureOut, MatchesOut, RadarOut, TracksOut
+from src.api.schemas import FutureOut, MatchesOut, RadarOut, ReskillOut, TracksOut
 from src.changes.store import baseline_cutoff
 from src.collectors.talentcorp import load_extraction
 from src.config import REPO_ROOT, Settings
@@ -24,12 +24,14 @@ from src.journey.person import Person, load_person
 from src.journey.progress import get_progress
 from src.journey.store import (
     ProfileData,
+    SkillClaim,
     choose_destination,
     create_profile,
     get_profile,
     update_profile,
 )
 from src.levels import load_levels
+from src.match import directions
 from src.match.basis import requirement_basis
 from src.match.decision import (
     band,
@@ -47,7 +49,8 @@ from src.match.radar import radar
 from src.match.tasks import task_view
 from src.occupations.catalogue import catalogue_table
 from src.pack import Pack, load_pack
-from src.pathway.planner import Pathway, PathwayOut, apply_progress, pathway_out
+from src.pathway.planner import Pathway, PathwayOut, ai_basics_choice, apply_progress, pathway_out
+from src.pathway.reskill import current_job_path, destination_path
 from src.pathway.sdg import role_targets
 from src.pathway.tracks import build_tracks, comparison
 from src.resources import load_resources
@@ -271,10 +274,13 @@ def _card(
     path: Pathway,
     demand: list[dict[str, str]],
     scenario: Scenario,
+    forecasts: dict[str, dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
-    pack, data, evidence, rows = person.pack, person.data, person.evidence, person.rows
+    pack, data, evidence, rows = person.pack, person.data, person.evidence, person.card_rows
     role = pack.destination_roles[match.role_id]
     current = pack.current_roles.get(data.current_role)
+    forecast = (forecasts or {}).get(match.role_id)
+    tier = directions.related_tier(rows, current.soc if current else None, role.soc)
     outlook = [
         {
             "kind": "expert",
@@ -318,6 +324,12 @@ def _card(
         # Skills TalentCorp names as in demand (expert view, PDF p. 25): the row's trend line.
         "in_demand": in_demand_skills(pack, role, rows),
         # The person's chosen goals this role serves (they order near-ties; fit is unchanged).
+        # Where the role is heading (industry forecast, estimate), how close the move is, and the
+        # score the roles are ordered by (fit x outlook factor; the fit itself is unchanged).
+        "forecast": directions.summary(forecast),
+        "direction": directions.direction(match.fit, tier),
+        "related_tier": tier,
+        "direction_score": round(match.fit * directions.factor(forecast), 1),
         "serves_goals": sorted(
             {link.target.split(".")[0] for link in pack.sdg.for_role(match.role_id)}
             & set(data.sdg_priorities)
@@ -334,13 +346,15 @@ def matches(
     person = require_person(engine, profile_id)
     pack, evidence, rows = person.pack, person.evidence, person.rows
     signals = occupation_signals(rows) + job_ad_signals(rows)
+    forecasts = person.forecasts(scenario)
     cards = [
         _card(
             person,
             m,
             person.plan(m, scenario),
-            role_outlook(pack, pack.destination_roles[m.role_id], rows, signals),
+            role_outlook(pack, pack.destination_roles[m.role_id], person.card_rows, signals),
             scenario,
+            forecasts,
         )
         for m in person.rank(scenario)
     ]
@@ -357,6 +371,8 @@ def matches(
         },
         "current_role": current.model_dump() if current else None,
         "current_impact": IMPACT_MEANING[current.impact] if current else None,
+        # Where the person's own job is heading: the basis of the no-destination reskilling path.
+        "current_forecast": directions.summary(forecasts.get(current.id)) if current else None,
         "destination": person.destination,
         "roles": cards,
         # B7: roles × SDG targets with reasons, so roles can be compared by contribution.
@@ -436,11 +452,64 @@ def tracks(
         "scenario": scenario,
         "weekly_hours": data.weekly_hours,
         "tracks": build_tracks(pack, res, match, path, done, person.rows),
+        # The one path shown (src/pathway/reskill.py): basics, adapt held skills, learn the gaps.
+        "path": destination_path(
+            pack, res, match, path, done, person.rows, *_reskill_inputs(person, scenario)
+        ),
         "comparison": comparison(
             pack, res, data.skills, chosen, data.weekly_hours, person.evidence, data.situation
         ),
         "resources_checked": res.checked,
         "courses_checked": pack.courses_checked,
+    }
+
+
+def _reskill_inputs(
+    person: Person, scenario: Scenario
+) -> tuple[str | None, dict[str, SkillClaim], list[dict[str, Any]], float, int | None]:
+    """The current occupation, claims, task rows, scenario intensity and task-model version."""
+    current = person.pack.current_roles.get(person.data.current_role)
+    version = person.task_rows[0]["version_id"] if person.task_rows else None
+    return (
+        current.soc if current else None,
+        dict(person.data.skills),
+        person.task_rows,
+        params.SCENARIO_INTENSITY[scenario],
+        version,
+    )
+
+
+@router.get("/profiles/{profile_id}/reskill", response_model=ReskillOut)
+def reskill(
+    profile_id: str,
+    scenario: Scenario = Query(default="moderate"),
+    engine: Engine = Depends(get_engine),
+) -> dict[str, Any]:
+    """The path shown before a destination is chosen: the person's job's AI-era path."""
+    person = require_person(engine, profile_id)
+    pack, data = person.pack, person.data
+    current = pack.current_roles.get(data.current_role)
+    soc, claims, task_rows, intensity, version = _reskill_inputs(person, scenario)
+    done: list[str] = []  # progress is recorded against a destination's plan, not this path
+    track, strengths = current_job_path(
+        pack,
+        load_resources(),
+        soc,
+        claims,
+        task_rows,
+        intensity,
+        version,
+        ai_basics_choice(pack, data.skills, data.situation),
+        done,
+    )
+    forecast = person.forecasts(scenario).get(current.id) if current else None
+    return {
+        "scenario": scenario,
+        "current_role": current.title if current else None,
+        "current_forecast": directions.summary(forecast),
+        "track": track,
+        "strengths": strengths,
+        "destination": person.destination,
     }
 
 

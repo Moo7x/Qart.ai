@@ -2,9 +2,11 @@
 
 We keep, for the field's occupations, the share of conversations (`pct`, global and Malaysia) and
 the global split between automation-style and augmentation-style use. The same metrics are kept for
-the O*NET tasks linked in data/packs/gbs_fa/tasks.yaml (task-level rows, series `aei_task_*`), so
-each task shows its own observed AI use. Months are compared only within one release, because
-earlier releases used a different sampling method.
+every O*NET task in the release (task-level rows, series `aei_task_*`): the tasks linked in
+data/packs/gbs_fa/tasks.yaml show their own observed AI use, and all of them train the task-level
+AI-use model (src/forecast/task_model.py). Country rows are kept for the linked tasks only.
+Months are compared only within one release, because earlier releases used a different sampling
+method.
 
 The newest release file is about 220 MB, so it is streamed and filtered row by row, and a release
 already ingested is not downloaded again (remembered in the source state).
@@ -81,8 +83,10 @@ def parse_rows(lines: Iterable[str], release_date: str, url: str) -> list[Observ
         # field's own screens filter to field codes.
         if row["category_name"] == "soc_occupation" and row["hierarchy_level"] == "0":
             prefix, kind, unit_of = "aei_", "soc_occupation", "occupation"
-        elif row["category_name"] == "onet" and row["hierarchy_level"] == "0" and node in tasks:
+        elif row["category_name"] == "onet" and row["hierarchy_level"] == "0":
             prefix, kind, unit_of = "aei_task_", "onet task", "task"
+            if node not in tasks and row["geo_id"] != "GLOBAL":
+                continue
         else:
             continue
         metrics = GLOBAL_METRICS if row["geo_id"] == "GLOBAL" else COUNTRY_METRICS
@@ -117,7 +121,7 @@ def collect(client: httpx.Client, state: SourceState) -> CollectorResult:
     release, release_date, csv_path = found
     # Remember the release together with the occupations and linked tasks read from it: adding
     # either to the pack must trigger a re-read of the same release.
-    seen_key = f"{release}|all-occupations"
+    seen_key = f"{release}|all-occupations|all-tasks"
     seen_key += f"|{','.join(sorted(load_pack().task_ids(), key=int))}"
     if state.get(STATE_KEY) == seen_key:
         return CollectorResult([], note=f"no new release since {release_date}")

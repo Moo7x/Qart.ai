@@ -46,15 +46,6 @@ export function PageHead({ badge, title, sub, right }: { badge: string; title: R
 }
 
 /** The main step forward: an ink pill with a round arrow. */
-export function DarkLink({ to, children, onClick }: { to: string; children: ReactNode; onClick?: () => void }) {
-  return (
-    <Link to={to} onClick={onClick} className="q-btn q-btn-dark self-start">
-      {children}
-      <span className="q-btn-arrow" aria-hidden="true"><ChevronRight size={16} /></span>
-    </Link>
-  )
-}
-
 export function DarkButton({ children, onClick, disabled }: { children: ReactNode; onClick: () => void; disabled?: boolean }) {
   return (
     <button type="button" onClick={onClick} disabled={disabled} className="q-btn q-btn-dark self-start">
@@ -76,6 +67,9 @@ export function Segmented<T extends string>({ label, value, options, onChange, w
 }
 
 export const SCENARIO_TEXT: Record<Scenario, string> = { moderate: 'Moderate AI adoption', fast: 'Fast AI adoption' }
+
+/** The Overview has no scenario switch and always shows this one; other pages use the shared choice. */
+export const OVERVIEW_SCENARIO: Scenario = 'moderate'
 
 /** The scenario switch, shared by every page through the journey state. */
 export function ScenarioSwitch({ white = true }: { white?: boolean }) {
@@ -99,11 +93,6 @@ export function Legend({ items }: { items: { swatch: string; text: string }[] })
       ))}
     </ul>
   )
-}
-
-/** Chart | Table switch for every chart. */
-export function ViewSwitch({ value, onChange }: { value: 'chart' | 'table'; onChange: (v: 'chart' | 'table') => void }) {
-  return <Segmented label="Show as" value={value} onChange={onChange} options={[{ id: 'chart', text: 'Chart' }, { id: 'table', text: 'Table' }]} />
 }
 
 type Vivid = 'lime' // the plan's badges tile; the other themes went with the Overview tiles

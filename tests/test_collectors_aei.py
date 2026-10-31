@@ -88,12 +88,14 @@ def test_parse_keeps_linked_task_rows_in_their_own_series() -> None:
     tasks = {
         (o.series, o.geography, o.period): o
         for o in observations
-        if o.series.startswith("aei_task_")
+        if o.series.startswith("aei_task_") and o.entity.startswith("21515 ")
     }
     auto = tasks[("aei_task_collaboration_bucket_automation_pct", "GLOBAL", "2026-05")]
     assert auto.value == 61.4 and auto.entity.startswith("21515 ")
     assert auto.unit == "% of this task's conversations"
     assert tasks[("aei_task_pct", "MYS", "2026-05")].value == 0.05
     assert ("aei_task_pct", "GLOBAL", "2026-05") in tasks
-    assert not any(o.entity.startswith("99999") for o in observations)  # not a linked task
+    # A task not linked in the pack is kept for the task model, global rows only.
+    unlinked = [o for o in observations if o.entity.startswith("99999")]
+    assert unlinked and all(o.geography == "GLOBAL" for o in unlinked)
     assert len(tasks) == 4  # the hierarchy-1 row (a work activity, not the task) is dropped

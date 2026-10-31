@@ -38,6 +38,22 @@ TECH_SERIES = "onet_technology"
 TECH_UNIT = "employer demand in job postings (O*NET): 2 in demand, 1 hot technology, 0 listed"
 # Release 31.0 renamed Technology Skills to Software Skills; retain the older archive name.
 TECH_FILES = ("software_skills.csv", "technology_skills.csv")
+# Related Occupations: for each occupation, the 20 occupations O*NET's analysts judged most related,
+# in three tiers. Stored per followed occupation as the tier code (declared): 1 = Primary-Short
+# (the top 5), 2 = Primary-Long (6th-10th), 3 = Supplemental (11th-20th). Used to check that a
+# suggested move between jobs is one O*NET itself considers close.
+RELATED_SERIES = "onet_related_occupation"
+RELATED_UNIT = "relatedness tier (O*NET expert review): 1 top 5, 2 6th-10th, 3 11th-20th"
+RELATED_FILE = "related_occupations.csv"
+RELATED_TIER = {"Primary-Short": 1.0, "Primary-Long": 2.0, "Supplemental": 3.0}
+# Emerging Tasks: task statements that workers wrote in and O*NET analysts accepted as new or as a
+# revision of an existing task. Stored as 1 = new task, 0 = revision (declared coding).
+EMERGING_SERIES = "onet_emerging_task"
+EMERGING_UNIT = "1 = new task, 0 = revision of an existing task (worker write-ins, O*NET review)"
+EMERGING_FILE = "emerging_tasks.csv"
+# Every task statement of the followed occupations, with its importance where rated: the tasks the
+# task-level AI-use model predicts for (src/forecast/task_model.py), not only the linked ones.
+STATEMENT_SERIES = "onet_task_statement"
 TECH_EXAMPLES_CITED = 5
 
 
@@ -99,6 +115,9 @@ def parse_archive(data: bytes, version: str, url: str) -> tuple[list[Observation
             )
         )
     observations += _technology(archive, version, url)
+    observations += _statements(archive, version, url)
+    observations += _related(archive, version, url)
+    observations += _emerging(archive, version, url)
     missing = sorted(task for (soc, task) in wanted if (soc, task) not in statements)
     reworded = sorted(
         key[1]
@@ -111,6 +130,113 @@ def parse_archive(data: bytes, version: str, url: str) -> tuple[list[Observation
     if reworded:
         notes.append(f"linked tasks reworded in this release: {', '.join(reworded)}")
     return observations, "; ".join(notes)
+
+
+def _optional(archive: zipfile.ZipFile, name: str) -> io.TextIOWrapper | None:
+    """A file that older releases may lack; None when it is not in the archive."""
+    try:
+        return _member(archive, name)
+    except StopIteration:
+        return None
+
+
+def _statements(archive: zipfile.ZipFile, version: str, url: str) -> list[Observation]:
+    """All task statements of the followed occupations, each with its importance where rated."""
+    followed = field_profile().soc_codes()
+    rows: dict[tuple[str, str], dict[str, str]] = {}
+    with _member(archive, "task_statements.csv") as handle:
+        for row in csv.DictReader(handle):
+            if row["O*NET-SOC Code"] in followed:
+                rows[(row["O*NET-SOC Code"], row["Task ID"])] = row
+    importance: dict[tuple[str, str], str] = {}
+    with _member(archive, "task_ratings.csv") as handle:
+        for row in csv.DictReader(handle):
+            key = (row["O*NET-SOC Code"], row["Task ID"])
+            if key in rows and row["Scale ID"] == IMPORTANCE_SCALE:
+                importance[key] = row["Data Value"]
+    return [
+        Observation(
+            source_id=SOURCE_ID,
+            series=STATEMENT_SERIES,
+            entity=f"{task} {soc}",
+            geography="US",
+            period=version,
+            value=float(importance[(soc, task)]) if (soc, task) in importance else None,
+            unit=UNIT,
+            url=url,
+            cited_span=(
+                f"O*NET {version} · {soc} {row['Title']} · task {task} ({row['Task Type']}): "
+                f"{row['Task']}"
+            ),
+            method_version=f"onet/{version}",
+        )
+        for (soc, task), row in sorted(rows.items())
+    ]
+
+
+def _related(archive: zipfile.ZipFile, version: str, url: str) -> list[Observation]:
+    """The occupations O*NET relates to each followed occupation, with the relatedness tier."""
+    handle = _optional(archive, RELATED_FILE)
+    if handle is None:
+        return []
+    followed = field_profile().soc_codes()
+    out = []
+    with handle:
+        for row in csv.DictReader(handle):
+            soc, related = row["O*NET-SOC Code"], row["Related O*NET-SOC Code"]
+            tier = RELATED_TIER.get(row["Relatedness Tier"])
+            if soc not in followed or tier is None:
+                continue
+            out.append(
+                Observation(
+                    source_id=SOURCE_ID,
+                    series=RELATED_SERIES,
+                    entity=f"{soc} {related}",
+                    geography="US",
+                    period=version,
+                    value=tier,
+                    unit=RELATED_UNIT,
+                    url=url,
+                    cited_span=(
+                        f"O*NET {version} · {soc} {row['Title']} → {related} "
+                        f"{row['Related Title']} · {row['Relatedness Tier']} #{row['Index']}"
+                    ),
+                    method_version=f"onet/{version}",
+                )
+            )
+    return out
+
+
+def _emerging(archive: zipfile.ZipFile, version: str, url: str) -> list[Observation]:
+    """New and revised task statements O*NET accepted for the followed occupations."""
+    handle = _optional(archive, EMERGING_FILE)
+    if handle is None:
+        return []
+    followed = field_profile().soc_codes()
+    out = []
+    with handle:
+        for n, row in enumerate(csv.DictReader(handle)):
+            soc = row["O*NET-SOC Code"]
+            if soc not in followed:
+                continue
+            out.append(
+                Observation(
+                    source_id=SOURCE_ID,
+                    series=EMERGING_SERIES,
+                    entity=f"{soc} {n}",
+                    geography="US",
+                    period=version,
+                    value=1.0 if row["Category"] == "New" else 0.0,
+                    unit=EMERGING_UNIT,
+                    url=url,
+                    cited_span=(
+                        f"O*NET {version} · {soc} {row['Title']} · {row['Category']} task "
+                        f"({row['Date']}): {row['Task']}"
+                    ),
+                    method_version=f"onet/{version}",
+                )
+            )
+    return out
 
 
 def _technology(archive: zipfile.ZipFile, version: str, url: str) -> list[Observation]:
@@ -166,6 +292,9 @@ def _technology(archive: zipfile.ZipFile, version: str, url: str) -> list[Observ
     return out
 
 
+EXTRA_SERIES = (TECH_SERIES, STATEMENT_SERIES, RELATED_SERIES, EMERGING_SERIES)
+
+
 def collect(client: httpx.Client, state: SourceState) -> CollectorResult:
     found = latest_release(client)
     if found is None:
@@ -173,7 +302,8 @@ def collect(client: httpx.Client, state: SourceState) -> CollectorResult:
     major, minor = found
     version = f"{major}.{minor}"
     # A changed crosswalk must re-read the same release, so the linked tasks are part of the key.
-    seen_key = f"{version}|software-v1|{','.join(sorted(load_pack().task_ids(), key=int))}"
+    linked = ",".join(sorted(load_pack().task_ids(), key=int))
+    seen_key = f"{version}|software-v1|related-emerging-statements|{linked}"
     if state.get(STATE_KEY) == seen_key:
         return CollectorResult([], note=f"no new release since O*NET {version}")
     url = DOWNLOAD.format(major=major, minor=minor)
@@ -181,9 +311,10 @@ def collect(client: httpx.Client, state: SourceState) -> CollectorResult:
     response.raise_for_status()
     observations, problems = parse_archive(response.content, version, url)
     state.set(STATE_KEY, seen_key)
-    technology_count = sum(row.series == TECH_SERIES for row in observations)
+    count = {s: sum(row.series == s for row in observations) for s in EXTRA_SERIES}
     note = (
-        f"O*NET {version}: {len(observations) - technology_count} linked tasks, "
-        f"{technology_count} software categories"
+        f"O*NET {version}: {len(observations) - sum(count.values())} linked tasks, "
+        f"{count[TECH_SERIES]} software categories, {count[STATEMENT_SERIES]} task statements, "
+        f"{count[RELATED_SERIES]} related occupations, {count[EMERGING_SERIES]} emerging tasks"
     )
     return CollectorResult(observations, note=f"{note}; {problems}" if problems else note)

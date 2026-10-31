@@ -1,13 +1,13 @@
+import { ArrowRight, BookOpen, Check, Clock } from 'lucide-react'
 import { useCallback, useState } from 'react'
 import { useJourney } from '../state'
 import type { SkillBasis, Track, TrackNode } from '../types'
 import type { PracticeStep } from '../typesScoring'
-import { AgentButton, AgentRunWindow } from './AgentWindow'
+import { AgentRunWindow, BrainButton } from './AgentWindow'
 import { levelText } from './journey'
-import { Chat } from './ProgressCheck'
 import { Windows, type Pane } from './Windows'
 
-type State = 'done' | 'current' | 'locked' | 'no_course'
+type State = 'done' | 'current' | 'no_course'
 
 function videoId(url: string): string {
   return new URL(url).searchParams.get('v') ?? ''
@@ -19,14 +19,12 @@ function nodeDone(node: TrackNode, done: string[]): boolean {
   return planned.length > 0 && planned.every((c) => done.includes(c.id))
 }
 
-// Within a track, a node unlocks when the nodes before it that have courses are done.
+// Steps are never locked: each is a different skill, so the person can start with any of them.
+// A step with no free course still opens (videos and articles); it is marked so.
 function states(track: Track, done: string[]): State[] {
-  let blocked = false
   return track.nodes.map((n) => {
-    if (n.courses.every((c) => !c.planned)) return 'no_course'
     if (nodeDone(n, done)) return 'done'
-    if (blocked) return 'locked'
-    blocked = true
+    if (n.courses.length === 0) return 'no_course'
     return 'current'
   })
 }
@@ -41,6 +39,7 @@ const STATUS_TAG: Record<PracticeStep['status'], string> = {
 function practicePane(steps: PracticeStep[], onSkip: (id: string) => void, paused: boolean): Pane {
   return {
     key: 'practice',
+    wide: true,
     title: 'Practice at work',
     hint: 'Study reaches level 2 at most; these levels come from work you do. Weeks are estimates.',
     body: (
@@ -52,7 +51,7 @@ function practicePane(steps: PracticeStep[], onSkip: (id: string) => void, pause
               <span className="tag bg-estimate-bg text-estimate">Estimate</span>
               {p.time.low}–{p.time.high} weeks · to agree with your manager
             </span>
-            <span className="text-[12px] text-graphite">To complete it, describe: {p.show_by} The progress check in the Agents window, or your own re-rating, moves the level.</span>
+            <span className="text-[12px] text-graphite">To complete it, describe: {p.show_by} Your own re-rating moves the level.</span>
             <span className="flex flex-wrap items-center gap-2">
               <span className={`tag ${STATUS_TAG[p.status]}`}>{p.status === 'open' ? (p.locked ? 'Locked: finish this skill’s courses first' : 'Open') : `${p.status === 'done' ? 'Done' : 'Skipped'} · ${p.status_label}`}</span>
               {p.status === 'open' && <button type="button" className="btn min-h-[44px] text-[13px]" disabled={paused} onClick={() => onSkip(p.id)}>Continue anyway</button>}
@@ -64,39 +63,52 @@ function practicePane(steps: PracticeStep[], onSkip: (id: string) => void, pause
   }
 }
 
-// Owner A's two agents on a skill stop (docs/PHASE2_PLAN.md §9): the scout points to the parts of
-// the checked resources that teach the skill; the progress check proposes a level from work the
-// person describes, which is how a practice step is completed. Both start only when asked.
+// Owner A's scout agent on a skill stop (docs/PHASE2_PLAN.md §9): it points to the parts of the
+// checked resources that teach the skill. It starts only when asked.
 type OpenAgent = (resourceId?: string, resourceTitle?: string) => void
-
-function agentsPane(node: TrackNode, profileId: string | null, onAgent: OpenAgent): Pane[] {
-  if (!node.skill) return []
-  return [{
-    key: 'agents',
-    title: 'Agents',
-    hint: 'Optional. Each starts only when you ask; you decide what to keep.',
-    body: (
-      <div className="flex flex-col gap-4">
-        <div className="flex flex-col gap-2">
-          <p className="m-0">The scout reads the checked videos and articles for {node.title} and takes you to the minutes or paragraphs that teach it.</p>
-          <AgentButton label="Find the best parts" onClick={() => onAgent()} />
-        </div>
-        {profileId && (
-          <div className="flex flex-col gap-2 border-t border-line pt-3">
-            <span className="cap">Check my progress in {node.title}</span>
-            <Chat profileId={profileId} skill={node.skill} />
-          </div>
-        )}
-      </div>
-    ),
-  }]
-}
 
 const WHY_TAG: Record<SkillBasis['kind'], [string, string]> = {
   talentcorp: ['TalentCorp names it for this role', 'bg-observed-bg text-observed'],
   onet: ['Used in this job\'s tasks', 'bg-observed-bg text-observed'],
   onet_tech: ['Employers ask for it', 'bg-observed-bg text-observed'],
   assumption: ['Our assumption', 'bg-estimate-bg text-estimate'],
+  ai_trend: ['Where AI is taking this skill', 'bg-estimate-bg text-estimate'],
+}
+
+// Adapt steps: resources on doing this skill's work with AI, each with the two checked quotes.
+function aiPane(node: TrackNode): Pane[] {
+  if (!node.mode || (node.mode !== 'oversee' && node.mode !== 'use_ai')) return []
+  const items = node.ai_resources ?? []
+  return [{
+    key: 'ai',
+    title: 'Doing this with AI',
+    hint: 'Checked: each one shows this skill’s work and AI used on it (quotes from the page or video).',
+    body: items.length === 0 ? (
+      <div className="flex flex-col gap-2">
+        <p className="m-0 text-graphite">No checked resource on doing this skill with AI yet. {node.basics?.length ? 'Start with these AI basics; the courses beside cover the skill itself.' : 'The courses beside cover the skill itself.'}</p>
+        {(node.basics ?? []).length > 0 && (
+          <ul className="m-0 flex list-none flex-col gap-2 p-0">
+            {(node.basics ?? []).map((b) => (
+              <li key={b.url} className="flex flex-col gap-0.5">
+                <a href={b.url} target="_blank" rel="noopener noreferrer" className="font-medium text-void">{b.title} ↗</a>
+                <span className="font-mono text-[11px] text-graphite">AI basics · {b.topic} · {b.provider} · {b.kind} · {b.minutes} min</span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    ) : (
+      <ul className="m-0 flex list-none flex-col gap-3 p-0">
+        {items.map((r) => (
+          <li key={r.id} className="flex flex-col gap-1 border-b border-line pb-2.5 last:border-0">
+            <a href={r.url} target="_blank" rel="noopener noreferrer" className="font-medium text-void">{r.title} ↗</a>
+            <span className="font-mono text-[11px] text-graphite">{r.provider} · {r.kind === 'video' ? 'video' : 'course'} · {r.minutes} min</span>
+            <span className="text-[12px] text-[#404040]">AI on this work: &ldquo;{r.ai_quote}&rdquo;</span>
+          </li>
+        ))}
+      </ul>
+    ),
+  }]
 }
 
 // Why this skill is on the plan at all, with its source (src/match/basis.py).
@@ -105,6 +117,7 @@ function whyPane(node: TrackNode): Pane[] {
   const [tag, tone] = WHY_TAG[node.why.kind]
   return [{
     key: 'why',
+    wide: true,
     title: 'Why you need this',
     hint: node.essential ? 'Essential for this role' : 'Counts toward your fit for this role',
     body: (
@@ -117,10 +130,11 @@ function whyPane(node: TrackNode): Pane[] {
   }]
 }
 
-function panes(node: TrackNode, state: State, blocker: string | null, done: string[], onToggle: (id: string) => void, onSkip: (id: string) => void, paused: boolean, checked: string, profileId: string | null, onAgent: OpenAgent): Pane[] {
+function panes(node: TrackNode, done: string[], onToggle: (id: string) => void, onSkip: (id: string) => void, paused: boolean, checked: string, onAgent: OpenAgent): Pane[] {
   const practice = node.practice?.length ? [practicePane(node.practice, onSkip, paused)] : []
   return [
     ...whyPane(node),
+    ...aiPane(node),
     ...practice,
     {
       key: 'courses',
@@ -141,13 +155,11 @@ function panes(node: TrackNode, state: State, blocker: string | null, done: stri
                 )}
                 <span className="flex flex-wrap items-center gap-2">
                   <span className={`tag ${c.planned ? 'bg-violet-soft text-violet' : 'bg-mist text-graphite'}`}>{c.planned ? 'In your plan' : 'Alternative'}</span>
-                  {c.planned && (state === 'locked' ? (
-                    <span className="text-[12px] text-graphite">Finish &ldquo;{blocker}&rdquo; first.</span>
-                  ) : (
+                  {c.planned && (
                     <button type="button" className={`btn min-h-[34px] text-[13px] ${isDone ? '' : 'btn-v'}`} aria-pressed={isDone} disabled={paused} onClick={() => onToggle(c.id)}>
                       {isDone ? 'Done ✓ · undo' : 'Mark as done'}
                     </button>
-                  ))}
+                  )}
                 </span>
               </li>
             )
@@ -164,15 +176,15 @@ function panes(node: TrackNode, state: State, blocker: string | null, done: stri
       ) : (
         <ul className="m-0 flex list-none flex-col gap-3 p-0">
           {node.videos.map((v) => (
-            <li key={v.id} className="flex flex-col gap-2">
-              <a href={v.url} target="_blank" rel="noopener noreferrer" className="grid grid-cols-[112px_minmax(0,1fr)] gap-3 text-void no-underline hover:underline">
+            <li key={v.id} className="flex items-start gap-3">
+              <a href={v.url} target="_blank" rel="noopener noreferrer" className="grid min-w-0 flex-auto grid-cols-[112px_minmax(0,1fr)] gap-3 text-void no-underline hover:underline">
                 <img src={`https://i.ytimg.com/vi/${videoId(v.url)}/mqdefault.jpg`} alt="" width={112} height={63} loading="lazy" className="h-[63px] w-[112px] bg-mist object-cover" />
                 <span className="flex min-w-0 flex-col gap-0.5">
                   <span className="font-medium leading-snug">{v.title}</span>
                   <span className="font-mono text-[11px] text-graphite">{v.channel} · {v.minutes} min · {v.published}</span>
                 </span>
               </a>
-              {node.skill && <span><AgentButton compact label="Agent: jump to the key minutes" onClick={() => onAgent(v.id, v.title)} /></span>}
+              <BrainButton label={`AI agent: open “${v.title}” at the key minute`} onClick={() => onAgent(v.id, v.title)} />
             </li>
           ))}
         </ul>
@@ -187,16 +199,17 @@ function panes(node: TrackNode, state: State, blocker: string | null, done: stri
       ) : (
         <ul className="m-0 flex list-none flex-col gap-2.5 p-0">
           {node.articles.map((a) => (
-            <li key={a.id} className="border-b border-line pb-2.5 last:border-0">
-              <a href={a.url} target="_blank" rel="noopener noreferrer" className="font-medium text-void">{a.title} ↗</a>
-              <span className="block font-mono text-[11px] text-graphite">{a.publisher}</span>
-              {node.skill && <span className="mt-1.5 block"><AgentButton compact label="Agent: jump to the key paragraph" onClick={() => onAgent(a.id, a.title)} /></span>}
+            <li key={a.id} className="flex items-start gap-3 border-b border-line pb-2.5 last:border-0">
+              <span className="min-w-0 flex-auto">
+                <a href={a.url} target="_blank" rel="noopener noreferrer" className="font-medium text-void">{a.title} ↗</a>
+                <span className="block font-mono text-[11px] text-graphite">{a.publisher}{a.is_article === false ? ' · web page' : ''}</span>
+              </span>
+              {a.is_article !== false && <BrainButton label={`AI agent: show the important passages of “${a.title}”`} onClick={() => onAgent(a.id, a.title)} />}
             </li>
           ))}
         </ul>
       ),
     },
-    ...agentsPane(node, profileId, onAgent),
   ]
 }
 
@@ -205,47 +218,82 @@ const TRACK_TONE: Record<Track['id'], { line: string; soft: string; label: strin
   ai_basics: { line: '#138a72', soft: '#e3f4ef', label: 'Start here' },
   without_ai: { line: '#d9771f', soft: '#fcefe3', label: 'Without AI' },
   with_ai: { line: '#6c47ff', soft: '#f1edff', label: 'With AI' },
+  path: { line: '#6c47ff', soft: '#f1edff', label: 'Your path' },
 }
 
-const LOCK_ICON = (
-  <svg width="13" height="14" viewBox="0 0 11 12" aria-hidden="true"><rect x="1" y="5" width="9" height="6.5" rx="1" fill="currentColor" /><path d="M3 5V3.5a2.5 2.5 0 0 1 5 0V5" fill="none" stroke="currentColor" strokeWidth="1.4" /></svg>
-)
+const MODE_TAG: Record<string, string> = { oversee: 'adapt: oversee AI', use_ai: 'adapt: use AI', learn: 'new for this role', basics: 'AI basics' }
 
-function Stop({ node, state, index, tone, blocker, onOpen }: { node: TrackNode; state: State; index: number; tone: { line: string; soft: string }; blocker: string | null; onOpen: () => void }) {
-  const locked = state === 'locked'
-  const ring = state === 'current' ? { boxShadow: `0 0 0 6px ${tone.soft}` } : undefined
-  const fill =
+// The step's level line: where you are on an adapt step, the study (and practice) move otherwise.
+function levelLine(node: TrackNode): string {
+  if (node.mode === 'oversee' || node.mode === 'use_ai') return `You ${levelText(node.now)}${node.ai_use != null ? ` · ${node.ai_use.toFixed(0)}% AI use on its tasks` : ''}`
+  if (node.now === null && node.required === null) return ''
+  const now = node.now === null ? 'not rated' : levelText(node.now)
+  return `${now} → ${levelText(node.study_after ?? node.after)} by study${node.practice?.length ? ` · practice to ${levelText(node.required)}` : ''}`
+}
+
+const plural = (n: number, word: string) => `${n} ${word}${n === 1 ? '' : 's'}`
+
+function Hours({ minutes }: { minutes: number }) {
+  return <>{minutes < 60 ? `${minutes} min` : `${(minutes / 60).toFixed(1)} h`}</>
+}
+
+// One step as a module card on the timeline. Progress is the person's own record: planned courses
+// marked done over planned courses. The button opens the step's courses, videos and articles.
+function Module({ node, state, index, next, done, last, onOpen }: { node: TrackNode; state: State; index: number; next: boolean; done: string[]; last: boolean; onOpen: () => void }) {
+  const planned = node.courses.filter((c) => c.planned)
+  const finished = planned.filter((c) => done.includes(c.id)).length
+  const pct = planned.length ? Math.round((100 * finished) / planned.length) : 0
+  const minutes = planned.reduce((sum, c) => sum + c.minutes, 0)
+  const line = levelLine(node)
+  const kind = node.mode ? MODE_TAG[node.mode] : null
+  const dot =
     state === 'done'
-      ? { background: tone.line, borderColor: tone.line, color: '#ffffff' }
-      : state === 'current'
-        ? { background: '#ffffff', borderColor: tone.line, color: tone.line, ...ring }
-        : state === 'no_course'
-          ? { background: '#ffffff', borderColor: '#9394a1', color: '#747686', borderStyle: 'dashed' as const }
-          : { background: '#eceef3', borderColor: '#dcdfe7', color: '#9394a1' }
-  const status = state === 'done' ? 'done' : state === 'current' ? 'next up' : state === 'locked' ? 'locked' : 'no course yet'
+      ? 'border-violet bg-violet text-white'
+      : next
+        ? 'border-violet bg-white text-violet shadow-[0_0_0_5px_#f1edff]'
+        : 'border-[#d9d9de] bg-white text-ash'
   return (
-    <li className="road-stop">
-      <span className={`road-pin ${state === 'current' ? '' : 'invisible'}`} style={{ background: tone.line }} aria-hidden="true">You are here</span>
-      <button
-        type="button"
-        disabled={locked}
-        onClick={onOpen}
-        title={locked ? `Locked: finish “${blocker ?? 'the step before'}” first` : 'Open courses, videos and articles'}
-        aria-label={`${node.title}: ${status}${locked ? `. Finish ${blocker ?? 'the step before'} first` : '. Open courses, videos and articles'}`}
-        className="road-dot"
-        style={fill}
-      >
-        {state === 'done' ? '✓' : locked ? LOCK_ICON : index + 1}
-      </button>
-      <span className={`road-label ${locked ? 'text-ash' : 'text-void'}`}>
-        <span className={`block text-[14px] leading-snug ${state === 'current' ? 'font-semibold' : 'font-medium'}`}>{node.title}</span>
-        <span className="mt-1 block font-mono text-[11px] text-graphite">
-          {node.now !== null || node.required !== null ? `${levelText(node.now)} → ${levelText(node.study_after ?? node.after)} by study${node.practice?.length ? ` · practice to ${levelText(node.required)}` : ''}` : `${node.courses.length + node.videos.length + node.articles.length} resources`}
-          {node.essential ? ' · essential' : ''}
+    <li className="grid grid-cols-[32px_minmax(0,1fr)] gap-x-2.5 sm:grid-cols-[44px_minmax(0,1fr)] sm:gap-x-5">
+      <span className="relative flex justify-center" aria-hidden="true">
+        {!last && <span className="absolute bottom-[-16px] top-11 w-0.5 bg-[#e4ddff]" />}
+        <span className={`relative z-[1] mt-5 grid h-8 w-8 place-items-center rounded-full border-2 font-mono text-[13px] font-semibold sm:h-11 sm:w-11 sm:text-[14px] ${dot}`}>
+          {state === 'done' ? <Check size={20} strokeWidth={3} /> : index + 1}
         </span>
-        {locked && <span className="mt-1 block text-[11px] text-ash">Unlocks after the step before</span>}
-        {state === 'no_course' && <span className="mt-1 block text-[11px] text-graphite">Videos and articles only</span>}
       </span>
+      <article aria-label={`Step ${index + 1}: ${node.title}`} className={`flex flex-wrap items-center justify-between gap-x-6 gap-y-4 rounded-[20px] border p-4 shadow-[0_10px_30px_rgba(108,71,255,0.10)] sm:p-5 ${state === 'done' ? 'border-[#d9d0ff] bg-[#f1edff]' : next ? 'border-[#cfc3ff] bg-[#f8f6ff] shadow-[0_12px_34px_rgba(108,71,255,0.18)]' : 'border-[#e9e4ff] bg-[#f8f6ff]'}`}>
+        <div className="flex min-w-0 flex-[1_1_320px] flex-col gap-1.5">
+          <h4 className="m-0 text-[17px] font-semibold leading-snug tracking-tight">Step {index + 1}: {node.title}</h4>
+          <p className="m-0 text-[13px] text-[#404040]">
+            {kind && `${kind[0].toUpperCase()}${kind.slice(1)}`}{kind && line ? ' · ' : ''}{line}{node.essential ? ' · essential' : ''}
+          </p>
+          <p className="m-0 flex flex-wrap items-center gap-x-3 gap-y-1 text-[13px] text-muted">
+            <span className="inline-flex items-center gap-1.5"><BookOpen size={16} aria-hidden="true" />{[node.courses.length && plural(node.courses.length, 'course'), node.videos.length && plural(node.videos.length, 'video'), node.articles.length && plural(node.articles.length, 'article')].filter(Boolean).join(' · ') || 'No resources yet'}</span>
+            <span aria-hidden="true" className="hidden h-4 w-px bg-[#d9d9de] sm:block" />
+            <span className="inline-flex items-center gap-1.5"><Clock size={16} aria-hidden="true" />{minutes ? <Hours minutes={minutes} /> : node.courses.length ? 'Optional, not in your hours' : 'Videos and articles only'}</span>
+          </p>
+        </div>
+        <div className="flex w-full min-w-0 flex-col items-stretch gap-2.5 sm:w-auto sm:min-w-[200px] sm:flex-[0_1_260px]">
+          {state === 'done' ? (
+            <>
+              <span className="inline-flex items-center justify-center gap-2 self-end rounded-full bg-violet px-4 py-2 text-[13px] font-semibold text-white"><Check size={16} strokeWidth={3} aria-hidden="true" />Completed</span>
+              <button type="button" className="q-btn min-h-[40px] self-end border-[#d9d9de] px-4 text-[13px]" onClick={onOpen}>Review the resources</button>
+            </>
+          ) : (
+            <>
+              {planned.length > 0 && (
+                <div className="flex flex-col gap-1.5">
+                  <span className="text-[13px] font-medium">{pct}% complete</span>
+                  <span className="block h-2 overflow-hidden rounded-full bg-[#e4ddff]" aria-hidden="true"><span className="block h-full rounded-full bg-violet transition-[width] duration-500" style={{ width: `${pct}%` }} /></span>
+                </div>
+              )}
+              <button type="button" onClick={onOpen} className="q-btn q-btn-dark justify-between py-2 pl-5 pr-2 text-[14px]">
+                {pct > 0 ? 'Continue learning' : 'Start this step'}
+                <span className="q-btn-arrow"><ArrowRight size={16} aria-hidden="true" /></span>
+              </button>
+            </>
+          )}
+        </div>
+      </article>
     </li>
   )
 }
@@ -260,9 +308,6 @@ export function TrackMap({ tracks, done, onToggle, onSkip, paused, checked }: { 
   const close = useCallback(() => setOpen(null), [])
   const all = tracks.map((t) => states(t, done))
   const selected = open ? tracks[open.track].nodes[open.node] : null
-  const selectedState = open ? all[open.track][open.node] : 'locked'
-  // The step that keeps a stop locked: the current (next-up) stop of its track.
-  const blockerOf = (ti: number) => tracks[ti].nodes.find((_, i) => all[ti][i] === 'current')?.title ?? null
 
   return (
     <div className="road-map">
@@ -272,9 +317,7 @@ export function TrackMap({ tracks, done, onToggle, onSkip, paused, checked }: { 
         const finished = st.filter((s) => s === 'done').length
         const countable = st.filter((s) => s !== 'no_course').length
         const n = track.nodes.length
-        // How far along the road the colour reaches: up to the current stop, or the end.
-        const reached = st.every((s) => s === 'done' || s === 'no_course') ? n - 1 : Math.max(st.indexOf('current'), 0)
-        const fraction = n > 1 ? reached / (n - 1) : 1
+        const next = st.findIndex((s) => s !== 'done')
         return (
           <section key={track.id} aria-label={track.title} className="road-track">
             <header className="road-head">
@@ -301,14 +344,11 @@ export function TrackMap({ tracks, done, onToggle, onSkip, paused, checked }: { 
             ) : n === 0 ? (
               <p className="m-0 text-[13px] text-graphite">Nothing to build on this road: you already meet these skills for this role.</p>
             ) : (
-              <div className="road-scroll">
-                <ol className="road" style={{ gridTemplateColumns: `repeat(${n}, minmax(150px, 1fr))`, ['--road-cols' as string]: n }}>
-                  <span aria-hidden="true" className="road-line" />
-                  <span aria-hidden="true" className="road-fill" style={{ background: tone.line, width: `calc((100% - 100% / ${n}) * ${fraction})` }} />
-                  <span aria-hidden="true" className="road-end road-end-start">Start</span>
-                  <span aria-hidden="true" className="road-end road-end-finish">Finish</span>
+              // The steps scroll inside this box (its own scrollbar), not the page.
+              <div tabIndex={0} role="region" aria-label={`${track.title}: ${n} steps, scrolls`} className="max-h-[70vh] overflow-y-auto overscroll-contain rounded-[20px] bg-tray p-3 sm:max-h-[600px] sm:p-4">
+                <ol className="m-0 flex list-none flex-col gap-4 p-0">
                   {track.nodes.map((node, ni) => (
-                    <Stop key={node.id} node={node} state={st[ni]} index={ni} tone={tone} blocker={blockerOf(ti)} onOpen={() => setOpen({ track: ti, node: ni })} />
+                    <Module key={node.id} node={node} state={st[ni]} index={ni} next={ni === next} done={done} last={ni === n - 1} onOpen={() => setOpen({ track: ti, node: ni })} />
                   ))}
                 </ol>
               </div>
@@ -316,14 +356,15 @@ export function TrackMap({ tracks, done, onToggle, onSkip, paused, checked }: { 
           </section>
         )
       })}
-      <p className="m-0 text-[12px] text-graphite">Click an open stop to see its courses, YouTube videos and articles. Locked stops open once the stop before them is done. Levels show you now → after the planned courses (projected, an assumption); levels above 2 need practice at work.</p>
+      <p className="m-0 text-[12px] text-graphite">Open any step for its courses, YouTube videos and articles; start with whichever skill you like. Levels show you now → after the planned courses (projected, an assumption); levels above 2 need practice at work.</p>
       {open && selected && (
         <Windows
           key={`${open.track}-${open.node}`}
           title={`${tracks[open.track].title} · ${selected.title}`}
-          panes={panes(selected, selectedState, blockerOf(open.track), done, onToggle, onSkip, paused, checked, profileId, (resourceId, resourceTitle) => {
-            if (!selected.skill) return
-            setAgent({ skill: selected.skill, skillName: selected.title, resourceId, resourceTitle })
+          panes={panes(selected, done, onToggle, onSkip, paused, checked, (resourceId, resourceTitle) => {
+            // A skill stop runs on its skill; an AI-basics stop on its topic.
+            const basics = selected.mode === 'basics' || tracks[open.track].id === 'ai_basics'
+            setAgent({ skill: basics ? selected.id : selected.skill ?? selected.id, skillName: selected.title, resourceId, resourceTitle })
             setOpen(null)
           })}
           onClose={close}

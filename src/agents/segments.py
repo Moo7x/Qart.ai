@@ -43,10 +43,31 @@ class Part:
         if self.kind == "video" and self.start is not None:
             match = VIDEO_ID.search(url)
             return f"https://youtu.be/{match.group(1)}?t={int(self.start)}" if match else url
-        words = anchor_words(self.text)
-        # "-" and "," have a meaning inside a text fragment, so they are always encoded.
-        encoded = quote(" ".join(words), safe="").replace("-", "%2D")
-        return f"{url.split('#')[0]}#:~:text={encoded}" if words else url
+        directive = fragment(self.text)
+        return f"{url.split('#')[0]}#:~:{directive}" if directive else url
+
+
+def _encode(words: list[str]) -> str:
+    # "-", "," and "&" have a meaning inside a text fragment, so they are always encoded.
+    return quote(" ".join(words), safe="").replace("-", "%2D")
+
+
+def fragment(text: str) -> str:
+    """A text-fragment directive that highlights the whole passage, start to end
+    (`text=first words,last words`); the start alone when the passage is short."""
+    words = anchor_words(text)
+    if not words:
+        return ""
+    tail = re.sub(r"\W+$", "", text).split()
+    if len(tail) > 2 * params.FRAGMENT_WORDS:
+        return f"text={_encode(words)},{_encode(tail[-params.FRAGMENT_WORDS :])}"
+    return f"text={_encode(words)}"
+
+
+def combined_link(url: str, texts: list[str]) -> str:
+    """One link that highlights several passages of the same page (one directive each)."""
+    directives = [d for d in (fragment(t) for t in texts) if d]
+    return f"{url.split('#')[0]}#:~:{'&'.join(directives)}" if directives else url
 
 
 def anchor_words(text: str) -> list[str]:

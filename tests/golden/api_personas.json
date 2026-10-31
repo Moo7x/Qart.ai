@@ -305,6 +305,7 @@
      "strong": 75.0
     }
    },
+   "current_forecast": null,
    "current_impact": null,
    "current_role": null,
    "destination": "cost_accountant",
@@ -399,6 +400,8 @@
        "weight": 1.0
       }
      ],
+     "direction": "stretch",
+     "direction_score": 26.7,
      "effort_hours": 34.0,
      "effort_weeks": 6,
      "essential_gaps": [
@@ -414,6 +417,18 @@
       "basis": "low: self-rated claims one level lower, unstated as none; high: unstated at working",
       "high": 66.7,
       "low": 26.7
+     },
+     "forecast": {
+      "ai_use": null,
+      "category": "stable",
+      "change_pp": null,
+      "critical": null,
+      "kind": "estimate",
+      "label": "Stable",
+      "meaning": "No strong signal either way yet.",
+      "reasons": [
+       "no forecast change beyond the noise and fewer than two AI signals"
+      ]
      },
      "gap": {
       "bridgeable": [
@@ -481,6 +496,7 @@
        "via": "study"
       }
      ],
+     "related_tier": null,
      "requirement_basis": {
       "accounting_principles": {
        "kind": "onet",
@@ -803,6 +819,8 @@
        "weight": 1.0
       }
      ],
+     "direction": "stretch",
+     "direction_score": 22.7,
      "effort_hours": 34.1,
      "effort_weeks": 6,
      "essential_gaps": [
@@ -816,6 +834,18 @@
       "basis": "low: self-rated claims one level lower, unstated as none; high: unstated at working",
       "high": 86.4,
       "low": 22.7
+     },
+     "forecast": {
+      "ai_use": null,
+      "category": "stable",
+      "change_pp": null,
+      "critical": null,
+      "kind": "estimate",
+      "label": "Stable",
+      "meaning": "No strong signal either way yet.",
+      "reasons": [
+       "no forecast change beyond the noise and fewer than two AI signals"
+      ]
      },
      "gap": {
       "bridgeable": [
@@ -880,6 +910,7 @@
        "via": "practice"
       }
      ],
+     "related_tier": null,
      "requirement_basis": {
       "dashboards": {
        "kind": "onet",
@@ -1141,6 +1172,8 @@
        "weight": 1.0
       }
      ],
+     "direction": "stretch",
+     "direction_score": 18.2,
      "effort_hours": 19.6,
      "effort_weeks": 4,
      "essential_gaps": [
@@ -1156,6 +1189,18 @@
       "basis": "low: self-rated claims one level lower, unstated as none; high: unstated at working",
       "high": 90.9,
       "low": 18.2
+     },
+     "forecast": {
+      "ai_use": null,
+      "category": "stable",
+      "change_pp": null,
+      "critical": null,
+      "kind": "estimate",
+      "label": "Stable",
+      "meaning": "No strong signal either way yet.",
+      "reasons": [
+       "no forecast change beyond the noise and fewer than two AI signals"
+      ]
      },
      "gap": {
       "bridgeable": [
@@ -1221,6 +1266,7 @@
        "via": "study"
       }
      ],
+     "related_tier": null,
      "requirement_basis": {
       "compliance_reporting": {
        "kind": "onet",
@@ -1474,6 +1520,8 @@
        "weight": 1.0
       }
      ],
+     "direction": "stretch",
+     "direction_score": 16.7,
      "effort_hours": 2.0,
      "effort_weeks": 1,
      "essential_gaps": [
@@ -1487,6 +1535,18 @@
       "basis": "low: self-rated claims one level lower, unstated as none; high: unstated at working",
       "high": 91.7,
       "low": 16.7
+     },
+     "forecast": {
+      "ai_use": null,
+      "category": "stable",
+      "change_pp": null,
+      "critical": null,
+      "kind": "estimate",
+      "label": "Stable",
+      "meaning": "No strong signal either way yet.",
+      "reasons": [
+       "no forecast change beyond the noise and fewer than two AI signals"
+      ]
      },
      "gap": {
       "bridgeable": [
@@ -1551,6 +1611,7 @@
        "via": "study"
       }
      ],
+     "related_tier": null,
      "requirement_basis": {
       "accounting_principles": {
        "kind": "talentcorp",
@@ -1835,6 +1896,8 @@
        "weight": 1.0
       }
      ],
+     "direction": "stretch",
+     "direction_score": 13.3,
      "effort_hours": 60.0,
      "effort_weeks": 10,
      "essential_gaps": [
@@ -1850,6 +1913,18 @@
       "basis": "low: self-rated claims one level lower, unstated as none; high: unstated at working",
       "high": 93.3,
       "low": 13.3
+     },
+     "forecast": {
+      "ai_use": null,
+      "category": "stable",
+      "change_pp": null,
+      "critical": null,
+      "kind": "estimate",
+      "label": "Stable",
+      "meaning": "No strong signal either way yet.",
+      "reasons": [
+       "no forecast change beyond the noise and fewer than two AI signals"
+      ]
      },
      "gap": {
       "bridgeable": [
@@ -1917,6 +1992,7 @@
        "via": "study"
       }
      ],
+     "related_tier": null,
      "requirement_basis": {
       "accounting_principles": {
        "kind": "onet",
@@ -2274,6 +2350,8 @@
        "weight": 1.0
       }
      ],
+     "direction": "stretch",
+     "direction_score": 13.2,
      "effort_hours": 47.9,
      "effort_weeks": 8,
      "essential_gaps": [
@@ -2289,6 +2367,18 @@
       "basis": "low: self-rated claims one level lower, unstated as none; high: unstated at working",
       "high": 92.1,
       "low": 13.2
+     },
+     "forecast": {
+      "ai_use": null,
+      "category": "stable",
+      "change_pp": null,
+      "critical": null,
+      "kind": "estimate",
+      "label": "Stable",
+      "meaning": "No strong signal either way yet.",
+      "reasons": [
+       "no forecast change beyond the noise and fewer than two AI signals"
+      ]
      },
      "gap": {
       "bridgeable": [
@@ -2358,6 +2448,7 @@
        "via": "study"
       }
      ],
+     "related_tier": null,
      "requirement_basis": {
       "accounting_principles": {
        "kind": "assumption",
@@ -2729,6 +2820,8 @@
        "weight": 1.0
       }
      ],
+     "direction": "stretch",
+     "direction_score": 11.5,
      "effort_hours": 20.3,
      "effort_weeks": 4,
      "essential_gaps": [
@@ -2744,6 +2837,18 @@
       "basis": "low: self-rated claims one level lower, unstated as none; high: unstated at working",
       "high": 80.8,
       "low": 11.5
+     },
+     "forecast": {
+      "ai_use": null,
+      "category": "stable",
+      "change_pp": null,
+      "critical": null,
+      "kind": "estimate",
+      "label": "Stable",
+      "meaning": "No strong signal either way yet.",
+      "reasons": [
+       "no forecast change beyond the noise and fewer than two AI signals"
+      ]
      },
      "gap": {
       "bridgeable": [
@@ -2810,6 +2915,7 @@
        "via": "practice"
       }
      ],
+     "related_tier": null,
      "requirement_basis": {
       "budget_management": {
        "kind": "onet",
@@ -3128,6 +3234,8 @@
        "weight": 1.0
       }
      ],
+     "direction": "stretch",
+     "direction_score": 2.8,
      "effort_hours": 38.8,
      "effort_weeks": 7,
      "essential_gaps": [
@@ -3141,6 +3249,18 @@
       "basis": "low: self-rated claims one level lower, unstated as none; high: unstated at working",
       "high": 97.2,
       "low": 2.8
+     },
+     "forecast": {
+      "ai_use": null,
+      "category": "stable",
+      "change_pp": null,
+      "critical": null,
+      "kind": "estimate",
+      "label": "Stable",
+      "meaning": "No strong signal either way yet.",
+      "reasons": [
+       "no forecast change beyond the noise and fewer than two AI signals"
+      ]
      },
      "gap": {
       "bridgeable": [
@@ -3208,6 +3328,7 @@
        "via": "study"
       }
      ],
+     "related_tier": null,
      "requirement_basis": {
       "big_data_analytics": {
        "kind": "talentcorp",
@@ -3627,6 +3748,8 @@
        "weight": 1.0
       }
      ],
+     "direction": "stretch",
+     "direction_score": 0.0,
      "effort_hours": 7.3,
      "effort_weeks": 2,
      "essential_gaps": [
@@ -3640,6 +3763,18 @@
       "basis": "low: self-rated claims one level lower, unstated as none; high: unstated at working",
       "high": 100.0,
       "low": 0.0
+     },
+     "forecast": {
+      "ai_use": null,
+      "category": "stable",
+      "change_pp": null,
+      "critical": null,
+      "kind": "estimate",
+      "label": "Stable",
+      "meaning": "No strong signal either way yet.",
+      "reasons": [
+       "no forecast change beyond the noise and fewer than two AI signals"
+      ]
      },
      "gap": {
       "bridgeable": [],
@@ -3704,6 +3839,7 @@
        "via": "study"
       }
      ],
+     "related_tier": null,
      "requirement_basis": {
       "big_data_analytics": {
        "kind": "talentcorp",
@@ -4022,6 +4158,8 @@
        "weight": 1.0
       }
      ],
+     "direction": "stretch",
+     "direction_score": 0.0,
      "effort_hours": 42.2,
      "effort_weeks": 8,
      "essential_gaps": [
@@ -4035,6 +4173,18 @@
       "basis": "low: self-rated claims one level lower, unstated as none; high: unstated at working",
       "high": 100.0,
       "low": 0.0
+     },
+     "forecast": {
+      "ai_use": null,
+      "category": "stable",
+      "change_pp": null,
+      "critical": null,
+      "kind": "estimate",
+      "label": "Stable",
+      "meaning": "No strong signal either way yet.",
+      "reasons": [
+       "no forecast change beyond the noise and fewer than two AI signals"
+      ]
      },
      "gap": {
       "bridgeable": [],
@@ -4097,6 +4247,7 @@
        "via": "study"
       }
      ],
+     "related_tier": null,
      "requirement_basis": {
       "data_management": {
        "kind": "onet",
@@ -5859,6 +6010,714 @@
     }
    },
    "courses_checked": "2026-10-23",
+   "path": {
+    "nodes": [
+     {
+      "after": 1,
+      "articles": [
+       {
+        "is_article": false,
+        "publisher": "ISO",
+        "title": "ISO 50001 \u2014 Energy management",
+        "url": "https://www.iso.org/iso-50001-energy-management.html"
+       }
+      ],
+      "courses": [
+       {
+        "done": false,
+        "fit_check": {
+         "by": "gpt-4o-mini",
+         "checked": "2026-10-31",
+         "quote": "Explain the purpose of Energy measurement and information system and its relation with the energy management system",
+         "result": "fits",
+         "skills_removed": []
+        },
+        "level": "beginner",
+        "minutes": 90,
+        "planned": true,
+        "provider": "Alison",
+        "title": "ISO 50001:2018 - Elements of Energy Management System (EnMS)",
+        "url": "https://alison.com/course/iso-50001-2018-elements-of-energy-management-system-enms"
+       }
+      ],
+      "essential": false,
+      "mode": "learn",
+      "now": null,
+      "practice": [],
+      "required": 2,
+      "skill": "energy_management",
+      "status": "open",
+      "study_after": 1,
+      "title": "Energy Management and Audit",
+      "videos": [
+       {
+        "channel": "Sustainability Education Academy",
+        "minutes": 11,
+        "published": "2025-04-23",
+        "title": "Energy Auditing VS. Energy Management",
+        "url": "https://www.youtube.com/watch?v=Vgv3nmOesgo"
+       }
+      ],
+      "why": {
+       "kind": "talentcorp",
+       "source": "TalentCorp (2024) GBS study, PDF p. 39",
+       "text": "TalentCorp names Energy Management and Audit for Cost Accountant (skill to build)."
+      }
+     },
+     {
+      "after": 1,
+      "articles": [
+       {
+        "is_article": true,
+        "publisher": "IFRS Foundation",
+        "title": "Conceptual Framework for Financial Reporting",
+        "url": "https://www.ifrs.org/issued-standards/list-of-standards/conceptual-framework/"
+       },
+       {
+        "is_article": true,
+        "publisher": "Microsoft Learn",
+        "title": "Financial reporting overview",
+        "url": "https://learn.microsoft.com/en-us/dynamics365/finance/general-ledger/financial-reporting-getting-started"
+       }
+      ],
+      "courses": [
+       {
+        "done": false,
+        "fit_check": {
+         "by": "gpt-4o-mini",
+         "checked": "2026-10-31",
+         "quote": "Design, create, and modify SSRS reports.",
+         "result": "fits",
+         "skills_removed": []
+        },
+        "level": "intermediate",
+        "minutes": 61,
+        "planned": true,
+        "provider": "Microsoft Learn",
+        "title": "Build reports for finance and operations apps",
+        "url": "https://learn.microsoft.com/en-us/training/modules/build-reports-finance-operations/"
+       },
+       {
+        "done": false,
+        "fit_check": null,
+        "level": "intermediate",
+        "minutes": 119,
+        "planned": false,
+        "provider": "Microsoft Learn",
+        "title": "Configure and work with analytics and reporting in finance and operations apps",
+        "url": "https://learn.microsoft.com/en-us/training/paths/configure-analytics-reporting-finance-operations/"
+       }
+      ],
+      "essential": false,
+      "mode": "learn",
+      "now": null,
+      "practice": [],
+      "required": 2,
+      "skill": "financial_reporting",
+      "status": "open",
+      "study_after": 1,
+      "title": "Financial Analysis and Reporting",
+      "videos": [
+       {
+        "channel": "Accounting Stuff",
+        "minutes": 35,
+        "published": "2024-10-02",
+        "title": "The Ultimate Guide to Financial Statements",
+        "url": "https://www.youtube.com/watch?v=eorpdJUWfTA"
+       },
+       {
+        "channel": "CandiMentor ",
+        "minutes": 7,
+        "published": "2026-09-25",
+        "title": "The FP&A Month-End Close and Reporting Process: From Trial Balance to Management Pack",
+        "url": "https://www.youtube.com/watch?v=YAfJ7Y5SZH8"
+       },
+       {
+        "channel": "Accounting Stuff",
+        "minutes": 10,
+        "published": "2022-10-11",
+        "title": "FINANCIAL STATEMENTS: all the basics in 8 MINS!",
+        "url": "https://www.youtube.com/watch?v=Fi1wkUczuyk"
+       },
+       {
+        "channel": "Accounting Stuff",
+        "minutes": 24,
+        "published": "2022-08-15",
+        "title": "FINANCIAL RATIOS: How to Analyze Financial Statements",
+        "url": "https://www.youtube.com/watch?v=3W_LwpeG8c8"
+       }
+      ],
+      "why": {
+       "kind": "onet",
+       "source": "O*NET 31.0, Accountants and Auditors (13-2011.00), 2 linked task(s)",
+       "text": "The job's own tasks use it (useful tool): \u201cPrepare, analyze, or verify annual reports, financial statements, and other records, using accepted accounting and statistical procedures to assess financial condition and facilitate financial planning.\u201d"
+      }
+     },
+     {
+      "after": 1,
+      "articles": [
+       {
+        "is_article": true,
+        "publisher": "AccountingTools",
+        "title": "Standard costing definition",
+        "url": "https://www.accountingtools.com/articles/standard-costing"
+       }
+      ],
+      "courses": [
+       {
+        "done": false,
+        "fit_check": null,
+        "level": "beginner",
+        "minutes": 85,
+        "planned": true,
+        "provider": "Microsoft Learn",
+        "title": "Get started with cost accounting for supply chains in Dynamics 365 Finance",
+        "url": "https://learn.microsoft.com/en-us/training/paths/get-started-cost-accounting-supply-chains-dyn365-finance/"
+       },
+       {
+        "done": false,
+        "fit_check": null,
+        "level": "intermediate",
+        "minutes": 480,
+        "planned": false,
+        "provider": "OpenLearn (The Open University)",
+        "title": "Fundamentals of cost accounting and environmental management accounting",
+        "url": "https://www.open.edu/openlearn/money-business/fundamentals-cost-accounting-and-environmental-management-accounting/content-section-overview"
+       }
+      ],
+      "essential": true,
+      "mode": "learn",
+      "now": 1,
+      "practice": [
+       {
+        "basis": [
+         {
+          "read": "2026-10-30",
+          "title": "ACRA and SkillsFuture Singapore, Skills Framework for Accountancy",
+          "url": "https://www.acra.gov.sg/advancing-accountancy/skills-framework/"
+         },
+         {
+          "read": "2026-10-30",
+          "title": "SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)",
+          "url": "https://sfia-online.org/en/sfia-9/responsibilities"
+         },
+         {
+          "read": "2026-10-23",
+          "title": "TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23",
+          "url": "https://www.talentcorp.com.my"
+         }
+        ],
+        "kind": "practice",
+        "locked": true,
+        "order": 12,
+        "show_by": "The standards you set and a variance you explained.",
+        "skill": "standard_costing",
+        "skill_name": "Standard Costing",
+        "status": "open",
+        "status_label": "",
+        "target_level": 3,
+        "text": "Set and maintain the standard costs for your area and explain the variances.",
+        "time": {
+         "basis": "practice_estimate",
+         "high": 16.0,
+         "low": 8.0,
+         "unit": "weeks",
+         "value": 8.0
+        },
+        "unlock": "study_done",
+        "week_start": {
+         "high": 3,
+         "low": 3
+        }
+       }
+      ],
+      "required": 3,
+      "skill": "standard_costing",
+      "status": "open",
+      "study_after": 1,
+      "title": "Standard Costing",
+      "videos": [
+       {
+        "channel": "Edspira",
+        "minutes": 16,
+        "published": "2014-12-23",
+        "title": "Standard Costs and Variance Analysis",
+        "url": "https://www.youtube.com/watch?v=yWOdzhjHNSM"
+       },
+       {
+        "channel": "Chegg",
+        "minutes": 7,
+        "published": "2024-08-13",
+        "title": "Understanding Standard Product Costs | Managerial Accounting",
+        "url": "https://www.youtube.com/watch?v=4JGG_4eGGVs"
+       }
+      ],
+      "why": {
+       "kind": "onet",
+       "source": "O*NET 31.0, Accountants and Auditors (13-2011.00), 2 linked task(s)",
+       "text": "The job's own tasks use it (main work of the role): \u201cDevelop, maintain, or analyze budgets, preparing periodic reports that compare budgeted costs to actual costs.\u201d"
+      }
+     },
+     {
+      "after": 1,
+      "articles": [
+       {
+        "is_article": true,
+        "publisher": "Corporate Finance Institute",
+        "title": "Variance Analysis - Learn How to Calculate and Analyze Variances",
+        "url": "https://corporatefinanceinstitute.com/resources/accounting/variance-analysis/"
+       }
+      ],
+      "courses": [
+       {
+        "done": false,
+        "fit_check": null,
+        "level": "beginner",
+        "minutes": 85,
+        "planned": true,
+        "provider": "Microsoft Learn",
+        "title": "Get started with cost accounting for supply chains in Dynamics 365 Finance",
+        "url": "https://learn.microsoft.com/en-us/training/paths/get-started-cost-accounting-supply-chains-dyn365-finance/"
+       },
+       {
+        "done": false,
+        "fit_check": null,
+        "level": "intermediate",
+        "minutes": 480,
+        "planned": false,
+        "provider": "OpenLearn (The Open University)",
+        "title": "Fundamentals of cost accounting and environmental management accounting",
+        "url": "https://www.open.edu/openlearn/money-business/fundamentals-cost-accounting-and-environmental-management-accounting/content-section-overview"
+       }
+      ],
+      "essential": false,
+      "mode": "learn",
+      "now": 1,
+      "practice": [
+       {
+        "basis": [
+         {
+          "read": "2026-10-30",
+          "title": "ACRA and SkillsFuture Singapore, Skills Framework for Accountancy",
+          "url": "https://www.acra.gov.sg/advancing-accountancy/skills-framework/"
+         },
+         {
+          "read": "2026-10-30",
+          "title": "SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)",
+          "url": "https://sfia-online.org/en/sfia-9/responsibilities"
+         },
+         {
+          "read": "2026-10-23",
+          "title": "TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23",
+          "url": "https://www.talentcorp.com.my"
+         }
+        ],
+        "kind": "practice",
+        "locked": true,
+        "order": 14,
+        "show_by": "A variance, its cause and how you explained it.",
+        "skill": "variance_analytics",
+        "skill_name": "Variance Analytics",
+        "status": "open",
+        "status_label": "",
+        "target_level": 3,
+        "text": "Analyse your area's variances and explain their causes to the business.",
+        "time": {
+         "basis": "practice_estimate",
+         "high": 16.0,
+         "low": 8.0,
+         "unit": "weeks",
+         "value": 8.0
+        },
+        "unlock": "study_done",
+        "week_start": {
+         "high": 3,
+         "low": 3
+        }
+       }
+      ],
+      "required": 3,
+      "skill": "variance_analytics",
+      "status": "open",
+      "study_after": 1,
+      "title": "Variance Analytics",
+      "videos": [
+       {
+        "channel": "Ryan O'Connell, CFA, FRM",
+        "minutes": 6,
+        "published": "2026-10-15",
+        "title": "What Is Variance Analysis? Budget vs Actual Explained",
+        "url": "https://www.youtube.com/watch?v=4Qd97lqDdb0"
+       },
+       {
+        "channel": "FNEGE M\u00e9dias",
+        "minutes": 3,
+        "published": "2025-10-24",
+        "title": "What is variance analysis?",
+        "url": "https://www.youtube.com/watch?v=Lug15-NbwNc"
+       },
+       {
+        "channel": "Edspira",
+        "minutes": 16,
+        "published": "2014-12-23",
+        "title": "Standard Costs and Variance Analysis",
+        "url": "https://www.youtube.com/watch?v=yWOdzhjHNSM"
+       },
+       {
+        "channel": "Corporate Finance Institute",
+        "minutes": 9,
+        "published": "2018-04-13",
+        "title": "What is Variance Analysis?",
+        "url": "https://www.youtube.com/watch?v=SMTa1lZu7Qw"
+       }
+      ],
+      "why": {
+       "kind": "onet",
+       "source": "O*NET 31.0, Accountants and Auditors (13-2011.00), 1 linked task(s)",
+       "text": "The job's own tasks use it (main work of the role): \u201cDevelop, maintain, or analyze budgets, preparing periodic reports that compare budgeted costs to actual costs.\u201d"
+      }
+     },
+     {
+      "after": 2,
+      "articles": [
+       {
+        "is_article": true,
+        "publisher": "IFRS Foundation",
+        "title": "Conceptual Framework for Financial Reporting",
+        "url": "https://www.ifrs.org/issued-standards/list-of-standards/conceptual-framework/"
+       }
+      ],
+      "courses": [
+       {
+        "done": false,
+        "fit_check": {
+         "by": "gpt-4o-mini",
+         "checked": "2026-10-31",
+         "quote": "Accounting distributions are used to define how an amount is accounted for.",
+         "result": "fits",
+         "skills_removed": []
+        },
+        "level": "intermediate",
+        "minutes": 112,
+        "planned": false,
+        "provider": "Microsoft Learn",
+        "title": "Work with accounting distributions, invoice validations, and settlements in Dynamics 365 Finance",
+        "url": "https://learn.microsoft.com/en-us/training/modules/accounting-distributions-invoice-validation-dyn365-finance/"
+       },
+       {
+        "done": false,
+        "fit_check": null,
+        "level": "beginner",
+        "minutes": 480,
+        "planned": false,
+        "provider": "OpenLearn (The Open University)",
+        "title": "Introduction to bookkeeping and accounting",
+        "url": "https://www.open.edu/openlearn/money-business/introduction-bookkeeping-and-accounting/content-section-overview"
+       }
+      ],
+      "essential": true,
+      "mode": "learn",
+      "now": 2,
+      "practice": [
+       {
+        "basis": [
+         {
+          "read": "2026-10-30",
+          "title": "ACRA and SkillsFuture Singapore, Skills Framework for Accountancy",
+          "url": "https://www.acra.gov.sg/advancing-accountancy/skills-framework/"
+         },
+         {
+          "read": "2026-10-30",
+          "title": "SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)",
+          "url": "https://sfia-online.org/en/sfia-9/responsibilities"
+         },
+         {
+          "read": "2026-10-23",
+          "title": "TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23",
+          "url": "https://www.talentcorp.com.my"
+         }
+        ],
+        "kind": "practice",
+        "locked": false,
+        "order": 13,
+        "show_by": "A treatment you decided on your own and how you applied the standard.",
+        "skill": "accounting_principles",
+        "skill_name": "Accounting Principles",
+        "status": "open",
+        "status_label": "",
+        "target_level": 3,
+        "text": "Take over the accounting treatment for one transaction type in your area, with a reviewer checking only the exceptions.",
+        "time": {
+         "basis": "practice_estimate",
+         "high": 16.0,
+         "low": 8.0,
+         "unit": "weeks",
+         "value": 8.0
+        },
+        "unlock": "study_done",
+        "week_start": {
+         "high": 1,
+         "low": 1
+        }
+       }
+      ],
+      "required": 3,
+      "skill": "accounting_principles",
+      "status": "open",
+      "study_after": 2,
+      "title": "Accounting Principles",
+      "videos": [
+       {
+        "channel": "Accounting Stuff",
+        "minutes": 35,
+        "published": "2024-10-02",
+        "title": "The Ultimate Guide to Financial Statements",
+        "url": "https://www.youtube.com/watch?v=eorpdJUWfTA"
+       },
+       {
+        "channel": "Accounting Stuff",
+        "minutes": 15,
+        "published": "2020-07-20",
+        "title": "ACCOUNTING BASICS: a Guide to (Almost) Everything",
+        "url": "https://www.youtube.com/watch?v=yYX4bvQSqbo"
+       },
+       {
+        "channel": "Leila Gharani",
+        "minutes": 10,
+        "published": "2019-11-12",
+        "title": "Accounting Basics Explained Through a Story",
+        "url": "https://www.youtube.com/watch?v=VYNTBWBqncU"
+       },
+       {
+        "channel": "The Finance Storyteller",
+        "minutes": 9,
+        "published": "2023-07-05",
+        "title": "Accounting principles",
+        "url": "https://www.youtube.com/watch?v=50dztqkmiFg"
+       }
+      ],
+      "why": {
+       "kind": "onet",
+       "source": "O*NET 31.0, Accountants and Auditors (13-2011.00), 2 linked task(s)",
+       "text": "The job's own tasks use it (main work of the role): \u201cPrepare, examine, or analyze accounting records, financial statements, or other financial reports to assess accuracy, completeness, and conformance to reporting and procedural standards.\u201d"
+      }
+     },
+     {
+      "after": 1,
+      "articles": [
+       {
+        "is_article": true,
+        "publisher": "IBM",
+        "title": "What is Big Data Analytics?",
+        "url": "https://www.ibm.com/think/topics/big-data-analytics"
+       }
+      ],
+      "courses": [
+       {
+        "done": false,
+        "fit_check": {
+         "by": "gpt-4o-mini",
+         "checked": "2026-10-31",
+         "quote": "Use Microsoft Fabric to ingest and analyze data.",
+         "result": "fits",
+         "skills_removed": []
+        },
+        "level": "beginner",
+        "minutes": 51,
+        "planned": true,
+        "provider": "Microsoft Learn",
+        "title": "Explore fundamentals of large-scale analytics",
+        "url": "https://learn.microsoft.com/en-us/training/modules/examine-components-of-modern-data-warehouse/"
+       },
+       {
+        "done": false,
+        "fit_check": null,
+        "level": "intermediate",
+        "minutes": 60,
+        "planned": true,
+        "provider": "Microsoft Learn",
+        "title": "Explore and analyze data with Python",
+        "url": "https://learn.microsoft.com/en-us/training/modules/explore-analyze-data-with-python/"
+       },
+       {
+        "done": false,
+        "fit_check": null,
+        "level": "beginner",
+        "minutes": 128,
+        "planned": false,
+        "provider": "Microsoft Learn",
+        "title": "Introduction to Microsoft Azure Data analytics in Azure",
+        "url": "https://learn.microsoft.com/en-us/training/paths/azure-data-fundamentals-explore-data-warehouse-analytics/"
+       }
+      ],
+      "essential": false,
+      "mode": "learn",
+      "now": null,
+      "practice": [],
+      "required": 2,
+      "skill": "big_data_analytics",
+      "status": "open",
+      "study_after": 1,
+      "title": "Big Data Analytics",
+      "videos": [
+       {
+        "channel": "IBM Technology",
+        "minutes": 7,
+        "published": "2019-06-27",
+        "title": "Big Data Explained",
+        "url": "https://www.youtube.com/watch?v=HRfR4dJoKDc"
+       }
+      ],
+      "why": {
+       "kind": "talentcorp",
+       "source": "TalentCorp (2024) GBS study, PDF p. 46",
+       "text": "TalentCorp names Big Data Analytics for Cost Accountant (skill to build)."
+      }
+     },
+     {
+      "after": 2,
+      "articles": [
+       {
+        "is_article": true,
+        "publisher": "IBM",
+        "title": "What is Enterprise Resource Planning (ERP)?",
+        "url": "https://www.ibm.com/think/topics/enterprise-resource-planning"
+       }
+      ],
+      "courses": [
+       {
+        "done": false,
+        "fit_check": null,
+        "level": "beginner",
+        "minutes": 36,
+        "planned": true,
+        "provider": "Microsoft Learn",
+        "title": "Describe expense management, fixed asset management, and budgeting in Dynamics 365 Finance",
+        "url": "https://learn.microsoft.com/en-us/training/modules/explore-expense-management-fixed-asset-management/"
+       },
+       {
+        "done": false,
+        "fit_check": {
+         "by": "gpt-4o-mini",
+         "checked": "2026-10-31",
+         "quote": "The world of enterprise resource planning (ERP) is continuously evolving and helping customers scale up in productivity and streamline their operations.",
+         "result": "fits",
+         "skills_removed": []
+        },
+        "level": "intermediate",
+        "minutes": 46,
+        "planned": true,
+        "provider": "Microsoft Learn",
+        "title": "Updates and upgrades for finance and operations apps",
+        "url": "https://learn.microsoft.com/en-us/training/modules/upgrades-updates-finance-operations-apps/"
+       },
+       {
+        "done": false,
+        "fit_check": null,
+        "level": "beginner",
+        "minutes": 85,
+        "planned": true,
+        "provider": "Microsoft Learn",
+        "title": "Get started with cost accounting for supply chains in Dynamics 365 Finance",
+        "url": "https://learn.microsoft.com/en-us/training/paths/get-started-cost-accounting-supply-chains-dyn365-finance/"
+       },
+       {
+        "done": false,
+        "fit_check": null,
+        "level": "intermediate",
+        "minutes": 104,
+        "planned": true,
+        "provider": "Microsoft Learn",
+        "title": "Process credit and collections in Dynamics 365 Finance",
+        "url": "https://learn.microsoft.com/en-us/training/modules/process-credit-collections-dyn365-finance/"
+       },
+       {
+        "done": false,
+        "fit_check": null,
+        "level": "beginner",
+        "minutes": 137,
+        "planned": true,
+        "provider": "Microsoft Learn",
+        "title": "Describe general ledger and cash and bank management processes in Dynamics 365 Finance",
+        "url": "https://learn.microsoft.com/en-us/training/modules/describe-general-ledger-cash-bank-management/"
+       },
+       {
+        "done": false,
+        "fit_check": {
+         "by": "gpt-4o-mini",
+         "checked": "2026-10-31",
+         "quote": "Learn how finance and operations apps support businesses to manage their global financial systems, operational business processes, and streamlined supply chains to empower people to make fast, informed decisions.",
+         "result": "fits",
+         "skills_removed": []
+        },
+        "level": "beginner",
+        "minutes": 657,
+        "planned": true,
+        "provider": "Microsoft Learn",
+        "title": "Get started with finance and operations apps",
+        "url": "https://learn.microsoft.com/en-us/training/paths/get-started-finance-operations/"
+       },
+       {
+        "done": false,
+        "fit_check": {
+         "by": "gpt-4o-mini",
+         "checked": "2026-10-31",
+         "quote": "You must plan and configure your organization and create legal entities as one of the first steps of implementing finance and operations apps.",
+         "result": "fits",
+         "skills_removed": [
+          "systems_integration"
+         ]
+        },
+        "level": "intermediate",
+        "minutes": 720,
+        "planned": true,
+        "provider": "Microsoft Learn",
+        "title": "Configure your organization in finance and operations apps",
+        "url": "https://learn.microsoft.com/en-us/training/paths/configure-your-organization-finance-ops/"
+       }
+      ],
+      "essential": false,
+      "mode": "learn",
+      "now": null,
+      "practice": [],
+      "required": 2,
+      "skill": "erp",
+      "status": "open",
+      "study_after": 2,
+      "title": "Enterprise Resource Planning (ERP)",
+      "videos": [
+       {
+        "channel": "Learning Business Apps with Pir Khurram Rashdi",
+        "minutes": 32,
+        "published": "2022-05-29",
+        "title": "How Accounts payable invoice matching (total, two/three-way, charges) works in Dynamics 365 Finance",
+        "url": "https://www.youtube.com/watch?v=b1EitxD9ylY"
+       },
+       {
+        "channel": "Management Courses - Mike Clayton",
+        "minutes": 14,
+        "published": "2023-07-24",
+        "title": "ERP 101: What is Enterprise Resource Planning?",
+        "url": "https://www.youtube.com/watch?v=WM4CKdQcvkw"
+       },
+       {
+        "channel": "IBM Technology",
+        "minutes": 11,
+        "published": "2021-06-16",
+        "title": "What is Enterprise Resource Planning (ERP) Software?",
+        "url": "https://www.youtube.com/watch?v=Da1hUqzoiAo"
+       }
+      ],
+      "why": {
+       "kind": "onet",
+       "source": "O*NET 31.0, Accountants and Auditors (13-2011.00), 1 linked task(s)",
+       "text": "The job's own tasks use it (useful tool): \u201cDevelop, implement, modify, and document recordkeeping and accounting systems, making use of current computer technology.\u201d"
+      }
+     }
+    ],
+    "title": "Your path to Cost Accountant",
+    "why": "One path: the skills you already have that AI is reshaping, then the skills this role needs. Start any step; each is a different skill."
+   },
    "resources_checked": "2026-10-24",
    "role_id": "cost_accountant",
    "role_title": "Cost Accountant",
@@ -5870,6 +6729,7 @@
        "after": null,
        "articles": [
         {
+         "is_article": true,
          "publisher": "IBM",
          "title": "What is Generative AI?",
          "url": "https://www.ibm.com/think/topics/generative-ai"
@@ -5928,6 +6788,7 @@
        "after": null,
        "articles": [
         {
+         "is_article": true,
          "publisher": "IBM",
          "title": "What Is Prompt Engineering?",
          "url": "https://www.ibm.com/think/topics/prompt-engineering"
@@ -5975,6 +6836,7 @@
        "after": null,
        "articles": [
         {
+         "is_article": true,
          "publisher": "Microsoft",
          "title": "Responsible AI Principles and Approach",
          "url": "https://www.microsoft.com/en-us/ai/principles-and-approach"
@@ -6019,6 +6881,7 @@
        "after": null,
        "articles": [
         {
+         "is_article": true,
          "publisher": "IBM",
          "title": "What Is Data Management?",
          "url": "https://www.ibm.com/think/topics/data-management"
@@ -6071,6 +6934,7 @@
        "after": 1,
        "articles": [
         {
+         "is_article": false,
          "publisher": "ISO",
          "title": "ISO 50001 \u2014 Energy management",
          "url": "https://www.iso.org/iso-50001-energy-management.html"
@@ -6121,11 +6985,13 @@
        "after": 1,
        "articles": [
         {
+         "is_article": true,
          "publisher": "IFRS Foundation",
          "title": "Conceptual Framework for Financial Reporting",
          "url": "https://www.ifrs.org/issued-standards/list-of-standards/conceptual-framework/"
         },
         {
+         "is_article": true,
          "publisher": "Microsoft Learn",
          "title": "Financial reporting overview",
          "url": "https://learn.microsoft.com/en-us/dynamics365/finance/general-ledger/financial-reporting-getting-started"
@@ -6181,6 +7047,20 @@
          "published": "2026-09-25",
          "title": "The FP&A Month-End Close and Reporting Process: From Trial Balance to Management Pack",
          "url": "https://www.youtube.com/watch?v=YAfJ7Y5SZH8"
+        },
+        {
+         "channel": "Accounting Stuff",
+         "minutes": 10,
+         "published": "2022-10-11",
+         "title": "FINANCIAL STATEMENTS: all the basics in 8 MINS!",
+         "url": "https://www.youtube.com/watch?v=Fi1wkUczuyk"
+        },
+        {
+         "channel": "Accounting Stuff",
+         "minutes": 24,
+         "published": "2022-08-15",
+         "title": "FINANCIAL RATIOS: How to Analyze Financial Statements",
+         "url": "https://www.youtube.com/watch?v=3W_LwpeG8c8"
         }
        ],
        "why": {
@@ -6193,6 +7073,7 @@
        "after": 1,
        "articles": [
         {
+         "is_article": true,
          "publisher": "AccountingTools",
          "title": "Standard costing definition",
          "url": "https://www.accountingtools.com/articles/standard-costing"
@@ -6296,6 +7177,7 @@
        "after": 1,
        "articles": [
         {
+         "is_article": true,
          "publisher": "Corporate Finance Institute",
          "title": "Variance Analysis - Learn How to Calculate and Analyze Variances",
          "url": "https://corporatefinanceinstitute.com/resources/accounting/variance-analysis/"
@@ -6394,6 +7276,13 @@
          "published": "2014-12-23",
          "title": "Standard Costs and Variance Analysis",
          "url": "https://www.youtube.com/watch?v=yWOdzhjHNSM"
+        },
+        {
+         "channel": "Corporate Finance Institute",
+         "minutes": 9,
+         "published": "2018-04-13",
+         "title": "What is Variance Analysis?",
+         "url": "https://www.youtube.com/watch?v=SMTa1lZu7Qw"
         }
        ],
        "why": {
@@ -6406,6 +7295,7 @@
        "after": 2,
        "articles": [
         {
+         "is_article": true,
          "publisher": "IFRS Foundation",
          "title": "Conceptual Framework for Financial Reporting",
          "url": "https://www.ifrs.org/issued-standards/list-of-standards/conceptual-framework/"
@@ -6496,6 +7386,27 @@
          "published": "2024-10-02",
          "title": "The Ultimate Guide to Financial Statements",
          "url": "https://www.youtube.com/watch?v=eorpdJUWfTA"
+        },
+        {
+         "channel": "Accounting Stuff",
+         "minutes": 15,
+         "published": "2020-07-20",
+         "title": "ACCOUNTING BASICS: a Guide to (Almost) Everything",
+         "url": "https://www.youtube.com/watch?v=yYX4bvQSqbo"
+        },
+        {
+         "channel": "Leila Gharani",
+         "minutes": 10,
+         "published": "2019-11-12",
+         "title": "Accounting Basics Explained Through a Story",
+         "url": "https://www.youtube.com/watch?v=VYNTBWBqncU"
+        },
+        {
+         "channel": "The Finance Storyteller",
+         "minutes": 9,
+         "published": "2023-07-05",
+         "title": "Accounting principles",
+         "url": "https://www.youtube.com/watch?v=50dztqkmiFg"
         }
        ],
        "why": {
@@ -6514,6 +7425,7 @@
        "after": 1,
        "articles": [
         {
+         "is_article": true,
          "publisher": "IBM",
          "title": "What is Big Data Analytics?",
          "url": "https://www.ibm.com/think/topics/big-data-analytics"
@@ -6584,6 +7496,7 @@
        "after": 2,
        "articles": [
         {
+         "is_article": true,
          "publisher": "IBM",
          "title": "What is Enterprise Resource Planning (ERP)?",
          "url": "https://www.ibm.com/think/topics/enterprise-resource-planning"
@@ -6703,6 +7616,13 @@
          "published": "2023-07-24",
          "title": "ERP 101: What is Enterprise Resource Planning?",
          "url": "https://www.youtube.com/watch?v=WM4CKdQcvkw"
+        },
+        {
+         "channel": "IBM Technology",
+         "minutes": 11,
+         "published": "2021-06-16",
+         "title": "What is Enterprise Resource Planning (ERP) Software?",
+         "url": "https://www.youtube.com/watch?v=Da1hUqzoiAo"
         }
        ],
        "why": {
@@ -7089,6 +8009,7 @@
      "strong": 75.0
     }
    },
+   "current_forecast": null,
    "current_impact": null,
    "current_role": null,
    "destination": "finance_systems_analyst",
@@ -7205,6 +8126,8 @@
        "weight": 1.0
       }
      ],
+     "direction": "adjacent",
+     "direction_score": 63.2,
      "effort_hours": 14.5,
      "effort_weeks": 3,
      "essential_gaps": [],
@@ -7214,6 +8137,18 @@
       "basis": "low: self-rated claims one level lower, unstated as none; high: unstated at working",
       "high": 100.0,
       "low": 63.2
+     },
+     "forecast": {
+      "ai_use": null,
+      "category": "stable",
+      "change_pp": null,
+      "critical": null,
+      "kind": "estimate",
+      "label": "Stable",
+      "meaning": "No strong signal either way yet.",
+      "reasons": [
+       "no forecast change beyond the noise and fewer than two AI signals"
+      ]
      },
      "gap": {
       "bridgeable": [],
@@ -7279,6 +8214,7 @@
        "via": "study"
       }
      ],
+     "related_tier": null,
      "requirement_basis": {
       "accounting_principles": {
        "kind": "assumption",
@@ -7661,6 +8597,8 @@
        "weight": 1.0
       }
      ],
+     "direction": "adjacent",
+     "direction_score": 53.3,
      "effort_hours": 4.7,
      "effort_weeks": 1,
      "essential_gaps": [
@@ -7674,6 +8612,18 @@
       "basis": "low: self-rated claims one level lower, unstated as none; high: unstated at working",
       "high": 100.0,
       "low": 53.3
+     },
+     "forecast": {
+      "ai_use": null,
+      "category": "stable",
+      "change_pp": null,
+      "critical": null,
+      "kind": "estimate",
+      "label": "Stable",
+      "meaning": "No strong signal either way yet.",
+      "reasons": [
+       "no forecast change beyond the noise and fewer than two AI signals"
+      ]
      },
      "gap": {
       "bridgeable": [],
@@ -7739,6 +8689,7 @@
        "via": "study"
       }
      ],
+     "related_tier": null,
      "requirement_basis": {
       "accounting_principles": {
        "kind": "onet",
@@ -8072,6 +9023,8 @@
        "weight": 1.0
       }
      ],
+     "direction": "adjacent",
+     "direction_score": 53.3,
      "effort_hours": 3.3,
      "effort_weeks": 1,
      "essential_gaps": [
@@ -8085,6 +9038,18 @@
       "basis": "low: self-rated claims one level lower, unstated as none; high: unstated at working",
       "high": 100.0,
       "low": 53.3
+     },
+     "forecast": {
+      "ai_use": null,
+      "category": "stable",
+      "change_pp": null,
+      "critical": null,
+      "kind": "estimate",
+      "label": "Stable",
+      "meaning": "No strong signal either way yet.",
+      "reasons": [
+       "no forecast change beyond the noise and fewer than two AI signals"
+      ]
      },
      "gap": {
       "bridgeable": [],
@@ -8150,6 +9115,7 @@
        "via": "study"
       }
      ],
+     "related_tier": null,
      "requirement_basis": {
       "accounting_principles": {
        "kind": "onet",
@@ -8463,6 +9429,8 @@
        "weight": 1.0
       }
      ],
+     "direction": "adjacent",
+     "direction_score": 50.0,
      "effort_hours": 9.0,
      "effort_weeks": 2,
      "essential_gaps": [
@@ -8476,6 +9444,18 @@
       "basis": "low: self-rated claims one level lower, unstated as none; high: unstated at working",
       "high": 100.0,
       "low": 50.0
+     },
+     "forecast": {
+      "ai_use": null,
+      "category": "stable",
+      "change_pp": null,
+      "critical": null,
+      "kind": "estimate",
+      "label": "Stable",
+      "meaning": "No strong signal either way yet.",
+      "reasons": [
+       "no forecast change beyond the noise and fewer than two AI signals"
+      ]
      },
      "gap": {
       "bridgeable": [],
@@ -8531,6 +9511,7 @@
        "via": "study"
       }
      ],
+     "related_tier": null,
      "requirement_basis": {
       "data_management": {
        "kind": "onet",
@@ -8768,6 +9749,8 @@
        "weight": 1.0
       }
      ],
+     "direction": "stretch",
+     "direction_score": 45.5,
      "effort_hours": 6.0,
      "effort_weeks": 1,
      "essential_gaps": [],
@@ -8777,6 +9760,18 @@
       "basis": "low: self-rated claims one level lower, unstated as none; high: unstated at working",
       "high": 100.0,
       "low": 45.5
+     },
+     "forecast": {
+      "ai_use": null,
+      "category": "stable",
+      "change_pp": null,
+      "critical": null,
+      "kind": "estimate",
+      "label": "Stable",
+      "meaning": "No strong signal either way yet.",
+      "reasons": [
+       "no forecast change beyond the noise and fewer than two AI signals"
+      ]
      },
      "gap": {
       "bridgeable": [],
@@ -8839,6 +9834,7 @@
        "via": "study"
       }
      ],
+     "related_tier": null,
      "requirement_basis": {
       "dashboards": {
        "kind": "onet",
@@ -9144,6 +10140,8 @@
        "weight": 1.0
       }
      ],
+     "direction": "stretch",
+     "direction_score": 38.9,
      "effort_hours": 5.6,
      "effort_weeks": 1,
      "essential_gaps": [],
@@ -9153,6 +10151,18 @@
       "basis": "low: self-rated claims one level lower, unstated as none; high: unstated at working",
       "high": 100.0,
       "low": 38.9
+     },
+     "forecast": {
+      "ai_use": null,
+      "category": "stable",
+      "change_pp": null,
+      "critical": null,
+      "kind": "estimate",
+      "label": "Stable",
+      "meaning": "No strong signal either way yet.",
+      "reasons": [
+       "no forecast change beyond the noise and fewer than two AI signals"
+      ]
      },
      "gap": {
       "bridgeable": [],
@@ -9218,6 +10228,7 @@
        "via": "study"
       }
      ],
+     "related_tier": null,
      "requirement_basis": {
       "big_data_analytics": {
        "kind": "talentcorp",
@@ -9626,6 +10637,8 @@
        "weight": 1.0
       }
      ],
+     "direction": "stretch",
+     "direction_score": 38.5,
      "effort_hours": 19.3,
      "effort_weeks": 4,
      "essential_gaps": [
@@ -9641,6 +10654,18 @@
       "basis": "low: self-rated claims one level lower, unstated as none; high: unstated at working",
       "high": 100.0,
       "low": 38.5
+     },
+     "forecast": {
+      "ai_use": null,
+      "category": "stable",
+      "change_pp": null,
+      "critical": null,
+      "kind": "estimate",
+      "label": "Stable",
+      "meaning": "No strong signal either way yet.",
+      "reasons": [
+       "no forecast change beyond the noise and fewer than two AI signals"
+      ]
      },
      "gap": {
       "bridgeable": [],
@@ -9706,6 +10731,7 @@
        "via": "study"
       }
      ],
+     "related_tier": null,
      "requirement_basis": {
       "budget_management": {
        "kind": "onet",
@@ -9991,6 +11017,8 @@
        "weight": 1.0
       }
      ],
+     "direction": "stretch",
+     "direction_score": 25.0,
      "effort_hours": 2.0,
      "effort_weeks": 1,
      "essential_gaps": [],
@@ -10000,6 +11028,18 @@
       "basis": "low: self-rated claims one level lower, unstated as none; high: unstated at working",
       "high": 100.0,
       "low": 25.0
+     },
+     "forecast": {
+      "ai_use": null,
+      "category": "stable",
+      "change_pp": null,
+      "critical": null,
+      "kind": "estimate",
+      "label": "Stable",
+      "meaning": "No strong signal either way yet.",
+      "reasons": [
+       "no forecast change beyond the noise and fewer than two AI signals"
+      ]
      },
      "gap": {
       "bridgeable": [],
@@ -10062,6 +11102,7 @@
        "via": "study"
       }
      ],
+     "related_tier": null,
      "requirement_basis": {
       "accounting_principles": {
        "kind": "talentcorp",
@@ -10346,6 +11387,8 @@
        "weight": 1.0
       }
      ],
+     "direction": "stretch",
+     "direction_score": 7.1,
      "effort_hours": 6.0,
      "effort_weeks": 1,
      "essential_gaps": [
@@ -10359,6 +11402,18 @@
       "basis": "low: self-rated claims one level lower, unstated as none; high: unstated at working",
       "high": 100.0,
       "low": 7.1
+     },
+     "forecast": {
+      "ai_use": null,
+      "category": "stable",
+      "change_pp": null,
+      "critical": null,
+      "kind": "estimate",
+      "label": "Stable",
+      "meaning": "No strong signal either way yet.",
+      "reasons": [
+       "no forecast change beyond the noise and fewer than two AI signals"
+      ]
      },
      "gap": {
       "bridgeable": [],
@@ -10424,6 +11479,7 @@
        "via": "study"
       }
      ],
+     "related_tier": null,
      "requirement_basis": {
       "big_data_analytics": {
        "kind": "talentcorp",
@@ -10742,6 +11798,8 @@
        "weight": 1.0
       }
      ],
+     "direction": "stretch",
+     "direction_score": 0.0,
      "effort_hours": 19.6,
      "effort_weeks": 4,
      "essential_gaps": [
@@ -10757,6 +11815,18 @@
       "basis": "low: self-rated claims one level lower, unstated as none; high: unstated at working",
       "high": 100.0,
       "low": 0.0
+     },
+     "forecast": {
+      "ai_use": null,
+      "category": "stable",
+      "change_pp": null,
+      "critical": null,
+      "kind": "estimate",
+      "label": "Stable",
+      "meaning": "No strong signal either way yet.",
+      "reasons": [
+       "no forecast change beyond the noise and fewer than two AI signals"
+      ]
      },
      "gap": {
       "bridgeable": [],
@@ -10820,6 +11890,7 @@
        "via": "study"
       }
      ],
+     "related_tier": null,
      "requirement_basis": {
       "compliance_reporting": {
        "kind": "onet",
@@ -12084,6 +13155,662 @@
     }
    },
    "courses_checked": "2026-10-23",
+   "path": {
+    "nodes": [
+     {
+      "after": null,
+      "ai_basis": "none",
+      "ai_resources": [
+       {
+        "ai_quote": "Learn how Copilot helps you ask natural-language questions, understand capabilities quickly, and move from data to action.",
+        "kind": "course",
+        "minutes": 34,
+        "provider": "Microsoft Learn",
+        "published": "2026-10-27",
+        "score": 0.432,
+        "skill_quote": "Start with Dynamics 365 Customer Insights - Data to unify customer data, build a trusted customer view, and activate AI-powered insights.",
+        "title": "Get started with an AI-powered customer data platform in Dynamics 365",
+        "url": "https://learn.microsoft.com/en-us/training/modules/get-started-customer-data-platform/"
+       }
+      ],
+      "ai_use": null,
+      "articles": [
+       {
+        "is_article": true,
+        "publisher": "IBM",
+        "title": "What Is Data Management?",
+        "url": "https://www.ibm.com/think/topics/data-management"
+       }
+      ],
+      "basics": [],
+      "courses": [
+       {
+        "done": false,
+        "fit_check": null,
+        "level": "beginner",
+        "minutes": 35,
+        "planned": false,
+        "provider": "Microsoft Learn",
+        "title": "Explore core data concepts",
+        "url": "https://learn.microsoft.com/en-us/training/modules/explore-core-data-concepts/"
+       },
+       {
+        "done": false,
+        "fit_check": null,
+        "level": "beginner",
+        "minutes": 23,
+        "planned": false,
+        "provider": "Microsoft Learn",
+        "title": "Describe the data governance solutions of Microsoft Purview",
+        "url": "https://learn.microsoft.com/en-us/training/modules/describe-purview-data-governance/"
+       },
+       {
+        "done": false,
+        "fit_check": {
+         "by": "gpt-4o-mini",
+         "checked": "2026-10-31",
+         "quote": "Learn how to prepare data for migration, by using the data management framework to manage data entities and data entity packages in finance and operations apps.",
+         "result": "fits",
+         "skills_removed": []
+        },
+        "level": "intermediate",
+        "minutes": 313,
+        "planned": false,
+        "provider": "Microsoft Learn",
+        "title": "Migrate data and go live with finance and operations apps",
+        "url": "https://learn.microsoft.com/en-us/training/paths/migrate-data-go-live-finance-operations/"
+       },
+       {
+        "done": false,
+        "fit_check": {
+         "by": "gpt-4o-mini",
+         "checked": "2026-10-31",
+         "quote": "Generate field mapping between source and target data structures.",
+         "result": "fits",
+         "skills_removed": []
+        },
+        "level": "advanced",
+        "minutes": 84,
+        "planned": false,
+        "provider": "Microsoft Learn",
+        "title": "Prepare data for migration to finance and operations apps",
+        "url": "https://learn.microsoft.com/en-us/training/modules/prepare-data-migration-finance-operations/"
+       },
+       {
+        "done": false,
+        "fit_check": {
+         "by": "gpt-4o-mini",
+         "checked": "2026-10-31",
+         "quote": "Clean up the staging tables.",
+         "result": "fits",
+         "skills_removed": []
+        },
+        "level": "intermediate",
+        "minutes": 103,
+        "planned": false,
+        "provider": "Microsoft Learn",
+        "title": "Work with data management in finance and operations apps",
+        "url": "https://learn.microsoft.com/en-us/training/modules/work-data-management-finance-operations/"
+       },
+       {
+        "done": false,
+        "fit_check": {
+         "by": "gpt-4o-mini",
+         "checked": "2026-10-31",
+         "quote": "Understanding data is key to many business operations.",
+         "result": "fits",
+         "skills_removed": []
+        },
+        "level": "beginner",
+        "minutes": 94,
+        "planned": false,
+        "provider": "Microsoft Learn",
+        "title": "Understand data concepts",
+        "url": "https://learn.microsoft.com/en-us/training/paths/understand-data-concepts/"
+       }
+      ],
+      "essential": false,
+      "mode": "use_ai",
+      "now": 3,
+      "required": null,
+      "skill": "data_management",
+      "status": "open",
+      "title": "Data Management: do it faster with AI",
+      "videos": [
+       {
+        "channel": "IBM Technology",
+        "minutes": 4,
+        "published": "2022-06-23",
+        "title": "What is Master Data Management",
+        "url": "https://www.youtube.com/watch?v=l83bkKJh1wM"
+       },
+       {
+        "channel": "IBM Technology",
+        "minutes": 5,
+        "published": "2022-07-15",
+        "title": "Data Governance Explained in 5 Minutes",
+        "url": "https://www.youtube.com/watch?v=uPsUjKLHLAg"
+       }
+      ],
+      "why": {
+       "kind": "ai_trend",
+       "source": "no AI-use data for these tasks; modes after the Singapore Jobs Transformation Map, Generative AI in Financial Services (MAS, IBF, SWDA, 2025): roles with high automation potential are redesigned and their staff reskilled; for the others, proficiency in GenAI tools is essential",
+       "text": "AI helps people do this work. Learning to use it here keeps you ahead."
+      }
+     },
+     {
+      "after": null,
+      "ai_basis": "none",
+      "ai_resources": [
+       {
+        "ai_quote": "Learn to automate tasks and workflows across systems, websites, and applications by using agent flows and computer use in Microsoft Copilot Studio.",
+        "kind": "course",
+        "minutes": 160,
+        "provider": "Microsoft Learn",
+        "published": "2026-10-27",
+        "score": 0.359,
+        "skill_quote": "Extend Copilot Studio agents to automate tasks in web browsers and desktop applications using computer use.",
+        "title": "Automate tasks and workflows in Microsoft Copilot Studio",
+        "url": "https://learn.microsoft.com/en-us/training/paths/automate-tasks-workflows-copilot-studio/"
+       }
+      ],
+      "ai_use": null,
+      "articles": [
+       {
+        "is_article": true,
+        "publisher": "IBM",
+        "title": "What is Enterprise Resource Planning (ERP)?",
+        "url": "https://www.ibm.com/think/topics/enterprise-resource-planning"
+       }
+      ],
+      "basics": [],
+      "courses": [
+       {
+        "done": false,
+        "fit_check": null,
+        "level": "beginner",
+        "minutes": 113,
+        "planned": false,
+        "provider": "Microsoft Learn",
+        "title": "Use Lifecycle Services to design and plan an implementation of finance and operations apps",
+        "url": "https://learn.microsoft.com/en-us/training/paths/use-lcs-design-plan-implementation-finance-operations/"
+       },
+       {
+        "done": false,
+        "fit_check": {
+         "by": "gpt-4o-mini",
+         "checked": "2026-10-31",
+         "quote": "Learn about the implementation journey for a successful finance and operations project.",
+         "result": "fits",
+         "skills_removed": []
+        },
+        "level": "intermediate",
+        "minutes": 50,
+        "planned": false,
+        "provider": "Microsoft Learn",
+        "title": "Get started with a finance and operations implementation project",
+        "url": "https://learn.microsoft.com/en-us/training/modules/get-started-implementation-project/"
+       },
+       {
+        "done": false,
+        "fit_check": {
+         "by": "gpt-4o-mini",
+         "checked": "2026-10-31",
+         "quote": "Integrations are an important component of implementing finance and operations apps.",
+         "result": "fits",
+         "skills_removed": []
+        },
+        "level": "intermediate",
+        "minutes": 468,
+        "planned": false,
+        "provider": "Microsoft Learn",
+        "title": "Work with integration tools in finance and operations apps",
+        "url": "https://learn.microsoft.com/en-us/training/paths/work-implementation-tools-finance-operations/"
+       }
+      ],
+      "essential": false,
+      "mode": "use_ai",
+      "now": 3,
+      "required": null,
+      "skill": "financial_systems",
+      "status": "open",
+      "title": "Financial Systems Implementation: do it faster with AI",
+      "videos": [
+       {
+        "channel": "Management Courses - Mike Clayton",
+        "minutes": 14,
+        "published": "2023-07-24",
+        "title": "ERP 101: What is Enterprise Resource Planning?",
+        "url": "https://www.youtube.com/watch?v=WM4CKdQcvkw"
+       },
+       {
+        "channel": "Leaders Talk - ThinkEduca",
+        "minutes": 15,
+        "published": "2024-08-04",
+        "title": "Enterprise Resource Planning (ERP) in 15 minutes",
+        "url": "https://www.youtube.com/watch?v=gBXJ_PhlADQ"
+       }
+      ],
+      "why": {
+       "kind": "ai_trend",
+       "source": "no AI-use data for these tasks; modes after the Singapore Jobs Transformation Map, Generative AI in Financial Services (MAS, IBF, SWDA, 2025): roles with high automation potential are redesigned and their staff reskilled; for the others, proficiency in GenAI tools is essential",
+       "text": "AI helps people do this work. Learning to use it here keeps you ahead."
+      }
+     },
+     {
+      "after": null,
+      "ai_basis": "none",
+      "ai_resources": [],
+      "ai_use": null,
+      "articles": [
+       {
+        "is_article": true,
+        "publisher": "IBM",
+        "title": "What is Data Migration?",
+        "url": "https://www.ibm.com/think/topics/data-migration"
+       },
+       {
+        "is_article": true,
+        "publisher": "IBM",
+        "title": "What Is Data Integration?",
+        "url": "https://www.ibm.com/think/topics/data-integration"
+       }
+      ],
+      "basics": [],
+      "courses": [
+       {
+        "done": false,
+        "fit_check": null,
+        "level": "advanced",
+        "minutes": 47,
+        "planned": false,
+        "provider": "Microsoft Learn",
+        "title": "Create a data migration strategy for Dynamics 365 solutions",
+        "url": "https://learn.microsoft.com/en-us/training/modules/data-migration/"
+       },
+       {
+        "done": false,
+        "fit_check": {
+         "by": "gpt-4o-mini",
+         "checked": "2026-10-31",
+         "quote": "Understand the steps to migrate to Business Central online.",
+         "result": "fits",
+         "skills_removed": []
+        },
+        "level": "intermediate",
+        "minutes": 56,
+        "planned": false,
+        "provider": "Microsoft Learn",
+        "title": "Migrate on-premises data to Dynamics 365 Business Central",
+        "url": "https://learn.microsoft.com/en-us/training/modules/connect-intelligent-cloud-dynamics-365-business-central/"
+       },
+       {
+        "done": false,
+        "fit_check": {
+         "by": "gpt-4o-mini",
+         "checked": "2026-10-31",
+         "quote": "Perform data migration using the Data migration assisted setup wizard.",
+         "result": "fits",
+         "skills_removed": []
+        },
+        "level": "intermediate",
+        "minutes": 79,
+        "planned": false,
+        "provider": "Microsoft Learn",
+        "title": "Migrate data to Business Central",
+        "url": "https://learn.microsoft.com/en-us/training/modules/migrate-data-dynamics-365-business-central/"
+       },
+       {
+        "done": false,
+        "fit_check": {
+         "by": "gpt-4o-mini",
+         "checked": "2026-10-31",
+         "quote": "Learn how to prepare data for migration, by using the data management framework to manage data entities and data entity packages in finance and operations apps.",
+         "result": "fits",
+         "skills_removed": []
+        },
+        "level": "intermediate",
+        "minutes": 313,
+        "planned": false,
+        "provider": "Microsoft Learn",
+        "title": "Migrate data and go live with finance and operations apps",
+        "url": "https://learn.microsoft.com/en-us/training/paths/migrate-data-go-live-finance-operations/"
+       },
+       {
+        "done": false,
+        "fit_check": {
+         "by": "gpt-4o-mini",
+         "checked": "2026-10-31",
+         "quote": "Generate field mapping between source and target data structures.",
+         "result": "fits",
+         "skills_removed": []
+        },
+        "level": "advanced",
+        "minutes": 84,
+        "planned": false,
+        "provider": "Microsoft Learn",
+        "title": "Prepare data for migration to finance and operations apps",
+        "url": "https://learn.microsoft.com/en-us/training/modules/prepare-data-migration-finance-operations/"
+       },
+       {
+        "done": false,
+        "fit_check": {
+         "by": "gpt-4o-mini",
+         "checked": "2026-10-31",
+         "quote": "Clean up the staging tables.",
+         "result": "fits",
+         "skills_removed": []
+        },
+        "level": "intermediate",
+        "minutes": 103,
+        "planned": false,
+        "provider": "Microsoft Learn",
+        "title": "Work with data management in finance and operations apps",
+        "url": "https://learn.microsoft.com/en-us/training/modules/work-data-management-finance-operations/"
+       }
+      ],
+      "essential": false,
+      "mode": "use_ai",
+      "now": 2,
+      "required": null,
+      "skill": "data_migration",
+      "status": "open",
+      "title": "Data Migration: AI is changing this work",
+      "videos": [
+       {
+        "channel": "Connected Cookie",
+        "minutes": 4,
+        "published": "2023-12-02",
+        "title": "ETL & ELT Explained in 4 minutes",
+        "url": "https://www.youtube.com/watch?v=WQu6zrSpiOY"
+       },
+       {
+        "channel": "IBM Technology",
+        "minutes": 6,
+        "published": "2019-07-26",
+        "title": "Data Migration Examples",
+        "url": "https://www.youtube.com/watch?v=S7HTsuWz_2U"
+       }
+      ],
+      "why": {
+       "kind": "ai_trend",
+       "source": "no AI-use data for these tasks; modes after the Singapore Jobs Transformation Map, Generative AI in Financial Services (MAS, IBF, SWDA, 2025): roles with high automation potential are redesigned and their staff reskilled; for the others, proficiency in GenAI tools is essential",
+       "text": "AI helps people do this work. Learning to use it here keeps you ahead. No checked resource on doing this with AI yet: start with the AI basics."
+      }
+     },
+     {
+      "after": 1,
+      "articles": [
+       {
+        "is_article": true,
+        "publisher": "Microsoft Learn",
+        "title": "Integration between finance and operations apps and third-party services",
+        "url": "https://learn.microsoft.com/en-us/dynamics365/fin-ops-core/dev-itpro/data-entities/integration-overview"
+       }
+      ],
+      "courses": [
+       {
+        "done": false,
+        "fit_check": null,
+        "level": "intermediate",
+        "minutes": 103,
+        "planned": true,
+        "provider": "Microsoft Learn",
+        "title": "Get started using Power Platform with finance and operations apps",
+        "url": "https://learn.microsoft.com/en-us/training/paths/get-started-power-platform-with-finance-operations/"
+       }
+      ],
+      "essential": false,
+      "mode": "learn",
+      "now": null,
+      "practice": [],
+      "required": 2,
+      "skill": "advanced_technology_integration",
+      "status": "open",
+      "study_after": 1,
+      "title": "Advanced Technology Integration",
+      "videos": [
+       {
+        "channel": "Accounting Basics",
+        "minutes": 8,
+        "published": "2026-07-23",
+        "title": "The Impact of AI on Accounting: What You Need to Know",
+        "url": "https://www.youtube.com/watch?v=ETVLo8aJqAY"
+       },
+       {
+        "channel": "IBM Technology",
+        "minutes": 12,
+        "published": "2025-09-01",
+        "title": "7 AI Terms You Need to Know: Agents, RAG, ASI & More",
+        "url": "https://www.youtube.com/watch?v=VSFuqMh4hus"
+       }
+      ],
+      "why": {
+       "kind": "talentcorp",
+       "source": "TalentCorp (2024) GBS study, PDF p. 43, 45",
+       "text": "TalentCorp names Advanced Technology Integration for Finance Systems Analyst (skill to build)."
+      }
+     },
+     {
+      "after": 1,
+      "articles": [
+       {
+        "is_article": true,
+        "publisher": "Microsoft Learn",
+        "title": "Monitoring and diagnostics tools in Lifecycle Services",
+        "url": "https://learn.microsoft.com/en-us/dynamics365/fin-ops-core/dev-itpro/lifecycle-services/monitoring-diagnostics"
+       },
+       {
+        "is_article": true,
+        "publisher": "IBM",
+        "title": "What Is Application Performance Management (APM)?",
+        "url": "https://www.ibm.com/think/topics/application-performance-management"
+       }
+      ],
+      "courses": [
+       {
+        "done": false,
+        "fit_check": null,
+        "level": "intermediate",
+        "minutes": 86,
+        "planned": true,
+        "provider": "Microsoft Learn",
+        "title": "Work with performance and monitoring tools in finance and operations apps",
+        "url": "https://learn.microsoft.com/en-us/training/modules/performance-monitoring-finance-operations/"
+       }
+      ],
+      "essential": false,
+      "mode": "learn",
+      "now": null,
+      "practice": [],
+      "required": 2,
+      "skill": "system_performance",
+      "status": "open",
+      "study_after": 1,
+      "title": "System Performance Management",
+      "videos": [],
+      "why": {
+       "kind": "talentcorp",
+       "source": "TalentCorp (2024) GBS study, PDF p. 41",
+       "text": "TalentCorp names System Performance Management for Finance Systems Analyst (skill to build)."
+      }
+     },
+     {
+      "after": 1,
+      "articles": [
+       {
+        "is_article": true,
+        "publisher": "Strategyzer",
+        "title": "The Business Model Canvas",
+        "url": "https://www.strategyzer.com/library/the-business-model-canvas"
+       }
+      ],
+      "courses": [
+       {
+        "done": false,
+        "fit_check": {
+         "by": "person",
+         "checked": "2026-10-31",
+         "quote": "",
+         "result": "fits",
+         "skills_removed": []
+        },
+        "level": "intermediate",
+        "minutes": 600,
+        "planned": true,
+        "provider": "OpenLearn",
+        "title": "Business models in strategic management",
+        "url": "https://www.open.edu/openlearn/money-business/business-models-strategic-management/content-section-0"
+       }
+      ],
+      "essential": false,
+      "mode": "learn",
+      "now": null,
+      "practice": [],
+      "required": 2,
+      "skill": "digital_business_model",
+      "status": "open",
+      "study_after": 1,
+      "title": "Digital Business Model Innovation",
+      "videos": [
+       {
+        "channel": "Strategyzer",
+        "minutes": 2,
+        "published": "2011-09-01",
+        "title": "Business Model Canvas Explained",
+        "url": "https://www.youtube.com/watch?v=QoAOzMTLP5s"
+       }
+      ],
+      "why": {
+       "kind": "talentcorp",
+       "source": "TalentCorp (2024) GBS study, PDF p. 38",
+       "text": "TalentCorp names Digital Business Model Innovation for Finance Systems Analyst (skill to build)."
+      }
+     },
+     {
+      "after": 1,
+      "articles": [
+       {
+        "is_article": true,
+        "publisher": "Microsoft Learn",
+        "title": "Transact-SQL Reference (Database Engine)",
+        "url": "https://learn.microsoft.com/en-us/sql/t-sql/language-reference"
+       }
+      ],
+      "courses": [
+       {
+        "done": false,
+        "fit_check": {
+         "by": "gpt-4o-mini",
+         "checked": "2026-10-31",
+         "quote": "Describe query techniques for data using the SQL language",
+         "result": "fits",
+         "skills_removed": []
+        },
+        "level": "beginner",
+        "minutes": 26,
+        "planned": true,
+        "provider": "Microsoft Learn",
+        "title": "Query relational data in Azure",
+        "url": "https://learn.microsoft.com/en-us/training/modules/query-relational-data/"
+       },
+       {
+        "done": false,
+        "fit_check": null,
+        "level": "beginner",
+        "minutes": 61,
+        "planned": true,
+        "provider": "Microsoft Learn",
+        "title": "Introduction to Transact-SQL",
+        "url": "https://learn.microsoft.com/en-us/training/modules/introduction-to-transact-sql/"
+       },
+       {
+        "done": false,
+        "fit_check": {
+         "by": "gpt-4o-mini",
+         "checked": "2026-10-31",
+         "quote": "Use the SQL query editor to write and run T-SQL queries against a data warehouse.",
+         "result": "fits",
+         "skills_removed": []
+        },
+        "level": "beginner",
+        "minutes": 67,
+        "planned": false,
+        "provider": "Microsoft Learn",
+        "title": "Query a data warehouse in Microsoft Fabric",
+        "url": "https://learn.microsoft.com/en-us/training/modules/query-data-warehouse-microsoft-fabric/"
+       },
+       {
+        "done": false,
+        "fit_check": {
+         "by": "gpt-4o-mini",
+         "checked": "2026-10-31",
+         "quote": "Join, filter, and aggregate data in a Query object.",
+         "result": "fits",
+         "skills_removed": []
+        },
+        "level": "intermediate",
+        "minutes": 79,
+        "planned": false,
+        "provider": "Microsoft Learn",
+        "title": "Work with queries in Dynamics 365 Business Central",
+        "url": "https://learn.microsoft.com/en-us/training/modules/work-with-queries/"
+       },
+       {
+        "done": false,
+        "fit_check": {
+         "by": "gpt-4o-mini",
+         "checked": "2026-10-31",
+         "quote": "Transform warehouse data using T-SQL queries",
+         "result": "fits",
+         "skills_removed": []
+        },
+        "level": "intermediate",
+        "minutes": 84,
+        "planned": false,
+        "provider": "Microsoft Learn",
+        "title": "Transform data using T-SQL in Microsoft Fabric",
+        "url": "https://learn.microsoft.com/en-us/training/modules/fabric-transform-data-tsql/"
+       },
+       {
+        "done": false,
+        "fit_check": null,
+        "level": "beginner",
+        "minutes": 345,
+        "planned": false,
+        "provider": "Microsoft Learn",
+        "title": "Query and modify data with Transact-SQL",
+        "url": "https://learn.microsoft.com/en-us/training/paths/get-started-querying-with-transact-sql/"
+       }
+      ],
+      "essential": false,
+      "mode": "learn",
+      "now": null,
+      "practice": [],
+      "required": 2,
+      "skill": "database_querying",
+      "status": "open",
+      "study_after": 1,
+      "title": "Database Querying",
+      "videos": [
+       {
+        "channel": "freeCodeCamp.org",
+        "minutes": 261,
+        "published": "2018-07-02",
+        "title": "SQL Tutorial - Full Database Course for Beginners",
+        "url": "https://www.youtube.com/watch?v=HXV3zeQKqGY"
+       }
+      ],
+      "why": {
+       "kind": "assumption",
+       "source": "TalentCorp (2024) GBS study, PDF p. 23",
+       "text": "Our assumption (useful tool): TalentCorp lists Database Querying for GBS finance roles in general, not for Finance Systems Analyst by name."
+      }
+     }
+    ],
+    "title": "Your path to Finance Systems Analyst",
+    "why": "One path: the skills you already have that AI is reshaping, then the skills this role needs. Start any step; each is a different skill."
+   },
    "resources_checked": "2026-10-24",
    "role_id": "finance_systems_analyst",
    "role_title": "Finance Systems Analyst",
@@ -12095,6 +13822,7 @@
        "after": null,
        "articles": [
         {
+         "is_article": true,
          "publisher": "IBM",
          "title": "What is Generative AI?",
          "url": "https://www.ibm.com/think/topics/generative-ai"
@@ -12153,6 +13881,7 @@
        "after": null,
        "articles": [
         {
+         "is_article": true,
          "publisher": "IBM",
          "title": "What Is Prompt Engineering?",
          "url": "https://www.ibm.com/think/topics/prompt-engineering"
@@ -12200,6 +13929,7 @@
        "after": null,
        "articles": [
         {
+         "is_article": true,
          "publisher": "Microsoft",
          "title": "Responsible AI Principles and Approach",
          "url": "https://www.microsoft.com/en-us/ai/principles-and-approach"
@@ -12244,6 +13974,7 @@
        "after": null,
        "articles": [
         {
+         "is_article": true,
          "publisher": "IBM",
          "title": "What Is Data Management?",
          "url": "https://www.ibm.com/think/topics/data-management"
@@ -12301,6 +14032,7 @@
        "after": 1,
        "articles": [
         {
+         "is_article": true,
          "publisher": "Microsoft Learn",
          "title": "Integration between finance and operations apps and third-party services",
          "url": "https://learn.microsoft.com/en-us/dynamics365/fin-ops-core/dev-itpro/data-entities/integration-overview"
@@ -12333,6 +14065,13 @@
          "published": "2026-07-23",
          "title": "The Impact of AI on Accounting: What You Need to Know",
          "url": "https://www.youtube.com/watch?v=ETVLo8aJqAY"
+        },
+        {
+         "channel": "IBM Technology",
+         "minutes": 12,
+         "published": "2025-09-01",
+         "title": "7 AI Terms You Need to Know: Agents, RAG, ASI & More",
+         "url": "https://www.youtube.com/watch?v=VSFuqMh4hus"
         }
        ],
        "why": {
@@ -12345,11 +14084,13 @@
        "after": 1,
        "articles": [
         {
+         "is_article": true,
          "publisher": "Microsoft Learn",
          "title": "Monitoring and diagnostics tools in Lifecycle Services",
          "url": "https://learn.microsoft.com/en-us/dynamics365/fin-ops-core/dev-itpro/lifecycle-services/monitoring-diagnostics"
         },
         {
+         "is_article": true,
          "publisher": "IBM",
          "title": "What Is Application Performance Management (APM)?",
          "url": "https://www.ibm.com/think/topics/application-performance-management"
@@ -12386,6 +14127,7 @@
        "after": 1,
        "articles": [
         {
+         "is_article": true,
          "publisher": "Strategyzer",
          "title": "The Business Model Canvas",
          "url": "https://www.strategyzer.com/library/the-business-model-canvas"
@@ -12436,6 +14178,7 @@
        "after": 1,
        "articles": [
         {
+         "is_article": true,
          "publisher": "Microsoft Learn",
          "title": "Transact-SQL Reference (Database Engine)",
          "url": "https://learn.microsoft.com/en-us/sql/t-sql/language-reference"
@@ -12836,6 +14579,7 @@
      "strong": 75.0
     }
    },
+   "current_forecast": null,
    "current_impact": null,
    "current_role": null,
    "destination": "p2p_reporting_analyst",
@@ -12919,6 +14663,8 @@
        "weight": 1.0
       }
      ],
+     "direction": "stretch",
+     "direction_score": 36.4,
      "effort_hours": 34.0,
      "effort_weeks": 6,
      "essential_gaps": [
@@ -12932,6 +14678,18 @@
       "basis": "low: self-rated claims one level lower, unstated as none; high: unstated at working",
       "high": 72.7,
       "low": 36.4
+     },
+     "forecast": {
+      "ai_use": null,
+      "category": "stable",
+      "change_pp": null,
+      "critical": null,
+      "kind": "estimate",
+      "label": "Stable",
+      "meaning": "No strong signal either way yet.",
+      "reasons": [
+       "no forecast change beyond the noise and fewer than two AI signals"
+      ]
      },
      "gap": {
       "bridgeable": [
@@ -12998,6 +14756,7 @@
        "via": "practice"
       }
      ],
+     "related_tier": null,
      "requirement_basis": {
       "dashboards": {
        "kind": "onet",
@@ -13259,6 +15018,8 @@
        "weight": 1.0
       }
      ],
+     "direction": "stretch",
+     "direction_score": 30.0,
      "effort_hours": 40.1,
      "effort_weeks": 7,
      "essential_gaps": [
@@ -13272,6 +15033,18 @@
       "basis": "low: self-rated claims one level lower, unstated as none; high: unstated at working",
       "high": 90.0,
       "low": 30.0
+     },
+     "forecast": {
+      "ai_use": null,
+      "category": "stable",
+      "change_pp": null,
+      "critical": null,
+      "kind": "estimate",
+      "label": "Stable",
+      "meaning": "No strong signal either way yet.",
+      "reasons": [
+       "no forecast change beyond the noise and fewer than two AI signals"
+      ]
      },
      "gap": {
       "bridgeable": [
@@ -13336,6 +15109,7 @@
        "via": "practice"
       }
      ],
+     "related_tier": null,
      "requirement_basis": {
       "data_management": {
        "kind": "onet",
@@ -13606,6 +15380,8 @@
        "weight": 1.0
       }
      ],
+     "direction": "stretch",
+     "direction_score": 11.1,
      "effort_hours": 39.7,
      "effort_weeks": 7,
      "essential_gaps": [
@@ -13619,6 +15395,18 @@
       "basis": "low: self-rated claims one level lower, unstated as none; high: unstated at working",
       "high": 94.4,
       "low": 11.1
+     },
+     "forecast": {
+      "ai_use": null,
+      "category": "stable",
+      "change_pp": null,
+      "critical": null,
+      "kind": "estimate",
+      "label": "Stable",
+      "meaning": "No strong signal either way yet.",
+      "reasons": [
+       "no forecast change beyond the noise and fewer than two AI signals"
+      ]
      },
      "gap": {
       "bridgeable": [
@@ -13686,6 +15474,7 @@
        "via": "study"
       }
      ],
+     "related_tier": null,
      "requirement_basis": {
       "big_data_analytics": {
        "kind": "talentcorp",
@@ -14083,6 +15872,8 @@
        "weight": 1.0
       }
      ],
+     "direction": "stretch",
+     "direction_score": 9.1,
      "effort_hours": 18.0,
      "effort_weeks": 3,
      "essential_gaps": [
@@ -14098,6 +15889,18 @@
       "basis": "low: self-rated claims one level lower, unstated as none; high: unstated at working",
       "high": 100.0,
       "low": 9.1
+     },
+     "forecast": {
+      "ai_use": null,
+      "category": "stable",
+      "change_pp": null,
+      "critical": null,
+      "kind": "estimate",
+      "label": "Stable",
+      "meaning": "No strong signal either way yet.",
+      "reasons": [
+       "no forecast change beyond the noise and fewer than two AI signals"
+      ]
      },
      "gap": {
       "bridgeable": [],
@@ -14162,6 +15965,7 @@
        "via": "study"
       }
      ],
+     "related_tier": null,
      "requirement_basis": {
       "compliance_reporting": {
        "kind": "onet",
@@ -14428,6 +16232,8 @@
        "weight": 1.0
       }
      ],
+     "direction": "stretch",
+     "direction_score": 7.1,
      "effort_hours": 5.7,
      "effort_weeks": 1,
      "essential_gaps": [
@@ -14441,6 +16247,18 @@
       "basis": "low: self-rated claims one level lower, unstated as none; high: unstated at working",
       "high": 100.0,
       "low": 7.1
+     },
+     "forecast": {
+      "ai_use": null,
+      "category": "stable",
+      "change_pp": null,
+      "critical": null,
+      "kind": "estimate",
+      "label": "Stable",
+      "meaning": "No strong signal either way yet.",
+      "reasons": [
+       "no forecast change beyond the noise and fewer than two AI signals"
+      ]
      },
      "gap": {
       "bridgeable": [],
@@ -14506,6 +16324,7 @@
        "via": "study"
       }
      ],
+     "related_tier": null,
      "requirement_basis": {
       "big_data_analytics": {
        "kind": "talentcorp",
@@ -14846,6 +16665,8 @@
        "weight": 1.0
       }
      ],
+     "direction": "stretch",
+     "direction_score": 6.7,
      "effort_hours": 60.8,
      "effort_weeks": 11,
      "essential_gaps": [
@@ -14861,6 +16682,18 @@
       "basis": "low: self-rated claims one level lower, unstated as none; high: unstated at working",
       "high": 100.0,
       "low": 6.7
+     },
+     "forecast": {
+      "ai_use": null,
+      "category": "stable",
+      "change_pp": null,
+      "critical": null,
+      "kind": "estimate",
+      "label": "Stable",
+      "meaning": "No strong signal either way yet.",
+      "reasons": [
+       "no forecast change beyond the noise and fewer than two AI signals"
+      ]
      },
      "gap": {
       "bridgeable": [],
@@ -14927,6 +16760,7 @@
        "via": "practice"
       }
      ],
+     "related_tier": null,
      "requirement_basis": {
       "accounting_principles": {
        "kind": "onet",
@@ -15284,6 +17118,8 @@
        "weight": 1.0
       }
      ],
+     "direction": "stretch",
+     "direction_score": 0.0,
      "effort_hours": 51.2,
      "effort_weeks": 9,
      "essential_gaps": [
@@ -15299,6 +17135,18 @@
       "basis": "low: self-rated claims one level lower, unstated as none; high: unstated at working",
       "high": 100.0,
       "low": 0.0
+     },
+     "forecast": {
+      "ai_use": null,
+      "category": "stable",
+      "change_pp": null,
+      "critical": null,
+      "kind": "estimate",
+      "label": "Stable",
+      "meaning": "No strong signal either way yet.",
+      "reasons": [
+       "no forecast change beyond the noise and fewer than two AI signals"
+      ]
      },
      "gap": {
       "bridgeable": [],
@@ -15366,6 +17214,7 @@
        "via": "study"
       }
      ],
+     "related_tier": null,
      "requirement_basis": {
       "accounting_principles": {
        "kind": "assumption",
@@ -15748,6 +17597,8 @@
        "weight": 1.0
       }
      ],
+     "direction": "stretch",
+     "direction_score": 0.0,
      "effort_hours": 35.9,
      "effort_weeks": 6,
      "essential_gaps": [
@@ -15763,6 +17614,18 @@
       "basis": "low: self-rated claims one level lower, unstated as none; high: unstated at working",
       "high": 100.0,
       "low": 0.0
+     },
+     "forecast": {
+      "ai_use": null,
+      "category": "stable",
+      "change_pp": null,
+      "critical": null,
+      "kind": "estimate",
+      "label": "Stable",
+      "meaning": "No strong signal either way yet.",
+      "reasons": [
+       "no forecast change beyond the noise and fewer than two AI signals"
+      ]
      },
      "gap": {
       "bridgeable": [],
@@ -15828,6 +17691,7 @@
        "via": "practice"
       }
      ],
+     "related_tier": null,
      "requirement_basis": {
       "accounting_principles": {
        "kind": "onet",
@@ -16150,6 +18014,8 @@
        "weight": 1.0
       }
      ],
+     "direction": "stretch",
+     "direction_score": 0.0,
      "effort_hours": 21.7,
      "effort_weeks": 4,
      "essential_gaps": [
@@ -16165,6 +18031,18 @@
       "basis": "low: self-rated claims one level lower, unstated as none; high: unstated at working",
       "high": 100.0,
       "low": 0.0
+     },
+     "forecast": {
+      "ai_use": null,
+      "category": "stable",
+      "change_pp": null,
+      "critical": null,
+      "kind": "estimate",
+      "label": "Stable",
+      "meaning": "No strong signal either way yet.",
+      "reasons": [
+       "no forecast change beyond the noise and fewer than two AI signals"
+      ]
      },
      "gap": {
       "bridgeable": [],
@@ -16229,6 +18107,7 @@
        "via": "practice"
       }
      ],
+     "related_tier": null,
      "requirement_basis": {
       "budget_management": {
        "kind": "onet",
@@ -16514,6 +18393,8 @@
        "weight": 1.0
       }
      ],
+     "direction": "stretch",
+     "direction_score": 0.0,
      "effort_hours": 3.9,
      "effort_weeks": 1,
      "essential_gaps": [
@@ -16527,6 +18408,18 @@
       "basis": "low: self-rated claims one level lower, unstated as none; high: unstated at working",
       "high": 100.0,
       "low": 0.0
+     },
+     "forecast": {
+      "ai_use": null,
+      "category": "stable",
+      "change_pp": null,
+      "critical": null,
+      "kind": "estimate",
+      "label": "Stable",
+      "meaning": "No strong signal either way yet.",
+      "reasons": [
+       "no forecast change beyond the noise and fewer than two AI signals"
+      ]
      },
      "gap": {
       "bridgeable": [],
@@ -16590,6 +18483,7 @@
        "via": "study"
       }
      ],
+     "related_tier": null,
      "requirement_basis": {
       "accounting_principles": {
        "kind": "talentcorp",
@@ -18272,6 +20166,670 @@
     }
    },
    "courses_checked": "2026-10-23",
+   "path": {
+    "nodes": [
+     {
+      "after": 2,
+      "articles": [
+       {
+        "is_article": true,
+        "publisher": "Microsoft Learn",
+        "title": "Financial reporting overview",
+        "url": "https://learn.microsoft.com/en-us/dynamics365/finance/general-ledger/financial-reporting-getting-started"
+       }
+      ],
+      "courses": [
+       {
+        "done": false,
+        "fit_check": {
+         "by": "gpt-4o-mini",
+         "checked": "2026-10-31",
+         "quote": "A report is a structured presentation of data.",
+         "result": "fits",
+         "skills_removed": [
+          "financial_reporting"
+         ]
+        },
+        "level": "intermediate",
+        "minutes": 69,
+        "planned": false,
+        "provider": "Microsoft Learn",
+        "title": "Explore reporting tools in finance and operations apps",
+        "url": "https://learn.microsoft.com/en-us/training/modules/explore-reporting-tools-finance-operations/"
+       },
+       {
+        "done": false,
+        "fit_check": null,
+        "level": "intermediate",
+        "minutes": 119,
+        "planned": false,
+        "provider": "Microsoft Learn",
+        "title": "Configure and work with analytics and reporting in finance and operations apps",
+        "url": "https://learn.microsoft.com/en-us/training/paths/configure-analytics-reporting-finance-operations/"
+       },
+       {
+        "done": false,
+        "fit_check": {
+         "by": "gpt-4o-mini",
+         "checked": "2026-10-31",
+         "quote": "Find out how to customize document layouts and reports in Business Central to follow your company's guidelines and preferences.",
+         "result": "fits",
+         "skills_removed": []
+        },
+        "level": "intermediate",
+        "minutes": 135,
+        "planned": false,
+        "provider": "Microsoft Learn",
+        "title": "Set up Microsoft Dynamics 365 Business Central for reporting",
+        "url": "https://learn.microsoft.com/en-us/training/paths/setup-reporting-dynamics-365-business-central/"
+       }
+      ],
+      "essential": true,
+      "mode": "learn",
+      "now": 2,
+      "practice": [
+       {
+        "basis": [
+         {
+          "read": "2026-10-30",
+          "title": "ACRA and SkillsFuture Singapore, Skills Framework for Accountancy",
+          "url": "https://www.acra.gov.sg/advancing-accountancy/skills-framework/"
+         },
+         {
+          "read": "2026-10-30",
+          "title": "SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)",
+          "url": "https://sfia-online.org/en/sfia-9/responsibilities"
+         },
+         {
+          "read": "2026-10-23",
+          "title": "TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23",
+          "url": "https://www.talentcorp.com.my"
+         }
+        ],
+        "kind": "practice",
+        "locked": false,
+        "order": 12,
+        "show_by": "A report, its sources and the commentary you wrote.",
+        "skill": "reporting",
+        "skill_name": "Reporting and Documentation",
+        "status": "open",
+        "status_label": "",
+        "target_level": 3,
+        "text": "Prepare your own reports end to end, including commentary on changes.",
+        "time": {
+         "basis": "practice_estimate",
+         "high": 16.0,
+         "low": 8.0,
+         "unit": "weeks",
+         "value": 8.0
+        },
+        "unlock": "study_done",
+        "week_start": {
+         "high": 1,
+         "low": 1
+        }
+       }
+      ],
+      "required": 3,
+      "skill": "reporting",
+      "status": "open",
+      "study_after": 2,
+      "title": "Reporting and Documentation",
+      "videos": [
+       {
+        "channel": "CandiMentor ",
+        "minutes": 7,
+        "published": "2026-09-25",
+        "title": "The FP&A Month-End Close and Reporting Process: From Trial Balance to Management Pack",
+        "url": "https://www.youtube.com/watch?v=YAfJ7Y5SZH8"
+       },
+       {
+        "channel": "CandiMentor ",
+        "minutes": 7,
+        "published": "2026-10-03",
+        "title": "RTR Month-End Close Process Explained Step by Step",
+        "url": "https://www.youtube.com/watch?v=oFsLC4WZ260"
+       }
+      ],
+      "why": {
+       "kind": "onet",
+       "source": "O*NET 31.0, Business Intelligence Analysts (15-2051.01), 2 linked task(s)",
+       "text": "The job's own tasks use it (main work of the role): \u201cGenerate standard or custom reports summarizing business, financial, or economic data for review by executives, managers, clients, and other stakeholders.\u201d"
+      }
+     },
+     {
+      "after": 1,
+      "articles": [
+       {
+        "is_article": true,
+        "publisher": "Microsoft Learn",
+        "title": "Accounts payable invoice matching overview",
+        "url": "https://learn.microsoft.com/en-us/dynamics365/finance/accounts-payable/accounts-payable-invoice-matching"
+       }
+      ],
+      "courses": [
+       {
+        "done": false,
+        "fit_check": {
+         "by": "gpt-4o-mini",
+         "checked": "2026-10-31",
+         "quote": "Learn the basics of invoice processing in AI Builder and how it can benefit your organization.",
+         "result": "fits",
+         "skills_removed": []
+        },
+        "level": "beginner",
+        "minutes": 10,
+        "planned": false,
+        "provider": "Microsoft Learn",
+        "title": "Extract invoice data with AI Builder\u2019s prebuilt model",
+        "url": "https://learn.microsoft.com/en-us/training/modules/ai-builder-invoice-processing/"
+       },
+       {
+        "done": false,
+        "fit_check": null,
+        "level": "intermediate",
+        "minutes": 16,
+        "planned": false,
+        "provider": "Microsoft Learn",
+        "title": "Use AI Builder to process invoice forms in Power Automate",
+        "url": "https://learn.microsoft.com/en-us/training/modules/use-ai-builder-process-invoice/"
+       },
+       {
+        "done": false,
+        "fit_check": null,
+        "level": "intermediate",
+        "minutes": 33,
+        "planned": false,
+        "provider": "Microsoft Learn",
+        "title": "Work with accounts payable invoice matching in Dynamics 365 Finance",
+        "url": "https://learn.microsoft.com/en-us/training/modules/work-invoice-matching-finance/"
+       },
+       {
+        "done": false,
+        "fit_check": {
+         "by": "gpt-4o-mini",
+         "checked": "2026-10-31",
+         "quote": "- Invoice from a purchase order.",
+         "result": "fits",
+         "skills_removed": []
+        },
+        "level": "intermediate",
+        "minutes": 37,
+        "planned": false,
+        "provider": "Microsoft Learn",
+        "title": "Processing vendor invoices in Dynamics 365 Business Central",
+        "url": "https://learn.microsoft.com/en-us/training/modules/processing-invoices-dynamics-365-business-central/"
+       },
+       {
+        "done": false,
+        "fit_check": {
+         "by": "gpt-4o-mini",
+         "checked": "2026-10-31",
+         "quote": "Describe vendor payments and settlements, including three-way matching concepts.",
+         "result": "fits",
+         "skills_removed": []
+        },
+        "level": "beginner",
+        "minutes": 61,
+        "planned": false,
+        "provider": "Microsoft Learn",
+        "title": "Describe accounts payable and accounts receivable in Dynamics 365 Finance",
+        "url": "https://learn.microsoft.com/en-us/training/modules/explore-accounts-payable-accounts-receivable-microsoft/"
+       },
+       {
+        "done": false,
+        "fit_check": {
+         "by": "gpt-4o-mini",
+         "checked": "2026-10-31",
+         "quote": "You learn how to configure the Accounts payable module in Dynamics 365 Finance to empower accounts payable staff to perform their daily activities.",
+         "result": "fits",
+         "skills_removed": []
+        },
+        "level": "intermediate",
+        "minutes": 596,
+        "planned": false,
+        "provider": "Microsoft Learn",
+        "title": "Manage accounts payable",
+        "url": "https://learn.microsoft.com/en-us/training/paths/implement-manage-accounts-payable-expenses/"
+       }
+      ],
+      "essential": false,
+      "mode": "learn",
+      "now": 1,
+      "practice": [
+       {
+        "basis": [
+         {
+          "read": "2026-10-30",
+          "title": "ACRA and SkillsFuture Singapore, Skills Framework for Accountancy",
+          "url": "https://www.acra.gov.sg/advancing-accountancy/skills-framework/"
+         },
+         {
+          "read": "2026-10-30",
+          "title": "SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)",
+          "url": "https://sfia-online.org/en/sfia-9/responsibilities"
+         },
+         {
+          "read": "2026-10-30",
+          "title": "University of Florida HR, TEAMS Titles competency: Accounts Payable (A-P)",
+          "url": "https://teams-titles.hr.ufl.edu/job-competency/accounts-payable-a-p/"
+         },
+         {
+          "read": "2026-10-23",
+          "title": "TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23",
+          "url": "https://www.talentcorp.com.my"
+         }
+        ],
+        "kind": "practice",
+        "locked": false,
+        "order": 13,
+        "show_by": "Your queue, an exception and how you resolved it.",
+        "skill": "invoice_processing",
+        "skill_name": "Invoice Processing",
+        "status": "open",
+        "status_label": "",
+        "target_level": 3,
+        "text": "Handle your own invoice queue end to end, including credit notes and exceptions.",
+        "time": {
+         "basis": "practice_estimate",
+         "high": 16.0,
+         "low": 8.0,
+         "unit": "weeks",
+         "value": 8.0
+        },
+        "unlock": "study_done",
+        "week_start": {
+         "high": 1,
+         "low": 1
+        }
+       }
+      ],
+      "required": 3,
+      "skill": "invoice_processing",
+      "status": "open",
+      "study_after": 1,
+      "title": "Invoice Processing",
+      "videos": [
+       {
+        "channel": "Procurement Academy",
+        "minutes": 2,
+        "published": "2023-06-14",
+        "title": "Procurement Academy: 3 Way Match Explained",
+        "url": "https://www.youtube.com/watch?v=nRkXKJcsICg"
+       },
+       {
+        "channel": "Learning Business Apps with Pir Khurram Rashdi",
+        "minutes": 32,
+        "published": "2022-05-29",
+        "title": "How Accounts payable invoice matching (total, two/three-way, charges) works in Dynamics 365 Finance",
+        "url": "https://www.youtube.com/watch?v=b1EitxD9ylY"
+       },
+       {
+        "channel": "Accounting Stuff",
+        "minutes": 7,
+        "published": "2019-01-28",
+        "title": "Invoices: What You NEED TO KNOW",
+        "url": "https://www.youtube.com/watch?v=O6qtAT_SnIM"
+       }
+      ],
+      "why": {
+       "kind": "assumption",
+       "source": "TalentCorp (2024) GBS study, PDF p. 23",
+       "text": "Our assumption (main work of the role): TalentCorp lists Invoice Processing for GBS finance roles in general, not for Procure-to-Pay (P2P) Reporting Analyst by name."
+      }
+     },
+     {
+      "after": 1,
+      "articles": [
+       {
+        "is_article": true,
+        "publisher": "Microsoft Learn",
+        "title": "Integration between finance and operations apps and third-party services",
+        "url": "https://learn.microsoft.com/en-us/dynamics365/fin-ops-core/dev-itpro/data-entities/integration-overview"
+       },
+       {
+        "is_article": true,
+        "publisher": "IBM",
+        "title": "What Is an API (Application Programming Interface)?",
+        "url": "https://www.ibm.com/think/topics/api"
+       },
+       {
+        "is_article": true,
+        "publisher": "IBM",
+        "title": "What Is Data Integration?",
+        "url": "https://www.ibm.com/think/topics/data-integration"
+       }
+      ],
+      "courses": [
+       {
+        "done": false,
+        "fit_check": null,
+        "level": "intermediate",
+        "minutes": 38,
+        "planned": true,
+        "provider": "Microsoft Learn",
+        "title": "Explore data integration concepts in finance and operations apps",
+        "url": "https://learn.microsoft.com/en-us/training/modules/integration-patterns-finance-operations/"
+       },
+       {
+        "done": false,
+        "fit_check": null,
+        "level": "intermediate",
+        "minutes": 103,
+        "planned": true,
+        "provider": "Microsoft Learn",
+        "title": "Get started using Power Platform with finance and operations apps",
+        "url": "https://learn.microsoft.com/en-us/training/paths/get-started-power-platform-with-finance-operations/"
+       },
+       {
+        "done": false,
+        "fit_check": {
+         "by": "gpt-4o-mini",
+         "checked": "2026-10-31",
+         "quote": "Integrations are an important component of implementing finance and operations apps.",
+         "result": "fits",
+         "skills_removed": []
+        },
+        "level": "intermediate",
+        "minutes": 468,
+        "planned": false,
+        "provider": "Microsoft Learn",
+        "title": "Work with integration tools in finance and operations apps",
+        "url": "https://learn.microsoft.com/en-us/training/paths/work-implementation-tools-finance-operations/"
+       }
+      ],
+      "essential": false,
+      "mode": "learn",
+      "now": null,
+      "practice": [],
+      "required": 2,
+      "skill": "systems_integration",
+      "status": "open",
+      "study_after": 1,
+      "title": "System Integration and Configuration",
+      "videos": [
+       {
+        "channel": "IBM Technology",
+        "minutes": 10,
+        "published": "2020-10-08",
+        "title": "What is API Management?",
+        "url": "https://www.youtube.com/watch?v=fh3VaXLzH5Y"
+       },
+       {
+        "channel": "IBM Technology",
+        "minutes": 11,
+        "published": "2022-04-04",
+        "title": "What is Application Integration?",
+        "url": "https://www.youtube.com/watch?v=rcuu-O02xqE"
+       }
+      ],
+      "why": {
+       "kind": "talentcorp",
+       "source": "TalentCorp (2024) GBS study, PDF p. 42",
+       "text": "TalentCorp names System Integration and Configuration for Procure-to-Pay (P2P) Reporting Analyst (skill to build)."
+      }
+     },
+     {
+      "after": 1,
+      "articles": [
+       {
+        "is_article": true,
+        "publisher": "Microsoft Learn",
+        "title": "What is Power BI?",
+        "url": "https://learn.microsoft.com/en-us/power-bi/fundamentals/power-bi-overview"
+       },
+       {
+        "is_article": true,
+        "publisher": "IBM",
+        "title": "What Is Data Visualization?",
+        "url": "https://www.ibm.com/think/topics/data-visualization"
+       }
+      ],
+      "courses": [
+       {
+        "done": false,
+        "fit_check": {
+         "by": "person",
+         "checked": "2026-10-31",
+         "quote": "",
+         "result": "fits",
+         "skills_removed": []
+        },
+        "level": "intermediate",
+        "minutes": 59,
+        "planned": true,
+        "provider": "Microsoft Learn",
+        "title": "Create dashboards in Power BI",
+        "url": "https://learn.microsoft.com/en-us/training/modules/create-dashboards-power-bi/"
+       },
+       {
+        "done": false,
+        "fit_check": {
+         "by": "gpt-4o-mini",
+         "checked": "2026-10-31",
+         "quote": "Design, create, and modify SSRS reports.",
+         "result": "fits",
+         "skills_removed": []
+        },
+        "level": "intermediate",
+        "minutes": 61,
+        "planned": true,
+        "provider": "Microsoft Learn",
+        "title": "Build reports for finance and operations apps",
+        "url": "https://learn.microsoft.com/en-us/training/modules/build-reports-finance-operations/"
+       },
+       {
+        "done": false,
+        "fit_check": null,
+        "level": "intermediate",
+        "minutes": 119,
+        "planned": false,
+        "provider": "Microsoft Learn",
+        "title": "Configure and work with analytics and reporting in finance and operations apps",
+        "url": "https://learn.microsoft.com/en-us/training/paths/configure-analytics-reporting-finance-operations/"
+       },
+       {
+        "done": false,
+        "fit_check": {
+         "by": "gpt-4o-mini",
+         "checked": "2026-10-31",
+         "quote": "Explore using Power BI to create a mobile view, publish a report, build a dashboard, and use storytelling with Power BI within PowerPoint.",
+         "result": "fits",
+         "skills_removed": []
+        },
+        "level": "beginner",
+        "minutes": 441,
+        "planned": false,
+        "provider": "Microsoft Learn",
+        "title": "Dashboard in a Day - Online workshop",
+        "url": "https://learn.microsoft.com/en-us/training/paths/dashboard-in-a-day/"
+       },
+       {
+        "done": false,
+        "fit_check": null,
+        "level": "beginner",
+        "minutes": 492,
+        "planned": false,
+        "provider": "Microsoft Learn",
+        "title": "Prepare and visualize data with Microsoft Power BI",
+        "url": "https://learn.microsoft.com/en-us/training/paths/prepare-visualize-data-power-bi/"
+       }
+      ],
+      "essential": false,
+      "mode": "learn",
+      "now": null,
+      "practice": [],
+      "required": 2,
+      "skill": "dashboards",
+      "status": "open",
+      "study_after": 1,
+      "title": "Dashboard Creation and Visualisation",
+      "videos": [
+       {
+        "channel": "Kevin Stratvert",
+        "minutes": 12,
+        "published": "2025-06-10",
+        "title": "Power BI Tutorial for Beginners",
+        "url": "https://www.youtube.com/watch?v=VaOhNqNtGGE"
+       },
+       {
+        "channel": "Leila Gharani",
+        "minutes": 24,
+        "published": "2021-12-16",
+        "title": "Power BI from ZERO to Your First Dashboard (in 20 Minutes)",
+        "url": "https://www.youtube.com/watch?v=c7LrqSxjJQQ"
+       }
+      ],
+      "why": {
+       "kind": "onet",
+       "source": "O*NET 31.0, Business Intelligence Analysts (15-2051.01), 2 linked task(s)",
+       "text": "The job's own tasks use it (useful tool): \u201cMaintain or update business intelligence tools, databases, dashboards, systems, or methods.\u201d"
+      }
+     },
+     {
+      "after": 2,
+      "articles": [
+       {
+        "is_article": true,
+        "publisher": "IBM",
+        "title": "What is Enterprise Resource Planning (ERP)?",
+        "url": "https://www.ibm.com/think/topics/enterprise-resource-planning"
+       }
+      ],
+      "courses": [
+       {
+        "done": false,
+        "fit_check": null,
+        "level": "beginner",
+        "minutes": 36,
+        "planned": true,
+        "provider": "Microsoft Learn",
+        "title": "Describe expense management, fixed asset management, and budgeting in Dynamics 365 Finance",
+        "url": "https://learn.microsoft.com/en-us/training/modules/explore-expense-management-fixed-asset-management/"
+       },
+       {
+        "done": false,
+        "fit_check": {
+         "by": "gpt-4o-mini",
+         "checked": "2026-10-31",
+         "quote": "The world of enterprise resource planning (ERP) is continuously evolving and helping customers scale up in productivity and streamline their operations.",
+         "result": "fits",
+         "skills_removed": []
+        },
+        "level": "intermediate",
+        "minutes": 46,
+        "planned": true,
+        "provider": "Microsoft Learn",
+        "title": "Updates and upgrades for finance and operations apps",
+        "url": "https://learn.microsoft.com/en-us/training/modules/upgrades-updates-finance-operations-apps/"
+       },
+       {
+        "done": false,
+        "fit_check": null,
+        "level": "beginner",
+        "minutes": 85,
+        "planned": true,
+        "provider": "Microsoft Learn",
+        "title": "Get started with cost accounting for supply chains in Dynamics 365 Finance",
+        "url": "https://learn.microsoft.com/en-us/training/paths/get-started-cost-accounting-supply-chains-dyn365-finance/"
+       },
+       {
+        "done": false,
+        "fit_check": null,
+        "level": "intermediate",
+        "minutes": 104,
+        "planned": true,
+        "provider": "Microsoft Learn",
+        "title": "Process credit and collections in Dynamics 365 Finance",
+        "url": "https://learn.microsoft.com/en-us/training/modules/process-credit-collections-dyn365-finance/"
+       },
+       {
+        "done": false,
+        "fit_check": null,
+        "level": "beginner",
+        "minutes": 137,
+        "planned": true,
+        "provider": "Microsoft Learn",
+        "title": "Describe general ledger and cash and bank management processes in Dynamics 365 Finance",
+        "url": "https://learn.microsoft.com/en-us/training/modules/describe-general-ledger-cash-bank-management/"
+       },
+       {
+        "done": false,
+        "fit_check": {
+         "by": "gpt-4o-mini",
+         "checked": "2026-10-31",
+         "quote": "Learn how finance and operations apps support businesses to manage their global financial systems, operational business processes, and streamlined supply chains to empower people to make fast, informed decisions.",
+         "result": "fits",
+         "skills_removed": []
+        },
+        "level": "beginner",
+        "minutes": 657,
+        "planned": true,
+        "provider": "Microsoft Learn",
+        "title": "Get started with finance and operations apps",
+        "url": "https://learn.microsoft.com/en-us/training/paths/get-started-finance-operations/"
+       },
+       {
+        "done": false,
+        "fit_check": {
+         "by": "gpt-4o-mini",
+         "checked": "2026-10-31",
+         "quote": "You must plan and configure your organization and create legal entities as one of the first steps of implementing finance and operations apps.",
+         "result": "fits",
+         "skills_removed": [
+          "systems_integration"
+         ]
+        },
+        "level": "intermediate",
+        "minutes": 720,
+        "planned": true,
+        "provider": "Microsoft Learn",
+        "title": "Configure your organization in finance and operations apps",
+        "url": "https://learn.microsoft.com/en-us/training/paths/configure-your-organization-finance-ops/"
+       }
+      ],
+      "essential": false,
+      "mode": "learn",
+      "now": null,
+      "practice": [],
+      "required": 2,
+      "skill": "erp",
+      "status": "open",
+      "study_after": 2,
+      "title": "Enterprise Resource Planning (ERP)",
+      "videos": [
+       {
+        "channel": "Learning Business Apps with Pir Khurram Rashdi",
+        "minutes": 32,
+        "published": "2022-05-29",
+        "title": "How Accounts payable invoice matching (total, two/three-way, charges) works in Dynamics 365 Finance",
+        "url": "https://www.youtube.com/watch?v=b1EitxD9ylY"
+       },
+       {
+        "channel": "Management Courses - Mike Clayton",
+        "minutes": 14,
+        "published": "2023-07-24",
+        "title": "ERP 101: What is Enterprise Resource Planning?",
+        "url": "https://www.youtube.com/watch?v=WM4CKdQcvkw"
+       },
+       {
+        "channel": "IBM Technology",
+        "minutes": 11,
+        "published": "2021-06-16",
+        "title": "What is Enterprise Resource Planning (ERP) Software?",
+        "url": "https://www.youtube.com/watch?v=Da1hUqzoiAo"
+       }
+      ],
+      "why": {
+       "kind": "assumption",
+       "source": "TalentCorp (2024) GBS study, PDF p. 23",
+       "text": "Our assumption (useful tool): TalentCorp lists Enterprise Resource Planning (ERP) for GBS finance roles in general, not for Procure-to-Pay (P2P) Reporting Analyst by name."
+      }
+     }
+    ],
+    "title": "Your path to Procure-to-Pay (P2P) Reporting Analyst",
+    "why": "One path: the skills you already have that AI is reshaping, then the skills this role needs. Start any step; each is a different skill."
+   },
    "resources_checked": "2026-10-24",
    "role_id": "p2p_reporting_analyst",
    "role_title": "Procure-to-Pay (P2P) Reporting Analyst",
@@ -18283,6 +20841,7 @@
        "after": null,
        "articles": [
         {
+         "is_article": true,
          "publisher": "IBM",
          "title": "What is Generative AI?",
          "url": "https://www.ibm.com/think/topics/generative-ai"
@@ -18341,6 +20900,7 @@
        "after": null,
        "articles": [
         {
+         "is_article": true,
          "publisher": "IBM",
          "title": "What Is Prompt Engineering?",
          "url": "https://www.ibm.com/think/topics/prompt-engineering"
@@ -18388,6 +20948,7 @@
        "after": null,
        "articles": [
         {
+         "is_article": true,
          "publisher": "Microsoft",
          "title": "Responsible AI Principles and Approach",
          "url": "https://www.microsoft.com/en-us/ai/principles-and-approach"
@@ -18432,6 +20993,7 @@
        "after": null,
        "articles": [
         {
+         "is_article": true,
          "publisher": "IBM",
          "title": "What Is Data Management?",
          "url": "https://www.ibm.com/think/topics/data-management"
@@ -18484,6 +21046,7 @@
        "after": 2,
        "articles": [
         {
+         "is_article": true,
          "publisher": "Microsoft Learn",
          "title": "Financial reporting overview",
          "url": "https://learn.microsoft.com/en-us/dynamics365/finance/general-ledger/financial-reporting-getting-started"
@@ -18611,6 +21174,7 @@
        "after": 1,
        "articles": [
         {
+         "is_article": true,
          "publisher": "Microsoft Learn",
          "title": "Accounts payable invoice matching overview",
          "url": "https://learn.microsoft.com/en-us/dynamics365/finance/accounts-payable/accounts-payable-invoice-matching"
@@ -18771,6 +21335,13 @@
          "published": "2022-05-29",
          "title": "How Accounts payable invoice matching (total, two/three-way, charges) works in Dynamics 365 Finance",
          "url": "https://www.youtube.com/watch?v=b1EitxD9ylY"
+        },
+        {
+         "channel": "Accounting Stuff",
+         "minutes": 7,
+         "published": "2019-01-28",
+         "title": "Invoices: What You NEED TO KNOW",
+         "url": "https://www.youtube.com/watch?v=O6qtAT_SnIM"
         }
        ],
        "why": {
@@ -18789,16 +21360,19 @@
        "after": 1,
        "articles": [
         {
+         "is_article": true,
          "publisher": "Microsoft Learn",
          "title": "Integration between finance and operations apps and third-party services",
          "url": "https://learn.microsoft.com/en-us/dynamics365/fin-ops-core/dev-itpro/data-entities/integration-overview"
         },
         {
+         "is_article": true,
          "publisher": "IBM",
          "title": "What Is an API (Application Programming Interface)?",
          "url": "https://www.ibm.com/think/topics/api"
         },
         {
+         "is_article": true,
          "publisher": "IBM",
          "title": "What Is Data Integration?",
          "url": "https://www.ibm.com/think/topics/data-integration"
@@ -18857,6 +21431,13 @@
          "published": "2020-10-08",
          "title": "What is API Management?",
          "url": "https://www.youtube.com/watch?v=fh3VaXLzH5Y"
+        },
+        {
+         "channel": "IBM Technology",
+         "minutes": 11,
+         "published": "2022-04-04",
+         "title": "What is Application Integration?",
+         "url": "https://www.youtube.com/watch?v=rcuu-O02xqE"
         }
        ],
        "why": {
@@ -18869,11 +21450,13 @@
        "after": 1,
        "articles": [
         {
+         "is_article": true,
          "publisher": "Microsoft Learn",
          "title": "What is Power BI?",
          "url": "https://learn.microsoft.com/en-us/power-bi/fundamentals/power-bi-overview"
         },
         {
+         "is_article": true,
          "publisher": "IBM",
          "title": "What Is Data Visualization?",
          "url": "https://www.ibm.com/think/topics/data-visualization"
@@ -18964,6 +21547,13 @@
          "published": "2025-06-10",
          "title": "Power BI Tutorial for Beginners",
          "url": "https://www.youtube.com/watch?v=VaOhNqNtGGE"
+        },
+        {
+         "channel": "Leila Gharani",
+         "minutes": 24,
+         "published": "2021-12-16",
+         "title": "Power BI from ZERO to Your First Dashboard (in 20 Minutes)",
+         "url": "https://www.youtube.com/watch?v=c7LrqSxjJQQ"
         }
        ],
        "why": {
@@ -18976,6 +21566,7 @@
        "after": 2,
        "articles": [
         {
+         "is_article": true,
          "publisher": "IBM",
          "title": "What is Enterprise Resource Planning (ERP)?",
          "url": "https://www.ibm.com/think/topics/enterprise-resource-planning"
@@ -19095,6 +21686,13 @@
          "published": "2023-07-24",
          "title": "ERP 101: What is Enterprise Resource Planning?",
          "url": "https://www.youtube.com/watch?v=WM4CKdQcvkw"
+        },
+        {
+         "channel": "IBM Technology",
+         "minutes": 11,
+         "published": "2021-06-16",
+         "title": "What is Enterprise Resource Planning (ERP) Software?",
+         "url": "https://www.youtube.com/watch?v=Da1hUqzoiAo"
         }
        ],
        "why": {
@@ -19446,6 +22044,7 @@
      "strong": 75.0
     }
    },
+   "current_forecast": null,
    "current_impact": null,
    "current_role": null,
    "destination": "o2c_reporting_analyst",
@@ -19562,6 +22161,8 @@
        "weight": 1.0
       }
      ],
+     "direction": "stretch",
+     "direction_score": 33.3,
      "effort_hours": 8.5,
      "effort_weeks": 2,
      "essential_gaps": [
@@ -19575,6 +22176,18 @@
       "basis": "low: self-rated claims one level lower, unstated as none; high: unstated at working",
       "high": 94.4,
       "low": 33.3
+     },
+     "forecast": {
+      "ai_use": null,
+      "category": "stable",
+      "change_pp": null,
+      "critical": null,
+      "kind": "estimate",
+      "label": "Stable",
+      "meaning": "No strong signal either way yet.",
+      "reasons": [
+       "no forecast change beyond the noise and fewer than two AI signals"
+      ]
      },
      "gap": {
       "bridgeable": [
@@ -19643,6 +22256,7 @@
        "via": "study"
       }
      ],
+     "related_tier": null,
      "requirement_basis": {
       "big_data_analytics": {
        "kind": "talentcorp",
@@ -20051,6 +22665,8 @@
        "weight": 1.0
       }
      ],
+     "direction": "stretch",
+     "direction_score": 27.3,
      "effort_hours": 8.0,
      "effort_weeks": 2,
      "essential_gaps": [
@@ -20064,6 +22680,18 @@
       "basis": "low: self-rated claims one level lower, unstated as none; high: unstated at working",
       "high": 90.9,
       "low": 27.3
+     },
+     "forecast": {
+      "ai_use": null,
+      "category": "stable",
+      "change_pp": null,
+      "critical": null,
+      "kind": "estimate",
+      "label": "Stable",
+      "meaning": "No strong signal either way yet.",
+      "reasons": [
+       "no forecast change beyond the noise and fewer than two AI signals"
+      ]
      },
      "gap": {
       "bridgeable": [
@@ -20129,6 +22757,7 @@
        "via": "practice"
       }
      ],
+     "related_tier": null,
      "requirement_basis": {
       "dashboards": {
        "kind": "onet",
@@ -20412,6 +23041,8 @@
        "weight": 1.0
       }
      ],
+     "direction": "stretch",
+     "direction_score": 26.7,
      "effort_hours": 32.1,
      "effort_weeks": 6,
      "essential_gaps": [
@@ -20427,6 +23058,18 @@
       "basis": "low: self-rated claims one level lower, unstated as none; high: unstated at working",
       "high": 93.3,
       "low": 26.7
+     },
+     "forecast": {
+      "ai_use": null,
+      "category": "stable",
+      "change_pp": null,
+      "critical": null,
+      "kind": "estimate",
+      "label": "Stable",
+      "meaning": "No strong signal either way yet.",
+      "reasons": [
+       "no forecast change beyond the noise and fewer than two AI signals"
+      ]
      },
      "gap": {
       "bridgeable": [
@@ -20495,6 +23138,7 @@
        "via": "study"
       }
      ],
+     "related_tier": null,
      "requirement_basis": {
       "accounting_principles": {
        "kind": "onet",
@@ -20852,6 +23496,8 @@
        "weight": 1.0
       }
      ],
+     "direction": "stretch",
+     "direction_score": 21.1,
      "effort_hours": 19.6,
      "effort_weeks": 4,
      "essential_gaps": [
@@ -20867,6 +23513,18 @@
       "basis": "low: self-rated claims one level lower, unstated as none; high: unstated at working",
       "high": 89.5,
       "low": 21.1
+     },
+     "forecast": {
+      "ai_use": null,
+      "category": "stable",
+      "change_pp": null,
+      "critical": null,
+      "kind": "estimate",
+      "label": "Stable",
+      "meaning": "No strong signal either way yet.",
+      "reasons": [
+       "no forecast change beyond the noise and fewer than two AI signals"
+      ]
      },
      "gap": {
       "bridgeable": [
@@ -20935,6 +23593,7 @@
        "via": "study"
       }
      ],
+     "related_tier": null,
      "requirement_basis": {
       "accounting_principles": {
        "kind": "assumption",
@@ -21317,6 +23976,8 @@
        "weight": 1.0
       }
      ],
+     "direction": "stretch",
+     "direction_score": 20.0,
      "effort_hours": 5.7,
      "effort_weeks": 1,
      "essential_gaps": [
@@ -21332,6 +23993,18 @@
       "basis": "low: self-rated claims one level lower, unstated as none; high: unstated at working",
       "high": 93.3,
       "low": 20.0
+     },
+     "forecast": {
+      "ai_use": null,
+      "category": "stable",
+      "change_pp": null,
+      "critical": null,
+      "kind": "estimate",
+      "label": "Stable",
+      "meaning": "No strong signal either way yet.",
+      "reasons": [
+       "no forecast change beyond the noise and fewer than two AI signals"
+      ]
      },
      "gap": {
       "bridgeable": [
@@ -21400,6 +24073,7 @@
        "via": "study"
       }
      ],
+     "related_tier": null,
      "requirement_basis": {
       "accounting_principles": {
        "kind": "onet",
@@ -21711,6 +24385,8 @@
        "weight": 1.0
       }
      ],
+     "direction": "stretch",
+     "direction_score": 20.0,
      "effort_hours": 11.4,
      "effort_weeks": 2,
      "essential_gaps": [
@@ -21724,6 +24400,18 @@
       "basis": "low: self-rated claims one level lower, unstated as none; high: unstated at working",
       "high": 100.0,
       "low": 20.0
+     },
+     "forecast": {
+      "ai_use": null,
+      "category": "stable",
+      "change_pp": null,
+      "critical": null,
+      "kind": "estimate",
+      "label": "Stable",
+      "meaning": "No strong signal either way yet.",
+      "reasons": [
+       "no forecast change beyond the noise and fewer than two AI signals"
+      ]
      },
      "gap": {
       "bridgeable": [],
@@ -21787,6 +24475,7 @@
        "via": "study"
       }
      ],
+     "related_tier": null,
      "requirement_basis": {
       "data_management": {
        "kind": "onet",
@@ -22024,6 +24713,8 @@
        "weight": 1.0
       }
      ],
+     "direction": "stretch",
+     "direction_score": 16.7,
      "effort_hours": 2.0,
      "effort_weeks": 1,
      "essential_gaps": [
@@ -22037,6 +24728,18 @@
       "basis": "low: self-rated claims one level lower, unstated as none; high: unstated at working",
       "high": 91.7,
       "low": 16.7
+     },
+     "forecast": {
+      "ai_use": null,
+      "category": "stable",
+      "change_pp": null,
+      "critical": null,
+      "kind": "estimate",
+      "label": "Stable",
+      "meaning": "No strong signal either way yet.",
+      "reasons": [
+       "no forecast change beyond the noise and fewer than two AI signals"
+      ]
      },
      "gap": {
       "bridgeable": [
@@ -22101,6 +24804,7 @@
        "via": "study"
       }
      ],
+     "related_tier": null,
      "requirement_basis": {
       "accounting_principles": {
        "kind": "talentcorp",
@@ -22374,6 +25078,8 @@
        "weight": 1.0
       }
      ],
+     "direction": "stretch",
+     "direction_score": 0.0,
      "effort_hours": 21.7,
      "effort_weeks": 4,
      "essential_gaps": [
@@ -22389,6 +25095,18 @@
       "basis": "low: self-rated claims one level lower, unstated as none; high: unstated at working",
       "high": 100.0,
       "low": 0.0
+     },
+     "forecast": {
+      "ai_use": null,
+      "category": "stable",
+      "change_pp": null,
+      "critical": null,
+      "kind": "estimate",
+      "label": "Stable",
+      "meaning": "No strong signal either way yet.",
+      "reasons": [
+       "no forecast change beyond the noise and fewer than two AI signals"
+      ]
      },
      "gap": {
       "bridgeable": [],
@@ -22453,6 +25171,7 @@
        "via": "practice"
       }
      ],
+     "related_tier": null,
      "requirement_basis": {
       "budget_management": {
        "kind": "onet",
@@ -22727,6 +25446,8 @@
        "weight": 1.0
       }
      ],
+     "direction": "stretch",
+     "direction_score": 0.0,
      "effort_hours": 19.6,
      "effort_weeks": 4,
      "essential_gaps": [
@@ -22742,6 +25463,18 @@
       "basis": "low: self-rated claims one level lower, unstated as none; high: unstated at working",
       "high": 100.0,
       "low": 0.0
+     },
+     "forecast": {
+      "ai_use": null,
+      "category": "stable",
+      "change_pp": null,
+      "critical": null,
+      "kind": "estimate",
+      "label": "Stable",
+      "meaning": "No strong signal either way yet.",
+      "reasons": [
+       "no forecast change beyond the noise and fewer than two AI signals"
+      ]
      },
      "gap": {
       "bridgeable": [],
@@ -22805,6 +25538,7 @@
        "via": "study"
       }
      ],
+     "related_tier": null,
      "requirement_basis": {
       "compliance_reporting": {
        "kind": "onet",
@@ -23071,6 +25805,8 @@
        "weight": 1.0
       }
      ],
+     "direction": "stretch",
+     "direction_score": 0.0,
      "effort_hours": 7.3,
      "effort_weeks": 2,
      "essential_gaps": [
@@ -23084,6 +25820,18 @@
       "basis": "low: self-rated claims one level lower, unstated as none; high: unstated at working",
       "high": 100.0,
       "low": 0.0
+     },
+     "forecast": {
+      "ai_use": null,
+      "category": "stable",
+      "change_pp": null,
+      "critical": null,
+      "kind": "estimate",
+      "label": "Stable",
+      "meaning": "No strong signal either way yet.",
+      "reasons": [
+       "no forecast change beyond the noise and fewer than two AI signals"
+      ]
      },
      "gap": {
       "bridgeable": [],
@@ -23148,6 +25896,7 @@
        "via": "study"
       }
      ],
+     "related_tier": null,
      "requirement_basis": {
       "big_data_analytics": {
        "kind": "talentcorp",
@@ -24844,6 +27593,629 @@
     }
    },
    "courses_checked": "2026-10-23",
+   "path": {
+    "nodes": [
+     {
+      "after": 2,
+      "articles": [
+       {
+        "is_article": true,
+        "publisher": "Microsoft Learn",
+        "title": "Financial reporting overview",
+        "url": "https://learn.microsoft.com/en-us/dynamics365/finance/general-ledger/financial-reporting-getting-started"
+       }
+      ],
+      "courses": [
+       {
+        "done": false,
+        "fit_check": {
+         "by": "gpt-4o-mini",
+         "checked": "2026-10-31",
+         "quote": "A report is a structured presentation of data.",
+         "result": "fits",
+         "skills_removed": [
+          "financial_reporting"
+         ]
+        },
+        "level": "intermediate",
+        "minutes": 69,
+        "planned": false,
+        "provider": "Microsoft Learn",
+        "title": "Explore reporting tools in finance and operations apps",
+        "url": "https://learn.microsoft.com/en-us/training/modules/explore-reporting-tools-finance-operations/"
+       },
+       {
+        "done": false,
+        "fit_check": null,
+        "level": "intermediate",
+        "minutes": 119,
+        "planned": false,
+        "provider": "Microsoft Learn",
+        "title": "Configure and work with analytics and reporting in finance and operations apps",
+        "url": "https://learn.microsoft.com/en-us/training/paths/configure-analytics-reporting-finance-operations/"
+       },
+       {
+        "done": false,
+        "fit_check": {
+         "by": "gpt-4o-mini",
+         "checked": "2026-10-31",
+         "quote": "Find out how to customize document layouts and reports in Business Central to follow your company's guidelines and preferences.",
+         "result": "fits",
+         "skills_removed": []
+        },
+        "level": "intermediate",
+        "minutes": 135,
+        "planned": false,
+        "provider": "Microsoft Learn",
+        "title": "Set up Microsoft Dynamics 365 Business Central for reporting",
+        "url": "https://learn.microsoft.com/en-us/training/paths/setup-reporting-dynamics-365-business-central/"
+       }
+      ],
+      "essential": true,
+      "mode": "learn",
+      "now": 2,
+      "practice": [
+       {
+        "basis": [
+         {
+          "read": "2026-10-30",
+          "title": "ACRA and SkillsFuture Singapore, Skills Framework for Accountancy",
+          "url": "https://www.acra.gov.sg/advancing-accountancy/skills-framework/"
+         },
+         {
+          "read": "2026-10-30",
+          "title": "SFIA 9, Levels of responsibility (level structure only; no SFIA text is used)",
+          "url": "https://sfia-online.org/en/sfia-9/responsibilities"
+         },
+         {
+          "read": "2026-10-23",
+          "title": "TalentCorp (2024), Impact Study of AI, Digital and Green Economy: GBS, PDF p. 23",
+          "url": "https://www.talentcorp.com.my"
+         }
+        ],
+        "kind": "practice",
+        "locked": false,
+        "order": 10,
+        "show_by": "A report, its sources and the commentary you wrote.",
+        "skill": "reporting",
+        "skill_name": "Reporting and Documentation",
+        "status": "open",
+        "status_label": "",
+        "target_level": 3,
+        "text": "Prepare your own reports end to end, including commentary on changes.",
+        "time": {
+         "basis": "practice_estimate",
+         "high": 16.0,
+         "low": 8.0,
+         "unit": "weeks",
+         "value": 8.0
+        },
+        "unlock": "study_done",
+        "week_start": {
+         "high": 1,
+         "low": 1
+        }
+       }
+      ],
+      "required": 3,
+      "skill": "reporting",
+      "status": "open",
+      "study_after": 2,
+      "title": "Reporting and Documentation",
+      "videos": [
+       {
+        "channel": "CandiMentor ",
+        "minutes": 7,
+        "published": "2026-09-25",
+        "title": "The FP&A Month-End Close and Reporting Process: From Trial Balance to Management Pack",
+        "url": "https://www.youtube.com/watch?v=YAfJ7Y5SZH8"
+       },
+       {
+        "channel": "CandiMentor ",
+        "minutes": 7,
+        "published": "2026-10-03",
+        "title": "RTR Month-End Close Process Explained Step by Step",
+        "url": "https://www.youtube.com/watch?v=oFsLC4WZ260"
+       }
+      ],
+      "why": {
+       "kind": "onet",
+       "source": "O*NET 31.0, Business Intelligence Analysts (15-2051.01), 2 linked task(s)",
+       "text": "The job's own tasks use it (main work of the role): \u201cGenerate standard or custom reports summarizing business, financial, or economic data for review by executives, managers, clients, and other stakeholders.\u201d"
+      }
+     },
+     {
+      "after": 1,
+      "articles": [
+       {
+        "is_article": true,
+        "publisher": "IBM",
+        "title": "What is Big Data Analytics?",
+        "url": "https://www.ibm.com/think/topics/big-data-analytics"
+       }
+      ],
+      "courses": [
+       {
+        "done": false,
+        "fit_check": {
+         "by": "gpt-4o-mini",
+         "checked": "2026-10-31",
+         "quote": "Use Microsoft Fabric to ingest and analyze data.",
+         "result": "fits",
+         "skills_removed": []
+        },
+        "level": "beginner",
+        "minutes": 51,
+        "planned": true,
+        "provider": "Microsoft Learn",
+        "title": "Explore fundamentals of large-scale analytics",
+        "url": "https://learn.microsoft.com/en-us/training/modules/examine-components-of-modern-data-warehouse/"
+       },
+       {
+        "done": false,
+        "fit_check": null,
+        "level": "intermediate",
+        "minutes": 60,
+        "planned": true,
+        "provider": "Microsoft Learn",
+        "title": "Explore and analyze data with Python",
+        "url": "https://learn.microsoft.com/en-us/training/modules/explore-analyze-data-with-python/"
+       },
+       {
+        "done": false,
+        "fit_check": null,
+        "level": "beginner",
+        "minutes": 128,
+        "planned": false,
+        "provider": "Microsoft Learn",
+        "title": "Introduction to Microsoft Azure Data analytics in Azure",
+        "url": "https://learn.microsoft.com/en-us/training/paths/azure-data-fundamentals-explore-data-warehouse-analytics/"
+       }
+      ],
+      "essential": false,
+      "mode": "learn",
+      "now": null,
+      "practice": [],
+      "required": 2,
+      "skill": "big_data_analytics",
+      "status": "open",
+      "study_after": 1,
+      "title": "Big Data Analytics",
+      "videos": [
+       {
+        "channel": "IBM Technology",
+        "minutes": 7,
+        "published": "2019-06-27",
+        "title": "Big Data Explained",
+        "url": "https://www.youtube.com/watch?v=HRfR4dJoKDc"
+       }
+      ],
+      "why": {
+       "kind": "talentcorp",
+       "source": "TalentCorp (2024) GBS study, PDF p. 40, 46",
+       "text": "TalentCorp names Big Data Analytics for Order-to-Cash (O2C) Reporting Analyst (skill to build)."
+      }
+     },
+     {
+      "after": 1,
+      "articles": [],
+      "courses": [
+       {
+        "done": false,
+        "fit_check": null,
+        "level": "intermediate",
+        "minutes": 60,
+        "planned": true,
+        "provider": "Microsoft Learn",
+        "title": "Explore and analyze data with Python",
+        "url": "https://learn.microsoft.com/en-us/training/modules/explore-analyze-data-with-python/"
+       }
+      ],
+      "essential": false,
+      "mode": "learn",
+      "now": null,
+      "practice": [],
+      "required": 2,
+      "skill": "statistical_analytics",
+      "status": "open",
+      "study_after": 1,
+      "title": "Statistical Analytics",
+      "videos": [
+       {
+        "channel": "Khan Academy",
+        "minutes": 13,
+        "published": "2009-01-19",
+        "title": "Statistics: The average | Descriptive statistics | Probability and Statistics | Khan Academy",
+        "url": "https://www.youtube.com/watch?v=uhxtUt_-GyM"
+       },
+       {
+        "channel": "StatQuest with Josh Starmer",
+        "minutes": 4,
+        "published": "2017-09-25",
+        "title": "StatQuest: Histograms, Clearly Explained",
+        "url": "https://www.youtube.com/watch?v=qBigTkBLU6g"
+       }
+      ],
+      "why": {
+       "kind": "talentcorp",
+       "source": "TalentCorp (2024) GBS study, PDF p. 40",
+       "text": "TalentCorp names Statistical Analytics for Order-to-Cash (O2C) Reporting Analyst (skill to build)."
+      }
+     },
+     {
+      "after": 1,
+      "articles": [
+       {
+        "is_article": true,
+        "publisher": "IBM",
+        "title": "What Is Data Management?",
+        "url": "https://www.ibm.com/think/topics/data-management"
+       }
+      ],
+      "courses": [
+       {
+        "done": false,
+        "fit_check": null,
+        "level": "beginner",
+        "minutes": 23,
+        "planned": true,
+        "provider": "Microsoft Learn",
+        "title": "Describe the data governance solutions of Microsoft Purview",
+        "url": "https://learn.microsoft.com/en-us/training/modules/describe-purview-data-governance/"
+       },
+       {
+        "done": false,
+        "fit_check": null,
+        "level": "beginner",
+        "minutes": 35,
+        "planned": true,
+        "provider": "Microsoft Learn",
+        "title": "Explore core data concepts",
+        "url": "https://learn.microsoft.com/en-us/training/modules/explore-core-data-concepts/"
+       },
+       {
+        "done": false,
+        "fit_check": {
+         "by": "gpt-4o-mini",
+         "checked": "2026-10-31",
+         "quote": "Generate field mapping between source and target data structures.",
+         "result": "fits",
+         "skills_removed": []
+        },
+        "level": "advanced",
+        "minutes": 84,
+        "planned": true,
+        "provider": "Microsoft Learn",
+        "title": "Prepare data for migration to finance and operations apps",
+        "url": "https://learn.microsoft.com/en-us/training/modules/prepare-data-migration-finance-operations/"
+       },
+       {
+        "done": false,
+        "fit_check": {
+         "by": "gpt-4o-mini",
+         "checked": "2026-10-31",
+         "quote": "Understanding data is key to many business operations.",
+         "result": "fits",
+         "skills_removed": []
+        },
+        "level": "beginner",
+        "minutes": 94,
+        "planned": false,
+        "provider": "Microsoft Learn",
+        "title": "Understand data concepts",
+        "url": "https://learn.microsoft.com/en-us/training/paths/understand-data-concepts/"
+       },
+       {
+        "done": false,
+        "fit_check": {
+         "by": "gpt-4o-mini",
+         "checked": "2026-10-31",
+         "quote": "Clean up the staging tables.",
+         "result": "fits",
+         "skills_removed": []
+        },
+        "level": "intermediate",
+        "minutes": 103,
+        "planned": false,
+        "provider": "Microsoft Learn",
+        "title": "Work with data management in finance and operations apps",
+        "url": "https://learn.microsoft.com/en-us/training/modules/work-data-management-finance-operations/"
+       },
+       {
+        "done": false,
+        "fit_check": {
+         "by": "gpt-4o-mini",
+         "checked": "2026-10-31",
+         "quote": "Learn how to prepare data for migration, by using the data management framework to manage data entities and data entity packages in finance and operations apps.",
+         "result": "fits",
+         "skills_removed": []
+        },
+        "level": "intermediate",
+        "minutes": 313,
+        "planned": false,
+        "provider": "Microsoft Learn",
+        "title": "Migrate data and go live with finance and operations apps",
+        "url": "https://learn.microsoft.com/en-us/training/paths/migrate-data-go-live-finance-operations/"
+       }
+      ],
+      "essential": false,
+      "mode": "learn",
+      "now": null,
+      "practice": [],
+      "required": 2,
+      "skill": "data_management",
+      "status": "open",
+      "study_after": 1,
+      "title": "Data Management",
+      "videos": [
+       {
+        "channel": "IBM Technology",
+        "minutes": 4,
+        "published": "2022-06-23",
+        "title": "What is Master Data Management",
+        "url": "https://www.youtube.com/watch?v=l83bkKJh1wM"
+       },
+       {
+        "channel": "IBM Technology",
+        "minutes": 5,
+        "published": "2022-07-15",
+        "title": "Data Governance Explained in 5 Minutes",
+        "url": "https://www.youtube.com/watch?v=uPsUjKLHLAg"
+       }
+      ],
+      "why": {
+       "kind": "talentcorp",
+       "source": "TalentCorp (2024) GBS study, PDF p. 43, 44",
+       "text": "TalentCorp names Data Management for Order-to-Cash (O2C) Reporting Analyst (skill to build)."
+      }
+     },
+     {
+      "after": 1,
+      "articles": [
+       {
+        "is_article": true,
+        "publisher": "Microsoft Learn",
+        "title": "Integration between finance and operations apps and third-party services",
+        "url": "https://learn.microsoft.com/en-us/dynamics365/fin-ops-core/dev-itpro/data-entities/integration-overview"
+       },
+       {
+        "is_article": true,
+        "publisher": "IBM",
+        "title": "What Is an API (Application Programming Interface)?",
+        "url": "https://www.ibm.com/think/topics/api"
+       },
+       {
+        "is_article": true,
+        "publisher": "IBM",
+        "title": "What Is Data Integration?",
+        "url": "https://www.ibm.com/think/topics/data-integration"
+       }
+      ],
+      "courses": [
+       {
+        "done": false,
+        "fit_check": null,
+        "level": "intermediate",
+        "minutes": 38,
+        "planned": true,
+        "provider": "Microsoft Learn",
+        "title": "Explore data integration concepts in finance and operations apps",
+        "url": "https://learn.microsoft.com/en-us/training/modules/integration-patterns-finance-operations/"
+       },
+       {
+        "done": false,
+        "fit_check": null,
+        "level": "intermediate",
+        "minutes": 103,
+        "planned": true,
+        "provider": "Microsoft Learn",
+        "title": "Get started using Power Platform with finance and operations apps",
+        "url": "https://learn.microsoft.com/en-us/training/paths/get-started-power-platform-with-finance-operations/"
+       },
+       {
+        "done": false,
+        "fit_check": {
+         "by": "gpt-4o-mini",
+         "checked": "2026-10-31",
+         "quote": "Integrations are an important component of implementing finance and operations apps.",
+         "result": "fits",
+         "skills_removed": []
+        },
+        "level": "intermediate",
+        "minutes": 468,
+        "planned": false,
+        "provider": "Microsoft Learn",
+        "title": "Work with integration tools in finance and operations apps",
+        "url": "https://learn.microsoft.com/en-us/training/paths/work-implementation-tools-finance-operations/"
+       }
+      ],
+      "essential": false,
+      "mode": "learn",
+      "now": null,
+      "practice": [],
+      "required": 2,
+      "skill": "systems_integration",
+      "status": "open",
+      "study_after": 1,
+      "title": "System Integration and Configuration",
+      "videos": [
+       {
+        "channel": "IBM Technology",
+        "minutes": 10,
+        "published": "2020-10-08",
+        "title": "What is API Management?",
+        "url": "https://www.youtube.com/watch?v=fh3VaXLzH5Y"
+       },
+       {
+        "channel": "IBM Technology",
+        "minutes": 11,
+        "published": "2022-04-04",
+        "title": "What is Application Integration?",
+        "url": "https://www.youtube.com/watch?v=rcuu-O02xqE"
+       }
+      ],
+      "why": {
+       "kind": "talentcorp",
+       "source": "TalentCorp (2024) GBS study, PDF p. 44",
+       "text": "TalentCorp names System Integration and Configuration for Order-to-Cash (O2C) Reporting Analyst (skill to build)."
+      }
+     },
+     {
+      "after": 1,
+      "articles": [
+       {
+        "is_article": true,
+        "publisher": "Microsoft Learn",
+        "title": "What is Power BI?",
+        "url": "https://learn.microsoft.com/en-us/power-bi/fundamentals/power-bi-overview"
+       },
+       {
+        "is_article": true,
+        "publisher": "IBM",
+        "title": "What Is Data Visualization?",
+        "url": "https://www.ibm.com/think/topics/data-visualization"
+       }
+      ],
+      "courses": [
+       {
+        "done": false,
+        "fit_check": {
+         "by": "person",
+         "checked": "2026-10-31",
+         "quote": "",
+         "result": "fits",
+         "skills_removed": []
+        },
+        "level": "intermediate",
+        "minutes": 59,
+        "planned": true,
+        "provider": "Microsoft Learn",
+        "title": "Create dashboards in Power BI",
+        "url": "https://learn.microsoft.com/en-us/training/modules/create-dashboards-power-bi/"
+       },
+       {
+        "done": false,
+        "fit_check": {
+         "by": "gpt-4o-mini",
+         "checked": "2026-10-31",
+         "quote": "Design, create, and modify SSRS reports.",
+         "result": "fits",
+         "skills_removed": []
+        },
+        "level": "intermediate",
+        "minutes": 61,
+        "planned": true,
+        "provider": "Microsoft Learn",
+        "title": "Build reports for finance and operations apps",
+        "url": "https://learn.microsoft.com/en-us/training/modules/build-reports-finance-operations/"
+       },
+       {
+        "done": false,
+        "fit_check": null,
+        "level": "intermediate",
+        "minutes": 119,
+        "planned": false,
+        "provider": "Microsoft Learn",
+        "title": "Configure and work with analytics and reporting in finance and operations apps",
+        "url": "https://learn.microsoft.com/en-us/training/paths/configure-analytics-reporting-finance-operations/"
+       },
+       {
+        "done": false,
+        "fit_check": {
+         "by": "gpt-4o-mini",
+         "checked": "2026-10-31",
+         "quote": "Explore using Power BI to create a mobile view, publish a report, build a dashboard, and use storytelling with Power BI within PowerPoint.",
+         "result": "fits",
+         "skills_removed": []
+        },
+        "level": "beginner",
+        "minutes": 441,
+        "planned": false,
+        "provider": "Microsoft Learn",
+        "title": "Dashboard in a Day - Online workshop",
+        "url": "https://learn.microsoft.com/en-us/training/paths/dashboard-in-a-day/"
+       },
+       {
+        "done": false,
+        "fit_check": null,
+        "level": "beginner",
+        "minutes": 492,
+        "planned": false,
+        "provider": "Microsoft Learn",
+        "title": "Prepare and visualize data with Microsoft Power BI",
+        "url": "https://learn.microsoft.com/en-us/training/paths/prepare-visualize-data-power-bi/"
+       }
+      ],
+      "essential": false,
+      "mode": "learn",
+      "now": null,
+      "practice": [],
+      "required": 2,
+      "skill": "dashboards",
+      "status": "open",
+      "study_after": 1,
+      "title": "Dashboard Creation and Visualisation",
+      "videos": [
+       {
+        "channel": "Kevin Stratvert",
+        "minutes": 12,
+        "published": "2025-06-10",
+        "title": "Power BI Tutorial for Beginners",
+        "url": "https://www.youtube.com/watch?v=VaOhNqNtGGE"
+       },
+       {
+        "channel": "Leila Gharani",
+        "minutes": 24,
+        "published": "2021-12-16",
+        "title": "Power BI from ZERO to Your First Dashboard (in 20 Minutes)",
+        "url": "https://www.youtube.com/watch?v=c7LrqSxjJQQ"
+       }
+      ],
+      "why": {
+       "kind": "onet",
+       "source": "O*NET 31.0, Business Intelligence Analysts (15-2051.01), 2 linked task(s)",
+       "text": "The job's own tasks use it (useful tool): \u201cMaintain or update business intelligence tools, databases, dashboards, systems, or methods.\u201d"
+      }
+     },
+     {
+      "after": null,
+      "articles": [
+       {
+        "is_article": true,
+        "publisher": "CIPD",
+        "title": "PESTLE analysis",
+        "url": "https://www.cipd.org/uk/knowledge/factsheets/pestle-analysis-factsheet/"
+       }
+      ],
+      "courses": [],
+      "essential": false,
+      "mode": "learn",
+      "now": null,
+      "practice": [],
+      "required": 2,
+      "skill": "business_environment_analytics",
+      "status": "no_course",
+      "study_after": 0,
+      "title": "Business Environment Analytics",
+      "videos": [
+       {
+        "channel": "Business To You",
+        "minutes": 10,
+        "published": "2018-05-22",
+        "title": "PESTEL Analysis EXPLAINED",
+        "url": "https://www.youtube.com/watch?v=bYn4CyL3r5w"
+       }
+      ],
+      "why": {
+       "kind": "talentcorp",
+       "source": "TalentCorp (2024) GBS study, PDF p. 45",
+       "text": "TalentCorp names Business Environment Analytics for Order-to-Cash (O2C) Reporting Analyst (skill to build)."
+      }
+     }
+    ],
+    "title": "Your path to Order-to-Cash (O2C) Reporting Analyst",
+    "why": "One path: the skills you already have that AI is reshaping, then the skills this role needs. Start any step; each is a different skill."
+   },
    "resources_checked": "2026-10-24",
    "role_id": "o2c_reporting_analyst",
    "role_title": "Order-to-Cash (O2C) Reporting Analyst",
@@ -24855,6 +28227,7 @@
        "after": null,
        "articles": [
         {
+         "is_article": true,
          "publisher": "IBM",
          "title": "What is Generative AI?",
          "url": "https://www.ibm.com/think/topics/generative-ai"
@@ -24913,6 +28286,7 @@
        "after": null,
        "articles": [
         {
+         "is_article": true,
          "publisher": "IBM",
          "title": "What Is Prompt Engineering?",
          "url": "https://www.ibm.com/think/topics/prompt-engineering"
@@ -24960,6 +28334,7 @@
        "after": null,
        "articles": [
         {
+         "is_article": true,
          "publisher": "Microsoft",
          "title": "Responsible AI Principles and Approach",
          "url": "https://www.microsoft.com/en-us/ai/principles-and-approach"
@@ -25004,6 +28379,7 @@
        "after": null,
        "articles": [
         {
+         "is_article": true,
          "publisher": "IBM",
          "title": "What Is Data Management?",
          "url": "https://www.ibm.com/think/topics/data-management"
@@ -25056,6 +28432,7 @@
        "after": 2,
        "articles": [
         {
+         "is_article": true,
          "publisher": "Microsoft Learn",
          "title": "Financial reporting overview",
          "url": "https://learn.microsoft.com/en-us/dynamics365/finance/general-ledger/financial-reporting-getting-started"
@@ -25189,6 +28566,7 @@
        "after": 1,
        "articles": [
         {
+         "is_article": true,
          "publisher": "IBM",
          "title": "What is Big Data Analytics?",
          "url": "https://www.ibm.com/think/topics/big-data-analytics"
@@ -25304,6 +28682,7 @@
        "after": 1,
        "articles": [
         {
+         "is_article": true,
          "publisher": "IBM",
          "title": "What Is Data Management?",
          "url": "https://www.ibm.com/think/topics/data-management"
@@ -25429,16 +28808,19 @@
        "after": 1,
        "articles": [
         {
+         "is_article": true,
          "publisher": "Microsoft Learn",
          "title": "Integration between finance and operations apps and third-party services",
          "url": "https://learn.microsoft.com/en-us/dynamics365/fin-ops-core/dev-itpro/data-entities/integration-overview"
         },
         {
+         "is_article": true,
          "publisher": "IBM",
          "title": "What Is an API (Application Programming Interface)?",
          "url": "https://www.ibm.com/think/topics/api"
         },
         {
+         "is_article": true,
          "publisher": "IBM",
          "title": "What Is Data Integration?",
          "url": "https://www.ibm.com/think/topics/data-integration"
@@ -25497,6 +28879,13 @@
          "published": "2020-10-08",
          "title": "What is API Management?",
          "url": "https://www.youtube.com/watch?v=fh3VaXLzH5Y"
+        },
+        {
+         "channel": "IBM Technology",
+         "minutes": 11,
+         "published": "2022-04-04",
+         "title": "What is Application Integration?",
+         "url": "https://www.youtube.com/watch?v=rcuu-O02xqE"
         }
        ],
        "why": {
@@ -25509,11 +28898,13 @@
        "after": 1,
        "articles": [
         {
+         "is_article": true,
          "publisher": "Microsoft Learn",
          "title": "What is Power BI?",
          "url": "https://learn.microsoft.com/en-us/power-bi/fundamentals/power-bi-overview"
         },
         {
+         "is_article": true,
          "publisher": "IBM",
          "title": "What Is Data Visualization?",
          "url": "https://www.ibm.com/think/topics/data-visualization"
@@ -25604,6 +28995,13 @@
          "published": "2025-06-10",
          "title": "Power BI Tutorial for Beginners",
          "url": "https://www.youtube.com/watch?v=VaOhNqNtGGE"
+        },
+        {
+         "channel": "Leila Gharani",
+         "minutes": 24,
+         "published": "2021-12-16",
+         "title": "Power BI from ZERO to Your First Dashboard (in 20 Minutes)",
+         "url": "https://www.youtube.com/watch?v=c7LrqSxjJQQ"
         }
        ],
        "why": {
@@ -25616,6 +29014,7 @@
        "after": null,
        "articles": [
         {
+         "is_article": true,
          "publisher": "CIPD",
          "title": "PESTLE analysis",
          "url": "https://www.cipd.org/uk/knowledge/factsheets/pestle-analysis-factsheet/"

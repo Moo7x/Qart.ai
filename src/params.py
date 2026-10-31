@@ -272,3 +272,79 @@ AI_BASICS_SKILLS = (
 )
 AI_BASICS_SKIP_LEVEL = 3
 AI_BASICS_ALWAYS = ("student", "switcher")
+
+# --- Task-level AI-use model (src/forecast/task_model.py) ---------------------------------------
+TASK_MODEL_VERSION = "task_model/1"  # bump when features or candidates change: forces a re-fit
+TASK_MODEL_SEED = 7  # fixed seed so a re-run with the same data gives the same version
+TASK_MODEL_FOLDS = 5  # cross-validation folds; 5 is the common default for a few thousand rows
+TASK_MODEL_MIN_TRAIN = 200  # fewer observed tasks than this: too little to learn from, skip
+# The best model must beat the mean baseline's error by this share (declared): a model that is
+# barely better than guessing the average is not worth showing as a prediction.
+TASK_MODEL_MIN_GAIN = 0.05
+TASK_EMBEDDING_MODEL = "BAAI/bge-m3"  # served by the RunPod worker (runpod/handler.py)
+TFIDF_COMPONENTS = 256  # fallback features when RunPod is unavailable
+TREE_COMPONENTS = 64  # tree models see this many PCA components of the embedding (see candidates)
+RIDGE_ALPHAS = (0.1, 1.0, 10.0, 100.0, 1000.0)  # ridge picks its penalty by internal CV
+
+# --- Industry forecast categories (src/forecast/industry.py) ------------------------------------
+# A forecast change in a job group's share of employees smaller than this, in percentage points
+# over the horizon, is treated as no change. Evidence: in DOSM 2016-2025 the finance-related groups
+# move by 0.19-0.28 points in an average year (mean absolute year-on-year change: managers 0.20,
+# professionals 0.25, clerical 0.28), so a smaller forecast change is within normal noise.
+INDUSTRY_DEMAND_EPS_PP = 0.2
+# "AI already does much of this work in practice": the importance-weighted automation-style share
+# of AI use on the occupation's tasks, after the scenario intensity, at or above this (declared).
+INDUSTRY_USE_HIGH = 25.0
+# ILO mean GenAI exposure of the occupation's tasks at or above this (0-1 scale; declared: the
+# upper half of the scale, where the ILO places its higher exposure gradients).
+INDUSTRY_EXPOSURE_HIGH = 0.5
+INDUSTRY_EXPERT_HIGH = 3.0  # TalentCorp impact level "high" (0 emerging, 1 low, 2 medium, 3 high)
+# How many of the three AI evidence kinds (use, exposure, expert) must agree before a role is called
+# transforming: two, so no verdict ever rests on one kind of evidence alone (AGENTS.md).
+INDUSTRY_AI_AGREE = 2
+INDUSTRY_DEFAULT_IMPORTANCE = 3.0  # weight for an O*NET task with no importance rating (mid-scale)
+
+# --- Directions: matching people to forecast roles (src/match/directions.py) ---------------------
+# Roles are ranked by fit x outlook factor (declared assumption): a role whose job group is forecast
+# to grow, or that is emerging, moves up a little; a shrinking one moves down. Fit itself is never
+# changed, and a factor this size only reorders roles whose fits are close (within about 10%).
+OUTLOOK_FACTOR = {
+    "growing": 1.10,
+    "emerging": 1.05,
+    "stable": 1.0,
+    "transforming": 1.0,  # the role stays; only how the work is done changes
+    "shrinking": 0.85,
+}
+# A move is "adjacent" when O*NET relates the two occupations within its top 10 (tier 1 or 2), when
+# both are the same occupation, or when the person already covers this much of the role; otherwise
+# it is a "stretch" (declared).
+DIRECTION_ADJACENT_TIER = 2
+DIRECTION_ADJACENT_FIT = 50.0
+
+# --- YouTube catalogue job (src/collectors/youtube.py) -------------------------------------------
+YOUTUBE_TARGET_PER_SKILL = 4  # stop adding once a skill or topic has this many checked videos
+# Video length kept (minutes, declared): long enough to teach something, short enough for one
+# sitting; full-length courses are left to the course catalogue.
+YOUTUBE_MIN_MINUTES = 3
+YOUTUBE_MAX_MINUTES = 60
+
+# --- AI-for-this-skill resources (src/collectors/ai_resources.py) --------------------------------
+AI_TARGET_TASKS = 3  # a skill's most AI-used linked tasks that define its AI-era work (declared)
+AI_SHORTLIST = 20  # candidates per skill sent to the reranker after dense search
+AI_JUDGED = 6  # best candidates per skill (by the lower reranker score) given to the judge
+AI_SHOWN = 3  # resources shown per plan step; also the k of the reported precision at k
+AI_RECENT_YEARS = 3  # published or updated within this many years counts as recent (AI tools move)
+AI_MIN_LABELS = 30  # fewer judged candidates than this: no ranker is fitted, the rule orders them
+AI_FETCH_SECONDS = 30.0  # longest wait for one page or caption fetch before it counts as no text
+# A video outside the trusted channels is eligible only with real reach (declared): a channel with
+# at least this many subscribers and a video with at least this many views. Reach is not quality,
+# so every video must still pass the quote-checked judgement before it is shown.
+AI_MIN_SUBSCRIBERS = 20_000
+AI_MIN_VIEWS = 5_000
+ARTICLE_MIN_WORDS = 300  # extracted body words for a page to count as an article the scout can read
+AI_PARALLEL = 4  # skills processed at once; the job waits on network calls, not on the CPU
+SCOUT_EXCERPT_WORDS = 45  # words of a chosen article passage shown in the agent window
+AI_MAX_SKILLS_PER_ITEM = 2  # a resource counts for at most this many skills (its best-scoring ones)
+BASICS_VIDEOS_PER_TOPIC = (
+    1  # AI-basics videos carried inside a step, per topic (the rest stay in the catalogue)
+)

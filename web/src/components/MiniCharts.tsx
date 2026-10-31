@@ -1,8 +1,8 @@
-import { useId, useState, type ReactNode } from 'react'
-import { Legend, ViewSwitch } from './atoms'
+import { useId, type ReactNode } from 'react'
+import { Legend } from './atoms'
 
-// Small charts in the redesign's dashboard style. Each has one axis, says in words what the
-// colours mean, and the larger ones switch to a table (docs/PHASE2_PLAN.md §10 rules).
+// Small charts in the redesign's dashboard style. Each has one axis and says in words what the
+// colours mean (docs/PHASE2_PLAN.md §10 rules).
 
 const BAND_COLOUR: Record<string, string> = { low: '#d1495b', fair: '#e9a23b', good: '#9bbf3a', strong: '#2e9e5b' }
 
@@ -39,48 +39,28 @@ export type LevelRow = { skill: string; name: string; you: number | null; needs:
 
 /** Your claimed level against the level the role needs, one pair of bars per skill (0–5). */
 export function LevelBars({ rows, title }: { rows: LevelRow[]; title: string }) {
-  const [view, setView] = useState<'chart' | 'table'>('chart')
   const id = useId()
   const H = 140
   return (
     <section aria-labelledby={id} className="flex flex-col gap-3">
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <h3 id={id} className="q-h3 text-[17px]">{title}</h3>
-        <ViewSwitch value={view} onChange={setView} />
-      </div>
-      {view === 'chart' ? (
-        <>
-          <div className="flex gap-2">
-            <div aria-hidden="true" className="flex flex-col justify-between pb-6 text-right text-[11px] text-muted-2" style={{ height: H + 24 }}>
-              {[5, 4, 3, 2, 1, 0].map((l) => <span key={l}>{l}</span>)}
-            </div>
-            <div role="img" aria-label={`${title}: ${rows.map((r) => `${r.name} you ${r.you ?? 'not rated'}, needs ${r.needs}`).join('; ')}`} className="flex min-w-0 flex-1 items-end gap-2 overflow-x-auto border-b border-[#e5e5e5]">
-              {rows.map((r) => (
-                <div key={r.skill} className="flex min-w-[44px] flex-1 flex-col items-center gap-1">
-                  <div className="relative w-full max-w-[34px]" style={{ height: H }}>
-                    <span className="absolute inset-x-0 bottom-0 rounded-t-lg bg-[#e9e4ff]" style={{ height: `${(r.needs / 5) * 100}%` }} />
-                    <span className="m-grow absolute inset-x-[5px] bottom-0 rounded-t-md bg-gradient-to-t from-[#4b2bd1] to-[#8f77ff]" style={{ height: `${((r.you ?? 0) / 5) * 100}%`, transformOrigin: '50% 100%' }} />
-                  </div>
-                  <span className="line-clamp-2 h-6 w-full text-center text-[10px] leading-tight text-muted" title={r.name}>{r.name}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-          <Legend items={[{ swatch: '#6c47ff', text: 'Your level (claim)' }, { swatch: '#e9e4ff', text: 'Level the role needs' }]} />
-        </>
-      ) : (
-        <div className="overflow-x-auto">
-          <table className="w-full min-w-[320px] border-collapse text-[13px]">
-            <caption className="pb-1.5 text-left text-xs text-muted">{title}</caption>
-            <thead><tr className="text-left text-xs text-muted"><th className="py-1.5 font-semibold">Skill</th><th className="font-semibold">You (claim)</th><th className="font-semibold">Needs</th></tr></thead>
-            <tbody>
-              {rows.map((r) => (
-                <tr key={r.skill} className="border-t border-[#eee]"><td className="py-1.5">{r.name}{r.essential ? ' · essential' : ''}</td><td>{r.you ?? 'not rated'}</td><td>{r.needs}</td></tr>
-              ))}
-            </tbody>
-          </table>
+      <h3 id={id} className="q-h3 text-[17px]">{title}</h3>
+      <div className="flex gap-2">
+        <div aria-hidden="true" className="flex flex-col justify-between pb-6 text-right text-[11px] text-muted-2" style={{ height: H + 24 }}>
+          {[5, 4, 3, 2, 1, 0].map((l) => <span key={l}>{l}</span>)}
         </div>
-      )}
+        <div role="img" aria-label={`${title}: ${rows.map((r) => `${r.name} you ${r.you ?? 'not rated'}, needs ${r.needs}`).join('; ')}`} className="flex min-w-0 flex-1 items-end gap-2 overflow-x-auto border-b border-[#e5e5e5]">
+          {rows.map((r) => (
+            <div key={r.skill} className="flex min-w-[44px] flex-1 flex-col items-center gap-1">
+              <div className="relative w-full max-w-[34px]" style={{ height: H }}>
+                <span className="absolute inset-x-0 bottom-0 rounded-t-lg bg-[#e9e4ff]" style={{ height: `${(r.needs / 5) * 100}%` }} />
+                <span className="m-grow absolute inset-x-[5px] bottom-0 rounded-t-md bg-gradient-to-t from-[#4b2bd1] to-[#8f77ff]" style={{ height: `${((r.you ?? 0) / 5) * 100}%`, transformOrigin: '50% 100%' }} />
+              </div>
+              <span className="line-clamp-2 h-6 w-full text-center text-[10px] leading-tight text-muted" title={r.name}>{r.name}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+      <Legend items={[{ swatch: '#6c47ff', text: 'Your level (claim)' }, { swatch: '#e9e4ff', text: 'Level the role needs' }]} />
     </section>
   )
 }

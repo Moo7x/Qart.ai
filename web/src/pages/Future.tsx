@@ -72,7 +72,7 @@ export function Future() {
               </div>
               <div className="flex flex-col gap-2">
                 <h3 className="cap m-0">Your skills</h3>
-                {data.skills_now.length === 0 && <p className="m-0 text-[13px] text-graphite">No rated skills yet. <Link to="/start?edit=1">Rate your skills</Link></p>}
+                {data.skills_now.length === 0 && <p className="m-0 text-[13px] text-graphite">No rated skills yet. <Link to="/overview">Rate your skills on your Overview</Link></p>}
                 {data.skills_now.map((s) => (
                   <div key={s.skill} className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 border-t border-line py-2 text-[13px]">
                     <span>{s.name}</span>

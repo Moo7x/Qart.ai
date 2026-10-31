@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { createPortal } from 'react-dom'
 
-export type Pane = { key: string; title: string; hint?: string; body: ReactNode }
+// `wide` panes span the whole row (a short summary above the side-by-side panes).
+export type Pane = { key: string; title: string; hint?: string; body: ReactNode; wide?: boolean }
 
 // Temporary windows over the page: each can be closed on its own; closing the last one (or
 // "Close all", Esc, or a click on the backdrop) returns to the page. Nothing is saved by closing.
@@ -11,6 +12,7 @@ export function Windows({ title, panes, onClose }: { title: string; panes: Pane[
   const first = useRef<HTMLButtonElement>(null)
   const dialog = useRef<HTMLDivElement>(null)
   const open = panes.filter((p) => !closed.includes(p.key))
+  const columns = open.filter((p) => !p.wide).length
   useEffect(() => {
     const trigger = document.activeElement instanceof HTMLElement ? document.activeElement : null
     first.current?.focus()
@@ -39,9 +41,9 @@ export function Windows({ title, panes, onClose }: { title: string; panes: Pane[
         <h2 className="m-0 min-w-0 text-lg font-semibold leading-snug tracking-tight">{title}</h2>
         <button ref={first} type="button" className="btn min-h-[40px] shrink-0" onClick={onClose}>Close all</button>
       </div>
-      <div className={`mx-auto grid min-h-0 w-full max-w-[1200px] flex-1 content-start items-start gap-3 overflow-y-auto ${open.length >= 3 ? 'md:grid-cols-3' : open.length === 2 ? 'md:grid-cols-2' : 'md:max-w-[640px]'}`}>
+      <div className={`mx-auto grid min-h-0 w-full max-w-[1200px] flex-1 content-start items-start gap-3 overflow-y-auto ${columns >= 3 ? 'md:grid-cols-3' : columns === 2 ? 'md:grid-cols-2' : 'md:max-w-[640px]'}`}>
         {open.map((p) => (
-          <section key={p.key} aria-label={p.title} className="flex max-h-[78vh] min-h-0 flex-col border border-line bg-paper motion-safe:animate-[pop_160ms_ease-out]">
+          <section key={p.key} aria-label={p.title} className={`flex min-h-0 flex-col border border-line bg-paper motion-safe:animate-[pop_160ms_ease-out] ${p.wide ? 'col-span-full max-h-[30vh]' : 'max-h-[70vh]'}`}>
             <header className="flex items-start justify-between gap-2 border-b border-line px-4 py-3">
               <div className="min-w-0">
                 <h3 className="m-0 text-[15px] font-semibold">{p.title}</h3>

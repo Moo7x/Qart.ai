@@ -1,6 +1,5 @@
 import { ChevronDown, Info } from 'lucide-react'
 import { useState } from 'react'
-import { useT } from '../i18n'
 import { Link, useNavigate } from 'react-router-dom'
 import { sendJSON, useApi } from '../api'
 import { Dots, SdgTag, levelText } from '../components/journey'
@@ -15,7 +14,7 @@ import { PayLine, ScoreWhy } from '../components/ScoreWhy'
 import { SdgRolesGrid } from '../components/SdgHeatmap'
 import { Loading, Problem } from '../components/ui'
 import { useJourney } from '../state'
-import type { GapColumn, MatchesResponse, PackInfo, ProfileData, RoleCard, Situation, SkillKind } from '../types'
+import type { GapColumn, MatchesResponse, PackInfo, ProfileData, RoleCard, Situation } from '../types'
 
 // Roles shown before "Show all": enough to compare, few enough to read.
 const ROLES_SHOWN = 5
@@ -217,58 +216,6 @@ function RoleDetail({ role, roles, matches, situation, pack }: { role: RoleCard;
   )
 }
 
-const INTERESTS: { id: SkillKind; label: string }[] = [
-  { id: 'data_digital', label: 'Working with data and systems' },
-  { id: 'finance_core', label: 'Accounting and finance work' },
-  { id: 'green', label: 'Sustainability (ESG)' },
-  { id: 'business', label: 'Improving processes and working with people' },
-]
-const SDGS = [
-  { id: '4', label: '4 · Quality education' },
-  { id: '8', label: '8 · Decent work' },
-  { id: '12', label: '12 · Responsible production' },
-]
-
-/** "What matters to you" (interests and SDG goals), inline: it only orders near-tie roles. */
-function MattersToYou({ profileId, profile, onSaved }: { profileId: string; profile: ProfileData; onSaved: () => void }) {
-  const { t } = useT()
-  const [open, setOpen] = useState(false)
-  const [interests, setInterests] = useState<SkillKind[]>(profile.interests)
-  const [sdgs, setSdgs] = useState<string[]>(profile.sdg_priorities)
-  const [busy, setBusy] = useState(false)
-  const toggle = <T,>(list: T[], x: T) => (list.includes(x) ? list.filter((y) => y !== x) : [...list, x])
-  async function save() {
-    setBusy(true)
-    try {
-      await sendJSON(`/api/profiles/${profileId}`, { method: 'PUT', body: { ...profile, interests, sdg_priorities: sdgs } })
-      onSaved()
-      setOpen(false)
-    } finally {
-      setBusy(false)
-    }
-  }
-  return (
-    <div className="flex flex-col gap-3">
-      <button type="button" aria-expanded={open} aria-controls="matters" onClick={() => setOpen((o) => !o)} className="q-btn self-start">
-        {t('What matters to you in your next role?')} <span className="text-muted">(optional)</span>
-      </button>
-      {open && (
-        <div id="matters" className="q-card gap-3">
-          <p className="m-0 text-sm text-[#404040]">{t('Used only to order roles that fit you almost equally well. It never changes a fit score.')}</p>
-          <div role="group" aria-label="Interests" className="flex flex-wrap gap-2">
-            {INTERESTS.map((i) => <button key={i.id} type="button" aria-pressed={interests.includes(i.id)} className="q-chip" onClick={() => setInterests((l) => toggle(l, i.id))}>{t(i.label)}</button>)}
-          </div>
-          <div role="group" aria-label="Sustainable Development Goals you care about" className="flex flex-wrap items-center gap-2">
-            <span className="text-[13px] font-semibold">{t('Sustainable Development Goals you care about (optional)')}</span>
-            {SDGS.map((g) => <button key={g.id} type="button" aria-pressed={sdgs.includes(g.id)} className="q-chip" onClick={() => setSdgs((l) => toggle(l, g.id))}>{g.label}</button>)}
-          </div>
-          <button type="button" className="q-btn q-btn-violet self-start" disabled={busy} onClick={save}>Save and re-order</button>
-        </div>
-      )}
-    </div>
-  )
-}
-
 function RangeBar({ role, i }: { role: RoleCard; i: number }) {
   const fit = Math.round(role.fit)
   const lo = Math.round(role.fit_range.low)
@@ -310,7 +257,6 @@ export function Roles() {
   const listed = showAll ? ordered : ordered.slice(0, ROLES_SHOWN)
   const openRole = openId === undefined ? listed[0]?.role_id : openId
   const skillName = (id: string) => pack.data?.skills.find((s) => s.id === id)?.name ?? id
-  const reloadAll = () => { current.reload(); baseline.reload(); fastView.reload(); profile.reload() }
 
   async function choose(roleId: string) {
     setBusy(true)
@@ -345,16 +291,15 @@ export function Roles() {
 
       {data && (
         <div className="q-tray flex flex-col gap-4">
-          {profile.data && <MattersToYou profileId={profileId} profile={profile.data.profile} onSaved={reloadAll} />}
           {data.current_role && (
             <div className="q-card flex-row flex-wrap items-center justify-between gap-3 px-5 py-3.5 text-[13px]">
-              <span><span className="font-semibold">Today: {data.current_role.title}</span> · TalentCorp rates it {data.current_impact} (PDF p. {data.current_role.page}).</span>
+              <span><span className="font-semibold">Today: {data.current_role.title}</span> · TalentCorp rates it {data.current_impact} (PDF p. {data.current_role.page}).{data.current_forecast && <> Qart forecast: <span className="font-semibold">{data.current_forecast.label}</span> ({data.current_forecast.meaning.toLowerCase()})</>}</span>
               <span className="text-muted">Routes it lists: {data.current_role.transitions.length} in GBS{data.current_role.other_sectors.length ? `, ${data.current_role.other_sectors.length} in other sectors` : ''}</span>
             </div>
           )}
           <section aria-label="Ranked roles" className="q-card gap-2">
             <div className="flex flex-wrap items-center justify-between gap-2">
-              <span className="text-[13px]"><span className="font-semibold text-violet">All {data.roles.length} destination roles</span> <span className="text-muted">· {data.scenario_label}</span></span>
+              <span className="text-[13px]"><span className="font-semibold text-violet">All {data.roles.length} destination roles</span> <span className="text-muted">· {data.scenario_label} · ordered by fit and the Qart forecast (a growing role moves up, a shrinking one down; the fit shown is unchanged)</span></span>
               <Legend items={[{ swatch: '#6c47ff', text: 'Fit today (estimate)' }, { swatch: '#d9d0ff', text: 'Range if unrated skills are low or working (assumption)' }]} />
             </div>
             {goals.length > 0 && (
@@ -387,6 +332,8 @@ export function Roles() {
                         <span className="text-[15px] font-semibold leading-snug">{r.title}</span>
                         <span className="flex flex-wrap gap-1">
                           {data.destination === r.role_id && <span className="whitespace-nowrap rounded-full bg-violet px-2 py-0.5 text-[11px] font-semibold text-white">your destination</span>}
+                          {r.forecast && <span title={`${r.forecast.meaning} ${r.forecast.reasons.join('; ')}`} className="whitespace-nowrap rounded-full bg-estimate-bg px-2 py-0.5 text-[11px] font-semibold text-estimate">{r.forecast.label} · Qart forecast</span>}
+                          <span className="whitespace-nowrap rounded-full bg-mist px-2 py-0.5 text-[11px] text-graphite">{r.direction === 'adjacent' ? 'adjacent move' : 'stretch move'}</span>
                           {r.listed_transition && <span className="whitespace-nowrap rounded-full bg-tray px-2 py-0.5 text-[11px] font-medium">listed route from your role</span>}
                           {prefs.data?.not_my_goal.includes(r.role_id) && <span className="whitespace-nowrap rounded-full bg-mist px-2 py-0.5 text-[11px] text-muted">you said: not your goal</span>}
                           {rankMove !== 0 && moderateRank.length > 0 && fastRank.length > 0 && <span className="q-label q-label-estimate">{rankMove > 0 ? `▲ ${rankMove}` : `▼ ${-rankMove}`} if AI moves fast</span>}

@@ -42,5 +42,5 @@ def write(name: str) -> Path:
 
 
 if __name__ == "__main__":
-    for sample in ("nur", "kavitha", "hafiz", "mei"):
+    for sample in ("nur", "kavitha", "hafiz", "mei", "daniel"):
         print(write(sample).relative_to(REPO_ROOT))

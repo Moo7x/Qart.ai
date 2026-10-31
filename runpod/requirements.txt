@@ -1,5 +1,6 @@
 # Installed only inside the RunPod worker image (runpod/Dockerfile), not in the app.
 runpod==1.12.0
-sentence-transformers==3.4.1
-# Pinned so a new release cannot change the build; sentence-transformers 3.4.1 needs <5.
-transformers==4.51.3
+# sentence-transformers 6.x fixes CVE-2026-68770 (code execution while loading a model); it needs
+# transformers 5.x, which also fixes CVE-2025-5197 and CVE-2025-3933 (ReDoS) found in 4.51.3.
+sentence-transformers==6.2.0
+transformers==5.22.1

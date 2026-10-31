@@ -1,8 +1,6 @@
-import { ClipboardList } from 'lucide-react'
 import { useState } from 'react'
 import { sendJSON, useApi } from '../api'
 import { CvPopup } from '../pages/onboarding/CvPopup'
-import { useJourney } from '../state'
 import type { Question } from '../types'
 import { Claim, DarkButton, Serif } from './atoms'
 import { LevelPicker } from './LevelPicker'
@@ -10,33 +8,10 @@ import { Loading, Problem } from './ui'
 
 const MAX_ANSWERS = 3 // the server returns the 3 questions that would change the person's options most
 
-/** "Increase the accuracy of your results": the unrated skills whose answer would change the
- *  person's options most (GET /questions), answered in a popup. Each answer is saved as the
- *  person's own rating (POST /answer), never a verified level; `onDone` lets the page refresh. */
-export function SkillSurvey({ onDone }: { onDone: () => void }) {
-  const { profileId, scenario } = useJourney()
-  const questions = useApi<Question[]>(profileId ? `/api/profiles/${profileId}/questions?scenario=${scenario}` : null)
-  const [open, setOpen] = useState(false)
-  if (!profileId || questions.loading || questions.error || !questions.data?.length) return null
-  const n = questions.data.length
-  return (
-    <section aria-label="Increase the accuracy of your results" className="q-card flex-row flex-wrap items-center gap-4 px-6 py-5">
-      <span aria-hidden="true" className="inline-flex h-12 w-12 flex-none items-center justify-center rounded-2xl bg-assumption-bg text-violet"><ClipboardList size={22} /></span>
-      <div className="flex min-w-0 flex-[1_1_320px] flex-col gap-1">
-        <h2 className="q-h3">Increase the accuracy of your results</h2>
-        <p className="m-0 text-sm text-[#404040]">
-          {n === 1 ? 'One skill' : `${n} skills`} your roles depend on {n === 1 ? 'is' : 'are'} not rated yet: {questions.data.map((q) => q.skill_name).join(', ')}. Answer a few questions; each answer is your own rating and updates your radar and your options.
-        </p>
-      </div>
-      <DarkButton onClick={() => setOpen(true)}>Answer the questions</DarkButton>
-      {open && profileId && (
-        <SurveyPopup profileId={profileId} scenario={scenario} onClose={() => { setOpen(false); questions.reload(); onDone() }} />
-      )}
-    </section>
-  )
-}
-
-function SurveyPopup({ profileId, scenario, onClose }: { profileId: string; scenario: string; onClose: () => void }) {
+/** "Rate next skill" on the Overview: the unrated skills whose answer would change the person's
+ *  options most (GET /questions). Each answer is saved as the person's own rating (POST /answer),
+ *  never a verified level; the caller refreshes the page on close. */
+export function SurveyPopup({ profileId, scenario, onClose }: { profileId: string; scenario: string; onClose: () => void }) {
   const questions = useApi<Question[]>(`/api/profiles/${profileId}/questions?scenario=${scenario}`)
   const [answered, setAnswered] = useState(0)
   const [skipped, setSkipped] = useState<string[]>([])
@@ -84,7 +59,7 @@ function SurveyPopup({ profileId, scenario, onClose }: { profileId: string; scen
         ) : (
           !questions.loading && (
             <p className="m-0 text-[15px]">
-              {answered ? `Thank you: ${answered} answer${answered === 1 ? '' : 's'} saved. Your radar and your options now use ${answered === 1 ? 'it' : 'them'}.` : 'No question is left to ask right now.'}
+              {answered ? `Thank you: ${answered} answer${answered === 1 ? '' : 's'} saved. Your skill levels and your options now use ${answered === 1 ? 'it' : 'them'}.` : 'No question is left to ask right now.'}
             </p>
           )
         )}
@@ -98,7 +73,7 @@ function SurveyPopup({ profileId, scenario, onClose }: { profileId: string; scen
         <span className="q-kicker">Why we ask</span>
         <h3 className="q-h3 text-[22px]">Unknown is different from missing</h3>
         <p className="m-0 text-[15px] text-[#404040]">
-          These are the skills whose answer would change your options most. Pick the highest sentence that is true for your work in the last two years. Your answer updates “Your skills as AI moves” and My options; it is your own rating, not a test.
+          These are the skills whose answer would change your options most. Pick the highest sentence that is true for your work in the last two years. Your answer updates &ldquo;Your skills as AI moves&rdquo; and My options; it is your own rating, not a test.
         </p>
       </aside>
     </CvPopup>

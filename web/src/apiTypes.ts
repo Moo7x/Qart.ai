@@ -11,6 +11,19 @@ export type AiBasics = {
   reason: string
 }
 
+export type AiResource = {
+  kind: "course" | "video"
+  id: string
+  title: string
+  provider: string
+  url: string
+  minutes: number
+  published: string
+  skill_quote: string
+  ai_quote: string
+  score: number
+}
+
 export type AiUse = {
   automation_share: number | null
   basis: string
@@ -45,10 +58,27 @@ export type Bands = {
   kind: "assumption"
 }
 
+export type BasicsItem = {
+  kind: "course" | "video"
+  topic: string
+  title: string
+  provider: string
+  url: string
+  minutes: number
+}
+
 export type Basis = {
   title: string
   url: string
   read: string
+}
+
+export type CategoryChange = {
+  role_id: string
+  title: string
+  before: string
+  after: string
+  current_job: boolean
 }
 
 export type ChangeReport = {
@@ -157,6 +187,7 @@ export type EvidenceTestOut = {
   after: Ranking
   weights: WeightChange[]
   pathway: PathwayChange | null
+  forecast: CategoryChange[]
 }
 
 export type FitCheck = {
@@ -263,6 +294,7 @@ export type MatchesOut = {
   evidence: EvidenceInfo
   current_role: CurrentRole | null
   current_impact: string | null
+  current_forecast: RoleForecast | null
   destination: string | null
   roles: RoleCard[]
   sdg_roles: SdgRole[]
@@ -280,7 +312,7 @@ export type Meters = {
 }
 
 export type Override = {
-  kind: "occupation_share" | "task_share"
+  kind: "occupation_share" | "task_share" | "group_change"
   key: string
   value: number
 }
@@ -458,6 +490,15 @@ export type RequirementScore = {
   tasks: TaskEvidence[]
 }
 
+export type ReskillOut = {
+  scenario: string
+  current_role: string | null
+  current_forecast: RoleForecast | null
+  track: Track
+  strengths: Strength[]
+  destination: string | null
+}
+
 export type RoleCard = {
   role_id: string
   title: string
@@ -485,6 +526,10 @@ export type RoleCard = {
   sdgs: SdgRef[]
   requirement_basis: Record<string, SkillBasis>
   in_demand: string[]
+  forecast: RoleForecast | null
+  direction: string
+  related_tier: number | null
+  direction_score: number
   serves_goals: string[]
 }
 
@@ -497,6 +542,17 @@ export type RoleDelta = {
   fit_before: number
   fit_after: number
   weights: WeightDelta[]
+}
+
+export type RoleForecast = {
+  category: string
+  label: string
+  meaning: string
+  reasons: string[]
+  change_pp: number | null
+  critical: boolean | null
+  ai_use: number | null
+  kind: string
 }
 
 export type RoleRank = {
@@ -645,7 +701,7 @@ export type SignalsResponse = {
 }
 
 export type SkillBasis = {
-  kind: "talentcorp" | "onet" | "onet_tech" | "assumption"
+  kind: "talentcorp" | "onet" | "onet_tech" | "assumption" | "ai_trend"
   text: string
   source: string
 }
@@ -712,6 +768,15 @@ export type StepSdg = {
   how: string
 }
 
+export type Strength = {
+  skill: string
+  name: string
+  level: number | null
+  ai_use: number | null
+  ai_basis: string
+  text: string
+}
+
 export type TaskEvidence = {
   task: string
   text: string
@@ -728,7 +793,7 @@ export type TimeEstimate = {
 }
 
 export type Track = {
-  id: "ai_basics" | "without_ai" | "with_ai"
+  id: "ai_basics" | "without_ai" | "with_ai" | "path"
   title: string
   why: string
   nodes: TrackNode[]
@@ -741,6 +806,7 @@ export type TrackArticle = {
   title: string
   publisher: string
   url: string
+  is_article: boolean
 }
 
 export type TrackCourse = {
@@ -770,6 +836,11 @@ export type TrackNode = {
   study_after: number | null
   practice: PracticeStep[] | null
   why: SkillBasis | null
+  mode: "basics" | "oversee" | "use_ai" | "learn" | null
+  ai_use: number | null
+  ai_basis: string | null
+  ai_resources: AiResource[] | null
+  basics: BasicsItem[] | null
 }
 
 export type TrackVideo = {
@@ -787,6 +858,7 @@ export type TracksOut = {
   scenario: string
   weekly_hours: number
   tracks: Track[]
+  path: Track | null
   comparison: RouteComparison
   resources_checked: string
   courses_checked: string
