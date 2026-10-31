@@ -14,6 +14,18 @@ Malaysian demand or a learner's proficiency. A new profile starts with the lates
 existing profiles keep their accepted snapshot until a revision is accepted. Both role gaps
 and plan stops use that same snapshot. Nothing here changes requirements, fit scores or levels.
 
+**Screens (redesign, 2026-10-31):** `/start` is the landing page (`pages/onboarding/Landing.tsx`,
+the decorative landscape in `components/HeroScene.tsx`) with a two-step CV popup over it
+(`CvPopup.tsx`: Your CV, then Your skills; levels are claims). "Continue" saves the profile and
+opens `/work`, "Your work today" (`pages/Work.tsx`, from `GET /work-today` and `/radar`), unless
+there is no current job, then `/roles`. Roles are compact ranked rows with a fit range bar; one row
+opens at a time with its Why?, evidence links and "Choose and continue", which leads to `/time`
+(hours and budget, saved on the profile) and then the plan. "What matters to you" (interests, SDG
+goals) is an optional control on Roles: it only orders near-tie roles. A top pill navbar
+(`components/TopNav.tsx`) replaces the side menu; the evidence pages sit under its Evidence menu.
+Shared pieces (labels, Why?, cards, segmented controls, vivid tiles) are in `components/atoms.tsx`
+and `index.css`; all motion is inside `prefers-reduced-motion: no-preference`.
+
 **One person, one plan:** every route that scores roles or plans for a person loads them once
 through `src/journey/person.py` (`Person`: profile, destination, accepted evidence). `Person.plan`
 always passes the person's claims and situation, and `Person.rank` always orders near-ties by

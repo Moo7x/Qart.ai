@@ -27,7 +27,7 @@ The browser's profile-scoped completion keys are independent of evidence version
 JMI. Only that source's cutoff changes; other reference data stays fixed. Method breaks and the
 declared possible job-ad coverage break are rejected. Apr/May may be months in the same release,
 so the UI calls this observation replay, not two historical publication vintages. Replay does not
-write a baseline or proposal. The page is `web/src/pages/Changes.tsx`; the sidebar flags proposals.
+write a baseline or proposal. The page is `web/src/pages/Changes.tsx`; the navbar's Evidence menu flags proposals.
 
 **Change test.** POST `/api/profiles/{id}/evidence-test` (`src/api/evidence_test.py`) answers a
 judge's "change the trend data now": it copies the stored evidence, replaces one occupation's or
