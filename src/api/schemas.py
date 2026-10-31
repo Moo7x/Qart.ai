@@ -164,6 +164,7 @@ class MatchesOut(BaseModel):
     current_impact: str | None
     current_forecast: RoleForecast | None = None
     destination: str | None
+    sdg_goals: list[str] = []
     roles: list[RoleCard]
     sdg_roles: list[SdgRole]
     bands: Bands

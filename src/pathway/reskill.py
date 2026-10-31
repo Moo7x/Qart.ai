@@ -304,8 +304,16 @@ def destination_path(
         done,
         basics_items(pack, res, path.ai_basics),
     )
+    # A new skill for the role is learned with its courses, and with AI from the start: the
+    # checked resources on doing that skill's work with AI come first in the step.
+    ai_all = load_ai_resources()
     learn = [
-        {**n, "mode": "learn"}
+        {
+            **n,
+            "mode": "learn",
+            "ai_resources": ai_all.get(str(n["skill"]), []),
+            "ai_tasks": ai_target_tasks(str(n["skill"])),
+        }
         for n in _skill_nodes(pack, res, match, path, done, False, rows)
         + _skill_nodes(pack, res, match, path, done, True, rows)
     ]

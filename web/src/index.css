@@ -10,8 +10,8 @@
   --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 
   --color-ink: #0b0f1a;
-  --color-canvas: #ededed;
-  --color-tray: #f5f2ee;
+  --color-canvas: #f2f3f8;
+  --color-tray: #eceef6;
   --color-muted: #525252;
   --color-muted-2: #737373;
   --color-assumption: #5d38f5;
@@ -21,18 +21,18 @@
   --color-void: #131316;
   --color-fog: #eceef3;
   --color-paper: #ffffff;
-  --color-line: #dcdfe7;
+  --color-line: #e4e6ef;
   --color-graphite: #5e5f6e;
   --color-ash: #747686;
   --color-stone: #9394a1;
-  --color-hairline: #d9d9de;
+  --color-hairline: #e1e3eb;
   --color-mist: #eeeef0;
   --color-obsidian: #212126;
   --color-surface: #2f3037;
   --color-slate-mid: #696a78;
-  --color-violet: #6c47ff;
-  --color-violet-hover: #5d38f5;
-  --color-violet-soft: #f1edff;
+  --color-violet: #5b3df5;
+  --color-violet-hover: #4a2ee0;
+  --color-violet-soft: #efebff;
   --color-violet-light: #9d86ff;
   --color-cyan: #5de3ff;
   --color-amber-glow: #ffa86b;
@@ -55,8 +55,8 @@
     color: var(--color-ink);
     -webkit-font-smoothing: antialiased;
     font-family: var(--font-sans);
-    font-size: 14px;
-    line-height: 1.5;
+    font-size: 14.5px;
+    line-height: 1.55;
   }
   :focus-visible {
     outline: 2px solid var(--color-violet);
@@ -149,8 +149,8 @@
     padding: 20px;
     background: var(--color-paper);
     border: 1px solid var(--color-line);
-    border-radius: 20px;
-    box-shadow: 0 1px 2px rgba(19, 19, 22, 0.04);
+    border-radius: 22px;
+    box-shadow: 0 1px 2px rgba(17, 24, 39, 0.04), 0 10px 30px rgba(17, 24, 39, 0.05);
   }
   @media (min-width: 768px) {
     .section, .panel { padding: 28px 32px; }
@@ -353,9 +353,9 @@
    not asked for reduced motion. */
 @layer components {
   .serif { font-family: var(--font-serif); font-style: italic; font-weight: 400; letter-spacing: 0; }
-  .q-tray { background: var(--color-tray); border-radius: 24px; padding: 12px; }
+  .q-tray { background: var(--color-tray); border-radius: 28px; padding: 12px; }
   @media (min-width: 640px) { .q-tray { padding: 20px; } }
-  .q-card { display: flex; flex-direction: column; gap: 14px; min-width: 0; padding: 20px; background: #fff; border-radius: 16px; }
+  .q-card { display: flex; flex-direction: column; gap: 14px; min-width: 0; padding: 20px; background: #fff; border: 1px solid #ebeaf4; border-radius: 20px; box-shadow: 0 1px 2px rgba(17, 24, 39, 0.04), 0 8px 24px rgba(17, 24, 39, 0.04); }
   .q-g3, .q-g2 { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; }
   @media (min-width: 640px) { .q-g3, .q-g2 { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; } }
   @media (min-width: 1024px) { .q-g3 { grid-template-columns: repeat(3, minmax(0, 1fr)); } .q-span2 { grid-column: span 2; } .q-span3 { grid-column: 1 / -1; } }
@@ -565,3 +565,16 @@
 .thin-scroll::-webkit-scrollbar { width: 6px; }
 .thin-scroll::-webkit-scrollbar-thumb { background: #cfc3ff; border-radius: 99px; }
 .thin-scroll::-webkit-scrollbar-track { background: transparent; }
+
+
+/* Refinement layer (final UI pass). Buttons answer the pointer; page titles carry one signature:
+   a short line from violet (today) to green (the future), echoing the product's journey. */
+@layer components {
+  .q-btn { transition: border-color 150ms, box-shadow 150ms, transform 150ms; }
+  .q-btn:not(:disabled):hover { border-color: #cfc3ff; box-shadow: 0 4px 14px rgba(91, 61, 245, 0.12); }
+  .q-btn-dark:not(:disabled):hover, .q-btn-violet:not(:disabled):hover { transform: translateY(-1px); }
+  .q-h1 { letter-spacing: -0.03em; }
+  .q-h1::after { content: ""; display: block; width: 64px; height: 3px; margin-top: 12px; border-radius: 99px; background: linear-gradient(90deg, var(--color-violet), var(--color-mint)); }
+  .eyebrow, .cap { letter-spacing: 0.08em; }
+}
+@media (prefers-reduced-motion: reduce) { .q-btn { transition: none; } }

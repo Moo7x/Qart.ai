@@ -4416,6 +4416,10 @@
    ],
    "scenario": "moderate",
    "scenario_label": "Moderate AI adoption",
+   "sdg_goals": [
+    "8",
+    "12"
+   ],
    "sdg_roles": [
     {
      "role_id": "o2c_reporting_analyst",
@@ -6014,6 +6018,8 @@
     "nodes": [
      {
       "after": 1,
+      "ai_resources": [],
+      "ai_tasks": [],
       "articles": [
        {
         "is_article": false,
@@ -6066,6 +6072,35 @@
      },
      {
       "after": 1,
+      "ai_resources": [
+       {
+        "ai_quote": "In this module, you'll learn how to use Microsoft 365 Copilot and Copilot+ PC to streamline your work as a finance professional.",
+        "kind": "course",
+        "minutes": 28,
+        "provider": "Microsoft Learn",
+        "published": "2026-10-28",
+        "score": 0.81,
+        "skill_quote": "You'll explore how to plan your day, analyze data, create models and reports, and collaborate with stakeholders more effectively.",
+        "title": "Work smarter with Copilot prompts for finance professionals",
+        "url": "https://learn.microsoft.com/en-us/training/modules/work-smarter-copilot-finance/"
+       },
+       {
+        "ai_quote": "Copilot Cowork carries out tasks on your behalf across Microsoft 365. Describe what you need in natural language, and it does the work\u2014sending emails, scheduling meetings, creating documents, posting in Teams, and managing files.",
+        "kind": "course",
+        "minutes": 270,
+        "provider": "Microsoft Learn",
+        "published": "2026-10-26",
+        "score": 0.72,
+        "skill_quote": "This module discusses Microsoft Copilot. It highlights how to analyze and visualize data effectively.",
+        "title": "Enhance business workflows with AI",
+        "url": "https://learn.microsoft.com/en-us/training/paths/transform-business-workflows-with-ai/"
+       }
+      ],
+      "ai_tasks": [
+       "Prepare, examine, or analyze accounting records, financial statements, or other financial reports to assess accuracy, completeness, and conformance to reporting and procedural standards.",
+       "Prepare, analyze, or verify annual reports, financial statements, and other records, using accepted accounting and statistical procedures to assess financial condition and facilitate financial planning.",
+       "Direct the preparation of regular and special budget reports."
+      ],
       "articles": [
        {
         "is_article": true,
@@ -6155,6 +6190,8 @@
      },
      {
       "after": 1,
+      "ai_resources": [],
+      "ai_tasks": [],
       "articles": [
        {
         "is_article": true,
@@ -6260,6 +6297,23 @@
      },
      {
       "after": 1,
+      "ai_resources": [
+       {
+        "ai_quote": "This module covers advanced data analysis with Copilot in Excel, including multi-step workbook building with Edit with Copilot, Python-powered forecasting, Graph-grounded data enrichment from Microsoft 365 and the web, and cross-file exploration with the Analyst agent.",
+        "kind": "course",
+        "minutes": 38,
+        "provider": "Microsoft Learn",
+        "published": "2026-10-26",
+        "score": 0.57,
+        "skill_quote": "By the end of this module, you'll be able to use Copilot in Excel to generate insights, build formulas, and create PivotTables from structured data.",
+        "title": "Uncover new data insights with AI",
+        "url": "https://learn.microsoft.com/en-us/training/modules/uncover-new-data-insights-ai/"
+       }
+      ],
+      "ai_tasks": [
+       "Analyze monthly department budgeting and accounting reports to maintain expenditure controls.",
+       "Develop, maintain, or analyze budgets, preparing periodic reports that compare budgeted costs to actual costs."
+      ],
       "articles": [
        {
         "is_article": true,
@@ -6379,6 +6433,23 @@
      },
      {
       "after": 2,
+      "ai_resources": [
+       {
+        "ai_quote": "AI-powered tools streamline data entry and reconciliation by extracting information from invoices and receipts, then matching transactions across various accounts.",
+        "kind": "video",
+        "minutes": 9,
+        "provider": "Business School 101",
+        "published": "2025-05-01",
+        "score": 0.927,
+        "skill_quote": "AI-powered tools streamline data entry and reconciliation by extracting information from invoices and receipts, then matching transactions across various accounts.",
+        "title": "AI Applications in Accounting | Accounting | From A Business Professor",
+        "url": "https://www.youtube.com/watch?v=5y7ROMCClJs"
+       }
+      ],
+      "ai_tasks": [
+       "Establish tables of accounts and assign entries to proper accounts.",
+       "Prepare, examine, or analyze accounting records, financial statements, or other financial reports to assess accuracy, completeness, and conformance to reporting and procedural standards."
+      ],
       "articles": [
        {
         "is_article": true,
@@ -6504,6 +6575,24 @@
      },
      {
       "after": 1,
+      "ai_resources": [
+       {
+        "ai_quote": "So at a high level, Fabi.ai AI is an analyst that connects directly to your data and allows you to use natural language to communicate with that data and create insights.",
+        "kind": "video",
+        "minutes": 18,
+        "provider": "Matt Mike",
+        "published": "2026-01-29",
+        "score": 0.663,
+        "skill_quote": "So, the first thing we're going to do is plan our analysis. We want to ground the AI in our data.",
+        "title": "The FASTEST Way to Analyze Data With AI",
+        "url": "https://www.youtube.com/watch?v=bwJb4bGCBfw"
+       }
+      ],
+      "ai_tasks": [
+       "Gather and organize information on problems or procedures.",
+       "Analyze data gathered and develop solutions or alternative methods of proceeding.",
+       "Analyze business operations, trends, costs, revenues, financial commitments, and obligations to project future revenues and expenses or to provide advice."
+      ],
       "articles": [
        {
         "is_article": true,
@@ -6576,6 +6665,8 @@
      },
      {
       "after": 2,
+      "ai_resources": [],
+      "ai_tasks": [],
       "articles": [
        {
         "is_article": true,
@@ -12077,6 +12168,10 @@
    ],
    "scenario": "moderate",
    "scenario_label": "Moderate AI adoption",
+   "sdg_goals": [
+    "8",
+    "12"
+   ],
    "sdg_roles": [
     {
      "role_id": "o2c_reporting_analyst",
@@ -13550,6 +13645,23 @@
      },
      {
       "after": 1,
+      "ai_resources": [
+       {
+        "ai_quote": "Recognize the role of Microsoft Copilot Studio and Power Platform in transforming business processes.",
+        "kind": "course",
+        "minutes": 30,
+        "provider": "Microsoft Learn",
+        "published": "2026-10-28",
+        "score": 0.381,
+        "skill_quote": "In this module, you learn about accelerating business transformation with Microsoft AI and SAP integration, enhancing business processes with Microsoft Copilot Studio, Power Platform, and SAP.",
+        "title": "Insights for SAP using unified analytics and AI platform",
+        "url": "https://learn.microsoft.com/en-us/training/modules/insights-sap-use-unified-analytics-ai-platform/"
+       }
+      ],
+      "ai_tasks": [
+       "Coordinate and link the computer systems within an organization to increase compatibility so that information can be shared.",
+       "Recommend new equipment or software packages."
+      ],
       "articles": [
        {
         "is_article": true,
@@ -13603,6 +13715,23 @@
      },
      {
       "after": 1,
+      "ai_resources": [
+       {
+        "ai_quote": "This module shows how endpoint administrators use AI-powered tools in Microsoft Intune and Microsoft Defender to surface patterns in endpoint telemetry, investigate security incidents faster, troubleshoot devices with natural language, analyze performance trends, and turn Defender insights into practical Intune actions.",
+        "kind": "course",
+        "minutes": 49,
+        "provider": "Microsoft Learn",
+        "published": "2026-10-26",
+        "score": 0.417,
+        "skill_quote": "Troubleshoot devices with Copilot in Intune by comparing devices, analyzing errors, and exploring policies",
+        "title": "Optimize device management using AI and Copilot tools",
+        "url": "https://learn.microsoft.com/en-us/training/modules/optimize-device-management-ai-copilot/"
+       }
+      ],
+      "ai_tasks": [
+       "Troubleshoot program and system malfunctions to restore normal functioning.",
+       "Review and analyze computer printouts and performance indicators to locate code problems, and correct errors by correcting codes."
+      ],
       "articles": [
        {
         "is_article": true,
@@ -13647,6 +13776,31 @@
      },
      {
       "after": 1,
+      "ai_resources": [
+       {
+        "ai_quote": "Learn to analyze, design, and implement AI-powered business solutions using agents, generative AI, and Microsoft Copilot for productivity.",
+        "kind": "course",
+        "minutes": 25,
+        "provider": "Microsoft Learn",
+        "published": "2026-10-28",
+        "score": 0.448,
+        "skill_quote": "Learn to analyze, design, and implement AI-powered business solutions using agents, generative AI, and Microsoft Copilot for productivity.",
+        "title": "Analyze requirements for AI-powered business solutions",
+        "url": "https://learn.microsoft.com/en-us/training/modules/analyze-requirements-ai-powered-business-solutions/"
+       },
+       {
+        "ai_quote": "Learn to analyze, design, and implement AI-powered business solutions using agents, generative AI, and Microsoft Copilot for productivity.",
+        "kind": "course",
+        "minutes": 684,
+        "provider": "Microsoft Learn",
+        "published": "2026-10-28",
+        "score": 0.334,
+        "skill_quote": "Discover how to design and implement AI-powered business solutions using agents, generative AI, and Microsoft Copilot.",
+        "title": "Architect AI solutions for business productivity",
+        "url": "https://learn.microsoft.com/en-us/training/paths/architect-agentic-ai-business-solutions/"
+       }
+      ],
+      "ai_tasks": [],
       "articles": [
        {
         "is_article": true,
@@ -13699,6 +13853,31 @@
      },
      {
       "after": 1,
+      "ai_resources": [
+       {
+        "ai_quote": "we're going to use Azure AI Search as our search index. Then, the popular index will use the Azure OpenAI embeddings API, which will take the information in the database and generate what's called a vector embedding.",
+        "kind": "video",
+        "minutes": 14,
+        "provider": "Microsoft Mechanics",
+        "published": "2024-06-26",
+        "score": 0.634,
+        "skill_quote": "I have a sample retail product database here, and I'll start with how you would normally search using SQL.",
+        "title": "New AI integration for your SQL databases | RAG, Vector Search, Admin Automation",
+        "url": "https://www.youtube.com/watch?v=-8DJ6FXuIa8"
+       },
+       {
+        "ai_quote": "Learn how to leverage GitHub Copilot and Fabric Copilot for AI-assisted database development across SQL Server, Azure SQL, and SQL databases in Microsoft Fabric.",
+        "kind": "course",
+        "minutes": 97,
+        "provider": "Microsoft Learn",
+        "published": "2026-10-28",
+        "score": 0.343,
+        "skill_quote": "Learn how to leverage GitHub Copilot and Fabric Copilot for AI-assisted database development across SQL Server, Azure SQL, and SQL databases in Microsoft Fabric.",
+        "title": "Implement SQL solutions by using AI-assisted tools",
+        "url": "https://learn.microsoft.com/en-us/training/modules/design-implement-sql-solutions-ai-assisted-tools/"
+       }
+      ],
+      "ai_tasks": [],
       "articles": [
        {
         "is_article": true,
@@ -18698,6 +18877,10 @@
    ],
    "scenario": "moderate",
    "scenario_label": "Moderate AI adoption",
+   "sdg_goals": [
+    "8",
+    "12"
+   ],
    "sdg_roles": [
     {
      "role_id": "o2c_reporting_analyst",
@@ -20180,6 +20363,24 @@
     "nodes": [
      {
       "after": 2,
+      "ai_resources": [
+       {
+        "ai_quote": "Copilot Cowork carries out tasks on your behalf across Microsoft 365. Describe what you need in natural language, and it does the work\u2014sending emails, scheduling meetings, creating documents, posting in Teams, and managing files.",
+        "kind": "course",
+        "minutes": 270,
+        "provider": "Microsoft Learn",
+        "published": "2026-10-26",
+        "score": 0.599,
+        "skill_quote": "This module discusses Microsoft Copilot. It highlights how to create a first draft of your document, then edit and enhance your content creation process to improve efficiency and collaboration.",
+        "title": "Enhance business workflows with AI",
+        "url": "https://learn.microsoft.com/en-us/training/paths/transform-business-workflows-with-ai/"
+       }
+      ],
+      "ai_tasks": [
+       "Prepare detailed reports on audit findings.",
+       "Report to management regarding the finances of establishment.",
+       "Generate standard or custom reports summarizing business, financial, or economic data for review by executives, managers, clients, and other stakeholders."
+      ],
       "articles": [
        {
         "is_article": true,
@@ -20309,6 +20510,42 @@
      },
      {
       "after": 1,
+      "ai_resources": [
+       {
+        "ai_quote": "Thankfully extracting information from text is super simple in Vector Shift. We can use the power of AI to do this for us.",
+        "kind": "video",
+        "minutes": 15,
+        "provider": "Leon van Zyl",
+        "published": "2025-03-31",
+        "score": 0.689,
+        "skill_quote": "I got tired of manually sorting through all my invoices, so I built an AI workflow that does it for me.",
+        "title": "VectorShift Tutorial: Automate Invoice Processing with AI",
+        "url": "https://www.youtube.com/watch?v=HV__T4zGNwg"
+       },
+       {
+        "ai_quote": "it's using this AI Builder model to extract the various Properties or entities from the file content of that uploaded file",
+        "kind": "video",
+        "minutes": 28,
+        "provider": "DamoBird365",
+        "published": "2024-05-13",
+        "score": 0.676,
+        "skill_quote": "this is the low code method this uses AI Builder credits on the Power Platform and we can EAS easily test this model against one of our own invoices and if I select this file here we can see it's analyzing an invoice that I generated earlier",
+        "title": "Automate Invoice Processing in Power Platform: AI Builder vs Azure Document Intelligence",
+        "url": "https://www.youtube.com/watch?v=fLHmEwcg8Jo"
+       },
+       {
+        "ai_quote": "Build a simple flow by using invoice processing with Microsoft Power Automate.",
+        "kind": "course",
+        "minutes": 10,
+        "provider": "Microsoft Learn",
+        "published": "2026-10-27",
+        "score": 0.4,
+        "skill_quote": "Learn the basics of invoice processing in AI Builder and how it can benefit your organization.",
+        "title": "Extract invoice data with AI Builder\u2019s prebuilt model",
+        "url": "https://learn.microsoft.com/en-us/training/modules/ai-builder-invoice-processing/"
+       }
+      ],
+      "ai_tasks": [],
       "articles": [
        {
         "is_article": true,
@@ -20490,6 +20727,34 @@
      },
      {
       "after": 1,
+      "ai_resources": [
+       {
+        "ai_quote": "Learn to orchestrate, configure, and extend AI-driven experiences in Dynamics 365 and Microsoft 365 Copilot.",
+        "kind": "course",
+        "minutes": 57,
+        "provider": "Microsoft Learn",
+        "published": "2026-10-28",
+        "score": 0.57,
+        "skill_quote": "Configure and operationalize prebuilt Copilot agents for finance, supply chain, sales, and service scenarios.",
+        "title": "Orchestrate configuration of prebuilt agents and apps",
+        "url": "https://learn.microsoft.com/en-us/training/modules/orchestrate-configuration-prebuilt-agents-apps/"
+       },
+       {
+        "ai_quote": "Configure business terms and customize Copilot in Dynamics 365.",
+        "kind": "course",
+        "minutes": 161,
+        "provider": "Microsoft Learn",
+        "published": "2026-10-28",
+        "score": 0.446,
+        "skill_quote": "Learn to design AI agents tailored to business needs using Dynamics 365 and Copilot.",
+        "title": "Design AI agents for business solutions",
+        "url": "https://learn.microsoft.com/en-us/training/modules/design-ai-agents-business-solutions/"
+       }
+      ],
+      "ai_tasks": [
+       "Create or review technical design documentation to ensure the accurate development of reporting solutions.",
+       "Create business intelligence tools or systems, including design of related databases, spreadsheets, or outputs."
+      ],
       "articles": [
        {
         "is_article": true,
@@ -20581,6 +20846,23 @@
      },
      {
       "after": 1,
+      "ai_resources": [
+       {
+        "ai_quote": "Analyze financial data with Copilot in Excel and Copilot in PowerPoint to generate actionable insights.",
+        "kind": "course",
+        "minutes": 19,
+        "provider": "Microsoft Learn",
+        "published": "2026-10-28",
+        "score": 0.486,
+        "skill_quote": "This module teaches learners how to use Copilot and Windows 11 features to analyze business data efficiently. It covers generating insights, creating visualizations, and preparing stakeholder-ready presentations using Excel and PowerPoint.",
+        "title": "Windows at work: Transforming finance teams with Windows 11 Pro",
+        "url": "https://learn.microsoft.com/en-us/training/modules/windows-at-work-finance/"
+       }
+      ],
+      "ai_tasks": [
+       "Maintain or update business intelligence tools, databases, dashboards, systems, or methods.",
+       "Provide technical support for existing reports, dashboards, or other tools."
+      ],
       "articles": [
        {
         "is_article": true,
@@ -20698,6 +20980,8 @@
      },
      {
       "after": 2,
+      "ai_resources": [],
+      "ai_tasks": [],
       "articles": [
        {
         "is_article": true,
@@ -26167,6 +26451,10 @@
    ],
    "scenario": "moderate",
    "scenario_label": "Moderate AI adoption",
+   "sdg_goals": [
+    "8",
+    "12"
+   ],
    "sdg_roles": [
     {
      "role_id": "o2c_reporting_analyst",
@@ -27607,6 +27895,24 @@
     "nodes": [
      {
       "after": 2,
+      "ai_resources": [
+       {
+        "ai_quote": "Copilot Cowork carries out tasks on your behalf across Microsoft 365. Describe what you need in natural language, and it does the work\u2014sending emails, scheduling meetings, creating documents, posting in Teams, and managing files.",
+        "kind": "course",
+        "minutes": 270,
+        "provider": "Microsoft Learn",
+        "published": "2026-10-26",
+        "score": 0.599,
+        "skill_quote": "This module discusses Microsoft Copilot. It highlights how to create a first draft of your document, then edit and enhance your content creation process to improve efficiency and collaboration.",
+        "title": "Enhance business workflows with AI",
+        "url": "https://learn.microsoft.com/en-us/training/paths/transform-business-workflows-with-ai/"
+       }
+      ],
+      "ai_tasks": [
+       "Prepare detailed reports on audit findings.",
+       "Report to management regarding the finances of establishment.",
+       "Generate standard or custom reports summarizing business, financial, or economic data for review by executives, managers, clients, and other stakeholders."
+      ],
       "articles": [
        {
         "is_article": true,
@@ -27736,6 +28042,24 @@
      },
      {
       "after": 1,
+      "ai_resources": [
+       {
+        "ai_quote": "So at a high level, Fabi.ai AI is an analyst that connects directly to your data and allows you to use natural language to communicate with that data and create insights.",
+        "kind": "video",
+        "minutes": 18,
+        "provider": "Matt Mike",
+        "published": "2026-01-29",
+        "score": 0.663,
+        "skill_quote": "So, the first thing we're going to do is plan our analysis. We want to ground the AI in our data.",
+        "title": "The FASTEST Way to Analyze Data With AI",
+        "url": "https://www.youtube.com/watch?v=bwJb4bGCBfw"
+       }
+      ],
+      "ai_tasks": [
+       "Gather and organize information on problems or procedures.",
+       "Analyze data gathered and develop solutions or alternative methods of proceeding.",
+       "Analyze business operations, trends, costs, revenues, financial commitments, and obligations to project future revenues and expenses or to provide advice."
+      ],
       "articles": [
        {
         "is_article": true,
@@ -27808,6 +28132,24 @@
      },
      {
       "after": 1,
+      "ai_resources": [
+       {
+        "ai_quote": "So at a high level, Fabi.ai AI is an analyst that connects directly to your data and allows you to use natural language to communicate with that data and create insights.",
+        "kind": "video",
+        "minutes": 18,
+        "provider": "Matt Mike",
+        "published": "2026-01-29",
+        "score": 0.629,
+        "skill_quote": "So, in this video, I'm going to show you how you can plan, execute, and distribute your data more efficiently using AI.",
+        "title": "The FASTEST Way to Analyze Data With AI",
+        "url": "https://www.youtube.com/watch?v=bwJb4bGCBfw"
+       }
+      ],
+      "ai_tasks": [
+       "Analyze data gathered and develop solutions or alternative methods of proceeding.",
+       "Synthesize current business intelligence or trend data to support recommendations for action.",
+       "Analyze competitive market strategies through analysis of related product, market, or share trends."
+      ],
       "articles": [],
       "courses": [
        {
@@ -27854,6 +28196,24 @@
      },
      {
       "after": 1,
+      "ai_resources": [
+       {
+        "ai_quote": "Learn how Copilot helps you ask natural-language questions, understand capabilities quickly, and move from data to action.",
+        "kind": "course",
+        "minutes": 34,
+        "provider": "Microsoft Learn",
+        "published": "2026-10-27",
+        "score": 0.432,
+        "skill_quote": "Start with Dynamics 365 Customer Insights - Data to unify customer data, build a trusted customer view, and activate AI-powered insights.",
+        "title": "Get started with an AI-powered customer data platform in Dynamics 365",
+        "url": "https://learn.microsoft.com/en-us/training/modules/get-started-customer-data-platform/"
+       }
+      ],
+      "ai_tasks": [
+       "Maintain and review computerized or manual records of purchased items, costs, deliveries, product performance, and inventories.",
+       "Maintain or update business intelligence tools, databases, dashboards, systems, or methods.",
+       "Manage timely flow of business intelligence information to users."
+      ],
       "articles": [
        {
         "is_article": true,
@@ -27981,6 +28341,34 @@
      },
      {
       "after": 1,
+      "ai_resources": [
+       {
+        "ai_quote": "Learn to orchestrate, configure, and extend AI-driven experiences in Dynamics 365 and Microsoft 365 Copilot.",
+        "kind": "course",
+        "minutes": 57,
+        "provider": "Microsoft Learn",
+        "published": "2026-10-28",
+        "score": 0.57,
+        "skill_quote": "Configure and operationalize prebuilt Copilot agents for finance, supply chain, sales, and service scenarios.",
+        "title": "Orchestrate configuration of prebuilt agents and apps",
+        "url": "https://learn.microsoft.com/en-us/training/modules/orchestrate-configuration-prebuilt-agents-apps/"
+       },
+       {
+        "ai_quote": "Configure business terms and customize Copilot in Dynamics 365.",
+        "kind": "course",
+        "minutes": 161,
+        "provider": "Microsoft Learn",
+        "published": "2026-10-28",
+        "score": 0.446,
+        "skill_quote": "Learn to design AI agents tailored to business needs using Dynamics 365 and Copilot.",
+        "title": "Design AI agents for business solutions",
+        "url": "https://learn.microsoft.com/en-us/training/modules/design-ai-agents-business-solutions/"
+       }
+      ],
+      "ai_tasks": [
+       "Create or review technical design documentation to ensure the accurate development of reporting solutions.",
+       "Create business intelligence tools or systems, including design of related databases, spreadsheets, or outputs."
+      ],
       "articles": [
        {
         "is_article": true,
@@ -28072,6 +28460,23 @@
      },
      {
       "after": 1,
+      "ai_resources": [
+       {
+        "ai_quote": "Analyze financial data with Copilot in Excel and Copilot in PowerPoint to generate actionable insights.",
+        "kind": "course",
+        "minutes": 19,
+        "provider": "Microsoft Learn",
+        "published": "2026-10-28",
+        "score": 0.486,
+        "skill_quote": "This module teaches learners how to use Copilot and Windows 11 features to analyze business data efficiently. It covers generating insights, creating visualizations, and preparing stakeholder-ready presentations using Excel and PowerPoint.",
+        "title": "Windows at work: Transforming finance teams with Windows 11 Pro",
+        "url": "https://learn.microsoft.com/en-us/training/modules/windows-at-work-finance/"
+       }
+      ],
+      "ai_tasks": [
+       "Maintain or update business intelligence tools, databases, dashboards, systems, or methods.",
+       "Provide technical support for existing reports, dashboards, or other tools."
+      ],
       "articles": [
        {
         "is_article": true,
@@ -28189,6 +28594,24 @@
      },
      {
       "after": null,
+      "ai_resources": [
+       {
+        "ai_quote": "Explain how Copilot in Sales supports forecasting through predictive forecasting, pipeline health insights, and anomaly detection.",
+        "kind": "course",
+        "minutes": 50,
+        "provider": "Microsoft Learn",
+        "published": "2026-10-27",
+        "score": 0.362,
+        "skill_quote": "This module explores the forecasting and analytics capabilities of Dynamics 365 Sales, including pipeline management, Relationship Intelligence, AI agents, and Copilot-driven insights.",
+        "title": "Explore forecasting, pipeline management, and analytics in Dynamics 365 Sales",
+        "url": "https://learn.microsoft.com/en-us/training/modules/explore-forecasting-pipeline-analytics-dynamics-365-sales/"
+       }
+      ],
+      "ai_tasks": [
+       "Collect business intelligence data from available industry reports, public information, field reports, or purchased sources.",
+       "Analyze competitive market strategies through analysis of related product, market, or share trends.",
+       "Identify and analyze industry or geographic trends with business strategy implications."
+      ],
       "articles": [
        {
         "is_article": true,

@@ -396,6 +396,15 @@ def matches(
         # Where the person's own job is heading: the basis of the no-destination reskilling path.
         "current_forecast": directions.summary(forecasts.get(current.id)) if current else None,
         "destination": person.destination,
+        # The SDG goals that can change the order: those the destination roles are linked to.
+        "sdg_goals": sorted(
+            {
+                link.target.split(".")[0]
+                for role_id in pack.destination_roles
+                for link in pack.sdg.for_role(role_id)
+            },
+            key=int,
+        ),
         "roles": cards,
         # B7: roles × SDG targets with reasons, so roles can be compared by contribution.
         "sdg_roles": [r.model_dump() for r in role_targets(pack)],

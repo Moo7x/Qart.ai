@@ -278,7 +278,7 @@ export function Roles() {
   const fastRank = fastView.data?.roles.map((r) => r.role_id) ?? []
   const goals = profile.data?.profile.sdg_priorities ?? []
   // The goals the destination roles are tagged with (from the API): only these can change an order.
-  const roleGoals = [...new Map((data?.roles ?? []).flatMap((r) => r.sdgs).map((x) => [x.target.split('.')[0], { id: x.target.split('.')[0], title: '' }])).values()].sort((a, b) => Number(a.id) - Number(b.id))
+  const roleGoals = (data?.sdg_goals ?? []).map((id) => ({ id, title: '' }))
   const ordered = data ? (bySdg ? [...data.roles].sort((a, b) => (b.serves_goals?.length ?? 0) - (a.serves_goals?.length ?? 0) || b.fit - a.fit) : data.roles) : []
   const listed = showAll ? ordered : ordered.slice(0, ROLES_SHOWN)
   const openRole = openId === undefined ? listed[0]?.role_id : openId

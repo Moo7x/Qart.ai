@@ -296,6 +296,7 @@ export type MatchesOut = {
   current_impact: string | null
   current_forecast: RoleForecast | null
   destination: string | null
+  sdg_goals: string[]
   roles: RoleCard[]
   sdg_roles: SdgRole[]
   bands: Bands

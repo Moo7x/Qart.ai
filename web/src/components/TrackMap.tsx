@@ -81,7 +81,10 @@ const WHY_TAG: Record<SkillBasis['kind'], [string, string]> = {
 
 // Adapt steps: resources on doing this skill's work with AI, each with the two checked quotes.
 function aiPane(node: TrackNode): Pane[] {
-  if (!node.mode || (node.mode !== 'oversee' && node.mode !== 'use_ai')) return []
+  // Adapt steps always have this pane; a step for a new skill has it when a checked AI resource
+  // exists for that skill, shown before the skill's courses.
+  if (!node.mode || node.mode === 'basics') return []
+  if (node.mode === 'learn' && !(node.ai_resources ?? []).length) return []
   const items = node.ai_resources ?? []
   return [{
     key: 'ai',
