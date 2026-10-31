@@ -185,54 +185,69 @@ def _run_all(
             results.append(_run_source(engine, client, source.id, collect, run_id, retry_pause))
     status = overall_status(results)
     new_total = sum(r["new"] for r in results)
+
     # Steps after collection are logged in the run but never change its status, and a failure in
-    # one never loses the data collected above.
-    try:
-        results.append(record_versions(engine, run_id))
-    except Exception as exc:  # noqa: BLE001
-        results.append(_failed_step("trend_models", exc))
-    try:
+    # one never loses the data collected above or skips the steps after it.
+    def occupation_index() -> dict[str, Any]:
         with factory() as client:
-            notes = [
-                refresh_catalogue(engine, client),
-                build_index(engine, load_settings(), client),
-                fill_isco(engine, client),
-            ]
-        results.append(
-            {
-                "source_id": "occupation_index",
-                "status": "ok",
-                "fetched": 0,
-                "new": 0,
-                "note": "; ".join(notes),
-            }
-        )
-    except Exception as exc:  # noqa: BLE001  RunPod or O*NET down: previous index and BM25 stay
-        results.append(_failed_step("occupation_index", exc))
-    try:
+            return _occupation_index(engine, client)
+
+    def link_check() -> dict[str, Any]:
         with (client_factory or links.client)() as client:
-            results.append(links.link_step(client))
-    except Exception as exc:  # noqa: BLE001  a link check problem never affects the evidence
-        results.append(_failed_step("link_check", exc))
-    try:
+            return links.link_step(client)
+
+    def retention() -> dict[str, Any]:
         removed = privacy.purge_idle(engine, params.PROFILE_RETENTION_DAYS)
-        results.append(
-            {
-                "source_id": "retention",
-                "status": "ok",
-                "fetched": 0,
-                "new": 0,
-                "note": (
-                    f"{removed} profile(s) unused for {params.PROFILE_RETENTION_DAYS} days deleted"
-                ),
-            }
-        )
-    except Exception as exc:  # noqa: BLE001
-        results.append(_failed_step("retention", exc))
+        days = params.PROFILE_RETENTION_DAYS
+        return _ok("retention", f"{removed} profile(s) unused for {days} days deleted")
+
+    follow_ups: list[tuple[str, Callable[[], dict[str, Any]]]] = [
+        ("trend_models", lambda: record_versions(engine, run_id)),
+        ("occupation_index", occupation_index),
+        ("link_check", link_check),
+        ("retention", retention),
+    ]
+    for name, step in follow_ups:
+        results.append(_guarded(name, step))
     # Also retry publication after a previous run stored evidence but failed before publication.
-    refresh_proposals(engine, previous_cutoff, run_id)
+    # Logged only when it fails, so a normal run's log is unchanged.
+    try:
+        refresh_proposals(engine, previous_cutoff, run_id)
+    except Exception as exc:  # noqa: BLE001
+        results.append(_failed_step("proposals", exc))
     finish_run(engine, run_id, status, new_total, results)
     return RunSummary(run_id, status, new_total, results)
+
+
+def _occupation_index(engine: Engine, client: httpx.Client) -> dict[str, Any]:
+    """Catalogue refresh, index build and ISCO fill, each on its own: one failing (RunPod or
+    O*NET down) never skips the others; the previous index and BM25 stay in use."""
+    parts: list[tuple[str, Callable[[], str]]] = [
+        ("catalogue", lambda: refresh_catalogue(engine, client)),
+        ("index", lambda: build_index(engine, load_settings(), client)),
+        ("isco", lambda: fill_isco(engine, client)),
+    ]
+    notes, errors = [], []
+    for part, run in parts:
+        try:
+            notes.append(run())
+        except Exception as exc:  # noqa: BLE001
+            errors.append(f"{part}: {type(exc).__name__}: {exc}")
+    row = _ok("occupation_index", "; ".join(notes))
+    if errors:
+        row.update(status="failed", error="; ".join(errors)[:300])
+    return row
+
+
+def _guarded(name: str, step: Callable[[], dict[str, Any]]) -> dict[str, Any]:
+    try:
+        return step()
+    except Exception as exc:  # noqa: BLE001  a follow-up step never affects the evidence
+        return _failed_step(name, exc)
+
+
+def _ok(name: str, note: str) -> dict[str, Any]:
+    return {"source_id": name, "status": "ok", "fetched": 0, "new": 0, "note": note}
 
 
 def _failed_step(name: str, exc: Exception) -> dict[str, Any]:
