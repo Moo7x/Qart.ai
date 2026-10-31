@@ -27,6 +27,30 @@ const GAP_TITLE: Record<GapColumn, [string, string]> = {
 }
 const COLUMNS: GapColumn[] = ['ready', 'bridgeable', 'missing', 'not_stated']
 
+/** The SDG goals that matter to the person: saved at once; roles whose fits are close are then
+ *  ordered by the goals they serve (the fit never changes), and the plan shows the goal's links. */
+function SdgGoals({ profileId, profile, goals, onSaved }: { profileId: string; profile: ProfileData; goals: { id: string; title: string }[]; onSaved: () => void }) {
+  const [busy, setBusy] = useState(false)
+  const chosen = profile.sdg_priorities
+  async function toggle(id: string) {
+    setBusy(true)
+    try {
+      const next = chosen.includes(id) ? chosen.filter((g) => g !== id) : [...chosen, id]
+      await sendJSON(`/api/profiles/${profileId}`, { method: 'PUT', body: { ...profile, sdg_priorities: next } })
+      onSaved()
+    } finally {
+      setBusy(false)
+    }
+  }
+  return (
+    <div role="group" aria-label="Sustainable Development Goals that matter to you" className="flex flex-wrap items-center gap-2 text-[13px]">
+      <span className="font-semibold">Goals that matter to you:</span>
+      {goals.map((g) => <button key={g.id} type="button" aria-pressed={chosen.includes(g.id)} disabled={busy} className="q-chip" onClick={() => toggle(g.id)}>SDG {g.id}{g.title ? ` · ${g.title}` : ''}</button>)}
+      <span className="text-muted">Roles with close fits move up when they serve your goals; the fit itself never changes.</span>
+    </div>
+  )
+}
+
 export function NeedProfile() {
   return (
     <main className="flex min-w-0 flex-[999_1_640px] flex-col gap-4 px-5 py-7 md:px-10">
@@ -253,6 +277,8 @@ export function Roles() {
   const moderateRank = baseline.data?.roles.map((r) => r.role_id) ?? []
   const fastRank = fastView.data?.roles.map((r) => r.role_id) ?? []
   const goals = profile.data?.profile.sdg_priorities ?? []
+  // The goals the destination roles are tagged with (from the API): only these can change an order.
+  const roleGoals = [...new Map((data?.roles ?? []).flatMap((r) => r.sdgs).map((x) => [x.target.split('.')[0], { id: x.target.split('.')[0], title: '' }])).values()].sort((a, b) => Number(a.id) - Number(b.id))
   const ordered = data ? (bySdg ? [...data.roles].sort((a, b) => (b.serves_goals?.length ?? 0) - (a.serves_goals?.length ?? 0) || b.fit - a.fit) : data.roles) : []
   const listed = showAll ? ordered : ordered.slice(0, ROLES_SHOWN)
   const openRole = openId === undefined ? listed[0]?.role_id : openId
@@ -297,6 +323,7 @@ export function Roles() {
               <span className="text-muted">Routes it lists: {data.current_role.transitions.length} in GBS{data.current_role.other_sectors.length ? `, ${data.current_role.other_sectors.length} in other sectors` : ''}</span>
             </div>
           )}
+          {profile.data && <SdgGoals profileId={profileId} profile={profile.data.profile} goals={roleGoals} onSaved={() => { current.reload(); baseline.reload(); fastView.reload(); profile.reload() }} />}
           <section aria-label="Ranked roles" className="q-card gap-2">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <span className="text-[13px]"><span className="font-semibold text-violet">All {data.roles.length} destination roles</span> <span className="text-muted">· {data.scenario_label} · ordered by fit and the Qart forecast (a growing role moves up, a shrinking one down; the fit shown is unchanged)</span></span>
