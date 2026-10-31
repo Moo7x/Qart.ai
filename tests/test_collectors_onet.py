@@ -63,10 +63,11 @@ def test_collect_keeps_linked_tasks_with_importance_once() -> None:
         first = onet.collect(client, state)
         second = onet.collect(client, state)
     linked = len({(s, t) for s, t in _linked()})
-    assert len(first.observations) == linked - 1
+    tasks = [o for o in first.observations if o.series == onet.SERIES]
+    assert len(tasks) == linked - 1
     assert all(o.period == "31.0" and o.geography == "US" for o in first.observations)
-    assert "99-9999.00" not in {o.entity.split()[1] for o in first.observations}
-    values = [o.value for o in first.observations]
+    assert "99-9999.00" not in {o.entity.split()[1] for o in tasks}
+    values = [o.value for o in tasks]
     assert values.count(None) == 1 and 4.2 in values  # an unrated task is missing, not zero
     assert "linked tasks not in this release" in first.note
     assert second.observations == [] and second.note == "no new release since O*NET 31.0"
@@ -133,3 +134,112 @@ def test_technology_skills_are_kept_per_followed_occupation_with_demand_flags() 
     assert tech_rows["15-2051.01 43232203"].value == 2.0  # in demand for this occupation
     assert tech_rows["15-2051.01 43232314"].value == 1.0  # hot technology only
     assert "SAP; Oracle" in tech_rows["15-2051.01 43232203"].cited_span
+
+
+def _with(files: dict[str, str]) -> bytes:
+    base = zipfile.ZipFile(io.BytesIO(archive()))
+    out = io.BytesIO()
+    with zipfile.ZipFile(out, "w") as z:
+        for name in base.namelist():
+            z.writestr(name, base.read(name))
+        for name, text in files.items():
+            z.writestr(f"db_31_0_csv/{name}", text)
+    return out.getvalue()
+
+
+def _csv(header: list[str], rows: list[list[str]]) -> str:
+    text = io.StringIO()
+    writer = csv.writer(text)
+    writer.writerow(header)
+    writer.writerows(rows)
+    return text.getvalue()
+
+
+def test_related_occupations_and_emerging_tasks_are_kept_for_followed_occupations() -> None:
+    related = _csv(
+        [
+            "O*NET-SOC Code",
+            "Title",
+            "Related O*NET-SOC Code",
+            "Related Title",
+            "Relatedness Tier",
+            "Index",
+        ],
+        [
+            [
+                "13-2011.00",
+                "Accountants and Auditors",
+                "13-2031.00",
+                "Budget Analysts",
+                "Primary-Short",
+                "1",
+            ],
+            [
+                "13-2011.00",
+                "Accountants and Auditors",
+                "43-3031.00",
+                "Bookkeeping Clerks",
+                "Supplemental",
+                "14",
+            ],
+            [
+                "99-9999.00",
+                "Not followed",
+                "13-2011.00",
+                "Accountants and Auditors",
+                "Primary-Short",
+                "1",
+            ],
+        ],
+    )
+    emerging = _csv(
+        [
+            "O*NET-SOC Code",
+            "Title",
+            "Task",
+            "Category",
+            "Original Task ID",
+            "Original Task",
+            "Date",
+            "Domain Source",
+        ],
+        [
+            [
+                "13-2011.00",
+                "Accountants and Auditors",
+                "Review AI-generated reconciliations.",
+                "New",
+                "",
+                "",
+                "08/2026",
+                "Incumbent",
+            ],
+            [
+                "99-9999.00",
+                "Not followed",
+                "Something else.",
+                "New",
+                "",
+                "",
+                "08/2026",
+                "Incumbent",
+            ],
+        ],
+    )
+    observations, _ = onet.parse_archive(
+        _with({"related_occupations.csv": related, "emerging_tasks.csv": emerging}),
+        "31.0",
+        "https://example.org/db.zip",
+    )
+    links = {o.entity: o.value for o in observations if o.series == onet.RELATED_SERIES}
+    assert links == {"13-2011.00 13-2031.00": 1.0, "13-2011.00 43-3031.00": 3.0}
+    new = [o for o in observations if o.series == onet.EMERGING_SERIES]
+    assert len(new) == 1 and new[0].value == 1.0
+    assert "Review AI-generated reconciliations." in new[0].cited_span
+
+
+def test_task_statements_cover_every_task_of_the_followed_occupations() -> None:
+    observations, _ = onet.parse_archive(archive(), "31.0", "https://example.org/db.zip")
+    statements = [o for o in observations if o.series == onet.STATEMENT_SERIES]
+    assert statements and all(o.entity.split()[1] != "99-9999.00" for o in statements)
+    assert all(o.unit == onet.UNIT for o in statements)

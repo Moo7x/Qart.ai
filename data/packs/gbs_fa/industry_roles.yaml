@@ -1,0 +1,38 @@
+# The roles the industry forecast covers (src/forecast/industry.py): every role TalentCorp (2024)
+# lists in the GBS Finance & Accounting job cluster (PDF page 22; impact levels PDF page 26), plus
+# the two destination roles of roles.yaml that TalentCorp names elsewhere in the study.
+# `talentcorp` is the role's name exactly as stored in the `talentcorp_role_impact` series.
+# `pack_role` links a role that roles.yaml already describes (its skills and requirements); roles
+# without it are forecast at occupation level only and are not offered as a destination.
+# `soc` is the O*NET occupation the role is measured through. For pack roles it is roles.yaml's;
+# for the others it is our mapping (assumption), with the reason in `soc_reason`.
+version: industry_roles/1
+source: "TalentCorp (2024), Impact Study of AI, Digital and Green Economy on the Malaysian Workforce: GBS, PDF p. 22 and p. 26"
+
+roles:
+  - {id: financial_analyst, title: Financial Analyst, talentcorp: Financial Analyst, pack_role: financial_analyst, soc: "13-2051.00"}
+  - {id: ap_analyst, title: Accounts Payable (AP) Analyst, talentcorp: Accounts Payable (AP) Analyst, pack_role: ap_analyst, soc: "43-3031.00"}
+  - {id: ar_analyst, title: Accounts Receivable (AR) Analyst, talentcorp: Accounts Receivable (AR) Analyst, pack_role: ar_analyst, soc: "43-3031.00"}
+  - {id: invoice_processing_administrator, title: Invoice Processing Administrator, talentcorp: Invoice Processing Administrator, pack_role: invoice_processing_administrator, soc: "43-3021.00"}
+  - {id: vendor_master_data_administrator, title: Vendor Master Data Administrator, talentcorp: Vendor Master Data Administrator, pack_role: vendor_master_data_administrator, soc: "43-9021.00"}
+  - {id: payment_processing_analyst, title: Payment Processing Analyst, talentcorp: Payment Processing Analyst, pack_role: payment_processing_analyst, soc: "43-3031.00"}
+  - {id: order_management_analyst, title: Order Management Analyst, talentcorp: Order Management Analyst, pack_role: order_management_analyst, soc: "43-4151.00"}
+  - {id: billing_analyst, title: Billing Analyst, talentcorp: Billing Analyst, pack_role: billing_analyst, soc: "43-3021.00"}
+  - {id: credit_analyst, title: Credit Analyst, talentcorp: Credit Analyst, pack_role: credit_analyst, soc: "13-2041.00"}
+  - {id: cash_application_analyst, title: Cash Application Analyst, talentcorp: Cash Application Analyst, pack_role: cash_application_analyst, soc: "43-3031.00"}
+  - {id: master_data_management_analyst, title: Master Data Management Analyst, talentcorp: Master Data Management Analyst, pack_role: master_data_management_analyst, soc: "15-2051.01"}
+  - {id: budget_analyst, title: Budget Analyst, talentcorp: Budget Analyst, pack_role: budget_analyst, soc: "13-2031.00"}
+  - {id: cost_accountant, title: Cost Accountant, talentcorp: Cost Accountant, pack_role: cost_accountant, soc: "13-2011.00"}
+  - {id: internal_auditor, title: Internal Auditor, talentcorp: Internal Auditor, soc: "13-2011.00", soc_reason: "O*NET groups auditors with accountants (13-2011.00 Accountants and Auditors)"}
+  - {id: accounting_manager, title: Accounting Manager, talentcorp: Accounting Manager, soc: "11-3031.01", soc_reason: "O*NET's Treasurers and Controllers direct accounting and financial reporting teams"}
+  - {id: finance_manager, title: Finance Manager, talentcorp: Finance Manager, soc: "11-3031.01", soc_reason: "the nearest followed O*NET management occupation for finance teams (Treasurers and Controllers)"}
+  - {id: fixed_assets_accountant, title: Fixed Assets Accountant, talentcorp: Fixed Assets Accountant, pack_role: fixed_assets_accountant, soc: "13-2011.00"}
+  - {id: gl_accountant, title: General Ledger (GL) Accountant, talentcorp: General Ledger (GL) Accountant, soc: "13-2011.00", soc_reason: "general ledger work is accountants' work in O*NET (13-2011.00)"}
+  - {id: finance_systems_analyst, title: Finance Systems Analyst, talentcorp: Finance Systems Analyst, pack_role: finance_systems_analyst, soc: "15-1211.00"}
+  - {id: p2p_reporting_analyst, title: Procure-to-Pay (P2P) Reporting Analyst, talentcorp: PTP Reporting Analyst, pack_role: p2p_reporting_analyst, soc: "15-2051.01"}
+  - {id: dispute_resolution_specialist, title: Dispute Resolution Specialist, talentcorp: Dispute Resolution Specialist, soc: "43-3011.00", soc_reason: "billing and payment disputes are handled by O*NET's Bill and Account Collectors"}
+  - {id: o2c_reporting_analyst, title: Order-to-Cash (O2C) Reporting Analyst, talentcorp: O2C Reporting Analyst, pack_role: o2c_reporting_analyst, soc: "15-2051.01"}
+  - {id: tax_analyst, title: Tax Analyst, talentcorp: Tax Analyst, pack_role: tax_analyst, soc: "13-2082.00"}
+  - {id: design_ethicist, title: Design Ethicist and Product Philosopher, talentcorp: Design Ethicist and Product Philosopher, soc_reason: "no O*NET occupation describes this new role; forecast from TalentCorp's emerging listing only"}
+  - {id: compliance_governance_specialist, title: Compliance and Governance Specialist, pack_role: compliance_governance_specialist, soc: "13-2011.00"}
+  - {id: continuous_improvement_specialist, title: Continuous Improvement Specialist, pack_role: continuous_improvement_specialist, soc: "13-1111.00"}
