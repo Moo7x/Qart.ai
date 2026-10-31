@@ -1,0 +1,311 @@
+checked: '2026-10-31'
+source: YouTube Data API v3 search; fit checked against captions or description
+videos:
+- id: yt_api_yYX4bvQSqbo
+  title: 'ACCOUNTING BASICS: a Guide to (Almost) Everything'
+  channel: Accounting Stuff
+  url: https://www.youtube.com/watch?v=yYX4bvQSqbo
+  minutes: 15
+  published: '2020-07-20'
+  skills:
+  - accounting_principles
+  fit_check:
+    result: fits
+    by: gpt-4.1-mini
+    quote: Ruff Times is a serious business so you're using double entry accounting
+      which means this transaction affects at least two accounts and the total debits
+      are equal to the total credits
+    checked: '2026-10-31'
+    from: captions
+- id: yt_api_VYNTBWBqncU
+  title: Accounting Basics Explained Through a Story
+  channel: Leila Gharani
+  url: https://www.youtube.com/watch?v=VYNTBWBqncU
+  minutes: 10
+  published: '2019-11-12'
+  skills:
+  - accounting_principles
+  fit_check:
+    result: fits
+    by: gpt-4.1-mini
+    quote: It's a very helpful tool, and we're going to come back to these T-accounts
+      all the time.
+    checked: '2026-10-31'
+    from: captions
+- id: yt_api_50dztqkmiFg
+  title: Accounting principles
+  channel: The Finance Storyteller
+  url: https://www.youtube.com/watch?v=50dztqkmiFg
+  minutes: 9
+  published: '2023-07-05'
+  skills:
+  - accounting_principles
+  fit_check:
+    result: fits
+    by: gpt-4.1-mini
+    quote: let me walk you through seven core accounting principles conservatism also
+      known as prudence consistency full disclosure going concern matching materiality
+      and objectivity
+    checked: '2026-10-31'
+    from: captions
+- id: yt_api_VSFuqMh4hus
+  title: '7 AI Terms You Need to Know: Agents, RAG, ASI & More'
+  channel: IBM Technology
+  url: https://www.youtube.com/watch?v=VSFuqMh4hus
+  minutes: 12
+  published: '2025-09-01'
+  skills:
+  - advanced_technology_integration
+  fit_check:
+    result: fits
+    by: gpt-4.1-mini
+    quote: AI agents are typically built using a particular form of large language
+      models, and that is known as number two, large reasoning models.
+    checked: '2026-10-31'
+    from: captions
+- id: yt_api_iITmoI0s1DQ
+  title: What is Continuous Improvement?
+  channel: IBM Technology
+  url: https://www.youtube.com/watch?v=iITmoI0s1DQ
+  minutes: 5
+  published: '2019-09-13'
+  skills:
+  - continuous_improvement
+  fit_check:
+    result: fits
+    by: gpt-4.1-mini
+    quote: continuous improvement is all about people process and tools
+    checked: '2026-10-31'
+    from: captions
+- id: yt_api_c7LrqSxjJQQ
+  title: Power BI from ZERO to Your First Dashboard (in 20 Minutes)
+  channel: Leila Gharani
+  url: https://www.youtube.com/watch?v=c7LrqSxjJQQ
+  minutes: 24
+  published: '2021-12-16'
+  skills:
+  - dashboards
+  fit_check:
+    result: fits
+    by: gpt-4.1-mini
+    quote: after 20 minutes, you've created first power BI dashboard, which you've
+      published to the web.
+    checked: '2026-10-31'
+    from: captions
+- id: yt_api_S7HTsuWz_2U
+  title: Data Migration Examples
+  channel: IBM Technology
+  url: https://www.youtube.com/watch?v=S7HTsuWz_2U
+  minutes: 6
+  published: '2019-07-26'
+  skills:
+  - data_migration
+  fit_check:
+    result: fits
+    by: gpt-4.1-mini
+    quote: Hi there, my name is Katie Morgan and I'm with the IBM Cloud team and today
+      I'm going to be talking about data migration.
+    checked: '2026-10-31'
+    from: captions
+- id: yt_api_Da1hUqzoiAo
+  title: What is Enterprise Resource Planning (ERP) Software?
+  channel: IBM Technology
+  url: https://www.youtube.com/watch?v=Da1hUqzoiAo
+  minutes: 11
+  published: '2021-06-16'
+  skills:
+  - erp
+  fit_check:
+    result: fits
+    by: gpt-4.1-mini
+    quote: The acronym ERP stands for Enterprise Resource Planning. An ERP system
+      is a core enterprise software and solution stack comprised of a central database
+      surrounded by multiple plug-in services and software packages, each of which
+      is tailored to solve specific enterprise problems and address specific challenges.
+    checked: '2026-10-31'
+    from: captions
+- id: yt_api_AkbGz3CYvqE
+  title: Environmental, Social and Governance (ESG) | Framework and Standards
+  channel: Corporate Finance Institute
+  url: https://www.youtube.com/watch?v=AkbGz3CYvqE
+  minutes: 3
+  published: '2022-08-30'
+  skills:
+  - esg
+  fit_check:
+    result: fits
+    by: gpt-4.1-mini
+    quote: esg stands for environmental social and governance you can think of it
+      as an analysis framework to help measure and quantify the degree to which an
+      organization is operating in a sustainable manner
+    checked: '2026-10-31'
+    from: captions
+- id: yt_api_Fi1wkUczuyk
+  title: 'FINANCIAL STATEMENTS: all the basics in 8 MINS!'
+  channel: Accounting Stuff
+  url: https://www.youtube.com/watch?v=Fi1wkUczuyk
+  minutes: 10
+  published: '2022-10-11'
+  skills:
+  - financial_reporting
+  fit_check:
+    result: fits
+    by: gpt-4.1-mini
+    quote: The balance sheet gives us a snapshot of a business's assets, liabilities
+      and equity at a single point in time.
+    checked: '2026-10-31'
+    from: captions
+- id: yt_api_3W_LwpeG8c8
+  title: 'FINANCIAL RATIOS: How to Analyze Financial Statements'
+  channel: Accounting Stuff
+  url: https://www.youtube.com/watch?v=3W_LwpeG8c8
+  minutes: 24
+  published: '2022-08-15'
+  skills:
+  - financial_reporting
+  fit_check:
+    result: fits
+    by: gpt-4.1-mini
+    quote: Financial statements! Financial Ratio Analysis begins with Financial Statements
+      accounting reports that summarize the financial activities and performance of
+      a business.
+    checked: '2026-10-31'
+    from: captions
+- id: yt_api_HR37VUq1LM0
+  title: 'GENERAL LEDGER: Explained in (Almost) 2 Minutes!'
+  channel: Accounting Stuff
+  url: https://www.youtube.com/watch?v=HR37VUq1LM0
+  minutes: 7
+  published: '2026-06-09'
+  skills:
+  - general_ledger
+  fit_check:
+    result: fits
+    by: gpt-4.1-mini
+    quote: Every increase, every decrease, and the running balance.
+    checked: '2026-10-31'
+    from: captions
+- id: yt_api_HxzOssLqF0I
+  title: 'T-ACCOUNTS: Explained in (Almost) 2 Minutes!'
+  channel: Accounting Stuff
+  url: https://www.youtube.com/watch?v=HxzOssLqF0I
+  minutes: 6
+  published: '2025-03-24'
+  skills:
+  - general_ledger
+  fit_check:
+    result: fits
+    by: gpt-4.1-mini
+    quote: An account is a place where a business records and stores all transactions
+      that affect a related group of items.
+    checked: '2026-10-31'
+    from: captions
+- id: yt_api_l5_n4yi9dMU
+  title: The 5 Components of Internal Control
+  channel: Edspira
+  url: https://www.youtube.com/watch?v=l5_n4yi9dMU
+  minutes: 5
+  published: '2019-03-05'
+  skills:
+  - internal_controls
+  fit_check:
+    result: fits
+    by: gpt-4.1-mini
+    quote: we'll talk about this in other videos with some examples or segregation
+      of duties authorization of transactions not just anybody can authorize for example
+      inventory to be dispersed from the warehouse
+    checked: '2026-10-31'
+    from: captions
+- id: yt_api_O6qtAT_SnIM
+  title: 'Invoices: What You NEED TO KNOW'
+  channel: Accounting Stuff
+  url: https://www.youtube.com/watch?v=O6qtAT_SnIM
+  minutes: 7
+  published: '2019-01-28'
+  skills:
+  - invoice_processing
+  fit_check:
+    result: fits
+    by: gpt-4.1-mini
+    quote: From an accounting point of view, invoices are also important because they
+      trigger the accounting entries in the books of both the buyer and the seller.
+    checked: '2026-10-31'
+    from: captions
+- id: yt_api_aZDaNVh3l0k
+  title: What is RPA (Robotic Process Automation)?
+  channel: IBM Technology
+  url: https://www.youtube.com/watch?v=aZDaNVh3l0k
+  minutes: 8
+  published: '2021-03-19'
+  skills:
+  - process_automation
+  fit_check:
+    result: fits
+    by: gpt-4.1-mini
+    quote: RPA is doing the same thing in the software world for tedious repetitive
+      tasks.
+    checked: '2026-10-31'
+    from: captions
+- id: yt_api_1E6II2U1shY
+  title: Business Process Analysis
+  channel: IBM Technology
+  url: https://www.youtube.com/watch?v=1E6II2U1shY
+  minutes: 7
+  published: '2022-08-19'
+  skills:
+  - process_optimisation
+  fit_check:
+    result: fits
+    by: gpt-4.1-mini
+    quote: the net of all this is that bpa defines an approach to perform a detailed
+      multi-step examination of each part of a process to identify what is working
+      well in your current process what needs to be improved and how any necessary
+      improvements can best be made
+    checked: '2026-10-31'
+    from: captions
+- id: yt_api_rcuu-O02xqE
+  title: What is Application Integration?
+  channel: IBM Technology
+  url: https://www.youtube.com/watch?v=rcuu-O02xqE
+  minutes: 11
+  published: '2022-04-04'
+  skills:
+  - systems_integration
+  fit_check:
+    result: fits
+    by: gpt-4.1-mini
+    quote: application integration is the process of enabling individual applications
+      to communicate together
+    checked: '2026-10-31'
+    from: captions
+- id: yt_api_AMXGBH7hoJY
+  title: 'TAX BASICS: a Beginner''s Guide to Everything'
+  channel: Accounting Stuff
+  url: https://www.youtube.com/watch?v=AMXGBH7hoJY
+  minutes: 20
+  published: '2023-01-17'
+  skills:
+  - tax_preparation
+  fit_check:
+    result: fits
+    by: gpt-4.1-mini
+    quote: Company tax or corporation tax is a direct tax on business profits. Profit
+      is equal to revenue less expenses and company tax payable is equal to taxable
+      profit multiplied by the company tax rate.
+    checked: '2026-10-31'
+    from: captions
+- id: yt_api_SMTa1lZu7Qw
+  title: What is Variance Analysis?
+  channel: Corporate Finance Institute
+  url: https://www.youtube.com/watch?v=SMTa1lZu7Qw
+  minutes: 9
+  published: '2018-04-13'
+  skills:
+  - variance_analytics
+  fit_check:
+    result: fits
+    by: gpt-4.1-mini
+    quote: the variance itself is just measuring the actual difference between results
+      and the budget
+    checked: '2026-10-31'
+    from: captions
