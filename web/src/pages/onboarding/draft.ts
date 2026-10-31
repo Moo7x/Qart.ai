@@ -36,7 +36,6 @@ export type DraftAction =
   | { type: 'load'; profile: ProfileData }
   | { type: 'extracted'; result: Extraction }
   | { type: 'set'; patch: Partial<Draft> }
-  | { type: 'level'; skill: string; level: number | null }
   | { type: 'add'; skills: string[]; level: number | null }
 
 export function draftReducer(d: Draft, a: DraftAction): Draft {
@@ -76,10 +75,6 @@ export function draftReducer(d: Draft, a: DraftAction): Draft {
     }
     case 'set':
       return { ...d, ...a.patch }
-    case 'level': {
-      const prev = d.skills[a.skill] ?? { evidence: '', source: 'self' as const }
-      return { ...d, skills: { ...d.skills, [a.skill]: { ...prev, level: a.level, source: prev.source === 'cv' ? 'cv' : 'self' } } }
-    }
     case 'add': {
       const skills = { ...d.skills }
       for (const id of a.skills) skills[id] ??= { level: a.level, evidence: '', source: 'self' }

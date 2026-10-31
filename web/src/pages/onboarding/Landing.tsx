@@ -49,7 +49,7 @@ export function Landing({ onStart, onForm, saved }: { onStart: () => void; onFor
               </span>
             </button>
             <div className="flex flex-wrap gap-2.5">
-              {step(2, 'Then', 'Your work today')}
+              {step(2, 'Then', 'Your overview')}
               {step(3, 'Next', 'Roles that fit you')}
             </div>
             <button type="button" className="h-primary" onClick={onStart}>
