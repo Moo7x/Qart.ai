@@ -4,6 +4,7 @@ import { getJSON, useApi } from '../api'
 import type { PackInfo, ProgressResponse } from '../types'
 import type { LevelsInfo } from '../typesScoring'
 import { useJourney } from '../state'
+import { Label, ScenarioSwitch as AtomScenarioSwitch } from './atoms'
 
 // Official UN SDG colours (un.org brand guidelines) for the goals the pack uses.
 const SDG_COLOUR: Record<number, string> = { 4: '#C5192D', 8: '#A21942', 12: '#BF8B2E', 13: '#3F7E44' }
@@ -67,23 +68,12 @@ export function Dots({ level, tone = 'violet' }: { level: number | null; tone?: 
   )
 }
 
-function segClass(active: boolean): string {
-  return `min-h-[32px] cursor-pointer rounded px-3 text-[13px] border-0 ${active ? 'bg-void font-medium text-white' : 'bg-transparent text-graphite'}`
-}
-
+/** The scenario switch with its ESTIMATE label (the redesign's segmented control, atoms.tsx). */
 export function ScenarioSwitch() {
-  const { scenario, setScenario } = useJourney()
   return (
     <div className="flex items-center gap-2.5">
-      <div role="group" aria-label="Scenario" className="card-light flex rounded-md p-[3px]">
-        <button type="button" aria-pressed={scenario === 'moderate'} className={segClass(scenario === 'moderate')} onClick={() => setScenario('moderate')}>
-          Moderate AI adoption
-        </button>
-        <button type="button" aria-pressed={scenario === 'fast'} className={segClass(scenario === 'fast')} onClick={() => setScenario('fast')}>
-          Fast AI adoption
-        </button>
-      </div>
-      <span className="tag bg-estimate-bg text-estimate">Estimate</span>
+      <AtomScenarioSwitch />
+      <Label kind="estimate" />
     </div>
   )
 }

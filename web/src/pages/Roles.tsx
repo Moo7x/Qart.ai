@@ -1,18 +1,21 @@
+import { ChevronDown, Info } from 'lucide-react'
 import { useState } from 'react'
 import { useT } from '../i18n'
 import { Link, useNavigate } from 'react-router-dom'
 import { sendJSON, useApi } from '../api'
-import { Dots, ScenarioSwitch, SdgTag, levelText, JourneyRoute, NextStep } from '../components/journey'
+import { Dots, SdgTag, levelText } from '../components/journey'
+import { DarkButton, Label, Legend, PageHead, ScenarioSwitch, Segmented, Serif } from '../components/atoms'
+import { FlowSteps } from '../components/FlowSteps'
 import { CompareRoles, JobPosts, Openings } from '../components/CompareRoles'
 import { BestQuestion, MeterRow, WhatIf } from '../components/Decision'
 import { ExplainRole } from '../components/ExplainRole'
 import { ReportProblem } from '../components/Feedback'
 import { RoleTasks } from '../components/RoleTasks'
-import { PayLine, ScoreChip } from '../components/ScoreWhy'
+import { PayLine, ScoreWhy } from '../components/ScoreWhy'
 import { SdgRolesGrid } from '../components/SdgHeatmap'
 import { Loading, Problem } from '../components/ui'
 import { useJourney } from '../state'
-import type { GapColumn, MatchesResponse, PackInfo, ProfileData, RoleCard, Situation } from '../types'
+import type { GapColumn, MatchesResponse, PackInfo, ProfileData, RoleCard, Situation, SkillKind } from '../types'
 
 // Roles shown before "Show all": enough to compare, few enough to read.
 const ROLES_SHOWN = 5
@@ -77,30 +80,19 @@ const TABS: [Tab, string][] = [
   ['whatif', 'What if'],
 ]
 
-function RoleDetail({ role, roles, matches, onChoose, chosen, busy, situation, pack }: { role: RoleCard; roles: RoleCard[]; matches: MatchesResponse; onChoose: () => void; chosen: boolean; busy: boolean; situation: Situation; pack: PackInfo | null }) {
-  const { t } = useT()
+function RoleDetail({ role, roles, matches, situation, pack }: { role: RoleCard; roles: RoleCard[]; matches: MatchesResponse; situation: Situation; pack: PackInfo | null }) {
   const { ready, partly } = bars(role)
   const { profileId, scenario } = useJourney()
   const [tab, setTab] = useState<Tab>('why')
   return (
-    <section aria-label={`${role.title}: details`} className="panel min-w-0 gap-6">
-      <div className="flex flex-wrap items-end justify-between gap-4">
-        <div className="flex min-w-0 flex-col gap-1">
-          <span className="eyebrow">Selected role</span>
-          <h2 className="m-0 text-[28px] font-semibold leading-tight tracking-[-0.03em]">{role.title}</h2>
-          <span className="text-[13px] text-graphite">
-            {role.effort_hours} h of verified free courses · about {role.effort_weeks} week{role.effort_weeks === 1 ? '' : 's'} at your pace
-          </span>
-        </div>
-        <ScoreChip role={role} matches={matches} />
-      </div>
+    <section aria-label={`${role.title}: details`} className="flex min-w-0 flex-col gap-4">
       <PayLine pay={role.pay} />
       <div className="flex flex-col gap-1.5">
-        <div className="flex h-2 overflow-hidden bg-mist" aria-hidden="true">
+        <div className="flex h-2 overflow-hidden rounded-full bg-mist" aria-hidden="true">
           <span style={{ width: `${ready}%` }} className="bg-rising" />
           <span style={{ width: `${partly}%` }} className="bg-violet-light" />
         </div>
-        <span className="flex flex-wrap gap-x-4 text-[11px] text-graphite">
+        <span className="flex flex-wrap gap-x-4 text-[11px] text-muted">
           <span><span className="mr-1 inline-block h-2 w-2 bg-rising" />ready now {Math.round(ready)}%</span>
           <span><span className="mr-1 inline-block h-2 w-2 bg-violet-light" />partly there {Math.round(partly)}%</span>
           <span>share of what the role leans on</span>
@@ -108,13 +100,7 @@ function RoleDetail({ role, roles, matches, onChoose, chosen, busy, situation, p
       </div>
       <MeterRow meters={role.meters} range={role.fit_range} />
       <ForYou role={role} situation={situation} pack={pack} />
-      <div className="flex flex-wrap items-center gap-3">
-        <button type="button" className="btn btn-v min-h-[44px]" onClick={onChoose} disabled={busy}>
-          {chosen ? 'Your destination ✓ · open the plan' : t('Choose as my destination')}
-        </button>
-        <JobPosts title={role.title} className="btn min-h-[44px]" />
-        <span className="text-[13px] text-graphite">You can change your destination any time.</span>
-      </div>
+      <JobPosts title={role.title} className="q-btn self-start" />
 
       <div role="tablist" aria-label="About this role" className="flex gap-1 overflow-x-auto border-b border-line">
         {TABS.map(([id, label]) => (
@@ -231,8 +217,75 @@ function RoleDetail({ role, roles, matches, onChoose, chosen, busy, situation, p
   )
 }
 
-export function Roles() {
+const INTERESTS: { id: SkillKind; label: string }[] = [
+  { id: 'data_digital', label: 'Working with data and systems' },
+  { id: 'finance_core', label: 'Accounting and finance work' },
+  { id: 'green', label: 'Sustainability (ESG)' },
+  { id: 'business', label: 'Improving processes and working with people' },
+]
+const SDGS = [
+  { id: '4', label: '4 · Quality education' },
+  { id: '8', label: '8 · Decent work' },
+  { id: '12', label: '12 · Responsible production' },
+]
+
+/** "What matters to you" (interests and SDG goals), inline: it only orders near-tie roles. */
+function MattersToYou({ profileId, profile, onSaved }: { profileId: string; profile: ProfileData; onSaved: () => void }) {
   const { t } = useT()
+  const [open, setOpen] = useState(false)
+  const [interests, setInterests] = useState<SkillKind[]>(profile.interests)
+  const [sdgs, setSdgs] = useState<string[]>(profile.sdg_priorities)
+  const [busy, setBusy] = useState(false)
+  const toggle = <T,>(list: T[], x: T) => (list.includes(x) ? list.filter((y) => y !== x) : [...list, x])
+  async function save() {
+    setBusy(true)
+    try {
+      await sendJSON(`/api/profiles/${profileId}`, { method: 'PUT', body: { ...profile, interests, sdg_priorities: sdgs } })
+      onSaved()
+      setOpen(false)
+    } finally {
+      setBusy(false)
+    }
+  }
+  return (
+    <div className="flex flex-col gap-3">
+      <button type="button" aria-expanded={open} aria-controls="matters" onClick={() => setOpen((o) => !o)} className="q-btn self-start">
+        {t('What matters to you in your next role?')} <span className="text-muted">(optional)</span>
+      </button>
+      {open && (
+        <div id="matters" className="q-card gap-3">
+          <p className="m-0 text-sm text-[#404040]">{t('Used only to order roles that fit you almost equally well. It never changes a fit score.')}</p>
+          <div role="group" aria-label="Interests" className="flex flex-wrap gap-2">
+            {INTERESTS.map((i) => <button key={i.id} type="button" aria-pressed={interests.includes(i.id)} className="q-chip" onClick={() => setInterests((l) => toggle(l, i.id))}>{t(i.label)}</button>)}
+          </div>
+          <div role="group" aria-label="Sustainable Development Goals you care about" className="flex flex-wrap items-center gap-2">
+            <span className="text-[13px] font-semibold">{t('Sustainable Development Goals you care about (optional)')}</span>
+            {SDGS.map((g) => <button key={g.id} type="button" aria-pressed={sdgs.includes(g.id)} className="q-chip" onClick={() => setSdgs((l) => toggle(l, g.id))}>{g.label}</button>)}
+          </div>
+          <button type="button" className="q-btn q-btn-violet self-start" disabled={busy} onClick={save}>Save and re-order</button>
+        </div>
+      )}
+    </div>
+  )
+}
+
+function RangeBar({ role, i }: { role: RoleCard; i: number }) {
+  const fit = Math.round(role.fit)
+  const lo = Math.round(role.fit_range.low)
+  const hi = Math.round(role.fit_range.high)
+  return (
+    <span className="r-bar flex min-w-0 items-center gap-2.5">
+      <span className="w-[30px] flex-none text-right text-[22px] font-semibold tracking-[-0.02em]">{fit}</span>
+      <span role="img" aria-label={`Fit ${fit} out of 100, range ${lo} to ${hi}`} className="relative h-3 flex-auto rounded-full bg-[#f0f0f0]">
+        <span className="m-grow absolute inset-y-0 rounded-full bg-range" style={{ left: `${lo}%`, width: `${Math.max(hi - lo, 1)}%`, animationDelay: `${0.25 + i * 0.04}s` }} />
+        <span className="m-fade absolute top-1/2 -ml-[7px] -mt-[7px] h-3.5 w-3.5 rounded-full bg-violet shadow-[0_0_0_2px_#fff]" style={{ left: `${fit}%`, animationDelay: `${0.6 + i * 0.04}s` }} />
+      </span>
+      <span className="flex-none whitespace-nowrap text-xs text-muted">{lo}–{hi}</span>
+    </span>
+  )
+}
+
+export function Roles() {
   const { profileId, scenario } = useJourney()
   const navigate = useNavigate()
   const current = useApi<MatchesResponse>(profileId ? `/api/profiles/${profileId}/matches?scenario=${scenario}` : null)
@@ -241,7 +294,8 @@ export function Roles() {
   const profile = useApi<{ profile: ProfileData }>(profileId ? `/api/profiles/${profileId}` : null)
   const pack = useApi<PackInfo>('/api/pack')
   const prefs = useApi<{ not_my_goal: string[] }>(profileId ? `/api/profiles/${profileId}/preferences` : null)
-  const [selected, setSelected] = useState<string | null>(null)
+  const [openId, setOpenId] = useState<string | null | undefined>(undefined) // undefined: the first row
+  const [whyFor, setWhyFor] = useState<RoleCard | null>(null)
   const [showAll, setShowAll] = useState(false)
   const [bySdg, setBySdg] = useState(false)
   const [busy, setBusy] = useState(false)
@@ -249,20 +303,21 @@ export function Roles() {
   if (!profileId) return <NeedProfile />
 
   const data = current.data
-  const role = data?.roles.find((r) => r.role_id === selected) ?? data?.roles[0]
   const moderateRank = baseline.data?.roles.map((r) => r.role_id) ?? []
   const fastRank = fastView.data?.roles.map((r) => r.role_id) ?? []
-  const fitIn = (view: MatchesResponse | null, id: string) => view?.roles.find((r) => r.role_id === id)?.fit
   const goals = profile.data?.profile.sdg_priorities ?? []
   const ordered = data ? (bySdg ? [...data.roles].sort((a, b) => (b.serves_goals?.length ?? 0) - (a.serves_goals?.length ?? 0) || b.fit - a.fit) : data.roles) : []
   const listed = showAll ? ordered : ordered.slice(0, ROLES_SHOWN)
+  const openRole = openId === undefined ? listed[0]?.role_id : openId
+  const skillName = (id: string) => pack.data?.skills.find((s) => s.id === id)?.name ?? id
+  const reloadAll = () => { current.reload(); baseline.reload(); fastView.reload(); profile.reload() }
 
   async function choose(roleId: string) {
     setBusy(true)
     setError(null)
     try {
       await sendJSON(`/api/profiles/${profileId}/destination`, { body: { role_id: roleId } })
-      navigate('/pathway')
+      navigate('/time')
     } catch (reason) {
       setError(reason instanceof Error ? reason.message : String(reason))
     } finally {
@@ -271,108 +326,119 @@ export function Roles() {
   }
 
   return (
-    <main className="page">
-      <JourneyRoute />
-      <header className="flex flex-wrap items-end justify-between gap-4">
-        <div className="flex flex-col gap-1.5">
-          <span className="eyebrow">My options · every destination role is scored</span>
-          <h1 className="h1">{t('Where your skills can take you')}</h1>
-          <p className="m-0 max-w-[640px] text-graphite">
-            Destination roles TalentCorp lists for highly impacted GBS finance roles. Fit compares your levels with what each role needs under the selected scenario; outlook is shown separately with its sources.
-          </p>
-        </div>
-        <div className="flex flex-col items-end gap-2">
-          <ScenarioSwitch />
-          <Link to="/goal" className="text-[13px]">Have a job posting? Check it against your skills →</Link>
-        </div>
-      </header>
+    <main className="page gap-6">
+      <FlowSteps current="roles" skip={profile.data?.profile.current_role === 'other' ? ['work'] : []} />
+      <PageHead
+        badge="My options · every destination role is scored"
+        title={<>Roles that fit you <Serif>next</Serif></>}
+        sub="Destination roles TalentCorp lists for highly impacted GBS finance roles. Fit compares your levels with what each role needs under the selected scenario; outlook is shown separately with its sources."
+        right={
+          <div className="flex flex-col items-start gap-2 md:items-end">
+            <span className="flex items-center gap-2"><ScenarioSwitch /><Label kind="estimate" /></span>
+            <Link to="/goal" className="text-[13px]">Have a job posting? Check it against your skills →</Link>
+          </div>
+        }
+      />
 
       {current.loading && <Loading what="your matches" />}
       {current.error && <Problem what="your matches" message={current.error} onRetry={current.reload} />}
       {error && <p role="alert" className="m-0 text-sm text-weak">{error}</p>}
 
-      {data && data.current_role && (
-        <div className="card-light flex flex-wrap items-center justify-between gap-3 px-5 py-3.5 text-[13px]">
-          <span>
-            <span className="font-semibold">Today: {data.current_role.title}</span> · TalentCorp rates it {data.current_impact} (PDF p. {data.current_role.page}).
-          </span>
-          <span className="text-graphite">Routes it lists: {data.current_role.transitions.length} in GBS{data.current_role.other_sectors.length ? `, ${data.current_role.other_sectors.length} in other sectors` : ''}</span>
-        </div>
-      )}
-
-      {data && role && (
-        <div className="grid items-start gap-8 lg:grid-cols-[minmax(280px,340px)_minmax(0,1fr)]">
-          <section aria-label="Ranked roles" className="panel min-w-0 gap-0 overflow-hidden !p-0 lg:sticky lg:top-6">
-            <div className="flex flex-col gap-2 border-b border-line px-5 pb-3 pt-5">
-              <div className="cap grid grid-cols-[24px_minmax(0,1fr)_96px] gap-3">
-                <span>#</span>
-                <span>Role</span>
-                <span className="text-right">Fit: moderate → fast</span>
-              </div>
-              {goals.length > 0 && (
-                <div role="radiogroup" aria-label="Order roles by" className="flex gap-1 text-[12px]">
-                  <button type="button" role="radio" aria-checked={!bySdg} onClick={() => setBySdg(false)} className={`btn min-h-[32px] px-2.5 text-[12px] ${!bySdg ? 'btn-v' : ''}`}>Best fit</button>
-                  <button type="button" role="radio" aria-checked={bySdg} onClick={() => setBySdg(true)} className={`btn min-h-[32px] px-2.5 text-[12px] ${bySdg ? 'btn-v' : ''}`}>My SDG goals first</button>
-                </div>
-              )}
+      {data && (
+        <div className="q-tray flex flex-col gap-4">
+          <BestQuestion profileId={profileId} scenario={scenario} onAnswered={reloadAll} />
+          {profile.data && <MattersToYou profileId={profileId} profile={profile.data.profile} onSaved={reloadAll} />}
+          {data.current_role && (
+            <div className="q-card flex-row flex-wrap items-center justify-between gap-3 px-5 py-3.5 text-[13px]">
+              <span><span className="font-semibold">Today: {data.current_role.title}</span> · TalentCorp rates it {data.current_impact} (PDF p. {data.current_role.page}).</span>
+              <span className="text-muted">Routes it lists: {data.current_role.transitions.length} in GBS{data.current_role.other_sectors.length ? `, ${data.current_role.other_sectors.length} in other sectors` : ''}</span>
             </div>
-            {listed.map((r, i) => {
-              const mod = fitIn(baseline.data, r.role_id)
-              const fst = fitIn(fastView.data, r.role_id)
-              const rankMove = moderateRank.indexOf(r.role_id) - fastRank.indexOf(r.role_id)
-              const b = bars(r)
-              const on = r.role_id === role.role_id
-              return (
-                <div key={r.role_id} className={`border-b border-line px-3 pb-3 last:border-b-0 ${on ? 'bg-violet-soft' : ''}`}>
-                <button
-                  type="button"
-                  aria-pressed={on}
-                  onClick={() => setSelected(r.role_id)}
-                  className={`grid w-full cursor-pointer grid-cols-[24px_minmax(0,1fr)_96px] items-start gap-x-3 border-0 border-l-2 bg-transparent py-4 pl-2 pr-2 text-left ${on ? 'border-l-violet' : 'border-l-transparent hover:bg-fog'}`}
-                >
-                  <span className="pt-0.5 font-mono text-ash">{i + 1}</span>
-                  <span className="flex min-w-0 flex-col gap-1.5">
-                    <span className={`text-[14px] leading-snug ${on ? 'font-semibold' : 'font-medium'}`}>{r.title}</span>
-                    <span aria-hidden="true" className="flex h-1 max-w-[200px] overflow-hidden bg-mist">
-                      <span style={{ width: `${b.ready}%` }} className="bg-rising" />
-                      <span style={{ width: `${b.partly}%` }} className="bg-violet-light" />
-                    </span>
-                    <span className="flex flex-wrap gap-1">
-                      {data.destination === r.role_id && <span className="tag bg-violet text-white">Your destination</span>}
-                      {r.listed_transition && <span className="tag bg-observed-bg text-observed">Route from your role</span>}
-                      {prefs.data?.not_my_goal.includes(r.role_id) && <span className="tag bg-mist text-ash">You said: not your goal</span>}
-                      {r.longer_route && <span className="tag bg-weak-bg text-weak">Longer route</span>}
-                      {rankMove !== 0 && moderateRank.length > 0 && fastRank.length > 0 && <span className="tag bg-estimate-bg text-estimate">{rankMove > 0 ? `▲ ${rankMove}` : `▼ ${-rankMove}`} place{Math.abs(rankMove) === 1 ? '' : 's'} if AI moves fast</span>}
-                      {(r.serves_goals ?? []).map((g) => <span key={g} className="tag bg-[#e8f6ee] text-rising">Serves SDG {g} · your goal</span>)}
-                    </span>
-                  </span>
-                  <span className="flex flex-col items-end">
-                    <span className="font-mono text-xl tracking-tight">{Math.round(r.fit)}</span>
-                    {mod !== undefined && fst !== undefined && (
-                      <span className={`font-mono text-[11px] ${fst > mod ? 'text-rising' : fst < mod ? 'text-weak' : 'text-graphite'}`}>{Math.round(mod)} → {Math.round(fst)}</span>
-                    )}
-                    {r.band && <span className="text-[11px] text-graphite">{r.band}</span>}
-                  </span>
-                </button>
-                <JobPosts title={r.title} className="job-link ml-11" />
-                </div>
-              )
-            })}
-            {ordered.length > ROLES_SHOWN && (
-              <button type="button" className="btn m-3 min-h-[36px] text-[13px]" onClick={() => setShowAll((v) => !v)}>{showAll ? `Show the top ${ROLES_SHOWN}` : `Show all ${ordered.length} roles`}</button>
+          )}
+          <section aria-label="Ranked roles" className="q-card gap-2">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <span className="text-[13px]"><span className="font-semibold text-violet">All {data.roles.length} destination roles</span> <span className="text-muted">· {data.scenario_label}</span></span>
+              <Legend items={[{ swatch: '#6c47ff', text: 'Fit today (estimate)' }, { swatch: '#d9d0ff', text: 'Range if unrated skills are low or working (assumption)' }]} />
+            </div>
+            {goals.length > 0 && (
+              <Segmented label="Order roles by" value={bySdg ? 'sdg' : 'fit'} onChange={(v) => setBySdg(v === 'sdg')} options={[{ id: 'fit', text: 'Best fit' }, { id: 'sdg', text: 'My SDG goals first' }]} />
             )}
-            <p className="m-0 px-5 pb-4 pt-1 text-[11px] text-graphite">
-              {data.scenario_label}: {Math.round(data.intensity * 100)}% of the observed automation-style AI use is assumed to reach these tasks within {data.horizon_years} years. Evidence: {data.evidence.source}, {data.evidence.period}.
+            <div className="r-axis" aria-hidden="true">
+              <span />
+              <span className="text-xs text-muted">Role</span>
+              <span className="flex items-center gap-2.5">
+                <span className="w-[30px] flex-none text-right text-xs text-muted">fit</span>
+                <span className="relative h-4 flex-auto">
+                  {[0, 25, 50, 75, 100].map((v) => <span key={v} className="absolute text-[11px] text-muted-2" style={{ left: `${v}%`, transform: `translateX(${v === 0 ? 0 : v === 100 ? -100 : -50}%)` }}>{v}</span>)}
+                </span>
+                <span className="flex-none text-xs text-muted">range</span>
+              </span>
+              <span className="text-xs text-muted">What stands between</span>
+              <span />
+            </div>
+            <ol className="m-0 list-none p-0">
+              {listed.map((r, i) => {
+                const open = r.role_id === openRole
+                const rankMove = moderateRank.indexOf(r.role_id) - fastRank.indexOf(r.role_id)
+                const short = r.essentials_short.length
+                const trend = r.in_demand.find((s) => (r.requirements.find((q) => q.skill === s)?.claimed ?? 0) < (r.requirements.find((q) => q.skill === s)?.required ?? 0))
+                return (
+                  <li key={r.role_id} className="border-t border-[#f0f0f0]">
+                    <button type="button" className="r-row" aria-expanded={open} aria-controls={`r-detail-${r.role_id}`} onClick={() => setOpenId(open ? null : r.role_id)}>
+                      <span className="text-[13px] font-semibold text-muted">{String(i + 1).padStart(2, '0')}</span>
+                      <span className="flex min-w-0 flex-col gap-1 text-left">
+                        <span className="text-[15px] font-semibold leading-snug">{r.title}</span>
+                        <span className="flex flex-wrap gap-1">
+                          {data.destination === r.role_id && <span className="whitespace-nowrap rounded-full bg-violet px-2 py-0.5 text-[11px] font-semibold text-white">your destination</span>}
+                          {r.listed_transition && <span className="whitespace-nowrap rounded-full bg-tray px-2 py-0.5 text-[11px] font-medium">listed route from your role</span>}
+                          {prefs.data?.not_my_goal.includes(r.role_id) && <span className="whitespace-nowrap rounded-full bg-mist px-2 py-0.5 text-[11px] text-muted">you said: not your goal</span>}
+                          {rankMove !== 0 && moderateRank.length > 0 && fastRank.length > 0 && <span className="q-label q-label-estimate">{rankMove > 0 ? `▲ ${rankMove}` : `▼ ${-rankMove}`} if AI moves fast</span>}
+                          {(r.serves_goals ?? []).map((g) => <span key={g} className="whitespace-nowrap rounded-full bg-rising-bg px-2 py-0.5 text-[11px] text-rising">serves SDG {g} · your goal</span>)}
+                        </span>
+                      </span>
+                      <RangeBar role={r} i={i} />
+                      <span className="r-meta flex min-w-0 flex-col gap-0.5 text-xs text-[#404040]">
+                        <span>{short ? `${short} essential${short === 1 ? '' : 's'} short` : 'no essential short'} · {r.effort_hours ? `${r.effort_hours} h study` : 'no verified course yet'}</span>
+                        {trend ? <span className="font-semibold text-rising">↑ {skillName(trend)} in demand</span> : <span className="text-muted">no in-demand skill listed</span>}
+                      </span>
+                      <ChevronDown size={16} aria-hidden="true" className={open ? 'rotate-180' : ''} />
+                    </button>
+                    {open && (
+                      <div id={`r-detail-${r.role_id}`} className="j-step j-fwd r-detail flex flex-col gap-4">
+                        <div className="flex flex-wrap items-start gap-x-6 gap-y-3">
+                          <div className="flex min-w-0 flex-[1_1_300px] flex-col gap-2">
+                            <span className="flex flex-wrap items-center gap-1.5 text-[13px]">Fit {Math.round(r.fit)} <Label kind="estimate" /> {r.band && <span className="rounded-full bg-[#fef3c7] px-2 py-0.5 text-xs font-semibold capitalize text-[#92400e]">{r.band} band</span>} range {Math.round(r.fit_range.low)}–{Math.round(r.fit_range.high)} <Label kind="assumption" /></span>
+                            <p className="m-0 text-[13px]">Essentials still short: <b className="font-semibold">{r.essentials_short.map(skillName).join(', ') || 'none'}</b></p>
+                            {trend && <p className="q-src">{skillName(trend)}: in demand · TalentCorp (2024), PDF p. 25</p>}
+                            <p className="q-src">Study: {r.effort_hours ? `${r.effort_hours} h of free courses, about ${r.effort_weeks} week${r.effort_weeks === 1 ? '' : 's'} at your pace (estimate)` : 'no verified free course covers its gaps yet'}</p>
+                          </div>
+                          <div className="flex flex-wrap items-center gap-2 self-end">
+                            <button type="button" className="q-btn q-why" onClick={() => setWhyFor(r)} aria-label={`Why? How ${r.title} scores ${Math.round(r.fit)}`}><Info size={16} aria-hidden="true" />Why?</button>
+                            <Link to="/trends" className="inline-flex min-h-[44px] items-center px-1 text-[13px] font-medium">See the evidence</Link>
+                            <Link to="/future" className="inline-flex min-h-[44px] items-center px-1 text-[13px] font-medium">Compare futures</Link>
+                            {data.destination === r.role_id ? (
+                              <DarkButton onClick={() => choose(r.role_id)} disabled={busy}>Continue with this role</DarkButton>
+                            ) : (
+                              <button type="button" className="q-btn" disabled={busy} onClick={() => choose(r.role_id)}>Choose and continue</button>
+                            )}
+                          </div>
+                        </div>
+                        <RoleDetail role={r} roles={data.roles} matches={data} situation={profile.data?.profile.situation ?? 'working'} pack={pack.data} />
+                      </div>
+                    )}
+                  </li>
+                )
+              })}
+            </ol>
+            {ordered.length > ROLES_SHOWN && (
+              <button type="button" className="q-btn self-start" aria-expanded={showAll} onClick={() => setShowAll((v) => !v)}>{showAll ? `Show the top ${ROLES_SHOWN}` : `Show all ${ordered.length} roles`}</button>
+            )}
+            <p className="q-src">
+              {data.scenario_label}: {Math.round(data.intensity * 100)}% of the observed automation-style AI use is assumed to reach these tasks within {data.horizon_years} years. Evidence: {data.evidence.source}, {data.evidence.period}. Fit measures skill coverage, not your chance of getting hired.
             </p>
           </section>
-
-          <div className="flex min-w-0 flex-col gap-6">
-            <BestQuestion profileId={profileId} scenario={scenario} onAnswered={() => { current.reload(); baseline.reload(); fastView.reload() }} />
-            <RoleDetail role={role} roles={data.roles} matches={data} chosen={data.destination === role.role_id} busy={busy} onChoose={() => choose(role.role_id)} situation={profile.data?.profile.situation ?? 'working'} pack={pack.data} />
-          </div>
         </div>
       )}
-      <NextStep to="/pathway" label="Open the plan for your role" hint="Next: a free learning plan for the role you chose" />
+      {whyFor && data && <ScoreWhy role={whyFor} matches={data} onClose={() => setWhyFor(null)} />}
     </main>
   )
 }
