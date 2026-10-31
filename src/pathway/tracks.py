@@ -195,7 +195,7 @@ def comparison(
     # AI-basics courses not already in the full plan add their hours to the "with AI" route.
     in_plan = {st.course.id for st in full["moderate"].steps}
     # Skipped AI basics (B5) add nothing to the with-AI route.
-    shown = full["moderate"].ai_basics["shown"]
+    shown = full["moderate"].ai_basics.shown
     basics = {c for t in res.ai_basics for c in t.courses} - in_plan if shown else set()
     # Rounded before adding, so the two parts shown always add up to the with-AI total.
     basics_hours = round(sum(pack.courses[c].minutes for c in basics) / MINUTES_PER_HOUR, 1)
@@ -250,8 +250,8 @@ def build_tracks(
             "safely.",
             "nodes": _basics_nodes(pack, res, done),
             # B5: false when skipped for this person; the nodes stay for "Show AI basics anyway".
-            "shown": path.ai_basics.get("shown", True),
-            "reason": path.ai_basics.get("reason", ""),
+            "shown": path.ai_basics.shown,
+            "reason": path.ai_basics.reason,
         },
         {
             "id": "without_ai",

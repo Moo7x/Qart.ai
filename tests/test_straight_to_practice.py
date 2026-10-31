@@ -21,6 +21,6 @@ def test_skill_at_study_maximum_is_practice_not_uncovered(skill: str) -> None:
     path = plan_pathway(pack, match, claims_from_levels(levels), 6, "moderate", EVIDENCE)
     name = pack.skills[skill].name
     assert name not in path.uncovered and name not in path.partly_covered
-    assert any(a["rule"] == "straight_to_practice" and name in a["text"] for a in path.adjustments)
+    assert any(a.rule == "straight_to_practice" and name in a.text for a in path.adjustments)
     assert any(p.skill == skill for p in path.practice_steps)
     assert all(s.skill != skill for s in path.steps)

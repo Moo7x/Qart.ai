@@ -46,7 +46,7 @@ from src.match.radar import radar
 from src.match.tasks import task_view
 from src.occupations.catalogue import catalogue_table
 from src.pack import Pack, load_pack
-from src.pathway.planner import Pathway, apply_progress
+from src.pathway.planner import Pathway, apply_progress, pathway_out
 from src.pathway.sdg import role_targets
 from src.pathway.tracks import build_tracks, comparison
 from src.resources import load_resources
@@ -411,7 +411,7 @@ def pathway(
     person = require_person(engine, profile_id)
     pack = person.pack
     _, path, _ = _progressed_plan(engine, person, chosen_role(person, role_id), scenario)
-    out = asdict(path)
+    out = pathway_out(path)
     out["sdg_targets"] = {k: v.model_dump() for k, v in pack.sdg.targets.items()}
     out["sdg_source"] = pack.sdg.source
     out["courses_checked"] = pack.courses_checked

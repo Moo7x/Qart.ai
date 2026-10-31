@@ -57,9 +57,9 @@ def _plans(claims: dict[str, SkillClaim], situation: str):  # type: ignore[no-un
 def test_kavitha_skips_ai_basics_and_gets_no_beginner_course_for_her_skills() -> None:
     claims = kavitha()
     for path in _plans(claims, "working"):
-        assert path.ai_basics["shown"] is False
-        assert POWER_AUTOMATE in path.ai_basics["reason"]
-        assert any(a["rule"] == "ai_basics_skipped" for a in path.adjustments)
+        assert path.ai_basics.shown is False
+        assert POWER_AUTOMATE in path.ai_basics.reason
+        assert any(a.rule == "ai_basics_skipped" for a in path.adjustments)
         at_two = {k for k, c in claims.items() if (c.level or 0) >= params.STUDY_MAX_LEVEL}
         for step in path.steps:
             assert not (step.course.level == "beginner" and step.skill in at_two), step.course.id
@@ -67,13 +67,13 @@ def test_kavitha_skips_ai_basics_and_gets_no_beginner_course_for_her_skills() ->
 
 def test_removing_kavithas_evidence_brings_ai_basics_back() -> None:
     for path in _plans(kavitha(evidenced=False), "working"):
-        assert path.ai_basics["shown"] is True
+        assert path.ai_basics.shown is True
 
 
 def test_students_and_switchers_always_see_ai_basics() -> None:
     pack = load_pack()
     for situation in params.AI_BASICS_ALWAYS:
-        assert ai_basics_choice(pack, kavitha(), situation)["shown"] is True
+        assert ai_basics_choice(pack, kavitha(), situation).shown is True
 
 
 def test_a_skill_at_the_study_maximum_goes_straight_to_practice() -> None:
@@ -85,7 +85,7 @@ def test_a_skill_at_the_study_maximum_goes_straight_to_practice() -> None:
     assert all(s.skill != core.skill for s in path.steps)
     assert [p.target_level for p in path.practice_steps if p.skill == core.skill] == [3]
     name = pack.skills[core.skill].name
-    assert any(a["rule"] == "straight_to_practice" and name in a["text"] for a in path.adjustments)
+    assert any(a.rule == "straight_to_practice" and name in a.text for a in path.adjustments)
 
 
 def test_hafiz_sees_ai_basics_first_through_the_api(client: TestClient) -> None:

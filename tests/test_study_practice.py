@@ -6,7 +6,13 @@ from src import params
 from src.journey.store import claims_from_levels
 from src.match.engine import Evidence, score_role
 from src.pack import Course, load_pack
-from src.pathway.planner import level_after_study, plan_pathway, study_level
+from src.pathway.planner import (
+    WeekRange,
+    level_after_study,
+    pathway_out,
+    plan_pathway,
+    study_level,
+)
 
 EVIDENCE = Evidence(automation_share={}, automation_period="", automation_source="")
 ROLES = list(load_pack().destination_roles)
@@ -51,18 +57,18 @@ def test_practice_steps_only_for_levels_above_2_and_totals_are_consistent(role_i
         assert p.target_level > params.STUDY_MAX_LEVEL and p.kind == "practice"
         req = next(r for r in match.requirements if r.skill == p.skill)
         assert p.target_level <= req.required
-        assert 0 < p.time["low"] <= p.time["high"]
+        assert 0 < p.time.low <= p.time.high
     expected = {r.skill for r in match.requirements if r.required > params.STUDY_MAX_LEVEL}
     assert {p.skill for p in path.practice_steps} == expected
-    assert path.study_hours == path.total_hours == pytest.approx(sum(s.hours for s in path.steps))
-    assert path.practice_weeks == {
-        "low": sum(p.time["low"] for p in path.practice_steps),
-        "high": sum(p.time["high"] for p in path.practice_steps),
-        "kind": "estimate",
-    }
+    assert pathway_out(path)["study_hours"] == path.total_hours
+    assert path.total_hours == pytest.approx(sum(s.hours for s in path.steps))
+    assert path.practice_weeks == WeekRange(
+        sum(int(p.time.low or 0) for p in path.practice_steps),
+        sum(int(p.time.high or 0) for p in path.practice_steps),
+    )
     for fit in (path.fit_after_study, path.fit_after_practice):
-        assert fit["low"] <= fit["high"] and fit["kind"] == "estimate"
-    assert path.fit_after_practice["high"] >= path.fit_after_study["high"]
+        assert fit.low <= fit.high and fit.kind == "estimate"
+    assert path.fit_after_practice.high >= path.fit_after_study.high
     assert all(v <= params.STUDY_MAX_LEVEL for v in path.study_levels.values())
 
 
@@ -70,7 +76,7 @@ def test_course_steps_carry_the_c3_fields() -> None:
     _, path = _plan("o2c_reporting_analyst", {})
     first, *rest = path.steps
     assert first.kind == "course" and first.id == first.course.id and first.unlock is None
-    assert first.time["unit"] == "hours" and first.time["basis"] == first.course.time_basis
+    assert first.time.unit == "hours" and first.time.basis == first.course.time_basis
     assert all(s.unlock == "previous_step" for s in rest)
 
 
