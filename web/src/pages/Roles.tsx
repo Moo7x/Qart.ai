@@ -12,7 +12,10 @@ import { PayLine, ScoreChip } from '../components/ScoreWhy'
 import { SdgRolesGrid } from '../components/SdgHeatmap'
 import { Loading, Problem } from '../components/ui'
 import { useJourney } from '../state'
-import type { GapColumn, MatchesResponse, PackInfo, ProfileData, RoleCard, SensitivityResponse, Situation } from '../types'
+import type { GapColumn, MatchesResponse, PackInfo, ProfileData, RoleCard, Situation } from '../types'
+
+// Roles shown before "Show all": enough to compare, few enough to read.
+const ROLES_SHOWN = 5
 
 const GAP_TITLE: Record<GapColumn, [string, string]> = {
   ready: ['Ready now', 'text-rising'],
@@ -229,11 +232,13 @@ export function Roles() {
   const navigate = useNavigate()
   const current = useApi<MatchesResponse>(profileId ? `/api/profiles/${profileId}/matches?scenario=${scenario}` : null)
   const baseline = useApi<MatchesResponse>(profileId ? `/api/profiles/${profileId}/matches?scenario=moderate` : null)
+  const fastView = useApi<MatchesResponse>(profileId ? `/api/profiles/${profileId}/matches?scenario=fast` : null)
   const profile = useApi<{ profile: ProfileData }>(profileId ? `/api/profiles/${profileId}` : null)
   const pack = useApi<PackInfo>('/api/pack')
   const prefs = useApi<{ not_my_goal: string[] }>(profileId ? `/api/profiles/${profileId}/preferences` : null)
-  const stability = useApi<SensitivityResponse>(profileId ? `/api/profiles/${profileId}/sensitivity?scenario=${scenario}` : null)
   const [selected, setSelected] = useState<string | null>(null)
+  const [showAll, setShowAll] = useState(false)
+  const [bySdg, setBySdg] = useState(false)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
   if (!profileId) return <NeedProfile />
@@ -241,6 +246,11 @@ export function Roles() {
   const data = current.data
   const role = data?.roles.find((r) => r.role_id === selected) ?? data?.roles[0]
   const moderateRank = baseline.data?.roles.map((r) => r.role_id) ?? []
+  const fastRank = fastView.data?.roles.map((r) => r.role_id) ?? []
+  const fitIn = (view: MatchesResponse | null, id: string) => view?.roles.find((r) => r.role_id === id)?.fit
+  const goals = profile.data?.profile.sdg_priorities ?? []
+  const ordered = data ? (bySdg ? [...data.roles].sort((a, b) => (b.serves_goals?.length ?? 0) - (a.serves_goals?.length ?? 0) || b.fit - a.fit) : data.roles) : []
+  const listed = showAll ? ordered : ordered.slice(0, ROLES_SHOWN)
 
   async function choose(roleId: string) {
     setBusy(true)
@@ -266,7 +276,10 @@ export function Roles() {
             Destination roles TalentCorp lists for highly impacted GBS finance roles. Fit compares your levels with what each role needs under the selected scenario; outlook is shown separately with its sources.
           </p>
         </div>
-        <ScenarioSwitch />
+        <div className="flex flex-col items-end gap-2">
+          <ScenarioSwitch />
+          <Link to="/goal" className="text-[13px]">Have a job posting? Check it against your skills →</Link>
+        </div>
       </header>
 
       {current.loading && <Loading what="your matches" />}
@@ -285,16 +298,24 @@ export function Roles() {
       {data && role && (
         <div className="grid items-start gap-8 lg:grid-cols-[minmax(280px,340px)_minmax(0,1fr)]">
           <section aria-label="Ranked roles" className="panel min-w-0 gap-0 overflow-hidden !p-0 lg:sticky lg:top-6">
-            <div className="cap grid grid-cols-[24px_minmax(0,1fr)_44px] gap-3 border-b border-line px-5 pb-3 pt-5">
-              <span>#</span>
-              <span>Role</span>
-              <span className="text-right">Fit</span>
+            <div className="flex flex-col gap-2 border-b border-line px-5 pb-3 pt-5">
+              <div className="cap grid grid-cols-[24px_minmax(0,1fr)_96px] gap-3">
+                <span>#</span>
+                <span>Role</span>
+                <span className="text-right">Fit: moderate → fast</span>
+              </div>
+              {goals.length > 0 && (
+                <div role="radiogroup" aria-label="Order roles by" className="flex gap-1 text-[12px]">
+                  <button type="button" role="radio" aria-checked={!bySdg} onClick={() => setBySdg(false)} className={`btn min-h-[32px] px-2.5 text-[12px] ${!bySdg ? 'btn-v' : ''}`}>Best fit</button>
+                  <button type="button" role="radio" aria-checked={bySdg} onClick={() => setBySdg(true)} className={`btn min-h-[32px] px-2.5 text-[12px] ${bySdg ? 'btn-v' : ''}`}>My SDG goals first</button>
+                </div>
+              )}
             </div>
-            {data.roles.map((r, i) => {
-              const was = moderateRank.indexOf(r.role_id)
-              const moved = scenario === 'fast' && was >= 0 ? was - i : 0
+            {listed.map((r, i) => {
+              const mod = fitIn(baseline.data, r.role_id)
+              const fst = fitIn(fastView.data, r.role_id)
+              const rankMove = moderateRank.indexOf(r.role_id) - fastRank.indexOf(r.role_id)
               const b = bars(r)
-              const ranks = stability.data?.roles.find((x) => x.role_id === r.role_id)?.ranks
               const on = r.role_id === role.role_id
               return (
                 <div key={r.role_id} className={`border-b border-line px-3 pb-3 last:border-b-0 ${on ? 'bg-violet-soft' : ''}`}>
@@ -302,7 +323,7 @@ export function Roles() {
                   type="button"
                   aria-pressed={on}
                   onClick={() => setSelected(r.role_id)}
-                  className={`grid w-full cursor-pointer grid-cols-[24px_minmax(0,1fr)_44px] items-start gap-x-3 border-0 border-l-2 bg-transparent py-4 pl-2 pr-2 text-left ${on ? 'border-l-violet' : 'border-l-transparent hover:bg-fog'}`}
+                  className={`grid w-full cursor-pointer grid-cols-[24px_minmax(0,1fr)_96px] items-start gap-x-3 border-0 border-l-2 bg-transparent py-4 pl-2 pr-2 text-left ${on ? 'border-l-violet' : 'border-l-transparent hover:bg-fog'}`}
                 >
                   <span className="pt-0.5 font-mono text-ash">{i + 1}</span>
                   <span className="flex min-w-0 flex-col gap-1.5">
@@ -316,14 +337,15 @@ export function Roles() {
                       {r.listed_transition && <span className="tag bg-observed-bg text-observed">Route from your role</span>}
                       {prefs.data?.not_my_goal.includes(r.role_id) && <span className="tag bg-mist text-ash">You said: not your goal</span>}
                       {r.longer_route && <span className="tag bg-weak-bg text-weak">Longer route</span>}
-                      {moved !== 0 && <span className="tag bg-estimate-bg text-estimate">{moved > 0 ? `▲ ${moved}` : `▼ ${-moved}`} under Fast</span>}
-                      {ranks && Math.min(...ranks) !== Math.max(...ranks) && (
-                        <span className="tag bg-estimate-bg text-estimate" title="Rank across AI-adoption intensities from none to stronger than fast">rank {Math.min(...ranks)}–{Math.max(...ranks)} by adoption</span>
-                      )}
+                      {rankMove !== 0 && moderateRank.length > 0 && fastRank.length > 0 && <span className="tag bg-estimate-bg text-estimate">{rankMove > 0 ? `▲ ${rankMove}` : `▼ ${-rankMove}`} place{Math.abs(rankMove) === 1 ? '' : 's'} if AI moves fast</span>}
+                      {(r.serves_goals ?? []).map((g) => <span key={g} className="tag bg-[#e8f6ee] text-rising">Serves SDG {g} · your goal</span>)}
                     </span>
                   </span>
                   <span className="flex flex-col items-end">
                     <span className="font-mono text-xl tracking-tight">{Math.round(r.fit)}</span>
+                    {mod !== undefined && fst !== undefined && (
+                      <span className={`font-mono text-[11px] ${fst > mod ? 'text-rising' : fst < mod ? 'text-weak' : 'text-graphite'}`}>{Math.round(mod)} → {Math.round(fst)}</span>
+                    )}
                     {r.band && <span className="text-[11px] text-graphite">{r.band}</span>}
                   </span>
                 </button>
@@ -331,13 +353,16 @@ export function Roles() {
                 </div>
               )
             })}
-            <p className="m-0 pt-3 text-[11px] text-graphite">
+            {ordered.length > ROLES_SHOWN && (
+              <button type="button" className="btn m-3 min-h-[36px] text-[13px]" onClick={() => setShowAll((v) => !v)}>{showAll ? `Show the top ${ROLES_SHOWN}` : `Show all ${ordered.length} roles`}</button>
+            )}
+            <p className="m-0 px-5 pb-4 pt-1 text-[11px] text-graphite">
               {data.scenario_label}: {Math.round(data.intensity * 100)}% of the observed automation-style AI use is assumed to reach these tasks within {data.horizon_years} years. Evidence: {data.evidence.source}, {data.evidence.period}.
             </p>
           </section>
 
           <div className="flex min-w-0 flex-col gap-6">
-            <BestQuestion profileId={profileId} scenario={scenario} onAnswered={() => { current.reload(); baseline.reload(); stability.reload() }} />
+            <BestQuestion profileId={profileId} scenario={scenario} onAnswered={() => { current.reload(); baseline.reload(); fastView.reload() }} />
             <RoleDetail role={role} roles={data.roles} matches={data} chosen={data.destination === role.role_id} busy={busy} onChoose={() => choose(role.role_id)} situation={profile.data?.profile.situation ?? 'working'} pack={pack.data} />
           </div>
         </div>

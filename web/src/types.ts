@@ -215,6 +215,7 @@ export type RoleCard = {
   raise?: RaiseOption[]
   essentials_short?: string[]
   pay?: RolePay | null
+  serves_goals?: string[]
 }
 export type MatchesResponse = {
   scenario: Scenario
