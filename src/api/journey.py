@@ -278,7 +278,7 @@ def _card(
         {
             "kind": "expert",
             "text": f"TalentCorp rates it {IMPACT_MEANING[role.impact]}.",
-            "source": "TalentCorp (2024) GBS study, PDF p. 25–26",
+            "source": role.study_source,
         }
     ]
     if match.automation_share is not None:

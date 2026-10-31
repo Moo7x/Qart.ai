@@ -69,6 +69,11 @@ class DestinationRole(BaseModel):
     soc: str
     requires: list[Requirement]
 
+    @property
+    def study_source(self) -> str:
+        """The citation for the role's title and impact level: its own study pages."""
+        return f"TalentCorp (2024) GBS study, PDF p. {', '.join(map(str, self.pages))}"
+
 
 class FitCheck(BaseModel):
     """How a candidate course's fit to its skills was checked (src/collectors/course_check.py)."""

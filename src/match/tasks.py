@@ -110,7 +110,7 @@ def task_view(
             "tasks": pack.tasks.source + " · " + pack.tasks.licence,
             "observed_use": "Anthropic Economic Index, sampled Claude conversations (CC-BY)",
             "exposure": "ILO Working Paper 140 (2025), CC BY 4.0, via the ESCO–O*NET crosswalk",
-            "expert": "TalentCorp (2024) GBS study, PDF p. 25–26",
+            "expert": role.study_source,
         },
     }
 
