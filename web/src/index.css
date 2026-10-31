@@ -577,3 +577,19 @@
   .j-closing.j-veil { animation: j-veil-out .2s ease-in forwards; }
   .j-closing .j-dialog { animation: j-out .2s ease-in forwards; }
 }
+
+/* Your work today (pages/Work.tsx): a task grid that stacks on phones. */
+@layer components {
+  .w-row { display: grid; grid-template-columns: minmax(0,2fr) minmax(0,1fr) minmax(0,.9fr); align-items: center; gap: 6px 18px; padding: 7px 4px; border-top: 1px solid #f0f0f0; }
+  .w-head { border-top: 0; padding-bottom: 2px; }
+  .w-mob { display: none; }
+  @media (max-width: 767px) {
+    .w-row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; padding: 9px 2px; }
+    .w-row > :first-child { flex: 1 1 100%; }
+    .w-row > :nth-child(2), .w-row > :nth-child(3) { margin-left: 18px; }
+    .w-head, .w-bar { display: none !important; }
+    .w-mob { display: inline; }
+    .w-scen, .w-scen [role=group] { width: 100%; }
+    .w-scen button { flex: 1 1 0; padding-inline: 6px; font-size: 13px; }
+  }
+}
