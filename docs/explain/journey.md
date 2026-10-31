@@ -314,3 +314,12 @@ My plan opens with three connected track stations. Full skill labels and explici
 5. **Keep control:** course completion is self-reported, never an automatic proficiency increase. New collected evidence proposes a revision; the person accepts it. Role search windows link out to job boards and guarantee no vacancy.
 
 Overview starts with the current role, ranked options, a prioritised essential/weighted gap and the next uncompleted course. Light charts share the Trends components; full radar labels wrap. Job-search windows are available beside role options, future lists, goal alternatives and Overview recommendations. Long source badges wrap on phones. Learning progress saves show failures and block duplicate pending writes; switching scenarios remounts the plan state to avoid displaying an old scenario response.
+
+## One reskilling path (src/pathway/reskill.py)
+
+The plan screen shows one path. With no destination it is **your job's AI-era path**: every skill
+you hold is measured by how much AI is already used on its tasks (Economic Index, else the Qart
+task model's prediction), and becomes "check and steer AI-run work", "do it faster with AI", or a
+human strength to keep. When you choose a role, that path is replaced by **your path to the role**:
+AI basics, your skills that AI is reshaping and the role also needs, then the role's new skills.
+Steps are never locked; start with any skill.

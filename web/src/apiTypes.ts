@@ -459,6 +459,15 @@ export type RequirementScore = {
   tasks: TaskEvidence[]
 }
 
+export type ReskillOut = {
+  scenario: string
+  current_role: string | null
+  current_forecast: RoleForecast | null
+  track: Track
+  strengths: Strength[]
+  destination: string | null
+}
+
 export type RoleCard = {
   role_id: string
   title: string
@@ -661,7 +670,7 @@ export type SignalsResponse = {
 }
 
 export type SkillBasis = {
-  kind: "talentcorp" | "onet" | "onet_tech" | "assumption"
+  kind: "talentcorp" | "onet" | "onet_tech" | "assumption" | "ai_trend"
   text: string
   source: string
 }
@@ -728,6 +737,15 @@ export type StepSdg = {
   how: string
 }
 
+export type Strength = {
+  skill: string
+  name: string
+  level: number | null
+  ai_use: number | null
+  ai_basis: string
+  text: string
+}
+
 export type TaskEvidence = {
   task: string
   text: string
@@ -744,7 +762,7 @@ export type TimeEstimate = {
 }
 
 export type Track = {
-  id: "ai_basics" | "without_ai" | "with_ai"
+  id: "ai_basics" | "without_ai" | "with_ai" | "path"
   title: string
   why: string
   nodes: TrackNode[]
@@ -786,6 +804,9 @@ export type TrackNode = {
   study_after: number | null
   practice: PracticeStep[] | null
   why: SkillBasis | null
+  mode: "basics" | "oversee" | "use_ai" | "learn" | null
+  ai_use: number | null
+  ai_basis: string | null
 }
 
 export type TrackVideo = {
@@ -803,6 +824,7 @@ export type TracksOut = {
   scenario: string
   weekly_hours: number
   tracks: Track[]
+  path: Track | null
   comparison: RouteComparison
   resources_checked: string
   courses_checked: string

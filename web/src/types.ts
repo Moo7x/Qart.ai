@@ -469,7 +469,7 @@ export type CourseFitCheck = { result: 'fits' | 'does_not_fit' | 'unclear'; by: 
 export type TrackCourse = api.TrackCourse
 export type TrackVideo = api.TrackVideo
 export type TrackArticle = api.TrackArticle
-export type SkillBasis = { kind: 'talentcorp' | 'onet' | 'onet_tech' | 'assumption'; text: string; source: string }
+export type SkillBasis = { kind: 'talentcorp' | 'onet' | 'onet_tech' | 'assumption' | 'ai_trend'; text: string; source: string }
 export type TrackNode = api.TrackNode
 export type Track = api.Track
 export type RouteMetrics = api.RouteMetrics
@@ -522,3 +522,4 @@ export interface IndustryForecastResponse {
   task_model: TaskModelSummary | null
   kind: 'estimate'
 }
+export type ReskillResponse = api.ReskillOut

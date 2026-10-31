@@ -28,7 +28,7 @@ class Labelled(BaseModel):
 class SkillBasis(BaseModel):
     """Why a skill counts for a role (src/match/basis.py)."""
 
-    kind: Literal["talentcorp", "onet", "onet_tech", "assumption"]
+    kind: Literal["talentcorp", "onet", "onet_tech", "assumption", "ai_trend"]
     text: str
     source: str
 
@@ -218,10 +218,14 @@ class TrackNode(BaseModel):
     study_after: int | None = None
     practice: list[PracticeStep] | None = None
     why: SkillBasis | None = None
+    # The one path (src/pathway/reskill.py): basics, adapt a held skill, or learn a gap skill.
+    mode: Literal["basics", "oversee", "use_ai", "learn"] | None = None
+    ai_use: float | None = None  # effective automation-style AI use on the skill's tasks
+    ai_basis: str | None = None  # observed, predicted, mixed, occupation or none
 
 
 class Track(BaseModel):
-    id: Literal["ai_basics", "without_ai", "with_ai"]
+    id: Literal["ai_basics", "without_ai", "with_ai", "path"]
     title: str
     why: str
     nodes: list[TrackNode]
@@ -253,9 +257,30 @@ class TracksOut(BaseModel):
     scenario: str
     weekly_hours: float
     tracks: list[Track]
+    path: Track | None = None
     comparison: RouteComparison
     resources_checked: str
     courses_checked: str
+
+
+class Strength(BaseModel):
+    skill: str
+    name: str
+    level: int | None
+    ai_use: float | None
+    ai_basis: str
+    text: str
+
+
+class ReskillOut(BaseModel):
+    """GET /reskill: the person's job's AI-era path, shown before a destination is chosen."""
+
+    scenario: str
+    current_role: str | None
+    current_forecast: RoleForecast | None
+    track: Track
+    strengths: list[Strength]
+    destination: str | None
 
 
 # --- /future: today against after the plan, in both scenarios -------------------------------
