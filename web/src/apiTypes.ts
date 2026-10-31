@@ -73,6 +73,14 @@ export type Basis = {
   read: string
 }
 
+export type CategoryChange = {
+  role_id: string
+  title: string
+  before: string
+  after: string
+  current_job: boolean
+}
+
 export type ChangeReport = {
   mode: "live" | "replay"
   scenario: "moderate" | "fast"
@@ -179,6 +187,7 @@ export type EvidenceTestOut = {
   after: Ranking
   weights: WeightChange[]
   pathway: PathwayChange | null
+  forecast: CategoryChange[]
 }
 
 export type FitCheck = {
@@ -303,7 +312,7 @@ export type Meters = {
 }
 
 export type Override = {
-  kind: "occupation_share" | "task_share"
+  kind: "occupation_share" | "task_share" | "group_change"
   key: string
   value: number
 }
