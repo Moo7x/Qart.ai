@@ -22,6 +22,12 @@ function Formula({ role }: { role: RoleCard }) {
   return (
     <div className="flex flex-col gap-2">
       <p className="m-0 font-mono text-[12px]">fit = 100 × Σ w·min(c/r, 1) ÷ Σ w = {role.fit.toFixed(1)}</p>
+      {role.forecast && (
+        <p className="m-0 font-mono text-[12px]">
+          order = fit × outlook factor ({role.forecast.label}: {role.fit > 0 ? (role.direction_score / role.fit).toFixed(2) : '1.00'}) = {role.direction_score.toFixed(1)}
+          <span className="block font-sans text-[11px] text-graphite">The outlook factor comes from the Qart forecast for this role (an estimate, with declared factors: growing roles move up a little, shrinking ones down). It only reorders roles with close fits; the fit itself is yours and does not change.</span>
+        </p>
+      )}
       <div className="overflow-x-auto">
         <table className="w-full min-w-[420px] border-collapse text-[12px]">
           <thead>
