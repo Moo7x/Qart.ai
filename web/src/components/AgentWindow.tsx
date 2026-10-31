@@ -71,6 +71,32 @@ function RunView({ runId }: { runId: string }) {
   )
 }
 
+// The same agent inside another window (a plan stop): the run shows in place, not in a new window.
+export function ScoutInline({ skill, skillName, profileId }: { skill: string; skillName: string; profileId: string | null }) {
+  const [runId, setRunId] = useState<string | null>(null)
+  const [error, setError] = useState<string | null>(null)
+  async function start() {
+    setError(null)
+    try {
+      const out = await sendJSON<{ run_id: string }>('/api/agents/scout', { body: { skill, profile_id: profileId } })
+      setRunId(out.run_id)
+    } catch (reason) {
+      setError(reason instanceof Error ? reason.message : String(reason))
+    }
+  }
+  if (runId) return <RunView runId={runId} />
+  return (
+    <div className="flex flex-col gap-2">
+      <p className="m-0">Optional: the scout reads the checked videos and articles for {skillName} and links you to the minutes or paragraphs that teach it. You can also open them yourself.</p>
+      <button type="button" className="btn min-h-[44px] gap-1.5 self-start" onClick={start}>
+        <Bot size={15} aria-hidden="true" />
+        Find the best parts
+      </button>
+      {error && <span role="alert" className="text-[12px] text-weak">{error}</span>}
+    </div>
+  )
+}
+
 export function ScoutButton({ skill, skillName, profileId }: { skill: string; skillName: string; profileId: string | null }) {
   const [runId, setRunId] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)

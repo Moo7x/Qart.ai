@@ -11,7 +11,7 @@ import { Windows } from './Windows'
 
 type Turn = { q: string; a: string }
 
-function Chat({ profileId, skill }: { profileId: string; skill: string }) {
+export function Chat({ profileId, skill }: { profileId: string; skill: string }) {
   const [state, setState] = useState<CheckState | null>(null)
   const [turns, setTurns] = useState<Turn[]>([])
   const [text, setText] = useState('')
