@@ -8,7 +8,7 @@ export type Draft = {
   years: string
   tasks: string
   skills: Record<string, SkillClaim>
-  // Kept from a saved profile; set later on Roles (interests, SDGs) and Time and budget.
+  // Kept from a saved profile; hours and budget are set later on Time and budget.
   hours: number
   budget: ProfileData['budget']
   interests: SkillKind[]
