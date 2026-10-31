@@ -267,7 +267,7 @@ def _interest_overlap(pack: Pack, match: RoleMatch, interests: set[str]) -> int:
 
 
 def sdg_overlap(pack: Pack, role_id: str, sdg_goals: set[str]) -> int:
-    """How many of the person's chosen goals (e.g. "8") the role's SDG targets (e.g. "8.5") serve."""
+    """How many of the person's chosen goals (e.g. "8") the role's targets (e.g. "8.5") serve."""
     return len({link.target.split(".")[0] for link in pack.sdg.for_role(role_id)} & sdg_goals)
 
 
