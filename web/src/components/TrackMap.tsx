@@ -38,6 +38,7 @@ const STATUS_TAG: Record<PracticeStep['status'], string> = {
 function practicePane(steps: PracticeStep[], onSkip: (id: string) => void, paused: boolean): Pane {
   return {
     key: 'practice',
+    wide: true,
     title: 'Practice at work',
     hint: 'Study reaches level 2 at most; these levels come from work you do. Weeks are estimates.',
     body: (
@@ -80,6 +81,7 @@ function whyPane(node: TrackNode): Pane[] {
   const [tag, tone] = WHY_TAG[node.why.kind]
   return [{
     key: 'why',
+    wide: true,
     title: 'Why you need this',
     hint: node.essential ? 'Essential for this role' : 'Counts toward your fit for this role',
     body: (
