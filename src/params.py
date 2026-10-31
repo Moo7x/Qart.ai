@@ -90,6 +90,14 @@ CATALOGUE_SHORTLIST = 15  # items per skill sent to the reranker
 CATALOGUE_TOP_PER_SKILL = 5
 CATALOGUE_MIN_RERANK = 0.01
 CATALOGUE_MAX_SKILLS_PER_ITEM = 3  # an item is listed under at most its three best skills
+# Automatic course fit check (src/collectors/course_check.py). Declared: a quote must be at least
+# 5 words so a match is a real sentence, not a common phrase; the first 8,000 characters of a page
+# hold a course's description and objectives; 20 s per page and 30 s per model call keep a check
+# of ~100 candidates within a few minutes.
+COURSE_CHECK_MIN_QUOTE_WORDS = 5
+COURSE_CHECK_PAGE_CHARS = 8000
+COURSE_CHECK_FETCH_SECONDS = 20
+COURSE_CHECK_LLM_SECONDS = 30
 # Resource scout (src/agents/scout.py). The agent may call at most 8 tools within 45 s, so a live
 # run in the demo always ends; it reads at most 3 resources and keeps the 3 best segments of each.
 # Video segments are 30–90 s of captions, cut at the end of a sentence: long enough to explain one

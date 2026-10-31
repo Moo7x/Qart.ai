@@ -70,6 +70,16 @@ class DestinationRole(BaseModel):
     requires: list[Requirement]
 
 
+class FitCheck(BaseModel):
+    """How a candidate course's fit to its skills was checked (src/collectors/course_check.py)."""
+
+    result: Literal["fits", "does_not_fit", "unclear"]
+    by: str  # "person" or the model that read the page, e.g. "gpt-4o-mini"
+    quote: str = ""  # a sentence from the course's own page, found there by code
+    checked: str = ""
+    skills_removed: list[str] = []  # matched skills the page did not show it teaches
+
+
 class Course(BaseModel):
     id: str
     title: str
@@ -85,6 +95,7 @@ class Course(BaseModel):
     hands_on: bool = False  # the material includes exercises the learner does, not only reading
     checked: str = ""  # date the entry was opened and checked, when it differs from its file's
     verified: bool = True  # False: a pipeline candidate not yet opened by a reviewer; never planned
+    fit_check: FitCheck | None = None  # how a candidate became verified (none: checked by hand)
 
 
 class SdgTarget(BaseModel):
