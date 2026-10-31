@@ -15,6 +15,7 @@ from sqlalchemy import Engine, Table, delete, select
 
 from src.agents.store import agent_run_table, agent_step_table
 from src.db import metadata
+from src.intake import cache as cv_cache
 from src.journey.store import profile_table
 
 
@@ -92,4 +93,7 @@ def purge_idle(engine: Engine, days: int, now: datetime | None = None) -> int:
         ]
     for profile_id in idle:
         delete_profile(engine, profile_id)
+    # Stored CV readings (src/intake/cache.py) follow the same retention as profiles.
+    with engine.begin() as conn:
+        conn.execute(delete(cv_cache.cache_table).where(cv_cache.cache_table.c.created_at < cutoff))
     return len(idle)

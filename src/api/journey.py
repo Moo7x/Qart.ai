@@ -1,5 +1,6 @@
 """Journey routes: intake, profiles, matched roles, destination, pathway, Today → Future you."""
 
+import hashlib
 import json
 from dataclasses import asdict
 from typing import Any
@@ -16,8 +17,10 @@ from src.changes.store import baseline_cutoff
 from src.collectors.talentcorp import load_extraction
 from src.config import REPO_ROOT, Settings
 from src.evidence.signals import build_signals, job_ad_signals, occupation_signals
-from src.intake.extract import extract
+from src.intake import cache as cv_cache
+from src.intake.extract import MAX_CV_CHARS, extract, messages, schema
 from src.intake.files import UnsupportedFileError, read_cv
+from src.intake.pii import scrub
 from src.intake.skill_search import search, warm
 from src.journey.events import record_claim_changes, record_event
 from src.journey.person import Person, load_person
@@ -182,19 +185,38 @@ def sample(sample_id: str) -> dict[str, str]:
     }
 
 
-def _extraction_out(text: str, settings: Settings) -> dict[str, Any]:
-    result = extract(load_pack(), text, settings)
-    return asdict(result)
+def _extraction_out(text: str, settings: Settings, engine: Engine) -> dict[str, Any]:
+    """Read the CV; the same CV text always gets the same reading (src/intake/cache.py)."""
+    pack = load_pack()
+    fingerprint = hashlib.sha256(
+        json.dumps([messages(pack, ""), schema(pack)], sort_keys=True).encode()
+    ).hexdigest()
+    cache_key = cv_cache.key(scrub(text[:MAX_CV_CHARS]).text, settings.llm_model, fingerprint)
+    if settings.llm_configured:
+        stored = cv_cache.get(engine, cache_key)
+        if stored is not None:
+            note = "This CV was read before: the same reading is used, so it gives the same result."
+            return {**stored, "note": f"{stored.get('note', '')} {note}".strip()}
+    out = asdict(extract(pack, text, settings))
+    if settings.llm_configured and str(out.get("engine", "")).startswith(settings.llm_model):
+        cv_cache.put(engine, cache_key, settings.llm_model, out)  # a model reading, not a fallback
+    return out
 
 
 @router.post("/intake/parse")
-def parse_text(body: TextIn, settings: Settings = Depends(get_settings)) -> dict[str, Any]:
-    return _extraction_out(body.text, settings)
+def parse_text(
+    body: TextIn,
+    settings: Settings = Depends(get_settings),
+    engine: Engine = Depends(get_engine),
+) -> dict[str, Any]:
+    return _extraction_out(body.text, settings, engine)
 
 
 @router.post("/intake/upload")
 async def parse_upload(
-    file: UploadFile = File(...), settings: Settings = Depends(get_settings)
+    file: UploadFile = File(...),
+    settings: Settings = Depends(get_settings),
+    engine: Engine = Depends(get_engine),
 ) -> dict[str, Any]:
     try:
         text = read_cv(file.filename or "", await file.read())
@@ -202,7 +224,7 @@ async def parse_upload(
         raise HTTPException(status_code=415, detail=str(exc)) from exc
     if not text.strip():
         raise HTTPException(status_code=422, detail="no text could be read from this file")
-    return _extraction_out(text, settings)
+    return _extraction_out(text, settings, engine)
 
 
 @router.post("/skills/search")
