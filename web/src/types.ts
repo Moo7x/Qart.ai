@@ -489,7 +489,7 @@ export interface IndustryRoleForecast {
   label: string
   meaning: string
   reasons: string[]
-  demand: { group: string | null; critical: boolean | null; change_pp?: number | null; model?: string | null; note?: string; source?: string | null; fetched?: string | null }
+  demand: { group: string | null; critical: boolean | null; change_pp?: number | null; model?: string | null; backtest_ratio?: number | null; note?: string; source?: string | null; fetched?: string | null }
   ai: { use: number | null; use_observed_share: number | null; tasks_observed: number; tasks_predicted: number; exposure: number | null; talentcorp_impact: number | null }
 }
 export interface SkillForecast {

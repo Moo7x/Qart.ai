@@ -15,6 +15,13 @@ const TONE: Record<IndustryCategory, string> = {
   shrinking: 'bg-[#fde8e8] text-[#9b1c1c]',
 }
 const MODEL_NAME: Record<string, string> = {
+  gbr: 'gradient boosting',
+  smoothing: 'exponential smoothing',
+  naive: 'keeping the last value',
+  drift: 'drift',
+  theta: 'theta',
+  damped: 'damped trend',
+  linear: 'linear trend',
   ridge: 'ridge regression',
   random_forest: 'random forest',
   hist_gradient_boosting: 'gradient boosting',
@@ -42,6 +49,7 @@ function RoleRow({ role }: { role: IndustryRoleForecast }) {
           <p className="m-0 text-[12px] text-graphite">
             Measured through O*NET {role.occupation ?? 'no occupation'}{role.soc ? ` (${role.soc})` : ''}{role.soc_reason ? `: ${role.soc_reason}` : ''}.
             {' '}AI use over {role.ai.tasks_observed} observed and {role.ai.tasks_predicted} predicted tasks.
+            {role.demand.model ? ` Job-group forecast by ${MODEL_NAME[role.demand.model] ?? role.demand.model}${role.demand.backtest_ratio != null ? (role.demand.backtest_ratio < 1 ? `, ${Math.round(100 * (1 - role.demand.backtest_ratio))}% better than "no change" in backtests${role.demand.backtest_ratio > 0.95 ? ' (a weak signal)' : ''}` : ', no better than "no change", so it is shown as no change') : ''}.` : ''}
             {role.demand.source ? ` Demand: ${role.demand.source}${role.demand.fetched ? `, fetched ${role.demand.fetched.slice(0, 10)}` : ''}.` : ''}
           </p>
         </div>
@@ -67,12 +75,13 @@ export function IndustryForecast() {
         <h2 className="h2">Qart forecast: where GBS finance jobs are heading ({data.scenario} AI)</h2>
         <KindLabel kind="estimate" />
       </div>
-      <div className="grid gap-4 [grid-template-columns:repeat(auto-fit,minmax(260px,1fr))]">
+      {/* Balanced columns: each category card keeps its height and the columns fill evenly. */}
+      <div className="columns-1 gap-4 md:columns-2 xl:columns-3">
         {ORDER.map((category) => {
           const roles = data.roles.filter((r) => r.category === category)
           if (!roles.length) return null
           return (
-            <div key={category} className="q-card gap-1 px-5 py-4">
+            <div key={category} className="q-card mb-4 break-inside-avoid gap-1 px-5 py-4">
               <span className={`self-start rounded-full px-3 py-1 text-[12px] font-semibold ${TONE[category]}`}>{roles[0].label} · {roles.length}</span>
               <p className="m-0 text-[12px] text-graphite">{roles[0].meaning}</p>
               <ul className="m-0 list-none p-0">{roles.map((r) => <RoleRow key={r.id} role={r} />)}</ul>

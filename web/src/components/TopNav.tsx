@@ -31,7 +31,6 @@ const EVIDENCE = [
   { to: '/trends', text: 'Trends and forecasts' },
   { to: '/changes', text: 'What changed' },
   { to: '/live', text: 'Live intelligence' },
-  { to: '/occupations', text: 'Any occupation' },
   { to: '/status', text: 'Status' },
   { to: '/privacy', text: 'Privacy' },
 ]

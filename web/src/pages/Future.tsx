@@ -29,6 +29,17 @@ function RoleList({ roles, destination, estimate }: { roles: FutureRole[]; desti
   )
 }
 
+const SKILLS_SHOWN = 6 // skills listed before "Show all" (the strongest first, as the API sends them)
+
+function SkillNow({ name, level }: { name: string; level: number | null }) {
+  return (
+    <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 border-t border-line py-2 text-[13px]">
+      <span>{name}</span>
+      <Dots level={level} tone="stone" />
+    </div>
+  )
+}
+
 export function Future() {
   const { profileId, scenario } = useJourney()
   const future = useApi<FutureResponse>(profileId ? `/api/profiles/${profileId}/future` : null)
@@ -73,12 +84,16 @@ export function Future() {
               <div className="flex flex-col gap-2">
                 <h3 className="cap m-0">Your skills</h3>
                 {data.skills_now.length === 0 && <p className="m-0 text-[13px] text-graphite">No rated skills yet. <Link to="/overview">Rate your skills on your Overview</Link></p>}
-                {data.skills_now.map((s) => (
-                  <div key={s.skill} className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 border-t border-line py-2 text-[13px]">
-                    <span>{s.name}</span>
-                    <Dots level={s.level} tone="stone" />
-                  </div>
-                ))}
+                {data.skills_now.slice(0, SKILLS_SHOWN).map((s) => <SkillNow key={s.skill} name={s.name} level={s.level} />)}
+                {data.skills_now.length > SKILLS_SHOWN && (
+                  <details className="group">
+                    <summary className="cursor-pointer list-none border-t border-line py-2 text-[13px] font-medium text-violet">
+                      <span className="group-open:hidden">Show all {data.skills_now.length} skills ▾</span>
+                      <span className="hidden group-open:inline">Show fewer ▴</span>
+                    </summary>
+                    {data.skills_now.slice(SKILLS_SHOWN).map((s) => <SkillNow key={s.skill} name={s.name} level={s.level} />)}
+                  </details>
+                )}
               </div>
             </section>
 

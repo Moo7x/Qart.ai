@@ -124,6 +124,9 @@ def _demand(rows: list[Row]) -> dict[str, dict[str, Any]]:
         out[group] = {
             "change_pp": forecast._change(entry),
             "model": entry.get("model"),
+            # Backtest error of that model divided by keeping the last value: below 1 it beat
+            # "no change", and how far below says how much the forecast can be trusted.
+            "backtest_ratio": (entry.get("backtest") or {}).get("ratio"),
             "note": entry.get("note", ""),
             "source": entry.get("source"),
             "fetched": entry.get("fetched"),
