@@ -44,6 +44,8 @@ def _course(c: Course, planned: set[str], done: list[str]) -> dict[str, Any]:
         "level": c.level,
         "planned": c.id in planned,
         "done": c.id in done,
+        # How a catalogue candidate's fit was checked (None: checked by hand when it was added).
+        "fit_check": c.fit_check.model_dump() if c.fit_check else None,
     }
 
 

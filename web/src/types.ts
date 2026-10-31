@@ -612,7 +612,8 @@ export type Stage = { name: string; engine: string; outcome: string; seconds: nu
 
 // ---- My plan tracks (src/pathway/tracks.py, GET /api/profiles/{id}/tracks) ----
 
-export type TrackCourse = { id: string; title: string; provider: string; url: string; minutes: number; level: string; planned: boolean; done: boolean }
+export type CourseFitCheck = { result: 'fits' | 'does_not_fit' | 'unclear'; by: string; quote: string; checked: string }
+export type TrackCourse = { id: string; title: string; provider: string; url: string; minutes: number; level: string; planned: boolean; done: boolean; fit_check?: CourseFitCheck | null }
 export type TrackVideo = { id: string; title: string; channel: string; url: string; minutes: number; published: string }
 export type TrackArticle = { id: string; title: string; publisher: string; url: string }
 export type TrackNode = {

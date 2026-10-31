@@ -106,6 +106,9 @@ function panes(node: TrackNode, state: State, blocker: string | null, done: stri
               <li key={c.id} className="flex flex-col gap-1.5 border-b border-line pb-3 last:border-0">
                 <a href={c.url} target="_blank" rel="noopener noreferrer" className="font-medium text-void">{c.title} ↗</a>
                 <span className="font-mono text-[11px] text-graphite">{c.provider} · {c.minutes < 60 ? `${c.minutes} min` : `${(c.minutes / 60).toFixed(1)} h`} · {c.level}</span>
+                {c.fit_check?.result === 'fits' && (
+                  <span className="text-[11px] text-graphite">Fit checked automatically ({c.fit_check.by}, {c.fit_check.checked}) from the course page: &ldquo;{c.fit_check.quote}&rdquo;</span>
+                )}
                 <span className="flex flex-wrap items-center gap-2">
                   <span className={`tag ${c.planned ? 'bg-violet-soft text-violet' : 'bg-mist text-graphite'}`}>{c.planned ? 'In your plan' : 'Alternative'}</span>
                   {c.planned && (state === 'locked' ? (
