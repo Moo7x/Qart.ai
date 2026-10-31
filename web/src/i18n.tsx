@@ -34,6 +34,7 @@ const MS: Record<string, string> = {
   'Your picture at a glance': 'Gambaran anda secara ringkas',
   Privacy: 'Privasi',
   Status: 'Status',
+  'Edit my profile': 'Kemas kini profil saya',
   // end phase2 A
   // onboarding
   'Your situation': 'Situasi anda',
@@ -112,6 +113,8 @@ const MS: Record<string, string> = {
   Send: 'Hantar',
   'Download as text': 'Muat turun sebagai teks',
   // phase2 B (owner B adds its strings in this block only, docs/PHASE2_PLAN.md §5)
+  'Roles that fit you next': 'Peranan yang sesuai untuk anda seterusnya',
+  'Your plan': 'Pelan anda',
   // end phase2 B
 }
 

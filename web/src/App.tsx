@@ -1,6 +1,6 @@
 import { Component, type ComponentType, lazy, type ReactNode, Suspense, useEffect } from 'react'
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
-import { Sidebar } from './components/Sidebar'
+import { TopNav } from './components/TopNav'
 import { Future } from './pages/Future'
 import { Goal } from './pages/Goal'
 import { Changes } from './pages/Changes'
@@ -102,7 +102,7 @@ function Shell() {
   if (location.pathname === '/overview' && !profileId) return <Navigate to="/start" replace />
   return (
     <div className="app-shell">
-      <Sidebar />
+      <TopNav />
       <Routes>
         <Route path="/overview" element={<PageError><Suspense fallback={<main className="page"><span role="status" className="cap">Loading your overview…</span></main>}><Overview /></Suspense></PageError>} />
         <Route path="/goal" element={<Goal />} />
