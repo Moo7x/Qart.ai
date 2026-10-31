@@ -6,4 +6,6 @@ in Stage 0; routes are added here only.
 
 from fastapi import APIRouter
 
+from src.journey import events  # noqa: F401  registers the journey_event table
+
 router = APIRouter(prefix="/api/profiles/{profile_id}")

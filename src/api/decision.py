@@ -9,6 +9,7 @@ from sqlalchemy import Engine
 from src.api.evidence import get_engine
 from src.api.journey import _destination_or_query, require_profile
 from src.changes.store import accepted_rows
+from src.journey.events import record_event
 from src.journey.progress import get_progress, save_progress
 from src.journey.store import (
     MAX_LEVEL,
@@ -58,8 +59,17 @@ def answer(profile_id: str, body: Answer, engine: Engine = Depends(get_engine)) 
     data, _ = require_profile(engine, profile_id)
     if body.skill not in load_pack().skills:
         raise HTTPException(status_code=422, detail=f"unknown skill: {body.skill}")
+    before = data.skills[body.skill].level if body.skill in data.skills else None
     data.skills[body.skill] = SkillClaim(level=body.level, source="self")
     update_profile(engine, profile_id, data)
+    record_event(
+        engine,
+        profile_id,
+        "level_changed",
+        body.skill,
+        before,
+        {"level": body.level, "source": "self"},
+    )
     return {"skill": body.skill, "level": str(body.level)}
 
 
@@ -205,7 +215,13 @@ def set_progress(
     require_profile(engine, profile_id)
     pack = load_pack()
     skipped = None if body.skipped is None else [s for s in body.skipped if _known_step(pack, s)]
-    save_progress(
-        engine, profile_id, [c for c in body.done if c in pack.courses], body.paused, skipped
-    )
+    done = [c for c in body.done if c in pack.courses]
+    saved = get_progress(engine, profile_id)
+    save_progress(engine, profile_id, done, body.paused, skipped)
+    for course in sorted(set(done) - set(saved["done"])):
+        record_event(engine, profile_id, "course_done", course)
+    for course in sorted(set(saved["done"]) - set(done)):
+        record_event(engine, profile_id, "course_undone", course)
+    for step in sorted(set(skipped or []) - set(saved["skipped"])):
+        record_event(engine, profile_id, "step_skipped", step)
     return _progress_view(engine, profile_id, scenario)

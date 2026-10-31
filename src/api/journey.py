@@ -17,6 +17,7 @@ from src.evidence.signals import build_signals, job_ad_signals, occupation_signa
 from src.intake.extract import extract
 from src.intake.files import UnsupportedFileError, read_cv
 from src.intake.skill_search import search
+from src.journey.events import record_claim_changes, record_event
 from src.journey.progress import get_progress
 from src.journey.store import (
     ProfileData,
@@ -196,6 +197,7 @@ def new_profile(data: ProfileData, engine: Engine = Depends(get_engine)) -> Prof
     _check_profile(load_pack(), data)
     profile_id = create_profile(engine, data)
     baseline_cutoff(engine, profile_id)
+    record_claim_changes(engine, profile_id, {}, _claim_states(data))
     return ProfileCreated(id=profile_id)
 
 
@@ -209,10 +211,15 @@ def read_profile(profile_id: str, engine: Engine = Depends(get_engine)) -> dict[
 def edit_profile(
     profile_id: str, data: ProfileData, engine: Engine = Depends(get_engine)
 ) -> dict[str, Any]:
-    require_profile(engine, profile_id)
+    old, _ = require_profile(engine, profile_id)
     _check_profile(load_pack(), data)
     update_profile(engine, profile_id, data)
+    record_claim_changes(engine, profile_id, _claim_states(old), _claim_states(data))
     return {"profile": data.model_dump()}
+
+
+def _claim_states(data: ProfileData) -> dict[str, tuple[int | None, str]]:
+    return {skill: (claim.level, claim.source) for skill, claim in data.skills.items()}
 
 
 def _check_profile(pack: Pack, data: ProfileData) -> None:
@@ -343,11 +350,13 @@ def matches(
 def set_destination(
     profile_id: str, body: dict[str, str], engine: Engine = Depends(get_engine)
 ) -> dict[str, str]:
-    require_profile(engine, profile_id)
+    _, before = require_profile(engine, profile_id)
     role_id = body.get("role_id", "")
     if role_id not in load_pack().destination_roles:
         raise HTTPException(status_code=422, detail="unknown destination role")
     choose_destination(engine, profile_id, role_id)
+    if role_id != before:
+        record_event(engine, profile_id, "destination_chosen", role_id, before, role_id)
     return {"destination": role_id}
 
 
