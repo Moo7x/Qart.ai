@@ -1,13 +1,14 @@
-import { useT } from '../i18n'
 import { Link } from 'react-router-dom'
 import { useApi } from '../api'
-import { ScenarioSwitch, levelText, JourneyRoute, NextStep } from '../components/journey'
+import { ScenarioSwitch, NextStep } from '../components/journey'
+import { PageHead, Serif } from '../components/atoms'
+import { OverviewTiles } from '../components/OverviewTiles'
 import { JobHub } from '../components/JobHub'
 import { OverviewGlance } from '../components/OverviewGlance'
 import { SkillRadar } from '../components/SkillRadar'
 import { Loading, Problem } from '../components/ui'
 import { useJourney } from '../state'
-import type { MatchesResponse, PackInfo, PathwayResponse, ProfileData, ProgressResponse, RadarAxis, RadarResponse } from '../types'
+import type { PackInfo, ProfileData, RadarAxis, RadarResponse } from '../types'
 
 // Overview: where you start, the role you are heading for, this week's step, how your skills are
 // moving and what is changing in your job. Matching, the plan and the market data have their own
@@ -73,40 +74,6 @@ function PersonalRadar() {
   )
 }
 
-// Your starting point: who you are today, the one gap that matters most, and the next step.
-function StartingPoint() {
-  const { profileId, scenario } = useJourney()
-  const view = useApi<MatchesResponse>(profileId ? `/api/profiles/${profileId}/matches?scenario=${scenario}` : null)
-  const progress = useApi<ProgressResponse>(profileId ? `/api/profiles/${profileId}/progress?scenario=${scenario}` : null)
-  const path = useApi<PathwayResponse>(profileId && view.data?.destination ? `/api/profiles/${profileId}/pathway?scenario=${scenario}` : null)
-  if (view.loading) return <Loading what="your starting point" />
-  if (view.error) return <Problem what="your starting point" message={view.error} onRetry={view.reload} />
-  if (!view.data) return null
-  const data = view.data
-  const target = data.roles.find((r) => r.role_id === data.destination) ?? data.roles[0]
-  const gap = target?.requirements.filter((r) => r.column !== 'ready').sort((a, b) => Number(b.essential) - Number(a.essential) || b.weight - a.weight)[0]
-  const next = path.data?.steps.find((s) => !progress.data?.done.includes(s.course.id))
-  return (
-    <section className="grid gap-0 overflow-hidden rounded-xl border border-line bg-paper md:grid-cols-3" aria-label="Your starting point">
-      <div className="flex flex-col gap-1 border-b border-line p-5 md:border-b-0 md:border-r">
-        <span className="cap">Your starting point</span>
-        <span className="text-[22px] font-semibold leading-tight tracking-tight">{data.current_role?.title ?? 'Your stated skills'}</span>
-        <Link to="/start?edit=1" className="text-[13px]">Edit my profile</Link>
-      </div>
-      <div className="flex flex-col gap-1 border-b border-line p-5 md:border-b-0 md:border-r">
-        <span className="cap">The gap that matters most</span>
-        <span className="text-[17px] font-semibold">{gap?.skill_name ?? 'No gap for this role'}</span>
-        {gap && <span className="text-[13px] text-graphite">you {levelText(gap.claimed)} → needs {levelText(gap.required)}{gap.essential ? ' · essential' : ''}</span>}
-      </div>
-      <div className="flex flex-col gap-2 bg-violet-soft p-5">
-        <span className="cap">Your next step</span>
-        <span className="text-[15px] font-medium">{path.loading || progress.loading ? 'Loading…' : next ? `${next.course.title} · ${next.hours} h` : data.destination ? 'Record the courses you complete.' : 'Choose the role you want.'}</span>
-        <Link className="btn btn-v self-start" to={data.destination ? '/pathway' : '/roles'}>{data.destination ? 'Continue my plan →' : 'See my roles →'}</Link>
-      </div>
-    </section>
-  )
-}
-
 // Working adults and switchers: what the evidence says about the job they have today.
 function CurrentJob() {
   const { profileId } = useJourney()
@@ -128,19 +95,14 @@ function CurrentJob() {
 }
 
 export function Overview() {
-  const { t } = useT()
   const { setProfileId, setScenario } = useJourney()
   return (
     <main className="page">
-      <JourneyRoute />
       <header className="flex flex-wrap items-end justify-between gap-3">
-        <div className="flex flex-col gap-1.5">
-          <span className="eyebrow">Overview · GBS finance &amp; accounting · Malaysia</span>
-          <h1 className="h1">{t('Your next move starts here')}</h1>
-        </div>
+        <PageHead badge="Overview · GBS finance & accounting · Malaysia" title={<>Your <Serif>next</Serif> move starts here</>} />
         <Link to="/start" className="text-sm text-graphite underline underline-offset-4" onClick={() => { setProfileId(null); setScenario('moderate') }}>Start over</Link>
       </header>
-      <StartingPoint />
+      <div className="q-tray"><OverviewTiles /></div>
       <OverviewGlance />
       <PersonalRadar />
       <CurrentJob />
