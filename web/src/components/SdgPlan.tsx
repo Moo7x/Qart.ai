@@ -25,8 +25,14 @@ export function SdgPlan({ matrix, path, goals }: { matrix: SdgMatrix; path: Path
         reasons: cells.flatMap((c) => c.reasons).filter((r, i, all) => all.findIndex((x) => x.text === r.text) === i),
       }
     }),
-    ...matrix.path_links.map((l) => ({ target: l.target, hours: null, skills: [], reasons: [{ text: l.text, source: l.source }] })),
   ]
+  // A whole-plan link (free learning, the role move) joins the tile of the same target if the
+  // plan's skills already serve it; otherwise it gets its own tile.
+  for (const l of matrix.path_links) {
+    const same = tiles.find((t) => t.target === l.target)
+    if (same) same.reasons.push({ text: l.text, source: l.source })
+    else tiles.push({ target: l.target, hours: null, skills: [], reasons: [{ text: l.text, source: l.source }] })
+  }
   const title = (target: string) => matrix.targets.find((t) => t.id === target)?.title ?? path.sdg_targets[target]?.title ?? ''
   const text = (target: string) => matrix.targets.find((t) => t.id === target)?.text ?? path.sdg_targets[target]?.text ?? ''
   return (
