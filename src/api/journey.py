@@ -17,7 +17,7 @@ from src.config import REPO_ROOT, Settings
 from src.evidence.signals import build_signals, job_ad_signals, occupation_signals
 from src.intake.extract import extract
 from src.intake.files import UnsupportedFileError, read_cv
-from src.intake.skill_search import search
+from src.intake.skill_search import search, warm
 from src.journey.events import record_claim_changes, record_event
 from src.journey.progress import get_progress
 from src.journey.store import (
@@ -200,6 +200,12 @@ async def parse_upload(
 @router.post("/skills/search")
 def skill_search(body: TextIn, settings: Settings = Depends(get_settings)) -> dict[str, Any]:
     return asdict(search(load_pack(), body.text, settings))
+
+
+@router.post("/skills/warm")
+def skill_search_warm(settings: Settings = Depends(get_settings)) -> dict[str, bool]:
+    """Start embedding the skills (and waking the GPU) before the person searches."""
+    return {"started": warm(load_pack(), settings)}
 
 
 @router.post("/profiles", status_code=201)

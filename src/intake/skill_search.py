@@ -8,6 +8,7 @@ as the model's answer.
 
 import math
 import re
+import threading
 from collections import Counter
 from dataclasses import dataclass, field
 from typing import Any
@@ -16,7 +17,12 @@ import httpx
 
 from src.config import Settings
 from src.pack import Pack
-from src.runpod_jobs import INTERACTIVE_BUDGET_SECONDS, RunPodError, embed
+from src.runpod_jobs import (
+    BACKGROUND_BUDGET_SECONDS,
+    INTERACTIVE_BUDGET_SECONDS,
+    RunPodError,
+    embed,
+)
 from src.stages import Stages
 
 # Shared async queue budget allows a cold worker to wake; no unbounded page wait.
@@ -85,6 +91,38 @@ def _embed(settings: Settings, texts: list[str], client: httpx.Client) -> list[l
 
 # Skill embeddings never change for a pack version, so they are computed once per process.
 _SKILL_VECTORS: dict[tuple[str, str], list[float]] = {}
+_warming = threading.Lock()
+
+
+def warm(pack: Pack, settings: Settings) -> bool:
+    """Embed every skill in the background so a later search only embeds the person's text.
+
+    Called when a person opens the intake: it also wakes a cold GPU worker while they type, so
+    "Find the matching skills" does not wait for the start-up. Returns whether a warm-up started.
+    """
+    if not settings.runpod_configured:
+        return False
+    keys = {sid: (sid, _skill_text(pack, sid)) for sid in pack.skills}
+    missing = [sid for sid in pack.skills if keys[sid] not in _SKILL_VECTORS]
+    if not missing or not _warming.acquire(blocking=False):
+        return False
+
+    def work() -> None:
+        try:
+            with httpx.Client() as http:
+                texts = [_skill_text(pack, sid) for sid in missing]
+                vectors = embed(settings, texts, BACKGROUND_BUDGET_SECONDS, http)
+                if len(vectors) == len(texts):
+                    _SKILL_VECTORS.update(
+                        dict(zip([keys[sid] for sid in missing], vectors, strict=True))
+                    )
+        except (httpx.HTTPError, RunPodError, ValueError):
+            pass  # the search itself still works: it embeds what is missing, or falls back
+        finally:
+            _warming.release()
+
+    threading.Thread(target=work, daemon=True).start()
+    return True
 
 
 def search(
