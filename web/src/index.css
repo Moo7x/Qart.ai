@@ -93,6 +93,7 @@
   @media (min-width: 1024px) {
     .onboarding-layout { grid-template-columns: minmax(0, 1.5fr) minmax(300px, 1fr); gap: 64px; padding-top: 56px; }
     .onboarding-help { position: sticky; top: 40px; align-self: start; }
+    .onboarding-layout.onboarding-wide { grid-template-columns: minmax(0, 1fr); }
   }
   .welcome-route { list-style: none; padding: 0; margin: 12px 0; }
   .welcome-route li { display: flex; gap: 16px; align-items: center; padding-bottom: 28px; position: relative; font-weight: 500; }
@@ -318,4 +319,24 @@
 @keyframes pop {
   from { opacity: 0; transform: translateY(6px) scale(0.985); }
   to { opacity: 1; transform: none; }
+}
+
+/* Current-job hub (components/JobHub.tsx): the job in the centre, evidence at the corners. */
+@layer components {
+  .job-hub { position: relative; display: grid; gap: 16px; grid-template-columns: minmax(0, 1fr); }
+  .job-hub-lines { display: none; }
+  .job-centre { order: -1; }
+  @media (min-width: 900px) {
+    .job-hub {
+      grid-template-columns: minmax(0, 1fr) minmax(220px, 0.9fr) minmax(0, 1fr);
+      grid-template-areas: "tl . tr" ". c ." "bl . br";
+      gap: 18px 28px;
+    }
+    .job-hub-lines { display: block; position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+    .job-tl { grid-area: tl; } .job-tr { grid-area: tr; } .job-bl { grid-area: bl; } .job-br { grid-area: br; }
+    .job-centre { grid-area: c; order: 0; }
+  }
+  .job-hub-line { stroke: var(--color-violet); stroke-width: 2; stroke-dasharray: 6 8; opacity: 0.55; vector-effect: non-scaling-stroke; animation: job-flow 1.6s linear infinite; }
+  @keyframes job-flow { to { stroke-dashoffset: -28; } }
+  @media (prefers-reduced-motion: reduce) { .job-hub-line { animation: none; } }
 }

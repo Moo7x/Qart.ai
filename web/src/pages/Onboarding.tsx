@@ -7,6 +7,8 @@ import { LevelPicker } from '../components/LevelPicker'
 import { useJourney } from '../state'
 import type { Extraction, MatchesResponse, PackInfo, PathwayResponse, ProfileData, SignalsResponse, Situation, SkillClaim, SkillKind, Stage } from '../types'
 
+const SKILLS_STEP = 4
+
 const STEPS = ['', 'Your situation', 'Your CV', 'Your work today', 'Your skills', 'Time and budget', 'What matters to you']
 const LAST_QUESTION = 6
 const BUILDING = 7
@@ -42,8 +44,8 @@ export function Onboarding() {
   const existing = useApi<{ profile: ProfileData }>(editing ? `/api/profiles/${profileId}` : null)
   const hydrated = useRef(false)
   const pack = useApi<PackInfo>('/api/pack')
-  const signals = useApi<SignalsResponse>('/api/signals')
-  const [step, setStep] = useState(editing ? 1 : 0)
+  // Editing opens on the skills (the profile itself), not on the first question.
+  const [step, setStep] = useState(editing ? Number(searchParams.get('step') ?? SKILLS_STEP) : 0)
   const [situation, setSituation] = useState<Situation>('working')
   const [stages, setStages] = useState<Stage[] | undefined>(undefined)
   const [activityStep, setActivityStep] = useState(0)
@@ -73,6 +75,15 @@ export function Onboarding() {
     setTasks([...new Set(Object.values(p.skills).map((s) => s.evidence).filter(Boolean))].join('\n'))
     hydrated.current = true
   }, [editing, existing.data])
+
+  // Wake the GPU and embed the skill list while the person reads the CV step, so "Find the
+  // matching skills" later only has to embed their own text.
+  const warmed = useRef(false)
+  useEffect(() => {
+    if (step < 2 || warmed.current) return
+    warmed.current = true
+    sendJSON('/api/skills/warm', { body: {} }).catch(() => undefined)
+  }, [step])
 
   const skillName = (id: string) => pack.data?.skills.find((s) => s.id === id)?.name ?? id
   const go = (n: number) => setStep(Math.max(0, Math.min(BUILDING, n)))
@@ -210,8 +221,6 @@ export function Onboarding() {
     })
 
   const addable = (pack.data?.skills ?? []).filter((s) => !(s.id in skills) && addQuery.length > 1 && s.name.toLowerCase().includes(addQuery.toLowerCase())).slice(0, 6)
-  const evidence = signals.data?.signals.filter((s) => s.id === 'dosm_jmi_accountants_and_auditors' || s.id === 'dosm_share_clerical') ?? []
-  const examples = pack.data?.task_examples.filter((example) => example.role_id === role) ?? []
   const help = [
     ['Your next move, made visible', 'Start with what you do today. Compare future roles, understand the gaps, then choose a practical learning route.'],
     ['A route that starts with you', 'Working, studying or changing careers: your situation changes the context, never your skill score.'],
@@ -222,6 +231,8 @@ export function Onboarding() {
     ['Choose what matters to you', 'Interests help order close matches. SDG links explain the contribution of each skill and role, rather than adding points.'],
     ['Real work, visible progress', 'Each build-log line records an actual API request. No invented progress or generated hiring probabilities.'],
   ][step]
+
+  const showActivity = step === activityStep && step < BUILDING && (busy !== null || (stages?.length ?? 0) > 0)
 
   return (
     <div className="relative min-h-screen w-full overflow-hidden bg-fog">
@@ -238,7 +249,7 @@ export function Onboarding() {
         <Link to="/live" className="text-sm text-graphite">{t('Browse public evidence')}</Link>
       </header>
 
-      <main className="onboarding-layout">
+      <main className={`onboarding-layout ${step === SKILLS_STEP ? 'onboarding-wide' : ''}`}>
       <div className="flex min-w-0 flex-col gap-7">
         {editing && existing.loading && <p role="status">Loading your saved answers…</p>}
         {editing && existing.error && <p role="alert">Could not load your saved answers. <button type="button" className="btn" onClick={existing.reload}>Retry</button></p>}
@@ -262,23 +273,11 @@ export function Onboarding() {
             <p className="m-0 max-w-[560px] text-lg text-graphite">
               Qart.ai reads Malaysia's public labour and job-ad data, shows which of your skills are gaining weight, which roles fit you, and a free learning plan. Every number links to its source.
             </p>
-            <div className="flex flex-wrap items-center gap-3">
-              <button type="button" className="btn btn-v min-h-[44px] text-[15px]" onClick={() => go(1)}>{t('Start · about 3 minutes')}</button>
+            <div className="flex flex-col items-center gap-3 py-6">
+              <button type="button" className="btn btn-v min-h-[60px] px-10 text-[18px] font-semibold shadow-[0_10px_30px_rgba(108,71,255,0.35)]" onClick={() => go(1)}>{t('Start · about 3 minutes')}</button>
               {profileId && <Link to="/overview" className="btn">Continue with my saved profile</Link>}
               <span className="text-[13px] text-graphite">{t('Skip any question. The demo uses synthetic CVs only.')}</span>
             </div>
-            {evidence.length > 0 && (
-              <div className="section">
-                <span className="cap">Observed · latest public evidence</span>
-                {evidence.map((s) => (
-                  <div key={s.id} className="grid grid-cols-[minmax(0,1fr)_auto] gap-x-4 font-mono text-[13px]">
-                    <span>{s.title}</span>
-                    <span className="text-observed">{s.points.at(-1)?.value.toFixed(2)}%</span>
-                    <span className="text-stone">{s.sources[0]?.name} · {s.points.at(-1)?.period}</span>
-                  </div>
-                ))}
-              </div>
-            )}
           </section>
         )}
 
@@ -357,16 +356,11 @@ export function Onboarding() {
             </label>
             <label className="flex flex-col gap-1.5 text-[13px] font-medium">
               Main tasks, in your own words
-              <textarea value={tasks} onChange={(e) => { setTasks(e.target.value); setSuggestions(null); setSelected([]) }} rows={3} placeholder="e.g. applying customer receipts, month-end reports" className="rounded-md border border-hairline bg-fog px-3 py-2 text-[15px]" />
+              <textarea value={tasks} onChange={(e) => { setTasks(e.target.value); setSuggestions(null); setSelected([]) }} rows={9} placeholder="e.g. applying customer receipts, month-end reports" className="min-h-[220px] rounded-md border border-hairline bg-fog px-3 py-2 text-[15px] leading-relaxed" />
             </label>
             <button type="button" className="btn self-start" disabled={busy !== null || tasks.trim().length < 3} onClick={findFromTasks}>
               Find the matching skills
             </button>
-            {examples.length > 0 && <div className="flex flex-col gap-2" aria-label="Task examples">
-              <span className="cap">Or start from an O*NET task and edit it</span>
-              {examples.map((example) => <button key={example.text} type="button" className="btn justify-start py-2 text-left text-xs" onClick={() => { setTasks(example.text); setSuggestions(null); setSelected([]) }}>{example.text}</button>)}
-              <a className="text-xs text-graphite" href={examples[0].url} target="_blank" rel="noreferrer">Task examples: {examples[0].source} · occupation {examples[0].soc}</a>
-            </div>}
             {suggestions && <section aria-label="Suggested skills" className="border-y border-hairline py-4">
               <p className="m-0 text-sm font-medium">{suggestions.hits.length ? 'Choose the skills that describe your work' : 'No matching skills found. Try a specific task, or add skills on the next step.'}</p>
               <p className="text-xs text-graphite">Matched by {suggestions.engine}. {suggestions.note}</p>
@@ -400,20 +394,17 @@ export function Onboarding() {
                 {extraction.note ? ` · ${extraction.note}` : ''}
               </p>
             )}
-            <div className="card-light">
-              {Object.keys(skills).length === 0 && <p className="m-0 px-4 py-4 text-sm text-graphite">{t('No skills yet. Add the ones you have below.')}</p>}
+            {Object.keys(skills).length === 0 && <p className="m-0 text-sm text-graphite">{t('No skills yet. Add the ones you have below.')}</p>}
+            <div className="grid items-start gap-3 lg:grid-cols-2">
               {Object.entries(skills).map(([id, claim]) => (
-                <div key={id} className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-b border-mist px-4 py-3">
-                  <span className="min-w-0 flex-[1_1_260px]">
+                <div key={id} className="card-light flex flex-col gap-2 px-4 py-3">
+                  <span className="min-w-0">
                     <span className="block font-medium">{skillName(id)}</span>
-                    <span className="block text-xs text-graphite">
+                    <span className="block truncate text-xs text-graphite" title={claim.evidence}>
                       {claim.source === 'cv' ? `CV: “${claim.evidence}”` : claim.source === 'keyword' ? 'Found by keyword · set your level' : 'You set this'}
                     </span>
                   </span>
-                  <span className="flex flex-col items-end gap-1">
-                    <LevelPicker skill={id} level={claim.level} label={`Your level in ${skillName(id)}`} onChange={(level) => setLevel(id, level)} />
-                    {claim.level === null && <span className="text-[11px] text-graphite">Not rated yet</span>}
-                  </span>
+                  <LevelPicker skill={id} level={claim.level} label={`Your level in ${skillName(id)}`} onChange={(level) => setLevel(id, level)} />
                 </div>
               ))}
             </div>
@@ -518,7 +509,6 @@ export function Onboarding() {
           </section>
         )}
 
-        {step === activityStep && step < BUILDING && <ProcessLog title={activityTitle || 'Activity'} running={busy !== null} label={t(busy ?? '')} stages={stages} result={activityResult} />}
         {error && <p role="alert" className="m-0 text-sm text-weak">{error}</p>}
 
         {step >= 1 && step <= LAST_QUESTION && (
@@ -528,6 +518,9 @@ export function Onboarding() {
               {step < LAST_QUESTION && (
                 <button type="button" className="min-h-[44px] cursor-pointer border-0 bg-transparent px-3 text-[15px] text-graphite" onClick={() => go(step + 1)}>{t('Skip')}</button>
               )}
+              {editing && step < LAST_QUESTION && (
+                <button type="button" className="btn min-h-[44px]" disabled={busy !== null || !hydrated.current} onClick={finish}>Save changes</button>
+              )}
               <button type="button" className="btn btn-v min-h-[44px]" disabled={busy !== null || (editing && !hydrated.current)} onClick={() => (step === LAST_QUESTION ? finish() : go(step + 1))}>
                 {step === LAST_QUESTION ? 'Build my picture' : 'Continue'}
               </button>
@@ -535,15 +528,20 @@ export function Onboarding() {
           </div>
         )}
       </div>
-      <aside className="onboarding-help" aria-label="About this step">
-        <span className="eyebrow">{step === 0 ? 'Your career, your decision' : `Your journey · ${Math.min(step, 6)} / 6`}</span>
-        <h2 className="h2">{help[0]}</h2>
-        <p className="m-0 text-graphite">{help[1]}</p>
-        <ol className="welcome-route">
-          {['Your skills today', 'Future roles that fit', 'A plan you can follow'].map((label, i) => <li key={label}><span>{i + 1}</span>{label}</li>)}
-        </ol>
-        <p className="m-0 border-t border-line pt-4 text-xs text-graphite">Public evidence. Explainable calculations. You choose the destination.</p>
-      </aside>
+      {step !== SKILLS_STEP && (showActivity ? (
+        <aside className="onboarding-help" aria-label="What is happening">
+          <ProcessLog title={activityTitle || 'Activity'} running={busy !== null} label={t(busy ?? '')} stages={stages} result={activityResult} />
+        </aside>
+      ) : (
+        <aside className="onboarding-help" aria-label="About this step">
+          <span className="eyebrow">{step === 0 ? 'Your career, your decision' : `Your journey · ${Math.min(step, 6)} / 6`}</span>
+          <h2 className="h2">{help[0]}</h2>
+          <p className="m-0 text-graphite">{help[1]}</p>
+          <ol className="welcome-route">
+            {['Your skills today', 'Future roles that fit', 'A plan you can follow'].map((label, i) => <li key={label}><span>{i + 1}</span>{label}</li>)}
+          </ol>
+        </aside>
+      ))}
       </main>
     </div>
   )
