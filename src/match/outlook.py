@@ -32,37 +32,52 @@ def _squash(text: str) -> str:
     return re.sub(r"[^a-z0-9]", "", text.lower())
 
 
-def role_outlook(
-    pack: Pack, role: DestinationRole, rows: list[Row], signals: list[Signal]
-) -> list[dict[str, str]]:
+def occupation_market(soc: str, signals: list[Signal]) -> list[dict[str, str]]:
+    """Job-market evidence for one occupation, each item observed, with its source, latest period
+    and direction: the DOSM employment share of its major group, and its DOSM job-ad share where
+    DOSM names the occupation. Empty when neither is in the evidence store."""
     by_id = {s.id: s for s in signals}
-    occupation = field_profile().occupation(role.soc)
+    occupation = field_profile().occupation(soc)
     items: list[dict[str, str]] = []
+
+    def item(signal: Signal, text: str, source: str) -> dict[str, str]:
+        latest = signal.points[-1].period if signal.points else ""
+        return {
+            "kind": "observed",
+            "text": text,
+            "source": source,
+            "period": latest,
+            "direction": signal.direction,
+        }
+
     if occupation and occupation.isco:
         group = MAJOR_GROUP.get(occupation.isco[0])
         signal = by_id.get(f"dosm_share_{group}") if group else None
         if signal:
             items.append(
-                {
-                    "kind": "observed",
-                    "text": (
-                        f"{signal.title} in Malaysia (all occupations in the major group of "
-                        f"ISCO-08 {occupation.isco}, not only this role): {signal.headline}; "
-                        f"{DIRECTION_TEXT[signal.direction]}. {signal.note}"
-                    ),
-                    "source": "DOSM, wages by occupation (OpenDOSM API)",
-                }
+                item(
+                    signal,
+                    f"{signal.title} in Malaysia (all occupations in the major group of "
+                    f"ISCO-08 {occupation.isco}, not only this role): {signal.headline}; "
+                    f"{DIRECTION_TEXT[signal.direction]}. {signal.note}",
+                    "DOSM, wages by occupation (OpenDOSM API)",
+                )
             )
     if occupation:
         ads = by_id.get(f"dosm_jmi_{occupation.name.lower().replace(' ', '_')}")
         if ads:
             items.append(
-                {
-                    "kind": "observed",
-                    "text": f"{ads.title}: {ads.headline}. {ads.note}",
-                    "source": "DOSM Job Market Insights",
-                }
+                item(ads, f"{ads.title}: {ads.headline}. {ads.note}", "DOSM Job Market Insights")
             )
+    return items
+
+
+def role_outlook(
+    pack: Pack, role: DestinationRole, rows: list[Row], signals: list[Signal]
+) -> list[dict[str, str]]:
+    items = [
+        {k: m[k] for k in ("kind", "text", "source")} for m in occupation_market(role.soc, signals)
+    ]
     in_demand = _in_demand(rows)
     named = [pack.skills[s].name for s in in_demand_skills(pack, role, rows)]
     if in_demand:
@@ -76,6 +91,7 @@ def role_outlook(
                 "source": "TalentCorp (2024) GBS study, PDF p. 25",
             }
         )
+    occupation = field_profile().occupation(role.soc)
     items += _mycol(rows, occupation.isco if occupation else None)
     return items
 

@@ -17,9 +17,11 @@ from typing import Any
 
 from src.collectors.ilo import OCCUPATION_SERIES, TASK_SERIES, gradient_of
 from src.evidence.field import field_profile
+from src.evidence.signals import build_signals
 from src.journey.store import SkillClaim
 from src.match.decision import is_evidenced
 from src.match.evidence import IMPORTANCE_SERIES
+from src.match.outlook import occupation_market
 from src.pack import CurrentRole, DestinationRole, Pack
 
 Row = dict[str, Any]
@@ -219,6 +221,7 @@ def work_view(
             "source": f"TalentCorp (2024) GBS study, PDF p. {role.page}",
         },
         "occupation": occupation.model_dump() if occupation else None,
+        "market": occupation_market(role.soc, build_signals(rows)),
         "exposure": {k: v for k, v in exposure.items() if k != "tasks"} if exposure else None,
         "deployment": None,
         "tasks": tasks[:WORK_TASKS_SHOWN],

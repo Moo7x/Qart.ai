@@ -273,6 +273,14 @@ export type Market = {
   emerging_page: number
 }
 
+export type MarketItem = {
+  kind: "observed"
+  text: string
+  source: string
+  period: string
+  direction: "rising" | "weakening" | "stable" | "insufficient" | "expert"
+}
+
 export type MatchesOut = {
   scenario: string
   scenario_label: string
@@ -885,6 +893,7 @@ export type WorkTask = {
 export type WorkTodayOut = {
   role: CurrentJob
   occupation: Occupation | null
+  market: MarketItem[]
   exposure: Exposure | null
   deployment: null
   tasks: WorkTask[]

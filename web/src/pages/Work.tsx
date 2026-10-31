@@ -91,6 +91,18 @@ export function Work() {
                 </Chip>
                 <Chip title="Reported deployment" quiet grow="0.6 1 200px">not collected yet</Chip>
               </div>
+              <section aria-label="Job market for your occupation" className="flex flex-col gap-1.5">
+                <span className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.06em] text-muted">Job market for your occupation <Label kind="observed" /></span>
+                {data.market.length === 0 && <p className="m-0 text-[13px] text-[#71717a]">Not in this snapshot of the evidence (missing, not zero).</p>}
+                <ul className="m-0 flex list-none flex-col gap-1 p-0">
+                  {data.market.map((m) => (
+                    <li key={m.text} className="flex items-start gap-2 text-[13px] leading-snug">
+                      <span aria-hidden="true" className={`font-bold ${m.direction === 'rising' ? 'text-rising' : m.direction === 'weakening' ? 'text-weak' : 'text-muted'}`}>{m.direction === 'rising' ? '↑' : m.direction === 'weakening' ? '↓' : '→'}</span>
+                      <span className="min-w-0">{m.text} <span className="text-muted">· {m.source}, {m.period}</span></span>
+                    </li>
+                  ))}
+                </ul>
+              </section>
               <section aria-label="Your tasks and AI" className="flex flex-col gap-1.5">
                 <div className="w-row w-head">
                   <span className="text-[11px] font-semibold uppercase tracking-[0.06em] text-muted">Your tasks</span>

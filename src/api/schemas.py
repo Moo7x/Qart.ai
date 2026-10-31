@@ -395,9 +395,20 @@ class WorkSources(BaseModel):
     skill_match: str
 
 
+class MarketItem(BaseModel):
+    """Job-market evidence for the occupation: observed, with source, latest period, direction."""
+
+    kind: Literal["observed"]
+    text: str
+    source: str
+    period: str
+    direction: Literal["rising", "weakening", "stable", "insufficient", "expert"]
+
+
 class WorkTodayOut(BaseModel):
     role: CurrentJob
     occupation: Occupation | None
+    market: list[MarketItem]
     exposure: Exposure | None
     deployment: None  # no source of reported deployment is collected yet
     tasks: list[WorkTask]
