@@ -104,6 +104,7 @@ class Scout:
         skill: str,
         http: httpx.Client,
         captions: Any = caption_snippets,
+        resource_id: str | None = None,
     ) -> None:
         pack, res = load_pack(), load_resources()
         self.engine, self.settings, self.run_id, self.http = engine, settings, run_id, http
@@ -111,6 +112,8 @@ class Scout:
         self.captions = captions
         self.resources = {v.id: ("video", v.title, v.url) for v in res.videos_for(skill=skill)}
         self.resources |= {a.id: ("article", a.title, a.url) for a in res.articles_for(skill=skill)}
+        if resource_id in self.resources:  # the person asked about one video or article
+            self.resources = {resource_id: self.resources[resource_id]}
         self.parts: dict[str, Part] = {}
         self.rank_engine = "none"
         self.cache = load_cache()
@@ -294,12 +297,13 @@ def run_scout(
     http: httpx.Client | None = None,
     chat: Chat | None = None,
     captions: Any = caption_snippets,
+    resource_id: str | None = None,
 ) -> dict[str, Any]:
     own = http is None
     client = http or httpx.Client(
         timeout=20, follow_redirects=True, headers={"User-Agent": USER_AGENT}
     )
-    scout = Scout(engine, settings, run_id, skill, client, captions)
+    scout = Scout(engine, settings, run_id, skill, client, captions, resource_id)
     scout.step("think", f"Looking for the parts that serve {scout.skill_name}")
     agent_engine = "ranking only (no language model)"
     picks: list[dict[str, Any]] | None = None

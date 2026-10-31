@@ -154,3 +154,14 @@ def test_refused_captions_fall_back_to_the_earlier_check(
     assert (
         cached and cached[0]["url"].endswith("?t=120") and cached[0]["reason"] == "Builds a chart."
     )
+
+
+def test_a_run_for_one_resource_reads_only_that_resource(
+    engine: Engine, settings: Settings
+) -> None:
+    video = load_resources().videos_for(skill=SKILL)[0]
+    run_id = store.start(engine, "scout", SKILL, None, "test")
+    result = run_scout(
+        engine, settings, run_id, SKILL, captions=lambda vid: SNIPPETS, resource_id=video.id
+    )
+    assert result["picks"] and {p["resource_id"] for p in result["picks"]} == {video.id}

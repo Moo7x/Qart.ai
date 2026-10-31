@@ -27,15 +27,19 @@ router = APIRouter(prefix="/api")
 class ScoutIn(BaseModel):
     skill: str = Field(min_length=1, max_length=64)
     profile_id: str | None = Field(default=None, max_length=64)
+    # One checked video or article to read; without it the agent picks among all of the skill's.
+    resource_id: str | None = Field(default=None, max_length=128)
 
 
 class RunStarted(BaseModel):
     run_id: str
 
 
-def _in_background(engine: Engine, settings: Settings, run_id: str, skill: str) -> None:
+def _in_background(
+    engine: Engine, settings: Settings, run_id: str, skill: str, resource_id: str | None
+) -> None:
     try:
-        run_scout(engine, settings, run_id, skill)
+        run_scout(engine, settings, run_id, skill, resource_id=resource_id)
     except Exception:  # noqa: BLE001  the run itself records the failure for the window
         return
 
@@ -54,7 +58,9 @@ def start_scout(
     agent_engine = f"{settings.agent_model} agent" if settings.llm_configured else "ranking only"
     run_id = store.start(engine, "scout", body.skill, body.profile_id, agent_engine)
     threading.Thread(
-        target=_in_background, args=(engine, settings, run_id, body.skill), daemon=True
+        target=_in_background,
+        args=(engine, settings, run_id, body.skill, body.resource_id),
+        daemon=True,
     ).start()
     return RunStarted(run_id=run_id)
 
