@@ -474,3 +474,51 @@ export type TrackNode = api.TrackNode
 export type Track = api.Track
 export type RouteMetrics = api.RouteMetrics
 export type TracksResponse = api.TracksOut
+
+// GET /api/forecast/industry (src/api/forecast.py, src/forecast/industry.py)
+export type IndustryCategory = 'growing' | 'transforming' | 'shrinking' | 'emerging' | 'stable'
+export interface IndustryRoleForecast {
+  id: string
+  title: string
+  soc: string | null
+  occupation: string | null
+  soc_reason: string | null
+  destination: boolean
+  pack_role: string | null
+  category: IndustryCategory
+  label: string
+  meaning: string
+  reasons: string[]
+  demand: { group: string | null; critical: boolean | null; change_pp?: number | null; model?: string | null; note?: string; source?: string | null; fetched?: string | null }
+  ai: { use: number | null; use_observed_share: number | null; tasks_observed: number; tasks_predicted: number; exposure: number | null; talentcorp_impact: number | null }
+}
+export interface SkillForecast {
+  skill: string
+  name: string
+  trend: 'rising' | 'steady' | 'declining'
+  ai_role: string
+  demand_change_pp: number | null
+  ai_use: number | null
+  needed_by: string[]
+}
+export interface TaskModelSummary {
+  version: number
+  trained: string | null
+  period: string
+  features: string
+  training_tasks: number
+  predicted_tasks: number
+  best: string
+  mae: number | null
+  baseline_mae: number | null
+  scores: Record<string, number>
+  source: string
+}
+export interface IndustryForecastResponse {
+  scenario: 'moderate' | 'fast'
+  intensity: number
+  roles: IndustryRoleForecast[]
+  skills: SkillForecast[]
+  task_model: TaskModelSummary | null
+  kind: 'estimate'
+}

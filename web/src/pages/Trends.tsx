@@ -3,6 +3,7 @@ import { useApi } from '../api'
 import { TimeSeriesChart } from '../components/Charts'
 import { ScenarioSwitch } from '../components/journey'
 import { TrendsChart } from '../components/TrendsChart'
+import { IndustryForecast } from '../components/IndustryForecast'
 import { KindLabel } from '../components/Why'
 import { Loading, Problem } from '../components/ui'
 import type { TrendsResponse } from '../types'
@@ -34,6 +35,7 @@ export function Trends() {
         </div>
         <ScenarioSwitch />
       </header>
+      <IndustryForecast />
       <TrendsChart />
       {view.loading && <Loading what="the trends" />}
       {view.error && <Problem what="the trends" message={view.error} onRetry={view.reload} />}

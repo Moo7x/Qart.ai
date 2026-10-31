@@ -38,6 +38,7 @@ from src.api.decision import router as decision_router  # noqa: E402
 from src.api.evidence import router as evidence_router  # noqa: E402
 from src.api.evidence_test import router as evidence_test_router  # noqa: E402
 from src.api.feedback import router as feedback_router  # noqa: E402
+from src.api.forecast import router as forecast_router  # noqa: E402
 from src.api.goal import router as goal_router  # noqa: E402
 from src.api.journey import router as journey_router  # noqa: E402
 from src.api.occupations import router as occupations_router  # noqa: E402
@@ -141,6 +142,7 @@ def create_app(settings: Settings | None = None, first_run: bool = True) -> Fast
     application.include_router(feedback_router)
     application.include_router(goal_router)
     application.include_router(occupations_router)
+    application.include_router(forecast_router)
     # Phase 2 routers (docs/PHASE2_PLAN.md §5): A owns agents, evidence_test, status and privacy;
     # B owns sdg and badges. Registered here once so neither branch edits this file.
     for phase2 in (
