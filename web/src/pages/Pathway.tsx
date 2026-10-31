@@ -264,8 +264,8 @@ function CurrentJobPath({ profileId, scenario }: { profileId: string; scenario: 
   return (
     <>
       <PageHead
-        badge="My plan · your job's AI-era path"
-        title={<>Reskill for where <Serif>your job</Serif> is heading</>}
+        badge={`My plan · ${data.track.title.toLowerCase()}`}
+        title={data.current_role ? <>Reskill for where <Serif>your job</Serif> is heading</> : <>Reskill <Serif>your skills</Serif> for the AI era</>}
         sub={data.current_role ? `${data.current_role}${data.current_forecast ? ` · Qart forecast: ${data.current_forecast.label} (estimate)` : ''}` : 'Based on the skills in your profile'}
         right={
           <div className="flex flex-col items-start gap-2 md:items-end">

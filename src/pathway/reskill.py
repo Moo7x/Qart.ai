@@ -263,9 +263,11 @@ def current_job_path(
     )
     track = {
         "id": "path",
-        "title": "Your job's AI-era path",
+        # A student or switcher has no current job: the path is about their skills.
+        "title": "Your job's AI-era path" if soc else "Your skills' AI-era path",
         "why": (
-            "Reskill the skills you already have for where your job is heading. Choose a role on "
+            f"Reskill the skills you already have for "
+            f"{'where your job is heading' if soc else 'the AI era'}. Choose a role on "
             "My options to switch to that role's path."
         ),
         "nodes": steps,
