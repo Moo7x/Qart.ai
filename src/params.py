@@ -303,3 +303,20 @@ INDUSTRY_EXPERT_HIGH = 3.0  # TalentCorp impact level "high" (0 emerging, 1 low,
 # transforming: two, so no verdict ever rests on one kind of evidence alone (AGENTS.md).
 INDUSTRY_AI_AGREE = 2
 INDUSTRY_DEFAULT_IMPORTANCE = 3.0  # weight for an O*NET task with no importance rating (mid-scale)
+
+# --- Directions: matching people to forecast roles (src/match/directions.py) ---------------------
+# Roles are ranked by fit x outlook factor (declared assumption): a role whose job group is forecast
+# to grow, or that is emerging, moves up a little; a shrinking one moves down. Fit itself is never
+# changed, and a factor this size only reorders roles whose fits are close (within about 10%).
+OUTLOOK_FACTOR = {
+    "growing": 1.10,
+    "emerging": 1.05,
+    "stable": 1.0,
+    "transforming": 1.0,  # the role stays; only how the work is done changes
+    "shrinking": 0.85,
+}
+# A move is "adjacent" when O*NET relates the two occupations within its top 10 (tier 1 or 2), when
+# both are the same occupation, or when the person already covers this much of the role; otherwise
+# it is a "stretch" (declared).
+DIRECTION_ADJACENT_TIER = 2
+DIRECTION_ADJACENT_FIT = 50.0

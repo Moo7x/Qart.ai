@@ -263,6 +263,7 @@ export type MatchesOut = {
   evidence: EvidenceInfo
   current_role: CurrentRole | null
   current_impact: string | null
+  current_forecast: RoleForecast | null
   destination: string | null
   roles: RoleCard[]
   sdg_roles: SdgRole[]
@@ -485,6 +486,10 @@ export type RoleCard = {
   sdgs: SdgRef[]
   requirement_basis: Record<string, SkillBasis>
   in_demand: string[]
+  forecast: RoleForecast | null
+  direction: string
+  related_tier: number | null
+  direction_score: number
   serves_goals: string[]
 }
 
@@ -497,6 +502,17 @@ export type RoleDelta = {
   fit_before: number
   fit_after: number
   weights: WeightDelta[]
+}
+
+export type RoleForecast = {
+  category: string
+  label: string
+  meaning: string
+  reasons: string[]
+  change_pp: number | null
+  critical: boolean | null
+  ai_use: number | null
+  kind: string
 }
 
 export type RoleRank = {

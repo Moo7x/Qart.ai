@@ -12,7 +12,9 @@ from typing import Any
 from sqlalchemy import Engine
 
 from src.changes.store import accepted_rows
+from src.forecast import task_model
 from src.journey.store import ProfileData, SkillClaim, get_profile
+from src.match import directions
 from src.match.engine import Evidence, RoleMatch, Scenario, rank_roles, score_role
 from src.match.evidence import automation_evidence
 from src.pack import Pack, load_pack
@@ -26,6 +28,8 @@ class Person:
     destination: str | None
     pack: Pack
     rows: list[dict[str, Any]]  # the accepted evidence observations at the person's cutoff
+    # The task model's newest per-task rows (observed and predicted AI use), for the forecast.
+    task_rows: list[dict[str, Any]] = field(default_factory=list)
     evidence: Evidence = field(init=False)
 
     def __post_init__(self) -> None:
@@ -51,9 +55,14 @@ class Person:
             self.evidence if evidence is None else evidence,
         )
 
+    def forecasts(self, scenario: Scenario) -> dict[str, dict[str, Any]]:
+        """The industry forecast for every pack role (src/match/directions.py)."""
+        return directions.forecasts(self.pack, self.rows, self.task_rows, scenario)
+
     def rank(self, scenario: Scenario, evidence: Evidence | None = None) -> list[RoleMatch]:
-        """Every destination role, best fit first; interests and chosen SDGs order near-ties."""
-        return rank_roles(
+        """Every destination role by direction score (fit x outlook factor); interests and chosen
+        SDGs order near-ties of fit first, and equal direction scores keep that order."""
+        by_fit = rank_roles(
             self.pack,
             self.levels(),
             scenario,
@@ -61,6 +70,7 @@ class Person:
             set(self.data.interests) or None,
             sdg_goals=set(self.data.sdg_priorities) or None,
         )
+        return directions.order(by_fit, self.forecasts(scenario))
 
     def plan(
         self,
@@ -86,4 +96,6 @@ def load_person(engine: Engine, profile_id: str) -> Person | None:
     if found is None:
         return None
     data, destination = found
-    return Person(profile_id, data, destination, load_pack(), accepted_rows(engine, profile_id))
+    _, task_rows = task_model.latest(engine)
+    rows = accepted_rows(engine, profile_id)
+    return Person(profile_id, data, destination, load_pack(), rows, task_rows)

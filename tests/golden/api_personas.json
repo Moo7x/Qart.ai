@@ -305,6 +305,7 @@
      "strong": 75.0
     }
    },
+   "current_forecast": null,
    "current_impact": null,
    "current_role": null,
    "destination": "cost_accountant",
@@ -399,6 +400,8 @@
        "weight": 1.0
       }
      ],
+     "direction": "stretch",
+     "direction_score": 26.7,
      "effort_hours": 34.0,
      "effort_weeks": 6,
      "essential_gaps": [
@@ -414,6 +417,18 @@
       "basis": "low: self-rated claims one level lower, unstated as none; high: unstated at working",
       "high": 66.7,
       "low": 26.7
+     },
+     "forecast": {
+      "ai_use": null,
+      "category": "stable",
+      "change_pp": null,
+      "critical": null,
+      "kind": "estimate",
+      "label": "Stable",
+      "meaning": "No strong signal either way yet.",
+      "reasons": [
+       "no forecast change beyond the noise and fewer than two AI signals"
+      ]
      },
      "gap": {
       "bridgeable": [
@@ -481,6 +496,7 @@
        "via": "study"
       }
      ],
+     "related_tier": null,
      "requirement_basis": {
       "accounting_principles": {
        "kind": "onet",
@@ -803,6 +819,8 @@
        "weight": 1.0
       }
      ],
+     "direction": "stretch",
+     "direction_score": 22.7,
      "effort_hours": 34.1,
      "effort_weeks": 6,
      "essential_gaps": [
@@ -816,6 +834,18 @@
       "basis": "low: self-rated claims one level lower, unstated as none; high: unstated at working",
       "high": 86.4,
       "low": 22.7
+     },
+     "forecast": {
+      "ai_use": null,
+      "category": "stable",
+      "change_pp": null,
+      "critical": null,
+      "kind": "estimate",
+      "label": "Stable",
+      "meaning": "No strong signal either way yet.",
+      "reasons": [
+       "no forecast change beyond the noise and fewer than two AI signals"
+      ]
      },
      "gap": {
       "bridgeable": [
@@ -880,6 +910,7 @@
        "via": "practice"
       }
      ],
+     "related_tier": null,
      "requirement_basis": {
       "dashboards": {
        "kind": "onet",
@@ -1141,6 +1172,8 @@
        "weight": 1.0
       }
      ],
+     "direction": "stretch",
+     "direction_score": 18.2,
      "effort_hours": 19.6,
      "effort_weeks": 4,
      "essential_gaps": [
@@ -1156,6 +1189,18 @@
       "basis": "low: self-rated claims one level lower, unstated as none; high: unstated at working",
       "high": 90.9,
       "low": 18.2
+     },
+     "forecast": {
+      "ai_use": null,
+      "category": "stable",
+      "change_pp": null,
+      "critical": null,
+      "kind": "estimate",
+      "label": "Stable",
+      "meaning": "No strong signal either way yet.",
+      "reasons": [
+       "no forecast change beyond the noise and fewer than two AI signals"
+      ]
      },
      "gap": {
       "bridgeable": [
@@ -1221,6 +1266,7 @@
        "via": "study"
       }
      ],
+     "related_tier": null,
      "requirement_basis": {
       "compliance_reporting": {
        "kind": "onet",
@@ -1474,6 +1520,8 @@
        "weight": 1.0
       }
      ],
+     "direction": "stretch",
+     "direction_score": 16.7,
      "effort_hours": 2.0,
      "effort_weeks": 1,
      "essential_gaps": [
@@ -1487,6 +1535,18 @@
       "basis": "low: self-rated claims one level lower, unstated as none; high: unstated at working",
       "high": 91.7,
       "low": 16.7
+     },
+     "forecast": {
+      "ai_use": null,
+      "category": "stable",
+      "change_pp": null,
+      "critical": null,
+      "kind": "estimate",
+      "label": "Stable",
+      "meaning": "No strong signal either way yet.",
+      "reasons": [
+       "no forecast change beyond the noise and fewer than two AI signals"
+      ]
      },
      "gap": {
       "bridgeable": [
@@ -1551,6 +1611,7 @@
        "via": "study"
       }
      ],
+     "related_tier": null,
      "requirement_basis": {
       "accounting_principles": {
        "kind": "talentcorp",
@@ -1835,6 +1896,8 @@
        "weight": 1.0
       }
      ],
+     "direction": "stretch",
+     "direction_score": 13.3,
      "effort_hours": 60.0,
      "effort_weeks": 10,
      "essential_gaps": [
@@ -1850,6 +1913,18 @@
       "basis": "low: self-rated claims one level lower, unstated as none; high: unstated at working",
       "high": 93.3,
       "low": 13.3
+     },
+     "forecast": {
+      "ai_use": null,
+      "category": "stable",
+      "change_pp": null,
+      "critical": null,
+      "kind": "estimate",
+      "label": "Stable",
+      "meaning": "No strong signal either way yet.",
+      "reasons": [
+       "no forecast change beyond the noise and fewer than two AI signals"
+      ]
      },
      "gap": {
       "bridgeable": [
@@ -1917,6 +1992,7 @@
        "via": "study"
       }
      ],
+     "related_tier": null,
      "requirement_basis": {
       "accounting_principles": {
        "kind": "onet",
@@ -2274,6 +2350,8 @@
        "weight": 1.0
       }
      ],
+     "direction": "stretch",
+     "direction_score": 13.2,
      "effort_hours": 47.9,
      "effort_weeks": 8,
      "essential_gaps": [
@@ -2289,6 +2367,18 @@
       "basis": "low: self-rated claims one level lower, unstated as none; high: unstated at working",
       "high": 92.1,
       "low": 13.2
+     },
+     "forecast": {
+      "ai_use": null,
+      "category": "stable",
+      "change_pp": null,
+      "critical": null,
+      "kind": "estimate",
+      "label": "Stable",
+      "meaning": "No strong signal either way yet.",
+      "reasons": [
+       "no forecast change beyond the noise and fewer than two AI signals"
+      ]
      },
      "gap": {
       "bridgeable": [
@@ -2358,6 +2448,7 @@
        "via": "study"
       }
      ],
+     "related_tier": null,
      "requirement_basis": {
       "accounting_principles": {
        "kind": "assumption",
@@ -2729,6 +2820,8 @@
        "weight": 1.0
       }
      ],
+     "direction": "stretch",
+     "direction_score": 11.5,
      "effort_hours": 20.3,
      "effort_weeks": 4,
      "essential_gaps": [
@@ -2744,6 +2837,18 @@
       "basis": "low: self-rated claims one level lower, unstated as none; high: unstated at working",
       "high": 80.8,
       "low": 11.5
+     },
+     "forecast": {
+      "ai_use": null,
+      "category": "stable",
+      "change_pp": null,
+      "critical": null,
+      "kind": "estimate",
+      "label": "Stable",
+      "meaning": "No strong signal either way yet.",
+      "reasons": [
+       "no forecast change beyond the noise and fewer than two AI signals"
+      ]
      },
      "gap": {
       "bridgeable": [
@@ -2810,6 +2915,7 @@
        "via": "practice"
       }
      ],
+     "related_tier": null,
      "requirement_basis": {
       "budget_management": {
        "kind": "onet",
@@ -3128,6 +3234,8 @@
        "weight": 1.0
       }
      ],
+     "direction": "stretch",
+     "direction_score": 2.8,
      "effort_hours": 38.8,
      "effort_weeks": 7,
      "essential_gaps": [
@@ -3141,6 +3249,18 @@
       "basis": "low: self-rated claims one level lower, unstated as none; high: unstated at working",
       "high": 97.2,
       "low": 2.8
+     },
+     "forecast": {
+      "ai_use": null,
+      "category": "stable",
+      "change_pp": null,
+      "critical": null,
+      "kind": "estimate",
+      "label": "Stable",
+      "meaning": "No strong signal either way yet.",
+      "reasons": [
+       "no forecast change beyond the noise and fewer than two AI signals"
+      ]
      },
      "gap": {
       "bridgeable": [
@@ -3208,6 +3328,7 @@
        "via": "study"
       }
      ],
+     "related_tier": null,
      "requirement_basis": {
       "big_data_analytics": {
        "kind": "talentcorp",
@@ -3627,6 +3748,8 @@
        "weight": 1.0
       }
      ],
+     "direction": "stretch",
+     "direction_score": 0.0,
      "effort_hours": 7.3,
      "effort_weeks": 2,
      "essential_gaps": [
@@ -3640,6 +3763,18 @@
       "basis": "low: self-rated claims one level lower, unstated as none; high: unstated at working",
       "high": 100.0,
       "low": 0.0
+     },
+     "forecast": {
+      "ai_use": null,
+      "category": "stable",
+      "change_pp": null,
+      "critical": null,
+      "kind": "estimate",
+      "label": "Stable",
+      "meaning": "No strong signal either way yet.",
+      "reasons": [
+       "no forecast change beyond the noise and fewer than two AI signals"
+      ]
      },
      "gap": {
       "bridgeable": [],
@@ -3704,6 +3839,7 @@
        "via": "study"
       }
      ],
+     "related_tier": null,
      "requirement_basis": {
       "big_data_analytics": {
        "kind": "talentcorp",
@@ -4022,6 +4158,8 @@
        "weight": 1.0
       }
      ],
+     "direction": "stretch",
+     "direction_score": 0.0,
      "effort_hours": 42.2,
      "effort_weeks": 8,
      "essential_gaps": [
@@ -4035,6 +4173,18 @@
       "basis": "low: self-rated claims one level lower, unstated as none; high: unstated at working",
       "high": 100.0,
       "low": 0.0
+     },
+     "forecast": {
+      "ai_use": null,
+      "category": "stable",
+      "change_pp": null,
+      "critical": null,
+      "kind": "estimate",
+      "label": "Stable",
+      "meaning": "No strong signal either way yet.",
+      "reasons": [
+       "no forecast change beyond the noise and fewer than two AI signals"
+      ]
      },
      "gap": {
       "bridgeable": [],
@@ -4097,6 +4247,7 @@
        "via": "study"
       }
      ],
+     "related_tier": null,
      "requirement_basis": {
       "data_management": {
        "kind": "onet",
@@ -7089,6 +7240,7 @@
      "strong": 75.0
     }
    },
+   "current_forecast": null,
    "current_impact": null,
    "current_role": null,
    "destination": "finance_systems_analyst",
@@ -7205,6 +7357,8 @@
        "weight": 1.0
       }
      ],
+     "direction": "adjacent",
+     "direction_score": 63.2,
      "effort_hours": 14.5,
      "effort_weeks": 3,
      "essential_gaps": [],
@@ -7214,6 +7368,18 @@
       "basis": "low: self-rated claims one level lower, unstated as none; high: unstated at working",
       "high": 100.0,
       "low": 63.2
+     },
+     "forecast": {
+      "ai_use": null,
+      "category": "stable",
+      "change_pp": null,
+      "critical": null,
+      "kind": "estimate",
+      "label": "Stable",
+      "meaning": "No strong signal either way yet.",
+      "reasons": [
+       "no forecast change beyond the noise and fewer than two AI signals"
+      ]
      },
      "gap": {
       "bridgeable": [],
@@ -7279,6 +7445,7 @@
        "via": "study"
       }
      ],
+     "related_tier": null,
      "requirement_basis": {
       "accounting_principles": {
        "kind": "assumption",
@@ -7661,6 +7828,8 @@
        "weight": 1.0
       }
      ],
+     "direction": "adjacent",
+     "direction_score": 53.3,
      "effort_hours": 4.7,
      "effort_weeks": 1,
      "essential_gaps": [
@@ -7674,6 +7843,18 @@
       "basis": "low: self-rated claims one level lower, unstated as none; high: unstated at working",
       "high": 100.0,
       "low": 53.3
+     },
+     "forecast": {
+      "ai_use": null,
+      "category": "stable",
+      "change_pp": null,
+      "critical": null,
+      "kind": "estimate",
+      "label": "Stable",
+      "meaning": "No strong signal either way yet.",
+      "reasons": [
+       "no forecast change beyond the noise and fewer than two AI signals"
+      ]
      },
      "gap": {
       "bridgeable": [],
@@ -7739,6 +7920,7 @@
        "via": "study"
       }
      ],
+     "related_tier": null,
      "requirement_basis": {
       "accounting_principles": {
        "kind": "onet",
@@ -8072,6 +8254,8 @@
        "weight": 1.0
       }
      ],
+     "direction": "adjacent",
+     "direction_score": 53.3,
      "effort_hours": 3.3,
      "effort_weeks": 1,
      "essential_gaps": [
@@ -8085,6 +8269,18 @@
       "basis": "low: self-rated claims one level lower, unstated as none; high: unstated at working",
       "high": 100.0,
       "low": 53.3
+     },
+     "forecast": {
+      "ai_use": null,
+      "category": "stable",
+      "change_pp": null,
+      "critical": null,
+      "kind": "estimate",
+      "label": "Stable",
+      "meaning": "No strong signal either way yet.",
+      "reasons": [
+       "no forecast change beyond the noise and fewer than two AI signals"
+      ]
      },
      "gap": {
       "bridgeable": [],
@@ -8150,6 +8346,7 @@
        "via": "study"
       }
      ],
+     "related_tier": null,
      "requirement_basis": {
       "accounting_principles": {
        "kind": "onet",
@@ -8463,6 +8660,8 @@
        "weight": 1.0
       }
      ],
+     "direction": "adjacent",
+     "direction_score": 50.0,
      "effort_hours": 9.0,
      "effort_weeks": 2,
      "essential_gaps": [
@@ -8476,6 +8675,18 @@
       "basis": "low: self-rated claims one level lower, unstated as none; high: unstated at working",
       "high": 100.0,
       "low": 50.0
+     },
+     "forecast": {
+      "ai_use": null,
+      "category": "stable",
+      "change_pp": null,
+      "critical": null,
+      "kind": "estimate",
+      "label": "Stable",
+      "meaning": "No strong signal either way yet.",
+      "reasons": [
+       "no forecast change beyond the noise and fewer than two AI signals"
+      ]
      },
      "gap": {
       "bridgeable": [],
@@ -8531,6 +8742,7 @@
        "via": "study"
       }
      ],
+     "related_tier": null,
      "requirement_basis": {
       "data_management": {
        "kind": "onet",
@@ -8768,6 +8980,8 @@
        "weight": 1.0
       }
      ],
+     "direction": "stretch",
+     "direction_score": 45.5,
      "effort_hours": 6.0,
      "effort_weeks": 1,
      "essential_gaps": [],
@@ -8777,6 +8991,18 @@
       "basis": "low: self-rated claims one level lower, unstated as none; high: unstated at working",
       "high": 100.0,
       "low": 45.5
+     },
+     "forecast": {
+      "ai_use": null,
+      "category": "stable",
+      "change_pp": null,
+      "critical": null,
+      "kind": "estimate",
+      "label": "Stable",
+      "meaning": "No strong signal either way yet.",
+      "reasons": [
+       "no forecast change beyond the noise and fewer than two AI signals"
+      ]
      },
      "gap": {
       "bridgeable": [],
@@ -8839,6 +9065,7 @@
        "via": "study"
       }
      ],
+     "related_tier": null,
      "requirement_basis": {
       "dashboards": {
        "kind": "onet",
@@ -9144,6 +9371,8 @@
        "weight": 1.0
       }
      ],
+     "direction": "stretch",
+     "direction_score": 38.9,
      "effort_hours": 5.6,
      "effort_weeks": 1,
      "essential_gaps": [],
@@ -9153,6 +9382,18 @@
       "basis": "low: self-rated claims one level lower, unstated as none; high: unstated at working",
       "high": 100.0,
       "low": 38.9
+     },
+     "forecast": {
+      "ai_use": null,
+      "category": "stable",
+      "change_pp": null,
+      "critical": null,
+      "kind": "estimate",
+      "label": "Stable",
+      "meaning": "No strong signal either way yet.",
+      "reasons": [
+       "no forecast change beyond the noise and fewer than two AI signals"
+      ]
      },
      "gap": {
       "bridgeable": [],
@@ -9218,6 +9459,7 @@
        "via": "study"
       }
      ],
+     "related_tier": null,
      "requirement_basis": {
       "big_data_analytics": {
        "kind": "talentcorp",
@@ -9626,6 +9868,8 @@
        "weight": 1.0
       }
      ],
+     "direction": "stretch",
+     "direction_score": 38.5,
      "effort_hours": 19.3,
      "effort_weeks": 4,
      "essential_gaps": [
@@ -9641,6 +9885,18 @@
       "basis": "low: self-rated claims one level lower, unstated as none; high: unstated at working",
       "high": 100.0,
       "low": 38.5
+     },
+     "forecast": {
+      "ai_use": null,
+      "category": "stable",
+      "change_pp": null,
+      "critical": null,
+      "kind": "estimate",
+      "label": "Stable",
+      "meaning": "No strong signal either way yet.",
+      "reasons": [
+       "no forecast change beyond the noise and fewer than two AI signals"
+      ]
      },
      "gap": {
       "bridgeable": [],
@@ -9706,6 +9962,7 @@
        "via": "study"
       }
      ],
+     "related_tier": null,
      "requirement_basis": {
       "budget_management": {
        "kind": "onet",
@@ -9991,6 +10248,8 @@
        "weight": 1.0
       }
      ],
+     "direction": "stretch",
+     "direction_score": 25.0,
      "effort_hours": 2.0,
      "effort_weeks": 1,
      "essential_gaps": [],
@@ -10000,6 +10259,18 @@
       "basis": "low: self-rated claims one level lower, unstated as none; high: unstated at working",
       "high": 100.0,
       "low": 25.0
+     },
+     "forecast": {
+      "ai_use": null,
+      "category": "stable",
+      "change_pp": null,
+      "critical": null,
+      "kind": "estimate",
+      "label": "Stable",
+      "meaning": "No strong signal either way yet.",
+      "reasons": [
+       "no forecast change beyond the noise and fewer than two AI signals"
+      ]
      },
      "gap": {
       "bridgeable": [],
@@ -10062,6 +10333,7 @@
        "via": "study"
       }
      ],
+     "related_tier": null,
      "requirement_basis": {
       "accounting_principles": {
        "kind": "talentcorp",
@@ -10346,6 +10618,8 @@
        "weight": 1.0
       }
      ],
+     "direction": "stretch",
+     "direction_score": 7.1,
      "effort_hours": 6.0,
      "effort_weeks": 1,
      "essential_gaps": [
@@ -10359,6 +10633,18 @@
       "basis": "low: self-rated claims one level lower, unstated as none; high: unstated at working",
       "high": 100.0,
       "low": 7.1
+     },
+     "forecast": {
+      "ai_use": null,
+      "category": "stable",
+      "change_pp": null,
+      "critical": null,
+      "kind": "estimate",
+      "label": "Stable",
+      "meaning": "No strong signal either way yet.",
+      "reasons": [
+       "no forecast change beyond the noise and fewer than two AI signals"
+      ]
      },
      "gap": {
       "bridgeable": [],
@@ -10424,6 +10710,7 @@
        "via": "study"
       }
      ],
+     "related_tier": null,
      "requirement_basis": {
       "big_data_analytics": {
        "kind": "talentcorp",
@@ -10742,6 +11029,8 @@
        "weight": 1.0
       }
      ],
+     "direction": "stretch",
+     "direction_score": 0.0,
      "effort_hours": 19.6,
      "effort_weeks": 4,
      "essential_gaps": [
@@ -10757,6 +11046,18 @@
       "basis": "low: self-rated claims one level lower, unstated as none; high: unstated at working",
       "high": 100.0,
       "low": 0.0
+     },
+     "forecast": {
+      "ai_use": null,
+      "category": "stable",
+      "change_pp": null,
+      "critical": null,
+      "kind": "estimate",
+      "label": "Stable",
+      "meaning": "No strong signal either way yet.",
+      "reasons": [
+       "no forecast change beyond the noise and fewer than two AI signals"
+      ]
      },
      "gap": {
       "bridgeable": [],
@@ -10820,6 +11121,7 @@
        "via": "study"
       }
      ],
+     "related_tier": null,
      "requirement_basis": {
       "compliance_reporting": {
        "kind": "onet",
@@ -12836,6 +13138,7 @@
      "strong": 75.0
     }
    },
+   "current_forecast": null,
    "current_impact": null,
    "current_role": null,
    "destination": "p2p_reporting_analyst",
@@ -12919,6 +13222,8 @@
        "weight": 1.0
       }
      ],
+     "direction": "stretch",
+     "direction_score": 36.4,
      "effort_hours": 34.0,
      "effort_weeks": 6,
      "essential_gaps": [
@@ -12932,6 +13237,18 @@
       "basis": "low: self-rated claims one level lower, unstated as none; high: unstated at working",
       "high": 72.7,
       "low": 36.4
+     },
+     "forecast": {
+      "ai_use": null,
+      "category": "stable",
+      "change_pp": null,
+      "critical": null,
+      "kind": "estimate",
+      "label": "Stable",
+      "meaning": "No strong signal either way yet.",
+      "reasons": [
+       "no forecast change beyond the noise and fewer than two AI signals"
+      ]
      },
      "gap": {
       "bridgeable": [
@@ -12998,6 +13315,7 @@
        "via": "practice"
       }
      ],
+     "related_tier": null,
      "requirement_basis": {
       "dashboards": {
        "kind": "onet",
@@ -13259,6 +13577,8 @@
        "weight": 1.0
       }
      ],
+     "direction": "stretch",
+     "direction_score": 30.0,
      "effort_hours": 40.1,
      "effort_weeks": 7,
      "essential_gaps": [
@@ -13272,6 +13592,18 @@
       "basis": "low: self-rated claims one level lower, unstated as none; high: unstated at working",
       "high": 90.0,
       "low": 30.0
+     },
+     "forecast": {
+      "ai_use": null,
+      "category": "stable",
+      "change_pp": null,
+      "critical": null,
+      "kind": "estimate",
+      "label": "Stable",
+      "meaning": "No strong signal either way yet.",
+      "reasons": [
+       "no forecast change beyond the noise and fewer than two AI signals"
+      ]
      },
      "gap": {
       "bridgeable": [
@@ -13336,6 +13668,7 @@
        "via": "practice"
       }
      ],
+     "related_tier": null,
      "requirement_basis": {
       "data_management": {
        "kind": "onet",
@@ -13606,6 +13939,8 @@
        "weight": 1.0
       }
      ],
+     "direction": "stretch",
+     "direction_score": 11.1,
      "effort_hours": 39.7,
      "effort_weeks": 7,
      "essential_gaps": [
@@ -13619,6 +13954,18 @@
       "basis": "low: self-rated claims one level lower, unstated as none; high: unstated at working",
       "high": 94.4,
       "low": 11.1
+     },
+     "forecast": {
+      "ai_use": null,
+      "category": "stable",
+      "change_pp": null,
+      "critical": null,
+      "kind": "estimate",
+      "label": "Stable",
+      "meaning": "No strong signal either way yet.",
+      "reasons": [
+       "no forecast change beyond the noise and fewer than two AI signals"
+      ]
      },
      "gap": {
       "bridgeable": [
@@ -13686,6 +14033,7 @@
        "via": "study"
       }
      ],
+     "related_tier": null,
      "requirement_basis": {
       "big_data_analytics": {
        "kind": "talentcorp",
@@ -14083,6 +14431,8 @@
        "weight": 1.0
       }
      ],
+     "direction": "stretch",
+     "direction_score": 9.1,
      "effort_hours": 18.0,
      "effort_weeks": 3,
      "essential_gaps": [
@@ -14098,6 +14448,18 @@
       "basis": "low: self-rated claims one level lower, unstated as none; high: unstated at working",
       "high": 100.0,
       "low": 9.1
+     },
+     "forecast": {
+      "ai_use": null,
+      "category": "stable",
+      "change_pp": null,
+      "critical": null,
+      "kind": "estimate",
+      "label": "Stable",
+      "meaning": "No strong signal either way yet.",
+      "reasons": [
+       "no forecast change beyond the noise and fewer than two AI signals"
+      ]
      },
      "gap": {
       "bridgeable": [],
@@ -14162,6 +14524,7 @@
        "via": "study"
       }
      ],
+     "related_tier": null,
      "requirement_basis": {
       "compliance_reporting": {
        "kind": "onet",
@@ -14428,6 +14791,8 @@
        "weight": 1.0
       }
      ],
+     "direction": "stretch",
+     "direction_score": 7.1,
      "effort_hours": 5.7,
      "effort_weeks": 1,
      "essential_gaps": [
@@ -14441,6 +14806,18 @@
       "basis": "low: self-rated claims one level lower, unstated as none; high: unstated at working",
       "high": 100.0,
       "low": 7.1
+     },
+     "forecast": {
+      "ai_use": null,
+      "category": "stable",
+      "change_pp": null,
+      "critical": null,
+      "kind": "estimate",
+      "label": "Stable",
+      "meaning": "No strong signal either way yet.",
+      "reasons": [
+       "no forecast change beyond the noise and fewer than two AI signals"
+      ]
      },
      "gap": {
       "bridgeable": [],
@@ -14506,6 +14883,7 @@
        "via": "study"
       }
      ],
+     "related_tier": null,
      "requirement_basis": {
       "big_data_analytics": {
        "kind": "talentcorp",
@@ -14846,6 +15224,8 @@
        "weight": 1.0
       }
      ],
+     "direction": "stretch",
+     "direction_score": 6.7,
      "effort_hours": 60.8,
      "effort_weeks": 11,
      "essential_gaps": [
@@ -14861,6 +15241,18 @@
       "basis": "low: self-rated claims one level lower, unstated as none; high: unstated at working",
       "high": 100.0,
       "low": 6.7
+     },
+     "forecast": {
+      "ai_use": null,
+      "category": "stable",
+      "change_pp": null,
+      "critical": null,
+      "kind": "estimate",
+      "label": "Stable",
+      "meaning": "No strong signal either way yet.",
+      "reasons": [
+       "no forecast change beyond the noise and fewer than two AI signals"
+      ]
      },
      "gap": {
       "bridgeable": [],
@@ -14927,6 +15319,7 @@
        "via": "practice"
       }
      ],
+     "related_tier": null,
      "requirement_basis": {
       "accounting_principles": {
        "kind": "onet",
@@ -15284,6 +15677,8 @@
        "weight": 1.0
       }
      ],
+     "direction": "stretch",
+     "direction_score": 0.0,
      "effort_hours": 51.2,
      "effort_weeks": 9,
      "essential_gaps": [
@@ -15299,6 +15694,18 @@
       "basis": "low: self-rated claims one level lower, unstated as none; high: unstated at working",
       "high": 100.0,
       "low": 0.0
+     },
+     "forecast": {
+      "ai_use": null,
+      "category": "stable",
+      "change_pp": null,
+      "critical": null,
+      "kind": "estimate",
+      "label": "Stable",
+      "meaning": "No strong signal either way yet.",
+      "reasons": [
+       "no forecast change beyond the noise and fewer than two AI signals"
+      ]
      },
      "gap": {
       "bridgeable": [],
@@ -15366,6 +15773,7 @@
        "via": "study"
       }
      ],
+     "related_tier": null,
      "requirement_basis": {
       "accounting_principles": {
        "kind": "assumption",
@@ -15748,6 +16156,8 @@
        "weight": 1.0
       }
      ],
+     "direction": "stretch",
+     "direction_score": 0.0,
      "effort_hours": 35.9,
      "effort_weeks": 6,
      "essential_gaps": [
@@ -15763,6 +16173,18 @@
       "basis": "low: self-rated claims one level lower, unstated as none; high: unstated at working",
       "high": 100.0,
       "low": 0.0
+     },
+     "forecast": {
+      "ai_use": null,
+      "category": "stable",
+      "change_pp": null,
+      "critical": null,
+      "kind": "estimate",
+      "label": "Stable",
+      "meaning": "No strong signal either way yet.",
+      "reasons": [
+       "no forecast change beyond the noise and fewer than two AI signals"
+      ]
      },
      "gap": {
       "bridgeable": [],
@@ -15828,6 +16250,7 @@
        "via": "practice"
       }
      ],
+     "related_tier": null,
      "requirement_basis": {
       "accounting_principles": {
        "kind": "onet",
@@ -16150,6 +16573,8 @@
        "weight": 1.0
       }
      ],
+     "direction": "stretch",
+     "direction_score": 0.0,
      "effort_hours": 21.7,
      "effort_weeks": 4,
      "essential_gaps": [
@@ -16165,6 +16590,18 @@
       "basis": "low: self-rated claims one level lower, unstated as none; high: unstated at working",
       "high": 100.0,
       "low": 0.0
+     },
+     "forecast": {
+      "ai_use": null,
+      "category": "stable",
+      "change_pp": null,
+      "critical": null,
+      "kind": "estimate",
+      "label": "Stable",
+      "meaning": "No strong signal either way yet.",
+      "reasons": [
+       "no forecast change beyond the noise and fewer than two AI signals"
+      ]
      },
      "gap": {
       "bridgeable": [],
@@ -16229,6 +16666,7 @@
        "via": "practice"
       }
      ],
+     "related_tier": null,
      "requirement_basis": {
       "budget_management": {
        "kind": "onet",
@@ -16514,6 +16952,8 @@
        "weight": 1.0
       }
      ],
+     "direction": "stretch",
+     "direction_score": 0.0,
      "effort_hours": 3.9,
      "effort_weeks": 1,
      "essential_gaps": [
@@ -16527,6 +16967,18 @@
       "basis": "low: self-rated claims one level lower, unstated as none; high: unstated at working",
       "high": 100.0,
       "low": 0.0
+     },
+     "forecast": {
+      "ai_use": null,
+      "category": "stable",
+      "change_pp": null,
+      "critical": null,
+      "kind": "estimate",
+      "label": "Stable",
+      "meaning": "No strong signal either way yet.",
+      "reasons": [
+       "no forecast change beyond the noise and fewer than two AI signals"
+      ]
      },
      "gap": {
       "bridgeable": [],
@@ -16590,6 +17042,7 @@
        "via": "study"
       }
      ],
+     "related_tier": null,
      "requirement_basis": {
       "accounting_principles": {
        "kind": "talentcorp",
@@ -19446,6 +19899,7 @@
      "strong": 75.0
     }
    },
+   "current_forecast": null,
    "current_impact": null,
    "current_role": null,
    "destination": "o2c_reporting_analyst",
@@ -19562,6 +20016,8 @@
        "weight": 1.0
       }
      ],
+     "direction": "stretch",
+     "direction_score": 33.3,
      "effort_hours": 8.5,
      "effort_weeks": 2,
      "essential_gaps": [
@@ -19575,6 +20031,18 @@
       "basis": "low: self-rated claims one level lower, unstated as none; high: unstated at working",
       "high": 94.4,
       "low": 33.3
+     },
+     "forecast": {
+      "ai_use": null,
+      "category": "stable",
+      "change_pp": null,
+      "critical": null,
+      "kind": "estimate",
+      "label": "Stable",
+      "meaning": "No strong signal either way yet.",
+      "reasons": [
+       "no forecast change beyond the noise and fewer than two AI signals"
+      ]
      },
      "gap": {
       "bridgeable": [
@@ -19643,6 +20111,7 @@
        "via": "study"
       }
      ],
+     "related_tier": null,
      "requirement_basis": {
       "big_data_analytics": {
        "kind": "talentcorp",
@@ -20051,6 +20520,8 @@
        "weight": 1.0
       }
      ],
+     "direction": "stretch",
+     "direction_score": 27.3,
      "effort_hours": 8.0,
      "effort_weeks": 2,
      "essential_gaps": [
@@ -20064,6 +20535,18 @@
       "basis": "low: self-rated claims one level lower, unstated as none; high: unstated at working",
       "high": 90.9,
       "low": 27.3
+     },
+     "forecast": {
+      "ai_use": null,
+      "category": "stable",
+      "change_pp": null,
+      "critical": null,
+      "kind": "estimate",
+      "label": "Stable",
+      "meaning": "No strong signal either way yet.",
+      "reasons": [
+       "no forecast change beyond the noise and fewer than two AI signals"
+      ]
      },
      "gap": {
       "bridgeable": [
@@ -20129,6 +20612,7 @@
        "via": "practice"
       }
      ],
+     "related_tier": null,
      "requirement_basis": {
       "dashboards": {
        "kind": "onet",
@@ -20412,6 +20896,8 @@
        "weight": 1.0
       }
      ],
+     "direction": "stretch",
+     "direction_score": 26.7,
      "effort_hours": 32.1,
      "effort_weeks": 6,
      "essential_gaps": [
@@ -20427,6 +20913,18 @@
       "basis": "low: self-rated claims one level lower, unstated as none; high: unstated at working",
       "high": 93.3,
       "low": 26.7
+     },
+     "forecast": {
+      "ai_use": null,
+      "category": "stable",
+      "change_pp": null,
+      "critical": null,
+      "kind": "estimate",
+      "label": "Stable",
+      "meaning": "No strong signal either way yet.",
+      "reasons": [
+       "no forecast change beyond the noise and fewer than two AI signals"
+      ]
      },
      "gap": {
       "bridgeable": [
@@ -20495,6 +20993,7 @@
        "via": "study"
       }
      ],
+     "related_tier": null,
      "requirement_basis": {
       "accounting_principles": {
        "kind": "onet",
@@ -20852,6 +21351,8 @@
        "weight": 1.0
       }
      ],
+     "direction": "stretch",
+     "direction_score": 21.1,
      "effort_hours": 19.6,
      "effort_weeks": 4,
      "essential_gaps": [
@@ -20867,6 +21368,18 @@
       "basis": "low: self-rated claims one level lower, unstated as none; high: unstated at working",
       "high": 89.5,
       "low": 21.1
+     },
+     "forecast": {
+      "ai_use": null,
+      "category": "stable",
+      "change_pp": null,
+      "critical": null,
+      "kind": "estimate",
+      "label": "Stable",
+      "meaning": "No strong signal either way yet.",
+      "reasons": [
+       "no forecast change beyond the noise and fewer than two AI signals"
+      ]
      },
      "gap": {
       "bridgeable": [
@@ -20935,6 +21448,7 @@
        "via": "study"
       }
      ],
+     "related_tier": null,
      "requirement_basis": {
       "accounting_principles": {
        "kind": "assumption",
@@ -21317,6 +21831,8 @@
        "weight": 1.0
       }
      ],
+     "direction": "stretch",
+     "direction_score": 20.0,
      "effort_hours": 5.7,
      "effort_weeks": 1,
      "essential_gaps": [
@@ -21332,6 +21848,18 @@
       "basis": "low: self-rated claims one level lower, unstated as none; high: unstated at working",
       "high": 93.3,
       "low": 20.0
+     },
+     "forecast": {
+      "ai_use": null,
+      "category": "stable",
+      "change_pp": null,
+      "critical": null,
+      "kind": "estimate",
+      "label": "Stable",
+      "meaning": "No strong signal either way yet.",
+      "reasons": [
+       "no forecast change beyond the noise and fewer than two AI signals"
+      ]
      },
      "gap": {
       "bridgeable": [
@@ -21400,6 +21928,7 @@
        "via": "study"
       }
      ],
+     "related_tier": null,
      "requirement_basis": {
       "accounting_principles": {
        "kind": "onet",
@@ -21711,6 +22240,8 @@
        "weight": 1.0
       }
      ],
+     "direction": "stretch",
+     "direction_score": 20.0,
      "effort_hours": 11.4,
      "effort_weeks": 2,
      "essential_gaps": [
@@ -21724,6 +22255,18 @@
       "basis": "low: self-rated claims one level lower, unstated as none; high: unstated at working",
       "high": 100.0,
       "low": 20.0
+     },
+     "forecast": {
+      "ai_use": null,
+      "category": "stable",
+      "change_pp": null,
+      "critical": null,
+      "kind": "estimate",
+      "label": "Stable",
+      "meaning": "No strong signal either way yet.",
+      "reasons": [
+       "no forecast change beyond the noise and fewer than two AI signals"
+      ]
      },
      "gap": {
       "bridgeable": [],
@@ -21787,6 +22330,7 @@
        "via": "study"
       }
      ],
+     "related_tier": null,
      "requirement_basis": {
       "data_management": {
        "kind": "onet",
@@ -22024,6 +22568,8 @@
        "weight": 1.0
       }
      ],
+     "direction": "stretch",
+     "direction_score": 16.7,
      "effort_hours": 2.0,
      "effort_weeks": 1,
      "essential_gaps": [
@@ -22037,6 +22583,18 @@
       "basis": "low: self-rated claims one level lower, unstated as none; high: unstated at working",
       "high": 91.7,
       "low": 16.7
+     },
+     "forecast": {
+      "ai_use": null,
+      "category": "stable",
+      "change_pp": null,
+      "critical": null,
+      "kind": "estimate",
+      "label": "Stable",
+      "meaning": "No strong signal either way yet.",
+      "reasons": [
+       "no forecast change beyond the noise and fewer than two AI signals"
+      ]
      },
      "gap": {
       "bridgeable": [
@@ -22101,6 +22659,7 @@
        "via": "study"
       }
      ],
+     "related_tier": null,
      "requirement_basis": {
       "accounting_principles": {
        "kind": "talentcorp",
@@ -22374,6 +22933,8 @@
        "weight": 1.0
       }
      ],
+     "direction": "stretch",
+     "direction_score": 0.0,
      "effort_hours": 21.7,
      "effort_weeks": 4,
      "essential_gaps": [
@@ -22389,6 +22950,18 @@
       "basis": "low: self-rated claims one level lower, unstated as none; high: unstated at working",
       "high": 100.0,
       "low": 0.0
+     },
+     "forecast": {
+      "ai_use": null,
+      "category": "stable",
+      "change_pp": null,
+      "critical": null,
+      "kind": "estimate",
+      "label": "Stable",
+      "meaning": "No strong signal either way yet.",
+      "reasons": [
+       "no forecast change beyond the noise and fewer than two AI signals"
+      ]
      },
      "gap": {
       "bridgeable": [],
@@ -22453,6 +23026,7 @@
        "via": "practice"
       }
      ],
+     "related_tier": null,
      "requirement_basis": {
       "budget_management": {
        "kind": "onet",
@@ -22727,6 +23301,8 @@
        "weight": 1.0
       }
      ],
+     "direction": "stretch",
+     "direction_score": 0.0,
      "effort_hours": 19.6,
      "effort_weeks": 4,
      "essential_gaps": [
@@ -22742,6 +23318,18 @@
       "basis": "low: self-rated claims one level lower, unstated as none; high: unstated at working",
       "high": 100.0,
       "low": 0.0
+     },
+     "forecast": {
+      "ai_use": null,
+      "category": "stable",
+      "change_pp": null,
+      "critical": null,
+      "kind": "estimate",
+      "label": "Stable",
+      "meaning": "No strong signal either way yet.",
+      "reasons": [
+       "no forecast change beyond the noise and fewer than two AI signals"
+      ]
      },
      "gap": {
       "bridgeable": [],
@@ -22805,6 +23393,7 @@
        "via": "study"
       }
      ],
+     "related_tier": null,
      "requirement_basis": {
       "compliance_reporting": {
        "kind": "onet",
@@ -23071,6 +23660,8 @@
        "weight": 1.0
       }
      ],
+     "direction": "stretch",
+     "direction_score": 0.0,
      "effort_hours": 7.3,
      "effort_weeks": 2,
      "essential_gaps": [
@@ -23084,6 +23675,18 @@
       "basis": "low: self-rated claims one level lower, unstated as none; high: unstated at working",
       "high": 100.0,
       "low": 0.0
+     },
+     "forecast": {
+      "ai_use": null,
+      "category": "stable",
+      "change_pp": null,
+      "critical": null,
+      "kind": "estimate",
+      "label": "Stable",
+      "meaning": "No strong signal either way yet.",
+      "reasons": [
+       "no forecast change beyond the noise and fewer than two AI signals"
+      ]
      },
      "gap": {
       "bridgeable": [],
@@ -23148,6 +23751,7 @@
        "via": "study"
       }
      ],
+     "related_tier": null,
      "requirement_basis": {
       "big_data_analytics": {
        "kind": "talentcorp",

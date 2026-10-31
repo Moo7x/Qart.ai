@@ -30,6 +30,7 @@ from src.journey.store import (
     update_profile,
 )
 from src.levels import load_levels
+from src.match import directions
 from src.match.basis import requirement_basis
 from src.match.decision import (
     band,
@@ -271,10 +272,13 @@ def _card(
     path: Pathway,
     demand: list[dict[str, str]],
     scenario: Scenario,
+    forecasts: dict[str, dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
     pack, data, evidence, rows = person.pack, person.data, person.evidence, person.rows
     role = pack.destination_roles[match.role_id]
     current = pack.current_roles.get(data.current_role)
+    forecast = (forecasts or {}).get(match.role_id)
+    tier = directions.related_tier(rows, current.soc if current else None, role.soc)
     outlook = [
         {
             "kind": "expert",
@@ -318,6 +322,12 @@ def _card(
         # Skills TalentCorp names as in demand (expert view, PDF p. 25): the row's trend line.
         "in_demand": in_demand_skills(pack, role, rows),
         # The person's chosen goals this role serves (they order near-ties; fit is unchanged).
+        # Where the role is heading (industry forecast, estimate), how close the move is, and the
+        # score the roles are ordered by (fit x outlook factor; the fit itself is unchanged).
+        "forecast": directions.summary(forecast),
+        "direction": directions.direction(match.fit, tier),
+        "related_tier": tier,
+        "direction_score": round(match.fit * directions.factor(forecast), 1),
         "serves_goals": sorted(
             {link.target.split(".")[0] for link in pack.sdg.for_role(match.role_id)}
             & set(data.sdg_priorities)
@@ -334,6 +344,7 @@ def matches(
     person = require_person(engine, profile_id)
     pack, evidence, rows = person.pack, person.evidence, person.rows
     signals = occupation_signals(rows) + job_ad_signals(rows)
+    forecasts = person.forecasts(scenario)
     cards = [
         _card(
             person,
@@ -341,6 +352,7 @@ def matches(
             person.plan(m, scenario),
             role_outlook(pack, pack.destination_roles[m.role_id], rows, signals),
             scenario,
+            forecasts,
         )
         for m in person.rank(scenario)
     ]
@@ -357,6 +369,8 @@ def matches(
         },
         "current_role": current.model_dump() if current else None,
         "current_impact": IMPACT_MEANING[current.impact] if current else None,
+        # Where the person's own job is heading: the basis of the no-destination reskilling path.
+        "current_forecast": directions.summary(forecasts.get(current.id)) if current else None,
         "destination": person.destination,
         "roles": cards,
         # B7: roles × SDG targets with reasons, so roles can be compared by contribution.

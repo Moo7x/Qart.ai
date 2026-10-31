@@ -106,8 +106,17 @@ def _critical(rows: list[Row], isco: str | None) -> bool | None:
     return bool(name and name in listed)
 
 
+_DEMAND_CACHE: dict[tuple[int, int], dict[str, dict[str, Any]]] = {}
+DEMAND_CACHE_SIZE = 8  # snapshots kept; each backtest takes seconds, and ranking asks often
+
+
 def _demand(rows: list[Row]) -> dict[str, dict[str, Any]]:
-    """Forecast per DOSM occupation group: change over the horizon, model and fetch date."""
+    """Forecast per DOSM occupation group: change over the horizon, model and fetch date.
+    Cached per evidence snapshot (row count and newest row id): the same rows give the same
+    forecast, and a new snapshot (or a person's own cutoff) gets its own entry."""
+    key = (len(rows), max((int(r.get("id") or 0) for r in rows), default=0))
+    if key in _DEMAND_CACHE:
+        return _DEMAND_CACHE[key]
     out = {}
     for entry in forecast.employment_forecasts(rows):
         group = entry["series_id"].split(":", 1)[1]
@@ -118,6 +127,9 @@ def _demand(rows: list[Row]) -> dict[str, dict[str, Any]]:
             "source": entry.get("source"),
             "fetched": entry.get("fetched"),
         }
+    if len(_DEMAND_CACHE) >= DEMAND_CACHE_SIZE:
+        _DEMAND_CACHE.pop(next(iter(_DEMAND_CACHE)))
+    _DEMAND_CACHE[key] = out
     return out
 
 

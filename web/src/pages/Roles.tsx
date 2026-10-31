@@ -348,13 +348,13 @@ export function Roles() {
           {profile.data && <MattersToYou profileId={profileId} profile={profile.data.profile} onSaved={reloadAll} />}
           {data.current_role && (
             <div className="q-card flex-row flex-wrap items-center justify-between gap-3 px-5 py-3.5 text-[13px]">
-              <span><span className="font-semibold">Today: {data.current_role.title}</span> · TalentCorp rates it {data.current_impact} (PDF p. {data.current_role.page}).</span>
+              <span><span className="font-semibold">Today: {data.current_role.title}</span> · TalentCorp rates it {data.current_impact} (PDF p. {data.current_role.page}).{data.current_forecast && <> Qart forecast: <span className="font-semibold">{data.current_forecast.label}</span> ({data.current_forecast.meaning.toLowerCase()})</>}</span>
               <span className="text-muted">Routes it lists: {data.current_role.transitions.length} in GBS{data.current_role.other_sectors.length ? `, ${data.current_role.other_sectors.length} in other sectors` : ''}</span>
             </div>
           )}
           <section aria-label="Ranked roles" className="q-card gap-2">
             <div className="flex flex-wrap items-center justify-between gap-2">
-              <span className="text-[13px]"><span className="font-semibold text-violet">All {data.roles.length} destination roles</span> <span className="text-muted">· {data.scenario_label}</span></span>
+              <span className="text-[13px]"><span className="font-semibold text-violet">All {data.roles.length} destination roles</span> <span className="text-muted">· {data.scenario_label} · ordered by fit and the Qart forecast (a growing role moves up, a shrinking one down; the fit shown is unchanged)</span></span>
               <Legend items={[{ swatch: '#6c47ff', text: 'Fit today (estimate)' }, { swatch: '#d9d0ff', text: 'Range if unrated skills are low or working (assumption)' }]} />
             </div>
             {goals.length > 0 && (
@@ -387,6 +387,8 @@ export function Roles() {
                         <span className="text-[15px] font-semibold leading-snug">{r.title}</span>
                         <span className="flex flex-wrap gap-1">
                           {data.destination === r.role_id && <span className="whitespace-nowrap rounded-full bg-violet px-2 py-0.5 text-[11px] font-semibold text-white">your destination</span>}
+                          {r.forecast && <span title={`${r.forecast.meaning} ${r.forecast.reasons.join('; ')}`} className="whitespace-nowrap rounded-full bg-estimate-bg px-2 py-0.5 text-[11px] font-semibold text-estimate">{r.forecast.label} · Qart forecast</span>}
+                          <span className="whitespace-nowrap rounded-full bg-mist px-2 py-0.5 text-[11px] text-graphite">{r.direction === 'adjacent' ? 'adjacent move' : 'stretch move'}</span>
                           {r.listed_transition && <span className="whitespace-nowrap rounded-full bg-tray px-2 py-0.5 text-[11px] font-medium">listed route from your role</span>}
                           {prefs.data?.not_my_goal.includes(r.role_id) && <span className="whitespace-nowrap rounded-full bg-mist px-2 py-0.5 text-[11px] text-muted">you said: not your goal</span>}
                           {rankMove !== 0 && moderateRank.length > 0 && fastRank.length > 0 && <span className="q-label q-label-estimate">{rankMove > 0 ? `▲ ${rankMove}` : `▼ ${-rankMove}`} if AI moves fast</span>}

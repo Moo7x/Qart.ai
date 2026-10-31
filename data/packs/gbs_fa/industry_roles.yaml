@@ -36,3 +36,4 @@ roles:
   - {id: design_ethicist, title: Design Ethicist and Product Philosopher, talentcorp: Design Ethicist and Product Philosopher, soc_reason: "no O*NET occupation describes this new role; forecast from TalentCorp's emerging listing only"}
   - {id: compliance_governance_specialist, title: Compliance and Governance Specialist, pack_role: compliance_governance_specialist, soc: "13-2011.00"}
   - {id: continuous_improvement_specialist, title: Continuous Improvement Specialist, pack_role: continuous_improvement_specialist, soc: "13-1111.00"}
+  - {id: procurement_analyst, title: Procurement Analyst, pack_role: procurement_analyst, soc: "13-1023.00"}

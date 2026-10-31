@@ -91,6 +91,19 @@ class SdgRef(BaseModel):
     how: str
 
 
+class RoleForecast(BaseModel):
+    """Where a role is heading (src/forecast/industry.py), an estimate with its reasons."""
+
+    category: str
+    label: str
+    meaning: str
+    reasons: list[str]
+    change_pp: float | None
+    critical: bool | None
+    ai_use: float | None
+    kind: str
+
+
 class RoleCard(BaseModel):
     """C2: one ranked role with its fit, range, band, components and what would raise it."""
 
@@ -122,6 +135,10 @@ class RoleCard(BaseModel):
     sdgs: list[SdgRef]
     requirement_basis: dict[str, SkillBasis]
     in_demand: list[str]  # skill ids TalentCorp names as in demand (expert view)
+    forecast: RoleForecast | None = None
+    direction: str = "stretch"  # "adjacent" or "stretch" (src/match/directions.py)
+    related_tier: int | None = None  # 0 same occupation, 1-3 O*NET relatedness tier
+    direction_score: float = 0.0  # fit x outlook factor: the order roles are shown in
     serves_goals: list[str]
 
 
@@ -145,6 +162,7 @@ class MatchesOut(BaseModel):
     evidence: EvidenceInfo
     current_role: CurrentRole | None
     current_impact: str | None
+    current_forecast: RoleForecast | None = None
     destination: str | None
     roles: list[RoleCard]
     sdg_roles: list[SdgRole]
