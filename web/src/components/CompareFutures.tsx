@@ -1,6 +1,6 @@
 import { useApi } from '../api'
 import { useJourney } from '../state'
-import type { MatchesResponse, SensitivityResponse } from '../types'
+import type { MatchesResponse } from '../types'
 import { KindLabel } from './Why'
 
 // Stage 6, compare futures (docs/PHASE2_PLAN.md A10): the same profile under moderate and fast AI
@@ -18,7 +18,6 @@ export function CompareFutures() {
   const { profileId } = useJourney()
   const moderate = useApi<MatchesResponse>(profileId ? `/api/profiles/${profileId}/matches?scenario=moderate` : null)
   const fast = useApi<MatchesResponse>(profileId ? `/api/profiles/${profileId}/matches?scenario=fast` : null)
-  const sensitivity = useApi<SensitivityResponse>(profileId ? `/api/profiles/${profileId}/sensitivity?scenario=moderate` : null)
   const m = moderate.data
   const f = fast.data
   if (!m || !f) return <span role="status" className="cap">Loading both futures…</span>
@@ -30,7 +29,6 @@ export function CompareFutures() {
   const moved = (mRole?.requirements ?? [])
     .map((req) => ({ req, fast: fRole?.requirements.find((x) => x.skill === req.skill) }))
     .filter(({ req, fast: fr }) => fr && Math.abs(fr.weight - req.weight) > 0.005)
-  const sens = sensitivity.data
   return (
     <section className="section" aria-label="Compare futures">
       <div className="flex flex-wrap items-baseline justify-between gap-2">
@@ -79,32 +77,6 @@ export function CompareFutures() {
             </ul>
           )}
           <p className="m-0 text-[12px] text-graphite">Fit {mRole.fit.toFixed(1)} → {fRole?.fit.toFixed(1)}. Your skills are the same in both; only the weights change.</p>
-        </div>
-      )}
-      {sens && (
-        <div className="flex flex-col gap-1.5 border-t border-line pt-3">
-          <span className="cap">How sure is the ranking? Rank at each adoption speed</span>
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-[480px] border-collapse text-[12px]">
-              <thead>
-                <tr className="text-left text-graphite">
-                  <th className="py-1 pr-2 font-normal">Role</th>
-                  {sens.intensities.map((x) => <th key={x} className="py-1 pr-2 text-right font-normal">{Math.round(100 * x)}%</th>)}
-                  <th className="py-1 text-right font-normal">Stable?</th>
-                </tr>
-              </thead>
-              <tbody>
-                {sens.roles.map((r) => (
-                  <tr key={r.role_id} className="border-t border-line">
-                    <td className="py-1 pr-2">{r.title}</td>
-                    {r.ranks.map((rank, i) => <td key={i} className="py-1 pr-2 text-right font-mono">{rank}</td>)}
-                    <td className={`py-1 text-right ${r.stable ? 'text-rising' : 'text-weak'}`}>{r.stable ? 'yes' : 'depends'}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <p className="m-0 text-[12px] text-graphite">0% is no AI shift; 50% and 100% are the two scenarios; 150% is a stronger case than fast. A role marked &ldquo;depends&rdquo; changes rank with the assumption.</p>
         </div>
       )}
     </section>

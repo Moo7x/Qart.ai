@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import { useApi } from '../api'
 import { CompareFutures } from '../components/CompareFutures'
 import { JobPosts } from '../components/CompareRoles'
-import { Dots, ScenarioSwitch, SdgTag, JourneyRoute, NextStep, levelText } from '../components/journey'
+import { Dots, ScenarioSwitch, JourneyRoute, NextStep, levelText } from '../components/journey'
 import { Loading, Problem } from '../components/ui'
 import { useJourney } from '../state'
 import type { FutureResponse, FutureRole } from '../types'
@@ -59,7 +59,7 @@ export function Future() {
               <span className="eyebrow">Today → Future you</span>
               <h1 className="h1">From {today.toLowerCase()} to {data.destination.title}</h1>
               <p className="m-0 max-w-[660px] text-graphite">
-                Left: what you have now and the roles it fits. Right: what finishing your {view.hours} h plan would add, and the roles it opens. The right side is an estimate, not a promise about hiring.
+                Left: your skills today. Right: what your {view.hours} h plan adds and the roles it opens. The right side is an estimate, not a promise about hiring.
               </p>
             </div>
             <ScenarioSwitch />
@@ -80,10 +80,6 @@ export function Future() {
                     <Dots level={s.level} tone="stone" />
                   </div>
                 ))}
-              </div>
-              <div className="flex flex-col gap-1">
-                <h3 className="cap m-0">Roles you fit best today</h3>
-                <RoleList roles={view.roles_now} destination={data.destination.id} />
               </div>
             </section>
 
@@ -116,14 +112,6 @@ export function Future() {
 
           <CompareFutures />
 
-          <section className="section" aria-label="SDG contribution">
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="text-[13px] font-semibold">Your path serves</span>
-              {view.sdg_targets.map((t) => <SdgTag key={t} target={t} />)}
-            </div>
-            {view.uncovered.length > 0 && <p className="m-0 text-[13px] text-graphite">Still without a verified free course: {view.uncovered.join(', ')}.</p>}
-            <p className="m-0 max-w-[720px] text-[13px] text-graphite">Qart.ai supports your decision and never makes hiring decisions. Essential skills keep their required level in every scenario.</p>
-          </section>
         </>
       )}
       <NextStep to="/pathway" label="Back to my plan" hint="Next: start the first step of your plan" />
