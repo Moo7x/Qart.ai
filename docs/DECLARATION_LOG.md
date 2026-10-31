@@ -57,7 +57,7 @@
 | 2026-10-23 | removed | axios | Replaced by the browser's fetch | — | — | team |
 | 2026-10-23 | library | python-docx 1.2.0 | Read synthetic DOCX CVs in memory | MIT (installed package metadata) | free / open source | team |
 | 2026-10-23 | library | python-multipart 0.0.32 | Synthetic CV uploads to the intake API | Apache-2.0 (installed package metadata) | free / open source | team |
-| 2026-10-23 | library | pypdf 6.21.2 (current runtime use; updated 2026-10-24 from 5.4.0, which had 96 known vulnerabilities per pip-audit) | Extract synthetic PDF CV text; existing TalentCorp page checks retained | BSD-3-Clause | free / open source | team |
+| 2026-10-23 | library | pypdf 6.21.4 (current runtime use; updated 2026-10-24 from 5.4.0, which had 96 known vulnerabilities per pip-audit, and 2026-10-31 from 6.21.2 after the Replit security scan) | Extract synthetic PDF CV text; existing TalentCorp page checks retained | BSD-3-Clause | free / open source | team |
 | 2026-10-23 | external API / resource links | Microsoft Learn Catalog API and OpenLearn course pages | Current GBS pack: titles, provider-stated time/level and links; catalogue checked 2026-10-23; no course content hosted | Microsoft API/provider terms; Open University terms; metadata and links only | public / linked free resources | team |
 | 2026-10-23 | reference | UN SDG targets 4.3, 4.4, 8.2, 8.5, 12.6 | Target wording and contribution mechanisms in the current pack | UN terms of use; attribution in sdg.yaml | public reference | team |
 | 2026-10-23 | AI model (called) | OpenAI gpt-4o-mini (current intake) | Schema-constrained skill claims from scrubbed synthetic CV text; exact quoted evidence validated in code; labelled fallback | OpenAI API terms | existing API access | team |
