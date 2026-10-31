@@ -11,6 +11,7 @@ from sqlalchemy import Engine, select
 
 from src import params
 from src.api.evidence import get_engine, get_settings
+from src.api.schemas import MatchesOut
 from src.changes.store import baseline_cutoff
 from src.collectors.talentcorp import load_extraction
 from src.config import REPO_ROOT, Settings
@@ -322,7 +323,7 @@ def _card(
     }
 
 
-@router.get("/profiles/{profile_id}/matches")
+@router.get("/profiles/{profile_id}/matches", response_model=MatchesOut)
 def matches(
     profile_id: str,
     scenario: Scenario = Query(default="moderate"),
