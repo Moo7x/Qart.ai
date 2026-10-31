@@ -28,6 +28,7 @@ from src.journey.store import (
     update_profile,
 )
 from src.levels import load_levels
+from src.match.basis import requirement_basis
 from src.match.decision import (
     band,
     components,
@@ -308,6 +309,10 @@ def _card(
         "effort_weeks": path.weeks,
         "uncovered": path.uncovered,
         "sdgs": _role_sdgs(pack, match),
+        # Why each skill is counted for this role (src/match/basis.py), keyed by skill id.
+        "requirement_basis": {
+            r.skill: requirement_basis(pack, match.role_id, r.skill) for r in match.requirements
+        },
         # The person's chosen goals this role serves (they order near-ties; fit is unchanged).
         "serves_goals": sorted(
             {link.target.split(".")[0] for link in pack.sdg.for_role(match.role_id)}

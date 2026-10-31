@@ -21,6 +21,7 @@ from dataclasses import asdict, replace
 from typing import Any
 
 from src import params
+from src.match.basis import requirement_basis
 from src.match.engine import Evidence, RoleMatch, Scenario, score_role
 from src.pack import Course, Pack
 from src.pathway.planner import Pathway, plan_pathway
@@ -105,6 +106,8 @@ def _skill_nodes(
                 "videos": [_video(v) for v in res.videos_for(skill=r.skill)],
                 "articles": [_article(a) for a in res.articles_for(skill=r.skill)],
                 "status": _status(courses),
+                # Why this skill is on the plan at all: TalentCorp, O*NET tasks, or our assumption.
+                "why": requirement_basis(pack, match.role_id, r.skill),
                 "_order": first,
             }
         )
