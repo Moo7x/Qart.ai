@@ -6,19 +6,25 @@ import { formatWhen, useApi } from '../api'
 import { useJourney } from '../state'
 import type { ChangesResponse, MatchesResponse, PathwayResponse, ProgressResponse, RoleCard, Run, SourceStatus, TrendsResponse } from '../types'
 import type { SeriesForecast } from '../typesAgents'
+import type { RaiseOption, SdgMatrix } from '../typesScoring'
 import { levelText, ScenarioSwitch, SdgTag } from './journey'
 import { KindLabel, WhyButton } from './Why'
 
 // Overview "at a glance" (docs/PHASE2_PLAN.md A1): seven short cards, each number with a Why?.
-// Fields owner B adds to the role score (C2) are read when present; until then the card shows
-// what the API already returns and hides the rest, never a placeholder number.
-type ScoredRole = RoleCard & { band?: string; essentials_short?: string[] }
+// The role score's band, range rule and "what would raise it" come from owner B's C2 fields;
+// an absent field hides its line, never a placeholder number.
+const RAISE_SHOWN = 3
+const VIA: Record<RaiseOption['via'], string> = { study: 'study', practice: 'practice at work', check: 'a progress check' }
+
+function raiseText(r: RaiseOption): string {
+  return `+${r.points.toFixed(1)} points: ${r.skill_name} ${levelText(r.from_level)} → ${levelText(r.to_level)} by ${VIA[r.via]}`
+}
 
 const SNAPSHOT_ITEMS = 3
 const RUNS_POLL_MS = 60_000
 
 function TopRoleCard({ matches }: { matches: MatchesResponse }) {
-  const role = (matches.roles.find((r) => r.role_id === matches.destination) ?? matches.roles[0]) as ScoredRole | undefined
+  const role: RoleCard | undefined = matches.roles.find((r) => r.role_id === matches.destination) ?? matches.roles[0]
   if (!role) return null
   const short = role.essentials_short ?? role.essential_gaps
   const rows = role.requirements
@@ -38,6 +44,7 @@ function TopRoleCard({ matches }: { matches: MatchesResponse }) {
       <p className="m-0 text-[13px]">
         {short.length > 0 ? <>Essentials still short: <span className="font-semibold">{short.join(', ')}</span></> : 'Your claims cover every essential skill.'}
       </p>
+      {role.raise && role.raise.length > 0 && <p className="m-0 text-[13px]">Biggest raise: <span className="font-semibold">{raiseText(role.raise[0])}</span></p>}
       <div className="mt-auto flex flex-wrap items-center gap-2">
         <WhyButton
           title={`Why ${role.title} scores ${Math.round(role.fit)}`}
@@ -79,10 +86,20 @@ function TopRoleCard({ matches }: { matches: MatchesResponse }) {
               hint: 'Assumption',
               body: (
                 <p className="m-0">
-                  {Math.round(role.fit_range.low)} counts the skills you have not stated as none; {Math.round(role.fit_range.high)} counts them at the highest level any requirement needs. Stating more skills narrows the range.
+                  {role.fit_range.basis ?? `${Math.round(role.fit_range.low)} counts the skills you have not stated as none; ${Math.round(role.fit_range.high)} counts them at the highest level any requirement needs.`} Stating more skills narrows the range.
                 </p>
               ),
             },
+            ...(role.raise && role.raise.length > 0 ? [{
+              key: 'raise',
+              title: 'What would raise it',
+              hint: 'Each option re-scored with only that one change',
+              body: (
+                <ul className="m-0 flex flex-col gap-1.5 pl-4">
+                  {role.raise.slice(0, RAISE_SHOWN).map((r) => <li key={`${r.skill}-${r.via}`}>{raiseText(r)}</li>)}
+                </ul>
+              ),
+            }] : []),
           ]}
         />
         <Link className="text-[13px]" to="/roles">All ranked roles →</Link>
@@ -93,7 +110,7 @@ function TopRoleCard({ matches }: { matches: MatchesResponse }) {
 }
 
 // The resource scout for one of the role's gaps, chosen by the person (essentials first).
-function GapScout({ role }: { role: ScoredRole }) {
+function GapScout({ role }: { role: RoleCard }) {
   const { profileId } = useJourney()
   const gaps = role.requirements
     .filter((r) => r.column !== 'ready')
@@ -232,8 +249,10 @@ function TrendsCard({ period }: { period: string }) {
 function SdgCard({ destination }: { destination: string | null }) {
   const { profileId, scenario } = useJourney()
   const path = useApi<PathwayResponse>(profileId && destination ? `/api/profiles/${profileId}/pathway?scenario=${scenario}` : null)
+  const matrix = useApi<SdgMatrix>(profileId && destination ? `/api/profiles/${profileId}/sdg?scenario=${scenario}` : null)
   const data = path.data
   const targets = data ? Object.keys(data.sdg_summary).sort() : []
+  const hours = new Map((matrix.data?.totals ?? []).map((t) => [t.target, t.hours]))
   return (
     <section className="card-light flex min-w-0 flex-col gap-2.5 p-4" aria-label="SDG contribution">
       <span className="cap">Your plan and the SDGs</span>
@@ -241,6 +260,12 @@ function SdgCard({ destination }: { destination: string | null }) {
         <>
           <p className="m-0 text-[13px]">Your plan contributes to {targets.length} SDG targets:</p>
           <div className="flex flex-wrap gap-1.5">{targets.map((t) => <SdgTag key={t} target={t} />)}</div>
+          {hours.size > 0 && (
+            <p className="m-0 font-mono text-[12px] text-graphite">
+              Planned study hours: {[...hours].filter(([, h]) => h > 0).map(([t, h]) => `${t} · ${h.toFixed(1)} h`).join(' · ')}
+              <span className="font-sans"> (an hour counts toward every target its skill serves)</span>
+            </p>
+          )}
           <div className="mt-auto flex flex-wrap items-center gap-2">
             <WhyButton
               title="How your plan contributes to the SDGs"
