@@ -118,6 +118,7 @@ current_roles:
 destination_roles:
   - id: o2c_reporting_analyst
     title: Order-to-Cash (O2C) Reporting Analyst
+    pages: [22, 26]  # PDF pages that name the role (title and impact or transition)
     impact: medium
     soc: "15-2051.01"
     requires:
@@ -132,6 +133,7 @@ destination_roles:
       - {skill: erp, tier: support}
   - id: finance_systems_analyst
     title: Finance Systems Analyst
+    pages: [22, 26]  # PDF pages that name the role (title and impact or transition)
     impact: medium
     soc: "15-1211.00"
     requires:
@@ -146,6 +148,7 @@ destination_roles:
       - {skill: database_querying, tier: support}
   - id: cost_accountant
     title: Cost Accountant
+    pages: [22, 26]  # PDF pages that name the role (title and impact or transition)
     impact: medium
     soc: "13-2011.00"
     requires:
@@ -158,6 +161,7 @@ destination_roles:
       - {skill: erp, tier: support}
   - id: fixed_assets_accountant
     title: Fixed Assets Accountant
+    pages: [22, 26]  # PDF pages that name the role (title and impact or transition)
     impact: medium
     soc: "13-2011.00"
     requires:
@@ -170,6 +174,7 @@ destination_roles:
       - {skill: erp, tier: support}
   - id: budget_analyst
     title: Budget Analyst
+    pages: [22, 26]  # PDF pages that name the role (title and impact or transition)
     impact: medium
     soc: "13-2031.00"
     requires:
@@ -181,6 +186,7 @@ destination_roles:
       - {skill: dashboards, tier: support}
   - id: p2p_reporting_analyst
     title: Procure-to-Pay (P2P) Reporting Analyst
+    pages: [22, 26]  # PDF pages that name the role (title and impact or transition)
     impact: medium
     soc: "15-2051.01"
     requires:
@@ -192,6 +198,7 @@ destination_roles:
       - {skill: erp, tier: support}
   - id: compliance_governance_specialist
     title: Compliance and Governance Specialist
+    pages: [39, 42]  # PDF pages that name the role (title and impact or transition)
     impact: medium
     soc: "13-2011.00"
     requires:
@@ -202,6 +209,7 @@ destination_roles:
       - {skill: stakeholder_management, tier: support}
   - id: continuous_improvement_specialist
     title: Continuous Improvement Specialist
+    pages: [34, 40]  # PDF pages that name the role (title and impact or transition)
     impact: medium
     soc: "13-1111.00"
     requires:
@@ -214,6 +222,7 @@ destination_roles:
       - {skill: stakeholder_management, tier: support}
   - id: procurement_analyst
     title: Procurement Analyst
+    pages: [26, 34, 41]  # PDF pages that name the role (title and impact or transition)
     impact: medium
     soc: "13-1023.00"
     requires:

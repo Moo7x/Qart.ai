@@ -11,7 +11,7 @@ from typing import Literal
 import yaml
 from pydantic import BaseModel
 
-from src.evidence.field import PACK_DIR
+from src.evidence.field import PACK_DIR, field_profile
 
 Tier = Literal["core", "upskill", "support"]
 
@@ -63,6 +63,9 @@ class DestinationRole(BaseModel):
     id: str
     title: str
     impact: Literal["high", "medium", "low"]
+    pages: list[
+        int
+    ] = []  # TalentCorp (2024) PDF pages naming the role; the pack check requires one
     soc: str
     requires: list[Requirement]
 
@@ -222,12 +225,27 @@ def _check(pack: Pack) -> None:
             if s not in needed
         ]
     problems += _sdg_link_problems(pack)
+    problems += _role_problems(pack)
     kinds = {s.kind for s in pack.skills.values()}
     problems += [
         f"skill kind {k} has no SDG mapping" for k in kinds if not pack.sdg.skill_kinds.get(k)
     ]
     if problems:
         raise PackError("; ".join(problems))
+
+
+def _role_problems(pack: Pack) -> list[str]:
+    """B10: a destination role is fully sourced: a study page, an essential and a known SOC code."""
+    followed = {o.code for o in field_profile().soc_occupations}
+    problems = []
+    for role in pack.destination_roles.values():
+        if not role.pages:
+            problems.append(f"destination role {role.id} cites no study page")
+        if not any(r.essential for r in role.requires):
+            problems.append(f"destination role {role.id} has no essential requirement")
+        if role.soc not in followed:
+            problems.append(f"destination role {role.id}: SOC {role.soc} is not in field.yaml")
+    return problems
 
 
 def _sdg_link_problems(pack: Pack) -> list[str]:
