@@ -64,6 +64,31 @@ class ClaimedSkill:
     evidence: str
 
 
+SITUATIONS = ("working", "student", "switcher")
+
+
+def situation_from(
+    current_role: str, years: float | None, model_says: str | None
+) -> tuple[str, str]:
+    """The person's situation read from the CV, and why (shown, and the person can change it).
+
+    A finance role the CV names as the current job means working in finance, whatever the model
+    says; otherwise the model's reading (studying or a recent graduate, or working in another field
+    and moving into finance); without a model, no stated work experience means a student.
+    """
+    if current_role != "other":
+        return "working", "the CV names a finance role as your current job"
+    if model_says in ("student", "switcher"):
+        return model_says, (
+            "the CV shows study and no full-time job yet"
+            if model_says == "student"
+            else "the CV shows work outside finance"
+        )
+    if not years:
+        return "student", "the CV states no work experience"
+    return "switcher", "the CV shows work experience but no finance role"
+
+
 @dataclass
 class Extraction:
     current_role: str  # a pack current-role id or "other"
@@ -78,6 +103,8 @@ class Extraction:
     # Listed as "not in our skill list", never dropped silently; they do not change any score.
     unmatched: list[str] = field(default_factory=list)
     stages: list[dict[str, Any]] = field(default_factory=list)  # measured, for the activity panel
+    situation: str = "working"  # read from the CV (situation_from); the person can change it
+    situation_reason: str = ""
 
 
 def _normalise(text: str) -> str:
@@ -88,8 +115,16 @@ def schema(pack: Pack) -> dict[str, Any]:
     return {
         "type": "object",
         "additionalProperties": False,
-        "required": ["current_role", "years_experience", "skills", "interests", "unmatched"],
+        "required": [
+            "current_role",
+            "years_experience",
+            "situation",
+            "skills",
+            "interests",
+            "unmatched",
+        ],
         "properties": {
+            "situation": {"type": "string", "enum": list(SITUATIONS)},
             "current_role": {"type": "string", "enum": [*pack.current_roles, "other"]},
             "years_experience": {"type": ["number", "null"]},
             "skills": {
@@ -132,7 +167,10 @@ def messages(pack: Pack, cv_text: str) -> list[dict[str, str]]:
                 "Tools named in the CV count as evidence for the matching skill (e.g. an ERP "
                 "system such as SAP for Enterprise Resource Planning). "
                 f"{level_guide(levels)} Pick the current role from the list, or "
-                "'other'. Interests are the "
+                "'other'. Situation: 'working' if the person works in finance or accounting now, "
+                "'student' if they are studying or recently graduated without a full-time job, "
+                "'switcher' if they work or worked in another field and want to move into "
+                "finance. Interests are the "
                 "kinds of work the person says they want more of. Under unmatched, copy word for "
                 "word the short name of each skill or tool the CV shows that fits none of the "
                 "allowed skills (e.g. a programming language); never a whole sentence."
@@ -247,8 +285,14 @@ def extract(
                 skills, checked = _with_erp_rule(pack, text, skills, checked)
                 unmatched = _unmatched(answer, text)
             role = answer.get("current_role")
+            role = role if role in pack.current_roles else "other"
+            situation, reason = situation_from(
+                role, answer.get("years_experience"), answer.get("situation")
+            )
             return Extraction(
-                current_role=role if role in pack.current_roles else "other",
+                current_role=role,
+                situation=situation,
+                situation_reason=reason,
                 years_experience=answer.get("years_experience"),
                 skills=skills,
                 interests=[k for k in answer.get("interests", []) if k in KINDS],
@@ -267,8 +311,11 @@ def extract(
         role, skills = keyword_extract(pack, text)
         skills, note = _with_erp_rule(pack, text, skills, note)
     note = f"{note}; {KEYWORD_UNMATCHED_NOTE}"
+    situation, reason = situation_from(role, None, None)
     return Extraction(
         current_role=role,
+        situation=situation,
+        situation_reason=reason,
         years_experience=None,
         skills=skills,
         interests=[],
