@@ -124,27 +124,17 @@ export function JourneyRoute() {
   }
   const current = STATIONS.findIndex((s) => s.paths.includes(pathname))
   return (
-    <nav aria-label="Your journey" className="-mb-2">
-      <ol className="m-0 grid list-none grid-cols-5 p-0">
+    <nav aria-label="Your journey">
+      <ol className="q-steps">
         {STATIONS.map((s, i) => {
           const isCurrent = i === current
-          const reached = done[s.key] || isCurrent
-          const lineDone = i < STATIONS.length - 1 && done[s.key]
           return (
-            <li key={s.key} className="relative flex min-w-0 flex-col items-start">
-              {i < STATIONS.length - 1 && (
-                <span aria-hidden="true" className={`absolute left-[7px] right-0 top-[7px] h-[2px] ${lineDone ? 'bg-violet' : 'bg-line'}`} />
-              )}
-              <Link to={s.to} aria-current={isCurrent ? 'step' : undefined} className="group relative flex min-w-0 flex-col items-start gap-1.5 pr-2 text-void no-underline">
-                <span
-                  aria-hidden="true"
-                  className={`grid h-4 w-4 place-items-center rounded-full border-2 ${done[s.key] ? 'border-violet bg-violet' : isCurrent ? 'border-violet bg-paper' : 'border-line bg-paper'}`}
-                >
-                  {isCurrent && !done[s.key] && <span className="h-1.5 w-1.5 rounded-full bg-violet" />}
-                </span>
-                <span className={`truncate text-[12px] leading-tight group-hover:underline ${isCurrent ? 'font-semibold' : reached ? '' : 'text-graphite'} ${isCurrent ? '' : 'max-sm:hidden'}`}>{s.label}</span>
-                <span className="hidden truncate font-mono text-[10px] uppercase tracking-wider text-ash sm:block">
-                  {done[s.key] ? '✓ ' : ''}{note[s.key]}
+            <li key={s.key} className="flex-none">
+              <Link to={s.to} aria-current={isCurrent ? 'step' : undefined} className="!pl-3">
+                <span aria-hidden="true" className={`h-2.5 w-2.5 flex-none rounded-full ${done[s.key] || isCurrent ? 'bg-violet' : 'border-2 border-[#a3a3a3]'}`} />
+                <span className="flex flex-col leading-tight">
+                  <span className="text-[13px] font-semibold">{s.label}</span>
+                  <span className="text-[11px] font-normal text-muted">{done[s.key] ? '✓ ' : ''}{note[s.key]}</span>
                 </span>
                 <span className="sr-only">{done[s.key] ? 'done' : isCurrent ? 'you are here' : 'not done yet'}</span>
               </Link>
