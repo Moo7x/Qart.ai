@@ -31,6 +31,7 @@ from src.agents import store
 from src.agents.character import load_character
 from src.config import Settings
 from src.evidence.field import PACK_DIR
+from src.journey.events import record_event
 from src.journey.store import MAX_LEVEL, ProfileData, SkillClaim, get_profile, update_profile
 from src.match.engine import required_level
 from src.pack import Pack, load_pack
@@ -56,9 +57,13 @@ def descriptions(skill: str) -> tuple[dict[int, str], str]:
     """Level → description for the skill, and where the descriptions come from."""
     if LEVELS_FILE.exists():
         data = yaml.safe_load(LEVELS_FILE.read_text(encoding="utf-8")) or {}
-        anchors = (data.get("skills") or {}).get(skill, {}).get("anchors")
+        entry = (data.get("skills") or {}).get(skill, {})
+        anchors = entry.get("anchors")
         if anchors:
-            return {int(k): str(v) for k, v in anchors.items()}, "the skill's level descriptions"
+            basis = "the skill's level descriptions"
+            if entry.get("status") != "reviewed":
+                basis += " (a draft the team has not reviewed yet)"
+            return {int(k): str(v) for k, v in anchors.items()}, basis
     return (
         GENERAL,
         "the general level meanings (the skill's own descriptions are not published yet)",
@@ -302,6 +307,14 @@ def decide(
             model=settings.agent_model,
         )
         update_profile(engine, profile_id, data)
+        record_event(
+            engine,
+            profile_id,
+            "level_changed",
+            state["skill"],
+            state["current"],
+            {"level": level, "source": "agent_check"},
+        )
     state["decided"] = "accepted" if accept else "declined"
     store.save(engine, session_id, "done", state)
     return _public(state, settings)

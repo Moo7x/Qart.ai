@@ -11,6 +11,7 @@ from src.agents import check
 from src.agents.character import load_character
 from src.config import Settings
 from src.db import init_db, make_engine
+from src.journey.events import list_events
 from src.journey.store import ProfileData, SkillClaim, create_profile, get_profile
 
 SKILL = "reconciliation"
@@ -140,6 +141,10 @@ def test_accept_writes_an_agent_check_claim_and_decline_changes_nothing(
     claim = get_profile(engine, profile)[0].skills[SKILL]  # type: ignore[index]
     assert (claim.level, claim.source, claim.model) == (2, "agent_check", settings.agent_model)
     assert "six entities" in claim.evidence and claim.checked_at
+    changed = [e for e in list_events(engine, profile) if e["kind"] == "level_changed"]
+    assert [(e["ref"], e["after"]) for e in changed] == [
+        (SKILL, {"level": 2, "source": "agent_check"})
+    ]  # one event, for the accepted check only (badges read it)
     with pytest.raises(check.CheckError):
         check.decide(engine, settings, profile, accepted["session_id"], accept=True)  # once only
 
