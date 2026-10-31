@@ -41,7 +41,14 @@ def _rerank(query: str, passages: Sequence[str]) -> list[float]:
         from sentence_transformers import CrossEncoder
 
         _models["reranker"] = CrossEncoder(RERANKER_MODEL)
-    scores = _models["reranker"].predict([(query, p) for p in passages])
+    import torch
+
+    # Scores are probabilities (0-1): the app's thresholds assume them. sentence-transformers 3.x
+    # applied this sigmoid by default for one-label rerankers; 5.x and later return raw logits
+    # unless asked, so it is explicit here.
+    scores = _models["reranker"].predict(
+        [(query, p) for p in passages], activation_fn=torch.nn.Sigmoid()
+    )
     return [float(s) for s in scores]
 
 

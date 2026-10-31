@@ -5,6 +5,7 @@ with their page. The list is complete (66 names), so an occupation of the field 
 is reported as "not listed", which is a fact about this edition, not a missing value. No network.
 """
 
+from functools import cache
 from typing import Any
 
 import httpx
@@ -21,7 +22,9 @@ PERSISTENT_SERIES = "mycol_persistent_occupation"
 UNIT = "listed (1)"
 
 
+@cache
 def load_extraction() -> dict[str, Any]:
+    """The hand-read MyCOL facts (a file in the repository): read once per process; read-only."""
     data: dict[str, Any] = yaml.safe_load(EXTRACTION.read_text(encoding="utf-8"))
     return data
 

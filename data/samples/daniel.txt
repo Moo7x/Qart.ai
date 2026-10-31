@@ -1,0 +1,40 @@
+Daniel Lim Wei Jie
+Email: daniel.lim.sample@example.com
+Phone: +60 11-000 0000
+IC No: 950505-07-0000
+Address: 12 Jalan Contoh, Bayan Lepas, Penang
+Date of birth: 5 May 1995
+Gender: Male
+
+SYNTHETIC SAMPLE CV FOR THE QART.AI DEMO. THIS PERSON DOES NOT EXIST.
+
+Profile
+Accounts Payable Analyst with 5 years in a global business services centre in Penang, processing
+supplier invoices for entities in six countries. I want to move into procurement or reporting work
+and to understand how AI will change accounts payable.
+
+Experience
+Accounts Payable Analyst, regional GBS centre, Penang (2020 – present)
+- Processed about 2,500 supplier invoices a month in SAP and checked each one against the purchase order and goods receipt (three-way match).
+- Reconciled supplier statements to the AP ledger every month and cleared open differences.
+- Prepared the month-end accrual listing and the AP ageing report for the finance controller.
+- Answered supplier queries on payment status and resolved blocked invoices with buyers.
+- Kept the vendor master data clean: checked bank details before changes and removed duplicate suppliers.
+- Built a Power BI dashboard of overdue invoices and payment cycle time for the weekly AP review.
+- Wrote simple SQL queries to pull invoice lists from the reporting database.
+- Followed the payment approval controls and supported the yearly internal audit of payables.
+- Trained two new team members on the invoice process and coordinated with colleagues in three time zones.
+
+Accounts Assistant, manufacturing company, Butterworth (2018 – 2020)
+- Posted supplier invoices and payments.
+- Prepared bank reconciliations.
+
+Education
+Bachelor of Accounting, 2018
+
+Skills
+SAP FI-AP and MM, Microsoft Excel (pivot tables, XLOOKUP), Power BI, basic SQL, supplier communication.
+Tried ChatGPT to draft supplier emails.
+
+Interests
+Process improvement and data; green procurement and sustainable supply chains.

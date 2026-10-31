@@ -18,7 +18,7 @@ from typing import Any
 
 from src import params
 from src.collectors.onet import RELATED_SERIES
-from src.forecast.industry import industry
+from src.forecast.industry import Overrides, industry
 from src.match.engine import RoleMatch
 from src.pack import Pack
 
@@ -44,9 +44,15 @@ def direction(fit: float, tier: int | None) -> str:
     return "adjacent" if close or fit >= params.DIRECTION_ADJACENT_FIT else "stretch"
 
 
-def forecasts(pack: Pack, rows: list[Row], task_rows: list[Row], scenario: str) -> dict[str, Row]:
+def forecasts(
+    pack: Pack,
+    rows: list[Row],
+    task_rows: list[Row],
+    scenario: str,
+    overrides: Overrides | None = None,
+) -> dict[str, Row]:
     """The industry forecast keyed by pack role id (current and destination roles)."""
-    view = industry(pack, rows, task_rows, scenario)
+    view = industry(pack, rows, task_rows, scenario, overrides)
     return {r["pack_role"]: r for r in view["roles"] if r["pack_role"]}
 
 

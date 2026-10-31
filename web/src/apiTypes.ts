@@ -11,6 +11,19 @@ export type AiBasics = {
   reason: string
 }
 
+export type AiResource = {
+  kind: "course" | "video"
+  id: string
+  title: string
+  provider: string
+  url: string
+  minutes: number
+  published: string
+  skill_quote: string
+  ai_quote: string
+  score: number
+}
+
 export type AiUse = {
   automation_share: number | null
   basis: string
@@ -45,10 +58,27 @@ export type Bands = {
   kind: "assumption"
 }
 
+export type BasicsItem = {
+  kind: "course" | "video"
+  topic: string
+  title: string
+  provider: string
+  url: string
+  minutes: number
+}
+
 export type Basis = {
   title: string
   url: string
   read: string
+}
+
+export type CategoryChange = {
+  role_id: string
+  title: string
+  before: string
+  after: string
+  current_job: boolean
 }
 
 export type ChangeReport = {
@@ -157,6 +187,7 @@ export type EvidenceTestOut = {
   after: Ranking
   weights: WeightChange[]
   pathway: PathwayChange | null
+  forecast: CategoryChange[]
 }
 
 export type FitCheck = {
@@ -281,7 +312,7 @@ export type Meters = {
 }
 
 export type Override = {
-  kind: "occupation_share" | "task_share"
+  kind: "occupation_share" | "task_share" | "group_change"
   key: string
   value: number
 }
@@ -775,6 +806,7 @@ export type TrackArticle = {
   title: string
   publisher: string
   url: string
+  is_article: boolean
 }
 
 export type TrackCourse = {
@@ -807,6 +839,8 @@ export type TrackNode = {
   mode: "basics" | "oversee" | "use_ai" | "learn" | null
   ai_use: number | null
   ai_basis: string | null
+  ai_resources: AiResource[] | null
+  basics: BasicsItem[] | null
 }
 
 export type TrackVideo = {

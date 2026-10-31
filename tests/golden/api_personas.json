@@ -6013,206 +6013,10 @@
    "path": {
     "nodes": [
      {
-      "after": null,
-      "articles": [
-       {
-        "publisher": "IBM",
-        "title": "What is Generative AI?",
-        "url": "https://www.ibm.com/think/topics/generative-ai"
-       }
-      ],
-      "courses": [
-       {
-        "done": false,
-        "fit_check": null,
-        "level": "beginner",
-        "minutes": 22,
-        "planned": true,
-        "provider": "Microsoft Learn",
-        "title": "Introduction to generative AI - Exploring the basics",
-        "url": "https://learn.microsoft.com/en-us/training/modules/intro-generative-ai-explore-basics/"
-       }
-      ],
-      "essential": false,
-      "mode": "basics",
-      "now": null,
-      "required": null,
-      "skill": null,
-      "status": "open",
-      "title": "What generative AI is and is not",
-      "videos": [
-       {
-        "channel": "Google Cloud Tech",
-        "minutes": 22,
-        "published": "2023-05-08",
-        "title": "Introduction to Generative AI",
-        "url": "https://www.youtube.com/watch?v=G2fqAlgmoPo"
-       },
-       {
-        "channel": "IBM Technology",
-        "minutes": 9,
-        "published": "2023-03-22",
-        "title": "What are Generative AI models?",
-        "url": "https://www.youtube.com/watch?v=hfIUstzHs9A"
-       },
-       {
-        "channel": "Google Cloud Tech",
-        "minutes": 16,
-        "published": "2023-05-08",
-        "title": "Introduction to large language models",
-        "url": "https://www.youtube.com/watch?v=zizonToFXDs"
-       },
-       {
-        "channel": "IBM Technology",
-        "minutes": 6,
-        "published": "2023-07-28",
-        "title": "How Large Language Models Work",
-        "url": "https://www.youtube.com/watch?v=5sLYAQS9sWQ"
-       }
-      ]
-     },
-     {
-      "after": null,
-      "articles": [
-       {
-        "publisher": "IBM",
-        "title": "What Is Prompt Engineering?",
-        "url": "https://www.ibm.com/think/topics/prompt-engineering"
-       }
-      ],
-      "courses": [
-       {
-        "done": false,
-        "fit_check": null,
-        "level": "beginner",
-        "minutes": 28,
-        "planned": true,
-        "provider": "Microsoft Learn",
-        "title": "Work smarter with Copilot prompts for finance professionals",
-        "url": "https://learn.microsoft.com/en-us/training/modules/work-smarter-copilot-finance/"
-       },
-       {
-        "done": false,
-        "fit_check": null,
-        "level": "beginner",
-        "minutes": 31,
-        "planned": true,
-        "provider": "Microsoft Learn",
-        "title": "Get started with Microsoft Copilot",
-        "url": "https://learn.microsoft.com/en-us/training/modules/get-started-with-copilot/"
-       }
-      ],
-      "essential": false,
-      "mode": "basics",
-      "now": null,
-      "required": null,
-      "skill": "prompt_engineering",
-      "status": "open",
-      "title": "Prompting AI tools well at work",
-      "videos": [
-       {
-        "channel": "AssemblyAI",
-        "minutes": 14,
-        "published": "2023-06-24",
-        "title": "Prompt Engineering 101 - Crash Course & Tips",
-        "url": "https://www.youtube.com/watch?v=aOm75o2Z5-o"
-       }
-      ]
-     },
-     {
-      "after": null,
-      "articles": [
-       {
-        "publisher": "Microsoft",
-        "title": "Responsible AI Principles and Approach",
-        "url": "https://www.microsoft.com/en-us/ai/principles-and-approach"
-       }
-      ],
-      "courses": [
-       {
-        "done": false,
-        "fit_check": null,
-        "level": "beginner",
-        "minutes": 24,
-        "planned": true,
-        "provider": "Microsoft Learn",
-        "title": "Introduction to Microsoft's Responsible AI Approach",
-        "url": "https://learn.microsoft.com/en-us/training/modules/introduction-to-microsofts-responsible-ai-approach/"
-       }
-      ],
-      "essential": false,
-      "mode": "basics",
-      "now": null,
-      "required": null,
-      "skill": null,
-      "status": "open",
-      "title": "Using AI responsibly",
-      "videos": [
-       {
-        "channel": "Google Cloud",
-        "minutes": 8,
-        "published": "2024-04-08",
-        "title": "Introduction to Responsible AI",
-        "url": "https://www.youtube.com/watch?v=w_3L1Bf2P_g"
-       },
-       {
-        "channel": "Microsoft Learn",
-        "minutes": 10,
-        "published": "2025-11-11",
-        "title": "Responsible AI Principles AI-3017 | Episode 3",
-        "url": "https://www.youtube.com/watch?v=8Ra5L1aQ5YM"
-       }
-      ]
-     },
-     {
-      "after": null,
-      "articles": [
-       {
-        "publisher": "IBM",
-        "title": "What Is Data Management?",
-        "url": "https://www.ibm.com/think/topics/data-management"
-       }
-      ],
-      "courses": [
-       {
-        "done": false,
-        "fit_check": null,
-        "level": "beginner",
-        "minutes": 35,
-        "planned": true,
-        "provider": "Microsoft Learn",
-        "title": "Explore core data concepts",
-        "url": "https://learn.microsoft.com/en-us/training/modules/explore-core-data-concepts/"
-       }
-      ],
-      "essential": false,
-      "mode": "basics",
-      "now": null,
-      "required": null,
-      "skill": "data_management",
-      "status": "open",
-      "title": "Data basics behind AI",
-      "videos": [
-       {
-        "channel": "IBM Technology",
-        "minutes": 4,
-        "published": "2022-06-23",
-        "title": "What is Master Data Management",
-        "url": "https://www.youtube.com/watch?v=l83bkKJh1wM"
-       },
-       {
-        "channel": "IBM Technology",
-        "minutes": 5,
-        "published": "2022-07-15",
-        "title": "Data Governance Explained in 5 Minutes",
-        "url": "https://www.youtube.com/watch?v=uPsUjKLHLAg"
-       }
-      ]
-     },
-     {
       "after": 1,
       "articles": [
        {
+        "is_article": false,
         "publisher": "ISO",
         "title": "ISO 50001 \u2014 Energy management",
         "url": "https://www.iso.org/iso-50001-energy-management.html"
@@ -6264,11 +6068,13 @@
       "after": 1,
       "articles": [
        {
+        "is_article": true,
         "publisher": "IFRS Foundation",
         "title": "Conceptual Framework for Financial Reporting",
         "url": "https://www.ifrs.org/issued-standards/list-of-standards/conceptual-framework/"
        },
        {
+        "is_article": true,
         "publisher": "Microsoft Learn",
         "title": "Financial reporting overview",
         "url": "https://learn.microsoft.com/en-us/dynamics365/finance/general-ledger/financial-reporting-getting-started"
@@ -6351,6 +6157,7 @@
       "after": 1,
       "articles": [
        {
+        "is_article": true,
         "publisher": "AccountingTools",
         "title": "Standard costing definition",
         "url": "https://www.accountingtools.com/articles/standard-costing"
@@ -6455,6 +6262,7 @@
       "after": 1,
       "articles": [
        {
+        "is_article": true,
         "publisher": "Corporate Finance Institute",
         "title": "Variance Analysis - Learn How to Calculate and Analyze Variances",
         "url": "https://corporatefinanceinstitute.com/resources/accounting/variance-analysis/"
@@ -6573,6 +6381,7 @@
       "after": 2,
       "articles": [
        {
+        "is_article": true,
         "publisher": "IFRS Foundation",
         "title": "Conceptual Framework for Financial Reporting",
         "url": "https://www.ifrs.org/issued-standards/list-of-standards/conceptual-framework/"
@@ -6697,6 +6506,7 @@
       "after": 1,
       "articles": [
        {
+        "is_article": true,
         "publisher": "IBM",
         "title": "What is Big Data Analytics?",
         "url": "https://www.ibm.com/think/topics/big-data-analytics"
@@ -6768,6 +6578,7 @@
       "after": 2,
       "articles": [
        {
+        "is_article": true,
         "publisher": "IBM",
         "title": "What is Enterprise Resource Planning (ERP)?",
         "url": "https://www.ibm.com/think/topics/enterprise-resource-planning"
@@ -6905,7 +6716,7 @@
      }
     ],
     "title": "Your path to Cost Accountant",
-    "why": "One path: AI basics, the skills you already have that AI is reshaping, then the skills this role needs. Start any step; each is a different skill."
+    "why": "One path: the skills you already have that AI is reshaping, then the skills this role needs. Start any step; each is a different skill."
    },
    "resources_checked": "2026-10-24",
    "role_id": "cost_accountant",
@@ -6918,6 +6729,7 @@
        "after": null,
        "articles": [
         {
+         "is_article": true,
          "publisher": "IBM",
          "title": "What is Generative AI?",
          "url": "https://www.ibm.com/think/topics/generative-ai"
@@ -6976,6 +6788,7 @@
        "after": null,
        "articles": [
         {
+         "is_article": true,
          "publisher": "IBM",
          "title": "What Is Prompt Engineering?",
          "url": "https://www.ibm.com/think/topics/prompt-engineering"
@@ -7023,6 +6836,7 @@
        "after": null,
        "articles": [
         {
+         "is_article": true,
          "publisher": "Microsoft",
          "title": "Responsible AI Principles and Approach",
          "url": "https://www.microsoft.com/en-us/ai/principles-and-approach"
@@ -7067,6 +6881,7 @@
        "after": null,
        "articles": [
         {
+         "is_article": true,
          "publisher": "IBM",
          "title": "What Is Data Management?",
          "url": "https://www.ibm.com/think/topics/data-management"
@@ -7119,6 +6934,7 @@
        "after": 1,
        "articles": [
         {
+         "is_article": false,
          "publisher": "ISO",
          "title": "ISO 50001 \u2014 Energy management",
          "url": "https://www.iso.org/iso-50001-energy-management.html"
@@ -7169,11 +6985,13 @@
        "after": 1,
        "articles": [
         {
+         "is_article": true,
          "publisher": "IFRS Foundation",
          "title": "Conceptual Framework for Financial Reporting",
          "url": "https://www.ifrs.org/issued-standards/list-of-standards/conceptual-framework/"
         },
         {
+         "is_article": true,
          "publisher": "Microsoft Learn",
          "title": "Financial reporting overview",
          "url": "https://learn.microsoft.com/en-us/dynamics365/finance/general-ledger/financial-reporting-getting-started"
@@ -7255,6 +7073,7 @@
        "after": 1,
        "articles": [
         {
+         "is_article": true,
          "publisher": "AccountingTools",
          "title": "Standard costing definition",
          "url": "https://www.accountingtools.com/articles/standard-costing"
@@ -7358,6 +7177,7 @@
        "after": 1,
        "articles": [
         {
+         "is_article": true,
          "publisher": "Corporate Finance Institute",
          "title": "Variance Analysis - Learn How to Calculate and Analyze Variances",
          "url": "https://corporatefinanceinstitute.com/resources/accounting/variance-analysis/"
@@ -7475,6 +7295,7 @@
        "after": 2,
        "articles": [
         {
+         "is_article": true,
          "publisher": "IFRS Foundation",
          "title": "Conceptual Framework for Financial Reporting",
          "url": "https://www.ifrs.org/issued-standards/list-of-standards/conceptual-framework/"
@@ -7604,6 +7425,7 @@
        "after": 1,
        "articles": [
         {
+         "is_article": true,
          "publisher": "IBM",
          "title": "What is Big Data Analytics?",
          "url": "https://www.ibm.com/think/topics/big-data-analytics"
@@ -7674,6 +7496,7 @@
        "after": 2,
        "articles": [
         {
+         "is_article": true,
          "publisher": "IBM",
          "title": "What is Enterprise Resource Planning (ERP)?",
          "url": "https://www.ibm.com/think/topics/enterprise-resource-planning"
@@ -13337,14 +13160,29 @@
      {
       "after": null,
       "ai_basis": "none",
+      "ai_resources": [
+       {
+        "ai_quote": "Learn how Copilot helps you ask natural-language questions, understand capabilities quickly, and move from data to action.",
+        "kind": "course",
+        "minutes": 34,
+        "provider": "Microsoft Learn",
+        "published": "2026-10-27",
+        "score": 0.432,
+        "skill_quote": "Start with Dynamics 365 Customer Insights - Data to unify customer data, build a trusted customer view, and activate AI-powered insights.",
+        "title": "Get started with an AI-powered customer data platform in Dynamics 365",
+        "url": "https://learn.microsoft.com/en-us/training/modules/get-started-customer-data-platform/"
+       }
+      ],
       "ai_use": null,
       "articles": [
        {
+        "is_article": true,
         "publisher": "IBM",
         "title": "What Is Data Management?",
         "url": "https://www.ibm.com/think/topics/data-management"
        }
       ],
+      "basics": [],
       "courses": [
        {
         "done": false,
@@ -13463,14 +13301,29 @@
      {
       "after": null,
       "ai_basis": "none",
+      "ai_resources": [
+       {
+        "ai_quote": "Learn to automate tasks and workflows across systems, websites, and applications by using agent flows and computer use in Microsoft Copilot Studio.",
+        "kind": "course",
+        "minutes": 160,
+        "provider": "Microsoft Learn",
+        "published": "2026-10-27",
+        "score": 0.359,
+        "skill_quote": "Extend Copilot Studio agents to automate tasks in web browsers and desktop applications using computer use.",
+        "title": "Automate tasks and workflows in Microsoft Copilot Studio",
+        "url": "https://learn.microsoft.com/en-us/training/paths/automate-tasks-workflows-copilot-studio/"
+       }
+      ],
       "ai_use": null,
       "articles": [
        {
+        "is_article": true,
         "publisher": "IBM",
         "title": "What is Enterprise Resource Planning (ERP)?",
         "url": "https://www.ibm.com/think/topics/enterprise-resource-planning"
        }
       ],
+      "basics": [],
       "courses": [
        {
         "done": false,
@@ -13547,19 +13400,23 @@
      {
       "after": null,
       "ai_basis": "none",
+      "ai_resources": [],
       "ai_use": null,
       "articles": [
        {
+        "is_article": true,
         "publisher": "IBM",
         "title": "What is Data Migration?",
         "url": "https://www.ibm.com/think/topics/data-migration"
        },
        {
+        "is_article": true,
         "publisher": "IBM",
         "title": "What Is Data Integration?",
         "url": "https://www.ibm.com/think/topics/data-integration"
        }
       ],
+      "basics": [],
       "courses": [
        {
         "done": false,
@@ -13658,7 +13515,7 @@
       "required": null,
       "skill": "data_migration",
       "status": "open",
-      "title": "Data Migration: do it faster with AI",
+      "title": "Data Migration: AI is changing this work",
       "videos": [
        {
         "channel": "Connected Cookie",
@@ -13678,13 +13535,14 @@
       "why": {
        "kind": "ai_trend",
        "source": "no AI-use data for these tasks; modes after the Singapore Jobs Transformation Map, Generative AI in Financial Services (MAS, IBF, SWDA, 2025): roles with high automation potential are redesigned and their staff reskilled; for the others, proficiency in GenAI tools is essential",
-       "text": "AI helps people do this work. Learning to use it here keeps you ahead."
+       "text": "AI helps people do this work. Learning to use it here keeps you ahead. No checked resource on doing this with AI yet: start with the AI basics."
       }
      },
      {
       "after": 1,
       "articles": [
        {
+        "is_article": true,
         "publisher": "Microsoft Learn",
         "title": "Integration between finance and operations apps and third-party services",
         "url": "https://learn.microsoft.com/en-us/dynamics365/fin-ops-core/dev-itpro/data-entities/integration-overview"
@@ -13737,11 +13595,13 @@
       "after": 1,
       "articles": [
        {
+        "is_article": true,
         "publisher": "Microsoft Learn",
         "title": "Monitoring and diagnostics tools in Lifecycle Services",
         "url": "https://learn.microsoft.com/en-us/dynamics365/fin-ops-core/dev-itpro/lifecycle-services/monitoring-diagnostics"
        },
        {
+        "is_article": true,
         "publisher": "IBM",
         "title": "What Is Application Performance Management (APM)?",
         "url": "https://www.ibm.com/think/topics/application-performance-management"
@@ -13779,6 +13639,7 @@
       "after": 1,
       "articles": [
        {
+        "is_article": true,
         "publisher": "Strategyzer",
         "title": "The Business Model Canvas",
         "url": "https://www.strategyzer.com/library/the-business-model-canvas"
@@ -13830,6 +13691,7 @@
       "after": 1,
       "articles": [
        {
+        "is_article": true,
         "publisher": "Microsoft Learn",
         "title": "Transact-SQL Reference (Database Engine)",
         "url": "https://learn.microsoft.com/en-us/sql/t-sql/language-reference"
@@ -13947,7 +13809,7 @@
      }
     ],
     "title": "Your path to Finance Systems Analyst",
-    "why": "One path: AI basics, the skills you already have that AI is reshaping, then the skills this role needs. Start any step; each is a different skill."
+    "why": "One path: the skills you already have that AI is reshaping, then the skills this role needs. Start any step; each is a different skill."
    },
    "resources_checked": "2026-10-24",
    "role_id": "finance_systems_analyst",
@@ -13960,6 +13822,7 @@
        "after": null,
        "articles": [
         {
+         "is_article": true,
          "publisher": "IBM",
          "title": "What is Generative AI?",
          "url": "https://www.ibm.com/think/topics/generative-ai"
@@ -14018,6 +13881,7 @@
        "after": null,
        "articles": [
         {
+         "is_article": true,
          "publisher": "IBM",
          "title": "What Is Prompt Engineering?",
          "url": "https://www.ibm.com/think/topics/prompt-engineering"
@@ -14065,6 +13929,7 @@
        "after": null,
        "articles": [
         {
+         "is_article": true,
          "publisher": "Microsoft",
          "title": "Responsible AI Principles and Approach",
          "url": "https://www.microsoft.com/en-us/ai/principles-and-approach"
@@ -14109,6 +13974,7 @@
        "after": null,
        "articles": [
         {
+         "is_article": true,
          "publisher": "IBM",
          "title": "What Is Data Management?",
          "url": "https://www.ibm.com/think/topics/data-management"
@@ -14166,6 +14032,7 @@
        "after": 1,
        "articles": [
         {
+         "is_article": true,
          "publisher": "Microsoft Learn",
          "title": "Integration between finance and operations apps and third-party services",
          "url": "https://learn.microsoft.com/en-us/dynamics365/fin-ops-core/dev-itpro/data-entities/integration-overview"
@@ -14217,11 +14084,13 @@
        "after": 1,
        "articles": [
         {
+         "is_article": true,
          "publisher": "Microsoft Learn",
          "title": "Monitoring and diagnostics tools in Lifecycle Services",
          "url": "https://learn.microsoft.com/en-us/dynamics365/fin-ops-core/dev-itpro/lifecycle-services/monitoring-diagnostics"
         },
         {
+         "is_article": true,
          "publisher": "IBM",
          "title": "What Is Application Performance Management (APM)?",
          "url": "https://www.ibm.com/think/topics/application-performance-management"
@@ -14258,6 +14127,7 @@
        "after": 1,
        "articles": [
         {
+         "is_article": true,
          "publisher": "Strategyzer",
          "title": "The Business Model Canvas",
          "url": "https://www.strategyzer.com/library/the-business-model-canvas"
@@ -14308,6 +14178,7 @@
        "after": 1,
        "articles": [
         {
+         "is_article": true,
          "publisher": "Microsoft Learn",
          "title": "Transact-SQL Reference (Database Engine)",
          "url": "https://learn.microsoft.com/en-us/sql/t-sql/language-reference"
@@ -20298,206 +20169,10 @@
    "path": {
     "nodes": [
      {
-      "after": null,
-      "articles": [
-       {
-        "publisher": "IBM",
-        "title": "What is Generative AI?",
-        "url": "https://www.ibm.com/think/topics/generative-ai"
-       }
-      ],
-      "courses": [
-       {
-        "done": false,
-        "fit_check": null,
-        "level": "beginner",
-        "minutes": 22,
-        "planned": true,
-        "provider": "Microsoft Learn",
-        "title": "Introduction to generative AI - Exploring the basics",
-        "url": "https://learn.microsoft.com/en-us/training/modules/intro-generative-ai-explore-basics/"
-       }
-      ],
-      "essential": false,
-      "mode": "basics",
-      "now": null,
-      "required": null,
-      "skill": null,
-      "status": "open",
-      "title": "What generative AI is and is not",
-      "videos": [
-       {
-        "channel": "Google Cloud Tech",
-        "minutes": 22,
-        "published": "2023-05-08",
-        "title": "Introduction to Generative AI",
-        "url": "https://www.youtube.com/watch?v=G2fqAlgmoPo"
-       },
-       {
-        "channel": "IBM Technology",
-        "minutes": 9,
-        "published": "2023-03-22",
-        "title": "What are Generative AI models?",
-        "url": "https://www.youtube.com/watch?v=hfIUstzHs9A"
-       },
-       {
-        "channel": "Google Cloud Tech",
-        "minutes": 16,
-        "published": "2023-05-08",
-        "title": "Introduction to large language models",
-        "url": "https://www.youtube.com/watch?v=zizonToFXDs"
-       },
-       {
-        "channel": "IBM Technology",
-        "minutes": 6,
-        "published": "2023-07-28",
-        "title": "How Large Language Models Work",
-        "url": "https://www.youtube.com/watch?v=5sLYAQS9sWQ"
-       }
-      ]
-     },
-     {
-      "after": null,
-      "articles": [
-       {
-        "publisher": "IBM",
-        "title": "What Is Prompt Engineering?",
-        "url": "https://www.ibm.com/think/topics/prompt-engineering"
-       }
-      ],
-      "courses": [
-       {
-        "done": false,
-        "fit_check": null,
-        "level": "beginner",
-        "minutes": 28,
-        "planned": true,
-        "provider": "Microsoft Learn",
-        "title": "Work smarter with Copilot prompts for finance professionals",
-        "url": "https://learn.microsoft.com/en-us/training/modules/work-smarter-copilot-finance/"
-       },
-       {
-        "done": false,
-        "fit_check": null,
-        "level": "beginner",
-        "minutes": 31,
-        "planned": true,
-        "provider": "Microsoft Learn",
-        "title": "Get started with Microsoft Copilot",
-        "url": "https://learn.microsoft.com/en-us/training/modules/get-started-with-copilot/"
-       }
-      ],
-      "essential": false,
-      "mode": "basics",
-      "now": null,
-      "required": null,
-      "skill": "prompt_engineering",
-      "status": "open",
-      "title": "Prompting AI tools well at work",
-      "videos": [
-       {
-        "channel": "AssemblyAI",
-        "minutes": 14,
-        "published": "2023-06-24",
-        "title": "Prompt Engineering 101 - Crash Course & Tips",
-        "url": "https://www.youtube.com/watch?v=aOm75o2Z5-o"
-       }
-      ]
-     },
-     {
-      "after": null,
-      "articles": [
-       {
-        "publisher": "Microsoft",
-        "title": "Responsible AI Principles and Approach",
-        "url": "https://www.microsoft.com/en-us/ai/principles-and-approach"
-       }
-      ],
-      "courses": [
-       {
-        "done": false,
-        "fit_check": null,
-        "level": "beginner",
-        "minutes": 24,
-        "planned": true,
-        "provider": "Microsoft Learn",
-        "title": "Introduction to Microsoft's Responsible AI Approach",
-        "url": "https://learn.microsoft.com/en-us/training/modules/introduction-to-microsofts-responsible-ai-approach/"
-       }
-      ],
-      "essential": false,
-      "mode": "basics",
-      "now": null,
-      "required": null,
-      "skill": null,
-      "status": "open",
-      "title": "Using AI responsibly",
-      "videos": [
-       {
-        "channel": "Google Cloud",
-        "minutes": 8,
-        "published": "2024-04-08",
-        "title": "Introduction to Responsible AI",
-        "url": "https://www.youtube.com/watch?v=w_3L1Bf2P_g"
-       },
-       {
-        "channel": "Microsoft Learn",
-        "minutes": 10,
-        "published": "2025-11-11",
-        "title": "Responsible AI Principles AI-3017 | Episode 3",
-        "url": "https://www.youtube.com/watch?v=8Ra5L1aQ5YM"
-       }
-      ]
-     },
-     {
-      "after": null,
-      "articles": [
-       {
-        "publisher": "IBM",
-        "title": "What Is Data Management?",
-        "url": "https://www.ibm.com/think/topics/data-management"
-       }
-      ],
-      "courses": [
-       {
-        "done": false,
-        "fit_check": null,
-        "level": "beginner",
-        "minutes": 35,
-        "planned": true,
-        "provider": "Microsoft Learn",
-        "title": "Explore core data concepts",
-        "url": "https://learn.microsoft.com/en-us/training/modules/explore-core-data-concepts/"
-       }
-      ],
-      "essential": false,
-      "mode": "basics",
-      "now": null,
-      "required": null,
-      "skill": "data_management",
-      "status": "open",
-      "title": "Data basics behind AI",
-      "videos": [
-       {
-        "channel": "IBM Technology",
-        "minutes": 4,
-        "published": "2022-06-23",
-        "title": "What is Master Data Management",
-        "url": "https://www.youtube.com/watch?v=l83bkKJh1wM"
-       },
-       {
-        "channel": "IBM Technology",
-        "minutes": 5,
-        "published": "2022-07-15",
-        "title": "Data Governance Explained in 5 Minutes",
-        "url": "https://www.youtube.com/watch?v=uPsUjKLHLAg"
-       }
-      ]
-     },
-     {
       "after": 2,
       "articles": [
        {
+        "is_article": true,
         "publisher": "Microsoft Learn",
         "title": "Financial reporting overview",
         "url": "https://learn.microsoft.com/en-us/dynamics365/finance/general-ledger/financial-reporting-getting-started"
@@ -20626,6 +20301,7 @@
       "after": 1,
       "articles": [
        {
+        "is_article": true,
         "publisher": "Microsoft Learn",
         "title": "Accounts payable invoice matching overview",
         "url": "https://learn.microsoft.com/en-us/dynamics365/finance/accounts-payable/accounts-payable-invoice-matching"
@@ -20806,16 +20482,19 @@
       "after": 1,
       "articles": [
        {
+        "is_article": true,
         "publisher": "Microsoft Learn",
         "title": "Integration between finance and operations apps and third-party services",
         "url": "https://learn.microsoft.com/en-us/dynamics365/fin-ops-core/dev-itpro/data-entities/integration-overview"
        },
        {
+        "is_article": true,
         "publisher": "IBM",
         "title": "What Is an API (Application Programming Interface)?",
         "url": "https://www.ibm.com/think/topics/api"
        },
        {
+        "is_article": true,
         "publisher": "IBM",
         "title": "What Is Data Integration?",
         "url": "https://www.ibm.com/think/topics/data-integration"
@@ -20894,11 +20573,13 @@
       "after": 1,
       "articles": [
        {
+        "is_article": true,
         "publisher": "Microsoft Learn",
         "title": "What is Power BI?",
         "url": "https://learn.microsoft.com/en-us/power-bi/fundamentals/power-bi-overview"
        },
        {
+        "is_article": true,
         "publisher": "IBM",
         "title": "What Is Data Visualization?",
         "url": "https://www.ibm.com/think/topics/data-visualization"
@@ -21009,6 +20690,7 @@
       "after": 2,
       "articles": [
        {
+        "is_article": true,
         "publisher": "IBM",
         "title": "What is Enterprise Resource Planning (ERP)?",
         "url": "https://www.ibm.com/think/topics/enterprise-resource-planning"
@@ -21146,7 +20828,7 @@
      }
     ],
     "title": "Your path to Procure-to-Pay (P2P) Reporting Analyst",
-    "why": "One path: AI basics, the skills you already have that AI is reshaping, then the skills this role needs. Start any step; each is a different skill."
+    "why": "One path: the skills you already have that AI is reshaping, then the skills this role needs. Start any step; each is a different skill."
    },
    "resources_checked": "2026-10-24",
    "role_id": "p2p_reporting_analyst",
@@ -21159,6 +20841,7 @@
        "after": null,
        "articles": [
         {
+         "is_article": true,
          "publisher": "IBM",
          "title": "What is Generative AI?",
          "url": "https://www.ibm.com/think/topics/generative-ai"
@@ -21217,6 +20900,7 @@
        "after": null,
        "articles": [
         {
+         "is_article": true,
          "publisher": "IBM",
          "title": "What Is Prompt Engineering?",
          "url": "https://www.ibm.com/think/topics/prompt-engineering"
@@ -21264,6 +20948,7 @@
        "after": null,
        "articles": [
         {
+         "is_article": true,
          "publisher": "Microsoft",
          "title": "Responsible AI Principles and Approach",
          "url": "https://www.microsoft.com/en-us/ai/principles-and-approach"
@@ -21308,6 +20993,7 @@
        "after": null,
        "articles": [
         {
+         "is_article": true,
          "publisher": "IBM",
          "title": "What Is Data Management?",
          "url": "https://www.ibm.com/think/topics/data-management"
@@ -21360,6 +21046,7 @@
        "after": 2,
        "articles": [
         {
+         "is_article": true,
          "publisher": "Microsoft Learn",
          "title": "Financial reporting overview",
          "url": "https://learn.microsoft.com/en-us/dynamics365/finance/general-ledger/financial-reporting-getting-started"
@@ -21487,6 +21174,7 @@
        "after": 1,
        "articles": [
         {
+         "is_article": true,
          "publisher": "Microsoft Learn",
          "title": "Accounts payable invoice matching overview",
          "url": "https://learn.microsoft.com/en-us/dynamics365/finance/accounts-payable/accounts-payable-invoice-matching"
@@ -21672,16 +21360,19 @@
        "after": 1,
        "articles": [
         {
+         "is_article": true,
          "publisher": "Microsoft Learn",
          "title": "Integration between finance and operations apps and third-party services",
          "url": "https://learn.microsoft.com/en-us/dynamics365/fin-ops-core/dev-itpro/data-entities/integration-overview"
         },
         {
+         "is_article": true,
          "publisher": "IBM",
          "title": "What Is an API (Application Programming Interface)?",
          "url": "https://www.ibm.com/think/topics/api"
         },
         {
+         "is_article": true,
          "publisher": "IBM",
          "title": "What Is Data Integration?",
          "url": "https://www.ibm.com/think/topics/data-integration"
@@ -21759,11 +21450,13 @@
        "after": 1,
        "articles": [
         {
+         "is_article": true,
          "publisher": "Microsoft Learn",
          "title": "What is Power BI?",
          "url": "https://learn.microsoft.com/en-us/power-bi/fundamentals/power-bi-overview"
         },
         {
+         "is_article": true,
          "publisher": "IBM",
          "title": "What Is Data Visualization?",
          "url": "https://www.ibm.com/think/topics/data-visualization"
@@ -21873,6 +21566,7 @@
        "after": 2,
        "articles": [
         {
+         "is_article": true,
          "publisher": "IBM",
          "title": "What is Enterprise Resource Planning (ERP)?",
          "url": "https://www.ibm.com/think/topics/enterprise-resource-planning"
@@ -27902,206 +27596,10 @@
    "path": {
     "nodes": [
      {
-      "after": null,
-      "articles": [
-       {
-        "publisher": "IBM",
-        "title": "What is Generative AI?",
-        "url": "https://www.ibm.com/think/topics/generative-ai"
-       }
-      ],
-      "courses": [
-       {
-        "done": false,
-        "fit_check": null,
-        "level": "beginner",
-        "minutes": 22,
-        "planned": true,
-        "provider": "Microsoft Learn",
-        "title": "Introduction to generative AI - Exploring the basics",
-        "url": "https://learn.microsoft.com/en-us/training/modules/intro-generative-ai-explore-basics/"
-       }
-      ],
-      "essential": false,
-      "mode": "basics",
-      "now": null,
-      "required": null,
-      "skill": null,
-      "status": "open",
-      "title": "What generative AI is and is not",
-      "videos": [
-       {
-        "channel": "Google Cloud Tech",
-        "minutes": 22,
-        "published": "2023-05-08",
-        "title": "Introduction to Generative AI",
-        "url": "https://www.youtube.com/watch?v=G2fqAlgmoPo"
-       },
-       {
-        "channel": "IBM Technology",
-        "minutes": 9,
-        "published": "2023-03-22",
-        "title": "What are Generative AI models?",
-        "url": "https://www.youtube.com/watch?v=hfIUstzHs9A"
-       },
-       {
-        "channel": "Google Cloud Tech",
-        "minutes": 16,
-        "published": "2023-05-08",
-        "title": "Introduction to large language models",
-        "url": "https://www.youtube.com/watch?v=zizonToFXDs"
-       },
-       {
-        "channel": "IBM Technology",
-        "minutes": 6,
-        "published": "2023-07-28",
-        "title": "How Large Language Models Work",
-        "url": "https://www.youtube.com/watch?v=5sLYAQS9sWQ"
-       }
-      ]
-     },
-     {
-      "after": null,
-      "articles": [
-       {
-        "publisher": "IBM",
-        "title": "What Is Prompt Engineering?",
-        "url": "https://www.ibm.com/think/topics/prompt-engineering"
-       }
-      ],
-      "courses": [
-       {
-        "done": false,
-        "fit_check": null,
-        "level": "beginner",
-        "minutes": 28,
-        "planned": true,
-        "provider": "Microsoft Learn",
-        "title": "Work smarter with Copilot prompts for finance professionals",
-        "url": "https://learn.microsoft.com/en-us/training/modules/work-smarter-copilot-finance/"
-       },
-       {
-        "done": false,
-        "fit_check": null,
-        "level": "beginner",
-        "minutes": 31,
-        "planned": true,
-        "provider": "Microsoft Learn",
-        "title": "Get started with Microsoft Copilot",
-        "url": "https://learn.microsoft.com/en-us/training/modules/get-started-with-copilot/"
-       }
-      ],
-      "essential": false,
-      "mode": "basics",
-      "now": null,
-      "required": null,
-      "skill": "prompt_engineering",
-      "status": "open",
-      "title": "Prompting AI tools well at work",
-      "videos": [
-       {
-        "channel": "AssemblyAI",
-        "minutes": 14,
-        "published": "2023-06-24",
-        "title": "Prompt Engineering 101 - Crash Course & Tips",
-        "url": "https://www.youtube.com/watch?v=aOm75o2Z5-o"
-       }
-      ]
-     },
-     {
-      "after": null,
-      "articles": [
-       {
-        "publisher": "Microsoft",
-        "title": "Responsible AI Principles and Approach",
-        "url": "https://www.microsoft.com/en-us/ai/principles-and-approach"
-       }
-      ],
-      "courses": [
-       {
-        "done": false,
-        "fit_check": null,
-        "level": "beginner",
-        "minutes": 24,
-        "planned": true,
-        "provider": "Microsoft Learn",
-        "title": "Introduction to Microsoft's Responsible AI Approach",
-        "url": "https://learn.microsoft.com/en-us/training/modules/introduction-to-microsofts-responsible-ai-approach/"
-       }
-      ],
-      "essential": false,
-      "mode": "basics",
-      "now": null,
-      "required": null,
-      "skill": null,
-      "status": "open",
-      "title": "Using AI responsibly",
-      "videos": [
-       {
-        "channel": "Google Cloud",
-        "minutes": 8,
-        "published": "2024-04-08",
-        "title": "Introduction to Responsible AI",
-        "url": "https://www.youtube.com/watch?v=w_3L1Bf2P_g"
-       },
-       {
-        "channel": "Microsoft Learn",
-        "minutes": 10,
-        "published": "2025-11-11",
-        "title": "Responsible AI Principles AI-3017 | Episode 3",
-        "url": "https://www.youtube.com/watch?v=8Ra5L1aQ5YM"
-       }
-      ]
-     },
-     {
-      "after": null,
-      "articles": [
-       {
-        "publisher": "IBM",
-        "title": "What Is Data Management?",
-        "url": "https://www.ibm.com/think/topics/data-management"
-       }
-      ],
-      "courses": [
-       {
-        "done": false,
-        "fit_check": null,
-        "level": "beginner",
-        "minutes": 35,
-        "planned": true,
-        "provider": "Microsoft Learn",
-        "title": "Explore core data concepts",
-        "url": "https://learn.microsoft.com/en-us/training/modules/explore-core-data-concepts/"
-       }
-      ],
-      "essential": false,
-      "mode": "basics",
-      "now": null,
-      "required": null,
-      "skill": "data_management",
-      "status": "open",
-      "title": "Data basics behind AI",
-      "videos": [
-       {
-        "channel": "IBM Technology",
-        "minutes": 4,
-        "published": "2022-06-23",
-        "title": "What is Master Data Management",
-        "url": "https://www.youtube.com/watch?v=l83bkKJh1wM"
-       },
-       {
-        "channel": "IBM Technology",
-        "minutes": 5,
-        "published": "2022-07-15",
-        "title": "Data Governance Explained in 5 Minutes",
-        "url": "https://www.youtube.com/watch?v=uPsUjKLHLAg"
-       }
-      ]
-     },
-     {
       "after": 2,
       "articles": [
        {
+        "is_article": true,
         "publisher": "Microsoft Learn",
         "title": "Financial reporting overview",
         "url": "https://learn.microsoft.com/en-us/dynamics365/finance/general-ledger/financial-reporting-getting-started"
@@ -28230,6 +27728,7 @@
       "after": 1,
       "articles": [
        {
+        "is_article": true,
         "publisher": "IBM",
         "title": "What is Big Data Analytics?",
         "url": "https://www.ibm.com/think/topics/big-data-analytics"
@@ -28347,6 +27846,7 @@
       "after": 1,
       "articles": [
        {
+        "is_article": true,
         "publisher": "IBM",
         "title": "What Is Data Management?",
         "url": "https://www.ibm.com/think/topics/data-management"
@@ -28473,16 +27973,19 @@
       "after": 1,
       "articles": [
        {
+        "is_article": true,
         "publisher": "Microsoft Learn",
         "title": "Integration between finance and operations apps and third-party services",
         "url": "https://learn.microsoft.com/en-us/dynamics365/fin-ops-core/dev-itpro/data-entities/integration-overview"
        },
        {
+        "is_article": true,
         "publisher": "IBM",
         "title": "What Is an API (Application Programming Interface)?",
         "url": "https://www.ibm.com/think/topics/api"
        },
        {
+        "is_article": true,
         "publisher": "IBM",
         "title": "What Is Data Integration?",
         "url": "https://www.ibm.com/think/topics/data-integration"
@@ -28561,11 +28064,13 @@
       "after": 1,
       "articles": [
        {
+        "is_article": true,
         "publisher": "Microsoft Learn",
         "title": "What is Power BI?",
         "url": "https://learn.microsoft.com/en-us/power-bi/fundamentals/power-bi-overview"
        },
        {
+        "is_article": true,
         "publisher": "IBM",
         "title": "What Is Data Visualization?",
         "url": "https://www.ibm.com/think/topics/data-visualization"
@@ -28676,6 +28181,7 @@
       "after": null,
       "articles": [
        {
+        "is_article": true,
         "publisher": "CIPD",
         "title": "PESTLE analysis",
         "url": "https://www.cipd.org/uk/knowledge/factsheets/pestle-analysis-factsheet/"
@@ -28708,7 +28214,7 @@
      }
     ],
     "title": "Your path to Order-to-Cash (O2C) Reporting Analyst",
-    "why": "One path: AI basics, the skills you already have that AI is reshaping, then the skills this role needs. Start any step; each is a different skill."
+    "why": "One path: the skills you already have that AI is reshaping, then the skills this role needs. Start any step; each is a different skill."
    },
    "resources_checked": "2026-10-24",
    "role_id": "o2c_reporting_analyst",
@@ -28721,6 +28227,7 @@
        "after": null,
        "articles": [
         {
+         "is_article": true,
          "publisher": "IBM",
          "title": "What is Generative AI?",
          "url": "https://www.ibm.com/think/topics/generative-ai"
@@ -28779,6 +28286,7 @@
        "after": null,
        "articles": [
         {
+         "is_article": true,
          "publisher": "IBM",
          "title": "What Is Prompt Engineering?",
          "url": "https://www.ibm.com/think/topics/prompt-engineering"
@@ -28826,6 +28334,7 @@
        "after": null,
        "articles": [
         {
+         "is_article": true,
          "publisher": "Microsoft",
          "title": "Responsible AI Principles and Approach",
          "url": "https://www.microsoft.com/en-us/ai/principles-and-approach"
@@ -28870,6 +28379,7 @@
        "after": null,
        "articles": [
         {
+         "is_article": true,
          "publisher": "IBM",
          "title": "What Is Data Management?",
          "url": "https://www.ibm.com/think/topics/data-management"
@@ -28922,6 +28432,7 @@
        "after": 2,
        "articles": [
         {
+         "is_article": true,
          "publisher": "Microsoft Learn",
          "title": "Financial reporting overview",
          "url": "https://learn.microsoft.com/en-us/dynamics365/finance/general-ledger/financial-reporting-getting-started"
@@ -29055,6 +28566,7 @@
        "after": 1,
        "articles": [
         {
+         "is_article": true,
          "publisher": "IBM",
          "title": "What is Big Data Analytics?",
          "url": "https://www.ibm.com/think/topics/big-data-analytics"
@@ -29170,6 +28682,7 @@
        "after": 1,
        "articles": [
         {
+         "is_article": true,
          "publisher": "IBM",
          "title": "What Is Data Management?",
          "url": "https://www.ibm.com/think/topics/data-management"
@@ -29295,16 +28808,19 @@
        "after": 1,
        "articles": [
         {
+         "is_article": true,
          "publisher": "Microsoft Learn",
          "title": "Integration between finance and operations apps and third-party services",
          "url": "https://learn.microsoft.com/en-us/dynamics365/fin-ops-core/dev-itpro/data-entities/integration-overview"
         },
         {
+         "is_article": true,
          "publisher": "IBM",
          "title": "What Is an API (Application Programming Interface)?",
          "url": "https://www.ibm.com/think/topics/api"
         },
         {
+         "is_article": true,
          "publisher": "IBM",
          "title": "What Is Data Integration?",
          "url": "https://www.ibm.com/think/topics/data-integration"
@@ -29382,11 +28898,13 @@
        "after": 1,
        "articles": [
         {
+         "is_article": true,
          "publisher": "Microsoft Learn",
          "title": "What is Power BI?",
          "url": "https://learn.microsoft.com/en-us/power-bi/fundamentals/power-bi-overview"
         },
         {
+         "is_article": true,
          "publisher": "IBM",
          "title": "What Is Data Visualization?",
          "url": "https://www.ibm.com/think/topics/data-visualization"
@@ -29496,6 +29014,7 @@
        "after": null,
        "articles": [
         {
+         "is_article": true,
          "publisher": "CIPD",
          "title": "PESTLE analysis",
          "url": "https://www.cipd.org/uk/knowledge/factsheets/pestle-analysis-factsheet/"

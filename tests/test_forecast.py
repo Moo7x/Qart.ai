@@ -87,3 +87,44 @@ def test_categories_need_two_kinds_of_ai_evidence_and_a_falling_forecast_to_shri
     assert categorise(None, None, 2.0, rising, None)[0] == "growing"
     assert categorise(None, None, 1.0, None, True)[0] == "growing"  # MyCOL hard to fill
     assert categorise(None, None, 0.0, None, None)[0] == "emerging"
+
+
+def test_forecast_overrides_replace_ai_use_and_job_group_trends() -> None:
+    from src.forecast.industry import Overrides
+
+    rows = [
+        {"soc": "A", "task": "1", "observed": 10.0, "predicted": None, "importance": 3.0},
+        {"soc": "A", "task": "2", "observed": None, "predicted": 20.0, "importance": 3.0},
+        {"soc": "B", "task": "3", "observed": 30.0, "predicted": None, "importance": 3.0},
+    ]
+    test = Overrides(occupation_use={"A": 90.0}, task_use={"3": 0.0})
+    assert [r["observed"] for r in test.tasks(rows)] == [90.0, 90.0, 0.0]
+    assert rows[0]["observed"] == 10.0  # the stored rows are not changed
+    assert not Overrides() and Overrides(group_change={"clerical": -1.0})
+
+
+def test_change_test_overrides_are_checked_per_kind() -> None:
+    import pytest
+    from pydantic import ValidationError
+
+    from src.api.evidence_test import Override
+
+    assert Override(kind="group_change", key="clerical", value=-1.5).value == -1.5
+    with pytest.raises(ValidationError):
+        Override(kind="group_change", key="clerical", value=9)
+    with pytest.raises(ValidationError):
+        Override(kind="task_share", key="1", value=-5)
+
+
+def test_a_person_only_gets_a_model_trained_on_evidence_they_accepted(tmp_path) -> None:
+    engine = make_engine(f"sqlite:///{tmp_path / 'f.sqlite'}")
+    init_db(engine)
+    rows = _rows(params.TASK_MODEL_MIN_TRAIN + 20)
+    task_model.run(engine, rows, _fake_embedder, None)  # trained on 2026-05
+    newer = [{**r, "period": "2026-06"} if r["series"] == task_model.TARGET else r for r in rows]
+    task_model.run(engine, newer, _fake_embedder, None)  # trained on 2026-06
+    assert task_model.latest(engine)[0]["period"] == "2026-06"
+    assert task_model.latest(engine, "2026-05")[0]["period"] == "2026-05"
+    assert task_model.latest(engine, "2026-04")[0] is None
+    assert task_model.evidence_period(rows) == "2026-05"
+    engine.dispose()

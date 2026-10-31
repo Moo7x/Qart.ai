@@ -9,6 +9,12 @@ import type { EvidenceTestOut, Override } from '../typesAgents'
 // real engine does with it. Nothing is saved; the stored evidence never changes.
 
 type Target = { kind: Override['kind']; key: string; label: string; current: number | null }
+// DOSM job groups a finance role can belong to (src/match/outlook.py MAJOR_GROUP).
+const GROUPS = [
+  { key: 'professionals', label: 'Professionals (accountants, analysts)' },
+  { key: 'technicians', label: 'Technicians and associate professionals' },
+  { key: 'clerical', label: 'Clerical support (finance clerks, AP and AR)' },
+]
 
 function targets(soc: string, req: RequirementScore, occupationShare: number | null): Target[] {
   const tasks: Target[] = req.tasks.map((t) => ({ kind: 'task_share', key: t.task, label: `Task: ${t.text}`, current: t.automation_share }))
@@ -27,6 +33,9 @@ export function ChangeTest() {
   const [skill, setSkill] = useState<string | null>(null)
   const [targetKey, setTargetKey] = useState<string | null>(null)
   const [value, setValue] = useState(50)
+  const [mode, setMode] = useState<'ai' | 'market'>('ai')
+  const [group, setGroup] = useState(GROUPS[2].key)
+  const [change, setChange] = useState(-1)
   const [result, setResult] = useState<EvidenceTestOut | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
@@ -54,7 +63,7 @@ export function ChangeTest() {
     setError(null)
     try {
       const out = await sendJSON<EvidenceTestOut>(`/api/profiles/${profileId}/evidence-test`, {
-        body: { scenario, overrides: [{ kind: target.kind, key: target.key, value }] },
+        body: { scenario, overrides: [mode === 'ai' ? { kind: target.kind, key: target.key, value } : { kind: 'group_change', key: group, value: change }] },
       })
       setResult(out)
     } catch (reason) {
@@ -74,6 +83,29 @@ export function ChangeTest() {
           Pick a skill of {role.title}, choose the observed AI-use figure behind it, and set a test value. The real scoring and planning rules run on it; your saved data and the stored evidence stay as they are.
         </p>
       </div>
+      <div role="radiogroup" aria-label="What to change" className="flex flex-wrap gap-2">
+        {([['ai', 'AI use on a task'], ['market', 'Job-market trend']] as const).map(([id, text]) => (
+          <button key={id} type="button" role="radio" aria-checked={mode === id} onClick={() => { setMode(id); setResult(null) }} className={`btn min-h-[40px] ${mode === id ? 'btn-v' : ''}`}>{text}</button>
+        ))}
+      </div>
+      {mode === 'market' && (
+        <div className="flex flex-col gap-2 text-[13px]">
+          <label className="flex flex-col gap-1">
+            <span className="cap">Job group (DOSM)</span>
+            <select className="min-h-[40px] rounded-md border border-hairline bg-paper px-2" value={group} onChange={(e) => { setGroup(e.target.value); setResult(null) }}>
+              {GROUPS.map((g) => <option key={g.key} value={g.key}>{g.label}</option>)}
+            </select>
+          </label>
+          <label className="flex flex-wrap items-center gap-3">
+            <span className="cap shrink-0">Test trend</span>
+            <input type="range" min={-3} max={3} step={0.1} value={change} onChange={(e) => { setChange(Number(e.target.value)); setResult(null) }} className="min-w-[160px] flex-1 accent-[var(--color-violet)]" aria-label="Forecast change of the group's share of employees, test value" />
+            <span className="w-[200px] font-mono">{change > 0 ? '+' : ''}{change.toFixed(1)} points in 2 years</span>
+          </label>
+          <p className="m-0 text-[12px] text-graphite">The forecast change of this group&rsquo;s share of Malaysian employees (DOSM, model chosen by backtest) is replaced by the test value. Roles in the group can move between Growing, Stable, Transforming and Shrinking.</p>
+          <button type="button" className="btn btn-v min-h-[44px] self-start" disabled={busy} onClick={apply}>{busy ? 'Recomputing…' : 'Apply test value'}</button>
+        </div>
+      )}
+      {mode === 'ai' && <>
       <div className="grid gap-3 md:grid-cols-3">
         <label className="flex flex-col gap-1 text-[13px]">
           <span className="cap">Skill</span>
@@ -109,10 +141,21 @@ export function ChangeTest() {
       <p className="m-0 text-[12px] text-graphite">
         Now: {target.current === null ? 'no published value' : `${target.current.toFixed(1)}%`} ({data.evidence.source}, {data.evidence.period}). Routine skills lose weight as this share rises; skills that complement AI gain weight. Essentials never move.
       </p>
+      </>}
       {error && <p role="alert" className="m-0 text-[13px] text-weak">{error}</p>}
       {result && (
         <div className="flex flex-col gap-3 rounded-md border-2 border-dashed border-estimate p-3">
           <span className="tag self-start bg-estimate-bg text-estimate">{result.label}</span>
+          <div>
+            <span className="cap">Qart forecast categories that changed</span>
+            {(result.forecast ?? []).length === 0 ? (
+              <p className="m-0 mt-1 text-[13px] text-graphite">None: no role crosses a category line with this value. A role is Transforming only when two of three kinds of AI evidence agree, and Shrinking only when its job group also falls.</p>
+            ) : (
+              <ul className="m-0 mt-1 flex list-none flex-col gap-1 p-0 text-[13px]">
+                {(result.forecast ?? []).map((c) => <li key={c.role_id} className="flex justify-between gap-2"><span>{c.title}{c.current_job ? ' · your job' : ''}</span><span className="font-mono">{c.before} → {c.after}</span></li>)}
+              </ul>
+            )}
+          </div>
           <div className="grid gap-4 md:grid-cols-2">
             <div className="min-w-0">
               <span className="cap">Role ranking, before → after</span>

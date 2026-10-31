@@ -276,7 +276,7 @@ def _card(
     scenario: Scenario,
     forecasts: dict[str, dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
-    pack, data, evidence, rows = person.pack, person.data, person.evidence, person.rows
+    pack, data, evidence, rows = person.pack, person.data, person.evidence, person.card_rows
     role = pack.destination_roles[match.role_id]
     current = pack.current_roles.get(data.current_role)
     forecast = (forecasts or {}).get(match.role_id)
@@ -352,7 +352,7 @@ def matches(
             person,
             m,
             person.plan(m, scenario),
-            role_outlook(pack, pack.destination_roles[m.role_id], rows, signals),
+            role_outlook(pack, pack.destination_roles[m.role_id], person.card_rows, signals),
             scenario,
             forecasts,
         )

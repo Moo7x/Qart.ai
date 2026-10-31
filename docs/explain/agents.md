@@ -3,7 +3,8 @@
 **What it does.** For one skill the person still needs, the scout finds the exact part of a
 checked video or article that serves it: a YouTube link that starts at the right second, or an
 article link that opens at the right passage (`#:~:text=`). It finds and points; it does not
-teach. Open it from My plan: the AI-brain button beside each video and article.
+teach. Open it from My plan: the AI-brain button beside each video and each checked article (web
+pages and sites that refuse readers get no button, `TrackArticle.is_article`).
 
 **How it works.** One agent on `AGENT_MODEL` (gpt-4.1-mini) with four code tools
 (`src/agents/scout.py`):

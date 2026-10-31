@@ -64,7 +64,13 @@ def _video(v: Video) -> dict[str, Any]:
 
 
 def _article(a: Article) -> dict[str, Any]:
-    return {"id": a.id, "title": a.title, "publisher": a.publisher, "url": a.url}
+    return {
+        "id": a.id,
+        "title": a.title,
+        "publisher": a.publisher,
+        "url": a.url,
+        "is_article": a.kind == "article",
+    }
 
 
 def _status(courses: list[dict[str, Any]]) -> str:

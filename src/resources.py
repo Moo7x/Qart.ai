@@ -6,10 +6,12 @@ next to the courses on My plan and are never counted in planned hours or project
 """
 
 from functools import cache
+from typing import Any
 
 import yaml
 from pydantic import BaseModel
 
+from src.evidence.field import PACK_DIR
 from src.pack import PackError, load_pack, pack_files
 
 
@@ -33,6 +35,9 @@ class Article(BaseModel):
     url: str
     skills: list[str] = []
     topics: list[str] = []
+    # "article", "web page" or "unreachable" (src/collectors/article_check.py); only an article
+    # can be read and pointed into by the scout. Unchecked links count as articles.
+    kind: str = "article"
 
 
 class AiTopic(BaseModel):
@@ -61,6 +66,14 @@ class Resources(BaseModel):
         ]
 
 
+def _article_kinds() -> dict[str, str]:
+    path = PACK_DIR / "article_checks.yaml"
+    if not path.exists():
+        return {}
+    data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+    return {k: v["kind"] for k, v in (data.get("articles") or {}).items()}
+
+
 def _read() -> Resources:
     """resources.yaml, plus the videos and articles of any resources_*.yaml (pipeline-built)."""
     first, *extra = pack_files("resources")
@@ -69,6 +82,9 @@ def _read() -> Resources:
         raw = yaml.safe_load(path.read_text(encoding="utf-8"))
         res.videos += [Video.model_validate(v) for v in raw.get("videos", [])]
         res.articles += [Article.model_validate(a) for a in raw.get("articles", [])]
+    kinds = _article_kinds()
+    for article in res.articles:
+        article.kind = kinds.get(article.id, "article")
     return res
 
 
@@ -101,3 +117,14 @@ def load_resources() -> Resources:
     if problems:
         raise PackError("; ".join(problems))
     return res
+
+
+@cache
+def load_ai_resources() -> dict[str, list[dict[str, Any]]]:
+    """Per skill, the checked resources that teach doing its work with AI
+    (data/packs/gbs_fa/ai_resources.yaml, built by src/collectors/ai_resources.py)."""
+    path = PACK_DIR / "ai_resources.yaml"
+    if not path.exists():
+        return {}
+    data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+    return {skill: list(v.get("resources", [])) for skill, v in (data.get("skills") or {}).items()}

@@ -29,6 +29,7 @@ demand is the weighted mean demand change of those roles, and its AI use the mea
 linked to it in those roles' occupations. Pure: rows, task rows and the pack in; dicts out.
 """
 
+from dataclasses import dataclass, field
 from typing import Any
 
 from src import params
@@ -167,6 +168,27 @@ def categorise(
     ]
 
 
+@dataclass(frozen=True)
+class Overrides:
+    """Test values for the change test: nothing stored changes (src/api/evidence_test.py).
+    occupation_use / task_use replace the automation-style AI-use share (0-100) of every task of an
+    occupation or of one task; group_change replaces a DOSM job group's forecast change (points)."""
+
+    occupation_use: dict[str, float] = field(default_factory=dict)
+    task_use: dict[str, float] = field(default_factory=dict)
+    group_change: dict[str, float] = field(default_factory=dict)
+
+    def __bool__(self) -> bool:
+        return bool(self.occupation_use or self.task_use or self.group_change)
+
+    def tasks(self, task_rows: list[Row]) -> list[Row]:
+        out = []
+        for r in task_rows:
+            value = self.task_use.get(r["task"], self.occupation_use.get(r["soc"]))
+            out.append({**r, "observed": value} if value is not None else r)
+        return out
+
+
 _INDUSTRY_CACHE: dict[tuple[Any, ...], dict[str, Any]] = {}
 
 
@@ -174,9 +196,18 @@ def _snapshot(rows: list[Row]) -> tuple[int, int]:
     return len(rows), max((int(r.get("id") or 0) for r in rows), default=0)
 
 
-def industry(pack: Pack, rows: list[Row], task_rows: list[Row], scenario: str) -> dict[str, Any]:
+def industry(
+    pack: Pack,
+    rows: list[Row],
+    task_rows: list[Row],
+    scenario: str,
+    overrides: Overrides | None = None,
+) -> dict[str, Any]:
     """Every industry role with its category, demand and AI evidence, and the skills' direction.
-    Cached per evidence snapshot, task-model version and scenario: ranking asks for it often."""
+    Cached per evidence snapshot, task-model version and scenario: ranking asks for it often.
+    Test overrides are never cached."""
+    if overrides:
+        return _industry(pack, rows, overrides.tasks(task_rows), scenario, overrides.group_change)
     version = task_rows[0].get("version_id") if task_rows else None
     key = (*_snapshot(rows), version, len(task_rows), scenario)
     if key not in _INDUSTRY_CACHE:
@@ -186,10 +217,20 @@ def industry(pack: Pack, rows: list[Row], task_rows: list[Row], scenario: str) -
     return _INDUSTRY_CACHE[key]
 
 
-def _industry(pack: Pack, rows: list[Row], task_rows: list[Row], scenario: str) -> dict[str, Any]:
+def _industry(
+    pack: Pack,
+    rows: list[Row],
+    task_rows: list[Row],
+    scenario: str,
+    group_change: dict[str, float] | None = None,
+) -> dict[str, Any]:
     intensity = params.SCENARIO_INTENSITY[scenario]
     pressure = task_pressure(task_rows)
     impacts, ilo, demand = _talentcorp(rows), _ilo(rows), _demand(rows)
+    if group_change:
+        demand = {
+            g: {**d, "change_pp": group_change.get(g, d["change_pp"])} for g, d in demand.items()
+        }
     roles: list[dict[str, Any]] = []
     role_change: dict[str, float] = {}
     for role in industry_roles().roles:

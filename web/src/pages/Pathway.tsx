@@ -131,7 +131,7 @@ function ProfilePathway({ profileId, scenario }: { profileId: string; scenario: 
             <div className="flex flex-col gap-1">
               <h2 className="h2">Your roadmap</h2>
               <p className="m-0 max-w-[720px] text-[13px] text-graphite">
-                One path: AI basics, then the skills you already have that AI is reshaping, then the skills this role needs. Each step opens its courses, YouTube videos and articles; start with any step.
+                One path: the skills you already have that AI is reshaping, then the skills this role needs. Each step opens how to do it with AI, its courses, YouTube videos and articles; start with any step.
               </p>
             </div>
             {data.adjustments && data.adjustments.length > 0 && (

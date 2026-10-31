@@ -42,7 +42,8 @@ function PickCard({ pick }: { pick: ScoutPick }) {
       )}
       <span className="flex min-w-0 flex-col gap-1">
         <span className="flex items-start justify-between gap-2 text-[14px] font-semibold leading-snug">{pick.title}<ExternalLink size={14} aria-hidden="true" className="mt-0.5 shrink-0 text-violet-light" /></span>
-        <span className="font-mono text-[11px] text-stone">{pick.kind === 'video' ? `Opens the video at ${clock(pick.start)}` : `Opens the article at “${pick.anchor}…”`} · {pick.source}</span>
+        <span className="font-mono text-[11px] text-stone">{pick.kind === 'video' ? `Opens the video at ${clock(pick.start)}` : 'Opens the article with the important passages highlighted'} · {pick.source}</span>
+        {pick.excerpt && <mark className="rounded bg-[rgba(157,134,255,0.22)] px-1.5 py-1 text-[13px] leading-relaxed text-white">&ldquo;{pick.excerpt}&rdquo;</mark>}
         {pick.reason && <span className="text-[13px] text-[#d9dae3]">{pick.reason}</span>}
       </span>
     </a>
