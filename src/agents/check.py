@@ -21,9 +21,10 @@ Level descriptions come from data/packs/gbs_fa/levels.yaml when owner B has publ
 import json
 import re
 from datetime import UTC, datetime, timedelta
-from typing import Any
+from typing import Any, Literal
 
 import yaml
+from pydantic import BaseModel
 from sqlalchemy import Engine
 
 from src import llm, params
@@ -70,6 +71,49 @@ def descriptions(skill: str) -> tuple[dict[int, str], str]:
     )
 
 
+class QA(BaseModel):
+    q: str
+    a: str = ""
+
+
+class Judgement(BaseModel):
+    level: int
+    verdict: Literal["yes", "partly", "no"]
+    quote: str
+
+
+class CheckResult(BaseModel):
+    skill: str
+    proposed_level: int
+    met: list[Judgement]
+    model: str
+    engine: str
+    note: str
+
+
+class CheckSession(BaseModel):
+    """One progress check, stored between turns in the agent run's `result` column."""
+
+    skill: str
+    skill_name: str
+    current: int  # the level the person claims now
+    target: int
+    tasks: list[str]  # linked O*NET tasks in their field, shown to the model
+    levels: dict[int, str]  # level → description the check judges against
+    levels_source: str
+    qa: list[QA] = []
+    result: CheckResult | None = None
+    decided: Literal["accepted", "declined"] | None = None
+
+    @property
+    def waiting(self) -> bool:
+        """Asked a question that has no answer yet."""
+        return bool(self.qa) and not self.qa[-1].a
+
+    def said(self) -> str:
+        return " ".join(t.a for t in self.qa if t.a)
+
+
 def _context(pack: Pack, data: ProfileData, destination: str | None, skill: str) -> dict[str, Any]:
     roles = [pack.destination_roles[destination]] if destination else []
     roles += [r for r in pack.destination_roles.values() if r not in roles]
@@ -89,17 +133,17 @@ def _context(pack: Pack, data: ProfileData, destination: str | None, skill: str)
     }
 
 
-def _messages(state: dict[str, Any], instruction: str) -> list[dict[str, str]]:
+def _messages(state: CheckSession, instruction: str) -> list[dict[str, str]]:
     character = load_character("progress_check")
-    levels = "\n".join(f"Level {k}: {v}" for k, v in sorted(state["levels"].items()))
-    talk = "\n".join(f"Q: {t['q']}\nA: {t['a']}" for t in state["qa"] if t.get("a"))
-    tasks = "\n".join(f"- {t}" for t in state["tasks"]) or "- (no linked tasks)"
+    levels = "\n".join(f"Level {k}: {v}" for k, v in sorted(state.levels.items()))
+    talk = "\n".join(f"Q: {t.q}\nA: {t.a}" for t in state.qa if t.a)
+    tasks = "\n".join(f"- {t}" for t in state.tasks) or "- (no linked tasks)"
     return [
         {"role": "system", "content": character.system_prompt()},
         {
             "role": "user",
             "content": (
-                f"Skill: {state['skill_name']}. The person now claims level {state['current']}.\n"
+                f"Skill: {state.skill_name}. The person now claims level {state.current}.\n"
                 f"Level descriptions:\n{levels}\nTasks in their field:\n{tasks}\n"
                 f"Conversation so far:\n{talk or '(none)'}\n\n{instruction}"
             ),
@@ -145,7 +189,7 @@ def _complete(settings: Settings, purpose: str) -> llm.Complete:
     )
 
 
-def _ask(state: dict[str, Any], complete: llm.Complete) -> tuple[str, bool]:
+def _ask(state: CheckSession, complete: llm.Complete) -> tuple[str, bool]:
     raw = complete(
         _messages(state, "Ask the next single question about work they did, or say it is enough."),
         QUESTION_SCHEMA,
@@ -159,22 +203,22 @@ def _norm(text: str) -> str:
 
 
 def proposed_level(
-    state: dict[str, Any], judgements: list[dict[str, Any]]
-) -> tuple[int, list[dict[str, Any]]]:
+    state: CheckSession, judgements: list[dict[str, Any]]
+) -> tuple[int, list[Judgement]]:
     """Highest consecutive level judged "yes" with a real quote, capped; and the kept judgements."""
-    said = _norm(" ".join(t["a"] for t in state["qa"] if t.get("a")))
+    said = _norm(state.said())
     kept = [
-        {"level": int(j["level"]), "verdict": j["verdict"], "quote": str(j["quote"]).strip()}
+        Judgement(level=int(j["level"]), verdict=j["verdict"], quote=str(j["quote"]).strip())
         for j in judgements
         if len(str(j.get("quote", "")).strip()) >= params.CHECK_MIN_QUOTE_CHARS
         and _norm(str(j["quote"])) in said
     ]
-    yes = {j["level"] for j in kept if j["verdict"] == "yes"}
-    cap = min(state["current"] + params.CHECK_MAX_RAISE, MAX_LEVEL)
-    level = state["current"]
+    yes = {j.level for j in kept if j.verdict == "yes"}
+    cap = min(state.current + params.CHECK_MAX_RAISE, MAX_LEVEL)
+    level = state.current
     while level + 1 <= cap and level + 1 in yes:
         level += 1
-    return level, sorted(kept, key=lambda j: j["level"])
+    return level, sorted(kept, key=lambda j: j.level)
 
 
 def start(
@@ -202,46 +246,44 @@ def start(
         raise CheckError(f"at most {params.CHECKS_PER_SKILL_PER_DAY} checks per skill per day")
     data, destination = found
     levels, levels_source = descriptions(skill)
-    state = {
-        "skill": skill,
-        "skill_name": pack.skills[skill].name,
+    state = CheckSession(
+        skill=skill,
+        skill_name=pack.skills[skill].name,
         **_context(pack, data, destination, skill),
-        "levels": {k: v for k, v in levels.items() if k <= MAX_LEVEL},
-        "levels_source": levels_source,
-        "qa": [],
-        "result": None,
-        "decided": None,
-    }
+        levels={k: v for k, v in levels.items() if k <= MAX_LEVEL},
+        levels_source=levels_source,
+    )
     run_id = store.start(engine, "check", skill, profile_id, f"{settings.agent_model} reviewer")
     question, _ = _ask(state, complete or _complete(settings, "progress_check"))
-    state["qa"].append({"q": question, "a": ""})
-    store.save(engine, run_id, "running", state)
+    state.qa.append(QA(q=question))
+    _save(engine, run_id, "running", state)
     return {"session_id": run_id, **_public(state, settings)}
 
 
-def _public(state: dict[str, Any], settings: Settings) -> dict[str, Any]:
-    pending = state["qa"][-1]["q"] if state["qa"] and not state["qa"][-1]["a"] else None
+def _save(engine: Engine, run_id: str, status: str, state: CheckSession) -> None:
+    store.save(engine, run_id, status, state.model_dump(mode="json"))
+
+
+def _public(state: CheckSession, settings: Settings) -> dict[str, Any]:
     return {
-        "skill": state["skill"],
-        "skill_name": state["skill_name"],
-        "current_level": state["current"],
-        "target_level": state["target"],
-        "question": pending,
-        "asked": len(state["qa"]),
-        "result": state["result"],
-        "decided": state["decided"],
-        "levels_source": state["levels_source"],
+        "skill": state.skill,
+        "skill_name": state.skill_name,
+        "current_level": state.current,
+        "target_level": state.target,
+        "question": state.qa[-1].q if state.waiting else None,
+        "asked": len(state.qa),
+        "result": state.result.model_dump() if state.result else None,
+        "decided": state.decided,
+        "levels_source": state.levels_source,
         "model": settings.agent_model,
     }
 
 
-def _session(engine: Engine, profile_id: str, session_id: str) -> dict[str, Any]:
+def _session(engine: Engine, profile_id: str, session_id: str) -> CheckSession:
     run = store.read(engine, session_id)
     if run is None or run["kind"] != "check" or run["profile_id"] != profile_id:
         raise CheckError("unknown check")
-    state: dict[str, Any] = run["result"]
-    state["levels"] = {int(k): v for k, v in state["levels"].items()}
-    return state
+    return CheckSession.model_validate(run["result"])
 
 
 def answer(
@@ -253,17 +295,17 @@ def answer(
     complete: llm.Complete | None = None,
 ) -> dict[str, Any]:
     state = _session(engine, profile_id, session_id)
-    if state["result"] is not None or not state["qa"] or state["qa"][-1]["a"]:
+    if state.result is not None or not state.waiting:
         raise CheckError("this check is not waiting for an answer")
-    state["qa"][-1]["a"] = text.strip()
+    state.qa[-1].a = text.strip()
     model = complete or _complete(settings, "progress_check")
-    asked = len(state["qa"])
+    asked = len(state.qa)
     enough = False
     if asked < params.CHECK_MAX_QUESTIONS:
         question, enough = _ask(state, model)
         if asked < params.CHECK_MIN_QUESTIONS or (not enough and question):
-            state["qa"].append({"q": question, "a": ""})
-            store.save(engine, session_id, "running", state)
+            state.qa.append(QA(q=question))
+            _save(engine, session_id, "running", state)
             return _public(state, settings)
     raw = model(
         _messages(
@@ -274,15 +316,15 @@ def answer(
         JUDGE_SCHEMA,
     )
     level, kept = proposed_level(state, json.loads(raw).get("judgements", []))
-    state["result"] = {
-        "skill": state["skill"],
-        "proposed_level": level,
-        "met": kept,
-        "model": settings.agent_model,
-        "engine": f"{settings.agent_model} (schema-constrained), quotes checked in code",
-        "note": f"Judged against {state['levels_source']}.",
-    }
-    store.save(engine, session_id, "done", state)
+    state.result = CheckResult(
+        skill=state.skill,
+        proposed_level=level,
+        met=kept,
+        model=settings.agent_model,
+        engine=f"{settings.agent_model} (schema-constrained), quotes checked in code",
+        note=f"Judged against {state.levels_source}.",
+    )
+    _save(engine, session_id, "done", state)
     return _public(state, settings)
 
 
@@ -290,16 +332,16 @@ def decide(
     engine: Engine, settings: Settings, profile_id: str, session_id: str, accept: bool
 ) -> dict[str, Any]:
     state = _session(engine, profile_id, session_id)
-    if state["result"] is None or state["decided"] is not None:
+    if state.result is None or state.decided is not None:
         raise CheckError("nothing to decide for this check")
-    level = state["result"]["proposed_level"]
-    if accept and level > state["current"]:
+    level = state.result.proposed_level
+    if accept and level > state.current:
         found = get_profile(engine, profile_id)
         if found is None:
             raise CheckError("profile not found")
         data, _ = found
-        quotes = "; ".join(j["quote"] for j in state["result"]["met"] if j["verdict"] == "yes")
-        data.skills[state["skill"]] = SkillClaim(
+        quotes = "; ".join(j.quote for j in state.result.met if j.verdict == "yes")
+        data.skills[state.skill] = SkillClaim(
             level=level,
             evidence=quotes,
             source="agent_check",
@@ -311,10 +353,10 @@ def decide(
             engine,
             profile_id,
             "level_changed",
-            state["skill"],
-            state["current"],
+            state.skill,
+            state.current,
             {"level": level, "source": "agent_check"},
         )
-    state["decided"] = "accepted" if accept else "declined"
-    store.save(engine, session_id, "done", state)
+    state.decided = "accepted" if accept else "declined"
+    _save(engine, session_id, "done", state)
     return _public(state, settings)
