@@ -7,6 +7,8 @@ privacy delete finds this table. Nothing here judges a person: events only recor
 """
 
 import json
+from collections.abc import Callable
+from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from typing import TYPE_CHECKING, Any, Literal, get_args
 
@@ -120,77 +122,96 @@ def _badge(badge_id: str, title: str, event: dict[str, Any], rule: str) -> dict[
     }
 
 
+@dataclass
+class _Progress:
+    """What the person's events say so far, replayed in order."""
+
+    essentials: dict[str, int]  # essential skill -> the level its tier needs
+    study_hours: dict[str, float]  # course id -> hours, for the plan's study steps
+    practice: list[tuple[str, int]]  # (skill, target level) of the plan's practice steps
+    has_plan: bool
+    done: set[str] = field(default_factory=set)
+    levels: dict[str, int] = field(default_factory=dict)
+
+    def essentials_met(self) -> bool:
+        return bool(self.essentials) and all(
+            self.levels.get(s, 0) >= need for s, need in self.essentials.items()
+        )
+
+    def halfway(self) -> bool:
+        total = sum(self.study_hours.values())
+        done = sum(h for c, h in self.study_hours.items() if c in self.done)
+        return total > 0 and done >= total / 2
+
+    def complete(self) -> bool:
+        return (
+            self.has_plan
+            and bool(self.study_hours or self.practice)
+            and all(c in self.done for c in self.study_hours)
+            and all(self.levels.get(s, 0) >= t for s, t in self.practice)
+        )
+
+
+@dataclass(frozen=True)
+class _StateBadge:
+    """A badge that describes the present: shown while `holds` is true, dated by the event that
+    last made it true."""
+
+    id: str
+    title: str
+    rule: str
+    holds: Callable[[_Progress], bool]
+
+
+STATE_BADGES = (
+    _StateBadge("essentials_ready", "Essentials ready", ESSENTIALS_RULE, _Progress.essentials_met),
+    _StateBadge("halfway", "Halfway", HALFWAY_RULE, _Progress.halfway),
+    _StateBadge("plan_complete", "Plan complete", COMPLETE_RULE, _Progress.complete),
+)
+
+
 def badges(
     pack: "Pack", events: list[dict[str, Any]], destination: str | None, plan: "Pathway | None"
 ) -> list[dict[str, Any]]:
     role = pack.destination_roles.get(destination) if destination else None
-    required = (
-        {r.skill for r in role.requires}
-        if role
-        else {r.skill for d in pack.destination_roles.values() for r in d.requires}
+    roles = [role] if role else list(pack.destination_roles.values())
+    required = {r.skill for d in roles for r in d.requires}
+    state = _Progress(
+        essentials={
+            r.skill: params.ROLE_TIER_LEVEL[r.tier]
+            for r in (role.requires if role else [])
+            if r.essential
+        },
+        study_hours={s.course.id: s.hours for s in plan.steps} if plan else {},
+        practice=[(p.skill, p.target_level) for p in plan.practice_steps] if plan else [],
+        has_plan=plan is not None,
     )
-    essentials = {r.skill: r for r in role.requires if r.essential} if role else {}
-    needed = {r.skill: r for r in role.requires} if role else {}
-    study_hours = {s.course.id: s.hours for s in plan.steps} if plan else {}
-    total_hours = sum(study_hours.values())
-    practice = [(p.skill, p.target_level) for p in plan.practice_steps] if plan else []
-
-    done: set[str] = set()
-    levels: dict[str, int] = {}
     out: list[dict[str, Any]] = []
-    first_step = False
-    since: dict[str, dict[str, Any] | None] = {
-        "essentials": None,
-        "halfway": None,
-        "complete": None,
-    }
-
-    def state() -> dict[str, bool]:
-        essentials_met = bool(essentials) and all(
-            levels.get(s, 0) >= params.ROLE_TIER_LEVEL[needed[s].tier] for s in essentials
-        )
-        hours_done = sum(h for c, h in study_hours.items() if c in done)
-        return {
-            "essentials": essentials_met,
-            "halfway": total_hours > 0 and hours_done >= total_hours / 2,
-            "complete": bool(plan)
-            and (bool(study_hours) or bool(practice))
-            and all(c in done for c in study_hours)
-            and all(levels.get(s, 0) >= t for s, t in practice),
-        }
-
+    since: dict[str, dict[str, Any] | None] = {b.id: None for b in STATE_BADGES}
     for event in events:
         kind, ref = event["kind"], event["ref"]
         if kind == "course_done":
-            done.add(ref)
-            if not first_step:
-                first_step = True
+            if not any(b["id"] == "first_step" for b in out):  # the first ever, kept
                 out.append(_badge("first_step", "First step", event, FIRST_STEP_RULE))
+            state.done.add(ref)
         elif kind == "course_undone":
-            done.discard(ref)
+            state.done.discard(ref)
         elif kind == "level_changed":
-            after = (event["after"] or {}).get("level")
-            before = event["before"]
+            after, before = (event["after"] or {}).get("level"), event["before"]
             if after is not None:
-                levels[ref] = after
+                state.levels[ref] = after
                 if before is not None and after > before and ref in required:
                     name = pack.skills[ref].name if ref in pack.skills else ref
                     out.append(
                         _badge(f"skill_up:{event['id']}", f"Skill up: {name}", event, SKILL_UP_RULE)
                     )
-        now = state()
-        for key in since:
-            if not now[key]:
-                since[key] = None
-            elif since[key] is None:
-                since[key] = event
-    titles = {
-        "essentials": ("essentials_ready", "Essentials ready", ESSENTIALS_RULE),
-        "halfway": ("halfway", "Halfway", HALFWAY_RULE),
-        "complete": ("plan_complete", "Plan complete", COMPLETE_RULE),
-    }
-    for key, made_true in since.items():
+        for b in STATE_BADGES:
+            if not b.holds(state):
+                since[b.id] = None
+            elif since[b.id] is None:
+                since[b.id] = event
+    for b in STATE_BADGES:
+        made_true = since[b.id]
         if made_true is not None:
-            badge_id, title, rule = titles[key]
-            out.append(_badge(badge_id, title, made_true, rule))
+            out.append(_badge(b.id, b.title, made_true, b.rule))
     return out

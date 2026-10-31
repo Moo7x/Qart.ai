@@ -96,7 +96,7 @@ def role_targets(pack: Pack) -> list[SdgRole]:
 
 def sdg_matrix(pack: Pack, pathway: Pathway) -> SdgMatrix:
     role = pack.destination_roles[pathway.role_id]
-    gap_skills = [r.skill for r in role.requires if r.skill in pathway.study_levels]
+    gap_skills = [r.skill for r in role.requires if r.skill in pathway.gap_skills]
     practised = {p.skill for p in pathway.practice_steps}
     hours: dict[str, float] = defaultdict(float)
     steps: dict[str, list[str]] = defaultdict(list)

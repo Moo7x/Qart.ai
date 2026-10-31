@@ -160,6 +160,11 @@ class Pathway:
     adjustments: list[Adjustment]
     free_share_basis: str = FREE_SHARE_BASIS
 
+    @property
+    def gap_skills(self) -> set[str]:
+        """The role's skills the person is below on today: the skills this plan is for."""
+        return set(self.study_levels)
+
 
 def pathway_out(path: Pathway) -> dict[str, Any]:
     """The plan as the API returns it, with the C3 field names unchanged."""
