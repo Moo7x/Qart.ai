@@ -27,6 +27,28 @@ function arrow(before: number, after: number): string {
   return '='
 }
 
+/** One sentence on what the test value changed, so the effect is seen at once. */
+function Summary({ result }: { result: EvidenceTestOut }) {
+  const before = new Map(result.before.roles.map((r) => [r.role_id, r]))
+  const moved = result.after.roles.filter((r) => before.get(r.role_id)?.fit !== r.fit)
+  const reordered = result.after.roles.some((r) => before.get(r.role_id)?.rank !== r.rank)
+  const parts: string[] = []
+  for (const r of moved.slice(0, 3)) {
+    const b = before.get(r.role_id)
+    if (b) parts.push(`${r.title} fit ${b.fit.toFixed(1)} → ${r.fit.toFixed(1)}`)
+  }
+  if (result.weights.length) parts.push(`${result.weights.length} skill weight${result.weights.length === 1 ? '' : 's'} moved`)
+  if (result.pathway && result.pathway.fit_after_before !== result.pathway.fit_after_after) parts.push(`plan fit ${result.pathway.fit_after_before.toFixed(1)} → ${result.pathway.fit_after_after.toFixed(1)}`)
+  if ((result.forecast ?? []).length) parts.push(`${result.forecast?.length} forecast categor${result.forecast?.length === 1 ? 'y' : 'ies'} changed`)
+  parts.push(reordered ? 'the role order changed' : 'the role order stayed the same')
+  return (
+    <p className="m-0 rounded-xl bg-[#f1edff] px-4 py-3 text-[14px] font-medium text-ink">
+      {moved.length || result.weights.length || (result.forecast ?? []).length ? 'What changed: ' : 'Nothing moved: this figure is not used by your roles. Try the whole occupation or a job-market trend. '}
+      {parts.join(' · ')}.
+    </p>
+  )
+}
+
 export function ChangeTest() {
   const { profileId, scenario } = useJourney()
   const matches = useApi<MatchesResponse>(profileId ? `/api/profiles/${profileId}/matches?scenario=${scenario}` : null)
@@ -146,6 +168,7 @@ export function ChangeTest() {
       {result && (
         <div className="flex flex-col gap-3 rounded-md border-2 border-dashed border-estimate p-3">
           <span className="tag self-start bg-estimate-bg text-estimate">{result.label}</span>
+          <Summary result={result} />
           <div>
             <span className="cap">Qart forecast categories that changed</span>
             {(result.forecast ?? []).length === 0 ? (
@@ -164,7 +187,7 @@ export function ChangeTest() {
                   {result.after.roles.map((r) => {
                     const b = ranksBefore.get(r.role_id)
                     return (
-                      <tr key={r.role_id} className="border-t border-line">
+                      <tr key={r.role_id} className={`border-t border-line ${b && (b.fit !== r.fit || b.rank !== r.rank) ? 'bg-[#f1edff] font-semibold text-violet' : ''}`}>
                         <td className="py-1 pr-2 font-mono">{r.rank}</td>
                         <td className="py-1 pr-2">{r.title}</td>
                         <td className="py-1 pr-2 font-mono text-graphite">{b ? `${b.fit.toFixed(1)} → ${r.fit.toFixed(1)}` : r.fit.toFixed(1)}</td>
