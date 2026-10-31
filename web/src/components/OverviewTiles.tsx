@@ -5,6 +5,7 @@ import type { RadarOut } from '../apiTypes'
 import { useJourney } from '../state'
 import type { ChangesResponse, MatchesResponse, ProgressResponse, Run } from '../types'
 import { Label, ScenarioSwitch, SCENARIO_TEXT, VividNumber, VividTile } from './atoms'
+import { ChangePill, Sparkline } from './MiniCharts'
 import { ScoreWhy } from './ScoreWhy'
 import { Loading, Problem } from './ui'
 
@@ -91,7 +92,11 @@ export function OverviewTiles() {
             <div key={s.id} className="flex flex-col gap-1">
               <span className="flex flex-wrap items-end gap-2.5">
                 <VividNumber value={`${Math.round(last.value * 100) / 100}${s.unit.startsWith('%') ? '%' : ` ${s.unit}`}`} size={i === 0 ? 64 : 28} />
-                <span className="pb-1"><Label kind={s.kind === 'observed' ? 'observed' : 'assumption'} /></span>
+                <span className="flex items-center gap-2 pb-1">
+                  <Label kind={s.kind === 'observed' ? 'observed' : 'assumption'} />
+                  <Sparkline points={s.points} label={s.title} />
+                  <ChangePill points={s.points} unit={s.unit} />
+                </span>
               </span>
               <span className="text-sm leading-snug text-[#33402a]">{s.title} · {source?.name ?? s.evidence[0]?.source_id ?? ''} · {last.period}</span>
             </div>

@@ -48,8 +48,6 @@ def occupation_market(soc: str, signals: list[Signal]) -> list[dict[str, Any]]:
             "source": source,
             "period": latest,
             "direction": signal.direction,
-            "unit": signal.unit,
-            "points": [p.model_dump() for p in signal.points],
         }
 
     if occupation and occupation.isco:

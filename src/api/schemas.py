@@ -10,8 +10,7 @@ from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field
 
-from src.evidence.field import Occupation
-from src.evidence.signals import Point, Signal
+from src.evidence.signals import Signal
 from src.match.engine import RequirementScore
 from src.pack import CurrentRole, FitCheck
 from src.pathway.planner import PracticeStep
@@ -341,78 +340,3 @@ class RadarOut(BaseModel):
     field_signals: list[Signal]
     scenario: str
     scenario_label: str
-
-
-# --- /work-today: the person's current job, its tasks and the four kinds of evidence ---------
-
-
-class TaskUse(BaseModel):
-    """Observed AI use of one O*NET task (Anthropic Economic Index), with its period."""
-
-    share: float | None
-    automation: float | None
-    augmentation: float | None
-    share_local: float | None
-    period: str
-    url: str
-
-
-class WorkTask(BaseModel):
-    text: str
-    task: str | None  # O*NET task id; None for an ILO task-list item
-    skill: str | None  # the linked skill (declared mapping, an assumption); None when not linked
-    skill_name: str | None
-    observed_use: TaskUse | None  # missing is not zero
-    exposure_score: float | None  # ILO task score 0–1 (estimate); None for O*NET tasks
-    you_do_this: bool
-    quote: str
-    importance: float | None
-
-
-class CurrentJob(BaseModel):
-    id: str
-    title: str
-    soc: str
-    impact: Literal["high", "medium", "low"]
-    impact_text: str
-    source: str
-
-
-class Exposure(BaseModel):
-    isco: str
-    title: str
-    mean: float
-    gradient: str
-    url: str
-    published: str | None
-
-
-class WorkSources(BaseModel):
-    tasks: str
-    observed_use: str
-    exposure: str
-    expert: str
-    skill_match: str
-
-
-class MarketItem(BaseModel):
-    """Job-market evidence for the occupation: observed, with source, latest period, direction."""
-
-    kind: Literal["observed"]
-    text: str
-    source: str
-    period: str
-    direction: Literal["rising", "weakening", "stable", "insufficient", "expert"]
-    unit: str
-    points: list[Point]  # the observed series, oldest first, for the sparkline
-
-
-class WorkTodayOut(BaseModel):
-    role: CurrentJob
-    occupation: Occupation | None
-    market: list[MarketItem]
-    exposure: Exposure | None
-    deployment: None  # no source of reported deployment is collected yet
-    tasks: list[WorkTask]
-    task_source: Literal["onet", "ilo"]
-    sources: WorkSources

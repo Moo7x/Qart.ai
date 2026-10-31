@@ -12,17 +12,12 @@ Pure: rows from the evidence store and the pack go in, a dict for the API comes 
 such as "being automated" is produced; the summary only restates what each source shows.
 """
 
-from collections.abc import Mapping
 from typing import Any
 
 from src.collectors.ilo import OCCUPATION_SERIES, TASK_SERIES, gradient_of
 from src.evidence.field import field_profile
-from src.evidence.signals import build_signals
-from src.journey.store import SkillClaim
-from src.match.decision import is_evidenced
 from src.match.evidence import IMPORTANCE_SERIES
-from src.match.outlook import occupation_market
-from src.pack import CurrentRole, DestinationRole, Pack
+from src.pack import DestinationRole, Pack
 
 Row = dict[str, Any]
 AEI = "anthropic_economic_index"
@@ -152,89 +147,3 @@ def _summary(n: int, observed: int, exposure: dict[str, Any] | None, impact: str
     parts.append(f"TalentCorp rates the role {impact} impact (expert view).")
     parts.append("No source here reports organisations deploying AI for these tasks yet.")
     return " ".join(parts)
-
-
-WORK_TASKS_SHOWN = 5
-
-
-def work_view(
-    pack: Pack,
-    role: CurrentRole,
-    rows: list[Row],
-    claims: Mapping[str, SkillClaim],
-    impact_text: str,
-) -> dict[str, Any]:
-    """ "Your work today": the person's current job, its tasks and the four kinds of evidence.
-
-    Tasks are the O*NET tasks the pack links to skills for the job's occupation (observed AI use
-    joins on them). When none are linked, the ILO's task list for the occupation is shown instead,
-    with its exposure score: those tasks carry no observed AI use and no skill link, and say so.
-    "You do this" marks a task whose skill the person claims with a CV sentence (an assumption:
-    the claim, not the task, is in the CV).
-    """
-    latest = _latest(rows)
-    exposure = _exposure(role.soc, latest)
-    linked = _linked_tasks(pack, role.soc, list(pack.skills), latest)
-    tasks: list[dict[str, Any]] = []
-    for entry in linked:
-        backed = [s for s in entry["skill_ids"] if is_evidenced(claims.get(s))]
-        skill = backed[0] if backed else entry["skill_ids"][0]
-        tasks.append(
-            {
-                "text": entry["text"],
-                "task": entry["task"],
-                "skill": skill,
-                "skill_name": pack.skills[skill].name,
-                "observed_use": entry["observed_use"],
-                "exposure_score": None,
-                "you_do_this": bool(backed),
-                "quote": claims[skill].evidence if backed else "",
-                "importance": (entry["importance"] or {}).get("value"),
-            }
-        )
-    task_source = "onet"
-    if not tasks and exposure:
-        task_source = "ilo"
-        tasks = [
-            {
-                "text": t["text"],
-                "task": None,
-                "skill": None,
-                "skill_name": None,
-                "observed_use": None,
-                "exposure_score": t["score"],
-                "you_do_this": False,
-                "quote": "",
-                "importance": None,
-            }
-            for t in exposure["tasks"]
-        ]
-    tasks.sort(key=lambda t: (not t["you_do_this"], -(t["importance"] or t["exposure_score"] or 0)))
-    occupation = field_profile().occupation(role.soc)
-    return {
-        "role": {
-            "id": role.id,
-            "title": role.title,
-            "soc": role.soc,
-            "impact": role.impact,
-            "impact_text": impact_text,
-            "source": f"TalentCorp (2024) GBS study, PDF p. {role.page}",
-        },
-        "occupation": occupation.model_dump() if occupation else None,
-        "market": occupation_market(role.soc, build_signals(rows)),
-        "exposure": {k: v for k, v in exposure.items() if k != "tasks"} if exposure else None,
-        "deployment": None,
-        "tasks": tasks[:WORK_TASKS_SHOWN],
-        "task_source": task_source,
-        "sources": {
-            "tasks": (
-                pack.tasks.source + " · " + pack.tasks.licence
-                if task_source == "onet"
-                else "ILO Working Paper 140 (2025), CC BY 4.0: the occupation's task list"
-            ),
-            "observed_use": "Anthropic Economic Index, sampled Claude conversations (CC-BY)",
-            "exposure": "ILO Working Paper 140 (2025), CC BY 4.0, via the ESCO–O*NET crosswalk",
-            "expert": f"TalentCorp (2024) GBS study, PDF p. {role.page}",
-            "skill_match": "Which task shows which skill is our declared mapping (assumption).",
-        },
-    }

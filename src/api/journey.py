@@ -11,7 +11,7 @@ from sqlalchemy import Engine, select
 
 from src import params
 from src.api.evidence import get_engine, get_settings
-from src.api.schemas import FutureOut, MatchesOut, RadarOut, TracksOut, WorkTodayOut
+from src.api.schemas import FutureOut, MatchesOut, RadarOut, TracksOut
 from src.changes.store import baseline_cutoff
 from src.collectors.talentcorp import load_extraction
 from src.config import REPO_ROOT, Settings
@@ -44,7 +44,7 @@ from src.match.explain import explain, facts
 from src.match.outlook import in_demand_skills, role_outlook
 from src.match.pay import role_pay
 from src.match.radar import radar
-from src.match.tasks import task_view, work_view
+from src.match.tasks import task_view
 from src.occupations.catalogue import catalogue_table
 from src.pack import Pack, load_pack
 from src.pathway.planner import Pathway, PathwayOut, apply_progress, pathway_out
@@ -494,17 +494,6 @@ def role_tasks(
         raise HTTPException(status_code=404, detail="unknown destination role")
     impact = f"TalentCorp rates it {IMPACT_MEANING[role.impact]}."
     return task_view(person.pack, role, person.rows, impact)
-
-
-@router.get("/profiles/{profile_id}/work-today", response_model=WorkTodayOut)
-def work_today(profile_id: str, engine: Engine = Depends(get_engine)) -> dict[str, Any]:
-    """The current job: its tasks and the four kinds of task-change evidence, kept apart."""
-    person = require_person(engine, profile_id)
-    current = person.pack.current_roles.get(person.data.current_role)
-    if current is None:
-        raise HTTPException(status_code=409, detail="no current job in this profile")
-    impact = f"TalentCorp rates it {IMPACT_MEANING[current.impact]}."
-    return work_view(person.pack, current, person.rows, person.data.skills, impact)
 
 
 def _top_roles(
