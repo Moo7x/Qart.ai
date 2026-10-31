@@ -96,6 +96,17 @@ def _relevant(pack: Pack, match: RoleMatch) -> set[str]:
     return ids
 
 
+def _with_prerequisites(pack: Pack, course_id: str) -> set[str]:
+    ids: set[str] = set()
+    stack = [course_id]
+    while stack:
+        course = stack.pop()
+        if course not in ids:
+            ids.add(course)
+            stack += pack.courses[course].requires
+    return ids
+
+
 def compare_plans(
     pack: Pack,
     match: RoleMatch,
@@ -112,7 +123,11 @@ def compare_plans(
             break
         greedy.add(step.course.id)
     plans = {"greedy": _evaluate(pack, match, levels, greedy, evidence)}
-    relevant = sorted(_relevant(pack, match))
+    # A course that does not fit the budget even with only its prerequisites can be in no
+    # feasible plan, so leaving it out keeps the search exact and its size small.
+    relevant = sorted(
+        c for c in _relevant(pack, match) if _hours(pack, _with_prerequisites(pack, c)) <= budget
+    )
     exact = len(relevant) <= params.PLAN_MAX_EXACT_COURSES
     if exact:
         best_key: tuple[float, ...] | None = None

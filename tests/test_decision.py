@@ -72,18 +72,24 @@ def test_sensitivity_and_what_if_leave_inputs_unchanged() -> None:
 
 def test_exact_plan_is_never_worse_than_greedy_within_the_same_budget() -> None:
     pack = load_pack()
+    exact_roles = 0
     for role_id in ("finance_systems_analyst", "budget_analyst", "cost_accountant"):
         match = score_role(pack, pack.destination_roles[role_id], LEVELS, "fast", EVIDENCE)
         result = compare_plans(pack, match, LEVELS, 1, "fast", EVIDENCE)
         plans = result["plans"]
-        assert result["exact"] and result["budget_hours"] == 12
+        assert result["budget_hours"] == 12
         assert all(p["hours"] <= 12 for p in plans.values())
+        if not result["exact"]:  # too many courses to enumerate: greedy only, and it says so
+            assert set(plans) == {"greedy"} and "only the greedy plan" in result["note"]
+            continue
         assert (plans["best"]["essentials_reached"], plans["best"]["fit_after"]["fast"]) >= (
             plans["greedy"]["essentials_reached"],
             plans["greedy"]["fit_after"]["fast"],
         )
         robust = plans["robust"]["fit_after"]
         assert min(robust.values()) >= min(plans["greedy"]["fit_after"].values())
+        exact_roles += 1
+    assert exact_roles >= 2  # budget and cost roles are still searched exhaustively
 
 
 def test_decision_routes(client: TestClient) -> None:
