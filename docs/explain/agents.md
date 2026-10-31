@@ -3,7 +3,7 @@
 **What it does.** For one skill the person still needs, the scout finds the exact part of a
 checked video or article that serves it: a YouTube link that starts at the right second, or an
 article link that opens at the right passage (`#:~:text=`). It finds and points; it does not
-teach. Open it from Overview's top-role card ("Find the best parts for …").
+teach. Open it from My plan: the AI-brain button beside each video and article.
 
 **How it works.** One agent on `AGENT_MODEL` (gpt-4.1-mini) with four code tools
 (`src/agents/scout.py`):
@@ -34,7 +34,8 @@ live run uses them, labelled "checked on <date>". No caption or article text is 
 
 **What it does.** A senior GBS finance reviewer (character:
 `data/agents/progress_check.character.yaml`) asks two to four questions, one at a time, about work
-the person has done, then proposes a level. Open it from Overview ("Check my progress in …").
+the person has done, then proposes a level. The API (`/api/profiles/{id}/checks`) remains, but no
+page opens it since 2026-11-01 (removed from the Overview at the user's request).
 
 **How a level is proposed** (`src/agents/check.py`). The model judges each level above the
 current one as yes / partly / no and quotes the person's words; it never writes the level. Code

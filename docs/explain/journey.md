@@ -19,12 +19,20 @@ and plan stops use that same snapshot. Nothing here changes requirements, fit sc
 `/start` is the landing page (`pages/onboarding/Landing.tsx`, the decorative landscape in
 `components/HeroScene.tsx`) with a one-step CV popup over it (`CvPopup.tsx`, `CvStep.tsx`): upload a
 CV or use the form, see what was read (every level a claim), and "Continue" saves the profile and
-opens the Overview. The Overview opens with "Your skills as AI moves": the radar, and beside it
-"What is changing in your current job" (`components/JobHub.tsx`, compact: the job card above four
-evidence cards, each opening its source; not shown without a current job). Then "Increase the accuracy of your results" (`components/SkillSurvey.tsx`): a popup asks
-the up to three unrated skills whose answer would change the person's options most
-(`GET /questions`); each answer is saved as their own rating (`POST /answer`) and the radar, tiles
-and My options use it at once. Then "Trends" (`components/OverviewTrends.tsx`, from `GET /api/trends`):
+opens the Overview (`pages/Overview.tsx`, always the moderate scenario, `OVERVIEW_SCENARIO`). A
+summary line (current role → destination) with fit, skills rated and plan steps done, then three
+columns that end level. (1) "Where you are" (`components/JobHub.tsx`, not shown without a current
+job): the job on a dark card (TalentCorp impact with the O*NET tasks, the pack's summary, routes
+out) and four small charts (AI use donut, ILO exposure gradient, DOSM employment line, MyCOL list),
+each opening its source. (2) "Your skills" (`components/SkillRadar.tsx`): a radar of the role's
+skills on the 0–5 scale, the claimed level against the needed level; an unrated skill's label (on
+a phone, the list under the radar) rates it, and "Rate next skill" opens a popup
+(`components/SkillSurvey.tsx`) with the up to three unrated skills whose answer would change the
+person's options most (`GET /questions`). Each answer is saved as their own rating (`POST /answer`)
+and the whole Overview reloads with it. Below it, the page's main action: "Next step: compare the
+roles that fit you" (My options). (3) "Where you're heading" (`components/OverviewGlance.tsx`): the
+destination's fit ring with its range, essentials still short, Why? and All ranked roles, and the
+biggest raise with the other ways to raise the fit. Then "Trends" (`components/OverviewTrends.tsx`, from `GET /api/trends`):
 skills rising or declining under the chosen scenario (their weight change, an assumption applied to
 observed AI use) and job groups rising or declining in DOSM's shares of employees and of online job
 ads (observed). "More" opens a popup with the numbers behind the row: for a skill, its weight change
@@ -110,8 +118,9 @@ of employees for the role's MASCO major group (reached through its ISCO-08 code)
 backtest result, the DOSM job-ad share where DOSM names the occupation, which of the role's skills
 TalentCorp lists as in demand, and whether MyCOL 2024/2025 lists the occupation as critical.
 
-**Radar.** `src/match/radar.py` (Overview) draws the person's chosen role, or best-fitting role
-until one is chosen: claimed level, needed level and level after the pathway (estimate) per skill,
+**Skill levels.** `src/match/radar.py` (`GET /radar`, shown on the Overview as a level table, no
+longer a radar chart) gives the person's chosen role, or best-fitting role until one is chosen:
+claimed level, needed level and level after the pathway (estimate) per skill,
 with the scenario emphasis (assumption), the observed AI use behind it and TalentCorp's in-demand
 flag (expert) kept apart. Below it are the existing field signals for the person's current
 occupation (its DOSM major group, job ads, AI use), so two CVs get a different radar focus.
