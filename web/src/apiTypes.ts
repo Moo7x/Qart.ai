@@ -820,6 +820,8 @@ export type TrackCourse = {
   planned: boolean
   done: boolean
   fit_check: FitCheck | null
+  ai_quote: string | null
+  match: number | null
 }
 
 export type TrackNode = {
@@ -852,6 +854,8 @@ export type TrackVideo = {
   url: string
   minutes: number
   published: string
+  ai_quote: string | null
+  match: number | null
 }
 
 export type TracksOut = {

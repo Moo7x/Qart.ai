@@ -18,7 +18,7 @@ from src.config import REPO_ROOT  # noqa: E402
 
 SAMPLES = REPO_ROOT / "data" / "samples"
 OUT = SAMPLES / "cv_files"
-SECTIONS = {"Profile", "Experience", "Education", "Internship", "Skills", "Interests"}
+SECTIONS = {"Profile", "Experience", "Education", "Internship", "Projects", "Skills", "Interests"}
 
 
 def write(name: str) -> Path:
@@ -42,5 +42,5 @@ def write(name: str) -> Path:
 
 
 if __name__ == "__main__":
-    for sample in ("nur", "kavitha", "hafiz", "mei", "daniel"):
+    for sample in ("nur", "kavitha", "hafiz", "mei", "daniel", "aina"):
         print(write(sample).relative_to(REPO_ROOT))

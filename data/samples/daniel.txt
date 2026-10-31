@@ -10,20 +10,20 @@ SYNTHETIC SAMPLE CV FOR THE QART.AI DEMO. THIS PERSON DOES NOT EXIST.
 
 Profile
 Accounts Payable Analyst with 5 years in a global business services centre in Penang, processing
-supplier invoices for entities in six countries. I want to move into procurement or reporting work
-and to understand how AI will change accounts payable.
+supplier invoices for entities in six countries. I want to understand how AI will change accounts
+payable and move towards reporting and data work.
 
 Experience
 Accounts Payable Analyst, regional GBS centre, Penang (2020 – present)
-- Processed about 2,500 supplier invoices a month in SAP and checked each one against the purchase order and goods receipt (three-way match).
-- Reconciled supplier statements to the AP ledger every month and cleared open differences.
+- Processed about 2,500 supplier invoices a month in SAP and matched each one to the purchase order and goods receipt.
+- Reconciled supplier statements and the AP sub-ledger to the general ledger every month and cleared open differences.
+- Applied incoming payments and refunds to the right supplier accounts and cleared unapplied cash.
 - Prepared the month-end accrual listing and the AP ageing report for the finance controller.
-- Answered supplier queries on payment status and resolved blocked invoices with buyers.
-- Kept the vendor master data clean: checked bank details before changes and removed duplicate suppliers.
+- Wrote SQL queries to pull invoice and payment data from the reporting database.
+- Kept the AP data clean: fixed duplicate and missing records in the invoice database each week.
 - Built a Power BI dashboard of overdue invoices and payment cycle time for the weekly AP review.
-- Wrote simple SQL queries to pull invoice lists from the reporting database.
-- Followed the payment approval controls and supported the yearly internal audit of payables.
-- Trained two new team members on the invoice process and coordinated with colleagues in three time zones.
+- Set up Malaysian e-invoices for local suppliers under the LHDN MyInvois rules.
+- Automated the weekly payment-run checklist with an Excel macro.
 
 Accounts Assistant, manufacturing company, Butterworth (2018 – 2020)
 - Posted supplier invoices and payments.
@@ -33,8 +33,7 @@ Education
 Bachelor of Accounting, 2018
 
 Skills
-SAP FI-AP and MM, Microsoft Excel (pivot tables, XLOOKUP), Power BI, basic SQL, supplier communication.
-Tried ChatGPT to draft supplier emails.
+SAP FI-AP, Microsoft Excel (pivot tables, XLOOKUP, macros), Power BI, SQL, LHDN MyInvois e-invoicing.
 
 Interests
-Process improvement and data; green procurement and sustainable supply chains.
+Process improvement and data.

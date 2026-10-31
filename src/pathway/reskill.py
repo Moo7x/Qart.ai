@@ -31,7 +31,7 @@ from src.journey.store import SkillClaim
 from src.match.engine import RoleMatch
 from src.pack import Pack
 from src.pathway.planner import AiBasics, Pathway
-from src.pathway.tracks import _article, _course, _skill_nodes, _status, _video
+from src.pathway.tracks import _skill_nodes, _status
 from src.resources import Resources, ai_target_tasks, load_ai_resources
 
 Row = dict[str, Any]
@@ -104,6 +104,60 @@ def mode_for(ai_role: str, effective: float | None) -> str:
     return "keep"
 
 
+def _ai_course(r: Row, done: list[str]) -> Row:
+    return {
+        "id": r["id"],
+        "title": r["title"],
+        "provider": r["provider"],
+        "url": r["url"],
+        "minutes": r["minutes"],
+        "level": "AI for this skill",
+        "planned": False,
+        "done": r["id"] in done,
+        "fit_check": None,
+        "ai_quote": r["ai_quote"],
+        "match": r["score"],
+    }
+
+
+def _ai_video(r: Row) -> Row:
+    return {
+        "id": r["id"],
+        "title": r["title"],
+        "channel": r["provider"],
+        "url": r["url"],
+        "minutes": r["minutes"],
+        "published": r["published"],
+        "ai_quote": r["ai_quote"],
+        "match": r["score"],
+    }
+
+
+def _basics_course(b: Row, done: list[str]) -> Row:
+    return {
+        "id": b["url"],
+        "title": b["title"],
+        "provider": b["provider"],
+        "url": b["url"],
+        "minutes": b["minutes"],
+        "level": f"AI basics: {b['topic']}",
+        "planned": False,
+        "done": b["url"] in done,
+        "fit_check": None,
+    }
+
+
+def _basics_video(b: Row) -> Row:
+    return {
+        "id": b["url"],
+        "title": b["title"],
+        "channel": b["provider"],
+        "url": b["url"],
+        "minutes": b["minutes"],
+        "published": f"AI basics: {b['topic']}",
+    }
+
+
 def _why(mode: str, effective: float | None, basis: str, model_version: int | None) -> Row:
     source = {
         "observed": "Anthropic Economic Index, automation-style share of task conversations",
@@ -168,10 +222,17 @@ def adapt_nodes(
                 }
             )
             continue
-        courses = [_course(c, set(), done or []) for c in pack.courses_for(skill_id)]
-        # Resources about doing this skill's work with AI (checked; src/collectors/ai_resources.py).
-        # Without one the step says so instead of promising an AI version it cannot show.
+        # The step's material is the AI-adopted material: checked courses and videos on doing
+        # this skill's work with AI (src/collectors/ai_resources.py), each with its AI quote and
+        # ranking match. A skill with none yet gets the AI basics in the same windows, labelled.
         ai_items = load_ai_resources().get(skill_id, [])
+        courses = [_ai_course(r, done or []) for r in ai_items if r["kind"] == "course"]
+        videos = [_ai_video(r) for r in ai_items if r["kind"] == "video"]
+        if not ai_items:
+            courses = [_basics_course(b, done or []) for b in basics or [] if b["kind"] == "course"]
+            videos = [_basics_video(b) for b in basics or [] if b["kind"] == "video"]
+        if not courses and not videos:
+            continue  # nothing checked to learn from for this skill yet: not a step of the path
         why = _why(mode, effective, basis, model_version)
         if not ai_items:
             why["text"] += (
@@ -192,8 +253,8 @@ def adapt_nodes(
                 "required": None,
                 "after": None,
                 "courses": courses,
-                "videos": [_video(v) for v in res.videos_for(skill=skill_id)],
-                "articles": [_article(a) for a in res.articles_for(skill=skill_id)],
+                "videos": videos,
+                "articles": [],  # no checked article on doing these skills with AI yet
                 "status": _status(courses),
                 "why": why,
                 "mode": mode,
@@ -307,16 +368,22 @@ def destination_path(
     # A new skill for the role is learned with its courses, and with AI from the start: the
     # checked resources on doing that skill's work with AI come first in the step.
     ai_all = load_ai_resources()
-    learn = [
-        {
-            **n,
-            "mode": "learn",
-            "ai_resources": ai_all.get(str(n["skill"]), []),
-            "ai_tasks": ai_target_tasks(str(n["skill"])),
-        }
-        for n in _skill_nodes(pack, res, match, path, done, False, rows)
-        + _skill_nodes(pack, res, match, path, done, True, rows)
-    ]
+    learn = []
+    for n in _skill_nodes(pack, res, match, path, done, False, rows) + _skill_nodes(
+        pack, res, match, path, done, True, rows
+    ):
+        ai_items = ai_all.get(str(n["skill"]), [])
+        learn.append(
+            {
+                **n,
+                "mode": "learn",
+                # The skill's AI-adopted courses and videos come first in the same windows.
+                "courses": [_ai_course(r, done) for r in ai_items if r["kind"] == "course"]
+                + n["courses"],
+                "videos": [_ai_video(r) for r in ai_items if r["kind"] == "video"] + n["videos"],
+                "ai_tasks": ai_target_tasks(str(n["skill"])),
+            }
+        )
     return {
         "id": "path",
         "title": f"Your path to {match.title}",

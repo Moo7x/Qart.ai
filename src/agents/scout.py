@@ -48,7 +48,7 @@ from src.agents.segments import (
 from src.config import Settings
 from src.http import client as http_client
 from src.pack import load_pack
-from src.resources import load_resources
+from src.resources import load_ai_resources, load_resources
 
 CACHE = AGENTS_DIR / "scout_cache.yaml"
 DIGIT = re.compile(r"\d")
@@ -123,6 +123,10 @@ class Scout:
             for a in res.articles_for(**by)
             if a.kind == "article"  # web pages and pages that refuse readers are not pointed into
         }
+        # The checked videos on doing this skill with AI (src/collectors/ai_resources.py) too.
+        for r in load_ai_resources().get(skill, []):
+            if r["kind"] == "video":
+                self.resources[r["id"]] = ("video", r["title"], r["url"])
         if resource_id in self.resources:  # the person asked about one video or article
             self.resources = {resource_id: self.resources[resource_id]}
         self.parts: dict[str, Part] = {}

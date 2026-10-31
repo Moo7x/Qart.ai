@@ -19,7 +19,7 @@ from src.agents.scout import run_scout
 from src.api.evidence import get_engine, get_settings
 from src.config import Settings
 from src.pack import load_pack
-from src.resources import load_resources
+from src.resources import load_ai_resources, load_resources
 
 router = APIRouter(prefix="/api")
 
@@ -55,7 +55,8 @@ def start_scout(
     if body.skill not in load_pack().skills and body.skill not in topics:
         raise HTTPException(status_code=422, detail="unknown skill")
     by = {"topic": body.skill} if body.skill in topics else {"skill": body.skill}
-    if not res.videos_for(**by) and not res.articles_for(**by):
+    ai_videos = [r for r in load_ai_resources().get(body.skill, []) if r["kind"] == "video"]
+    if not res.videos_for(**by) and not res.articles_for(**by) and not ai_videos:
         raise HTTPException(status_code=422, detail="no checked video or article for this skill")
     agent_engine = f"{settings.agent_model} agent" if settings.llm_configured else "ranking only"
     run_id = store.start(engine, "scout", body.skill, body.profile_id, agent_engine)

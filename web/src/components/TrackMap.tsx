@@ -79,55 +79,6 @@ const WHY_TAG: Record<SkillBasis['kind'], [string, string]> = {
   ai_trend: ['Where AI is taking this skill', 'bg-estimate-bg text-estimate'],
 }
 
-// Adapt steps: resources on doing this skill's work with AI, each with the two checked quotes.
-function aiPane(node: TrackNode): Pane[] {
-  // Adapt steps always have this pane; a step for a new skill has it when a checked AI resource
-  // exists for that skill, shown before the skill's courses.
-  if (!node.mode || node.mode === 'basics') return []
-  if (node.mode === 'learn' && !(node.ai_resources ?? []).length) return []
-  const items = node.ai_resources ?? []
-  return [{
-    key: 'ai',
-    title: 'Doing this with AI',
-    hint: 'Found for this skill’s most AI-affected tasks, ranked by our models, and checked: both quotes are on the page or in the video.',
-    body: <div className="flex flex-col gap-3">
-      {(node.ai_tasks ?? []).length > 0 && (
-        <div className="rounded-2xl bg-[#f1edff] px-3 py-2 text-[12px]">
-          <b>Searched for these tasks, where AI use is highest</b>{node.ai_use != null ? ` (${node.ai_use.toFixed(0)}% automation-style on this skill's tasks)` : ''}:
-          <ul className="m-0 mt-1 pl-4">{(node.ai_tasks ?? []).map((t) => <li key={t}>{t}</li>)}</ul>
-          <span className="text-graphite">Ranked by BGE-M3 and a reranker for both the skill and AI use, then a learned ranker; kept only when both quotes are found.</span>
-        </div>
-      )}
-      {items.length === 0 ? (
-      <div className="flex flex-col gap-2">
-        <p className="m-0 text-graphite">No checked resource on doing this skill with AI yet. {node.basics?.length ? 'Start with these AI basics; the courses beside cover the skill itself.' : 'The courses beside cover the skill itself.'}</p>
-        {(node.basics ?? []).length > 0 && (
-          <ul className="m-0 flex list-none flex-col gap-2 p-0">
-            {(node.basics ?? []).map((b) => (
-              <li key={b.url} className="flex flex-col gap-0.5">
-                <a href={b.url} target="_blank" rel="noopener noreferrer" className="font-medium text-void">{b.title} ↗</a>
-                <span className="font-mono text-[11px] text-graphite">AI basics · {b.topic} · {b.provider} · {b.kind} · {b.minutes} min</span>
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
-    ) : (
-      <ul className="m-0 flex list-none flex-col gap-3 p-0">
-        {items.map((r) => (
-          <li key={r.id} className="flex flex-col gap-1.5 rounded-2xl border border-[#ece6ff] bg-[#faf8ff] p-3">
-            <a href={r.url} target="_blank" rel="noopener noreferrer" className="font-medium text-void">{r.title} ↗</a>
-            <span className="font-mono text-[11px] text-graphite">{r.provider} · {r.kind === 'video' ? 'YouTube video' : 'course'} · {r.minutes} min · match {Math.round(100 * r.score)}%</span>
-            <span className="text-[12px] text-[#404040]"><b>The skill&rsquo;s work:</b> &ldquo;{r.skill_quote}&rdquo;</span>
-            <span className="text-[12px] text-[#404040]"><b>AI used on it:</b> &ldquo;{r.ai_quote}&rdquo;</span>
-          </li>
-        ))}
-      </ul>
-      )}
-    </div>,
-  }]
-}
-
 // Why this skill is on the plan at all, with its source (src/match/basis.py).
 function whyPane(node: TrackNode): Pane[] {
   if (!node.why) return []
@@ -153,19 +104,17 @@ function panes(node: TrackNode, done: string[], onToggle: (id: string) => void, 
   const practice = node.practice?.length ? [practicePane(node.practice, onSkip, paused)] : []
   // A step that adapts a skill to AI shows only the AI material: resources on doing this work
   // with AI (checked), or the AI basics when none is checked yet; never the skill's plain courses.
-  if (isAdapt(node)) return [...whyPane(node), ...aiPane(node)]
+  // A step that adapts a skill to AI: its three windows hold the AI-adopted material only.
+  const adapt = isAdapt(node)
   return [
-    ...whyPane(node),
-    ...aiPane(node),
+    ...(adapt ? [] : whyPane(node)),
     ...practice,
     {
       key: 'courses',
-      // On a step that adapts a skill to AI, the AI part is "Doing this with AI"; these courses
-      // cover the skill as it is done today, to refresh it.
-      title: node.mode === 'oversee' || node.mode === 'use_ai' ? 'The skill itself (without AI)' : 'Courses',
-      hint: node.mode === 'oversee' || node.mode === 'use_ai' ? 'Free and checked: the skill as it is done today. The AI version is in “Doing this with AI”.' : 'Free and checked. Courses marked “In your plan” count towards your hours and fit.',
+      title: 'Courses',
+      hint: adapt ? 'Free courses on doing this skill with AI, checked: the quote is on the course page.' : 'Free and checked. Courses marked “In your plan” count towards your hours and fit.',
       body: node.courses.length === 0 ? (
-        <p className="m-0 text-graphite">No verified free course for this yet. The videos and articles are a start; ask your L&amp;D team about paid options.</p>
+        <p className="m-0 text-graphite">{adapt ? 'No checked free course on doing this skill with AI yet.' : 'No verified free course for this yet. The videos and articles are a start; ask your L&D team about paid options.'}</p>
       ) : (
         <ul className="m-0 flex list-none flex-col gap-3 p-0">
           {node.courses.map((c) => {
@@ -173,7 +122,8 @@ function panes(node: TrackNode, done: string[], onToggle: (id: string) => void, 
             return (
               <li key={c.id} className="flex flex-col gap-1.5 border-b border-line pb-3 last:border-0">
                 <a href={c.url} target="_blank" rel="noopener noreferrer" className="font-medium text-void">{c.title} ↗</a>
-                <span className="font-mono text-[11px] text-graphite">{c.provider} · {c.minutes < 60 ? `${c.minutes} min` : `${(c.minutes / 60).toFixed(1)} h`} · {c.level}</span>
+                <span className="font-mono text-[11px] text-graphite">{c.provider} · {c.minutes < 60 ? `${c.minutes} min` : `${(c.minutes / 60).toFixed(1)} h`} · {c.level}{c.match != null ? ` · match ${Math.round(100 * c.match)}%` : ''}</span>
+                {c.ai_quote && <span className="rounded-lg bg-[#f1edff] px-2 py-1 text-[12px] text-[#3b2a99]"><b>AI used on this work:</b> &ldquo;{c.ai_quote}&rdquo;</span>}
                 {c.fit_check?.result === 'fits' && c.fit_check.quote && (
                   <span className="text-[11px] text-graphite">Fit checked automatically ({c.fit_check.by}, {c.fit_check.checked}) from the course page: &ldquo;{c.fit_check.quote}&rdquo;</span>
                 )}
@@ -194,7 +144,7 @@ function panes(node: TrackNode, done: string[], onToggle: (id: string) => void, 
     {
       key: 'videos',
       title: 'YouTube',
-      hint: `Channel, length and date checked ${checked}. Extra watching, not counted in your hours.`,
+      hint: adapt ? 'Videos on doing this skill with AI, checked against their captions.' : `Channel, length and date checked ${checked}. Extra watching, not counted in your hours.`,
       body: node.videos.length === 0 ? (
         <p className="m-0 text-graphite">No checked video for this yet.</p>
       ) : (
@@ -205,7 +155,8 @@ function panes(node: TrackNode, done: string[], onToggle: (id: string) => void, 
                 <img src={`https://i.ytimg.com/vi/${videoId(v.url)}/mqdefault.jpg`} alt="" width={112} height={63} loading="lazy" className="h-[63px] w-[112px] bg-mist object-cover" />
                 <span className="flex min-w-0 flex-col gap-0.5">
                   <span className="font-medium leading-snug">{v.title}</span>
-                  <span className="font-mono text-[11px] text-graphite">{v.channel} · {v.minutes} min · {v.published}</span>
+                  <span className="font-mono text-[11px] text-graphite">{v.channel} · {v.minutes} min · {v.published}{v.match != null ? ` · match ${Math.round(100 * v.match)}%` : ''}</span>
+                  {v.ai_quote && <span className="mt-1 rounded-lg bg-[#f1edff] px-2 py-1 text-[12px] text-[#3b2a99]"><b>AI used on this work:</b> &ldquo;{v.ai_quote}&rdquo;</span>}
                 </span>
               </a>
               <BrainButton label={`AI agent: open “${v.title}” at the key minute`} onClick={() => onAgent(v.id, v.title)} />
@@ -217,9 +168,9 @@ function panes(node: TrackNode, done: string[], onToggle: (id: string) => void, 
     {
       key: 'articles',
       title: 'Articles',
-      hint: `Pages from standards bodies, professional bodies and official docs, checked ${checked}.`,
+      hint: adapt ? 'Articles on doing this skill with AI.' : `Pages from standards bodies, professional bodies and official docs, checked ${checked}.`,
       body: node.articles.length === 0 ? (
-        <p className="m-0 text-graphite">No checked article for this yet.</p>
+        <p className="m-0 text-graphite">{adapt ? 'No checked article on doing this skill with AI yet.' : 'No checked article for this yet.'}</p>
       ) : (
         <ul className="m-0 flex list-none flex-col gap-2.5 p-0">
           {node.articles.map((a) => (

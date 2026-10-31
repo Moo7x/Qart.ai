@@ -183,6 +183,8 @@ class TrackCourse(BaseModel):
     planned: bool
     done: bool
     fit_check: FitCheck | None
+    ai_quote: str | None = None  # AI-adopted material: the checked sentence showing AI on the work
+    match: float | None = None  # its ranking match (learned ranker), 0-1
 
 
 class TrackVideo(BaseModel):
@@ -192,6 +194,8 @@ class TrackVideo(BaseModel):
     url: str
     minutes: int
     published: str
+    ai_quote: str | None = None
+    match: float | None = None
 
 
 class TrackArticle(BaseModel):

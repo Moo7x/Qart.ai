@@ -1,0 +1,30 @@
+Aina Sofea Binti Rahman
+Email: aina.sofea.sample@example.com
+Phone: +60 13-000 0000
+
+SYNTHETIC SAMPLE CV FOR THE QART.AI DEMO. THIS PERSON DOES NOT EXIST.
+
+Profile
+Final-year Bachelor of Finance student at a public university in Kuala Lumpur, looking for a first
+role in financial planning and analysis in a shared services centre.
+
+Education
+Bachelor of Finance (final year), 2023 – present
+- Courses in corporate finance, management accounting, financial statement analysis and business statistics.
+
+Internship
+Finance Intern, regional GBS centre, Kuala Lumpur (3 months, 2025)
+- Helped build the monthly budget versus actual report and explained the main variances.
+- Updated the rolling forecast model in Excel for two cost centres.
+- Built a Power BI chart pack of monthly costs for the finance manager.
+- Wrote simple SQL queries to extract cost data for the forecast.
+
+Projects
+- Final-year project: forecasting quarterly revenue with regression analysis in Excel.
+- Group project: analysed a large public dataset of company results and presented the trends.
+
+Skills
+Microsoft Excel (pivot tables, charts), Power BI, basic SQL, statistics.
+
+Interests
+Data and financial planning.
