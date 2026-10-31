@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { useT } from '../i18n'
 import { Link } from 'react-router-dom'
 import { sendJSON, useApi } from '../api'
 import { SdgPlan } from '../components/SdgPlan'
@@ -32,7 +31,6 @@ export function Pathway() {
 }
 
 function ProfilePathway({ profileId, scenario }: { profileId: string; scenario: Scenario }) {
-  const { t } = useT()
   const path = useApi<PathwayResponse>(`/api/profiles/${profileId}/pathway?scenario=${scenario}`)
   const tracks = useApi<TracksResponse>(`/api/profiles/${profileId}/tracks?scenario=${scenario}`)
   const sdg = useApi<SdgMatrix>(`/api/profiles/${profileId}/sdg?scenario=${scenario}`)
@@ -115,7 +113,6 @@ function ProfilePathway({ profileId, scenario }: { profileId: string; scenario: 
             <VividTile theme="lime" pill="your badges" label="Your badges">
               {badges.error && <Problem what="your badges" message={badges.error} onRetry={badges.reload} />}
               {badges.data && <Badges badges={badges.data} />}
-              <p className="m-0 mt-auto text-[13px] leading-normal text-[#33402a]">Badges come only from what you do: courses marked done, levels raised. Never from a model or a guess.</p>
             </VividTile>
             {radar.data && (
               <article aria-label="Your levels against the role" className="q-card q-span2">
@@ -174,44 +171,6 @@ function ProfilePathway({ profileId, scenario }: { profileId: string; scenario: 
             <a className="btn min-h-[40px]" href="https://www.myfuturejobs.gov.my" target="_blank" rel="noopener noreferrer">MYFutureJobs ↗</a>
           </section>
 
-          {current?.plan && (
-            <section aria-label="Your progress" className="panel gap-4">
-              <div className="flex flex-wrap items-end justify-between gap-3">
-                <div className="flex items-baseline gap-3">
-                  <span className="font-mono text-[40px] leading-none tracking-[-0.05em]">{current.plan.steps_done}<span className="text-graphite">/{current.plan.steps}</span></span>
-                  <span className="text-[13px] text-graphite">
-                    steps done · {current.plan.hours_done} of {current.plan.hours} h
-                    {current.paused && <span className="ml-2 font-semibold text-weak">Paused</span>}
-                  </span>
-                </div>
-                <button type="button" className="btn" disabled={saving} onClick={() => save({ done, paused: !current.paused })}>{current.paused ? t('Resume') : t('Pause for now')}</button>
-              </div>
-              <div
-                role="progressbar"
-                aria-label="Plan completed"
-                aria-valuemin={0}
-                aria-valuemax={data.steps.length}
-                aria-valuenow={finished}
-                className="grid h-3 gap-[3px]"
-                style={{ gridTemplateColumns: data.steps.map((s) => `${Math.max(s.hours, 0.5)}fr`).join(' ') }}
-              >
-                {data.steps.map((s) => (
-                  <span key={s.course.id} title={s.course.title} className={`transition-colors duration-500 ${done.includes(s.course.id) ? 'bg-violet' : 'bg-line'}`} />
-                ))}
-              </div>
-              <div className="flex flex-wrap gap-x-6 gap-y-1 text-[12px] text-graphite">
-                <span>Segment width = course hours · your own record</span>
-                <span>Requirement coverage {Math.round(current.plan.coverage)}/100 (changes only when you update your skill levels)</span>
-                {current.plan.open_questions > 0 && <Link to="/roles">{current.plan.open_questions} skill{current.plan.open_questions === 1 ? '' : 's'} still to rate</Link>}
-              </div>
-              {!current.paused && current.plan.this_week.length > 0 && (
-                <p className="m-0 border-l-2 border-violet pl-3 text-[13px]">
-                  <span className="font-semibold">This week ({current.plan.weekly_hours} h):</span>{' '}
-                  {current.plan.this_week.map((w) => `${w.title} (${w.hours} h)`).join(' · ')}
-                </p>
-              )}
-            </section>
-          )}
 
         </>
       )}
@@ -233,20 +192,28 @@ function PlanTotals({ data }: { data: PathwayResponse }) {
   const bases = [...new Set(data.steps.map((s) => s.time?.basis).filter((b): b is NonNullable<typeof b> => !!b && b in BASIS_TEXT))]
   const range = (r: { low: number; high: number }) => `${Math.round(r.low)}–${Math.round(r.high)}`
   const weeks = data.practice_weeks
+  const tiles: [string, string, string][] = [
+    ['Study', `${data.study_hours} h`, bases.length ? bases.map((b) => BASIS_TEXT[b]).join(', ') : 'course hours'],
+    ['At your pace', `${data.weeks} week${data.weeks === 1 ? '' : 's'}`, `${data.weekly_hours} h a week`],
+    ['Fit now → after study', `${Math.round(data.fit_before)} → ${range(data.fit_after_study)}`, 'planned levels count as self-rated'],
+    weeks && weeks.high > 0
+      ? ['Practice at work', `${weeks.low}–${weeks.high} weeks`, `fit after practice ${range(data.fit_after_practice)}`]
+      : ['Cost', 'RM 0', 'free courses only'],
+  ]
   return (
-    <div className="flex w-full flex-col gap-1.5 text-[13px]">
-      <span className="flex flex-wrap items-center gap-2">
-        <span className="tag bg-estimate-bg text-estimate">Estimate</span>
-        Study {data.study_hours} h{bases.length ? ` (${bases.map((b) => BASIS_TEXT[b]).join(', ')})` : ''}
-        {weeks && weeks.high > 0 ? ` · practice at work ${weeks.low}–${weeks.high} weeks` : ''}
-      </span>
-      <span>
-        Fit after study <b>{range(data.fit_after_study)}</b>
-        {weeks && weeks.high > 0 ? <> · after study and practice <b>{range(data.fit_after_practice)}</b></> : null}
-        <span className="text-graphite"> (now {Math.round(data.fit_before)}; planned levels count as self-rated)</span>
-      </span>
+    <div className="flex w-full flex-col gap-3">
+      <div className="grid grid-cols-2 gap-2.5">
+        {tiles.map(([label, value, note]) => (
+          <div key={label} className="flex flex-col gap-0.5 rounded-2xl bg-[#f6f3ff] px-3.5 py-3">
+            <span className="text-[11px] font-semibold uppercase tracking-[0.06em] text-violet">{label}</span>
+            <span className="font-mono text-[22px] leading-tight text-ink">{value}</span>
+            <span className="text-[11px] text-graphite">{note}</span>
+          </div>
+        ))}
+      </div>
+      <span className="self-start"><span className="tag bg-estimate-bg text-estimate">Estimate</span></span>
       {data.partly_covered.length > 0 && (
-        <span className="text-graphite">Study stops below level 2 for {data.partly_covered.join(', ')}: not enough verified hands-on material yet. Level 2 needs 20 h including hands-on work.</span>
+        <p className="m-0 rounded-xl border border-[#ece6ff] px-3 py-2 text-[12px] text-graphite">Study stops below level 2 for {data.partly_covered.join(', ')}: not enough verified hands-on material yet (level 2 needs about 20 h including hands-on work).</p>
       )}
     </div>
   )

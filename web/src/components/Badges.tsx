@@ -12,8 +12,16 @@ const KINDS: { prefix: string; title: string; how: string; icon: typeof Trophy; 
   { prefix: 'plan_complete', title: 'Plan complete', how: 'Finish every step', icon: Trophy, colours: ['#b8860b', '#ffd34d'] },
 ]
 
+// Collecting REWARD_AT kinds of badge unlocks the progress record: a printable page of the
+// person's skills, plan and evidence to bring to a manager, HR (an HRD Corp training request) or an
+// employer. It records only what they did; nothing is bought or paid.
+const REWARD_AT = 3
+
 export function Badges({ badges }: { badges: Badge[] }) {
+  const kinds = KINDS.filter((k) => badges.some((b) => b.id.startsWith(k.prefix))).length
+  const unlocked = kinds >= REWARD_AT
   return (
+    <div className="flex flex-col gap-4">
     <ul className="m-0 grid list-none grid-cols-2 gap-4 p-0 sm:grid-cols-3 lg:grid-cols-5" aria-label="Your badges">
       {KINDS.map((k) => {
         const earned = badges.filter((b) => b.id.startsWith(k.prefix))
@@ -35,5 +43,15 @@ export function Badges({ badges }: { badges: Badge[] }) {
         )
       })}
     </ul>
+    <div className="flex flex-col gap-2 rounded-2xl bg-white/60 px-4 py-3">
+      <span className="flex items-center justify-between gap-2 text-[13px] font-semibold">
+        <span>{unlocked ? 'Progress record unlocked' : `${kinds} of ${REWARD_AT} badges to unlock your progress record`}</span>
+        <span className="font-mono">{Math.min(kinds, REWARD_AT)}/{REWARD_AT}</span>
+      </span>
+      <span className="block h-2 overflow-hidden rounded-full bg-white" aria-hidden="true"><span className="block h-full rounded-full bg-[#3f6212] transition-[width] duration-500" style={{ width: `${(100 * Math.min(kinds, REWARD_AT)) / REWARD_AT}%` }} /></span>
+      <span className="text-[12px] text-[#33402a]">A one-page record of your skills, plan and the evidence behind them, to bring to your manager, to HR when you ask for HRD Corp-funded training, or to an employer. Badges come only from what you do.</span>
+      {unlocked && <button type="button" className="q-btn self-start text-[13px]" onClick={() => window.print()}>Print my progress record</button>}
+    </div>
+    </div>
   )
 }

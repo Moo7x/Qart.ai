@@ -46,13 +46,16 @@ export function SdgPlan({ matrix, path, goals }: { matrix: SdgMatrix; path: Path
       {table ? (
         <SdgHeatmap data={matrix} />
       ) : (
-        <div className="grid gap-4 [grid-template-columns:repeat(auto-fit,minmax(230px,1fr))]">
-          {tiles.map((t) => {
+        // The tiles move slowly left to right in a loop (a second, hidden copy closes the loop);
+        // hover, focus or an open tile pauses it, and reduced-motion users see it still.
+        <div className={`sdg-marquee ${open ? 'sdg-paused' : ''}`}>
+          <div className="sdg-track">
+          {[0, 1].flatMap((copy) => tiles.map((t) => {
             const colour = sdgColour(t.target)
             const mine = goals.includes(t.target.split('.')[0])
             const isOpen = open === t.target
             return (
-              <button key={t.target} type="button" aria-expanded={isOpen} onClick={() => setOpen(isOpen ? null : t.target)} className="sdg-tile flex cursor-pointer flex-col gap-2 rounded-xl border-0 bg-paper p-0 text-left shadow-[0_6px_20px_rgba(19,19,22,0.07)]">
+              <button key={`${copy}-${t.target}`} type="button" aria-hidden={copy === 1} tabIndex={copy === 1 ? -1 : undefined} aria-expanded={isOpen} onClick={() => setOpen(isOpen ? null : t.target)} className="sdg-tile flex w-[270px] flex-none cursor-pointer flex-col gap-2 self-start rounded-2xl border-0 bg-paper p-0 text-left shadow-[0_6px_20px_rgba(19,19,22,0.07)]">
                 <span className="flex items-center justify-between gap-2 rounded-t-xl px-4 py-3 text-white" style={{ background: colour }}>
                   <span className="font-mono text-[20px] font-semibold">SDG {t.target}</span>
                   {mine && <span className="rounded-full bg-white/90 px-2 py-0.5 text-[11px] font-semibold" style={{ color: colour }}>Your goal</span>}
@@ -76,7 +79,8 @@ export function SdgPlan({ matrix, path, goals }: { matrix: SdgMatrix; path: Path
                 </span>
               </button>
             )
-          })}
+          }))}
+          </div>
         </div>
       )}
       <p className="m-0 text-[12px] text-graphite">Hours are planned study hours; an hour counts toward every target its skill serves. These are the ways the plan contributes, not a measured impact. {matrix.source}</p>
