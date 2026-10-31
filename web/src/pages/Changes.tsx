@@ -5,7 +5,7 @@ import { formatWhen, getJSON, sendJSON, useApi } from '../api'
 import { ScenarioSwitch } from '../components/journey'
 import { Loading, Problem } from '../components/ui'
 import { useJourney } from '../state'
-import type { AutomationBasis, ChangeReport, ChangesResponse, PathSummary, Proposal } from '../types'
+import type { AutomationBasis, ChangeReport, ChangesResponse, Proposal } from '../types'
 import { NeedProfile } from './Roles'
 
 const CHANGE_POLL_MS = 60_000
@@ -24,85 +24,74 @@ function shareText(share: number | null, basis: AutomationBasis) {
   return share === null ? BASIS_LABEL.none : `${share.toFixed(1)}% (${BASIS_LABEL[basis]})`
 }
 
-function PathColumn({ title, path }: { title: string; path: PathSummary }) {
-  return (
-    <div className="min-w-0 flex-1 rounded-lg border border-hairline p-4">
-      <h3 className="m-0 text-base">{title}</h3>
-      <p className="text-sm text-graphite">{path.hours} h · about {path.weeks} weeks</p>
-      <ol className="space-y-2 pl-5 text-sm">
-        {path.courses.map((course) => <li key={course.id}><a href={course.url} target="_blank" rel="noreferrer">{course.title}</a></li>)}
-      </ol>
-      {path.essential_gaps.length > 0 && <p className="text-sm text-weak">Essentials still to build: {path.essential_gaps.join(', ')}.</p>}
-    </div>
-  )
-}
+const EVIDENCE_SHOWN = 3
 
+// A change in plain words: what the source reported, what it does to your roles, what it means
+// for your plan. The exact weights stay one click away.
 function Report({ report }: { report: ChangeReport }) {
   const pathway = report.pathway
+  const moved = report.roles.filter((r) => r.rank_after !== r.rank_before || Math.abs(r.fit_after - r.fit_before) >= 0.05)
+  const still = report.roles.length - moved.length
   return (
     <div className="flex flex-col gap-5">
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <h2 className="h2">{report.before_label} → {report.after_label}</h2>
-        <span className="tag bg-estimate-bg text-estimate">{report.mode === 'replay' ? 'Historical source replay' : 'Update proposal'} · {report.scenario}</span>
-      </div>
-      <p role="status" className="m-0 text-[14px] text-graphite">
-        {report.recommendation_changed ? 'The recomputed ranking, fit or pathway differs.' : 'No change to the computed ranking, fit or pathway. New evidence does not have to change your recommendation.'}
-      </p>
-      <details className="rounded-lg border border-hairline p-4" open>
-        <summary className="cursor-pointer text-[14px] font-semibold">1 · What the source reports · {report.evidence.length} changed observations</summary>
-        <div className="mt-3 max-h-[420px] overflow-auto">
-          {report.evidence.length === 0 && <p className="text-[14px]">No latest observed values changed.</p>}
-          {report.evidence.map((e, index) => (
-            <article key={`${e.source_id}-${index}`} className="border-t border-mist py-3 text-[14px]">
-              <div className="font-semibold">{e.entity} · {e.geography}</div>
-              <div className="font-mono text-[13px]">{e.before ?? 'not available'} ({e.before_period ?? '—'}) → {e.after ?? 'not available'} ({e.after_period ?? '—'}) · {e.unit}</div>
-              <div className="mt-1 text-[13px] text-graphite">{e.metric} · {e.comparable ? 'Same recorded method and unit' : 'New or non-comparable cell; do not treat as a measured rate of change'}</div>
-              <blockquote className="mx-0 my-2 break-words border-l-2 border-hairline pl-3 text-[13px] text-graphite">{e.cited_span}</blockquote>
-              <a href={e.url} target="_blank" rel="noreferrer">Open source ↗</a>
-              <span className="ml-2 text-[13px] text-graphite">Published {e.published ?? 'date not supplied'}</span>
-            </article>
+      <ol className="m-0 grid list-none gap-4 p-0 lg:grid-cols-3">
+        <li className="flex flex-col gap-2 rounded-xl border border-line bg-paper p-4">
+          <span className="cap">1 · What the source reported</span>
+          {report.evidence.length === 0 && <span className="text-[14px]">No value changed.</span>}
+          {report.evidence.slice(0, EVIDENCE_SHOWN).map((e, i) => (
+            <span key={`${e.source_id}-${i}`} className="text-[14px]">
+              <b>{e.entity}</b>: {e.before ?? 'none'} → <b>{e.after ?? 'none'}</b> {e.unit}
+              <a className="ml-1 text-[12px]" href={e.url} target="_blank" rel="noreferrer">source ↗</a>
+            </span>
           ))}
-        </div>
-      </details>
-      <section className="min-w-0 overflow-x-auto">
-        <h3 className="h2 mb-3">2 · Scenario emphasis → your role scores</h3>
-        <p className="text-[13px] text-graphite">Your skills stay fixed. Essential weights stay fixed; their share of a normalised total can change. Expand a role for the exact calculation differences.</p>
-        {report.roles.map((role) => {
-          const driver = report.evidence.find((e) => e.source_id === 'anthropic_economic_index' && e.metric === 'aei_collaboration_bucket_automation_pct' && e.geography === 'GLOBAL' && e.entity.split(' ')[0] === role.soc)
-          return (
-          <details key={role.role_id} className="border-t border-hairline py-3">
-            <summary className="cursor-pointer text-[14px]">
+          {report.evidence.length > EVIDENCE_SHOWN && <span className="text-[12px] text-graphite">and {report.evidence.length - EVIDENCE_SHOWN} more values</span>}
+        </li>
+        <li className="flex flex-col gap-2 rounded-xl border border-line bg-paper p-4">
+          <span className="cap">2 · What it does to your roles</span>
+          {moved.length === 0 && <span className="text-[14px]">No role moved: same fit, same order.</span>}
+          {moved.map((r) => (
+            <span key={r.role_id} className="flex flex-wrap items-baseline justify-between gap-2 text-[14px]">
+              <span className="font-medium">{r.title}</span>
+              <span className="font-mono text-[13px]">
+                fit {r.fit_before.toFixed(0)} → <b className={r.fit_after > r.fit_before ? 'text-rising' : r.fit_after < r.fit_before ? 'text-weak' : ''}>{r.fit_after.toFixed(0)}</b>
+                {r.rank_after !== r.rank_before && <span className={`ml-2 tag ${r.rank_after < r.rank_before ? 'bg-[#e8f6ee] text-rising' : 'bg-weak-bg text-weak'}`}>#{r.rank_before} → #{r.rank_after}</span>}
+              </span>
+            </span>
+          ))}
+          {still > 0 && moved.length > 0 && <span className="text-[12px] text-graphite">{still} other role{still === 1 ? '' : 's'} unchanged</span>}
+        </li>
+        <li className="flex flex-col gap-2 rounded-xl border border-line bg-paper p-4">
+          <span className="cap">3 · What it means for your plan</span>
+          {!pathway && <span className="text-[14px]">Choose a destination on the <Link to="/roles">Roles page</Link> to see this.</span>}
+          {pathway && pathway.added.length === 0 && pathway.removed.length === 0 && !pathway.reordered && (
+            <span className="text-[14px]">Your plan for {pathway.title} stays the same: {pathway.after.courses.length} courses, {pathway.after.hours} h.</span>
+          )}
+          {pathway && (pathway.added.length > 0 || pathway.removed.length > 0 || pathway.reordered) && (
+            <>
+              <span className="text-[14px]">For {pathway.title}: {pathway.before.hours} h → <b>{pathway.after.hours} h</b></span>
+              {pathway.added.length > 0 && <span className="text-[13px] text-rising">Added: {pathway.after.courses.filter((c) => pathway.added.includes(c.id)).map((c) => c.title).join(', ')}</span>}
+              {pathway.removed.length > 0 && <span className="text-[13px] text-weak">Removed: {pathway.before.courses.filter((c) => pathway.removed.includes(c.id)).map((c) => c.title).join(', ')}</span>}
+              {pathway.reordered && <span className="text-[13px] text-graphite">Same courses in a new order.</span>}
+            </>
+          )}
+        </li>
+      </ol>
+      <details className="text-[13px]">
+        <summary className="cursor-pointer text-graphite">Exact calculation: every weight that moved</summary>
+        <div className="mt-3 flex flex-col gap-3">
+          {report.roles.filter((r) => r.weights.length > 0).map((role) => (
+            <div key={role.role_id} className="border-t border-line pt-2">
               <span className="font-semibold">{role.title}</span>
-              <span className="ml-3 font-mono">{role.fit_before.toFixed(1)} → {role.fit_after.toFixed(1)} / 100</span>
-              <span className="ml-3 text-graphite">rank {role.rank_before} → {role.rank_after}</span>
-            </summary>
-            <p className="text-[13px] text-graphite">Mapped occupation: {role.soc}. {driver && <>Occupation-level automation-style share (used for skills without task-level data): {driver.before ?? 'not available'}% → {driver.after ?? 'not available'}%. <a href={driver.url} target="_blank" rel="noreferrer">Source ↗</a></>}</p>
-            {role.weights.length === 0 ? <p className="text-[13px] text-graphite">No requirement weights or contributions changed.</p> : (
-              <ul className="space-y-3 pl-5 text-[13px]">
+              <ul className="m-0 mt-1 flex flex-col gap-1 pl-5">
                 {role.weights.map((w) => (
-                  <li key={w.skill}>
-                    <span className="font-semibold">{w.name}{w.essential ? ' · essential' : ''}</span>
-                    <div className="font-mono">Weight {w.before.toFixed(4)} → {w.after.toFixed(4)} · fit points {w.points_before.toFixed(4)} → {w.points_after.toFixed(4)}</div>
-                    <div className="font-mono text-graphite">Observed automation-style share: {shareText(w.share_before, w.basis_before)} → {shareText(w.share_after, w.basis_after)}</div>
-                    <div className="text-graphite">{w.reason} Scenario rule, not an observed change in your ability.</div>
-                  </li>
+                  <li key={w.skill}>{w.name}{w.essential ? ' · essential' : ''}: weight {w.before.toFixed(2)} → {w.after.toFixed(2)}, AI share {shareText(w.share_before, w.basis_before)} → {shareText(w.share_after, w.basis_after)}</li>
                 ))}
               </ul>
-            )}
-          </details>
-          )
-        })}
-      </section>
-      {pathway ? (
-        <section>
-          <h3 className="h2">3 · Your selected pathway · {pathway.title}</h3>
-          <p className="text-[14px] text-graphite">{pathway.added.length} courses added · {pathway.removed.length} removed · {pathway.reordered ? 'order changed' : 'no reordering of the same courses'}. Your destination is unchanged.</p>
-          <div className="flex flex-wrap gap-4"><PathColumn title="Before" path={pathway.before} /><PathColumn title="After · proposed" path={pathway.after} /></div>
-        </section>
-      ) : <p className="text-[14px]">Choose a destination on the <Link to="/roles">Roles page</Link> to compare its pathway too.</p>}
-      <aside className="rounded-lg bg-fog p-4 text-[13px] leading-relaxed text-graphite">
-        {report.notes.map((note) => <p key={note} className="my-1">{note}</p>)}
-      </aside>
+            </div>
+          ))}
+          {report.notes.map((note) => <p key={note} className="m-0 text-graphite">{note}</p>)}
+        </div>
+      </details>
     </div>
   )
 }
@@ -110,14 +99,6 @@ function Report({ report }: { report: ChangeReport }) {
 // One collected update: the gist and the decision first, the full comparison on request.
 function ProposalCard({ proposal, busy, onDecide }: { proposal: Proposal; busy: boolean; onDecide: (d: 'accept' | 'decline') => void }) {
   const r = proposal.report
-  const moved = [...r.roles].sort((x, y) => Math.abs(y.fit_after - y.fit_before) - Math.abs(x.fit_after - x.fit_before))[0]
-  const changedRoles = r.roles.filter((x) => x.fit_after !== x.fit_before || x.rank_after !== x.rank_before).length
-  const stats: [string, string][] = [
-    ['Observations changed', String(r.evidence.length)],
-    ['Your roles affected', `${changedRoles} of ${r.roles.length}`],
-    ['Biggest fit change', moved ? `${moved.title}: ${moved.fit_before.toFixed(1)} → ${moved.fit_after.toFixed(1)}` : 'none'],
-    ['Your plan', r.pathway ? `${r.pathway.added.length} added · ${r.pathway.removed.length} removed` : 'no destination chosen'],
-  ]
   return (
     <article className="flex flex-col gap-5 rounded-md border border-line bg-paper p-5 md:p-6">
       <header className="flex flex-wrap items-start justify-between gap-4">
@@ -135,18 +116,7 @@ function ProposalCard({ proposal, busy, onDecide }: { proposal: Proposal; busy: 
           </div>
         ) : <span className="tag bg-mist text-graphite">{proposal.status}</span>}
       </header>
-      <dl className="m-0 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        {stats.map(([label, value]) => (
-          <div key={label} className="border-l-2 border-violet pl-3">
-            <dt className="cap">{label}</dt>
-            <dd className="m-0 mt-1 text-[15px] font-semibold">{value}</dd>
-          </div>
-        ))}
-      </dl>
-      <details>
-        <summary className="cursor-pointer text-[14px] font-medium text-violet">See the full comparison</summary>
-        <div className="mt-4"><Report report={r} /></div>
-      </details>
+      <Report report={r} />
     </article>
   )
 }
@@ -194,7 +164,7 @@ export function Changes() {
         <div><span className="eyebrow">What changed · from evidence to your decision</span><h1 className="h1 mt-2">{t('See the difference, then choose')}</h1></div>
         <ScenarioSwitch />
       </header>
-      <p className="m-0 max-w-[760px] text-sm text-graphite">Collected evidence can propose a revision. Your roles and pathway keep their accepted evidence until you choose an update. Historical replay is separate and never changes your profile.</p>
+      <p className="m-0 max-w-[760px] text-sm text-graphite">When a source publishes new data, we recompute your roles and plan and show you the difference here. Nothing changes until you accept.</p>
       {changes.loading && !changes.data && <Loading what="evidence changes" />}
       {changes.error && <Problem what="change history" message={changes.error} onRetry={changes.reload} />}
       {message && <p role="status" className="rounded-md bg-fog p-3 text-sm">{message}</p>}
