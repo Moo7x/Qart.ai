@@ -86,8 +86,16 @@ function aiPane(node: TrackNode): Pane[] {
   return [{
     key: 'ai',
     title: 'Doing this with AI',
-    hint: 'Checked: each one shows this skill’s work and AI used on it (quotes from the page or video).',
-    body: items.length === 0 ? (
+    hint: 'Found for this skill’s most AI-affected tasks, ranked by our models, and checked: both quotes are on the page or in the video.',
+    body: <div className="flex flex-col gap-3">
+      {(node.ai_tasks ?? []).length > 0 && (
+        <div className="rounded-2xl bg-[#f1edff] px-3 py-2 text-[12px]">
+          <b>Searched for these tasks, where AI use is highest</b>{node.ai_use != null ? ` (${node.ai_use.toFixed(0)}% automation-style on this skill's tasks)` : ''}:
+          <ul className="m-0 mt-1 pl-4">{(node.ai_tasks ?? []).map((t) => <li key={t}>{t}</li>)}</ul>
+          <span className="text-graphite">Ranked by BGE-M3 and a reranker for both the skill and AI use, then a learned ranker; kept only when both quotes are found.</span>
+        </div>
+      )}
+      {items.length === 0 ? (
       <div className="flex flex-col gap-2">
         <p className="m-0 text-graphite">No checked resource on doing this skill with AI yet. {node.basics?.length ? 'Start with these AI basics; the courses beside cover the skill itself.' : 'The courses beside cover the skill itself.'}</p>
         {(node.basics ?? []).length > 0 && (
@@ -104,14 +112,16 @@ function aiPane(node: TrackNode): Pane[] {
     ) : (
       <ul className="m-0 flex list-none flex-col gap-3 p-0">
         {items.map((r) => (
-          <li key={r.id} className="flex flex-col gap-1 border-b border-line pb-2.5 last:border-0">
+          <li key={r.id} className="flex flex-col gap-1.5 rounded-2xl border border-[#ece6ff] bg-[#faf8ff] p-3">
             <a href={r.url} target="_blank" rel="noopener noreferrer" className="font-medium text-void">{r.title} ↗</a>
-            <span className="font-mono text-[11px] text-graphite">{r.provider} · {r.kind === 'video' ? 'video' : 'course'} · {r.minutes} min</span>
-            <span className="text-[12px] text-[#404040]">AI on this work: &ldquo;{r.ai_quote}&rdquo;</span>
+            <span className="font-mono text-[11px] text-graphite">{r.provider} · {r.kind === 'video' ? 'YouTube video' : 'course'} · {r.minutes} min · match {Math.round(100 * r.score)}%</span>
+            <span className="text-[12px] text-[#404040]"><b>The skill&rsquo;s work:</b> &ldquo;{r.skill_quote}&rdquo;</span>
+            <span className="text-[12px] text-[#404040]"><b>AI used on it:</b> &ldquo;{r.ai_quote}&rdquo;</span>
           </li>
         ))}
       </ul>
-    ),
+      )}
+    </div>,
   }]
 }
 
@@ -134,8 +144,13 @@ function whyPane(node: TrackNode): Pane[] {
   }]
 }
 
+const isAdapt = (node: TrackNode) => node.mode === 'oversee' || node.mode === 'use_ai'
+
 function panes(node: TrackNode, done: string[], onToggle: (id: string) => void, onSkip: (id: string) => void, paused: boolean, checked: string, onAgent: OpenAgent): Pane[] {
   const practice = node.practice?.length ? [practicePane(node.practice, onSkip, paused)] : []
+  // A step that adapts a skill to AI shows only the AI material: resources on doing this work
+  // with AI (checked), or the AI basics when none is checked yet; never the skill's plain courses.
+  if (isAdapt(node)) return [...whyPane(node), ...aiPane(node)]
   return [
     ...whyPane(node),
     ...aiPane(node),
@@ -273,7 +288,7 @@ function Module({ node, state, index, next, done, last, onOpen, onMark, paused }
             {kind && `${kind[0].toUpperCase()}${kind.slice(1)}`}{kind && line ? ' · ' : ''}{line}{node.essential ? ' · essential' : ''}
           </p>
           <p className="m-0 flex flex-wrap items-center gap-x-3 gap-y-1 text-[13px] text-muted">
-            <span className="inline-flex items-center gap-1.5"><BookOpen size={16} aria-hidden="true" />{[node.courses.length && plural(node.courses.length, 'course'), node.videos.length && plural(node.videos.length, 'video'), node.articles.length && plural(node.articles.length, 'article')].filter(Boolean).join(' · ') || 'No resources yet'}</span>
+            <span className="inline-flex items-center gap-1.5"><BookOpen size={16} aria-hidden="true" />{isAdapt(node) ? ((node.ai_resources ?? []).length ? `${plural((node.ai_resources ?? []).length, 'resource')} on doing it with AI` : 'AI basics for this skill') : [node.courses.length && plural(node.courses.length, 'course'), node.videos.length && plural(node.videos.length, 'video'), node.articles.length && plural(node.articles.length, 'article')].filter(Boolean).join(' · ') || 'No resources yet'}</span>
             <span aria-hidden="true" className="hidden h-4 w-px bg-[#d9d9de] sm:block" />
             <span className="inline-flex items-center gap-1.5"><Clock size={16} aria-hidden="true" />{minutes ? <Hours minutes={minutes} /> : node.courses.length ? 'Optional, not in your hours' : 'Videos and articles only'}</span>
           </p>

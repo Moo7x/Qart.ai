@@ -32,7 +32,7 @@ from src.match.engine import RoleMatch
 from src.pack import Pack
 from src.pathway.planner import AiBasics, Pathway
 from src.pathway.tracks import _article, _course, _skill_nodes, _status, _video
-from src.resources import Resources, load_ai_resources
+from src.resources import Resources, ai_target_tasks, load_ai_resources
 
 Row = dict[str, Any]
 NO_AI_TITLE = "AI is changing this work"  # no checked AI resource for the skill yet
@@ -182,6 +182,8 @@ def adapt_nodes(
                 "id": f"adapt:{skill_id}",
                 "title": f"{skill.name}: {MODE_TITLE[mode] if ai_items else NO_AI_TITLE}",
                 "ai_resources": ai_items,
+                # The AI-affected tasks the resources were found and ranked for (evidence).
+                "ai_tasks": ai_target_tasks(skill_id),
                 # No checked AI resource for this skill: the AI basics go inside the step.
                 "basics": [] if ai_items else (basics or []),
                 "skill": skill_id,

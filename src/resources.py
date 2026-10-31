@@ -120,11 +120,20 @@ def load_resources() -> Resources:
 
 
 @cache
-def load_ai_resources() -> dict[str, list[dict[str, Any]]]:
-    """Per skill, the checked resources that teach doing its work with AI
-    (data/packs/gbs_fa/ai_resources.yaml, built by src/collectors/ai_resources.py)."""
+def ai_resources_file() -> dict[str, Any]:
+    """data/packs/gbs_fa/ai_resources.yaml (built by src/collectors/ai_resources.py)."""
     path = PACK_DIR / "ai_resources.yaml"
     if not path.exists():
         return {}
-    data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
-    return {skill: list(v.get("resources", [])) for skill, v in (data.get("skills") or {}).items()}
+    return dict(yaml.safe_load(path.read_text(encoding="utf-8")) or {})
+
+
+def load_ai_resources() -> dict[str, list[dict[str, Any]]]:
+    """Per skill, the checked resources that teach doing its work with AI."""
+    skills = ai_resources_file().get("skills") or {}
+    return {skill: list(v.get("resources", [])) for skill, v in skills.items()}
+
+
+def ai_target_tasks(skill: str) -> list[str]:
+    """The skill's most AI-used O*NET tasks that the AI resources were searched and ranked for."""
+    return list(((ai_resources_file().get("skills") or {}).get(skill) or {}).get("tasks", []))

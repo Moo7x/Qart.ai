@@ -150,7 +150,7 @@ function ForecastScore({ entries }: { entries: SeriesForecast[] }) {
               <span className="h-4 rounded-full bg-mist">
                 {gain > 0 && <span className="block h-4 rounded-full bg-rising transition-[width] duration-700" style={{ width: `${Math.min(100, gain * 2)}%` }} />}
               </span>
-              <span className={gain > 0 ? 'font-semibold text-rising' : 'text-graphite'}>{gain > 0 ? `${gain}% smaller miss · forecast drawn` : 'repeating last year wins'}</span>
+              <span className={gain > 0 ? 'font-semibold text-rising' : 'text-graphite'}>{gain > 0 ? `${gain}% more accurate than "no change": forecast used` : '"no change" was as good: shown as no change'}</span>
             </li>
           )
         })}

@@ -250,6 +250,7 @@ class TrackNode(BaseModel):
     ai_use: float | None = None  # effective automation-style AI use on the skill's tasks
     ai_basis: str | None = None  # observed, predicted, mixed, occupation or none
     ai_resources: list[AiResource] | None = None  # adapt steps: doing the skill with AI
+    ai_tasks: list[str] | None = None  # the AI-affected tasks those resources were ranked for
     basics: list[BasicsItem] | None = None  # adapt steps without AI resources: AI basics inside
 
 

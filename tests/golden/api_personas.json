@@ -13173,6 +13173,11 @@
         "url": "https://learn.microsoft.com/en-us/training/modules/get-started-customer-data-platform/"
        }
       ],
+      "ai_tasks": [
+       "Maintain and review computerized or manual records of purchased items, costs, deliveries, product performance, and inventories.",
+       "Maintain or update business intelligence tools, databases, dashboards, systems, or methods.",
+       "Manage timely flow of business intelligence information to users."
+      ],
       "ai_use": null,
       "articles": [
        {
@@ -13314,6 +13319,10 @@
         "url": "https://learn.microsoft.com/en-us/training/paths/automate-tasks-workflows-copilot-studio/"
        }
       ],
+      "ai_tasks": [
+       "Use the computer in the analysis and solution of business problems, such as development of integrated production and inventory control and cost analysis systems.",
+       "Analyze information processing or computation needs and plan and design computer systems, using techniques such as structured analysis, data modeling, and information engineering."
+      ],
       "ai_use": null,
       "articles": [
        {
@@ -13401,6 +13410,7 @@
       "after": null,
       "ai_basis": "none",
       "ai_resources": [],
+      "ai_tasks": [],
       "ai_use": null,
       "articles": [
        {

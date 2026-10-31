@@ -840,6 +840,7 @@ export type TrackNode = {
   ai_use: number | null
   ai_basis: string | null
   ai_resources: AiResource[] | null
+  ai_tasks: string[] | null
   basics: BasicsItem[] | null
 }
 
