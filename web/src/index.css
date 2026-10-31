@@ -124,21 +124,6 @@
     .road-head { grid-template-columns: 44px minmax(0, 1fr) auto; }
     .road-progress { grid-column: 3; text-align: right; }
   }
-  .road-scroll { overflow-x: auto; padding: 4px 2px 6px; }
-  .road { position: relative; display: grid; list-style: none; margin: 0; padding: 30px 0 0; min-width: min-content; }
-  .road-line, .road-fill { position: absolute; top: 58px; height: 8px; border-radius: 999px; }
-  .road-line { left: calc(50% / var(--road-cols)); right: calc(50% / var(--road-cols)); background: var(--color-mist); box-shadow: inset 0 0 0 1px var(--color-line); }
-  .road-fill { left: calc(50% / var(--road-cols)); transition: width 500ms ease; }
-  .road-end { position: absolute; top: 34px; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-ash); }
-  .road-end-start { left: 0; }
-  .road-end-finish { right: 0; }
-  .road-stop { position: relative; display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 0 8px; text-align: center; }
-  .road-pin { position: absolute; top: -28px; padding: 2px 8px; border-radius: 3px; color: #fff; font-size: 10px; font-weight: 600; white-space: nowrap; }
-  .road-pin::after { content: ''; position: absolute; left: 50%; bottom: -4px; width: 8px; height: 8px; background: inherit; transform: translateX(-50%) rotate(45deg); }
-  .road .road-dot { position: relative; z-index: 1; display: grid; place-items: center; width: 52px; height: 52px; margin-top: 6px; border: 3px solid; border-radius: 999px; font-family: var(--font-mono); font-size: 15px; font-weight: 700; cursor: pointer; transition: transform 150ms ease; }
-  .road .road-dot:not(:disabled):hover { transform: scale(1.08); }
-  .road .road-dot:disabled { cursor: not-allowed; }
-  .road-label { max-width: 180px; }
   /* My plan SDG band: centred, on a tinted background, cards staggered left and right. */
   .sdg-band { display: flex; flex-direction: column; gap: 28px; padding: 36px 20px; border-radius: 6px; background: linear-gradient(180deg, #eae6ff 0%, #f4f1ff 100%); border: 1px solid #d9d1ff; }
   .sdg-grid { display: grid; gap: 20px; width: 100%; max-width: 980px; margin: 0 auto; }

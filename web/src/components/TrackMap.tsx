@@ -1,3 +1,4 @@
+import { ArrowRight, BookOpen, Check, Clock } from 'lucide-react'
 import { useCallback, useState } from 'react'
 import { useJourney } from '../state'
 import type { SkillBasis, Track, TrackNode } from '../types'
@@ -222,39 +223,77 @@ const TRACK_TONE: Record<Track['id'], { line: string; soft: string; label: strin
 
 const MODE_TAG: Record<string, string> = { oversee: 'adapt: oversee AI', use_ai: 'adapt: use AI', learn: 'new for this role', basics: 'AI basics' }
 
-function Stop({ node, state, index, tone, onOpen, first }: { node: TrackNode; state: State; index: number; tone: { line: string; soft: string }; onOpen: () => void; first: boolean }) {
-  const ring = state === 'current' ? { boxShadow: `0 0 0 6px ${tone.soft}` } : undefined
-  const fill =
+// The step's level line: where you are on an adapt step, the study (and practice) move otherwise.
+function levelLine(node: TrackNode): string {
+  if (node.mode === 'oversee' || node.mode === 'use_ai') return `You ${levelText(node.now)}${node.ai_use != null ? ` · ${node.ai_use.toFixed(0)}% AI use on its tasks` : ''}`
+  if (node.now === null && node.required === null) return ''
+  const now = node.now === null ? 'not rated' : levelText(node.now)
+  return `${now} → ${levelText(node.study_after ?? node.after)} by study${node.practice?.length ? ` · practice to ${levelText(node.required)}` : ''}`
+}
+
+const plural = (n: number, word: string) => `${n} ${word}${n === 1 ? '' : 's'}`
+
+function Hours({ minutes }: { minutes: number }) {
+  return <>{minutes < 60 ? `${minutes} min` : `${(minutes / 60).toFixed(1)} h`}</>
+}
+
+// One step as a module card on the timeline. Progress is the person's own record: planned courses
+// marked done over planned courses. The button opens the step's courses, videos and articles.
+function Module({ node, state, index, next, done, last, onOpen }: { node: TrackNode; state: State; index: number; next: boolean; done: string[]; last: boolean; onOpen: () => void }) {
+  const planned = node.courses.filter((c) => c.planned)
+  const finished = planned.filter((c) => done.includes(c.id)).length
+  const pct = planned.length ? Math.round((100 * finished) / planned.length) : 0
+  const minutes = planned.reduce((sum, c) => sum + c.minutes, 0)
+  const line = levelLine(node)
+  const kind = node.mode ? MODE_TAG[node.mode] : null
+  const dot =
     state === 'done'
-      ? { background: tone.line, borderColor: tone.line, color: '#ffffff' }
-      : state === 'current'
-        ? { background: '#ffffff', borderColor: tone.line, color: tone.line, ...ring }
-        : { background: '#ffffff', borderColor: '#9394a1', color: '#747686', borderStyle: 'dashed' as const }
-  const status = state === 'done' ? 'done' : state === 'current' ? 'next up' : 'no course yet'
+      ? 'border-violet bg-violet text-white'
+      : next
+        ? 'border-violet bg-white text-violet shadow-[0_0_0_5px_#f1edff]'
+        : 'border-[#d9d9de] bg-white text-ash'
   return (
-    <li className="road-stop">
-      <span className={`road-pin ${first ? '' : 'invisible'}`} style={{ background: tone.line }} aria-hidden="true">Start here</span>
-      <button
-        type="button"
-        onClick={onOpen}
-        title="Open courses, videos and articles"
-        aria-label={`${node.title}: ${status}. Open courses, videos and articles`}
-        className="road-dot"
-        style={fill}
-      >
-        {state === 'done' ? '✓' : index + 1}
-      </button>
-      <span className="road-label text-void">
-        <span className={`block text-[14px] leading-snug ${state === 'current' ? 'font-semibold' : 'font-medium'}`}>{node.title}</span>
-        <span className="mt-1 block font-mono text-[11px] text-graphite">
-          {node.mode === 'oversee' || node.mode === 'use_ai'
-            ? `you: ${levelText(node.now)}${node.ai_use != null ? ` · ${node.ai_use.toFixed(0)}% AI use on its tasks` : ''}`
-            : node.now !== null || node.required !== null ? `${levelText(node.now)} → ${levelText(node.study_after ?? node.after)} by study${node.practice?.length ? ` · practice to ${levelText(node.required)}` : ''}` : `${node.courses.length + node.videos.length + node.articles.length} resources`}
-          {node.essential ? ' · essential' : ''}
+    <li className="grid grid-cols-[32px_minmax(0,1fr)] gap-x-2.5 sm:grid-cols-[44px_minmax(0,1fr)] sm:gap-x-5">
+      <span className="relative flex justify-center" aria-hidden="true">
+        {!last && <span className="absolute bottom-[-16px] top-11 w-0.5 bg-[#e4ddff]" />}
+        <span className={`relative z-[1] mt-5 grid h-8 w-8 place-items-center rounded-full border-2 font-mono text-[13px] font-semibold sm:h-11 sm:w-11 sm:text-[14px] ${dot}`}>
+          {state === 'done' ? <Check size={20} strokeWidth={3} /> : index + 1}
         </span>
-        {node.mode && <span className="mt-1 block text-[11px] text-graphite">{MODE_TAG[node.mode]}</span>}
-        {state === 'no_course' && <span className="mt-1 block text-[11px] text-graphite">Videos and articles only</span>}
       </span>
+      <article aria-label={`Step ${index + 1}: ${node.title}`} className={`flex flex-wrap items-center justify-between gap-x-6 gap-y-4 rounded-[20px] border p-4 shadow-[0_10px_30px_rgba(108,71,255,0.10)] sm:p-5 ${state === 'done' ? 'border-[#d9d0ff] bg-[#f1edff]' : next ? 'border-[#cfc3ff] bg-[#f8f6ff] shadow-[0_12px_34px_rgba(108,71,255,0.18)]' : 'border-[#e9e4ff] bg-[#f8f6ff]'}`}>
+        <div className="flex min-w-0 flex-[1_1_320px] flex-col gap-1.5">
+          <h4 className="m-0 text-[17px] font-semibold leading-snug tracking-tight">Step {index + 1}: {node.title}</h4>
+          <p className="m-0 text-[13px] text-[#404040]">
+            {kind && `${kind[0].toUpperCase()}${kind.slice(1)}`}{kind && line ? ' · ' : ''}{line}{node.essential ? ' · essential' : ''}
+          </p>
+          <p className="m-0 flex flex-wrap items-center gap-x-3 gap-y-1 text-[13px] text-muted">
+            <span className="inline-flex items-center gap-1.5"><BookOpen size={16} aria-hidden="true" />{[node.courses.length && plural(node.courses.length, 'course'), node.videos.length && plural(node.videos.length, 'video'), node.articles.length && plural(node.articles.length, 'article')].filter(Boolean).join(' · ') || 'No resources yet'}</span>
+            <span aria-hidden="true" className="hidden h-4 w-px bg-[#d9d9de] sm:block" />
+            <span className="inline-flex items-center gap-1.5"><Clock size={16} aria-hidden="true" />{minutes ? <Hours minutes={minutes} /> : node.courses.length ? 'Optional, not in your hours' : 'Videos and articles only'}</span>
+          </p>
+        </div>
+        <div className="flex w-full min-w-0 flex-col items-stretch gap-2.5 sm:w-auto sm:min-w-[200px] sm:flex-[0_1_260px]">
+          {state === 'done' ? (
+            <>
+              <span className="inline-flex items-center justify-center gap-2 self-end rounded-full bg-violet px-4 py-2 text-[13px] font-semibold text-white"><Check size={16} strokeWidth={3} aria-hidden="true" />Completed</span>
+              <button type="button" className="q-btn min-h-[40px] self-end border-[#d9d9de] px-4 text-[13px]" onClick={onOpen}>Review the resources</button>
+            </>
+          ) : (
+            <>
+              {planned.length > 0 && (
+                <div className="flex flex-col gap-1.5">
+                  <span className="text-[13px] font-medium">{pct}% complete</span>
+                  <span className="block h-2 overflow-hidden rounded-full bg-[#e4ddff]" aria-hidden="true"><span className="block h-full rounded-full bg-violet transition-[width] duration-500" style={{ width: `${pct}%` }} /></span>
+                </div>
+              )}
+              <button type="button" onClick={onOpen} className="q-btn q-btn-dark justify-between py-2 pl-5 pr-2 text-[14px]">
+                {pct > 0 ? 'Continue learning' : 'Start this step'}
+                <span className="q-btn-arrow"><ArrowRight size={16} aria-hidden="true" /></span>
+              </button>
+            </>
+          )}
+        </div>
+      </article>
     </li>
   )
 }
@@ -278,9 +317,7 @@ export function TrackMap({ tracks, done, onToggle, onSkip, paused, checked }: { 
         const finished = st.filter((s) => s === 'done').length
         const countable = st.filter((s) => s !== 'no_course').length
         const n = track.nodes.length
-        // How far along the road the colour reaches: up to the current stop, or the end.
-        const reached = st.every((s) => s === 'done' || s === 'no_course') ? n - 1 : Math.max(st.indexOf('current'), 0)
-        const fraction = n > 1 ? reached / (n - 1) : 1
+        const next = st.findIndex((s) => s !== 'done')
         return (
           <section key={track.id} aria-label={track.title} className="road-track">
             <header className="road-head">
@@ -307,14 +344,11 @@ export function TrackMap({ tracks, done, onToggle, onSkip, paused, checked }: { 
             ) : n === 0 ? (
               <p className="m-0 text-[13px] text-graphite">Nothing to build on this road: you already meet these skills for this role.</p>
             ) : (
-              <div className="road-scroll">
-                <ol className="road" style={{ gridTemplateColumns: `repeat(${n}, minmax(150px, 1fr))`, ['--road-cols' as string]: n }}>
-                  <span aria-hidden="true" className="road-line" />
-                  <span aria-hidden="true" className="road-fill" style={{ background: tone.line, width: `calc((100% - 100% / ${n}) * ${fraction})` }} />
-                  <span aria-hidden="true" className="road-end road-end-start">Start</span>
-                  <span aria-hidden="true" className="road-end road-end-finish">Finish</span>
+              // The steps scroll inside this box (its own scrollbar), not the page.
+              <div tabIndex={0} role="region" aria-label={`${track.title}: ${n} steps, scrolls`} className="max-h-[70vh] overflow-y-auto overscroll-contain rounded-[20px] bg-tray p-3 sm:max-h-[600px] sm:p-4">
+                <ol className="m-0 flex list-none flex-col gap-4 p-0">
                   {track.nodes.map((node, ni) => (
-                    <Stop key={node.id} node={node} state={st[ni]} index={ni} tone={tone} first={ni === st.findIndex((x) => x !== 'done')} onOpen={() => setOpen({ track: ti, node: ni })} />
+                    <Module key={node.id} node={node} state={st[ni]} index={ni} next={ni === next} done={done} last={ni === n - 1} onOpen={() => setOpen({ track: ti, node: ni })} />
                   ))}
                 </ol>
               </div>
@@ -322,7 +356,7 @@ export function TrackMap({ tracks, done, onToggle, onSkip, paused, checked }: { 
           </section>
         )
       })}
-      <p className="m-0 text-[12px] text-graphite">Click any stop to see its courses, YouTube videos and articles; start with whichever skill you like. Levels show you now → after the planned courses (projected, an assumption); levels above 2 need practice at work.</p>
+      <p className="m-0 text-[12px] text-graphite">Open any step for its courses, YouTube videos and articles; start with whichever skill you like. Levels show you now → after the planned courses (projected, an assumption); levels above 2 need practice at work.</p>
       {open && selected && (
         <Windows
           key={`${open.track}-${open.node}`}
