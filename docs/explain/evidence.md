@@ -15,9 +15,16 @@ Rule: never invent statistics; every number cites a source.
    cadence. Only registered sources are collected.
 Course catalogue (`src/collectors/mslearn.py`): the Microsoft Learn Catalog API is screened for
 finance, data and process items, which BGE-M3 and the reranker map to pack skills on RunPod. The
-results are written as unverified candidates (`courses_mslearn.yaml`) that the planner ignores
-until a reviewer opens and verifies each one (`scripts/review_catalogue.py`). Every pipeline run
-also checks that each course, video and article link still opens (`src/pipeline/links.py`).
+results are written as unverified candidates (`courses_mslearn.yaml`) that the planner ignores.
+Skills Microsoft Learn does not teach get free courses read by hand from UN CC:Learn, OpenLearn
+and Alison (`courses_open.yaml`), also as candidates. A candidate becomes verified in one of two
+ways: a person opens it (`scripts/review_catalogue.py --verify`), or the automatic fit check
+(`src/collectors/course_check.py`) reads the course's own page, gpt-4o-mini answers fits / does
+not fit / unclear with one sentence from the page, and code accepts "fits" only if that sentence
+is really on the page. The course is real (official catalogue or a page read by hand) and free
+before the check; the check only settles whether it teaches the skill. The plan shows "fit checked
+automatically" with the model, date and quote. Every pipeline run also checks that each course,
+video and article link still opens (`src/pipeline/links.py`).
 
 Robustness: a source that fails keeps its stored observations, so screens keep showing the last
 good data, and `/api/sources` says when it was fetched (`serving_snapshot_from`) and when the
