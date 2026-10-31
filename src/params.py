@@ -125,17 +125,19 @@ PROFILE_RETENTION_DAYS = 90
 # Status page: platform SDG totals are withheld while fewer people than this have a destination.
 # Declared, from the project rule that aggregates across people suppress groups under 5.
 PLATFORM_SDG_MIN_PROFILES = 5
-# Prices for the cost estimate (status page, scripts/cost.py), USD per million tokens. Declared:
-# the OpenAI list prices as the team knew them on 2026-10-30; check the provider's price page
-# before quoting a cost. RunPod is billed per GPU-second and depends on the GPU the endpoint uses,
-# so its price is left unset (the estimate then shows seconds only) until the team sets it from
-# the RunPod console.
+# Prices for the cost estimate (status page, scripts/cost.py). Declared, not measured: the OpenAI
+# list prices (USD per million tokens) checked on OpenAI's pricing page on 2026-10-31, and the
+# RunPod Serverless GPU price from the endpoint's console on 2026-10-31. The endpoint may run on
+# either of its two GPU tiers (16 GB: RTX 2000/4000 Ada, RTX A4000/A4500 at $0.58 per hour;
+# 24 GB: RTX 3090, L4, RTX A5000 at $0.75 per hour), so the estimate uses the dearer one,
+# $0.75 ÷ 3,600 s, and never understates the cost.
 PRICES_PER_MILLION_TOKENS = {
     "gpt-4o-mini": {"in": 0.15, "out": 0.60},
     "gpt-4.1-mini": {"in": 0.40, "out": 1.60},
 }
-PRICES_CHECKED = "2026-10-30"
-RUNPOD_USD_PER_SECOND: float | None = None
+PRICES_CHECKED = "2026-10-31"
+RUNPOD_USD_PER_HOUR = 0.75
+RUNPOD_USD_PER_SECOND: float | None = RUNPOD_USD_PER_HOUR / 3600
 
 # --- Matching (src/match/engine.py) ------------------------------------------------------------
 # Bump when the formula/planning algorithm changes, even if its numeric parameters do not.
@@ -257,12 +259,12 @@ LEVEL2_MIN_HOURS = 20
 # person already shows AI or automation work: any of these skills claimed at AI_BASICS_SKIP_LEVEL
 # ("working") or above with evidence (a CV sentence or an accepted progress check). Declared: at
 # that level they use these tools in their own work, which is what AI basics teach. Students and
-# switchers always see them, since their claims rarely come from finance work yet.
+# switchers always see them, since their claims rarely come from finance work yet. Data
+# management is not in the list: keeping records clean shows no use of AI or automation tools.
 AI_BASICS_SKILLS = (
     "prompt_engineering",
     "process_automation",
     "advanced_technology_integration",
-    "data_management",
 )
 AI_BASICS_SKIP_LEVEL = 3
 AI_BASICS_ALWAYS = ("student", "switcher")

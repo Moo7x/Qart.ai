@@ -34,6 +34,8 @@ def test_cost_uses_declared_prices_and_leaves_unknown_prices_empty() -> None:
     assert rows[0]["cost_usd"] == params.PRICES_PER_MILLION_TOKENS["gpt-4o-mini"]["in"]
     if params.RUNPOD_USD_PER_SECOND is None:
         assert rows[1]["cost_usd"] is None  # no declared GPU price: no made-up number
+    else:
+        assert rows[1]["cost_usd"] == round(2.0 * params.RUNPOD_USD_PER_SECOND, 4)
 
 
 def test_status_route_shape(client: TestClient) -> None:
