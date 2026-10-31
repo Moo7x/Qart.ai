@@ -7,6 +7,7 @@ by hand and several planned without the person's claims (docs/decision_log.md, 2
 
 from collections.abc import Mapping
 from dataclasses import dataclass, field, replace
+from functools import cached_property
 from typing import Any
 
 from sqlalchemy import Engine
@@ -20,6 +21,8 @@ from src.match.engine import Evidence, RoleMatch, Scenario, rank_roles, score_ro
 from src.match.evidence import automation_evidence
 from src.pack import Pack, load_pack
 from src.pathway.planner import Pathway, plan_pathway
+
+TASK_LEVEL_SERIES = {"ilo_task_exposure", "onet_task_statement"}
 
 
 @dataclass
@@ -35,6 +38,17 @@ class Person:
 
     def __post_init__(self) -> None:
         self.evidence = automation_evidence(self.rows)
+
+    @cached_property
+    def card_rows(self) -> list[dict[str, Any]]:
+        """The accepted rows without the task-level AI-use and exposure series (most of the
+        rows): role cards, pay, outlook and requirement evidence never read those, so they scan
+        this smaller list. Same facts, same results; only the scan is shorter."""
+        return [
+            r
+            for r in self.rows
+            if r["source_id"] != "anthropic_economic_index" and r["series"] not in TASK_LEVEL_SERIES
+        ]
 
     def with_claims(self, changes: Mapping[str, SkillClaim]) -> "Person":
         """The same person with some claims replaced (a what-if); nothing is saved."""
