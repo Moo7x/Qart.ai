@@ -70,7 +70,7 @@ export function Dots({ level, tone = 'violet' }: { level: number | null; tone?: 
 /** The scenario switch with its ESTIMATE label (the redesign's segmented control, atoms.tsx). */
 export function ScenarioSwitch() {
   return (
-    <div className="flex items-center gap-2.5">
+    <div className="flex flex-wrap items-center gap-2.5">
       <AtomScenarioSwitch />
       <Label kind="estimate" />
     </div>

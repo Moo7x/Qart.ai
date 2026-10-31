@@ -33,7 +33,7 @@ export function SkillRadar({ axes }: { axes: RadarAxis[] }) {
   const n = axes.length
   if (n < 3) return null
   return (
-    <svg viewBox={`-150 -40 ${SIZE + 300} ${SIZE + 80}`} className="w-full max-w-[620px]" role="img" aria-label={`Skills radar: ${axes.map((a) => `${a.name}, you ${a.claimed ?? 'not rated'}, needs ${a.required}, after the plan ${a.after}`).join('; ')}`}>
+    <svg viewBox={`-150 -40 ${SIZE + 300} ${SIZE + 80}`} className="w-full max-w-[680px]" role="img" aria-label={`Skills radar: ${axes.map((a) => `${a.name}, you ${a.claimed ?? 'not rated'}, needs ${a.required}, after the plan ${a.after}`).join('; ')}`}>
       <defs>
         <radialGradient id="radar-disc" cx="50%" cy="45%" r="60%">
           <stop offset="0" stopColor="#ffffff" />

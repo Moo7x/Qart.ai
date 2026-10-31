@@ -19,8 +19,9 @@ and plan stops use that same snapshot. Nothing here changes requirements, fit sc
 `/start` is the landing page (`pages/onboarding/Landing.tsx`, the decorative landscape in
 `components/HeroScene.tsx`) with a one-step CV popup over it (`CvPopup.tsx`, `CvStep.tsx`): upload a
 CV or use the form, see what was read (every level a claim), and "Continue" saves the profile and
-opens the Overview. The Overview opens with "Your skills as AI moves" (radar and how each skill
-moves), then "Increase the accuracy of your results" (`components/SkillSurvey.tsx`): a popup asks
+opens the Overview. The Overview opens with "Your skills as AI moves": the radar, and beside it
+"What is changing in your current job" (`components/JobHub.tsx`, compact: the job card above four
+evidence cards, each opening its source; not shown without a current job). Then "Increase the accuracy of your results" (`components/SkillSurvey.tsx`): a popup asks
 the up to three unrated skills whose answer would change the person's options most
 (`GET /questions`); each answer is saved as their own rating (`POST /answer`) and the radar, tiles
 and My options use it at once. Then "Trends" (`components/OverviewTrends.tsx`, from `GET /api/trends`):

@@ -19,21 +19,23 @@ const KIND: Record<Kind, [string, string]> = {
 
 type Spoke = { key: string; icon: ReactNode; kind: Kind; title: string; big: string; line: string; detail: Pane }
 
-function SpokeCard({ spoke, onOpen, corner }: { spoke: Spoke; onOpen: () => void; corner: string }) {
+function SpokeCard({ spoke, onOpen, corner, compact }: { spoke: Spoke; onOpen: () => void; corner: string; compact?: boolean }) {
   return (
     <button type="button" onClick={onOpen} className={`job-spoke ${corner} group flex cursor-pointer flex-col gap-1.5 rounded-xl border border-line bg-paper p-4 text-left shadow-[0_6px_20px_rgba(19,19,22,0.06)] transition-transform hover:-translate-y-0.5 hover:border-violet`}>
       <span className="flex items-center justify-between gap-2">
         <span className="flex items-center gap-2 text-[13px] font-semibold"><span className="grid h-7 w-7 place-items-center rounded-lg bg-violet-soft text-violet">{spoke.icon}</span>{spoke.title}</span>
-        <span className={`tag ${KIND[spoke.kind][1]}`}>{KIND[spoke.kind][0]}</span>
+        <span className={`tag shrink-0 whitespace-nowrap ${KIND[spoke.kind][1]}`}>{KIND[spoke.kind][0]}</span>
       </span>
-      <span className="font-mono text-[28px] leading-none tracking-tight">{spoke.big}</span>
+      <span className={`font-mono leading-none tracking-tight ${compact ? 'text-[24px]' : 'text-[28px]'}`}>{spoke.big}</span>
       <span className="text-[13px] text-graphite">{spoke.line}</span>
       <span className="text-[12px] font-medium text-violet opacity-0 transition-opacity group-hover:opacity-100">Details and source →</span>
     </button>
   )
 }
 
-export function JobHub({ soc, title, impact, page, routes }: { soc: string; title: string; impact: string; page: number; routes: number }) {
+/** `compact`: for a half-width column (the Overview's skills card): the job card on top, the four
+ *  evidence cards in a 2 × 2 grid below, no connecting lines. Same content and detail panels. */
+export function JobHub({ soc, title, impact, page, routes, compact = false }: { soc: string; title: string; impact: string; page: number; routes: number; compact?: boolean }) {
   const view = useApi<OccupationPreview>(`/api/occupations/${soc}`)
   const [open, setOpen] = useState<Pane | null>(null)
   if (view.loading) return <Loading what="the evidence for your job" />
@@ -101,11 +103,11 @@ export function JobHub({ soc, title, impact, page, routes }: { soc: string; titl
   }
   const corners = ['job-tl', 'job-tr', 'job-bl', 'job-br']
   return (
-    <div className="job-hub">
+    <div className={`job-hub ${compact ? 'job-hub-compact' : ''}`}>
       <svg className="job-hub-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
         {[[20, 22], [80, 22], [20, 78], [80, 78]].map(([x, y]) => <line key={`${x}-${y}`} x1="50" y1="50" x2={x} y2={y} className="job-hub-line" />)}
       </svg>
-      {spokes.map((s, i) => <SpokeCard key={s.key} spoke={s} corner={corners[i]} onOpen={() => setOpen(s.detail)} />)}
+      {spokes.map((s, i) => <SpokeCard key={s.key} spoke={s} corner={corners[i]} compact={compact} onOpen={() => setOpen(s.detail)} />)}
       <button type="button" onClick={() => setOpen(centre)} className="job-centre flex cursor-pointer flex-col items-center gap-2 rounded-2xl border-2 border-violet bg-void p-5 text-center text-white shadow-[0_12px_40px_rgba(108,71,255,0.35)]">
         <span className="font-mono text-[11px] uppercase tracking-widest text-violet-light">Your job today</span>
         <span className="text-[20px] font-semibold leading-tight">{title}</span>

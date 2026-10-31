@@ -344,6 +344,15 @@
     .job-tl { grid-area: tl; } .job-tr { grid-area: tr; } .job-bl { grid-area: bl; } .job-br { grid-area: br; }
     .job-centre { grid-area: c; order: 0; }
   }
+  .job-hub.job-hub-compact { grid-template-columns: minmax(0, 1fr); grid-template-areas: none; gap: 12px; }
+  @media (min-width: 560px) {
+    .job-hub.job-hub-compact { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-areas: "c c" "tl tr" "bl br"; }
+    .job-hub-compact .job-tl { grid-area: tl; } .job-hub-compact .job-tr { grid-area: tr; }
+    .job-hub-compact .job-bl { grid-area: bl; } .job-hub-compact .job-br { grid-area: br; }
+    .job-hub-compact .job-centre { grid-area: c; }
+  }
+  .job-hub-compact .job-hub-lines { display: none; }
+  .job-hub-compact .job-spoke { padding: 14px; }
   .job-hub-line { stroke: var(--color-violet); stroke-width: 2; stroke-dasharray: 6 8; opacity: 0.55; vector-effect: non-scaling-stroke; animation: job-flow 1.6s linear infinite; }
   @keyframes job-flow { to { stroke-dashoffset: -28; } }
   @media (prefers-reduced-motion: reduce) { .job-hub-line { animation: none; } }
