@@ -55,13 +55,13 @@ courses:
   - dashboards
   time_basis: reading_estimate
   hands_on: true
-  checked: '2026-10-30'
-  verified: false
+  checked: '2026-10-31'
+  verified: true
   match:
     dashboards: 0.679
   fit_check:
-    result: unclear
-    by: gpt-4o-mini
+    result: fits
+    by: person
     quote: ''
     checked: '2026-10-31'
 - id: mslearn_learn_bizapps_dashboard_in_a_day
@@ -361,13 +361,13 @@ courses:
   - fixed_assets
   time_basis: reading_estimate
   hands_on: true
-  checked: '2026-10-30'
-  verified: false
+  checked: '2026-10-31'
+  verified: true
   match:
     fixed_assets: 0.972
   fit_check:
-    result: unclear
-    by: gpt-4o-mini
+    result: fits
+    by: person
     quote: ''
     checked: '2026-10-31'
 - id: mslearn_learn_dynamics_configure_periodic_processes_d365_finance_ops
@@ -380,32 +380,13 @@ courses:
   - reconciliation
   time_basis: reading_estimate
   hands_on: true
-  checked: '2026-10-30'
-  verified: false
+  checked: '2026-10-31'
+  verified: true
   match:
     reconciliation: 0.454
   fit_check:
-    result: unclear
-    by: gpt-4o-mini
-    quote: ''
-    checked: '2026-10-31'
-- id: mslearn_learn_dynamics_configure_use_budget_planning
-  title: Configure and use budget planning in Dynamics 365 Finance
-  provider: Microsoft Learn
-  url: https://learn.microsoft.com/en-us/training/modules/configure-use-budget-planning-dyn365-finance/
-  minutes: 44
-  level: intermediate
-  covers:
-  - budget_management
-  time_basis: reading_estimate
-  hands_on: true
-  checked: '2026-10-30'
-  verified: false
-  match:
-    budget_management: 0.137
-  fit_check:
-    result: unclear
-    by: gpt-4o-mini
+    result: fits
+    by: person
     quote: ''
     checked: '2026-10-31'
 - id: mslearn_learn_dynamics_configure_use_general_ledger_dynamics_365_finance_ops
@@ -678,25 +659,6 @@ courses:
     by: gpt-4o-mini
     quote: Learn how to prepare data for migration, by using the data management framework
       to manage data entities and data entity packages in finance and operations apps.
-    checked: '2026-10-31'
-- id: mslearn_learn_dynamics_net_customers_vendors
-  title: Customer and vendor netting in Dynamics 365 Finance
-  provider: Microsoft Learn
-  url: https://learn.microsoft.com/en-us/training/modules/netting-customer-vendor/
-  minutes: 55
-  level: intermediate
-  covers:
-  - vendor_management
-  time_basis: reading_estimate
-  hands_on: true
-  checked: '2026-10-30'
-  verified: false
-  match:
-    vendor_management: 0.061
-  fit_check:
-    result: unclear
-    by: gpt-4o-mini
-    quote: ''
     checked: '2026-10-31'
 - id: mslearn_learn_dynamics_prepare_data_migration_to_dynamics_365_finance_ops
   title: Prepare data for migration to finance and operations apps
@@ -1123,13 +1085,13 @@ courses:
   - vendor_management
   time_basis: reading_estimate
   hands_on: true
-  checked: '2026-10-30'
-  verified: false
+  checked: '2026-10-31'
+  verified: true
   match:
     vendor_management: 0.173
   fit_check:
-    result: unclear
-    by: gpt-4o-mini
+    result: fits
+    by: person
     quote: ''
     checked: '2026-10-31'
 - id: mslearn_learn_wwl_describe_account_payables_account_receivables
@@ -1142,13 +1104,13 @@ courses:
   - credit_collections
   time_basis: reading_estimate
   hands_on: false
-  checked: '2026-10-30'
-  verified: false
+  checked: '2026-10-31'
+  verified: true
   match:
     credit_collections: 0.037
   fit_check:
-    result: unclear
-    by: gpt-4o-mini
+    result: fits
+    by: person
     quote: ''
     checked: '2026-10-31'
 - id: mslearn_learn_wwl_describe_reporting_integration

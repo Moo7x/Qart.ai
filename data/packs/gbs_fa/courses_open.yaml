@@ -56,10 +56,10 @@ courses:
   time_basis: stated
   hands_on: false
   checked: '2026-10-31'
-  verified: false
+  verified: true
   fit_check:
-    result: unclear
-    by: gpt-4o-mini
+    result: fits
+    by: person
     quote: ''
     checked: '2026-10-31'
 - id: alison_ohse_diploma
