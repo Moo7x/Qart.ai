@@ -43,6 +43,10 @@ soc_occupations:
      esco_uri: http://data.europa.eu/esco/occupation/60082a99-d8ef-4e84-9290-78902681b6ed}
   - {code: "13-1023.00", name: "Purchasing Agents, Except Wholesale, Retail, and Farm Products", isco: "3323", esco: "purchaser", esco_match: exactMatch,
      esco_uri: http://data.europa.eu/esco/occupation/29fa406d-de89-4515-be8d-0fe7bda993f1}
+  # B10 (2026-10-31): Tax Analyst. ESCO "tax advisor" (2411.1.12, under accountant; alternative
+  # terms include tax specialist and tax preparer) is the crosswalk's exactMatch for 13-2082.00.
+  - {code: "13-2082.00", name: Tax Preparers, isco: "2411", esco: "tax advisor", esco_match: exactMatch,
+     esco_uri: http://data.europa.eu/esco/occupation/59c22779-4d89-4bc9-ba8b-d64bea236723}
 # DOSM job-ad releases name occupations in words; these are the ones followed for this field.
 dosm_job_ad_occupations:
   - Accountants and Auditors

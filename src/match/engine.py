@@ -132,13 +132,14 @@ def scenario_weight(
 ) -> tuple[float, str]:
     """Weight of one requirement under a scenario, and the sentence that explains it.
 
-    w' = w × (1 + d × s × a)
+    w' = w × max(floor, 1 + d × s × a)
       w  base weight of the tier (declared)
       d  +1 for skills that complement AI, −1 for routine skills, 0 otherwise (declared per skill)
       s  scenario intensity: how much of the observed automation-style use is assumed to reach
          these tasks within the horizon (declared: moderate 0.5, fast 1.0)
       a  share of AI use that is automation-style (observed): on the skill's linked tasks, or
          for the occupation when no linked task has data (see `requirement_automation`)
+      floor  SCENARIO_FACTOR_FLOOR (declared): a weight never vanishes or turns negative
     Essential requirements are never shifted.
     """
     base = params.ROLE_TIER_WEIGHT[req.tier]
@@ -155,7 +156,7 @@ def scenario_weight(
     # `intensity` overrides the scenario's declared value only for sensitivity checks.
     if intensity is None:
         intensity = params.SCENARIO_INTENSITY[scenario]
-    factor = 1 + direction * intensity * automation_share / 100
+    factor = max(params.SCENARIO_FACTOR_FLOOR, 1 + direction * intensity * automation_share / 100)
     verb = "up" if direction > 0 else "down"
     return base * factor, (
         f"Weight {verb} ×{factor:.2f}: {automation_share:.0f}% of {basis} is automation-style "

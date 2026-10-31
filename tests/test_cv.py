@@ -25,7 +25,8 @@ def test_draft_uses_only_what_the_person_confirmed() -> None:
     assert draft["headline"] == [
         "Cash Application Analyst, building towards Order-to-Cash (O2C) Reporting Analyst."
     ]
-    assert draft["skills"] == ["Reconciliation Processes — own rating: 4 of 5 (proficient)"]
+    # Stored 3 reads "working" on the 0–5 scale (B2, docs/PHASE2_PLAN.md §1 decision 2).
+    assert draft["skills"] == ["Reconciliation Processes — own rating: 3 of 5 (working)"]
     assert draft["experience"] == ["Reconciled daily bank statements."]
     assert len(draft["learning"]) == 1 and "completed, self-reported" in draft["learning"][0]
 

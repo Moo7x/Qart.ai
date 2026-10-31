@@ -1,0 +1,106 @@
+# Fixed levels for the four synthetic personas (docs/PHASE2_PLAN.md §6, B6), each quoting a
+# sentence of that persona's synthetic CV in this folder. Used by the persona test and by
+# scripts/kpis.py; no model is involved. Levels are claims (source: cv), never verified skill.
+personas:
+  hafiz:
+    situation: student
+    skills:
+      variance_analytics:
+        level: 1
+        evidence: 'Final-year project: variance analysis of a manufacturing company''s standard costs.'
+      standard_costing:
+        level: 1
+        evidence: 'Final-year project: variance analysis of a manufacturing company''s standard costs.'
+      accounting_principles:
+        level: 2
+        evidence: Courses in financial accounting, management accounting, auditing and taxation.
+      database_querying:
+        level: 1
+        evidence: Learned SQL basics and built simple dashboards in Power BI for a class project.
+      dashboards:
+        level: 1
+        evidence: Learned SQL basics and built simple dashboards in Power BI for a class project.
+      internal_controls:
+        level: 2
+        evidence: Helped prepare working papers and tested internal controls over purchases.
+      invoice_processing:
+        level: 2
+        evidence: Matched supplier invoices to purchase orders and delivery notes.
+  mei:
+    situation: switcher
+    skills:
+      reconciliation:
+        level: 2
+        evidence: Counted and reconciled the daily cash and card takings against the point-of-sale system.
+      vendor_management:
+        level: 2
+        evidence: Managed stock orders with suppliers and checked deliveries against invoices.
+      invoice_processing:
+        level: 1
+        evidence: Managed stock orders with suppliers and checked deliveries against invoices.
+      reporting:
+        level: 2
+        evidence: Prepared the weekly sales report for the area manager.
+      stakeholder_management:
+        level: 2
+        evidence: Trained and scheduled a team of eight staff.
+  nur:
+    situation: working
+    skills:
+      cash_application:
+        level: 3
+        evidence: Applied incoming customer receipts to open invoices in SAP for four entities, about 1,200 lines a month.
+      reconciliation:
+        level: 3
+        evidence: Reconciled daily bank statements to the cash ledger and cleared unapplied cash.
+      credit_collections:
+        level: 3
+        evidence: Worked with the credit team on overdue accounts and collection follow-ups.
+      erp:
+        level: 2
+        evidence: Applied incoming customer receipts to open invoices in SAP for four entities, about 1,200 lines a month.
+      reporting:
+        level: 2
+        evidence: Built the daily cash position report in Excel for the AR manager.
+      accounting_principles:
+        level: 2
+        evidence: Prepared monthly ageing reports.
+  kavitha:
+    situation: working
+    skills:
+      process_automation:
+        level: 3
+        evidence: Built Power Automate flows that read supplier invoices from a shared mailbox and log them for AP review.
+      reporting:
+        level: 4
+        evidence: Train and review the work of new reporting analysts joining the team.
+      dashboards:
+        level: 3
+        evidence: Built multi-source Power BI dashboards with Power Query, combining SAP, Excel and payroll data.
+      data_validation:
+        level: 3
+        evidence: Checked data quality of ledger extracts before reporting.
+      data_management:
+        level: 3
+        evidence: Checked data quality of ledger extracts before reporting.
+      financial_reporting:
+        level: 3
+        evidence: Prepared the monthly management reporting pack and variance commentary for regional finance leads.
+      variance_analytics:
+        level: 3
+        evidence: Prepared the monthly management reporting pack and variance commentary for regional finance leads.
+      general_ledger:
+        level: 3
+        evidence: Prepared month-end journals and balance sheet reconciliations in SAP.
+      accounting_principles:
+        level: 3
+        evidence: Prepared month-end journals and balance sheet reconciliations in SAP.
+      erp:
+        level: 3
+        evidence: Ran user acceptance testing for the S/4HANA migration of the general ledger and reporting.
+      financial_systems:
+        level: 3
+        evidence: Ran user acceptance testing for the S/4HANA migration of the general ledger and reporting.
+      data_migration:
+        level: 2
+        evidence: Ran user acceptance testing for the S/4HANA migration of the general ledger and reporting.

@@ -40,9 +40,9 @@ def create(client: TestClient, body: dict[str, Any] = NUR) -> str:
 
 def test_pack_lists_skills_roles_and_synthetic_samples(client: TestClient) -> None:
     body = client.get("/api/pack").json()
-    assert len(body["destination_roles"]) == 9
+    assert len(body["destination_roles"]) == 10
     assert body["task_examples"] and all(x["url"] for x in body["task_examples"])
-    assert {s["id"] for s in body["samples"]} == {"nur", "hafiz", "mei"}
+    assert {s["id"] for s in body["samples"]} == {"nur", "hafiz", "mei", "kavitha"}
     assert "THIS PERSON DOES NOT EXIST" in client.get("/api/samples/nur").json()["text"]
 
 
@@ -106,7 +106,7 @@ def test_matches_rank_every_role_with_reasons_and_sources(client: TestClient) ->
     profile_id = create(client)
     body = client.get(f"/api/profiles/{profile_id}/matches").json()
     assert body["scenario"] == "moderate"
-    assert len(body["roles"]) == 9
+    assert len(body["roles"]) == 10
     first = body["roles"][0]
     assert first["requirements"] and first["outlook"] and first["sdgs"]
     assert all(o["source"] for o in first["outlook"])

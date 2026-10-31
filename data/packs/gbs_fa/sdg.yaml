@@ -44,3 +44,364 @@ pathway:
 # Moving into a destination role.
 destination:
   - {target: "8.5", how: "A move from a highly impacted role into a role TalentCorp lists as a transition keeps you in productive employment."}
+
+# Per skill and per destination role (B7): each link names its target, a one-line
+# mechanism and its source. skill_kinds above stays as the fallback.
+skills:
+  reconciliation:
+  - target: '4.4'
+    how: 'Reconciliation Processes keeps ledgers and bank records in agreement: a relevant skill TalentCorp names for GBS finance roles, for decent jobs.'
+    source: TalentCorp (2024) GBS study, PDF p. 23
+  cash_application:
+  - target: '4.4'
+    how: 'Cash Application matches customer payments to what they owe: a relevant skill TalentCorp names for GBS finance roles, for decent jobs.'
+    source: TalentCorp (2024) GBS study, PDF p. 23
+  invoice_processing:
+  - target: '4.4'
+    how: 'Invoice Processing turns supplier invoices into correct, approved payments: a relevant skill TalentCorp names for GBS finance roles, for decent jobs.'
+    source: TalentCorp (2024) GBS study, PDF p. 23
+  credit_collections:
+  - target: '4.4'
+    how: 'Credit and Collections Management keeps customers paying on time: a relevant skill TalentCorp names for GBS finance roles, for decent jobs.'
+    source: TalentCorp (2024) GBS study, PDF p. 23
+  general_ledger:
+  - target: '4.4'
+    how: 'General Ledger Accounting keeps the books that every report is built from: a relevant skill TalentCorp names for GBS finance roles, for decent jobs.'
+    source: TalentCorp (2024) GBS study, PDF p. 23
+  accounting_principles:
+  - target: '4.4'
+    how: 'Accounting Principles applies the standards every finance role works to: a relevant skill TalentCorp names for GBS finance roles, for decent jobs.'
+    source: TalentCorp (2024) GBS study, PDF p. 23
+  financial_reporting:
+  - target: '4.4'
+    how: 'Financial Analysis and Reporting turns the books into statements people can rely on: a relevant skill TalentCorp names for GBS finance roles, for decent jobs.'
+    source: TalentCorp (2024) GBS study, PDF p. 23
+  fpa:
+  - target: '4.4'
+    how: 'Financial Planning, Analysis and Forecasting plans and forecasts where the business is heading: a relevant skill TalentCorp names for GBS finance roles, for decent jobs.'
+    source: TalentCorp (2024) GBS study, PDF p. 23
+  variance_analytics:
+  - target: '4.4'
+    how: 'Variance Analytics explains why results differ from the plan: a relevant skill TalentCorp names for GBS finance roles, for decent jobs.'
+    source: TalentCorp (2024) GBS study, PDF p. 23
+  standard_costing:
+  - target: '4.4'
+    how: 'Standard Costing sets and checks what products should cost: a relevant skill TalentCorp names for GBS finance roles, for decent jobs.'
+    source: TalentCorp (2024) GBS study, PDF p. 23
+  fixed_assets:
+  - target: '4.4'
+    how: 'Fixed Assets Management tracks what the business owns and its value: a relevant skill TalentCorp names for GBS finance roles, for decent jobs.'
+    source: TalentCorp (2024) GBS study, PDF p. 23
+  financial_systems:
+  - target: '4.4'
+    how: 'Financial Systems Implementation puts new finance systems into use: a relevant skill TalentCorp names for GBS finance roles, for decent jobs.'
+    source: TalentCorp (2024) GBS study, PDF p. 23
+  - target: '8.2'
+    how: 'New finance systems, used well, let the same team do more accurate work: technological upgrading.'
+    source: TalentCorp (2024) GBS study, PDF p. 23; UN target 8.2
+  budget_management:
+  - target: '4.4'
+    how: 'Budget Management keeps spending within an agreed plan: a relevant skill TalentCorp names for GBS finance roles, for decent jobs.'
+    source: TalentCorp (2024) GBS study, PDF p. 23
+  erp:
+  - target: '4.4'
+    how: 'Enterprise Resource Planning (ERP) runs finance work in the systems GBS centres use: a relevant skill TalentCorp names for GBS finance roles, for decent jobs.'
+    source: TalentCorp (2024) GBS study, PDF p. 23
+  - target: '8.2'
+    how: 'Doing finance work fully in the ERP replaces manual re-keying with system steps: technological upgrading.'
+    source: TalentCorp (2024) GBS study, PDF p. 23; UN target 8.2
+  reporting:
+  - target: '4.4'
+    how: 'Reporting and Documentation turns finance data into reports people act on: a relevant skill TalentCorp names for GBS finance roles, for decent jobs.'
+    source: TalentCorp (2024) GBS study, PDF p. 23
+  dashboards:
+  - target: '4.4'
+    how: 'Dashboard Creation and Visualisation shows finance data so decisions are quicker: a relevant skill TalentCorp names for GBS finance roles, for decent jobs.'
+    source: TalentCorp (2024) GBS study, PDF p. 23
+  - target: '8.2'
+    how: 'Dashboards replace manual report building, so finance time moves to analysis: productivity through technology.'
+    source: TalentCorp (2024) GBS study, PDF p. 23; UN target 8.2
+  big_data_analytics:
+  - target: '4.4'
+    how: 'Big Data Analytics finds answers in large finance data sets: a relevant skill TalentCorp names for GBS finance roles, for decent jobs.'
+    source: TalentCorp (2024) GBS study, PDF p. 23
+  - target: '8.2'
+    how: 'Analysing large data sets finds savings and risks manual sampling misses: higher-value work.'
+    source: TalentCorp (2024) GBS study, PDF p. 23; UN target 8.2
+  statistical_analytics:
+  - target: '4.4'
+    how: 'Statistical Analytics tests what the numbers really show: a relevant skill TalentCorp names for GBS finance roles, for decent jobs.'
+    source: TalentCorp (2024) GBS study, PDF p. 23
+  - target: '8.2'
+    how: 'Statistical methods make forecasts and checks more reliable with less effort: higher-value work.'
+    source: TalentCorp (2024) GBS study, PDF p. 23; UN target 8.2
+  data_validation:
+  - target: '4.4'
+    how: 'Data Validation checks finance data before it is used: a relevant skill TalentCorp names for GBS finance roles, for decent jobs.'
+    source: TalentCorp (2024) GBS study, PDF p. 23
+  data_management:
+  - target: '4.4'
+    how: 'Data Management keeps finance data accurate and owned: a relevant skill TalentCorp names for GBS finance roles, for decent jobs.'
+    source: TalentCorp (2024) GBS study, PDF p. 23
+  - target: '8.2'
+    how: 'Owned, clean data removes rework across every process that uses it: productivity through upgrading.'
+    source: TalentCorp (2024) GBS study, PDF p. 23; UN target 8.2
+  data_visualisation:
+  - target: '4.4'
+    how: 'Data Visualisation presents data clearly: a relevant skill TalentCorp names for GBS finance roles, for decent jobs.'
+    source: TalentCorp (2024) GBS study, PDF p. 23
+  - target: '8.2'
+    how: 'Clear visuals shorten the time from data to decision: productivity through technology.'
+    source: TalentCorp (2024) GBS study, PDF p. 23; UN target 8.2
+  database_querying:
+  - target: '4.4'
+    how: 'Database Querying pulls the data a question needs: a relevant skill TalentCorp names for GBS finance roles, for decent jobs.'
+    source: TalentCorp (2024) GBS study, PDF p. 23
+  - target: '8.2'
+    how: 'Querying data directly replaces manual extraction: technological upgrading.'
+    source: TalentCorp (2024) GBS study, PDF p. 23; UN target 8.2
+  sql:
+  - target: '4.4'
+    how: 'Structured Query Language (SQL) queries the databases finance data lives in: a relevant skill TalentCorp names for GBS finance roles, for decent jobs.'
+    source: TalentCorp (2024) GBS study, PDF p. 24
+  - target: '8.2'
+    how: 'Querying data directly replaces manual extraction: technological upgrading.'
+    source: TalentCorp (2024) GBS study, PDF p. 24; UN target 8.2
+  systems_integration:
+  - target: '4.4'
+    how: 'System Integration and Configuration connects finance systems so data flows: a relevant skill TalentCorp names for GBS finance roles, for decent jobs.'
+    source: TalentCorp (2024) GBS study, PDF p. 24
+  - target: '8.2'
+    how: 'Connected systems stop data being re-keyed between them: technological upgrading.'
+    source: TalentCorp (2024) GBS study, PDF p. 24; UN target 8.2
+  system_performance:
+  - target: '4.4'
+    how: 'System Performance Management keeps finance systems running well: a relevant skill TalentCorp names for GBS finance roles, for decent jobs.'
+    source: TalentCorp (2024) GBS study, PDF p. 24
+  data_migration:
+  - target: '4.4'
+    how: 'Data Migration moves finance data safely to new systems: a relevant skill TalentCorp names for GBS finance roles, for decent jobs.'
+    source: TalentCorp (2024) GBS study, PDF p. 47
+  - target: '8.2'
+    how: 'A clean migration lets a team move to better systems without losing data: technological upgrading.'
+    source: TalentCorp (2024) GBS study, PDF p. 47; UN target 8.2
+  process_automation:
+  - target: '4.4'
+    how: 'Robotics and Automation Application automates routine finance steps: a relevant skill TalentCorp names for GBS finance roles, for decent jobs.'
+    source: TalentCorp (2024) GBS study, PDF p. 23
+  - target: '8.2'
+    how: 'Automating routine steps frees finance time for judgement work: productivity through innovation.'
+    source: TalentCorp (2024) GBS study, PDF p. 23; UN target 8.2
+  prompt_engineering:
+  - target: '4.4'
+    how: 'Prompt Engineering uses AI tools well and safely at work: a relevant skill TalentCorp names for GBS finance roles, for decent jobs.'
+    source: TalentCorp (2024) GBS study, PDF p. 23
+  - target: '8.2'
+    how: 'Using AI tools well speeds drafting and checking work: productivity through innovation.'
+    source: TalentCorp (2024) GBS study, PDF p. 23; UN target 8.2
+  continuous_improvement:
+  - target: '4.4'
+    how: 'Continuous Improvement makes finance work better step by step: a relevant skill TalentCorp names for GBS finance roles, for decent jobs.'
+    source: TalentCorp (2024) GBS study, PDF p. 23
+  - target: '8.2'
+    how: 'Steady process improvements raise output per hour: productivity through upgrading.'
+    source: TalentCorp (2024) GBS study, PDF p. 23; UN target 8.2
+  process_optimisation:
+  - target: '4.4'
+    how: 'Process Optimisation redesigns processes to remove waste: a relevant skill TalentCorp names for GBS finance roles, for decent jobs.'
+    source: TalentCorp (2024) GBS study, PDF p. 24
+  - target: '8.2'
+    how: 'Redesigned processes remove waste and delay: productivity through upgrading.'
+    source: TalentCorp (2024) GBS study, PDF p. 24; UN target 8.2
+  internal_controls:
+  - target: '4.4'
+    how: 'Internal Controls Evaluation checks that controls stop errors and fraud: a relevant skill TalentCorp names for GBS finance roles, for decent jobs.'
+    source: TalentCorp (2024) GBS study, PDF p. 24
+  credit_risk:
+  - target: '4.4'
+    how: 'Credit Risk Assessment judges which customers can pay: a relevant skill TalentCorp names for GBS finance roles, for decent jobs.'
+    source: TalentCorp (2024) GBS study, PDF p. 24
+  compliance_reporting:
+  - target: '4.4'
+    how: 'Compliance Reporting meets regulators'' reporting rules: a relevant skill TalentCorp names for GBS finance roles, for decent jobs.'
+    source: TalentCorp (2024) GBS study, PDF p. 24
+  stakeholder_management:
+  - target: '4.4'
+    how: 'Stakeholder Management works with the people who use finance results: a relevant skill TalentCorp names for GBS finance roles, for decent jobs.'
+    source: TalentCorp (2024) GBS study, PDF p. 23
+  vendor_management:
+  - target: '4.4'
+    how: 'Vendor Management keeps supplier relationships on track: a relevant skill TalentCorp names for GBS finance roles, for decent jobs.'
+    source: TalentCorp (2024) GBS study, PDF p. 23
+  business_environment_analytics:
+  - target: '4.4'
+    how: 'Business Environment Analytics reads how outside changes affect the business: a relevant skill TalentCorp names for GBS finance roles, for decent jobs.'
+    source: TalentCorp (2024) GBS study, PDF p. 45
+  advanced_technology_integration:
+  - target: '4.4'
+    how: 'Advanced Technology Integration brings AI, RPA and cloud tools into finance work: a relevant skill TalentCorp names for GBS finance roles, for decent jobs.'
+    source: TalentCorp (2024) GBS study, PDF p. 43
+  - target: '8.2'
+    how: Bringing AI, RPA and cloud into finance work is technological upgrading itself.
+    source: TalentCorp (2024) GBS study, PDF p. 43; UN target 8.2
+  digital_business_model:
+  - target: '4.4'
+    how: 'Digital Business Model Innovation shapes new digital ways of delivering finance services: a relevant skill TalentCorp names for GBS finance roles, for decent jobs.'
+    source: TalentCorp (2024) GBS study, PDF p. 38
+  - target: '8.2'
+    how: 'New digital service models create higher value from the same finance work: innovation.'
+    source: TalentCorp (2024) GBS study, PDF p. 38; UN target 8.2
+  it_asset_management:
+  - target: '4.4'
+    how: 'IT Asset Management tracks the technology a business owns: a relevant skill TalentCorp names for GBS finance roles, for decent jobs.'
+    source: TalentCorp (2024) GBS study, PDF p. 41
+  esg:
+  - target: '4.4'
+    how: 'Environment and Social Governance reports environmental, social and governance performance: a relevant skill TalentCorp names for GBS finance roles, for decent jobs.'
+    source: TalentCorp (2024) GBS study, PDF p. 38
+  - target: '12.6'
+    how: ESG reporting is how a company integrates sustainability information into its reporting cycle.
+    source: TalentCorp (2024) GBS study, PDF p. 38; UN target 12.6
+  sustainable_business:
+  - target: '4.4'
+    how: 'Sustainable Business Practices builds sustainability into business decisions: a relevant skill TalentCorp names for GBS finance roles, for decent jobs.'
+    source: TalentCorp (2024) GBS study, PDF p. 23
+  - target: '12.6'
+    how: Building sustainability into decisions is a company adopting sustainable practices.
+    source: TalentCorp (2024) GBS study, PDF p. 23; UN target 12.6
+  green_asset_management:
+  - target: '4.4'
+    how: 'Green Asset Management tracks assets that cut environmental impact: a relevant skill TalentCorp names for GBS finance roles, for decent jobs.'
+    source: TalentCorp (2024) GBS study, PDF p. 23
+  - target: '12.6'
+    how: Tracking green assets gives the sustainability figures companies report.
+    source: TalentCorp (2024) GBS study, PDF p. 23; UN target 12.6
+  green_auditing:
+  - target: '4.4'
+    how: 'Green Auditing checks environmental claims and records: a relevant skill TalentCorp names for GBS finance roles, for decent jobs.'
+    source: TalentCorp (2024) GBS study, PDF p. 24
+  - target: '12.6'
+    how: Green audits check that the sustainability information a company reports is true.
+    source: TalentCorp (2024) GBS study, PDF p. 24; UN target 12.6
+  energy_management:
+  - target: '4.4'
+    how: 'Energy Management and Audit measures and reduces energy use and cost: a relevant skill TalentCorp names for GBS finance roles, for decent jobs.'
+    source: TalentCorp (2024) GBS study, PDF p. 39
+  - target: '12.6'
+    how: Measuring and cutting energy use is a sustainable practice with figures to report.
+    source: TalentCorp (2024) GBS study, PDF p. 39; UN target 12.6
+  green_procurement:
+  - target: '4.4'
+    how: 'Green Procurement Policies and Standards buys with environmental criteria: a relevant skill TalentCorp names for GBS finance roles, for decent jobs.'
+    source: TalentCorp (2024) GBS study, PDF p. 23
+  - target: '12.6'
+    how: Buying with green criteria spreads sustainable practices along the supply chain.
+    source: TalentCorp (2024) GBS study, PDF p. 23; UN target 12.6
+  ehs:
+  - target: '4.4'
+    how: 'Environment, Health and Safety keeps work safe and environmentally compliant: a relevant skill TalentCorp names for GBS finance roles, for decent jobs.'
+    source: TalentCorp (2024) GBS study, PDF p. 23
+  - target: '12.6'
+    how: EHS records are part of the sustainability information companies report.
+    source: TalentCorp (2024) GBS study, PDF p. 23; UN target 12.6
+  tax_preparation:
+  - target: '4.4'
+    how: 'Tax Preparation prepares tax computations and returns accurately: a relevant skill TalentCorp names for GBS finance roles, for decent jobs.'
+    source: TalentCorp (2024) GBS study, PDF p. 23
+  green_tax_strategies:
+  - target: '4.4'
+    how: 'Green Tax Strategies uses tax incentives that reward greener business: a relevant skill TalentCorp names for GBS finance roles, for decent jobs.'
+    source: TalentCorp (2024) GBS study, PDF p. 23
+  - target: '12.6'
+    how: Using green tax incentives helps companies adopt sustainable practices and report them.
+    source: TalentCorp (2024) GBS study, PDF p. 23; UN target 12.6
+  e_invoicing_standards:
+  - target: '4.4'
+    how: 'Knowledge of e-Invoicing Standards keeps invoices in the format tax authorities require: a relevant skill TalentCorp names for GBS finance roles, for decent jobs.'
+    source: TalentCorp (2024) GBS study, PDF p. 23
+  - target: '8.2'
+    how: 'Standard e-invoices replace manual invoice handling with system checks: technological upgrading.'
+    source: TalentCorp (2024) GBS study, PDF p. 23; UN target 8.2
+  attention_to_detail:
+  - target: '4.4'
+    how: 'Attention to Detail keeps finance work accurate: a relevant skill TalentCorp names for GBS finance roles, for decent jobs.'
+    source: TalentCorp (2024) GBS study, PDF p. 24
+  ethical_judgement:
+  - target: '4.4'
+    how: 'Ethical Judgement keeps finance work honest and compliant: a relevant skill TalentCorp names for GBS finance roles, for decent jobs.'
+    source: TalentCorp (2024) GBS study, PDF p. 24
+
+roles:
+  o2c_reporting_analyst:
+  - target: '8.5'
+    how: Moving into Order-to-Cash (O2C) Reporting Analyst, a role TalentCorp lists in the GBS finance cluster (medium AI impact), keeps you in productive employment as routine work changes.
+    source: TalentCorp (2024) GBS study, PDF p. 22 (finance & accounting roles) and p. 26 (impact)
+  - target: '8.2'
+    how: 'The role turns order-to-cash data into analysis with digital tools: higher-value work.'
+    source: TalentCorp (2024) GBS study, PDF p. 22 (finance & accounting roles) and p. 26 (impact)
+  finance_systems_analyst:
+  - target: '8.5'
+    how: Moving into Finance Systems Analyst, a role TalentCorp lists in the GBS finance cluster (medium AI impact), keeps you in productive employment as routine work changes.
+    source: TalentCorp (2024) GBS study, PDF p. 22 (finance & accounting roles) and p. 26 (impact)
+  - target: '8.2'
+    how: 'The role brings new finance systems into use: technological upgrading of finance work.'
+    source: TalentCorp (2024) GBS study, PDF p. 22 (finance & accounting roles) and p. 26 (impact)
+  cost_accountant:
+  - target: '8.5'
+    how: Moving into Cost Accountant, a role TalentCorp lists in the GBS finance cluster (medium AI impact), keeps you in productive employment as routine work changes.
+    source: TalentCorp (2024) GBS study, PDF p. 22 (finance & accounting roles) and p. 26 (impact)
+  - target: '12.6'
+    how: 'The role requires Energy Management and Audit: it helps the company adopt sustainable practices and report them.'
+    source: TalentCorp (2024) GBS study, PDF p. 22 (finance & accounting roles) and p. 26 (impact)
+  fixed_assets_accountant:
+  - target: '8.5'
+    how: Moving into Fixed Assets Accountant, a role TalentCorp lists in the GBS finance cluster (medium AI impact), keeps you in productive employment as routine work changes.
+    source: TalentCorp (2024) GBS study, PDF p. 22 (finance & accounting roles) and p. 26 (impact)
+  - target: '12.6'
+    how: 'The role requires Green Asset Management, Energy Management and Audit: it helps the company adopt sustainable practices and report them.'
+    source: TalentCorp (2024) GBS study, PDF p. 22 (finance & accounting roles) and p. 26 (impact)
+  budget_analyst:
+  - target: '8.5'
+    how: Moving into Budget Analyst, a role TalentCorp lists in the GBS finance cluster (medium AI impact), keeps you in productive employment as routine work changes.
+    source: TalentCorp (2024) GBS study, PDF p. 22 (finance & accounting roles) and p. 26 (impact)
+  - target: '12.6'
+    how: 'The role requires Environment and Social Governance: it helps the company adopt sustainable practices and report them.'
+    source: TalentCorp (2024) GBS study, PDF p. 22 (finance & accounting roles) and p. 26 (impact)
+  p2p_reporting_analyst:
+  - target: '8.5'
+    how: Moving into Procure-to-Pay (P2P) Reporting Analyst, a role TalentCorp lists in the GBS finance cluster (medium AI impact), keeps you in productive employment as routine work changes.
+    source: TalentCorp (2024) GBS study, PDF p. 22 (finance & accounting roles) and p. 26 (impact)
+  - target: '8.2'
+    how: 'The role turns procure-to-pay data into analysis with digital tools: higher-value work.'
+    source: TalentCorp (2024) GBS study, PDF p. 22 (finance & accounting roles) and p. 26 (impact)
+  compliance_governance_specialist:
+  - target: '8.5'
+    how: Moving into Compliance and Governance Specialist, a role TalentCorp lists in the GBS finance cluster (medium AI impact), keeps you in productive employment as routine work changes.
+    source: TalentCorp (2024) GBS study, PDF p. 22 (finance & accounting roles) and p. 26 (impact)
+  - target: '12.6'
+    how: 'The role requires Green Auditing, Environment, Health and Safety: it helps the company adopt sustainable practices and report them.'
+    source: TalentCorp (2024) GBS study, PDF p. 22 (finance & accounting roles) and p. 26 (impact)
+  continuous_improvement_specialist:
+  - target: '8.5'
+    how: Moving into Continuous Improvement Specialist, a role TalentCorp lists in the GBS finance cluster (medium AI impact), keeps you in productive employment as routine work changes.
+    source: TalentCorp (2024) GBS study, PDF p. 22 (finance & accounting roles) and p. 26 (impact)
+  - target: '8.2'
+    how: 'The role improves and automates finance processes: productivity through innovation.'
+    source: TalentCorp (2024) GBS study, PDF p. 22 (finance & accounting roles) and p. 26 (impact)
+  - target: '12.6'
+    how: 'The role requires Energy Management and Audit: it helps the company adopt sustainable practices and report them.'
+    source: TalentCorp (2024) GBS study, PDF p. 22 (finance & accounting roles) and p. 26 (impact)
+  procurement_analyst:
+  - target: '8.5'
+    how: Moving into Procurement Analyst, a role TalentCorp lists in the GBS finance cluster (medium AI impact), keeps you in productive employment as routine work changes.
+    source: TalentCorp (2024) GBS study, PDF p. 22 (finance & accounting roles) and p. 26 (impact)
+  - target: '12.6'
+    how: 'The role requires Green Procurement Policies and Standards: it helps the company adopt sustainable practices and report them.'
+    source: TalentCorp (2024) GBS study, PDF p. 22 (finance & accounting roles) and p. 26 (impact)
+  tax_analyst:
+  - target: '8.5'
+    how: Moving into Tax Analyst, a role TalentCorp lists in the GBS finance cluster (low AI impact), keeps you in productive employment as routine work changes.
+    source: TalentCorp (2024) GBS study, PDF p. 22 (finance & accounting roles), p. 26 (impact) and p. 50 (skills)
+  - target: '12.6'
+    how: 'The role requires Green Tax Strategies: it helps the company adopt sustainable practices and report them.'
+    source: TalentCorp (2024) GBS study, PDF p. 50

@@ -19,7 +19,7 @@ from collections.abc import Mapping
 from dataclasses import asdict, dataclass, field
 from typing import Any
 
-from src import llm
+from src import llm, params
 from src.config import Settings
 from src.intake.extract import KEYWORD_MIN_SCORE, MIN_QUOTE_CHARS, _normalise
 from src.intake.pii import scrub
@@ -30,9 +30,13 @@ from src.stages import Stages
 
 LLM_TIME_BUDGET_SECONDS = 25.0
 MAX_POSTING_CHARS = 8000
-# Level a posting requirement is taken to need when it states none: "working" (2), the level the
+# Level a posting requirement is taken to need when it states none: "aware" (2), the level the
 # pack uses for non-core requirements. Declared, because postings rarely state levels.
 POSTING_DEFAULT_LEVEL = 2
+# The scale as the model reads it: "1 novice, 2 aware, 3 working, 4 proficient, 5 expert".
+POSTING_LEVEL_WORDS = ", ".join(
+    f"{i} {label}" for i, label in enumerate(params.PROFICIENCY_LABELS) if i
+)
 ESSENTIAL_WORDS = re.compile(r"\b(must|required|requirement|minimum|mandatory|essential)\b", re.I)
 LINE = re.compile(r"\n+|(?<=[.;])\s+")
 MAX_STEPPING_STONES = 3
@@ -76,7 +80,7 @@ def _schema(pack: Pack) -> dict[str, Any]:
                         "quote": {"type": "string"},
                         "skill": {"type": "string", "enum": [*pack.skills, "other"]},
                         "essential": {"type": "boolean"},
-                        "level": {"type": ["integer", "null"], "enum": [1, 2, 3, 4, None]},
+                        "level": {"type": ["integer", "null"], "enum": [1, 2, 3, 4, 5, None]},
                     },
                 },
             }
@@ -94,7 +98,7 @@ def _messages(pack: Pack, posting: str) -> list[dict[str, str]]:
                 "from the posting word for word as 'quote', pick the closest skill from the list "
                 "or 'other' if none fits, mark essential=true only if the posting says it is "
                 "required, a must or a minimum, and give a level only if the posting clearly "
-                "states one (1 aware, 2 working, 3 proficient/several years, 4 expert/lead), "
+                f"states one ({POSTING_LEVEL_WORDS}), "
                 "otherwise null. Do not add anything the posting does not ask for.\n\n"
                 f"Skills:\n{skills}"
             ),

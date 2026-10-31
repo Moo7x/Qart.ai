@@ -43,7 +43,9 @@ def test_fit_range_spans_unstated_skills_and_is_exact_when_all_known() -> None:
     assert r["low"] == match.fit < r["high"]
     known = {req.skill: 2 for req in role.requires}
     full = score_role(pack, role, known, "moderate", EVIDENCE)
-    assert fit_range(pack, full, known, "moderate", EVIDENCE) == {"low": full.fit, "high": full.fit}
+    # C2 adds a "basis" sentence beside the two numbers (B3).
+    r_full = fit_range(pack, full, known, "moderate", EVIDENCE)
+    assert (r_full["low"], r_full["high"]) == (full.fit, full.fit)
 
 
 def test_best_questions_are_unstated_and_ranked_by_declared_value() -> None:
@@ -60,7 +62,7 @@ def test_sensitivity_and_what_if_leave_inputs_unchanged() -> None:
     pack = load_pack()
     before = dict(LEVELS)
     s = sensitivity(pack, LEVELS, "moderate", EVIDENCE, None)
-    assert len(s["roles"]) == 9 and all(
+    assert len(s["roles"]) == 10 and all(
         len(r["ranks"]) == len(s["intensities"]) for r in s["roles"]
     )
     rows = what_if(pack, LEVELS, {"budget_management": 3, "fpa": 3}, "moderate", EVIDENCE, None)

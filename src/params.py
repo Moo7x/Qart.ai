@@ -125,12 +125,15 @@ RUNPOD_USD_PER_SECOND: float | None = None
 # --- Matching (src/match/engine.py) ------------------------------------------------------------
 # Bump when the formula/planning algorithm changes, even if its numeric parameters do not.
 # Used with pack/parameter fingerprints to invalidate proposals computed under different rules.
-CALCULATION_VERSION = "journey-2"  # journey-2: task-level AI-use evidence per requirement
-# Proficiency scale used everywhere: 0 none · 1 aware · 2 working · 3 proficient · 4 expert.
-PROFICIENCY_LABELS = ("none", "aware", "working", "proficient", "expert")
+CALCULATION_VERSION = "journey-3"  # journey-3: 0–5 described levels (C1); stored numbers kept
+# Proficiency scale used everywhere (docs/PHASE2_PLAN.md §1 decision 2, aligned with SFIA's lower
+# five levels): 0 none · 1 novice · 2 aware · 3 working · 4 proficient · 5 expert. Each level of
+# each skill is described by an "I can…" sentence in data/packs/gbs_fa/levels.yaml.
+PROFICIENCY_LABELS = ("none", "novice", "aware", "working", "proficient", "expert")
 # Level a destination role needs, by requirement tier. Core skills are the role's defining work, so
-# they need "proficient"; skills TalentCorp names for the move (upskill) and supporting tools need
-# "working" level: enough to do the job while growing in it.
+# they need "working" (handles the full task alone); skills TalentCorp names for the move (upskill)
+# and supporting tools need "aware" (routine tasks with guidance): enough to do the job while
+# growing in it.
 ROLE_TIER_LEVEL = {"core": 3, "upskill": 2, "support": 2}
 # How much each tier counts in the fit score: defining work counts most, tools least.
 ROLE_TIER_WEIGHT = {"core": 3.0, "upskill": 2.0, "support": 1.0}
@@ -141,15 +144,18 @@ AI_ROLE_DIRECTION = {"complement": 1, "routine": -1, "neutral": 0}
 # assumed to reach these tasks. Moderate = half, fast = all of it. Declared, not estimated.
 SCENARIO_INTENSITY = {"moderate": 0.5, "fast": 1.0}
 SCENARIO_HORIZON_YEARS = 2
+# Lowest scenario factor a weight can get. Declared: a routine skill can lose most of its weight
+# but never vanish or turn negative, even at the 1.5 sensitivity intensity with 100% automation.
+SCENARIO_FACTOR_FLOOR = 0.1
 # Roles whose fit differs by less than this are near-ties: the person's interests may order them.
 NEAR_TIE_POINTS = 3.0
 
 # --- Decision support (src/match/decision.py) ----------------------------------------------------
-# Level an unstated skill is assumed to have at the top of the fit range: "proficient", the
+# Level an unstated skill is assumed to have at the top of the fit range: "working", the
 # highest level any requirement needs, so the range shows the most an answer could add. The bottom
 # of the range is 0 (not stated counts as none, as in the fit itself).
 UNSTATED_HIGH_LEVEL = 3
-# Answers compared when choosing the most valuable question: none (0) versus proficient (3).
+# Answers compared when choosing the most valuable question: none (0) versus working (3).
 QUESTION_ANSWERS = (0, 3)
 QUESTIONS_SHOWN = 3
 # Ranking of questions: an essential of the person's chosen (else best-fitting) role matters most,
@@ -162,14 +168,6 @@ QUESTION_WEIGHT_TOP_CHANGE = 100.0
 SENSITIVITY_INTENSITIES = (0.0, 0.25, 0.5, 0.75, 1.0, 1.5)
 
 # --- Pathway (src/pathway/planner.py) ----------------------------------------------------------
-# Highest level a course's material can take a skill to, by its stated level.
-COURSE_LEVEL_REACH = {"beginner": 2, "intermediate": 3, "advanced": 3}
-# Most levels a single course can add to a skill, by its length. Short modules introduce a topic;
-# only longer material can move someone two levels. Several courses on one skill add up, capped by
-# each course's level reach. Declared to keep plans honest about what a few hours can do.
-COURSE_SHORT_MINUTES = 180
-COURSE_MAX_GAIN_SHORT = 1
-COURSE_MAX_GAIN_LONG = 2
 # Plan comparison (src/pathway/optimise.py): the time budget is the person's weekly hours over
 # this many weeks, about one quarter; plans are compared within the same budget.
 PLAN_BUDGET_WEEKS = 12
@@ -191,3 +189,68 @@ AI_TRACK_KINDS = ("data_digital",)
 # Owner B adds parameters for the 0–5 level scale, fit range and bands, study versus practice,
 # the adaptive plan, SDG totals and badges here (and edits the matching, decision and pathway
 # sections above).
+
+# CV reading (src/intake/extract.py, B1).
+# ERP systems a CV may name. If the CV names one and no `erp` claim was read, a claim at
+# ERP_RULE_LEVEL is added with that sentence as evidence: naming the system a person posted or
+# reconciled in is direct evidence of using it. Declared list: the ERP and accounting systems
+# common in Malaysian GBS and SME finance; matched as whole words, ignoring case.
+ERP_ALIASES = (
+    "SAP",
+    "S/4HANA",
+    "Oracle",
+    "Dynamics 365",
+    "NetSuite",
+    "Workday Financials",
+    "Infor",
+    "Sage X3",
+    "SQL Accounting",
+    "AutoCount",
+)
+# Level of the rule's claim: "did it in a job" (2), the most a tool mention alone shows. Declared.
+ERP_RULE_LEVEL = 2
+
+# Level guide in the CV-reading prompt (src/intake/extract.py, B2). The scale meanings always go
+# in; each skill's five sentences go in too when the whole guide stays under this many characters,
+# otherwise the meanings only. Declared: about 2,000 tokens, so the prompt stays small and fast.
+# Measured 2026-10-30: the 37 skills' sentences are about 16,500 characters, so today the prompt
+# carries the meanings and rules only, and the person refines each level with its sentences.
+LEVEL_GUIDE_MAX_CHARS = 8_000
+
+# Fit band and "what would raise it" (src/match/decision.py, B3, docs/PHASE2_PLAN.md §4 C2).
+# Band of a role's fit, from the fit itself. Declared thresholds, shown as an assumption: a fit of
+# 75+ meets three quarters of the weighted requirements; below 35, most of the role is still to
+# learn. Lower bound inclusive, checked from the top: strong ≥ 75 · good ≥ 55 · fair ≥ 35 · low.
+BAND_THRESHOLDS = {"strong": 75, "good": 55, "fair": 35}
+BAND_BELOW = "low"
+# Highest level study alone can reach: "aware" (2). Levels 3 and above need work done (levels.yaml
+# rule "done, not studied"). Declared: MQF counts 40 notional hours per credit including practice,
+# and vendors expect months of use before working-level skill. Used by "raise" now and by the
+# planner in B4.
+STUDY_MAX_LEVEL = 2
+RAISE_SHOWN = 3  # single-skill changes listed under "what would raise it"
+
+# Study versus practice (src/pathway/planner.py, B4). These replace the old per-course gains.
+# Material covering a skill gives level 1 ("novice") from LEVEL1_MIN_HOURS: enough to know the
+# basics. Level 2 ("aware") needs LEVEL2_MIN_HOURS including at least one hands-on item: the
+# shortest recognised programme found was 19 h (WSQ Vendor Performance Management). Declared.
+# Study never goes above STUDY_MAX_LEVEL (above); levels 3 and 4 come from practice tasks.
+LEVEL1_MIN_HOURS = 1
+LEVEL2_MIN_HOURS = 20
+
+# The plan adapts to the person (src/pathway/planner.py, B5). AI basics are skipped when the
+# person already shows AI or automation work: any of these skills claimed at AI_BASICS_SKIP_LEVEL
+# ("working") or above with evidence (a CV sentence or an accepted progress check). Declared: at
+# that level they use these tools in their own work, which is what AI basics teach. Students and
+# switchers always see them, since their claims rarely come from finance work yet.
+AI_BASICS_SKILLS = (
+    "prompt_engineering",
+    "process_automation",
+    "advanced_technology_integration",
+    "data_management",
+)
+AI_BASICS_SKIP_LEVEL = 3
+AI_BASICS_ALWAYS = ("student", "switcher")
+# No course labelled beginner is planned for a skill claimed at this level or above. Declared:
+# "aware" (2) already covers what a beginner course teaches.
+NO_BEGINNER_FROM_LEVEL = 2

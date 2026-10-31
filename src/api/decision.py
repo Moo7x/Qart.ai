@@ -9,6 +9,7 @@ from sqlalchemy import Engine
 from src.api.evidence import get_engine
 from src.api.journey import _destination_or_query, require_profile
 from src.changes.store import accepted_rows
+from src.journey.events import record_event
 from src.journey.progress import get_progress, save_progress
 from src.journey.store import (
     MAX_LEVEL,
@@ -20,7 +21,7 @@ from src.journey.store import (
 from src.match.decision import best_questions, sensitivity, what_if
 from src.match.engine import Scenario, score_role
 from src.match.evidence import automation_evidence
-from src.pack import load_pack
+from src.pack import Pack, load_pack
 from src.pathway.optimise import compare_plans
 from src.pathway.planner import plan_pathway
 
@@ -57,9 +58,18 @@ def answer(profile_id: str, body: Answer, engine: Engine = Depends(get_engine)) 
     """The person's own answer to a question: a self-rated claim, never a verified level."""
     data, _ = require_profile(engine, profile_id)
     if body.skill not in load_pack().skills:
-        raise HTTPException(status_code=422, detail="unknown skill")
+        raise HTTPException(status_code=422, detail=f"unknown skill: {body.skill}")
+    before = data.skills[body.skill].level if body.skill in data.skills else None
     data.skills[body.skill] = SkillClaim(level=body.level, source="self")
     update_profile(engine, profile_id, data)
+    record_event(
+        engine,
+        profile_id,
+        "level_changed",
+        body.skill,
+        before,
+        {"level": body.level, "source": "self"},
+    )
     return {"skill": body.skill, "level": str(body.level)}
 
 
@@ -138,6 +148,17 @@ def plans(
 class ProgressIn(BaseModel):
     done: list[str] = Field(default=[], max_length=200)
     paused: bool = False
+    # Steps passed with "continue anyway" (C5). None keeps what is stored.
+    skipped: list[str] | None = Field(default=None, max_length=200)
+
+
+def _known_step(pack: Pack, step_id: str) -> bool:
+    """A course id, or a practice step id for a pack skill and a practice level."""
+    if step_id in pack.courses:
+        return True
+    kind, _, rest = step_id.partition(":")
+    skill, _, level = rest.partition(":")
+    return kind == "practice" and skill in pack.skills and level in ("3", "4")
 
 
 def _progress_view(engine: Engine, profile_id: str, scenario: Scenario) -> dict[str, Any]:
@@ -192,6 +213,15 @@ def set_progress(
     engine: Engine = Depends(get_engine),
 ) -> dict[str, Any]:
     require_profile(engine, profile_id)
-    known = load_pack().courses
-    save_progress(engine, profile_id, [c for c in body.done if c in known], body.paused)
+    pack = load_pack()
+    skipped = None if body.skipped is None else [s for s in body.skipped if _known_step(pack, s)]
+    done = [c for c in body.done if c in pack.courses]
+    saved = get_progress(engine, profile_id)
+    save_progress(engine, profile_id, done, body.paused, skipped)
+    for course in sorted(set(done) - set(saved["done"])):
+        record_event(engine, profile_id, "course_done", course)
+    for course in sorted(set(saved["done"]) - set(done)):
+        record_event(engine, profile_id, "course_undone", course)
+    for step in sorted(set(skipped or []) - set(saved["skipped"])):
+        record_event(engine, profile_id, "step_skipped", step)
     return _progress_view(engine, profile_id, scenario)

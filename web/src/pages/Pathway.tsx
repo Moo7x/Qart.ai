@@ -4,11 +4,14 @@ import { Link } from 'react-router-dom'
 import { sendJSON, useApi } from '../api'
 import { PlanCompare } from '../components/PlanCompare'
 import { RouteCompare } from '../components/RouteCompare'
+import { SdgHeatmap } from '../components/SdgHeatmap'
+import { Badges } from '../components/Badges'
 import { TrackMap } from '../components/TrackMap'
 import { ScenarioSwitch, SdgTag, sdgColour, JourneyRoute, NextStep, PROGRESS_EVENT } from '../components/journey'
 import { Loading, Problem } from '../components/ui'
 import { useJourney } from '../state'
 import type { PathwayResponse, ProgressResponse, Scenario, TracksResponse } from '../types'
+import type { Badge, SdgMatrix } from '../typesScoring'
 import { NeedProfile } from './Roles'
 
 // Older builds kept completion in this browser; it is moved to the server once.
@@ -31,6 +34,8 @@ function ProfilePathway({ profileId, scenario }: { profileId: string; scenario: 
   const { t } = useT()
   const path = useApi<PathwayResponse>(`/api/profiles/${profileId}/pathway?scenario=${scenario}`)
   const tracks = useApi<TracksResponse>(`/api/profiles/${profileId}/tracks?scenario=${scenario}`)
+  const sdg = useApi<SdgMatrix>(`/api/profiles/${profileId}/sdg?scenario=${scenario}`)
+  const badges = useApi<Badge[]>(`/api/profiles/${profileId}/badges?scenario=${scenario}`)
   // Self-reported completion, saved per profile on the server; it never changes skills or fit.
   const progress = useApi<ProgressResponse>(`/api/profiles/${profileId}/progress?scenario=${scenario}`)
   const [state, setState] = useState<ProgressResponse | null>(null)
@@ -39,12 +44,16 @@ function ProfilePathway({ profileId, scenario }: { profileId: string; scenario: 
   const current = state ?? progress.data
   const done = current?.done ?? []
 
-  async function save(next: { done: string[]; paused: boolean }) {
+  async function save(next: { done: string[]; paused: boolean; skipped?: string[] }) {
     setSaving(true)
     setSaveError(null)
     try {
       setState(await sendJSON<ProgressResponse>(`/api/profiles/${profileId}/progress?scenario=${scenario}`, { method: 'PUT', body: next }))
       window.dispatchEvent(new Event(PROGRESS_EVENT))
+      // Lock and skip states are computed by the server, so the plan is read again.
+      path.reload()
+      tracks.reload()
+      badges.reload()
       return true
     } catch (reason) {
       setSaveError(reason instanceof Error ? reason.message : String(reason))
@@ -60,6 +69,11 @@ function ProfilePathway({ profileId, scenario }: { profileId: string; scenario: 
       void save({ done: legacy, paused: progress.data.paused }).then((saved) => { if (saved) window.localStorage.removeItem(`qart.done.${profileId}`) })
     }
   }, [progress.data]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  function skip(stepId: string) {
+    const skipped = current?.skipped ?? []
+    void save({ done, paused: current?.paused ?? false, skipped: [...skipped, stepId] })
+  }
 
   function toggle(courseId: string) {
     const next = done.includes(courseId) ? done.filter((d) => d !== courseId) : [...done, courseId]
@@ -90,14 +104,21 @@ function ProfilePathway({ profileId, scenario }: { profileId: string; scenario: 
               <span className="eyebrow">Pathway · destination you chose</span>
               <h1 className="h1">{data.role_title}</h1>
               <p className="m-0 font-mono text-[13px] text-graphite">
-                {data.total_hours} h · RM 0 · {data.weekly_hours} h a week · about {data.weeks} week{data.weeks === 1 ? '' : 's'} · {finished} of {data.steps.length} steps done
+                {data.total_hours} h{tracks.data?.comparison.with_ai.ai_basics_hours ? ` + ${tracks.data.comparison.with_ai.ai_basics_hours} h AI basics` : ''} · RM 0 · {data.weekly_hours} h a week · about {data.weeks} week{data.weeks === 1 ? '' : 's'} · {finished} of {data.steps.length} steps done
               </p>
             </div>
+            <PlanTotals data={data} />
             <div className="flex flex-col items-end gap-2">
               <ScenarioSwitch />
               <Link to="/roles" className="text-[13px]">Change destination</Link>
             </div>
           </header>
+
+          <section aria-label="Your badges" className="panel min-w-0 gap-3">
+            <h2 className="h2">Your badges</h2>
+            {badges.error && <Problem what="your badges" message={badges.error} onRetry={badges.reload} />}
+            {badges.data && <Badges badges={badges.data} />}
+          </section>
 
           <section aria-label="Your roadmap" className="panel min-w-0 gap-5">
             <div className="flex flex-col gap-1">
@@ -106,6 +127,12 @@ function ProfilePathway({ profileId, scenario }: { profileId: string; scenario: 
                 Three tracks: AI basics first, then the skills this role needs without AI and with AI. Each step opens its courses, YouTube videos and articles; a step unlocks when the one before it in its track is done.
               </p>
             </div>
+            {data.adjustments && data.adjustments.length > 0 && (
+              <div className="flex flex-col gap-1 border-l-4 border-observed bg-observed-bg px-4 py-3 text-[13px]">
+                <span className="font-semibold text-observed">Adjusted for you</span>
+                <ul className="m-0 pl-5">{data.adjustments.map((a) => <li key={`${a.rule}-${a.text}`}>{a.text}</li>)}</ul>
+              </div>
+            )}
             {(data.essentials_unmet.length > 0 || data.uncovered.length > 0) && (
               <div className="flex flex-col gap-1 border-l-4 border-weak bg-weak-bg px-4 py-3 text-[13px]">
                 {data.essentials_unmet.length > 0 && <span className="font-semibold text-weak">Essential skills still below the level after this plan: {data.essentials_unmet.join(', ')}.</span>}
@@ -116,10 +143,20 @@ function ProfilePathway({ profileId, scenario }: { profileId: string; scenario: 
             {tracks.error && <Problem what="your roadmap" message={tracks.error} onRetry={tracks.reload} />}
             {saveError && <p role="alert" className="m-0 text-weak">Progress was not saved: {saveError}. Try the action again.</p>}
             {/* Drawn only once saved progress is known, so steps never flash the wrong state. */}
-            {tracks.data && (current || progress.error) && <TrackMap tracks={tracks.data.tracks} done={done} onToggle={toggle} paused={saving || progress.loading || (current?.paused ?? false)} checked={tracks.data.resources_checked} />}
+            {tracks.data && (current || progress.error) && <TrackMap tracks={tracks.data.tracks} done={done} onToggle={toggle} onSkip={skip} paused={saving || progress.loading || (current?.paused ?? false)} checked={tracks.data.resources_checked} />}
           </section>
 
           {tracks.data && <RouteCompare data={tracks.data.comparison} scenario={scenario} />}
+
+          <section id="sdg" aria-label="SDG contribution" className="panel min-w-0 gap-4">
+            <div className="flex flex-col gap-1">
+              <h2 className="h2">How your plan contributes to the SDGs</h2>
+              <p className="m-0 max-w-[720px] text-[13px] text-graphite">Each cell is the study hours a skill takes in your plan, counted toward every target that skill serves. Click a cell for the reason and its source.</p>
+            </div>
+            {sdg.loading && <Loading what="the SDG map" />}
+            {sdg.error && <Problem what="the SDG map" message={sdg.error} onRetry={sdg.reload} />}
+            {sdg.data && <SdgHeatmap data={sdg.data} />}
+          </section>
 
           {current?.plan && (
             <section aria-label="Your progress" className="panel gap-4">
@@ -188,3 +225,36 @@ function ProfilePathway({ profileId, scenario }: { profileId: string; scenario: 
     </main>
   )
 }
+
+const BASIS_TEXT: Record<string, string> = {
+  reading_estimate: 'reading estimates',
+  guided_hours: 'guided hours',
+  stated: 'stated lengths',
+}
+
+// Study and practice kept apart (B4): hours of study, weeks of practice as a range, and the fit
+// after each, every one an estimate. Study reaches level 2 at most.
+function PlanTotals({ data }: { data: PathwayResponse }) {
+  if (data.study_hours === undefined || !data.fit_after_study || !data.fit_after_practice) return null
+  const bases = [...new Set(data.steps.map((s) => s.time?.basis).filter((b): b is NonNullable<typeof b> => !!b && b in BASIS_TEXT))]
+  const range = (r: { low: number; high: number }) => `${Math.round(r.low)}–${Math.round(r.high)}`
+  const weeks = data.practice_weeks
+  return (
+    <div className="flex w-full flex-col gap-1.5 text-[13px]">
+      <span className="flex flex-wrap items-center gap-2">
+        <span className="tag bg-estimate-bg text-estimate">Estimate</span>
+        Study {data.study_hours} h{bases.length ? ` (${bases.map((b) => BASIS_TEXT[b]).join(', ')})` : ''}
+        {weeks && weeks.high > 0 ? ` · practice at work ${weeks.low}–${weeks.high} weeks` : ''}
+      </span>
+      <span>
+        Fit after study <b>{range(data.fit_after_study)}</b>
+        {weeks && weeks.high > 0 ? <> · after study and practice <b>{range(data.fit_after_practice)}</b></> : null}
+        <span className="text-graphite"> (now {Math.round(data.fit_before)}; planned levels count as self-rated)</span>
+      </span>
+      {data.partly_covered.length > 0 && (
+        <span className="text-graphite">Study stops below level 2 for {data.partly_covered.join(', ')}: not enough verified hands-on material yet. Level 2 needs 20 h including hands-on work.</span>
+      )}
+    </div>
+  )
+}
+

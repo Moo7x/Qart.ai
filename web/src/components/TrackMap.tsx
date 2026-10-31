@@ -1,6 +1,7 @@
 import { useCallback, useState } from 'react'
 import { Link } from 'react-router-dom'
 import type { Track, TrackNode } from '../types'
+import type { PracticeStep } from '../typesScoring'
 import { levelText } from './journey'
 import { Windows, type Pane } from './Windows'
 
@@ -28,8 +29,43 @@ function states(track: Track, done: string[]): State[] {
   })
 }
 
-function panes(node: TrackNode, state: State, blocker: string | null, done: string[], onToggle: (id: string) => void, paused: boolean, checked: string): Pane[] {
+const STATUS_TAG: Record<PracticeStep['status'], string> = {
+  open: 'bg-mist text-graphite',
+  done: 'bg-observed-bg text-observed',
+  skipped: 'bg-weak-bg text-weak',
+}
+
+// Practice at work (B4): levels above what study gives come from a task agreed with a manager.
+function practicePane(steps: PracticeStep[], onSkip: (id: string) => void, paused: boolean): Pane {
+  return {
+    key: 'practice',
+    title: 'Practice at work',
+    hint: 'Study reaches level 2 at most; these levels come from work you do. Weeks are estimates.',
+    body: (
+      <ol className="m-0 flex flex-col gap-3 pl-5">
+        {steps.map((p) => (
+          <li key={p.id} className="flex flex-col gap-1.5">
+            <span className="font-medium">To {levelText(p.target_level)}: {p.text}</span>
+            <span className="flex flex-wrap items-center gap-2 font-mono text-[11px] text-graphite">
+              <span className="tag bg-estimate-bg text-estimate">Estimate</span>
+              {p.time.low}–{p.time.high} weeks · to agree with your manager
+            </span>
+            <span className="text-[12px] text-graphite">To complete it, describe: {p.show_by} A progress check or your own re-rating moves the level.</span>
+            <span className="flex flex-wrap items-center gap-2">
+              <span className={`tag ${STATUS_TAG[p.status]}`}>{p.status === 'open' ? (p.locked ? 'Locked: finish this skill’s courses first' : 'Open') : `${p.status === 'done' ? 'Done' : 'Skipped'} · ${p.status_label}`}</span>
+              {p.status === 'open' && <button type="button" className="btn min-h-[44px] text-[13px]" disabled={paused} onClick={() => onSkip(p.id)}>Continue anyway</button>}
+            </span>
+          </li>
+        ))}
+      </ol>
+    ),
+  }
+}
+
+function panes(node: TrackNode, state: State, blocker: string | null, done: string[], onToggle: (id: string) => void, onSkip: (id: string) => void, paused: boolean, checked: string): Pane[] {
+  const practice = node.practice?.length ? [practicePane(node.practice, onSkip, paused)] : []
   return [
+    ...practice,
     {
       key: 'courses',
       title: 'Courses',
@@ -143,7 +179,7 @@ function Stop({ node, state, index, tone, blocker, onOpen }: { node: TrackNode; 
       <span className={`road-label ${locked ? 'text-ash' : 'text-void'}`}>
         <span className={`block text-[14px] leading-snug ${state === 'current' ? 'font-semibold' : 'font-medium'}`}>{node.title}</span>
         <span className="mt-1 block font-mono text-[11px] text-graphite">
-          {node.now !== null || node.required !== null ? `${levelText(node.now)} → ${levelText(node.after)}` : `${node.courses.length + node.videos.length + node.articles.length} resources`}
+          {node.now !== null || node.required !== null ? `${levelText(node.now)} → ${levelText(node.study_after ?? node.after)} by study${node.practice?.length ? ` · practice to ${levelText(node.required)}` : ''}` : `${node.courses.length + node.videos.length + node.articles.length} resources`}
           {node.essential ? ' · essential' : ''}
         </span>
         {locked && <span className="mt-1 block text-[11px] text-ash">Unlocks after the step before</span>}
@@ -155,8 +191,9 @@ function Stop({ node, state, index, tone, blocker, onOpen }: { node: TrackNode; 
 
 // My plan as three roads stacked top to bottom. Each road runs from Start to Finish through its
 // reskilling stops; the coloured part of the road is what the person has completed.
-export function TrackMap({ tracks, done, onToggle, paused, checked }: { tracks: Track[]; done: string[]; onToggle: (id: string) => void; paused: boolean; checked: string }) {
+export function TrackMap({ tracks, done, onToggle, onSkip, paused, checked }: { tracks: Track[]; done: string[]; onToggle: (id: string) => void; onSkip: (id: string) => void; paused: boolean; checked: string }) {
   const [open, setOpen] = useState<{ track: number; node: number } | null>(null)
+  const [showSkipped, setShowSkipped] = useState(false)
   const close = useCallback(() => setOpen(null), [])
   const all = tracks.map((t) => states(t, done))
   const selected = open ? tracks[open.track].nodes[open.node] : null
@@ -192,7 +229,13 @@ export function TrackMap({ tracks, done, onToggle, paused, checked }: { tracks: 
                 </span>
               </div>
             </header>
-            {n === 0 ? (
+            {track.shown === false && !showSkipped ? (
+              <div className="flex flex-wrap items-center gap-3 text-[13px]">
+                <span className="tag bg-observed-bg text-observed">Adjusted for you</span>
+                <span className="text-graphite">{track.reason}</span>
+                <button type="button" className="btn min-h-[44px]" onClick={() => setShowSkipped(true)}>Show AI basics anyway</button>
+              </div>
+            ) : n === 0 ? (
               <p className="m-0 text-[13px] text-graphite">Nothing to build on this road: you already meet these skills for this role.</p>
             ) : (
               <div className="road-scroll">
@@ -210,12 +253,12 @@ export function TrackMap({ tracks, done, onToggle, paused, checked }: { tracks: 
           </section>
         )
       })}
-      <p className="m-0 text-[12px] text-graphite">Click an open stop to see its courses, YouTube videos and articles. Locked stops open once the stop before them is done. Levels show you now → after the planned courses (projected, an assumption).</p>
+      <p className="m-0 text-[12px] text-graphite">Click an open stop to see its courses, YouTube videos and articles. Locked stops open once the stop before them is done. Levels show you now → after the planned courses (projected, an assumption); levels above 2 need practice at work.</p>
       {open && selected && (
         <Windows
           key={`${open.track}-${open.node}`}
           title={`${tracks[open.track].title} · ${selected.title}`}
-          panes={panes(selected, selectedState, blockerOf(open.track), done, onToggle, paused, checked)}
+          panes={panes(selected, selectedState, blockerOf(open.track), done, onToggle, onSkip, paused, checked)}
           onClose={close}
         />
       )}
