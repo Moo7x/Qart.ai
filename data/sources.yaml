@@ -18,7 +18,7 @@
   collector: dosm_wages
   shows: Employees (wage recipients) by major occupation group in Malaysia, per year
   does_not_show: Demand for one job title or skill, or why a group grew or shrank
-  notes: 2010 is excluded from trends because the occupation classification changed in 2011.
+  notes: Trends start in 2016, when DOSM moved from MASCO 2008 to MASCO 2013 (earlier years are not comparable; 2011 was the previous change).
 
 - id: dosm_job_market_insights
   name: DOSM · Big Data Analytics, Job Market Insights

@@ -31,17 +31,17 @@ def wage_rows() -> list[dict[str, Any]]:
 
 def test_clerical_share_and_headcount_match_dosm(wage_rows: list[dict[str, Any]]) -> None:
     shares = dict(measures.occupation_shares(wage_rows)["clerical"])
-    assert round(shares["2011"], 2) == 14.52
+    assert round(shares["2016"], 2) == 12.85
     assert round(shares["2025"], 2) == 13.10
     heads = dict(measures.headcounts(wage_rows, "clerical"))
-    assert (heads["2011"], heads["2025"]) == (1108.6, 1360.1)
+    assert (heads["2016"], heads["2025"]) == (1082.9, 1360.1)
 
 
-def test_2010_is_left_out_because_of_the_classification_break(
+def test_years_before_the_2016_classification_change_are_left_out(
     wage_rows: list[dict[str, Any]],
 ) -> None:
     years = [p for p, _ in measures.occupation_shares(wage_rows)["professionals"]]
-    assert years[0] == "2011"
+    assert years[0] == "2016"  # MASCO 2008 → MASCO 2013
     assert round(dict(measures.occupation_shares(wage_rows)["professionals"])["2025"], 2) == 18.74
 
 
@@ -49,15 +49,16 @@ def test_backtest_is_reproducible_and_no_change_wins_for_clerical(
     wage_rows: list[dict[str, Any]],
 ) -> None:
     row = measures.backtest(measures.occupation_shares(wage_rows)["clerical"], "clerical")
-    assert (round(row.naive, 2), round(row.linear, 2), round(row.damped, 2)) == (0.48, 0.95, 0.88)
+    assert (round(row.naive, 2), round(row.linear, 2), round(row.damped, 2)) == (0.48, 0.7, 0.88)
     assert row.best == "naive"
 
 
 def test_occupation_labels_follow_the_declared_threshold(wage_rows: list[dict[str, Any]]) -> None:
     by_id = {s.id: s for s in signals.occupation_signals(wage_rows)}
-    assert by_id["dosm_share_clerical"].direction == "weakening"
-    assert by_id["dosm_share_professionals"].direction == "rising"
-    assert by_id["dosm_share_technicians"].direction == "stable"  # -0.20 pts < 0.5
+    # Since the 2016 classification change no group moved 0.5 points or more.
+    assert by_id["dosm_share_clerical"].direction == "stable"  # +0.25 pts < 0.5
+    assert by_id["dosm_share_professionals"].direction == "stable"  # +0.26 pts
+    assert by_id["dosm_share_technicians"].direction == "stable"  # -0.19 pts
     assert "not extrapolated" in by_id["dosm_share_clerical"].note
 
 

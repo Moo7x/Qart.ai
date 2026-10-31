@@ -5,9 +5,13 @@ Changing one changes labels on screen, so each change is logged in docs/decision
 """
 
 # --- OpenDOSM occupation shares ------------------------------------------------------------
-# The occupation classification changed between 2010 and 2011 (professionals jump 9.2% → 13.9%),
-# so trends start in 2011.
-DOSM_FIRST_COMPARABLE_YEAR = 2011
+# Evidence: DOSM's Labour Force tables classify occupations by MASCO 1998 up to 2010, MASCO 2008
+# for 2011–2015 and MASCO 2013 from 2016 (Table 11 notes); the Salaries & Wages Survey behind
+# OpenDOSM wages_occupation is run with the Labour Force Survey. Both changes show in the data:
+# professionals jump 9.2% → 13.9% in 2011, and in 2016 four groups make their largest one-year
+# move at once (professionals +2.8, service and sales −1.4, clerical −1.2, technicians +0.9
+# points). Trends, trend models and forecasts therefore start at the latest change, 2016.
+DOSM_FIRST_COMPARABLE_YEAR = 2016
 # A group is labelled rising or weakening when its share of employees moved at least this many
 # percentage points over the comparable period; smaller moves are within year-to-year noise
 # (single-year swings of up to ~0.9 points occur, e.g. clerical 2019 → 2020).

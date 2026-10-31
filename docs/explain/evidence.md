@@ -47,8 +47,9 @@ forecasts and keep demand and observed AI use as separate parts.
 4. **Pipeline** (`src/pipeline/run.py`): a lock stops overlapping runs; each source gets two
    attempts; a failing source keeps its last good data; a run with nothing new is "no change".
 5. **Measures** (`src/evidence/measures.py`):
-   - share(group, year) = 100 × employees(group) ÷ employees(all), from 2011 (2010 is a
-     classification break);
+   - share(group, year) = 100 × employees(group) ÷ employees(all), from 2016: DOSM moved from
+     MASCO 2008 to MASCO 2013 that year, and four groups make their largest one-year move at
+     once (professionals +2.8 points), so earlier years are not comparable;
    - job-ad share = 100 × count ÷ total per quarter, split where the total jumps by more than 60%
      (treated as a possible platform-coverage break);
    - Economic Index change counts only if ≥ 0.02 points and ≥ 5%, compared at two decimals;
@@ -88,10 +89,11 @@ routes in `src/api/evidence.py` (`/api/signals`, `/api/sources`, `/api/pipeline/
 `/api/pipeline/backtest`, `POST /api/pipeline/run` with the admin token).
 
 ## Example
-OpenDOSM: clerical support workers 1,108.6k of 7,634.0k employees in 2011 (14.52%) and 1,360.1k of
-10,381.6k in 2025 (13.10%): a fall of 1.42 points ≥ 0.5 over 15 comparable years → "weakening",
-noted as history. Backtest for clerical: no-change error 0.48 points, straight line 0.95 → the
-trend is not projected.
+OpenDOSM: clerical support workers 12.85% of employees in 2016 and 1,360.1k of 10,381.6k in 2025
+(13.10%): a rise of 0.25 points < 0.5 over 10 comparable years → "stable". Backtest for clerical:
+no-change error 0.48 points, straight line 0.70 → the trend is not projected. Before the 2016
+change was handled, the same group read 14.52% (2011) → 13.10%, "weakening": most of that fall was
+the reclassification, not the labour market.
 
 ## Limits and honesty
 - Occupation groups are broad (MASCO major groups); they do not show demand for one job title.
