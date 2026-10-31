@@ -231,3 +231,18 @@ destination_roles:
       - {skill: green_procurement, tier: upskill, pages: [41]}
       - {skill: reporting, tier: support}
       - {skill: erp, tier: support}
+  - id: tax_analyst
+    title: Tax Analyst
+    pages: [22, 26, 50]  # PDF pages that name the role (title and impact or transition)
+    impact: low
+    soc: "13-2082.00"
+    requires:
+      # Tax Analyst's own skill list: PDF p. 50 (low impacted roles). Tax Preparation is a
+      # declared link: the study's finance skills list (p. 23) names it, and it is the role's
+      # defining work.
+      - {skill: accounting_principles, tier: core, essential: true, pages: [50]}
+      - {skill: tax_preparation, tier: core, pages: [23]}
+      - {skill: green_tax_strategies, tier: upskill, pages: [50]}
+      - {skill: e_invoicing_standards, tier: upskill, pages: [50]}
+      - {skill: attention_to_detail, tier: support, pages: [50]}
+      - {skill: ethical_judgement, tier: support, pages: [50]}

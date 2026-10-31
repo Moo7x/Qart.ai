@@ -398,3 +398,10 @@ roles:
   - target: '12.6'
     how: 'The role requires Green Procurement Policies and Standards: it helps the company adopt sustainable practices and report them.'
     source: TalentCorp (2024) GBS study, PDF p. 22 (finance & accounting roles) and p. 26 (impact)
+  tax_analyst:
+  - target: '8.5'
+    how: Moving into Tax Analyst, a role TalentCorp lists in the GBS finance cluster (low AI impact), keeps you in productive employment as routine work changes.
+    source: TalentCorp (2024) GBS study, PDF p. 22 (finance & accounting roles), p. 26 (impact) and p. 50 (skills)
+  - target: '12.6'
+    how: 'The role requires Green Tax Strategies: it helps the company adopt sustainable practices and report them.'
+    source: TalentCorp (2024) GBS study, PDF p. 50

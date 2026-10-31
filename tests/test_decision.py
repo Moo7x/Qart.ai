@@ -62,7 +62,7 @@ def test_sensitivity_and_what_if_leave_inputs_unchanged() -> None:
     pack = load_pack()
     before = dict(LEVELS)
     s = sensitivity(pack, LEVELS, "moderate", EVIDENCE, None)
-    assert len(s["roles"]) == 9 and all(
+    assert len(s["roles"]) == 10 and all(
         len(r["ranks"]) == len(s["intensities"]) for r in s["roles"]
     )
     rows = what_if(pack, LEVELS, {"budget_management": 3, "fpa": 3}, "moderate", EVIDENCE, None)

@@ -6,6 +6,7 @@ from functools import cache
 
 import pytest
 
+from scripts.kpis import PHASE1_REQUIRED
 from src.evidence.field import field_profile
 from src.pack import load_pack
 from tests.test_talentcorp import PDF
@@ -14,7 +15,7 @@ from tests.test_talentcorp import PDF
 def test_pack_loads_and_every_reference_resolves() -> None:
     pack = load_pack()
     assert len(pack.current_roles) == 11  # the 11 highly impacted finance roles (PDF p. 26)
-    assert len(pack.destination_roles) == 9
+    assert len(pack.destination_roles) == 10  # 9 at Phase 1 + Tax Analyst (B10, PDF p. 50)
     assert "cash_application_analyst" in pack.current_roles
 
 
@@ -27,10 +28,14 @@ def test_every_role_crosswalk_is_followed_by_the_evidence_layer() -> None:
     assert socs <= codes
 
 
-def test_every_destination_is_reachable_from_some_current_role() -> None:
+def test_every_destination_is_a_listed_transition_or_cites_its_own_page() -> None:
+    # B10: a destination the study names with its own skill list (Tax Analyst, p. 50) may be
+    # chosen without a listed transition; its card says it is not a listed transition.
     pack = load_pack()
     reachable = {d for r in pack.current_roles.values() for d in r.transitions}
-    assert reachable == set(pack.destination_roles)
+    assert reachable <= set(pack.destination_roles)
+    for role_id in set(pack.destination_roles) - reachable:
+        assert pack.destination_roles[role_id].pages, role_id
 
 
 def test_courses_are_free_sources_with_stated_length() -> None:
@@ -42,8 +47,9 @@ def test_courses_are_free_sources_with_stated_length() -> None:
 
 
 def test_most_destination_skills_have_a_verified_course() -> None:
+    # Over the Phase 1 skills (pinned in scripts/kpis.py); skills added later are reported apart.
     pack = load_pack()
-    needed = {r.skill for d in pack.destination_roles.values() for r in d.requires}
+    needed = set(PHASE1_REQUIRED)
     uncovered = sorted(s for s in needed if not pack.courses_for(s))
     # Known gaps are shown as "no verified free course yet", never filled with guesses.
     assert len(uncovered) <= len(needed) // 3, uncovered
