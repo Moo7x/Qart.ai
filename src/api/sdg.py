@@ -9,10 +9,8 @@ from fastapi import APIRouter, Depends, Query
 from sqlalchemy import Engine
 
 from src.api.evidence import get_engine
-from src.api.journey import _destination_or_query, evidence_for, require_profile
-from src.match.engine import Scenario, score_role
-from src.pack import load_pack
-from src.pathway.planner import plan_pathway
+from src.api.journey import chosen_role, require_person
+from src.match.engine import Scenario
 from src.pathway.sdg import SdgMatrix, sdg_matrix
 
 router = APIRouter(prefix="/api/profiles/{profile_id}")
@@ -25,13 +23,6 @@ def sdg(
     engine: Engine = Depends(get_engine),
 ) -> SdgMatrix:
     """The destination plan's skills × SDG targets in planned study hours, with reasons."""
-    data, destination = require_profile(engine, profile_id)
-    chosen = _destination_or_query(destination, None)
-    pack = load_pack()
-    evidence = evidence_for(engine, profile_id)
-    levels = data.levels()
-    match = score_role(pack, pack.destination_roles[chosen], levels, scenario, evidence)
-    path = plan_pathway(
-        pack, match, data.skills, data.weekly_hours, scenario, evidence, data.situation
-    )
-    return sdg_matrix(pack, path)
+    person = require_person(engine, profile_id)
+    match = person.score(chosen_role(person), scenario)
+    return sdg_matrix(person.pack, person.plan(match, scenario))

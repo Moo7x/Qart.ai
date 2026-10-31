@@ -17,10 +17,9 @@ from pydantic import BaseModel, Field
 from sqlalchemy import Engine
 
 from src.api.evidence import get_engine
-from src.api.journey import evidence_for, require_profile
-from src.match.engine import Evidence, RoleMatch, Scenario, rank_roles
-from src.pack import Pack, load_pack
-from src.pathway.planner import plan_pathway
+from src.api.journey import require_person
+from src.match.engine import Evidence, RoleMatch, Scenario
+from src.pack import Pack
 
 router = APIRouter(prefix="/api/profiles/{profile_id}")
 
@@ -135,24 +134,18 @@ def evidence_test(
     profile_id: str, body: EvidenceTestIn, engine: Engine = Depends(get_engine)
 ) -> EvidenceTestOut:
     """Before → after for the person's ranking, weights and plan under test evidence values."""
-    data, destination = require_profile(engine, profile_id)
-    pack = load_pack()
+    person = require_person(engine, profile_id)
+    pack = person.pack
     _check_keys(pack, body.overrides)
-    stored = evidence_for(engine, profile_id)
+    stored = person.evidence
     tested = apply_overrides(stored, body.overrides)
-    levels = data.levels()
-    interests: set[str] | None = set(data.interests) or None
-    before = rank_roles(pack, levels, body.scenario, stored, interests)
-    after = rank_roles(pack, levels, body.scenario, tested, interests)
-    focus = destination or before[0].role_id
+    before = person.rank(body.scenario, stored)
+    after = person.rank(body.scenario, tested)
+    focus = person.destination or before[0].role_id
     match_before = next(m for m in before if m.role_id == focus)
     match_after = next(m for m in after if m.role_id == focus)
-    path_before = plan_pathway(
-        pack, match_before, data.skills, data.weekly_hours, body.scenario, stored, data.situation
-    )
-    path_after = plan_pathway(
-        pack, match_after, data.skills, data.weekly_hours, body.scenario, tested, data.situation
-    )
+    path_before = person.plan(match_before, body.scenario, stored)
+    path_after = person.plan(match_after, body.scenario, tested)
     previous = {
         o.key: (
             stored.automation_share if o.kind == "occupation_share" else stored.task_automation

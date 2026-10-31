@@ -14,6 +14,12 @@ Malaysian demand or a learner's proficiency. A new profile starts with the lates
 existing profiles keep their accepted snapshot until a revision is accepted. Both role gaps
 and plan stops use that same snapshot. Nothing here changes requirements, fit scores or levels.
 
+**One person, one plan:** every route that scores roles or plans for a person loads them once
+through `src/journey/person.py` (`Person`: profile, destination, accepted evidence). `Person.plan`
+always passes the person's claims and situation, and `Person.rank` always orders near-ties by
+their interests and chosen SDGs, so `/matches`, `/pathway`, `/tracks`, `/sdg`, `/badges`,
+`/future`, `/radar`, `/explain`, the change test and the status totals all use the same plan.
+
 **First-run flow:** `/` always sends visitors to `/start`, including saved-profile users. After building,
 the final action opens Overview. Overview's edit action loads existing answers and updates the
 same profile without clearing its destination. Start over forgets the browser's profile key and

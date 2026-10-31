@@ -11,7 +11,7 @@ from sqlalchemy import Engine, select
 
 from src import params
 from src.api.evidence import get_engine, get_settings
-from src.changes.store import accepted_rows, baseline_cutoff
+from src.changes.store import baseline_cutoff
 from src.collectors.talentcorp import load_extraction
 from src.config import REPO_ROOT, Settings
 from src.evidence.signals import build_signals, job_ad_signals, occupation_signals
@@ -19,6 +19,7 @@ from src.intake.extract import extract
 from src.intake.files import UnsupportedFileError, read_cv
 from src.intake.skill_search import search, warm
 from src.journey.events import record_claim_changes, record_event
+from src.journey.person import Person, load_person
 from src.journey.progress import get_progress
 from src.journey.store import (
     ProfileData,
@@ -37,8 +38,7 @@ from src.match.decision import (
     meters,
     raise_options,
 )
-from src.match.engine import Evidence, RoleMatch, Scenario, rank_roles, score_role
-from src.match.evidence import automation_evidence
+from src.match.engine import Evidence, RoleMatch, Scenario, rank_roles
 from src.match.explain import explain, facts
 from src.match.outlook import role_outlook
 from src.match.pay import role_pay
@@ -46,7 +46,7 @@ from src.match.radar import radar
 from src.match.tasks import task_view
 from src.occupations.catalogue import catalogue_table
 from src.pack import Pack, load_pack
-from src.pathway.planner import Pathway, apply_progress, plan_pathway
+from src.pathway.planner import Pathway, apply_progress
 from src.pathway.sdg import role_targets
 from src.pathway.tracks import build_tracks, comparison
 from src.resources import load_resources
@@ -86,8 +86,11 @@ def load_personas() -> dict[str, dict[str, Any]]:
     return personas
 
 
-def evidence_for(engine: Engine, profile_id: str) -> Evidence:
-    return automation_evidence(accepted_rows(engine, profile_id))
+def require_person(engine: Engine, profile_id: str) -> Person:
+    person = load_person(engine, profile_id)
+    if person is None:
+        raise HTTPException(status_code=404, detail="profile not found")
+    return person
 
 
 def require_profile(engine: Engine, profile_id: str) -> tuple[ProfileData, str | None]:
@@ -262,15 +265,13 @@ def _role_sdgs(pack: Pack, match: RoleMatch) -> list[dict[str, str]]:
 
 
 def _card(
-    pack: Pack,
+    person: Person,
     match: RoleMatch,
-    data: ProfileData,
     path: Pathway,
-    evidence: Evidence,
     demand: list[dict[str, str]],
     scenario: Scenario,
-    rows: list[dict[str, Any]],
 ) -> dict[str, Any]:
+    pack, data, evidence, rows = person.pack, person.data, person.evidence, person.rows
     role = pack.destination_roles[match.role_id]
     current = pack.current_roles.get(data.current_role)
     outlook = [
@@ -327,36 +328,20 @@ def matches(
     scenario: Scenario = Query(default="moderate"),
     engine: Engine = Depends(get_engine),
 ) -> dict[str, Any]:
-    data, destination = require_profile(engine, profile_id)
-    pack = load_pack()
-    rows = accepted_rows(engine, profile_id)
-    evidence = automation_evidence(rows)
+    person = require_person(engine, profile_id)
+    pack, evidence, rows = person.pack, person.evidence, person.rows
     signals = occupation_signals(rows) + job_ad_signals(rows)
-    levels = data.levels()
-    ranked = rank_roles(
-        pack,
-        levels,
-        scenario,
-        evidence,
-        set(data.interests) or None,
-        sdg_goals=set(data.sdg_priorities) or None,
-    )
     cards = [
         _card(
-            pack,
+            person,
             m,
-            data,
-            plan_pathway(
-                pack, m, data.skills, data.weekly_hours, scenario, evidence, data.situation
-            ),
-            evidence,
+            person.plan(m, scenario),
             role_outlook(pack, pack.destination_roles[m.role_id], rows, signals),
             scenario,
-            rows,
         )
-        for m in ranked
+        for m in person.rank(scenario)
     ]
-    current = pack.current_roles.get(data.current_role)
+    current = pack.current_roles.get(person.data.current_role)
     return {
         "scenario": scenario,
         "scenario_label": SCENARIO_LABEL[scenario],
@@ -369,7 +354,7 @@ def matches(
         },
         "current_role": current.model_dump() if current else None,
         "current_impact": IMPACT_MEANING[current.impact] if current else None,
-        "destination": destination,
+        "destination": person.destination,
         "roles": cards,
         # B7: roles × SDG targets with reasons, so roles can be compared by contribution.
         "sdg_roles": [r.model_dump() for r in role_targets(pack)],
@@ -395,11 +380,25 @@ def set_destination(
     return {"destination": role_id}
 
 
-def _destination_or_query(destination: str | None, role_id: str | None) -> str:
-    chosen = role_id or destination
-    if not chosen or chosen not in load_pack().destination_roles:
+def chosen_role(person: Person, role_id: str | None = None) -> str:
+    """The role asked for, else the person's destination; 409 when there is neither."""
+    chosen = role_id or person.destination
+    if not chosen or chosen not in person.pack.destination_roles:
         raise HTTPException(status_code=409, detail="choose a destination role first")
     return chosen
+
+
+def _progressed_plan(
+    engine: Engine, person: Person, role_id: str, scenario: Scenario
+) -> tuple[RoleMatch, Pathway, list[str]]:
+    """The person's plan with their saved progress applied, and every course they marked done
+    (AI-basics courses too, which are not plan steps)."""
+    match = person.score(role_id, scenario)
+    saved = get_progress(engine, person.id)
+    path = apply_progress(
+        person.plan(match, scenario), saved["done"], saved["skipped"], person.data.skills
+    )
+    return match, path, saved["done"]
 
 
 @router.get("/profiles/{profile_id}/pathway")
@@ -409,22 +408,9 @@ def pathway(
     role_id: str | None = Query(default=None, max_length=64),
     engine: Engine = Depends(get_engine),
 ) -> dict[str, Any]:
-    data, destination = require_profile(engine, profile_id)
-    chosen = _destination_or_query(destination, role_id)
-    pack = load_pack()
-    evidence = evidence_for(engine, profile_id)
-    match = score_role(pack, pack.destination_roles[chosen], data.levels(), scenario, evidence)
-    path = plan_pathway(
-        pack,
-        match,
-        data.skills,
-        data.weekly_hours,
-        scenario,
-        evidence,
-        data.situation,
-    )
-    saved = get_progress(engine, profile_id)
-    apply_progress(path, saved["done"], saved["skipped"], data.skills)
+    person = require_person(engine, profile_id)
+    pack = person.pack
+    _, path, _ = _progressed_plan(engine, person, chosen_role(person, role_id), scenario)
     out = asdict(path)
     out["sdg_targets"] = {k: v.model_dump() for k, v in pack.sdg.targets.items()}
     out["sdg_source"] = pack.sdg.source
@@ -440,38 +426,19 @@ def tracks(
     engine: Engine = Depends(get_engine),
 ) -> dict[str, Any]:
     """My plan as AI basics, reskilling without AI and with AI, plus the route comparison."""
-    data, destination = require_profile(engine, profile_id)
-    chosen = _destination_or_query(destination, None)
-    pack = load_pack()
+    person = require_person(engine, profile_id)
+    pack, data = person.pack, person.data
+    chosen = chosen_role(person)
     res = load_resources()
-    evidence = evidence_for(engine, profile_id)
-    match = score_role(pack, pack.destination_roles[chosen], data.levels(), scenario, evidence)
-    path = plan_pathway(
-        pack,
-        match,
-        data.skills,
-        data.weekly_hours,
-        scenario,
-        evidence,
-        data.situation,
-    )
-    saved = get_progress(engine, profile_id)
-    done = saved["done"]
-    apply_progress(path, done, saved["skipped"], data.skills)
+    match, path, done = _progressed_plan(engine, person, chosen, scenario)
     return {
         "role_id": chosen,
         "role_title": match.title,
         "scenario": scenario,
         "weekly_hours": data.weekly_hours,
-        "tracks": build_tracks(pack, res, match, path, done, accepted_rows(engine, profile_id)),
+        "tracks": build_tracks(pack, res, match, path, done, person.rows),
         "comparison": comparison(
-            pack,
-            res,
-            data.skills,
-            chosen,
-            data.weekly_hours,
-            evidence,
-            data.situation,
+            pack, res, data.skills, chosen, data.weekly_hours, person.evidence, data.situation
         ),
         "resources_checked": res.checked,
         "courses_checked": pack.courses_checked,
@@ -487,19 +454,11 @@ def explain_role(
     settings: Settings = Depends(get_settings),
 ) -> dict[str, Any]:
     """Plain-language sentences about one computed role result, each tied to the facts it uses."""
-    data, _ = require_profile(engine, profile_id)
-    pack = load_pack()
-    role = pack.destination_roles.get(role_id)
-    if role is None:
+    person = require_person(engine, profile_id)
+    if role_id not in person.pack.destination_roles:
         raise HTTPException(status_code=404, detail="unknown destination role")
-    rows = accepted_rows(engine, profile_id)
-    evidence = automation_evidence(rows)
-    levels = data.levels()
-    match = score_role(pack, role, levels, scenario, evidence)
-    path = plan_pathway(
-        pack, match, data.skills, data.weekly_hours, scenario, evidence, data.situation
-    )
-    return explain(facts(match, path, SCENARIO_LABEL[scenario]), settings)
+    match = person.score(role_id, scenario)
+    return explain(facts(match, person.plan(match, scenario), SCENARIO_LABEL[scenario]), settings)
 
 
 @router.get("/profiles/{profile_id}/radar")
@@ -509,19 +468,19 @@ def personal_radar(
     engine: Engine = Depends(get_engine),
 ) -> dict[str, Any]:
     """The chosen (or best-fitting) role's skills for this person, and their field's signals."""
-    data, destination = require_profile(engine, profile_id)
-    pack = load_pack()
-    rows = accepted_rows(engine, profile_id)
-    evidence = automation_evidence(rows)
-    levels = data.levels()
-    if destination:
-        match = score_role(pack, pack.destination_roles[destination], levels, scenario, evidence)
-    else:
-        match = rank_roles(pack, levels, scenario, evidence, set(data.interests) or None)[0]
-    path = plan_pathway(
-        pack, match, data.skills, data.weekly_hours, scenario, evidence, data.situation
+    person = require_person(engine, profile_id)
+    destination, rows = person.destination, person.rows
+    match = person.score(destination, scenario) if destination else person.rank(scenario)[0]
+    path = person.plan(match, scenario)
+    out = radar(
+        person.pack,
+        match,
+        path,
+        bool(destination),
+        rows,
+        build_signals(rows),
+        person.data.current_role,
     )
-    out = radar(pack, match, path, bool(destination), rows, build_signals(rows), data.current_role)
     return {**out, "scenario": scenario, "scenario_label": SCENARIO_LABEL[scenario]}
 
 
@@ -530,18 +489,18 @@ def role_tasks(
     profile_id: str, role_id: str, engine: Engine = Depends(get_engine)
 ) -> dict[str, Any]:
     """The role's linked O*NET tasks with the four kinds of evidence, at the accepted cutoff."""
-    require_profile(engine, profile_id)
-    pack = load_pack()
-    role = pack.destination_roles.get(role_id)
+    person = require_person(engine, profile_id)
+    role = person.pack.destination_roles.get(role_id)
     if role is None:
         raise HTTPException(status_code=404, detail="unknown destination role")
     impact = f"TalentCorp rates it {IMPACT_MEANING[role.impact]}."
-    return task_view(pack, role, accepted_rows(engine, profile_id), impact)
+    return task_view(person.pack, role, person.rows, impact)
 
 
 def _top_roles(
     pack: Pack, levels: dict[str, int | None], scenario: Scenario, evidence: Evidence
 ) -> list[dict[str, Any]]:
+    """The best fits by fit alone (no ordering preferences): today against after the plan."""
     ranked = rank_roles(pack, levels, scenario, evidence)[: params.FUTURE_ROLES_SHOWN]
     return [{"role_id": m.role_id, "title": m.title, "fit": m.fit} for m in ranked]
 
@@ -566,19 +525,15 @@ def future(
     role_id: str | None = Query(default=None, max_length=64),
     engine: Engine = Depends(get_engine),
 ) -> dict[str, Any]:
-    data, destination = require_profile(engine, profile_id)
-    chosen = _destination_or_query(destination, role_id)
-    pack = load_pack()
-    evidence = evidence_for(engine, profile_id)
-    role = pack.destination_roles[chosen]
-    levels = data.levels()
+    person = require_person(engine, profile_id)
+    pack, data, evidence = person.pack, person.data, person.evidence
+    role = pack.destination_roles[chosen_role(person, role_id)]
+    levels = person.levels()
     by_scenario: dict[str, Any] = {}
     scenarios: tuple[Scenario, ...] = ("moderate", "fast")
     for scenario in scenarios:
-        match = score_role(pack, role, levels, scenario, evidence)
-        path = plan_pathway(
-            pack, match, data.skills, data.weekly_hours, scenario, evidence, data.situation
-        )
+        match = person.score(role.id, scenario)
+        path = person.plan(match, scenario)
         after = {g.skill: g.after for step in path.steps for g in step.gains}
         # Projected levels if the plan is finished (estimate): the higher of claim and plan.
         levels_after = {**levels, **{k: max(v, levels.get(k) or 0) for k, v in after.items()}}

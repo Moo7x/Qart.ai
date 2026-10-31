@@ -7,8 +7,7 @@ from pydantic import BaseModel, Field
 from sqlalchemy import Engine
 
 from src.api.evidence import get_engine
-from src.api.journey import _destination_or_query, require_profile
-from src.changes.store import accepted_rows
+from src.api.journey import chosen_role, require_person, require_profile
 from src.journey.events import record_event
 from src.journey.progress import get_progress, save_progress
 from src.journey.store import (
@@ -19,11 +18,9 @@ from src.journey.store import (
     update_profile,
 )
 from src.match.decision import best_questions, sensitivity, what_if
-from src.match.engine import Scenario, score_role
-from src.match.evidence import automation_evidence
+from src.match.engine import Scenario
 from src.pack import Pack, load_pack
 from src.pathway.optimise import compare_plans
-from src.pathway.planner import plan_pathway
 
 router = APIRouter(prefix="/api/profiles/{profile_id}")
 
@@ -45,10 +42,9 @@ def questions(
     scenario: Scenario = Query(default="moderate"),
     engine: Engine = Depends(get_engine),
 ) -> list[dict[str, Any]]:
-    data, destination = require_profile(engine, profile_id)
-    evidence = automation_evidence(accepted_rows(engine, profile_id))
+    p = require_person(engine, profile_id)
     found = best_questions(
-        load_pack(), data.levels(), scenario, evidence, set(data.interests) or None, destination
+        p.pack, p.levels(), scenario, p.evidence, set(p.data.interests) or None, p.destination
     )
     return [q.__dict__ for q in found]
 
@@ -79,9 +75,8 @@ def rank_sensitivity(
     scenario: Scenario = Query(default="moderate"),
     engine: Engine = Depends(get_engine),
 ) -> dict[str, Any]:
-    data, _ = require_profile(engine, profile_id)
-    evidence = automation_evidence(accepted_rows(engine, profile_id))
-    return sensitivity(load_pack(), data.levels(), scenario, evidence, set(data.interests) or None)
+    p = require_person(engine, profile_id)
+    return sensitivity(p.pack, p.levels(), scenario, p.evidence, set(p.data.interests) or None)
 
 
 @router.post("/whatif")
@@ -89,44 +84,28 @@ def hypothetical(
     profile_id: str, body: WhatIf, engine: Engine = Depends(get_engine)
 ) -> dict[str, Any]:
     """Recompute with hypothetical changes; nothing is saved."""
-    data, destination = require_profile(engine, profile_id)
-    pack = load_pack()
+    person = require_person(engine, profile_id)
+    pack, data, destination = person.pack, person.data, person.destination
     unknown = [s for s in body.changes if s not in pack.skills]
     if unknown:
         raise HTTPException(status_code=422, detail=f"unknown skills: {', '.join(unknown)}")
-    evidence = automation_evidence(accepted_rows(engine, profile_id))
-    levels = data.levels()
     interests: set[str] | None = set(data.interests) or None
     out: dict[str, Any] = {
-        "roles": what_if(pack, levels, body.changes, body.scenario, evidence, interests),
+        "roles": what_if(
+            pack, person.levels(), body.changes, body.scenario, person.evidence, interests
+        ),
         "pathway": None,
     }
     if destination:
-        role = pack.destination_roles[destination]
-        hours = body.weekly_hours or data.weekly_hours
-        then = {**levels, **body.changes}
         # A what-if level is the person's own hypothesis: an unevidenced claim.
-        then_claims = {
-            **data.skills,
-            **{k: SkillClaim(level=v, source="self") for k, v in body.changes.items()},
-        }
-        now_path = plan_pathway(
-            pack,
-            score_role(pack, role, levels, body.scenario, evidence),
-            data.skills,
-            data.weekly_hours,
-            body.scenario,
-            evidence,
-            data.situation,
+        then = person.with_claims(
+            {k: SkillClaim(level=v, source="self") for k, v in body.changes.items()}
         )
-        then_path = plan_pathway(
-            pack,
-            score_role(pack, role, then, body.scenario, evidence),
-            then_claims,
-            hours,
+        now_path = person.plan(person.score(destination, body.scenario), body.scenario)
+        then_path = then.plan(
+            then.score(destination, body.scenario),
             body.scenario,
-            evidence,
-            data.situation,
+            weekly_hours=body.weekly_hours or data.weekly_hours,
         )
         out["pathway"] = {
             "role_id": destination,
@@ -143,14 +122,17 @@ def plans(
     role_id: str | None = Query(default=None, max_length=64),
     engine: Engine = Depends(get_engine),
 ) -> dict[str, Any]:
-    data, destination = require_profile(engine, profile_id)
-    chosen = _destination_or_query(destination, role_id)
-    pack = load_pack()
-    evidence = automation_evidence(accepted_rows(engine, profile_id))
-    levels = data.levels()
-    match = score_role(pack, pack.destination_roles[chosen], levels, scenario, evidence)
+    person = require_person(engine, profile_id)
+    data = person.data
+    match = person.score(chosen_role(person, role_id), scenario)
     return compare_plans(
-        pack, match, data.skills, data.weekly_hours, scenario, evidence, data.situation
+        person.pack,
+        match,
+        data.skills,
+        data.weekly_hours,
+        scenario,
+        person.evidence,
+        data.situation,
     )
 
 
@@ -172,18 +154,14 @@ def _known_step(pack: Pack, step_id: str) -> bool:
 
 def _progress_view(engine: Engine, profile_id: str, scenario: Scenario) -> dict[str, Any]:
     """Three separate measures: plan completion, requirement coverage, open questions."""
-    data, destination = require_profile(engine, profile_id)
+    person = require_person(engine, profile_id)
+    data, destination = person.data, person.destination
     saved = get_progress(engine, profile_id)
     out: dict[str, Any] = {**saved, "plan": None}
     if not destination:
         return out
-    pack = load_pack()
-    evidence = automation_evidence(accepted_rows(engine, profile_id))
-    levels = data.levels()
-    match = score_role(pack, pack.destination_roles[destination], levels, scenario, evidence)
-    path = plan_pathway(
-        pack, match, data.skills, data.weekly_hours, scenario, evidence, data.situation
-    )
+    match = person.score(destination, scenario)
+    path = person.plan(match, scenario)
     steps = [(s.course.id, s.course.title, s.hours) for s in path.steps]
     done = [c for c, _, _ in steps if c in saved["done"]]
     left = [(c, t, h) for c, t, h in steps if c not in saved["done"]]

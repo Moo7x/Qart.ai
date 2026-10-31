@@ -19,7 +19,6 @@ from sqlalchemy import Engine, func, select
 
 from src import params, usage
 from src.api.evidence import get_engine, get_settings, sources
-from src.api.journey import evidence_for
 from src.config import Settings
 from src.evidence.store import (
     close_stale_runs,
@@ -28,12 +27,11 @@ from src.evidence.store import (
     query_observations,
 )
 from src.journey.impact import time_to_plan
-from src.journey.store import ProfileData, profile_table
-from src.match.engine import score_role
+from src.journey.person import load_person
+from src.journey.store import profile_table
 from src.match.evidence import automation_evidence
 from src.match.fairness import paired_profile_check
 from src.pack import load_pack
-from src.pathway.planner import plan_pathway
 from src.pathway.sdg import sdg_matrix
 
 router = APIRouter(prefix="/api")
@@ -110,22 +108,11 @@ def _platform_totals(engine: Engine) -> list[dict[str, Any]]:
                 profile_table.c.destination.is_not(None)
             )
         ).all()
-    for profile_id, raw, destination in rows:
-        if destination not in pack.destination_roles:
-            continue  # a role removed from the pack since the person chose it
-        data = ProfileData.model_validate(raw)
-        evidence = evidence_for(engine, profile_id)
-        levels = data.levels()
-        match = score_role(pack, pack.destination_roles[destination], levels, "moderate", evidence)
-        plan = plan_pathway(
-            pack,
-            match,
-            data.skills,
-            data.weekly_hours,
-            "moderate",
-            evidence,
-            data.situation,
-        )
+    for profile_id, _, destination in rows:
+        person = load_person(engine, profile_id)
+        if person is None or destination not in pack.destination_roles:
+            continue  # deleted meanwhile, or a role removed from the pack since it was chosen
+        plan = person.plan(person.score(destination, "moderate"), "moderate")
         for total in sdg_matrix(pack, plan).totals:
             hours[total.target] += total.hours
     return [{"target": t, "hours": round(h, 1)} for t, h in sorted(hours.items())]

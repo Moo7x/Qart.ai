@@ -8,8 +8,7 @@ from pydantic import BaseModel, Field
 from sqlalchemy import Engine
 
 from src.api.evidence import get_engine, get_settings
-from src.api.journey import require_profile
-from src.changes.store import accepted_rows
+from src.api.journey import require_person, require_profile
 from src.config import Settings
 from src.goal.posting import (
     MAX_POSTING_CHARS,
@@ -21,7 +20,6 @@ from src.goal.posting import (
 )
 from src.goal.store import get_goal, save_goal
 from src.match.engine import Scenario
-from src.match.evidence import automation_evidence
 from src.pack import load_pack
 
 router = APIRouter(prefix="/api/profiles/{profile_id}/goal")
@@ -38,7 +36,7 @@ class GoalIn(BaseModel):
 
 
 def _view(engine: Engine, profile_id: str, scenario: Scenario) -> dict[str, Any]:
-    data, _ = require_profile(engine, profile_id)
+    person = require_person(engine, profile_id)
     goal = get_goal(engine, profile_id)
     if goal is None:
         return {"goal": None}
@@ -52,15 +50,13 @@ def _view(engine: Engine, profile_id: str, scenario: Scenario) -> dict[str, Any]
             for r in goal["requirements"]
         ],
     )
-    levels = data.levels()
-    evidence = automation_evidence(accepted_rows(engine, profile_id))
-    pack = load_pack()
+    levels = person.levels()
     result = coverage(check, levels) if check.requirements else None
     return {
         "goal": {k: goal[k] for k in GoalIn.model_fields},
         "coverage": result,
         "stages": goal.get("stages", []),
-        "stepping_stones": stepping_stones(pack, check, levels, scenario, evidence)
+        "stepping_stones": stepping_stones(person.pack, check, levels, scenario, person.evidence)
         if result
         else [],
     }
