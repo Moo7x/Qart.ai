@@ -1,6 +1,6 @@
 """Read a (synthetic) CV into claimed skills, each backed by a sentence copied from the CV.
 
-Primary: OpenAI gpt-4o-mini with a strict JSON schema whose skill field is limited to the pack's
+Primary: OpenAI gpt-4.1-mini with a strict JSON schema whose skill field is limited to the pack's
 skill ids, so the model cannot name a skill we do not have. Code then checks every quoted
 sentence against the scrubbed CV and rejects any claim whose quote is not really there.
 Fallback (no key, timeout, invalid answer): keyword matching, labelled as such; its skills come
@@ -112,7 +112,15 @@ def schema(pack: Pack) -> dict[str, Any]:
 
 
 def messages(pack: Pack, cv_text: str) -> list[dict[str, str]]:
-    skills = "\n".join(f"- {s.id}: {s.name}" for s in pack.skills.values())
+    levels = load_levels()
+
+    def meaning(skill_id: str) -> str:
+        # The skill's level-1 sentence says what it covers, so "Invoice Processing" (supplier
+        # invoices) is not read from customer-invoice work; skills without sentences use the name.
+        found = levels.skills.get(skill_id)
+        return f" ({found.anchors[1].removeprefix('I can ')})" if found else ""
+
+    skills = "\n".join(f"- {s.id}: {s.name}{meaning(s.id)}" for s in pack.skills.values())
     roles = "\n".join(f"- {r.id}: {r.title}" for r in pack.current_roles.values())
     return [
         {
@@ -123,7 +131,7 @@ def messages(pack: Pack, cv_text: str) -> list[dict[str, str]]:
                 "word for word as evidence. Never add a skill without such a sentence. "
                 "Tools named in the CV count as evidence for the matching skill (e.g. an ERP "
                 "system such as SAP for Enterprise Resource Planning). "
-                f"{level_guide(load_levels())} Pick the current role from the list, or "
+                f"{level_guide(levels)} Pick the current role from the list, or "
                 "'other'. Interests are the "
                 "kinds of work the person says they want more of. Under unmatched, copy word for "
                 "word the short name of each skill or tool the CV shows that fits none of the "
