@@ -10,7 +10,7 @@ Source refresh → stored comparison/proposal → user accepts or declines → a
 - `src/pack.py`, `data/packs/gbs_fa/`: 46 skills, 11 starting roles, 9 destinations, 30 linked
   resources, prerequisite relationships and SDG mechanisms. Numerical levels are declared policy.
 - `src/intake/`: synthetic PDF/DOCX/text or questionnaire, identifier scrubbing, quoted claims,
-  gpt-4o-mini or labelled keyword/form fallback; RunPod/BM25 skill discovery.
+  gpt-4.1-mini or labelled keyword/form fallback; RunPod/BM25 skill discovery.
 - `src/match/`, `src/pathway/`: pure functions; every score component and hypothetical course
   gain is explained. Source observations do not establish a person's proficiency.
 - `src/journey/store.py`: claimed profile and selected destination behind a random browser-held

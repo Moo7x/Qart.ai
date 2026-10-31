@@ -74,7 +74,7 @@ class FitCheck(BaseModel):
     """How a candidate course's fit to its skills was checked (src/collectors/course_check.py)."""
 
     result: Literal["fits", "does_not_fit", "unclear"]
-    by: str  # "person" or the model that read the page, e.g. "gpt-4o-mini"
+    by: str  # "person" or the model that read the page, e.g. "gpt-4.1-mini"
     quote: str = ""  # a sentence from the course's own page, found there by code
     checked: str = ""
     skills_removed: list[str] = []  # matched skills the page did not show it teaches

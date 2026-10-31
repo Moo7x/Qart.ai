@@ -20,4 +20,4 @@ def test_missing_llm_key_means_not_configured(monkeypatch: pytest.MonkeyPatch) -
     monkeypatch.delenv("LLM_MODEL", raising=False)
     settings = load_settings()
     assert not settings.llm_configured
-    assert settings.llm_model == "gpt-4o-mini"
+    assert settings.llm_model == "gpt-4.1-mini"

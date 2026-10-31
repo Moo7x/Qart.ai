@@ -73,14 +73,14 @@ with the scenario emphasis (assumption), the observed AI use behind it and Talen
 flag (expert) kept apart. Below it are the existing field signals for the person's current
 occupation (its DOSM major group, job ads, AI use), so two CVs get a different radar focus.
 
-**Plain-words explanation.** `src/match/explain.py` (Roles, on click) gives gpt-4o-mini the
+**Plain-words explanation.** `src/match/explain.py` (Roles, on click) gives gpt-4.1-mini (`LLM_MODEL`) the
 computed facts of one role result and asks for a few sentences, each citing the facts it uses.
 Code drops sentences with numbers (digits or words), forecast or promise words, or no valid
 citation; the cited facts, written by code, are shown under each sentence. No key, an error or no
 valid sentence gives a labelled template of the facts. Market evidence is not given to the model.
 
 **My goal.** `src/goal/posting.py` (page "My goal"): the person names a target role and may paste
-a public job posting. gpt-4o-mini lists its requirements under a strict schema, each with a quote
+a public job posting. gpt-4.1-mini lists its requirements under a strict schema, each with a quote
 code checks against the posting (PII scrubbed first), a pack skill or "other", and "required" only
 when the posting says so; otherwise keyword matching, labelled. Coverage is counts of this posting
 ("covers 2 of 6, essentials 1 of 2") with unstated and out-of-catalogue requirements apart, using
@@ -263,7 +263,7 @@ Desktop pages use a centred workspace beside the menu; onboarding pairs each que
 My plan opens with three connected track stations. Full skill labels and explicit next/done/locked/no-planned-course states replace truncated labels. Selecting a skill opens three independently closable, scrollable resource panes. Escape or Close all dismisses them; keyboard focus stays inside the dialog and returns to the triggering node. Completion remains self-reported and does not prove proficiency.
 
 ### How Qart decides
-1. **Read the profile:** rules remove identifiers from a synthetic CV. OpenAI gpt-4o-mini extracts allowed skill claims with exact quotes; code rejects unsupported quotes. Without the model, a labelled keyword fallback suggests unrated skills. On both paths, if the CV names an ERP system (`ERP_ALIASES`: SAP, S/4HANA, Oracle, …) and no ERP claim was read, a rule adds one at level 2 with that sentence as evidence, and the note says "added by rule". Skills or tools the model finds outside our list come back as `unmatched` phrases (each checked to be in the CV) and show as "Not in our skill list"; they never change a score, and the keyword fallback says it cannot list them. People review and rate them.
+1. **Read the profile:** rules remove identifiers from a synthetic CV. OpenAI gpt-4.1-mini (`LLM_MODEL`) extracts allowed skill claims with exact quotes; code rejects unsupported quotes. Without the model, a labelled keyword fallback suggests unrated skills. On both paths, if the CV names an ERP system (`ERP_ALIASES`: SAP, S/4HANA, Oracle, …) and no ERP claim was read, a rule adds one at level 2 with that sentence as evidence, and the note says "added by rule". Skills or tools the model finds outside our list come back as `unmatched` phrases (each checked to be in the CV) and show as "Not in our skill list"; they never change a score, and the keyword fallback says it cannot list them. People review and rate them.
 2. **Search:** BM25 or BGE-M3 embeddings on RunPod map task wording to catalogue skills. The wider occupation search also uses the RunPod reranker. Retrieval suggests identities, not proficiency, fit scores or jobs.
 3. **Calculate:** accepted Economic Index task/occupation observations feed declared Moderate/Fast emphasis rules. TalentCorp supplies role and skill requirements. Essentials remain fixed. Pure Python computes coverage scores, gaps and rankings for every destination. ILO exposure and DOSM demand/history are separate evidence panels, not extra ingredients secretly added to fit. DOSM projections have their own backtests; they are not forecasts of individual hiring.
 4. **Plan:** code orders verified free courses by prerequisites and a person's weekly hours, with target-level SDG mechanisms. Projected gains use declared rules, not measured learning. Three tracks group this same output; their comparison includes AI-basics study time, not a proven AI-tutoring speedup.

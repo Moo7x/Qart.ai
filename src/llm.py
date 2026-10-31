@@ -2,7 +2,7 @@
 
 Every caller gets the same behaviour: a strict JSON schema, a time budget, no retries (the caller
 has a labelled fallback), and one usage row per call (src/usage.py) for the cost figures. The
-model is `settings.llm_model` (gpt-4o-mini) unless a caller names another, as agents do with
+model is `settings.llm_model` (gpt-4.1-mini) unless a caller names another, as agents do with
 `settings.agent_model`.
 """
 

@@ -35,7 +35,7 @@ Malaysia's Global Business Services (GBS) sector employs about 250,000 people, a
 
 ### Solution
 
-Qart.ai turns that public evidence into a personal plan that can be checked. A person uploads a synthetic CV or answers a few questions; personal details are removed, and OpenAI gpt-4o-mini reads the CV into skill claims, each quoting the CV. A daily pipeline collects seven public sources, and code then works out how much each skill matters under a moderate and a fast AI-adoption scenario, ranks nine real GBS finance roles with an explainable fit score and skills gap, and builds a roadmap: AI basics first, because nobody can adapt their work to AI without them, then reskilling without AI and with AI, from checked free courses, videos and articles.
+Qart.ai turns that public evidence into a personal plan that can be checked. A person uploads a synthetic CV or answers a few questions; personal details are removed, and OpenAI gpt-4.1-mini reads the CV into skill claims, each quoting the CV. A daily pipeline collects seven public sources, and code then works out how much each skill matters under a moderate and a fast AI-adoption scenario, ranks nine real GBS finance roles with an explainable fit score and skills gap, and builds a roadmap: AI basics first, because nobody can adapt their work to AI without them, then reskilling without AI and with AI, from checked free courses, videos and articles.
 
 What makes it different:
 
@@ -65,7 +65,7 @@ Working adults in GBS finance and accounting roles at risk of displacement, fres
 | Frontend      | React 19, TypeScript, Vite, Tailwind CSS, Recharts |
 | Backend       | Python 3.12, FastAPI, Pydantic, SQLAlchemy Core |
 | Database      | PostgreSQL on Replit; SQLite for local runs |
-| AI / Compute  | OpenAI gpt-4o-mini (CV reading, plain-words explanations); RunPod Serverless GPU with BAAI/bge-m3 and bge-reranker-v2-m3 (job-title and skill matching) |
+| AI / Compute  | OpenAI gpt-4.1-mini (CV reading, plain-words explanations); RunPod Serverless GPU with BAAI/bge-m3 and bge-reranker-v2-m3 (job-title and skill matching) |
 | Hosting / Dev | Replit Autoscale (web app and API) and Replit Scheduled (daily evidence pipeline) |
 
 Every library, dataset and model, with its licence, is listed in [`docs/DECLARATION_LOG.md`](docs/DECLARATION_LOG.md).
@@ -122,7 +122,7 @@ Every library, dataset and model, with its licence, is listed in [`docs/DECLARAT
  React web app ──► FastAPI backend (Replit Autoscale) ◄──► PostgreSQL (Replit)
                      │                     │                       ▲
                      ▼                     ▼                       │ writes daily
-          OpenAI gpt-4o-mini       RunPod Serverless GPU    Evidence pipeline
+          OpenAI gpt-4.1-mini      RunPod Serverless GPU    Evidence pipeline
           CV → quoted claims;      BGE-M3 + reranker:       (Replit Scheduled)
           plain-words text         titles and tasks → skills       ▲
                                                               7 public sources

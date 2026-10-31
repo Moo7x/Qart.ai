@@ -36,7 +36,7 @@ your branch's files (`docs/PHASE2_PLAN.md` §5).
   stored observations. Every recommendation, role, skill, course and claim shown to users carries
   its source and date. Anything that cannot be verified is stored with `verified: false` and is
   never recommended.
-- Name the LLM wherever it is used and in the declaration log: OpenAI gpt-4o-mini (`LLM_MODEL`)
+- Name the LLM wherever it is used and in the declaration log: OpenAI gpt-4.1-mini (`LLM_MODEL`)
   for extraction and explanations, `AGENT_MODEL` (default gpt-4.1-mini) for agents.
 - Humans decide. The system recommends; it never makes hiring, promotion or dismissal decisions.
   New evidence only proposes revisions with a diff; the user accepts or declines.

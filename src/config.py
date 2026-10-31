@@ -10,7 +10,7 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parent.parent
 # Local default: one SQLite file under data/ (gitignored). Replit sets DATABASE_URL to Postgres.
 DEFAULT_SQLITE_PATH = REPO_ROOT / "data" / "qart.sqlite"
-DEFAULT_LLM_MODEL = "gpt-4o-mini"  # the named model for extraction and explanations
+DEFAULT_LLM_MODEL = "gpt-4.1-mini"  # the named model for extraction and explanations
 # Agents plan tool calls over several steps, which needs a stronger model than reading one CV; a
 # mid-tier one, not the most expensive, keeps credits for the demo (docs/PHASE2_PLAN.md §1).
 DEFAULT_AGENT_MODEL = "gpt-4.1-mini"

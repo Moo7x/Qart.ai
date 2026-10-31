@@ -19,7 +19,7 @@ results are written as unverified candidates (`courses_mslearn.yaml`) that the p
 Skills Microsoft Learn does not teach get free courses read by hand from UN CC:Learn, OpenLearn
 and Alison (`courses_open.yaml`), also as candidates. A candidate becomes verified in one of two
 ways: a person opens it (`scripts/review_catalogue.py --verify`), or the automatic fit check
-(`src/collectors/course_check.py`) reads the course's own page, gpt-4o-mini answers fits / does
+(`src/collectors/course_check.py`) reads the course's own page, the language model (`LLM_MODEL`, named in each stored result) answers fits / does
 not fit / unclear with one sentence from the page, and code accepts "fits" only if that sentence
 is really on the page. The course is real (official catalogue or a page read by hand) and free
 before the check; the check only settles whether it teaches the skill. The plan shows "fit checked

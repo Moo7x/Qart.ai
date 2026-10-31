@@ -1,4 +1,4 @@
-"""Plain-language explanation of one computed role result (OpenAI gpt-4o-mini, never numbers).
+"""Plain-language explanation of one computed role result (OpenAI gpt-4.1-mini, never numbers).
 
 Code first turns the computed match and pathway into numbered facts (with their numbers). The
 model may only rephrase those facts: it returns a few sentences, each citing the fact ids it

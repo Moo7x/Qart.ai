@@ -1,6 +1,6 @@
 """A person's goal role, checked against a public job posting they paste (PLAN: dream role).
 
-1. Requirements are read from the posting. Primary: gpt-4o-mini with a strict JSON schema; each
+1. Requirements are read from the posting. Primary: gpt-4.1-mini with a strict JSON schema; each
    requirement must quote the posting word for word (checked in code) and maps to a pack skill
    or "other". Fallback (no key, error, nothing valid): the posting's lines matched to skills by
    keyword search, labelled. Requirements marked "required/must/minimum" are essential.
