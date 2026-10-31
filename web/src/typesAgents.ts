@@ -4,7 +4,8 @@
 
 // ---- C7 change test (POST /api/profiles/{id}/evidence-test, src/api/evidence_test.py) ----
 
-export type Override = { kind: 'occupation_share' | 'task_share'; key: string; value: number }
+export type Override = { kind: 'occupation_share' | 'task_share' | 'group_change'; key: string; value: number }
+export type CategoryChange = { role_id: string; title: string; before: string; after: string; current_job: boolean }
 export type RoleRank = { role_id: string; title: string; rank: number; fit: number }
 export type EvidenceTestOut = {
   label: string
@@ -13,6 +14,7 @@ export type EvidenceTestOut = {
   previous: Record<string, number | null>
   before: { roles: RoleRank[] }
   after: { roles: RoleRank[] }
+  forecast?: CategoryChange[]
   weights: { role_id: string; skill: string; skill_name: string; before: number; after: number }[]
   pathway: null | {
     role_id: string

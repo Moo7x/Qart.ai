@@ -87,3 +87,30 @@ def test_categories_need_two_kinds_of_ai_evidence_and_a_falling_forecast_to_shri
     assert categorise(None, None, 2.0, rising, None)[0] == "growing"
     assert categorise(None, None, 1.0, None, True)[0] == "growing"  # MyCOL hard to fill
     assert categorise(None, None, 0.0, None, None)[0] == "emerging"
+
+
+def test_forecast_overrides_replace_ai_use_and_job_group_trends() -> None:
+    from src.forecast.industry import Overrides
+
+    rows = [
+        {"soc": "A", "task": "1", "observed": 10.0, "predicted": None, "importance": 3.0},
+        {"soc": "A", "task": "2", "observed": None, "predicted": 20.0, "importance": 3.0},
+        {"soc": "B", "task": "3", "observed": 30.0, "predicted": None, "importance": 3.0},
+    ]
+    test = Overrides(occupation_use={"A": 90.0}, task_use={"3": 0.0})
+    assert [r["observed"] for r in test.tasks(rows)] == [90.0, 90.0, 0.0]
+    assert rows[0]["observed"] == 10.0  # the stored rows are not changed
+    assert not Overrides() and Overrides(group_change={"clerical": -1.0})
+
+
+def test_change_test_overrides_are_checked_per_kind() -> None:
+    import pytest
+    from pydantic import ValidationError
+
+    from src.api.evidence_test import Override
+
+    assert Override(kind="group_change", key="clerical", value=-1.5).value == -1.5
+    with pytest.raises(ValidationError):
+        Override(kind="group_change", key="clerical", value=9)
+    with pytest.raises(ValidationError):
+        Override(kind="task_share", key="1", value=-5)

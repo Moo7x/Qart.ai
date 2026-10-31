@@ -13,6 +13,7 @@ from sqlalchemy import Engine
 
 from src.changes.store import accepted_rows
 from src.forecast import task_model
+from src.forecast.industry import Overrides
 from src.journey.store import ProfileData, SkillClaim, get_profile
 from src.match import directions
 from src.match.engine import Evidence, RoleMatch, Scenario, rank_roles, score_role
@@ -55,11 +56,18 @@ class Person:
             self.evidence if evidence is None else evidence,
         )
 
-    def forecasts(self, scenario: Scenario) -> dict[str, dict[str, Any]]:
+    def forecasts(
+        self, scenario: Scenario, overrides: Overrides | None = None
+    ) -> dict[str, dict[str, Any]]:
         """The industry forecast for every pack role (src/match/directions.py)."""
-        return directions.forecasts(self.pack, self.rows, self.task_rows, scenario)
+        return directions.forecasts(self.pack, self.rows, self.task_rows, scenario, overrides)
 
-    def rank(self, scenario: Scenario, evidence: Evidence | None = None) -> list[RoleMatch]:
+    def rank(
+        self,
+        scenario: Scenario,
+        evidence: Evidence | None = None,
+        overrides: Overrides | None = None,
+    ) -> list[RoleMatch]:
         """Every destination role by direction score (fit x outlook factor); interests and chosen
         SDGs order near-ties of fit first, and equal direction scores keep that order."""
         by_fit = rank_roles(
@@ -70,7 +78,7 @@ class Person:
             set(self.data.interests) or None,
             sdg_goals=set(self.data.sdg_priorities) or None,
         )
-        return directions.order(by_fit, self.forecasts(scenario))
+        return directions.order(by_fit, self.forecasts(scenario, overrides))
 
     def plan(
         self,
