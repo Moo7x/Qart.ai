@@ -2,7 +2,7 @@ import { useCallback, useState } from 'react'
 import { useJourney } from '../state'
 import type { Track, TrackNode } from '../types'
 import type { PracticeStep } from '../typesScoring'
-import { ScoutInline } from './AgentWindow'
+import { AgentButton, AgentRunWindow } from './AgentWindow'
 import { levelText } from './journey'
 import { Chat } from './ProgressCheck'
 import { Windows, type Pane } from './Windows'
@@ -67,7 +67,9 @@ function practicePane(steps: PracticeStep[], onSkip: (id: string) => void, pause
 // Owner A's two agents on a skill stop (docs/PHASE2_PLAN.md §9): the scout points to the parts of
 // the checked resources that teach the skill; the progress check proposes a level from work the
 // person describes, which is how a practice step is completed. Both start only when asked.
-function agentsPane(node: TrackNode, profileId: string | null): Pane[] {
+type OpenAgent = (resourceId?: string, resourceTitle?: string) => void
+
+function agentsPane(node: TrackNode, profileId: string | null, onAgent: OpenAgent): Pane[] {
   if (!node.skill) return []
   return [{
     key: 'agents',
@@ -75,7 +77,10 @@ function agentsPane(node: TrackNode, profileId: string | null): Pane[] {
     hint: 'Optional. Each starts only when you ask; you decide what to keep.',
     body: (
       <div className="flex flex-col gap-4">
-        <ScoutInline skill={node.skill} skillName={node.title} profileId={profileId} />
+        <div className="flex flex-col gap-2">
+          <p className="m-0">The scout reads the checked videos and articles for {node.title} and takes you to the minutes or paragraphs that teach it.</p>
+          <AgentButton label="Find the best parts" onClick={() => onAgent()} />
+        </div>
         {profileId && (
           <div className="flex flex-col gap-2 border-t border-line pt-3">
             <span className="cap">Check my progress in {node.title}</span>
@@ -87,7 +92,7 @@ function agentsPane(node: TrackNode, profileId: string | null): Pane[] {
   }]
 }
 
-function panes(node: TrackNode, state: State, blocker: string | null, done: string[], onToggle: (id: string) => void, onSkip: (id: string) => void, paused: boolean, checked: string, profileId: string | null): Pane[] {
+function panes(node: TrackNode, state: State, blocker: string | null, done: string[], onToggle: (id: string) => void, onSkip: (id: string) => void, paused: boolean, checked: string, profileId: string | null, onAgent: OpenAgent): Pane[] {
   const practice = node.practice?.length ? [practicePane(node.practice, onSkip, paused)] : []
   return [
     ...practice,
@@ -133,7 +138,7 @@ function panes(node: TrackNode, state: State, blocker: string | null, done: stri
       ) : (
         <ul className="m-0 flex list-none flex-col gap-3 p-0">
           {node.videos.map((v) => (
-            <li key={v.id}>
+            <li key={v.id} className="flex flex-col gap-2">
               <a href={v.url} target="_blank" rel="noopener noreferrer" className="grid grid-cols-[112px_minmax(0,1fr)] gap-3 text-void no-underline hover:underline">
                 <img src={`https://i.ytimg.com/vi/${videoId(v.url)}/mqdefault.jpg`} alt="" width={112} height={63} loading="lazy" className="h-[63px] w-[112px] bg-mist object-cover" />
                 <span className="flex min-w-0 flex-col gap-0.5">
@@ -141,6 +146,7 @@ function panes(node: TrackNode, state: State, blocker: string | null, done: stri
                   <span className="font-mono text-[11px] text-graphite">{v.channel} · {v.minutes} min · {v.published}</span>
                 </span>
               </a>
+              {node.skill && <span><AgentButton compact label="Agent: jump to the key minutes" onClick={() => onAgent(v.id, v.title)} /></span>}
             </li>
           ))}
         </ul>
@@ -158,12 +164,13 @@ function panes(node: TrackNode, state: State, blocker: string | null, done: stri
             <li key={a.id} className="border-b border-line pb-2.5 last:border-0">
               <a href={a.url} target="_blank" rel="noopener noreferrer" className="font-medium text-void">{a.title} ↗</a>
               <span className="block font-mono text-[11px] text-graphite">{a.publisher}</span>
+              {node.skill && <span className="mt-1.5 block"><AgentButton compact label="Agent: jump to the key paragraph" onClick={() => onAgent(a.id, a.title)} /></span>}
             </li>
           ))}
         </ul>
       ),
     },
-    ...agentsPane(node, profileId),
+    ...agentsPane(node, profileId, onAgent),
   ]
 }
 
@@ -222,6 +229,7 @@ function Stop({ node, state, index, tone, blocker, onOpen }: { node: TrackNode; 
 export function TrackMap({ tracks, done, onToggle, onSkip, paused, checked }: { tracks: Track[]; done: string[]; onToggle: (id: string) => void; onSkip: (id: string) => void; paused: boolean; checked: string }) {
   const { profileId } = useJourney()
   const [open, setOpen] = useState<{ track: number; node: number } | null>(null)
+  const [agent, setAgent] = useState<{ skill: string; skillName: string; resourceId?: string; resourceTitle?: string } | null>(null)
   const [showSkipped, setShowSkipped] = useState(false)
   const close = useCallback(() => setOpen(null), [])
   const all = tracks.map((t) => states(t, done))
@@ -287,10 +295,15 @@ export function TrackMap({ tracks, done, onToggle, onSkip, paused, checked }: { 
         <Windows
           key={`${open.track}-${open.node}`}
           title={`${tracks[open.track].title} · ${selected.title}`}
-          panes={panes(selected, selectedState, blockerOf(open.track), done, onToggle, onSkip, paused, checked, profileId)}
+          panes={panes(selected, selectedState, blockerOf(open.track), done, onToggle, onSkip, paused, checked, profileId, (resourceId, resourceTitle) => {
+            if (!selected.skill) return
+            setAgent({ skill: selected.skill, skillName: selected.title, resourceId, resourceTitle })
+            setOpen(null)
+          })}
           onClose={close}
         />
       )}
+      {agent && <AgentRunWindow skill={agent.skill} skillName={agent.skillName} profileId={profileId} resourceId={agent.resourceId} resourceTitle={agent.resourceTitle} onClose={() => setAgent(null)} />}
     </div>
   )
 }
