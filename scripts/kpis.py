@@ -120,8 +120,10 @@ def compute() -> dict[str, Any]:
             runpod_endpoint_id=None,
             admin_token=None,
         )
-        with TestClient(create_app(settings, first_run=False)) as client:
+        app = create_app(settings, first_run=False)
+        with TestClient(app) as client:
             people = personas(client)
+        app.state.engine.dispose()  # Windows cannot delete the temporary database while it is open
     evidence = Evidence(automation_share={}, automation_period="", automation_source="")
     return {
         "generated": datetime.now(UTC).strftime("%Y-%m-%d %H:%M UTC"),
