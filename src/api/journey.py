@@ -311,7 +311,8 @@ def _card(
         "sdgs": _role_sdgs(pack, match),
         # Why each skill is counted for this role (src/match/basis.py), keyed by skill id.
         "requirement_basis": {
-            r.skill: requirement_basis(pack, match.role_id, r.skill) for r in match.requirements
+            r.skill: requirement_basis(pack, match.role_id, r.skill, rows)
+            for r in match.requirements
         },
         # The person's chosen goals this role serves (they order near-ties; fit is unchanged).
         "serves_goals": sorted(
@@ -463,7 +464,7 @@ def tracks(
         "role_title": match.title,
         "scenario": scenario,
         "weekly_hours": data.weekly_hours,
-        "tracks": build_tracks(pack, res, match, path, done),
+        "tracks": build_tracks(pack, res, match, path, done, accepted_rows(engine, profile_id)),
         "comparison": comparison(
             pack,
             res,

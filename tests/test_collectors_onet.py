@@ -87,3 +87,49 @@ def _linked() -> list[tuple[str, int]]:
         for links in occ.skills.values()
         for link in links
     ]
+
+
+def test_technology_skills_are_kept_per_followed_occupation_with_demand_flags() -> None:
+    import csv
+    import io
+
+    from src.collectors.onet import TECH_SERIES, parse_archive
+
+    rows = [
+        ("15-2051.01", "SAP", "43232203", "Enterprise resource planning ERP software", "Y", "Y"),
+        ("15-2051.01", "Oracle", "43232203", "Enterprise resource planning ERP software", "Y", "N"),
+        (
+            "15-2051.01",
+            "Tableau",
+            "43232314",
+            "Business intelligence and data analysis software",
+            "Y",
+            "N",
+        ),
+        ("29-1141.00", "Epic", "43231507", "Medical software", "Y", "Y"),  # not followed
+    ]
+    tech = io.StringIO()
+    writer = csv.writer(tech)
+    writer.writerow(
+        [
+            "O*NET-SOC Code",
+            "Example",
+            "Commodity Code",
+            "Commodity Title",
+            "Hot Technology",
+            "In Demand",
+        ]
+    )
+    writer.writerows(rows)
+    base = zipfile.ZipFile(io.BytesIO(archive()))
+    out = io.BytesIO()
+    with zipfile.ZipFile(out, "w") as z:
+        for name in base.namelist():
+            z.writestr(name, base.read(name))
+        z.writestr("db_31_0_csv/technology_skills.csv", tech.getvalue())
+    observations, _ = parse_archive(out.getvalue(), "31.0", "https://example.org/db.zip")
+    tech_rows = {o.entity: o for o in observations if o.series == TECH_SERIES}
+    assert set(tech_rows) == {"15-2051.01 43232203", "15-2051.01 43232314"}
+    assert tech_rows["15-2051.01 43232203"].value == 2.0  # in demand for this occupation
+    assert tech_rows["15-2051.01 43232314"].value == 1.0  # hot technology only
+    assert "SAP; Oracle" in tech_rows["15-2051.01 43232203"].cited_span

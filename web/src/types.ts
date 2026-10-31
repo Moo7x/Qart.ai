@@ -621,7 +621,7 @@ export type CourseFitCheck = { result: 'fits' | 'does_not_fit' | 'unclear'; by: 
 export type TrackCourse = { id: string; title: string; provider: string; url: string; minutes: number; level: string; planned: boolean; done: boolean; fit_check?: CourseFitCheck | null }
 export type TrackVideo = { id: string; title: string; channel: string; url: string; minutes: number; published: string }
 export type TrackArticle = { id: string; title: string; publisher: string; url: string }
-export type SkillBasis = { kind: 'talentcorp' | 'onet' | 'assumption'; text: string; source: string }
+export type SkillBasis = { kind: 'talentcorp' | 'onet' | 'onet_tech' | 'assumption'; text: string; source: string }
 export type TrackNode = {
   id: string
   title: string

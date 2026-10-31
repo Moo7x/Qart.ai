@@ -1,4 +1,5 @@
-"""O*NET database: the task statements and importance ratings behind the task crosswalk.
+"""O*NET database: the task statements and importance ratings behind the task crosswalk, and the
+software employers ask for in each followed occupation (Technology Skills).
 
 The newest database release is found on the O*NET download page; its CSV archive (about 16 MB) is
 read in memory and only the tasks linked in data/packs/gbs_fa/tasks.yaml are kept, each with its
@@ -11,10 +12,12 @@ import csv
 import io
 import re
 import zipfile
+from typing import Any
 
 import httpx
 
 from src.collectors.base import CollectorResult, SourceState
+from src.evidence.field import field_profile
 from src.evidence.store import Observation
 from src.pack import load_pack
 
@@ -26,6 +29,15 @@ STATE_KEY = "release"
 SERIES = "onet_task_importance"
 UNIT = "importance (O*NET IM scale, 1–5)"
 IMPORTANCE_SCALE = "IM"
+# Technology Skills: the software examples O*NET lists per occupation, grouped by commodity
+# (e.g. "Enterprise resource planning ERP software"). O*NET flags an example "Hot Technology" when
+# it is often named in job postings, and "In Demand" when the postings for this occupation name it.
+# Stored per occupation and commodity as one coded value (declared): 2 = an example is in demand
+# for this occupation, 1 = an example is a hot technology, 0 = listed without either flag.
+TECH_SERIES = "onet_technology"
+TECH_UNIT = "employer demand in job postings (O*NET): 2 in demand, 1 hot technology, 0 listed"
+TECH_FILE = "technology_skills.csv"
+TECH_EXAMPLES_CITED = 5
 
 
 def latest_release(client: httpx.Client) -> tuple[int, int] | None:
@@ -85,6 +97,7 @@ def parse_archive(data: bytes, version: str, url: str) -> tuple[list[Observation
                 method_version=f"onet/{version}",
             )
         )
+    observations += _technology(archive, version, url)
     missing = sorted(task for (soc, task) in wanted if (soc, task) not in statements)
     reworded = sorted(
         key[1]
@@ -99,6 +112,47 @@ def parse_archive(data: bytes, version: str, url: str) -> tuple[list[Observation
     return observations, "; ".join(notes)
 
 
+def _technology(archive: zipfile.ZipFile, version: str, url: str) -> list[Observation]:
+    """One row per followed occupation and software commodity; none if the release lacks it."""
+    followed = {o.code for o in field_profile().soc_occupations}
+    groups: dict[tuple[str, str], dict[str, Any]] = {}
+    try:
+        handle = _member(archive, TECH_FILE)
+    except StopIteration:
+        return []
+    with handle:
+        for row in csv.DictReader(handle):
+            soc = row["O*NET-SOC Code"]
+            if soc not in followed:
+                continue
+            group = groups.setdefault(
+                (soc, row["Commodity Code"]),
+                {"title": row["Commodity Title"], "examples": [], "hot": False, "demand": False},
+            )
+            group["examples"].append(row["Example"])
+            group["hot"] = group["hot"] or row.get("Hot Technology") == "Y"
+            group["demand"] = group["demand"] or row.get("In Demand") == "Y"
+    out = []
+    for (soc, code), g in sorted(groups.items()):
+        value = 2.0 if g["demand"] else 1.0 if g["hot"] else 0.0
+        examples = "; ".join(g["examples"][:TECH_EXAMPLES_CITED])
+        out.append(
+            Observation(
+                source_id=SOURCE_ID,
+                series=TECH_SERIES,
+                entity=f"{soc} {code}",
+                geography="US",
+                period=version,
+                value=value,
+                unit=TECH_UNIT,
+                url=url,
+                cited_span=f"O*NET {version} · {soc} · {g['title']}: {examples}",
+                method_version=f"onet/{version}",
+            )
+        )
+    return out
+
+
 def collect(client: httpx.Client, state: SourceState) -> CollectorResult:
     found = latest_release(client)
     if found is None:
@@ -106,7 +160,7 @@ def collect(client: httpx.Client, state: SourceState) -> CollectorResult:
     major, minor = found
     version = f"{major}.{minor}"
     # A changed crosswalk must re-read the same release, so the linked tasks are part of the key.
-    seen_key = f"{version}|{','.join(sorted(load_pack().task_ids(), key=int))}"
+    seen_key = f"{version}|tech|{','.join(sorted(load_pack().task_ids(), key=int))}"
     if state.get(STATE_KEY) == seen_key:
         return CollectorResult([], note=f"no new release since O*NET {version}")
     url = DOWNLOAD.format(major=major, minor=minor)

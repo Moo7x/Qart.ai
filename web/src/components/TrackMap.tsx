@@ -95,6 +95,7 @@ function agentsPane(node: TrackNode, profileId: string | null, onAgent: OpenAgen
 const WHY_TAG: Record<SkillBasis['kind'], [string, string]> = {
   talentcorp: ['TalentCorp names it for this role', 'bg-observed-bg text-observed'],
   onet: ['Used in this job\'s tasks', 'bg-observed-bg text-observed'],
+  onet_tech: ['Employers ask for it', 'bg-observed-bg text-observed'],
   assumption: ['Our assumption', 'bg-estimate-bg text-estimate'],
 }
 

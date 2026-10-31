@@ -75,7 +75,13 @@ def _status(courses: list[dict[str, Any]]) -> str:
 
 
 def _skill_nodes(
-    pack: Pack, res: Resources, match: RoleMatch, path: Pathway, done: list[str], ai: bool
+    pack: Pack,
+    res: Resources,
+    match: RoleMatch,
+    path: Pathway,
+    done: list[str],
+    ai: bool,
+    rows: list[dict[str, Any]] | None = None,
 ) -> list[dict[str, Any]]:
     planned = {s.course.id for s in path.steps}
     order = {s.course.id: s.order for s in path.steps}
@@ -107,7 +113,7 @@ def _skill_nodes(
                 "articles": [_article(a) for a in res.articles_for(skill=r.skill)],
                 "status": _status(courses),
                 # Why this skill is on the plan at all: TalentCorp, O*NET tasks, or our assumption.
-                "why": requirement_basis(pack, match.role_id, r.skill),
+                "why": requirement_basis(pack, match.role_id, r.skill, rows),
                 "_order": first,
             }
         )
@@ -229,7 +235,9 @@ def build_tracks(
     match: RoleMatch,
     path: Pathway,
     done: list[str],
+    rows: list[dict[str, Any]] | None = None,
 ) -> list[dict[str, Any]]:
+    """`rows` are the person's accepted observations, used for each skill's evidence (basis)."""
     return [
         {
             "id": "ai_basics",
@@ -246,13 +254,13 @@ def build_tracks(
             "title": "Reskilling without AI",
             "why": "Finance, business and green skills the role needs that you have not reached "
             "yet.",
-            "nodes": _skill_nodes(pack, res, match, path, done, ai=False),
+            "nodes": _skill_nodes(pack, res, match, path, done, ai=False, rows=rows),
         },
         {
             "id": "with_ai",
             "title": "Reskilling with AI",
             "why": "Data and digital skills the role needs: the work that grows as routine steps "
             "are automated.",
-            "nodes": _skill_nodes(pack, res, match, path, done, ai=True),
+            "nodes": _skill_nodes(pack, res, match, path, done, ai=True, rows=rows),
         },
     ]
