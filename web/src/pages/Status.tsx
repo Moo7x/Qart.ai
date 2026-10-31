@@ -1,4 +1,4 @@
-import { formatWhen, useApi } from '../api'
+import { useApi } from '../api'
 import { KindLabel } from '../components/Why'
 import { Loading, Problem } from '../components/ui'
 import type { StatusResponse } from '../typesAgents'
@@ -8,64 +8,20 @@ import type { StatusResponse } from '../typesAgents'
 
 const POLL_MS = 30_000
 
-function TimeToPlan({ t }: { t: NonNullable<StatusResponse['time_to_plan']> }) {
-  const share = t.people ? t.under_target / t.people : null
-  return (
-    <section className="section">
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <h2 className="h2">Time to ranked roles and a plan</h2>
-        <KindLabel kind="observed" />
-      </div>
-      {t.people === 0 ? (
-        <p className="m-0 text-[14px] text-graphite">No timed journey yet. Each new profile records the minutes from Start to choosing a role.</p>
-      ) : (
-        <p className="m-0 text-[15px]">
-          <b className="font-mono text-[28px]">{share === null ? '—' : `${Math.round(100 * share)}%`}</b> of {t.people} {t.people === 1 ? 'person' : 'people'} got there within {t.target_seconds / 60} minutes (target {Math.round(100 * t.target_share)}%) · median {t.median_seconds === null ? '—' : `${Math.floor(t.median_seconds / 60)} min ${t.median_seconds % 60} s`}
-        </p>
-      )}
-      <p className="m-0 text-[12px] text-graphite">Measured from use: the intake timer plus the time until a destination was chosen. Our Phase 1 target.</p>
-    </section>
-  )
-}
-
 export function Status() {
   const view = useApi<StatusResponse>('/api/status', POLL_MS)
   const data = view.data
   return (
     <main className="page">
       <header className="flex flex-col gap-1.5">
-        <span className="eyebrow">Status · data, engines, cost</span>
-        <h1 className="h1">Is the evidence fresh, and what does it cost?</h1>
-        <p className="m-0 max-w-[700px] text-graphite">Measured from the app&rsquo;s own run log and usage counter. Cost multiplies the measured calls by declared list prices, so it is an estimate.</p>
+        <span className="eyebrow">Status · engines and cost</span>
+        <h1 className="h1">Which engines answer, and what does it cost?</h1>
+        <p className="m-0 max-w-[700px] text-[13px] text-graphite">Measured from the app&rsquo;s usage counter; cost multiplies the measured calls by declared list prices, so it is an estimate. Data freshness and runs are on Live intelligence.</p>
       </header>
-      {data?.time_to_plan && <TimeToPlan t={data.time_to_plan} />}
       {view.loading && !data && <Loading what="the status" />}
       {view.error && <Problem what="the status" message={view.error} onRetry={view.reload} />}
       {data && (
         <>
-          <section className="section">
-            <div className="flex flex-wrap items-baseline justify-between gap-2"><h2 className="h2">Sources</h2><KindLabel kind="observed" /></div>
-            <p className="m-0 text-[13px] text-graphite">{data.schedule}</p>
-            <table className="w-full border-collapse text-[13px]">
-              <thead><tr className="text-left text-graphite"><th className="py-1 pr-3 font-normal">Source</th><th className="py-1 pr-3 font-normal">Data fetched</th><th className="py-1 pr-3 font-normal">Last attempt</th><th className="py-1 font-normal">Last success</th></tr></thead>
-              <tbody>
-                {data.sources.map((s) => (
-                  <tr key={s.id} className="border-t border-line">
-                    <td className="py-1.5 pr-3">{s.name}</td>
-                    <td className="py-1.5 pr-3 font-mono">{formatWhen(s.serving_snapshot_from)}</td>
-                    <td className={`py-1.5 pr-3 ${s.last_status === 'failed' ? 'text-weak' : ''}`}>{s.last_status ?? '—'} · {formatWhen(s.last_attempt_at)}</td>
-                    <td className="py-1.5 font-mono">{formatWhen(s.last_success_at)}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </section>
-          <section className="section">
-            <h2 className="h2">Recent runs</h2>
-            <ul className="m-0 flex list-none flex-col gap-1 p-0 font-mono text-[12px]">
-              {data.runs.map((r) => <li key={r.id}>{formatWhen(r.started_at)} · {r.trigger} · {r.status} · {r.new_observations} new</li>)}
-            </ul>
-          </section>
           <section className="section">
             <div className="flex flex-wrap items-baseline justify-between gap-2"><h2 className="h2">Engines and cost</h2><KindLabel kind="estimate" /></div>
             <div className="grid gap-3 md:grid-cols-2">
@@ -92,7 +48,15 @@ export function Status() {
                 ))}
               </tbody>
             </table>
-            <p className="m-0 text-[12px] text-graphite">Total so far: about USD {data.cost.total_usd.toFixed(4)} for the language model{data.cost.gpu_price_set ? ' and GPU' : ' (GPU seconds above; set its price to include it)'}. {data.cost.note} Prices checked {data.cost.prices_checked}.</p>
+            {data.cost.per_person_usd != null && (
+              <div className="grid gap-3 sm:grid-cols-4">
+                <div className="card-light flex flex-col gap-0.5 p-3"><span className="cap">Per person</span><span className="font-mono text-[22px]">USD {data.cost.per_person_usd.toFixed(4)}</span><span className="text-[11px] text-graphite">measured over {data.cost.profiles} profiles</span></div>
+                {Object.entries(data.cost.per_month_usd ?? {}).map(([n, usd]) => (
+                  <div key={n} className="card-light flex flex-col gap-0.5 p-3"><span className="cap">{Number(n).toLocaleString()} people a month</span><span className="font-mono text-[22px]">USD {usd.toFixed(2)}</span><span className="text-[11px] text-graphite">language model and GPU, estimate</span></div>
+                ))}
+              </div>
+            )}
+            <p className="m-0 text-[12px] text-graphite">Hosting (Replit) is a fixed monthly cost, not per person. Total so far: about USD {data.cost.total_usd.toFixed(4)} for the language model{data.cost.gpu_price_set ? ' and GPU' : ' (GPU seconds above; set its price to include it)'}. {data.cost.note} Prices checked {data.cost.prices_checked}.</p>
           </section>
         </>
       )}

@@ -77,7 +77,7 @@ export type StatusResponse = {
   schedule: string
   engines: { language_model: EngineState; gpu: EngineState }
   usage: UsageRow[]
-  cost: { label: 'estimate'; total_usd: number; prices_checked: string; gpu_price_set: boolean; note: string }
+  cost: { label: 'estimate'; total_usd: number; prices_checked: string; gpu_price_set: boolean; note: string; profiles?: number; per_person_usd?: number | null; per_month_usd?: Record<string, number> }
   fairness: { available: boolean; pairs?: number; identical?: boolean; max_fit_difference?: number; checked_at?: string }
   platform_sdg: { available: boolean; profiles?: number; min_profiles?: number; suppressed?: boolean; totals?: { target: string; hours: number }[] }
   time_to_plan?: { people: number; median_seconds: number | null; under_target: number; target_seconds: number; target_share: number; kind: 'observed' }

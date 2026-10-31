@@ -352,3 +352,8 @@ BASICS_VIDEOS_PER_TOPIC = (
 # --- Ranking check against TalentCorp's listed career moves (src/match/validation.py) ------------
 VALIDATION_LEVEL = 3  # "working": the synthetic person handles each typical skill of the role alone
 VALIDATION_TOP_K = 3  # a listed move counts as found when it is among the top 3 roles shown first
+COST_PEOPLE_PER_MONTH = (
+    1_000,
+    10_000,
+    50_000,
+)  # new people a month shown in the cost estimate (declared)

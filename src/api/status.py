@@ -129,6 +129,10 @@ def status(
         e = by_engine.setdefault(row["engine"], {"calls": 0, "failed": 0})
         e["calls"] += int(row["calls"])
         e["failed"] += int(row["failed"])
+    total_usd = round(sum(r["cost_usd"] or 0 for r in totals), 4)
+    with engine.connect() as conn:
+        people = int(conn.execute(select(func.count()).select_from(profile_table)).scalar_one())
+    per_person = total_usd / people if people else None
     return {
         "sources": [s.model_dump() for s in sources(engine)],
         "runs": list_runs(engine, RUNS_SHOWN),
@@ -149,7 +153,16 @@ def status(
         "usage": totals,
         "cost": {
             "label": "estimate",
-            "total_usd": round(sum(r["cost_usd"] or 0 for r in totals), 4),
+            "total_usd": total_usd,
+            # Measured cost per profile, and what that means per month at a given number of new
+            # people (estimate: assumes future people use the app as the measured ones did).
+            "profiles": people,
+            "per_person_usd": round(per_person, 5) if per_person is not None else None,
+            "per_month_usd": {
+                str(n): round(per_person * n, 2) for n in params.COST_PEOPLE_PER_MONTH
+            }
+            if per_person is not None
+            else {},
             "prices_checked": params.PRICES_CHECKED,
             "gpu_price_set": params.RUNPOD_USD_PER_SECOND is not None,
             "note": "Measured calls and tokens Ã— declared list prices; GPU cost needs the "
