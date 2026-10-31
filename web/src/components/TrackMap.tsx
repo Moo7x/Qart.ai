@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react'
 import { useJourney } from '../state'
-import type { Track, TrackNode } from '../types'
+import type { SkillBasis, Track, TrackNode } from '../types'
 import type { PracticeStep } from '../typesScoring'
 import { AgentButton, AgentRunWindow } from './AgentWindow'
 import { levelText } from './journey'
@@ -92,9 +92,34 @@ function agentsPane(node: TrackNode, profileId: string | null, onAgent: OpenAgen
   }]
 }
 
+const WHY_TAG: Record<SkillBasis['kind'], [string, string]> = {
+  talentcorp: ['TalentCorp names it for this role', 'bg-observed-bg text-observed'],
+  onet: ['Used in this job\'s tasks', 'bg-observed-bg text-observed'],
+  assumption: ['Our assumption', 'bg-estimate-bg text-estimate'],
+}
+
+// Why this skill is on the plan at all, with its source (src/match/basis.py).
+function whyPane(node: TrackNode): Pane[] {
+  if (!node.why) return []
+  const [tag, tone] = WHY_TAG[node.why.kind]
+  return [{
+    key: 'why',
+    title: 'Why you need this',
+    hint: node.essential ? 'Essential for this role' : 'Counts toward your fit for this role',
+    body: (
+      <div className="flex flex-col gap-2">
+        <span className={`tag self-start ${tone}`}>{tag}</span>
+        <p className="m-0">{node.why.text}</p>
+        <span className="font-mono text-[11px] text-graphite">{node.why.source}</span>
+      </div>
+    ),
+  }]
+}
+
 function panes(node: TrackNode, state: State, blocker: string | null, done: string[], onToggle: (id: string) => void, onSkip: (id: string) => void, paused: boolean, checked: string, profileId: string | null, onAgent: OpenAgent): Pane[] {
   const practice = node.practice?.length ? [practicePane(node.practice, onSkip, paused)] : []
   return [
+    ...whyPane(node),
     ...practice,
     {
       key: 'courses',

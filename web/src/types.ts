@@ -217,6 +217,7 @@ export type RoleCard = {
   essentials_short?: string[]
   pay?: RolePay | null
   serves_goals?: string[]
+  requirement_basis?: Record<string, SkillBasis>
 }
 export type MatchesResponse = {
   scenario: Scenario
@@ -618,6 +619,7 @@ export type CourseFitCheck = { result: 'fits' | 'does_not_fit' | 'unclear'; by: 
 export type TrackCourse = { id: string; title: string; provider: string; url: string; minutes: number; level: string; planned: boolean; done: boolean; fit_check?: CourseFitCheck | null }
 export type TrackVideo = { id: string; title: string; channel: string; url: string; minutes: number; published: string }
 export type TrackArticle = { id: string; title: string; publisher: string; url: string }
+export type SkillBasis = { kind: 'talentcorp' | 'onet' | 'assumption'; text: string; source: string }
 export type TrackNode = {
   id: string
   title: string
@@ -632,6 +634,7 @@ export type TrackNode = {
   status: 'done' | 'open' | 'no_course'
   study_after?: number | null
   practice?: PracticeStep[]
+  why?: SkillBasis
 }
 export type Track = { id: 'ai_basics' | 'without_ai' | 'with_ai'; title: string; why: string; nodes: TrackNode[]; shown?: boolean; reason?: string }
 export type RouteMetrics = {

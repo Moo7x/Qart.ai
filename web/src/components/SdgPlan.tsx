@@ -15,8 +15,7 @@ export function SdgPlan({ matrix, path, goals }: { matrix: SdgMatrix; path: Path
   const [open, setOpen] = useState<string | null>(null)
   const [table, setTable] = useState(false)
   const name = (skill: string) => matrix.rows.find((r) => r.skill === skill)?.skill_name ?? skill
-  const tiles: Tile[] = [
-    ...matrix.totals.map((t) => {
+  const tiles: Tile[] = matrix.totals.map((t) => {
       const cells = matrix.cells.filter((c) => c.target === t.target)
       return {
         target: t.target,
@@ -24,8 +23,7 @@ export function SdgPlan({ matrix, path, goals }: { matrix: SdgMatrix; path: Path
         skills: cells.filter((c) => c.hours > 0).map((c) => ({ name: name(c.skill), hours: c.hours })).sort((a, b) => b.hours - a.hours),
         reasons: cells.flatMap((c) => c.reasons).filter((r, i, all) => all.findIndex((x) => x.text === r.text) === i),
       }
-    }),
-  ]
+    })
   // A whole-plan link (free learning, the role move) joins the tile of the same target if the
   // plan's skills already serve it; otherwise it gets its own tile.
   for (const l of matrix.path_links) {

@@ -184,6 +184,11 @@ function RoleDetail({ role, roles, matches, onChoose, chosen, busy, situation, p
                     <div key={r.skill} className="border-t border-line pt-2 text-[13px]">
                       <div className="font-medium">{r.skill_name}</div>
                       <div className="font-mono text-[11px] text-ash">you {levelText(r.claimed)} · needs {levelText(r.required)}</div>
+                      {role.requirement_basis?.[r.skill] && (
+                        <div className={`mt-1 text-[11px] ${role.requirement_basis[r.skill].kind === 'assumption' ? 'text-estimate' : 'text-graphite'}`} title={role.requirement_basis[r.skill].source}>
+                          {role.requirement_basis[r.skill].kind === 'assumption' ? 'Our assumption' : role.requirement_basis[r.skill].kind === 'talentcorp' ? 'Named by TalentCorp' : 'In this job\'s tasks'}
+                        </div>
+                      )}
                     </div>
                   ))}
                 </div>
