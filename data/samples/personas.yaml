@@ -49,7 +49,7 @@ personas:
     skills:
       cash_application:
         level: 3
-        evidence: Applied incoming customer receipts to open invoices in SAP for four entities, about 1,200 lines a month.
+        evidence: Applied incoming customer receipts to open receivables in SAP for four entities, about 1,200 lines a month.
       reconciliation:
         level: 3
         evidence: Reconciled daily bank statements to the cash ledger and cleared unapplied cash.
@@ -58,7 +58,7 @@ personas:
         evidence: Worked with the credit team on overdue accounts and collection follow-ups.
       erp:
         level: 2
-        evidence: Applied incoming customer receipts to open invoices in SAP for four entities, about 1,200 lines a month.
+        evidence: Applied incoming customer receipts to open receivables in SAP for four entities, about 1,200 lines a month.
       reporting:
         level: 2
         evidence: Built the daily cash position report in Excel for the AR manager.

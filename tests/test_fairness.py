@@ -51,7 +51,7 @@ def test_model_receives_identical_messages(settings: Settings) -> None:
             {
                 "skill": "cash_application",
                 "level": 3,
-                "evidence": "Applied incoming customer receipts to open invoices in SAP",
+                "evidence": "Applied incoming customer receipts to open receivables in SAP",
             }
         ],
         "interests": ["data_digital"],

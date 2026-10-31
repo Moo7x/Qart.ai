@@ -12,6 +12,9 @@ Bachelor of Accounting (Honours), public university in Malaysia, 2026
 - Final-year project: variance analysis of a manufacturing company's standard costs.
 - Courses in financial accounting, management accounting, auditing and taxation.
 - Learned SQL basics and built simple dashboards in Power BI for a class project.
+- Prepared a standard cost card for the project company and calculated its price and usage variances.
+- Prepared a full set of financial statements for a case company in the financial reporting course.
+- Tracked the monthly electricity use of two faculty buildings in Excel for a campus energy-saving campaign.
 
 Internship
 Finance Intern, audit firm, Kuala Lumpur (3 months, 2025)

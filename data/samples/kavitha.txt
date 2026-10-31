@@ -18,6 +18,9 @@ Senior Reporting Analyst, regional GBS centre, Kuala Lumpur (2020 – present)
 - Built multi-source Power BI dashboards with Power Query, combining SAP, Excel and payroll data.
 - Prepared the monthly management reporting pack and variance commentary for regional finance leads.
 - Train and review the work of new reporting analysts joining the team.
+- Wrote SQL queries against the reporting database to pull ledger and payroll extracts.
+- Mapped and migrated the legacy chart of accounts into S/4HANA and reconciled what moved.
+- Monitored month-end batch jobs and raised tickets when the reporting system slowed down.
 
 Financial Analyst, regional GBS centre, Kuala Lumpur (2017 – 2020)
 - Prepared month-end journals and balance sheet reconciliations in SAP.

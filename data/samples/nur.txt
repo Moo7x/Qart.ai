@@ -11,11 +11,15 @@ customers in four countries. I want to move towards reporting and data work.
 
 Experience
 Cash Application Analyst, regional GBS centre, Kuala Lumpur (2019 – present)
-- Applied incoming customer receipts to open invoices in SAP for four entities, about 1,200 lines a month.
+- Applied incoming customer receipts to open receivables in SAP for four entities, about 1,200 lines a month.
 - Reconciled daily bank statements to the cash ledger and cleared unapplied cash.
 - Investigated short-payments and disputes with customers and the sales team.
 - Built the daily cash position report in Excel for the AR manager.
 - Worked with the credit team on overdue accounts and collection follow-ups.
+- Agreed payment plans with customers on disputed overdue balances and logged each promise to pay.
+- Kept the data quality of customer accounts in SAP: fixed duplicate records and missing fields each week.
+- Built a Power BI dashboard of unapplied cash and ageing by entity for the weekly AR review.
+- Checked the month-end ageing report against the ledger before it went to the AR manager.
 
 Accounts Receivable Assistant, trading company, Petaling Jaya (2017 – 2019)
 - Issued customer invoices and posted receipts.

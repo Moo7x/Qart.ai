@@ -13,7 +13,7 @@ from src.pack import load_pack
 
 NUR = (Path(__file__).parent.parent / "data" / "samples" / "nur.txt").read_text(encoding="utf-8")
 SAP_SENTENCE = (
-    "Applied incoming customer receipts to open invoices in SAP for four entities, about 1,200 "
+    "Applied incoming customer receipts to open receivables in SAP for four entities, about 1,200 "
     "lines a month."
 )
 

@@ -50,7 +50,7 @@ def test_claims_without_a_real_quote_are_rejected(settings: Settings) -> None:
             {
                 "skill": "cash_application",
                 "level": 3,
-                "evidence": "Applied incoming customer receipts to open invoices in SAP",
+                "evidence": "Applied incoming customer receipts to open receivables in SAP",
             },
             {"skill": "sql", "level": 3, "evidence": "Wrote complex SQL queries every day"},
             {"skill": "made_up_skill", "level": 2, "evidence": "anything at all here"},
