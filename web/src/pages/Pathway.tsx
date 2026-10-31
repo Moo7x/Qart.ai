@@ -6,7 +6,9 @@ import { RouteCompare } from '../components/RouteCompare'
 import { SdgPlan } from '../components/SdgPlan'
 import { Badges } from '../components/Badges'
 import { TrackMap } from '../components/TrackMap'
-import { ScenarioSwitch, JourneyRoute, NextStep, PROGRESS_EVENT } from '../components/journey'
+import { ScenarioSwitch, NextStep, PROGRESS_EVENT } from '../components/journey'
+import { PageHead, Serif, VividTile } from '../components/atoms'
+import { FlowSteps } from '../components/FlowSteps'
 import { Loading, Problem } from '../components/ui'
 import { useJourney } from '../state'
 import type { PathwayResponse, ProfileData, ProgressResponse, Scenario, TracksResponse } from '../types'
@@ -86,7 +88,7 @@ function ProfilePathway({ profileId, scenario }: { profileId: string; scenario: 
 
   return (
     <main className="page">
-      <JourneyRoute />
+      <FlowSteps current="plan" skip={profile.data?.profile.current_role === 'other' ? ['work'] : []} />
       {noDestination && (
         <div className="flex flex-col gap-3">
           <span className="eyebrow">My plan · pathway</span>
@@ -99,27 +101,29 @@ function ProfilePathway({ profileId, scenario }: { profileId: string; scenario: 
 
       {data && (
         <>
-          <header className="flex flex-wrap items-end justify-between gap-4">
-            <div className="flex flex-col gap-1.5">
-              <span className="eyebrow">Pathway · destination you chose</span>
-              <h1 className="h1">{data.role_title}</h1>
-              <p className="m-0 font-mono text-[13px] text-graphite">
-                {data.total_hours} h{tracks.data?.comparison.with_ai.ai_basics_hours ? ` + ${tracks.data.comparison.with_ai.ai_basics_hours} h AI basics` : ''} · RM 0 · {data.weekly_hours} h a week · about {data.weeks} week{data.weeks === 1 ? '' : 's'} · {finished} of {data.steps.length} steps done
-              </p>
-            </div>
-            <PlanTotals data={data} />
-            <div className="flex flex-col items-end gap-2">
-              <ScenarioSwitch />
-              <Link to="/roles" className="text-[13px]">Change destination</Link>
-            </div>
-          </header>
+          <PageHead
+            badge="My plan · destination you chose"
+            title={<>Your <Serif>plan</Serif> to {data.role_title}</>}
+            sub={`${data.total_hours} h${tracks.data?.comparison.with_ai.ai_basics_hours ? ` + ${tracks.data.comparison.with_ai.ai_basics_hours} h AI basics` : ''} · RM 0 · ${data.weekly_hours} h a week · about ${data.weeks} week${data.weeks === 1 ? '' : 's'} · ${finished} of ${data.steps.length} steps done`}
+            right={
+              <div className="flex flex-col items-start gap-2 md:items-end">
+                <ScenarioSwitch />
+                <span className="flex gap-3 text-[13px]"><Link to="/time">Change time and budget</Link><Link to="/roles">Change destination</Link></span>
+              </div>
+            }
+          />
 
-          <section aria-label="Your badges" className="panel min-w-0 gap-3">
-            <h2 className="h2">Your badges</h2>
-            <span className="text-[12px] text-graphite">Earned only from what you do: courses marked done, levels raised.</span>
-            {badges.error && <Problem what="your badges" message={badges.error} onRetry={badges.reload} />}
-            {badges.data && <Badges badges={badges.data} />}
-          </section>
+          <div className="q-tray q-g2">
+            <article aria-label="Plan totals" className="q-card">
+              <span className="q-kicker">Study and practice</span>
+              <PlanTotals data={data} />
+            </article>
+            <VividTile theme="lime" pill="your badges" label="Your badges">
+              {badges.error && <Problem what="your badges" message={badges.error} onRetry={badges.reload} />}
+              {badges.data && <Badges badges={badges.data} />}
+              <p className="m-0 mt-auto text-[13px] leading-normal text-[#33402a]">Badges come only from what you do: courses marked done, levels raised. Never from a model or a guess.</p>
+            </VividTile>
+          </div>
 
           <section aria-label="Your roadmap" className="panel min-w-0 gap-5">
             <div className="flex flex-col gap-1">
