@@ -87,7 +87,7 @@ export function Onboarding() {
 
   return (
     <>
-      <Landing onStart={() => start('cv')} onForm={() => start('form')} saved={profileId !== null} />
+      <Landing onStart={() => start('cv')} saved={profileId !== null} />
       {open && (
         <CvPopup onClose={() => { setOpen(null); if (editing) navigate(-1) }}>
           <section aria-label="Your CV" className="flex min-w-0 flex-[1.6_1_520px] flex-col gap-5">
