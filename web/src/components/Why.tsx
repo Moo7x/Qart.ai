@@ -9,7 +9,7 @@ export function WhyButton({ title, panes, label = 'Why?' }: { title: string; pan
   const [open, setOpen] = useState(false)
   return (
     <>
-      <button type="button" className="btn min-h-[44px] gap-1.5" onClick={() => setOpen(true)} aria-label={`${label} ${title}`}>
+      <button type="button" className="q-btn q-why" onClick={() => setOpen(true)} aria-label={`${label} ${title}`}>
         <Info size={15} aria-hidden="true" />
         {label}
       </button>
@@ -20,12 +20,7 @@ export function WhyButton({ title, panes, label = 'Why?' }: { title: string; pan
 
 export type Kind = 'observed' | 'assumption' | 'estimate'
 
-const KIND_STYLE: Record<Kind, string> = {
-  observed: 'bg-observed-bg text-observed',
-  assumption: 'bg-mist text-graphite',
-  estimate: 'bg-estimate-bg text-estimate',
-}
-
+// The same pill as atoms.tsx Label, so every page labels numbers alike.
 export function KindLabel({ kind }: { kind: Kind }) {
-  return <span className={`tag ${KIND_STYLE[kind]}`}>{kind[0].toUpperCase() + kind.slice(1)}</span>
+  return <span className={`q-label q-label-${kind}`}>{kind}</span>
 }
