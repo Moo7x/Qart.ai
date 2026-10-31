@@ -110,6 +110,9 @@ CHECK_MIN_QUOTE_CHARS = 8  # a quote shorter than this cannot show anything
 # Privacy (src/privacy.py): a profile not updated for 90 days is deleted by the pipeline. Declared:
 # long enough to come back to a plan after a quarter, short enough not to keep data for nothing.
 PROFILE_RETENTION_DAYS = 90
+# Status page: platform SDG totals are withheld while fewer people than this have a destination.
+# Declared, from the project rule that aggregates across people suppress groups under 5.
+PLATFORM_SDG_MIN_PROFILES = 5
 # Prices for the cost estimate (status page, scripts/cost.py), USD per million tokens. Declared:
 # the OpenAI list prices as the team knew them on 2026-10-30; check the provider's price page
 # before quoting a cost. RunPod is billed per GPU-second and depends on the GPU the endpoint uses,

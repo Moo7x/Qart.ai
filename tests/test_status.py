@@ -41,3 +41,25 @@ def test_status_route_shape(client: TestClient) -> None:
     assert {"sources", "runs", "engines", "usage", "cost", "fairness", "platform_sdg"} <= set(body)
     assert body["cost"]["label"] == "estimate"
     assert body["engines"]["language_model"]["configured"] is False  # tests run offline
+
+
+def test_fairness_result_is_shown_with_its_date(client: TestClient) -> None:
+    fairness = client.get("/api/status").json()["fairness"]
+    assert fairness["available"] and fairness["identical"] is True
+    assert fairness["pairs"] >= 1 and fairness["checked_at"]
+
+
+def test_platform_sdg_totals_are_withheld_below_five_people(client: TestClient) -> None:
+    def add_person() -> None:
+        profile = {"situation": "working", "skills": {"reconciliation": {"level": 2}}}
+        pid = client.post("/api/profiles", json=profile).json()["id"]
+        client.post(f"/api/profiles/{pid}/destination", json={"role_id": "cost_accountant"})
+
+    for _ in range(params.PLATFORM_SDG_MIN_PROFILES - 1):
+        add_person()
+    below = client.get("/api/status").json()["platform_sdg"]
+    assert below["suppressed"] is True and below["totals"] == []
+    add_person()
+    shown = client.get("/api/status").json()["platform_sdg"]
+    assert shown["suppressed"] is False and shown["profiles"] == params.PLATFORM_SDG_MIN_PROFILES
+    assert shown["totals"] and all(t["hours"] >= 0 for t in shown["totals"])

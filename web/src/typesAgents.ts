@@ -95,8 +95,8 @@ export type StatusResponse = {
   engines: { language_model: EngineState; gpu: EngineState }
   usage: UsageRow[]
   cost: { label: 'estimate'; total_usd: number; prices_checked: string; gpu_price_set: boolean; note: string }
-  fairness: { available: boolean }
-  platform_sdg: { available: boolean }
+  fairness: { available: boolean; pairs?: number; identical?: boolean; max_fit_difference?: number; checked_at?: string }
+  platform_sdg: { available: boolean; profiles?: number; min_profiles?: number; suppressed?: boolean; totals?: { target: string; hours: number }[] }
 }
 
 // ---- C8 forecast (GET /api/forecast, src/api/evidence.py SeriesForecast) ----

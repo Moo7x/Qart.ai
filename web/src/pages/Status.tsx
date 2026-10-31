@@ -8,6 +8,35 @@ import type { StatusResponse } from '../typesAgents'
 
 const POLL_MS = 30_000
 
+function FairnessLine({ f }: { f: StatusResponse['fairness'] }) {
+  if (!f.available || f.identical === undefined) return <p className="m-0 text-[13px]">Paired-profile fairness check: not available.</p>
+  return (
+    <div className="flex flex-col gap-1">
+      <p className="m-0 text-[13px]">
+        <span className={`font-semibold ${f.identical ? 'text-rising' : 'text-weak'}`}>{f.identical ? 'Identical results' : 'Results differ'}</span>
+        {' '}for {f.pairs} pairs of the same synthetic CV that differ only in name, gender, religion, race, age, marital status and contact details. Largest fit difference: {f.max_fit_difference}. Run {formatWhen(f.checked_at ?? null)} on the current evidence.
+      </p>
+      <p className="m-0 text-[12px] text-graphite">Personal details are removed before matching, and the same check runs in the test suite on every change.</p>
+    </div>
+  )
+}
+
+function PlatformSdg({ p }: { p: StatusResponse['platform_sdg'] }) {
+  if (!p.available) return <p className="m-0 text-[13px]">SDG hours planned across all people: not available.</p>
+  if (p.suppressed) {
+    return <p className="m-0 text-[13px]">SDG hours planned across all people: withheld, because {p.profiles} {p.profiles === 1 ? 'person has' : 'people have'} chosen a destination and groups under {p.min_profiles} are never shown.</p>
+  }
+  return (
+    <div className="flex flex-col gap-1">
+      <span className="text-[13px]">Study hours planned across the {p.profiles} people with a destination, per SDG target</span>
+      <ul className="m-0 flex list-none flex-wrap gap-x-6 gap-y-1 p-0 text-[13px]">
+        {(p.totals ?? []).map((t) => <li key={t.target}><span className="font-mono">{t.target}</span> · {t.hours} h</li>)}
+      </ul>
+      <p className="m-0 text-[12px] text-graphite">An hour of a skill counts toward every target that skill serves, so these do not add up across targets. Planned hours, not completed hours.</p>
+    </div>
+  )
+}
+
 export function Status() {
   const view = useApi<StatusResponse>('/api/status', POLL_MS)
   const data = view.data
@@ -75,8 +104,8 @@ export function Status() {
           </section>
           <section className="section">
             <h2 className="h2">Fairness and SDG totals</h2>
-            <p className="m-0 text-[13px]">Paired-profile fairness check: {data.fairness.available ? 'available' : 'not available yet (added with the scoring update)'}.</p>
-            <p className="m-0 text-[13px]">SDG hours planned across all people: {data.platform_sdg.available ? 'available' : 'not available yet (added with the SDG update)'}. Groups under 5 people are never shown.</p>
+            <FairnessLine f={data.fairness} />
+            <PlatformSdg p={data.platform_sdg} />
           </section>
         </>
       )}
