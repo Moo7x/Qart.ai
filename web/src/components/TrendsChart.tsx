@@ -100,7 +100,8 @@ function groupRows(data: TrendsResponse, forecasts: SeriesForecast[]): Row[] {
       const forecast = horizon && last !== undefined
         ? { point: horizon.point - last, low: horizon.low === null ? null : horizon.low - last, high: horizon.high === null ? null : horizon.high - last }
         : undefined
-      const here = roles.filter((r) => r.components?.group === g.group).map((r) => r.title)
+      const inGroup = roles.filter((r) => r.components?.group === g.group)
+      const here = inGroup.map((r) => r.title)
       return {
         id: g.group,
         label: g.title,
@@ -126,6 +127,20 @@ function groupRows(data: TrendsResponse, forecasts: SeriesForecast[]): Row[] {
                 <p className="m-0 text-graphite">{f?.note || 'No forecast for this group.'}</p>
               )}
               {here.length > 0 && <p className="m-0">Your destination roles in this group: {here.join(', ')}. The forecast is for the whole group, not for these roles.</p>}
+              {inGroup.map((r) => {
+                const items = Array.isArray(r.components?.evidence) ? r.components.evidence : []
+                if (items.length === 0) return null
+                return (
+                  <div key={r.series_id} className="flex flex-col gap-1 border-t border-line pt-2">
+                    <span className="text-[13px] font-semibold">{r.title}: evidence about this occupation</span>
+                    <ul className="m-0 flex list-none flex-col gap-1.5 p-0 text-[12px]">
+                      {items.map((e) => (
+                        <li key={e.text}>{e.kind === 'observed' ? <KindLabel kind="observed" /> : <span className="tag bg-mist text-graphite">Expert view</span>} {e.text} <span className="text-graphite">({e.source})</span></li>
+                      ))}
+                    </ul>
+                  </div>
+                )
+              })}
             </div>
           ),
         },

@@ -35,8 +35,9 @@ from sklearn.ensemble import HistGradientBoostingRegressor  # type: ignore[impor
 from src import params
 from src.evidence import measures
 from src.evidence.field import field_profile
+from src.evidence.signals import job_ad_signals, occupation_signals
 from src.match.engine import Evidence, requirement_automation
-from src.match.outlook import MAJOR_GROUP
+from src.match.outlook import MAJOR_GROUP, role_outlook
 from src.pack import Pack
 
 Row = dict[str, Any]
@@ -327,10 +328,17 @@ def _change(entry: dict[str, Any]) -> float | None:
 
 
 def outlooks(
-    pack: Pack, employment: list[dict[str, Any]], evidence: Evidence
+    pack: Pack, employment: list[dict[str, Any]], evidence: Evidence, rows: list[Row]
 ) -> list[dict[str, Any]]:
-    """Role outlooks from their group's forecast; skill outlooks with their components apart."""
+    """Role outlooks from their group's forecast; skill outlooks with their components apart.
+
+    The group forecast is the same for every role in a broad DOSM group, so each role also carries
+    the finer evidence about its own occupation that the role cards show (src/match/outlook.py):
+    the DOSM job-ad share where DOSM names the occupation, TalentCorp's in-demand skills and the
+    MyCOL critical-occupation list. Those are observed or expert facts, not forecasts.
+    """
     by_group = {e["series_id"].split(":", 1)[1]: e for e in employment}
+    signals = occupation_signals(rows) + job_ad_signals(rows)
     out: list[dict[str, Any]] = []
     role_change: dict[str, float] = {}
     for role in pack.destination_roles.values():
@@ -352,6 +360,7 @@ def outlooks(
                     "group_title": GROUP_TITLES.get(group or "", group),
                     "change_pp": change,
                     "talentcorp_impact": role.impact,
+                    "evidence": role_outlook(pack, role, rows, signals),
                 },
                 "note": (
                     f"Forecast for {GROUP_TITLES.get(group or '', group)}, the occupation group of "
@@ -411,4 +420,4 @@ def outlooks(
 
 def forecasts(pack: Pack, rows: list[Row], evidence: Evidence) -> list[dict[str, Any]]:
     employment = employment_forecasts(rows)
-    return [*employment, *job_ad_forecasts(rows), *outlooks(pack, employment, evidence)]
+    return [*employment, *job_ad_forecasts(rows), *outlooks(pack, employment, evidence, rows)]

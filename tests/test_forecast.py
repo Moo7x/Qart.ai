@@ -124,3 +124,14 @@ def test_forecast_route_returns_labelled_estimates(client: TestClient) -> None:
     body = client.get("/api/forecast").json()
     assert isinstance(body, list)
     assert all(entry["label"] == "estimate" for entry in body)
+
+
+def test_each_role_outlook_carries_its_own_occupation_evidence() -> None:
+    rows = wage_rows()
+    entries = fc.forecasts(load_pack(), rows, automation_evidence(rows))
+    roles = [e for e in entries if e["kind"] == "role_outlook"]
+    for role in roles:
+        evidence = role["components"]["evidence"]
+        # The broad group's share is always there; every item says its kind and source.
+        assert evidence and all({"kind", "text", "source"} <= set(item) for item in evidence)
+        assert all(item["kind"] in {"observed", "expert"} for item in evidence)

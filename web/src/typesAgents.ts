@@ -116,5 +116,7 @@ export type SeriesForecast = {
   source: string
   fetched_at: string | null
   note: string
-  components: Record<string, string | number | null> | null
+  // Role outlooks add `evidence`: the role's own observed and expert facts (src/match/outlook.py).
+  components: Record<string, string | number | null | OutlookEvidence[]> | null
 }
+export type OutlookEvidence = { kind: 'observed' | 'expert'; text: string; source: string }
