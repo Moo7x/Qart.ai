@@ -1,5 +1,4 @@
 import { useCallback, useState } from 'react'
-import { Link } from 'react-router-dom'
 import { useJourney } from '../state'
 import type { Track, TrackNode } from '../types'
 import type { PracticeStep } from '../typesScoring'
@@ -118,7 +117,6 @@ function panes(node: TrackNode, state: State, blocker: string | null, done: stri
                       {isDone ? 'Done ✓ · undo' : 'Mark as done'}
                     </button>
                   ))}
-                  {isDone && <Link to="/cv" className="text-[12px] font-medium text-violet">Add it to your CV →</Link>}
                 </span>
               </li>
             )

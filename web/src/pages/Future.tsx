@@ -126,7 +126,7 @@ export function Future() {
           </section>
         </>
       )}
-      <NextStep to="/cv" label="Update your CV" hint="Next: add what you have done to your CV" />
+      <NextStep to="/pathway" label="Back to my plan" hint="Next: start the first step of your plan" />
     </main>
   )
 }

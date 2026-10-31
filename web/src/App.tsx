@@ -1,7 +1,6 @@
 import { Component, type ComponentType, lazy, type ReactNode, Suspense, useEffect } from 'react'
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { Sidebar } from './components/Sidebar'
-import { Cv } from './pages/Cv'
 import { Future } from './pages/Future'
 import { Goal } from './pages/Goal'
 import { Changes } from './pages/Changes'
@@ -111,7 +110,6 @@ function Shell() {
         <Route path="/pathway" element={<Pathway />} />
         <Route path="/future" element={<Future />} />
         <Route path="/changes" element={<Changes />} />
-        <Route path="/cv" element={<Cv />} />
         <Route path="/trends" element={<PageError><Suspense fallback={<main className="page"><span role="status" className="cap">Loading the trends…</span></main>}><Trends /></Suspense></PageError>} />
         <Route path="/occupations" element={<Occupations />} />
         <Route path="/live" element={<LiveIntelligence />} />

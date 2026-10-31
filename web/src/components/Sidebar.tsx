@@ -1,4 +1,4 @@
-import { Activity, FileText, Flag, Gauge, Radar, Search } from 'lucide-react'
+import { Activity, Gauge, Radar, Search } from 'lucide-react'
 import { LanguageSwitch, useT } from '../i18n'
 import { useEffect, useState } from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
@@ -7,8 +7,6 @@ import { useJourney } from '../state'
 import type { ChangesResponse, Run } from '../types'
 
 const RUNS_POLL_MS = 60_000
-// The SDG stage is a section of the plan page (owner B adds the anchor with the heatmap).
-const SDG_HASH = '#sdg'
 
 function navClass({ isActive }: { isActive: boolean }): string {
   const base = 'flex min-h-[38px] items-center gap-2.5 rounded-md px-2.5 text-sm no-underline'
@@ -19,7 +17,7 @@ function navClass({ isActive }: { isActive: boolean }): string {
 
 // Pages that belong to a stage (My CV and My goal under Profile), indented under it.
 function subClass({ isActive }: { isActive: boolean }): string {
-  const base = 'ml-7 flex min-h-[32px] items-center gap-2 rounded-md px-2.5 text-[13px] no-underline'
+  const base = 'flex min-h-[32px] items-center gap-2 rounded-md px-2.5 text-[13px] no-underline'
   return isActive ? `${base} bg-surface text-white` : `${base} text-[#a9aab6] hover:bg-obsidian hover:text-white`
 }
 
@@ -69,60 +67,47 @@ export function Sidebar() {
         <Radar size={16} aria-hidden="true" />
         {t('Overview')}
       </NavLink>
-      {/* The six demo stages (docs/PHASE2_PLAN.md §6), numbered in journey order. */}
+      {/* The demo stages (docs/PHASE2_PLAN.md §6); the SDG stage is a section of the plan page. */}
       <NavLink to="/start?edit=1" className={navClass({ isActive: false })}>
         <StageNo n={1} />
         {t('Profile')}
-      </NavLink>
-      <NavLink to="/cv" className={subClass}>
-        <FileText size={14} aria-hidden="true" />
-        {t('My CV')}
-      </NavLink>
-      <NavLink to="/goal" className={subClass}>
-        <Flag size={14} aria-hidden="true" />
-        {t('My goal')}
       </NavLink>
       <NavLink to="/trends" className={navClass}>
         <StageNo n={2} />
         {t('Future skills radar')}
       </NavLink>
-      <NavLink to="/roles" className={navClass}>
+      <NavLink to="/roles" className={() => navClass({ isActive: location.pathname === '/roles' || location.pathname === '/goal' })}>
         <StageNo n={3} />
-        {t('Ranked roles')}
+        {t('Roles for you')}
       </NavLink>
-      <NavLink to="/pathway" className={() => navClass({ isActive: location.pathname === '/pathway' && location.hash !== SDG_HASH })}>
+      <NavLink to="/pathway" className={navClass}>
         <StageNo n={4} />
-        {t('Pathway')}
-      </NavLink>
-      <NavLink to={`/pathway${SDG_HASH}`} className={() => navClass({ isActive: location.pathname === '/pathway' && location.hash === SDG_HASH })}>
-        <StageNo n={5} />
-        {t('SDG contribution')}
+        {t('Plan and SDGs')}
       </NavLink>
       <NavLink to="/future" className={navClass}>
-        <StageNo n={6} />
+        <StageNo n={5} />
         {t('Compare futures')}
       </NavLink>
       <div className="mx-1.5 my-3 h-px bg-surface" />
-      <span className="cap px-2.5 pb-1.5 text-slate-mid">{t('Evidence')}</span>
+      <span className="cap px-2.5 pb-1.5 text-slate-mid">{t('Data')}</span>
       <NavLink to="/changes" className={navClass}>
         <Activity size={16} aria-hidden="true" className="text-cyan" />
         {t('What changed')}
         {changes.data?.proposals.some((p) => p.actionable) && <span className="tag bg-violet text-white">New</span>}
       </NavLink>
+      <NavLink to="/live" className={navClass}>
+        <Gauge size={16} aria-hidden="true" className="text-cyan" />
+        {t('Live intelligence')}
+      </NavLink>
       <NavLink to="/occupations" className={navClass}>
         <Search size={16} aria-hidden="true" className="text-cyan" />
         {t('Any occupation')}
       </NavLink>
-      <NavLink to="/live" className={navClass}>
-        <Activity size={16} aria-hidden="true" className="text-cyan" />
-        {t('Live intelligence')}
-      </NavLink>
-      <NavLink to="/status" className={navClass}>
-        <Gauge size={16} aria-hidden="true" className="text-cyan" />
-        {t('Status')}
-      </NavLink>
       <div className="flex-1" />
-      <NavLink to="/privacy" className={subClass}>{t('Privacy')}</NavLink>
+      <span className="flex gap-1">
+        <NavLink to="/status" className={subClass}>{t('Status')}</NavLink>
+        <NavLink to="/privacy" className={subClass}>{t('Privacy')}</NavLink>
+      </span>
       <LanguageSwitch />
       <div className="border-t border-surface p-2.5 font-mono text-[11px] leading-relaxed text-stone">
         LAST PIPELINE RUN

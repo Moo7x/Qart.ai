@@ -101,7 +101,6 @@ const STATIONS: Station[] = [
   { key: 'options', label: 'Choose a role', to: '/roles', paths: ['/roles', '/goal'] },
   { key: 'plan', label: 'Your plan', to: '/pathway', paths: ['/pathway'] },
   { key: 'future', label: 'Future you', to: '/future', paths: ['/future'] },
-  { key: 'cv', label: 'Your CV', to: '/cv', paths: ['/cv'] },
 ]
 
 // Each station's state comes from saved data: a profile exists, a destination is chosen, plan
@@ -125,7 +124,6 @@ export function JourneyRoute() {
     options: chosen ? 'role chosen' : 'pick one',
     plan: plan ? `${plan.steps_done}/${plan.steps} steps` : chosen ? 'not started' : 'after a role',
     future: chosen ? 'compare' : 'after a role',
-    cv: plan && plan.steps_done > 0 ? 'add your steps' : 'draft',
   }
   const done: Record<string, boolean> = {
     profile: true,
@@ -133,12 +131,11 @@ export function JourneyRoute() {
     options: chosen,
     plan: Boolean(plan && plan.steps > 0 && plan.steps_done === plan.steps),
     future: false,
-    cv: false,
   }
   const current = STATIONS.findIndex((s) => s.paths.includes(pathname))
   return (
     <nav aria-label="Your journey" className="-mb-2">
-      <ol className="m-0 grid list-none grid-cols-6 p-0">
+      <ol className="m-0 grid list-none grid-cols-5 p-0">
         {STATIONS.map((s, i) => {
           const isCurrent = i === current
           const reached = done[s.key] || isCurrent
