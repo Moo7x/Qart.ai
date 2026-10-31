@@ -7,11 +7,11 @@ import { LevelPicker } from '../components/LevelPicker'
 import { useJourney } from '../state'
 import type { Extraction, MatchesResponse, PackInfo, PathwayResponse, ProfileData, SignalsResponse, Situation, SkillClaim, SkillKind, Stage } from '../types'
 
-const SKILLS_STEP = 4
+const SKILLS_STEP = 3
 
-const STEPS = ['', 'Your situation', 'Your CV', 'Your work today', 'Your skills', 'Time and budget', 'What matters to you']
-const LAST_QUESTION = 6
-const BUILDING = 7
+const STEPS = ['', 'Your CV', 'Your work today', 'Your skills', 'Time and budget', 'What matters to you']
+const LAST_QUESTION = 5
+const BUILDING = 6
 const HOURS = [2, 4, 6, 10]
 type SkillSuggestions = { hits: { skill: string; name: string; score: number }[]; engine: string; note: string; stages?: Stage[] }
 const SITUATIONS: { id: Situation; title: string; body: string }[] = [
@@ -19,6 +19,7 @@ const SITUATIONS: { id: Situation; title: string; body: string }[] = [
   { id: 'student', title: "I'm studying or just graduated", body: 'Entry roles that fit you and the skills to build first.' },
   { id: 'switcher', title: 'I want to move into finance', body: 'Which of your skills carry over, and a plan to switch.' },
 ]
+const READ_AS: Record<Situation, string> = { working: 'working in finance', student: 'studying or a recent graduate', switcher: 'moving into finance from another field' }
 const INTERESTS: { id: SkillKind; label: string }[] = [
   { id: 'data_digital', label: 'Working with data and systems' },
   { id: 'finance_core', label: 'Accounting and finance work' },
@@ -47,6 +48,9 @@ export function Onboarding() {
   // Editing opens on the skills (the profile itself), not on the first question.
   const [step, setStep] = useState(editing ? Number(searchParams.get('step') ?? SKILLS_STEP) : 0)
   const [situation, setSituation] = useState<Situation>('working')
+  // Read from the CV (or the work step); shown so the person can correct it.
+  const [situationSet, setSituationSet] = useState(false)
+  const [situationNote, setSituationNote] = useState('')
   const [stages, setStages] = useState<Stage[] | undefined>(undefined)
   const [activityStep, setActivityStep] = useState(0)
   const [activityTitle, setActivityTitle] = useState('')
@@ -70,7 +74,7 @@ export function Onboarding() {
   useEffect(() => {
     if (!editing || !existing.data || hydrated.current) return
     const p = existing.data.profile
-    setSituation(p.situation); setRole(p.current_role); setYears(p.years_experience === null ? '' : String(p.years_experience))
+    setSituation(p.situation); setSituationSet(true); setRole(p.current_role); setYears(p.years_experience === null ? '' : String(p.years_experience))
     setSkills(p.skills); setHours(p.weekly_hours); setBudget(p.budget); setInterests(p.interests); setSdgs(p.sdg_priorities)
     setTasks([...new Set(Object.values(p.skills).map((s) => s.evidence).filter(Boolean))].join('\n'))
     hydrated.current = true
@@ -80,7 +84,7 @@ export function Onboarding() {
   // matching skills" later only has to embed their own text.
   const warmed = useRef(false)
   useEffect(() => {
-    if (step < 2 || warmed.current) return
+    if (step < 1 || warmed.current) return
     warmed.current = true
     sendJSON('/api/skills/warm', { body: {} }).catch(() => undefined)
   }, [step])
@@ -94,6 +98,7 @@ export function Onboarding() {
     setExtraction(result)
     setStages(result.stages)
     if (result.current_role !== 'other') setRole(result.current_role)
+    if (result.situation) { setSituation(result.situation); setSituationNote(result.situation_reason ?? ''); setSituationSet(true) }
     if (result.years_experience !== null) setYears(String(result.years_experience))
     if (result.interests.length) setInterests(result.interests)
     const found: Record<string, SkillClaim> = {}
@@ -108,8 +113,8 @@ export function Onboarding() {
         (result.rejected.length ? ` · ${result.rejected.length} claim${result.rejected.length === 1 ? '' : 's'} dropped: quote not in the CV` : ''),
     )
     // The log follows the person to the step where the results are shown.
-    setActivityStep(3)
-    go(3)
+    setActivityStep(2)
+    go(2)
   }
 
   async function run(label: string, action: () => Promise<void>) {
@@ -127,12 +132,6 @@ export function Onboarding() {
       setBusy(null)
     }
   }
-
-  const pickSample = (id: string) =>
-    run('Reading the sample CV…', async () => {
-      const sample = await getJSON<{ text: string }>(`/api/samples/${id}`)
-      applyExtraction(await sendJSON<Extraction>('/api/intake/parse', { body: { text: sample.text } }))
-    })
 
   const pickFile = (file: File) =>
     run('Reading your CV…', async () => applyExtraction(await uploadFile<Extraction>('/api/intake/upload', file)))
@@ -156,9 +155,11 @@ export function Onboarding() {
   const finish = () =>
     run('Building your picture…', async () => {
       go(BUILDING)
+      const inferred: Situation = role !== 'other' ? 'working' : years === '' || Number(years) === 0 ? 'student' : 'switcher'
+      const finalSituation: Situation = situationSet ? situation : inferred
       const profile: ProfileData = {
-        situation,
-        current_role: situation === 'student' ? 'other' : role,
+        situation: finalSituation,
+        current_role: finalSituation === 'student' ? 'other' : role,
         years_experience: years === '' ? null : Number(years),
         weekly_hours: hours,
         budget,
@@ -226,8 +227,7 @@ export function Onboarding() {
   const addable = (pack.data?.skills ?? []).filter((s) => !(s.id in skills) && addQuery.length > 1 && s.name.toLowerCase().includes(addQuery.toLowerCase())).slice(0, 6)
   const help = [
     ['Your next move, made visible', 'Start with what you do today. Compare future roles, understand the gaps, then choose a practical learning route.'],
-    ['A route that starts with you', 'Working, studying or changing careers: your situation changes the context, never your skill score.'],
-    ['You control what gets used', 'Use a synthetic sample for this demo. Review every extracted skill and set your own levels before continuing.'],
+    ['You control what gets used', 'Upload a CV. We read your situation, role and skills from it; you review every one before continuing.'],
     ['Describe the work, not just the title', 'Your tasks help find relevant skills. Suggestions are yours to accept; a job title never proves proficiency.'],
     ['Unknown is different from missing', 'Leave a level unrated when unsure. Your matches show that uncertainty instead of treating the skill as verified.'],
     ['Make the plan fit your week', 'Course hours are estimates from the checked catalogue. More weekly time changes the schedule, not your current ability.'],
@@ -258,7 +258,7 @@ export function Onboarding() {
         {editing && existing.error && <p role="alert">Could not load your saved answers. <button type="button" className="btn" onClick={existing.reload}>Retry</button></p>}
         {step >= 1 && step <= LAST_QUESTION && (
           <div className="flex flex-col gap-2.5">
-            <div role="progressbar" aria-valuemin={1} aria-valuemax={LAST_QUESTION} aria-valuenow={step} aria-label="Onboarding progress" className="grid grid-cols-6 gap-1.5">
+            <div role="progressbar" aria-valuemin={1} aria-valuemax={LAST_QUESTION} aria-valuenow={step} aria-label="Onboarding progress" className="grid grid-cols-5 gap-1.5">
               {STEPS.slice(1).map((name, i) => (
                 <span key={name} className={`h-1 rounded-full ${i + 1 <= step ? 'bg-violet' : 'bg-hairline'}`} />
               ))}
@@ -286,31 +286,6 @@ export function Onboarding() {
 
         {step === 1 && (
           <section className="flex flex-col gap-4">
-            <h1 className="h1">{t('Which describes you?')}</h1>
-            <p className="m-0 text-graphite">{t('This changes what you see first.')}</p>
-            <div role="radiogroup" aria-label="Your situation" className="flex flex-col gap-2.5">
-              {SITUATIONS.map((s) => (
-                <button
-                  key={s.id}
-                  type="button"
-                  role="radio"
-                  aria-checked={situation === s.id}
-                  onClick={() => setSituation(s.id)}
-                  className={`flex w-full cursor-pointer items-center justify-between gap-4 rounded-lg bg-white px-[18px] py-4 text-left ${situation === s.id ? 'border-[1.5px] border-violet shadow-[0_0_0_3px_rgba(108,71,255,0.12)]' : 'border border-hairline'}`}
-                >
-                  <span>
-                    <span className="block font-semibold">{t(s.title)}</span>
-                    <span className="block text-sm text-graphite">{t(s.body)}</span>
-                  </span>
-                  <span aria-hidden="true" className={`h-[18px] w-[18px] flex-none rounded-full ${situation === s.id ? 'border-[5px] border-violet' : 'border-[1.5px] border-stone'}`} />
-                </button>
-              ))}
-            </div>
-          </section>
-        )}
-
-        {step === 2 && (
-          <section className="flex flex-col gap-4">
             <h1 className="h1">{t('Add your CV')}</h1>
             <p className="m-0 text-graphite">{t('We pre-fill the next questions from it. Prefer not to? Skip and answer them yourself.')}</p>
             <label className="relative flex min-h-[160px] cursor-pointer flex-col items-center justify-center gap-1.5 rounded-lg border-[1.5px] border-dashed border-stone bg-white p-4 text-center">
@@ -324,24 +299,22 @@ export function Onboarding() {
                 onChange={(e) => e.target.files?.[0] && pickFile(e.target.files[0])}
               />
             </label>
-            <div className="flex flex-col gap-2">
-              <span className="cap">{t('Or try a synthetic sample')}</span>
-              <div className="flex flex-wrap gap-2">
-                {(pack.data?.samples ?? []).map((s) => (
-                  <button key={s.id} type="button" disabled={busy !== null} className={chip(false)} onClick={() => pickSample(s.id)}>
-                    {s.label}
-                  </button>
-                ))}
-              </div>
-            </div>
             <p className="m-0 text-[13px] text-graphite">{t('Names, IC numbers, phone numbers and emails are removed before anything reads the CV. The CV text itself is not stored.')}</p>
           </section>
         )}
 
-        {step === 3 && (
+        {step === 2 && (
           <section className="flex flex-col gap-4">
             <h1 className="h1">{situation === 'student' ? 'What have you studied and done?' : 'What do you do today?'}</h1>
             {extraction && <span className="font-mono text-[11px] text-violet">READ FROM YOUR CV BY {extraction.engine.toUpperCase()} · EDIT IF WRONG</span>}
+            <div className="flex flex-col gap-2 rounded-lg border border-hairline bg-white px-4 py-3">
+              <span className="text-[13px]">We read you as <b>{READ_AS[situationSet ? situation : role !== 'other' ? 'working' : years === '' || Number(years) === 0 ? 'student' : 'switcher']}</b>{situationNote ? ` · ${situationNote}` : situationSet ? '' : ' · from your answers below'}. Not right?</span>
+              <div role="radiogroup" aria-label="Your situation" className="flex flex-wrap gap-2">
+                {SITUATIONS.map((x) => (
+                  <button key={x.id} type="button" role="radio" aria-checked={situationSet && situation === x.id} className={chip(situationSet && situation === x.id)} onClick={() => { setSituation(x.id); setSituationSet(true); setSituationNote('') }}>{t(x.title)}</button>
+                ))}
+              </div>
+            </div>
             {situation !== 'student' && (
               <label className="flex flex-col gap-1.5 text-[13px] font-medium">
                 Current or last role
@@ -384,7 +357,7 @@ export function Onboarding() {
           </section>
         )}
 
-        {step === 4 && (
+        {step === 3 && (
           <section className="flex flex-col gap-4">
             <h1 className="h1">{t('Check your skills')}</h1>
             <p className="m-0 text-graphite">
@@ -438,7 +411,7 @@ export function Onboarding() {
           </section>
         )}
 
-        {step === 5 && (
+        {step === 4 && (
           <section className="flex flex-col gap-5">
             <h1 className="h1">{t('How much time and money can you put into learning?')}</h1>
             <div role="radiogroup" aria-label="Hours per week" className="flex flex-col gap-2.5">
@@ -461,7 +434,7 @@ export function Onboarding() {
           </section>
         )}
 
-        {step === 6 && (
+        {step === 5 && (
           <section className="flex flex-col gap-5">
             <h1 className="h1">{t('What matters to you in your next role?')}</h1>
             <p className="m-0 text-graphite">{t('Used only to order roles that fit you almost equally well. It never changes a fit score.')}</p>
@@ -537,7 +510,7 @@ export function Onboarding() {
         </aside>
       ) : (
         <aside className="onboarding-help" aria-label="About this step">
-          <span className="eyebrow">{step === 0 ? 'Your career, your decision' : `Your journey · ${Math.min(step, 6)} / 6`}</span>
+          <span className="eyebrow">{step === 0 ? 'Your career, your decision' : `Your journey · ${Math.min(step, LAST_QUESTION)} / ${LAST_QUESTION}`}</span>
           <h2 className="h2">{help[0]}</h2>
           <p className="m-0 text-graphite">{help[1]}</p>
           <ol className="welcome-route">

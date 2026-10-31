@@ -143,6 +143,8 @@ export type Extraction = {
   rejected: { skill: string; reason: string }[]
   unmatched?: string[]
   stages?: Stage[]
+  situation?: Situation
+  situation_reason?: string
 }
 
 export type SkillClaim = {
