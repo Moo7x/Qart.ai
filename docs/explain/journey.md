@@ -203,6 +203,14 @@ a click opening the reason and source; free learning (4.3) and the role move (8.
 path links below it. On `/roles` a roles × targets grid (`sdg_roles` on `/matches`) shows which
 targets each role serves, linked or not, with the reason on click.
 
+**Progress events and badges.** `src/journey/events.py` records what a person does as dated
+events in `journey_event` (C5): `level_changed` with its source (including the starting claims),
+`destination_chosen`, `course_done`, `course_undone` and `step_skipped`, only when something
+changed. Badges are derived from these events alone: "First step" and "Skill up" (a rise on a
+skill the destination requires) stay once earned; "Essentials ready", "Halfway" and "Plan
+complete" show only while true. The plan page shows each badge with the event and date that
+earned it. Owner A's progress check records its accepted level through `record_event`.
+
 **Personas.** Four synthetic people (`data/samples/`): Hafiz (graduate), Mei (retail supervisor
 switching in), Nur (cash application analyst at risk) and Kavitha (senior reporting analyst).
 `tests/test_personas.py` builds each through the API from fixed levels, each quoting their CV,

@@ -98,3 +98,12 @@ export type SdgMatrix = {
   note: string
   source: string
 }
+
+// C5: GET /api/profiles/{id}/badges (src/api/badges.py Badge), derived only from events.
+export type Badge = {
+  id: string
+  title: string
+  earned_at: string
+  rule: string
+  evidence: { kind: string; ref: string }
+}

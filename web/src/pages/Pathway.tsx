@@ -5,12 +5,13 @@ import { sendJSON, useApi } from '../api'
 import { PlanCompare } from '../components/PlanCompare'
 import { RouteCompare } from '../components/RouteCompare'
 import { SdgHeatmap } from '../components/SdgHeatmap'
+import { Badges } from '../components/Badges'
 import { TrackMap } from '../components/TrackMap'
 import { ScenarioSwitch, SdgTag, sdgColour, JourneyRoute, NextStep, PROGRESS_EVENT } from '../components/journey'
 import { Loading, Problem } from '../components/ui'
 import { useJourney } from '../state'
 import type { PathwayResponse, ProgressResponse, Scenario, TracksResponse } from '../types'
-import type { SdgMatrix } from '../typesScoring'
+import type { Badge, SdgMatrix } from '../typesScoring'
 import { NeedProfile } from './Roles'
 
 // Older builds kept completion in this browser; it is moved to the server once.
@@ -34,6 +35,7 @@ function ProfilePathway({ profileId, scenario }: { profileId: string; scenario: 
   const path = useApi<PathwayResponse>(`/api/profiles/${profileId}/pathway?scenario=${scenario}`)
   const tracks = useApi<TracksResponse>(`/api/profiles/${profileId}/tracks?scenario=${scenario}`)
   const sdg = useApi<SdgMatrix>(`/api/profiles/${profileId}/sdg?scenario=${scenario}`)
+  const badges = useApi<Badge[]>(`/api/profiles/${profileId}/badges?scenario=${scenario}`)
   // Self-reported completion, saved per profile on the server; it never changes skills or fit.
   const progress = useApi<ProgressResponse>(`/api/profiles/${profileId}/progress?scenario=${scenario}`)
   const [state, setState] = useState<ProgressResponse | null>(null)
@@ -51,6 +53,7 @@ function ProfilePathway({ profileId, scenario }: { profileId: string; scenario: 
       // Lock and skip states are computed by the server, so the plan is read again.
       path.reload()
       tracks.reload()
+      badges.reload()
       return true
     } catch (reason) {
       setSaveError(reason instanceof Error ? reason.message : String(reason))
@@ -110,6 +113,12 @@ function ProfilePathway({ profileId, scenario }: { profileId: string; scenario: 
               <Link to="/roles" className="text-[13px]">Change destination</Link>
             </div>
           </header>
+
+          <section aria-label="Your badges" className="panel min-w-0 gap-3">
+            <h2 className="h2">Your badges</h2>
+            {badges.error && <Problem what="your badges" message={badges.error} onRetry={badges.reload} />}
+            {badges.data && <Badges badges={badges.data} />}
+          </section>
 
           <section aria-label="Your roadmap" className="panel min-w-0 gap-5">
             <div className="flex flex-col gap-1">
