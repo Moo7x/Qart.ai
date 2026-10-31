@@ -1,50 +1,60 @@
-import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { ScoutButton } from './AgentWindow'
-import { ProgressCheckButton } from './ProgressCheck'
 import { formatWhen, useApi } from '../api'
-import { useJourney } from '../state'
-import type { MatchesResponse, ProgressResponse, RoleCard, Run, SourceStatus } from '../types'
+import type { MatchesResponse, RoleCard, Run, SourceStatus } from '../types'
 import type { RaiseOption } from '../typesScoring'
-import { levelText, ScenarioSwitch } from './journey'
+import { levelText } from './journey'
 import { KindLabel, WhyButton } from './Why'
 
-// Overview "at a glance" (docs/PHASE2_PLAN.md A1): the role you are heading for and this week's
-// steps, each number with a Why?.
-// The role score's band, range rule and "what would raise it" come from owner B's C2 fields;
-// an absent field hides its line, never a placeholder number.
+// "Where you're heading" on the Overview (docs/PHASE2_PLAN.md A1): the destination's fit as a ring
+// with its range, the essentials still short and the one change that would raise it most, each
+// with a Why?. The band, range rule and "what would raise it" come from owner B's C2 fields; an
+// absent field hides its line, never a placeholder number.
 const RAISE_SHOWN = 3
 const VIA: Record<RaiseOption['via'], string> = { study: 'study', practice: 'practice at work', check: 'a progress check' }
 
 function raiseText(r: RaiseOption): string {
-  return `+${r.points.toFixed(1)} points: ${r.skill_name} ${levelText(r.from_level)} → ${levelText(r.to_level)} by ${VIA[r.via]}`
+  const from = r.from_level === null || r.from_level === undefined ? 'not rated' : levelText(r.from_level)
+  return `+${r.points.toFixed(1)} points: ${r.skill_name} ${from} → ${levelText(r.to_level)} by ${VIA[r.via]}`
 }
 
 const RUNS_POLL_MS = 60_000
+const RING = 2 * Math.PI * 70
 
-function TopRoleCard({ matches }: { matches: MatchesResponse }) {
-  const role: RoleCard | undefined = matches.roles.find((r) => r.role_id === matches.destination) ?? matches.roles[0]
-  if (!role) return null
-  const short = role.essentials_short ?? role.essential_gaps
-  const rows = role.requirements
+export const destinationOf = (matches: MatchesResponse): RoleCard | undefined => matches.roles.find((r) => r.role_id === matches.destination) ?? matches.roles[0]
+
+function FitRing({ fit, low, high, band }: { fit: number; low: number; high: number; band: string | null | undefined }) {
+  const arc = (from: number, to: number) => ({ strokeDasharray: `${(RING * Math.max(to - from, 0.5)) / 100} ${RING}`, strokeDashoffset: `${(-RING * from) / 100}` })
   return (
-    <section className="card-light flex min-w-0 flex-col gap-2.5 p-4" aria-label="Your top role">
-      <div className="flex items-baseline justify-between gap-2">
-        <span className="cap">{matches.destination ? 'Your destination' : 'Your best-fitting role'}</span>
+    <svg viewBox="0 0 200 200" className="mx-auto h-[180px] w-[180px]" role="img" aria-label={`Fit ${Math.round(fit)} out of 100${band ? `, ${band}` : ''}, range ${Math.round(low)} to ${Math.round(high)}`}>
+      <circle cx="100" cy="100" r="88" fill="none" stroke="#d9d0ff" strokeWidth="2" strokeDasharray="2 6" />
+      <circle cx="100" cy="100" r="70" fill="#fff" stroke="#eeeef0" strokeWidth="12" />
+      <circle cx="100" cy="100" r="70" fill="none" stroke="#d9d0ff" strokeWidth="12" transform="rotate(-90 100 100)" style={arc(low, high)} />
+      <circle cx="100" cy="100" r="70" fill="none" stroke="#6c47ff" strokeWidth="12" strokeLinecap="round" transform="rotate(-90 100 100)" style={arc(0, fit)} />
+      <text x="100" y="106" textAnchor="middle" className="fill-ink font-mono text-[40px]">{Math.round(fit)}</text>
+      <text x="100" y="128" textAnchor="middle" className="fill-muted text-[11px]">fit / 100{band ? ` · ${band}` : ''}</text>
+    </svg>
+  )
+}
+
+/** The destination's fit, with Why? and a way to every ranked role. */
+export function FitCard({ matches }: { matches: MatchesResponse }) {
+  const role = destinationOf(matches)
+  if (!role) return null
+  const rows = role.requirements
+  // The API sends skill ids; show the names.
+  const short = (role.essentials_short ?? role.essential_gaps).map((id) => rows.find((r) => r.skill === id)?.skill_name ?? id)
+  return (
+    <section aria-label="Your destination" className="flex flex-col gap-2 rounded-[28px] bg-white p-5 sm:p-6">
+      <div className="flex items-start justify-between gap-2">
+        <h2 className="m-0 text-[18px] font-medium leading-snug">{role.title}</h2>
         <KindLabel kind="estimate" />
       </div>
-      <h3 className="m-0 text-lg font-semibold leading-snug">{role.title}</h3>
-      <div className="flex flex-wrap items-end gap-3">
-        <span className="font-mono text-[34px] leading-none">{Math.round(role.fit)}</span>
-        <span className="pb-1 text-[13px] text-graphite">
-          / 100 fit{role.band ? ` · ${role.band}` : ''} · range {Math.round(role.fit_range.low)}–{Math.round(role.fit_range.high)}
-        </span>
-      </div>
-      <p className="m-0 text-[13px]">
-        {short.length > 0 ? <>Essentials still short: <span className="font-semibold">{short.join(', ')}</span></> : 'Your claims cover every essential skill.'}
+      <span className="text-[12px] text-muted">{matches.destination ? 'Your destination' : 'Your best-fitting role'} · {matches.scenario_label}</span>
+      <FitRing fit={role.fit} low={role.fit_range.low} high={role.fit_range.high} band={role.band} />
+      <p className="m-0 text-[13px] leading-relaxed text-[#404040]">
+        Range {Math.round(role.fit_range.low)}–{Math.round(role.fit_range.high)}. {short.length > 0 ? <>Essentials still short: <b className="text-ink">{short.join(', ')}</b>.</> : 'Your claims cover every essential skill.'}
       </p>
-      {role.raise && role.raise.length > 0 && <p className="m-0 text-[13px]">Biggest raise: <span className="font-semibold">{raiseText(role.raise[0])}</span></p>}
-      <div className="mt-auto flex flex-wrap items-center gap-2">
+      <div className="flex flex-wrap items-center gap-2 pt-1">
         <WhyButton
           title={`Why ${role.title} scores ${Math.round(role.fit)}`}
           panes={[
@@ -101,75 +111,61 @@ function TopRoleCard({ matches }: { matches: MatchesResponse }) {
             }] : []),
           ]}
         />
-        <Link className="text-[13px]" to="/roles">All ranked roles →</Link>
+        <Link className="q-btn q-btn-dark ml-auto py-2 pl-5 pr-5" to="/roles">All ranked roles</Link>
       </div>
-      <GapScout role={role} />
     </section>
   )
 }
 
-// The resource scout for one of the role's gaps, chosen by the person (essentials first).
-function GapScout({ role }: { role: RoleCard }) {
-  const { profileId } = useJourney()
-  const gaps = role.requirements
-    .filter((r) => r.column !== 'ready')
-    .sort((a, b) => Number(b.essential) - Number(a.essential) || b.weight - a.weight)
-  const [pick, setPick] = useState(gaps[0]?.skill ?? '')
-  const chosen = gaps.find((g) => g.skill === pick) ?? gaps[0]
-  if (!chosen) return null
+/** The one change that would raise the fit most, drawn on the 0–100 fit line. */
+export function RaiseCard({ matches }: { matches: MatchesResponse }) {
+  const role = destinationOf(matches)
+  const best = role?.raise?.[0]
+  if (!role || !best) return null
+  const fit = role.fit
+  const gain = Math.min(best.points, 100 - fit)
+  const high = Math.max(role.fit_range.high, fit + gain)
   return (
-    <div className="flex flex-col gap-2 border-t border-line pt-3">
-      <label className="flex flex-col gap-1 text-[12px]">
-        <span className="cap">Find learning material for a gap</span>
-        <select className="min-h-[40px] rounded-md border border-hairline bg-paper px-2 text-[13px]" value={chosen.skill} onChange={(e) => setPick(e.target.value)}>
-          {gaps.map((g) => <option key={g.skill} value={g.skill}>{g.skill_name}{g.essential ? ' · essential' : ''}</option>)}
-        </select>
-      </label>
-      <ScoutButton key={chosen.skill} skill={chosen.skill} skillName={chosen.skill_name} profileId={profileId} />
-      <ProgressCheckButton key={`check-${chosen.skill}`} skill={chosen.skill} skillName={chosen.skill_name} profileId={profileId} />
-    </div>
-  )
-}
-
-function WeekCard() {
-  const { profileId, scenario } = useJourney()
-  const progress = useApi<ProgressResponse>(profileId ? `/api/profiles/${profileId}/progress?scenario=${scenario}` : null)
-  const plan = progress.data?.plan
-  return (
-    <section className="card-light flex min-w-0 flex-col gap-2.5 p-4" aria-label="Your next step this week">
-      <div className="flex items-baseline justify-between gap-2">
-        <span className="cap">This week</span>
-        {plan && <KindLabel kind="estimate" />}
+    <section aria-label="Biggest raise" className="flex flex-1 flex-col gap-3 rounded-[28px] bg-white p-5 sm:p-6">
+      <div className="flex items-baseline justify-between gap-3">
+        <h2 className="m-0 text-[16px] font-medium">Biggest raise</h2>
+        <span className="text-[28px] tracking-tight">+{best.points.toFixed(1)}</span>
       </div>
-      {plan ? (
-        plan.this_week.length > 0 ? (
-          <>
-            <ul className="m-0 flex list-none flex-col gap-1.5 p-0 text-[13px]">
-              {plan.this_week.map((s) => <li key={s.id}><span className="font-semibold">{s.title}</span> <span className="font-mono text-graphite">· {s.hours} h</span></li>)}
-            </ul>
-            <p className="m-0 text-[12px] text-graphite">Within your {plan.weekly_hours} h a week · {plan.steps_done} of {plan.steps} steps done</p>
-          </>
-        ) : (
-          <p className="m-0 text-[13px]">Every planned step is done. Review your levels on your plan.</p>
-        )
-      ) : (
-        <p className="m-0 text-[13px] text-graphite">{progress.loading ? 'Loading your plan…' : 'Choose a destination role to get a week-by-week plan.'}</p>
+      <div role="img" aria-label={`Fit ${Math.round(fit)} now, about ${Math.round(fit + gain)} with this change, range up to ${Math.round(high)}`} className="flex h-9 gap-1">
+        <span className="rounded-l-[14px] rounded-r bg-violet" style={{ flex: Math.max(fit, 2) }} />
+        <span className="rounded bg-ink" style={{ flex: Math.max(gain, 2) }} />
+        <span className="rounded-l rounded-r-[14px] bg-range" style={{ flex: Math.max(high - fit - gain, 2) }} />
+      </div>
+      <div className="flex justify-between text-[11px] text-muted"><span>now {Math.round(fit)}</span><span>→ about {Math.round(fit + gain)}</span><span>range to {Math.round(high)}</span></div>
+      <p className="m-0 text-[13px] leading-relaxed text-[#404040]">{raiseText(best).replace(/^\+[\d.]+ points: /, '')}. Points are an estimate.</p>
+      {role.raise && role.raise.length > 1 && (
+        <div className="flex flex-col gap-2.5 border-t border-[#eeeef0] pt-3">
+          <span className="text-[12px] font-semibold">Other ways to raise it</span>
+          <ul className="m-0 flex list-none flex-col gap-2.5 p-0">
+            {role.raise.slice(1, RAISE_SHOWN + 1).map((r) => (
+              <li key={`${r.skill}-${r.via}`} className="flex flex-col gap-1 text-[12px] leading-snug">
+                <span className="flex items-baseline justify-between gap-2"><span className="min-w-0">{r.skill_name}</span><span className="font-mono font-semibold">+{r.points.toFixed(1)}</span></span>
+                <span aria-hidden="true" className="block h-1.5 overflow-hidden rounded-full bg-[#eeeef0]"><span className="block h-full rounded-full bg-[#9d86ff]" style={{ width: `${Math.min(100, (100 * r.points) / best.points)}%` }} /></span>
+                <span className="text-muted">{r.from_level === null || r.from_level === undefined ? 'not rated' : levelText(r.from_level)} → {levelText(r.to_level)} by {VIA[r.via]}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
       )}
-      {!progress.loading && <Link className="btn btn-v mt-auto self-start" to={plan ? '/pathway' : '/roles'}>{plan ? 'Open my plan →' : 'Choose a role →'}</Link>}
     </section>
   )
 }
 
-function FreshnessLine() {
+export function FreshnessLine() {
   const runs = useApi<Run[]>('/api/pipeline/runs?limit=1', RUNS_POLL_MS)
   const sources = useApi<SourceStatus[]>('/api/sources')
   const latest = runs.data?.[0]
   const fetched = (sources.data ?? []).filter((s) => s.last_fetched).sort((a, b) => (b.last_fetched ?? '').localeCompare(a.last_fetched ?? ''))
   const failing = (sources.data ?? []).filter((s) => s.last_status === 'failed')
   return (
-    <div className="flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-[12px] text-graphite">
-      <span>Last pipeline run: {runs.loading && !latest ? '…' : latest ? `${formatWhen(latest.finished_at ?? latest.started_at)} · ${latest.status}` : 'none yet'}</span>
-      <span>Newest data fetched: {sources.loading ? '…' : fetched[0] ? formatWhen(fetched[0].last_fetched) : 'not yet'}</span>
+    <div className="flex flex-wrap items-center gap-2 font-mono text-[12px] text-graphite">
+      <span className="rounded-full bg-white px-3.5 py-2">Last pipeline run: {runs.loading && !latest ? '…' : latest ? `${formatWhen(latest.finished_at ?? latest.started_at)} · ${latest.status}` : 'none yet'}</span>
+      <span className="rounded-full bg-white px-3.5 py-2">Newest data fetched: {sources.loading ? '…' : fetched[0] ? formatWhen(fetched[0].last_fetched) : 'not yet'}</span>
       {failing.length > 0 && <span className="text-weak">{failing.length} source(s) failed last time; showing their last good data</span>}
       <WhyButton
         label="Sources"
@@ -189,24 +185,5 @@ function FreshnessLine() {
         }))}
       />
     </div>
-  )
-}
-
-export function OverviewGlance() {
-  const { profileId, scenario } = useJourney()
-  const matches = useApi<MatchesResponse>(profileId ? `/api/profiles/${profileId}/matches?scenario=${scenario}` : null)
-  if (!profileId || !matches.data) return null
-  return (
-    <section className="flex flex-col gap-3" aria-label="Your picture at a glance">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <h2 className="h2">Your picture at a glance</h2>
-        <ScenarioSwitch />
-      </div>
-      <div className="grid gap-3 md:grid-cols-2">
-        <TopRoleCard matches={matches.data} />
-        <WeekCard />
-      </div>
-      <FreshnessLine />
-    </section>
   )
 }
