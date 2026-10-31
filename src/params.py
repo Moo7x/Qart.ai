@@ -345,3 +345,6 @@ ARTICLE_MIN_WORDS = 300  # extracted body words for a page to count as an articl
 AI_PARALLEL = 4  # skills processed at once; the job waits on network calls, not on the CPU
 SCOUT_EXCERPT_WORDS = 45  # words of a chosen article passage shown in the agent window
 AI_MAX_SKILLS_PER_ITEM = 2  # a resource counts for at most this many skills (its best-scoring ones)
+BASICS_VIDEOS_PER_TOPIC = (
+    1  # AI-basics videos carried inside a step, per topic (the rest stay in the catalogue)
+)

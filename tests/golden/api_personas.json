@@ -6013,207 +6013,6 @@
    "path": {
     "nodes": [
      {
-      "after": null,
-      "articles": [
-       {
-        "is_article": true,
-        "publisher": "IBM",
-        "title": "What is Generative AI?",
-        "url": "https://www.ibm.com/think/topics/generative-ai"
-       }
-      ],
-      "courses": [
-       {
-        "done": false,
-        "fit_check": null,
-        "level": "beginner",
-        "minutes": 22,
-        "planned": true,
-        "provider": "Microsoft Learn",
-        "title": "Introduction to generative AI - Exploring the basics",
-        "url": "https://learn.microsoft.com/en-us/training/modules/intro-generative-ai-explore-basics/"
-       }
-      ],
-      "essential": false,
-      "mode": "basics",
-      "now": null,
-      "required": null,
-      "skill": null,
-      "status": "open",
-      "title": "What generative AI is and is not",
-      "videos": [
-       {
-        "channel": "Google Cloud Tech",
-        "minutes": 22,
-        "published": "2023-05-08",
-        "title": "Introduction to Generative AI",
-        "url": "https://www.youtube.com/watch?v=G2fqAlgmoPo"
-       },
-       {
-        "channel": "IBM Technology",
-        "minutes": 9,
-        "published": "2023-03-22",
-        "title": "What are Generative AI models?",
-        "url": "https://www.youtube.com/watch?v=hfIUstzHs9A"
-       },
-       {
-        "channel": "Google Cloud Tech",
-        "minutes": 16,
-        "published": "2023-05-08",
-        "title": "Introduction to large language models",
-        "url": "https://www.youtube.com/watch?v=zizonToFXDs"
-       },
-       {
-        "channel": "IBM Technology",
-        "minutes": 6,
-        "published": "2023-07-28",
-        "title": "How Large Language Models Work",
-        "url": "https://www.youtube.com/watch?v=5sLYAQS9sWQ"
-       }
-      ]
-     },
-     {
-      "after": null,
-      "articles": [
-       {
-        "is_article": true,
-        "publisher": "IBM",
-        "title": "What Is Prompt Engineering?",
-        "url": "https://www.ibm.com/think/topics/prompt-engineering"
-       }
-      ],
-      "courses": [
-       {
-        "done": false,
-        "fit_check": null,
-        "level": "beginner",
-        "minutes": 28,
-        "planned": true,
-        "provider": "Microsoft Learn",
-        "title": "Work smarter with Copilot prompts for finance professionals",
-        "url": "https://learn.microsoft.com/en-us/training/modules/work-smarter-copilot-finance/"
-       },
-       {
-        "done": false,
-        "fit_check": null,
-        "level": "beginner",
-        "minutes": 31,
-        "planned": true,
-        "provider": "Microsoft Learn",
-        "title": "Get started with Microsoft Copilot",
-        "url": "https://learn.microsoft.com/en-us/training/modules/get-started-with-copilot/"
-       }
-      ],
-      "essential": false,
-      "mode": "basics",
-      "now": null,
-      "required": null,
-      "skill": "prompt_engineering",
-      "status": "open",
-      "title": "Prompting AI tools well at work",
-      "videos": [
-       {
-        "channel": "AssemblyAI",
-        "minutes": 14,
-        "published": "2023-06-24",
-        "title": "Prompt Engineering 101 - Crash Course & Tips",
-        "url": "https://www.youtube.com/watch?v=aOm75o2Z5-o"
-       }
-      ]
-     },
-     {
-      "after": null,
-      "articles": [
-       {
-        "is_article": true,
-        "publisher": "Microsoft",
-        "title": "Responsible AI Principles and Approach",
-        "url": "https://www.microsoft.com/en-us/ai/principles-and-approach"
-       }
-      ],
-      "courses": [
-       {
-        "done": false,
-        "fit_check": null,
-        "level": "beginner",
-        "minutes": 24,
-        "planned": true,
-        "provider": "Microsoft Learn",
-        "title": "Introduction to Microsoft's Responsible AI Approach",
-        "url": "https://learn.microsoft.com/en-us/training/modules/introduction-to-microsofts-responsible-ai-approach/"
-       }
-      ],
-      "essential": false,
-      "mode": "basics",
-      "now": null,
-      "required": null,
-      "skill": null,
-      "status": "open",
-      "title": "Using AI responsibly",
-      "videos": [
-       {
-        "channel": "Google Cloud",
-        "minutes": 8,
-        "published": "2024-04-08",
-        "title": "Introduction to Responsible AI",
-        "url": "https://www.youtube.com/watch?v=w_3L1Bf2P_g"
-       },
-       {
-        "channel": "Microsoft Learn",
-        "minutes": 10,
-        "published": "2025-11-11",
-        "title": "Responsible AI Principles AI-3017 | Episode 3",
-        "url": "https://www.youtube.com/watch?v=8Ra5L1aQ5YM"
-       }
-      ]
-     },
-     {
-      "after": null,
-      "articles": [
-       {
-        "is_article": true,
-        "publisher": "IBM",
-        "title": "What Is Data Management?",
-        "url": "https://www.ibm.com/think/topics/data-management"
-       }
-      ],
-      "courses": [
-       {
-        "done": false,
-        "fit_check": null,
-        "level": "beginner",
-        "minutes": 35,
-        "planned": true,
-        "provider": "Microsoft Learn",
-        "title": "Explore core data concepts",
-        "url": "https://learn.microsoft.com/en-us/training/modules/explore-core-data-concepts/"
-       }
-      ],
-      "essential": false,
-      "mode": "basics",
-      "now": null,
-      "required": null,
-      "skill": "data_management",
-      "status": "open",
-      "title": "Data basics behind AI",
-      "videos": [
-       {
-        "channel": "IBM Technology",
-        "minutes": 4,
-        "published": "2022-06-23",
-        "title": "What is Master Data Management",
-        "url": "https://www.youtube.com/watch?v=l83bkKJh1wM"
-       },
-       {
-        "channel": "IBM Technology",
-        "minutes": 5,
-        "published": "2022-07-15",
-        "title": "Data Governance Explained in 5 Minutes",
-        "url": "https://www.youtube.com/watch?v=uPsUjKLHLAg"
-       }
-      ]
-     },
-     {
       "after": 1,
       "articles": [
        {
@@ -6917,7 +6716,7 @@
      }
     ],
     "title": "Your path to Cost Accountant",
-    "why": "One path: AI basics, the skills you already have that AI is reshaping, then the skills this role needs. Start any step; each is a different skill."
+    "why": "One path: the skills you already have that AI is reshaping, then the skills this role needs. Start any step; each is a different skill."
    },
    "resources_checked": "2026-10-24",
    "role_id": "cost_accountant",
@@ -13383,6 +13182,7 @@
         "url": "https://www.ibm.com/think/topics/data-management"
        }
       ],
+      "basics": [],
       "courses": [
        {
         "done": false,
@@ -13523,6 +13323,7 @@
         "url": "https://www.ibm.com/think/topics/enterprise-resource-planning"
        }
       ],
+      "basics": [],
       "courses": [
        {
         "done": false,
@@ -13615,6 +13416,7 @@
         "url": "https://www.ibm.com/think/topics/data-integration"
        }
       ],
+      "basics": [],
       "courses": [
        {
         "done": false,
@@ -14007,7 +13809,7 @@
      }
     ],
     "title": "Your path to Finance Systems Analyst",
-    "why": "One path: AI basics, the skills you already have that AI is reshaping, then the skills this role needs. Start any step; each is a different skill."
+    "why": "One path: the skills you already have that AI is reshaping, then the skills this role needs. Start any step; each is a different skill."
    },
    "resources_checked": "2026-10-24",
    "role_id": "finance_systems_analyst",
@@ -20367,207 +20169,6 @@
    "path": {
     "nodes": [
      {
-      "after": null,
-      "articles": [
-       {
-        "is_article": true,
-        "publisher": "IBM",
-        "title": "What is Generative AI?",
-        "url": "https://www.ibm.com/think/topics/generative-ai"
-       }
-      ],
-      "courses": [
-       {
-        "done": false,
-        "fit_check": null,
-        "level": "beginner",
-        "minutes": 22,
-        "planned": true,
-        "provider": "Microsoft Learn",
-        "title": "Introduction to generative AI - Exploring the basics",
-        "url": "https://learn.microsoft.com/en-us/training/modules/intro-generative-ai-explore-basics/"
-       }
-      ],
-      "essential": false,
-      "mode": "basics",
-      "now": null,
-      "required": null,
-      "skill": null,
-      "status": "open",
-      "title": "What generative AI is and is not",
-      "videos": [
-       {
-        "channel": "Google Cloud Tech",
-        "minutes": 22,
-        "published": "2023-05-08",
-        "title": "Introduction to Generative AI",
-        "url": "https://www.youtube.com/watch?v=G2fqAlgmoPo"
-       },
-       {
-        "channel": "IBM Technology",
-        "minutes": 9,
-        "published": "2023-03-22",
-        "title": "What are Generative AI models?",
-        "url": "https://www.youtube.com/watch?v=hfIUstzHs9A"
-       },
-       {
-        "channel": "Google Cloud Tech",
-        "minutes": 16,
-        "published": "2023-05-08",
-        "title": "Introduction to large language models",
-        "url": "https://www.youtube.com/watch?v=zizonToFXDs"
-       },
-       {
-        "channel": "IBM Technology",
-        "minutes": 6,
-        "published": "2023-07-28",
-        "title": "How Large Language Models Work",
-        "url": "https://www.youtube.com/watch?v=5sLYAQS9sWQ"
-       }
-      ]
-     },
-     {
-      "after": null,
-      "articles": [
-       {
-        "is_article": true,
-        "publisher": "IBM",
-        "title": "What Is Prompt Engineering?",
-        "url": "https://www.ibm.com/think/topics/prompt-engineering"
-       }
-      ],
-      "courses": [
-       {
-        "done": false,
-        "fit_check": null,
-        "level": "beginner",
-        "minutes": 28,
-        "planned": true,
-        "provider": "Microsoft Learn",
-        "title": "Work smarter with Copilot prompts for finance professionals",
-        "url": "https://learn.microsoft.com/en-us/training/modules/work-smarter-copilot-finance/"
-       },
-       {
-        "done": false,
-        "fit_check": null,
-        "level": "beginner",
-        "minutes": 31,
-        "planned": true,
-        "provider": "Microsoft Learn",
-        "title": "Get started with Microsoft Copilot",
-        "url": "https://learn.microsoft.com/en-us/training/modules/get-started-with-copilot/"
-       }
-      ],
-      "essential": false,
-      "mode": "basics",
-      "now": null,
-      "required": null,
-      "skill": "prompt_engineering",
-      "status": "open",
-      "title": "Prompting AI tools well at work",
-      "videos": [
-       {
-        "channel": "AssemblyAI",
-        "minutes": 14,
-        "published": "2023-06-24",
-        "title": "Prompt Engineering 101 - Crash Course & Tips",
-        "url": "https://www.youtube.com/watch?v=aOm75o2Z5-o"
-       }
-      ]
-     },
-     {
-      "after": null,
-      "articles": [
-       {
-        "is_article": true,
-        "publisher": "Microsoft",
-        "title": "Responsible AI Principles and Approach",
-        "url": "https://www.microsoft.com/en-us/ai/principles-and-approach"
-       }
-      ],
-      "courses": [
-       {
-        "done": false,
-        "fit_check": null,
-        "level": "beginner",
-        "minutes": 24,
-        "planned": true,
-        "provider": "Microsoft Learn",
-        "title": "Introduction to Microsoft's Responsible AI Approach",
-        "url": "https://learn.microsoft.com/en-us/training/modules/introduction-to-microsofts-responsible-ai-approach/"
-       }
-      ],
-      "essential": false,
-      "mode": "basics",
-      "now": null,
-      "required": null,
-      "skill": null,
-      "status": "open",
-      "title": "Using AI responsibly",
-      "videos": [
-       {
-        "channel": "Google Cloud",
-        "minutes": 8,
-        "published": "2024-04-08",
-        "title": "Introduction to Responsible AI",
-        "url": "https://www.youtube.com/watch?v=w_3L1Bf2P_g"
-       },
-       {
-        "channel": "Microsoft Learn",
-        "minutes": 10,
-        "published": "2025-11-11",
-        "title": "Responsible AI Principles AI-3017 | Episode 3",
-        "url": "https://www.youtube.com/watch?v=8Ra5L1aQ5YM"
-       }
-      ]
-     },
-     {
-      "after": null,
-      "articles": [
-       {
-        "is_article": true,
-        "publisher": "IBM",
-        "title": "What Is Data Management?",
-        "url": "https://www.ibm.com/think/topics/data-management"
-       }
-      ],
-      "courses": [
-       {
-        "done": false,
-        "fit_check": null,
-        "level": "beginner",
-        "minutes": 35,
-        "planned": true,
-        "provider": "Microsoft Learn",
-        "title": "Explore core data concepts",
-        "url": "https://learn.microsoft.com/en-us/training/modules/explore-core-data-concepts/"
-       }
-      ],
-      "essential": false,
-      "mode": "basics",
-      "now": null,
-      "required": null,
-      "skill": "data_management",
-      "status": "open",
-      "title": "Data basics behind AI",
-      "videos": [
-       {
-        "channel": "IBM Technology",
-        "minutes": 4,
-        "published": "2022-06-23",
-        "title": "What is Master Data Management",
-        "url": "https://www.youtube.com/watch?v=l83bkKJh1wM"
-       },
-       {
-        "channel": "IBM Technology",
-        "minutes": 5,
-        "published": "2022-07-15",
-        "title": "Data Governance Explained in 5 Minutes",
-        "url": "https://www.youtube.com/watch?v=uPsUjKLHLAg"
-       }
-      ]
-     },
-     {
       "after": 2,
       "articles": [
        {
@@ -21227,7 +20828,7 @@
      }
     ],
     "title": "Your path to Procure-to-Pay (P2P) Reporting Analyst",
-    "why": "One path: AI basics, the skills you already have that AI is reshaping, then the skills this role needs. Start any step; each is a different skill."
+    "why": "One path: the skills you already have that AI is reshaping, then the skills this role needs. Start any step; each is a different skill."
    },
    "resources_checked": "2026-10-24",
    "role_id": "p2p_reporting_analyst",
@@ -27995,207 +27596,6 @@
    "path": {
     "nodes": [
      {
-      "after": null,
-      "articles": [
-       {
-        "is_article": true,
-        "publisher": "IBM",
-        "title": "What is Generative AI?",
-        "url": "https://www.ibm.com/think/topics/generative-ai"
-       }
-      ],
-      "courses": [
-       {
-        "done": false,
-        "fit_check": null,
-        "level": "beginner",
-        "minutes": 22,
-        "planned": true,
-        "provider": "Microsoft Learn",
-        "title": "Introduction to generative AI - Exploring the basics",
-        "url": "https://learn.microsoft.com/en-us/training/modules/intro-generative-ai-explore-basics/"
-       }
-      ],
-      "essential": false,
-      "mode": "basics",
-      "now": null,
-      "required": null,
-      "skill": null,
-      "status": "open",
-      "title": "What generative AI is and is not",
-      "videos": [
-       {
-        "channel": "Google Cloud Tech",
-        "minutes": 22,
-        "published": "2023-05-08",
-        "title": "Introduction to Generative AI",
-        "url": "https://www.youtube.com/watch?v=G2fqAlgmoPo"
-       },
-       {
-        "channel": "IBM Technology",
-        "minutes": 9,
-        "published": "2023-03-22",
-        "title": "What are Generative AI models?",
-        "url": "https://www.youtube.com/watch?v=hfIUstzHs9A"
-       },
-       {
-        "channel": "Google Cloud Tech",
-        "minutes": 16,
-        "published": "2023-05-08",
-        "title": "Introduction to large language models",
-        "url": "https://www.youtube.com/watch?v=zizonToFXDs"
-       },
-       {
-        "channel": "IBM Technology",
-        "minutes": 6,
-        "published": "2023-07-28",
-        "title": "How Large Language Models Work",
-        "url": "https://www.youtube.com/watch?v=5sLYAQS9sWQ"
-       }
-      ]
-     },
-     {
-      "after": null,
-      "articles": [
-       {
-        "is_article": true,
-        "publisher": "IBM",
-        "title": "What Is Prompt Engineering?",
-        "url": "https://www.ibm.com/think/topics/prompt-engineering"
-       }
-      ],
-      "courses": [
-       {
-        "done": false,
-        "fit_check": null,
-        "level": "beginner",
-        "minutes": 28,
-        "planned": true,
-        "provider": "Microsoft Learn",
-        "title": "Work smarter with Copilot prompts for finance professionals",
-        "url": "https://learn.microsoft.com/en-us/training/modules/work-smarter-copilot-finance/"
-       },
-       {
-        "done": false,
-        "fit_check": null,
-        "level": "beginner",
-        "minutes": 31,
-        "planned": true,
-        "provider": "Microsoft Learn",
-        "title": "Get started with Microsoft Copilot",
-        "url": "https://learn.microsoft.com/en-us/training/modules/get-started-with-copilot/"
-       }
-      ],
-      "essential": false,
-      "mode": "basics",
-      "now": null,
-      "required": null,
-      "skill": "prompt_engineering",
-      "status": "open",
-      "title": "Prompting AI tools well at work",
-      "videos": [
-       {
-        "channel": "AssemblyAI",
-        "minutes": 14,
-        "published": "2023-06-24",
-        "title": "Prompt Engineering 101 - Crash Course & Tips",
-        "url": "https://www.youtube.com/watch?v=aOm75o2Z5-o"
-       }
-      ]
-     },
-     {
-      "after": null,
-      "articles": [
-       {
-        "is_article": true,
-        "publisher": "Microsoft",
-        "title": "Responsible AI Principles and Approach",
-        "url": "https://www.microsoft.com/en-us/ai/principles-and-approach"
-       }
-      ],
-      "courses": [
-       {
-        "done": false,
-        "fit_check": null,
-        "level": "beginner",
-        "minutes": 24,
-        "planned": true,
-        "provider": "Microsoft Learn",
-        "title": "Introduction to Microsoft's Responsible AI Approach",
-        "url": "https://learn.microsoft.com/en-us/training/modules/introduction-to-microsofts-responsible-ai-approach/"
-       }
-      ],
-      "essential": false,
-      "mode": "basics",
-      "now": null,
-      "required": null,
-      "skill": null,
-      "status": "open",
-      "title": "Using AI responsibly",
-      "videos": [
-       {
-        "channel": "Google Cloud",
-        "minutes": 8,
-        "published": "2024-04-08",
-        "title": "Introduction to Responsible AI",
-        "url": "https://www.youtube.com/watch?v=w_3L1Bf2P_g"
-       },
-       {
-        "channel": "Microsoft Learn",
-        "minutes": 10,
-        "published": "2025-11-11",
-        "title": "Responsible AI Principles AI-3017 | Episode 3",
-        "url": "https://www.youtube.com/watch?v=8Ra5L1aQ5YM"
-       }
-      ]
-     },
-     {
-      "after": null,
-      "articles": [
-       {
-        "is_article": true,
-        "publisher": "IBM",
-        "title": "What Is Data Management?",
-        "url": "https://www.ibm.com/think/topics/data-management"
-       }
-      ],
-      "courses": [
-       {
-        "done": false,
-        "fit_check": null,
-        "level": "beginner",
-        "minutes": 35,
-        "planned": true,
-        "provider": "Microsoft Learn",
-        "title": "Explore core data concepts",
-        "url": "https://learn.microsoft.com/en-us/training/modules/explore-core-data-concepts/"
-       }
-      ],
-      "essential": false,
-      "mode": "basics",
-      "now": null,
-      "required": null,
-      "skill": "data_management",
-      "status": "open",
-      "title": "Data basics behind AI",
-      "videos": [
-       {
-        "channel": "IBM Technology",
-        "minutes": 4,
-        "published": "2022-06-23",
-        "title": "What is Master Data Management",
-        "url": "https://www.youtube.com/watch?v=l83bkKJh1wM"
-       },
-       {
-        "channel": "IBM Technology",
-        "minutes": 5,
-        "published": "2022-07-15",
-        "title": "Data Governance Explained in 5 Minutes",
-        "url": "https://www.youtube.com/watch?v=uPsUjKLHLAg"
-       }
-      ]
-     },
-     {
       "after": 2,
       "articles": [
        {
@@ -28814,7 +28214,7 @@
      }
     ],
     "title": "Your path to Order-to-Cash (O2C) Reporting Analyst",
-    "why": "One path: AI basics, the skills you already have that AI is reshaping, then the skills this role needs. Start any step; each is a different skill."
+    "why": "One path: the skills you already have that AI is reshaping, then the skills this role needs. Start any step; each is a different skill."
    },
    "resources_checked": "2026-10-24",
    "role_id": "o2c_reporting_analyst",

@@ -58,6 +58,15 @@ export type Bands = {
   kind: "assumption"
 }
 
+export type BasicsItem = {
+  kind: "course" | "video"
+  topic: string
+  title: string
+  provider: string
+  url: string
+  minutes: number
+}
+
 export type Basis = {
   title: string
   url: string
@@ -822,6 +831,7 @@ export type TrackNode = {
   ai_use: number | null
   ai_basis: string | null
   ai_resources: AiResource[] | null
+  basics: BasicsItem[] | null
 }
 
 export type TrackVideo = {

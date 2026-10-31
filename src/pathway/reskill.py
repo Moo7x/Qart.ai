@@ -15,6 +15,9 @@ Only one path is shown at a time:
   role's gap skills (learn) in plan order. A skill can appear in both paths: finance roles are
   close.
 
+AI basics are not stops of their own: the AI part belongs inside each step. A step with checked
+resources on doing its skill with AI shows those; a step without them carries the AI basics
+(prompting and responsible use) inside it, unless the person's CV already shows AI work.
 Steps are never locked: each is a different skill, so the person can start anywhere. The mode
 rules (thresholds and wording) are declared assumptions in src/params.py; the AI-use numbers are
 observed or estimated and say which. Pure: the pack, resources, rows and claims in; dicts out.
@@ -28,11 +31,12 @@ from src.journey.store import SkillClaim
 from src.match.engine import RoleMatch
 from src.pack import Pack
 from src.pathway.planner import AiBasics, Pathway
-from src.pathway.tracks import _article, _basics_nodes, _course, _skill_nodes, _status, _video
+from src.pathway.tracks import _article, _course, _skill_nodes, _status, _video
 from src.resources import Resources, load_ai_resources
 
 Row = dict[str, Any]
 NO_AI_TITLE = "AI is changing this work"  # no checked AI resource for the skill yet
+BASICS_IN_STEP = ("prompting", "responsible_ai")  # AI basics carried inside a step
 MODE_TITLE = {
     "oversee": "check and steer AI-run work",
     "use_ai": "do it faster with AI",
@@ -135,6 +139,7 @@ def adapt_nodes(
     model_version: int | None,
     only: set[str] | None = None,
     done: list[str] | None = None,
+    basics: list[Row] | None = None,
 ) -> tuple[list[Row], list[Row]]:
     """Steps that adapt the skills the person holds to AI, and the skills kept as strengths."""
     steps: list[Row] = []
@@ -147,6 +152,10 @@ def adapt_nodes(
         skill = pack.skills[skill_id]
         effective, basis = skill_pressure(pack, soc, skill_id, task_rows, intensity)
         mode = mode_for(skill.ai_role, effective)
+        if basis == "occupation" and skill.ai_role == "neutral":
+            # Only the job's average says AI is used here, nothing about this skill's own tasks:
+            # not evidence enough to call a neutral skill AI work, so it stays a human strength.
+            mode = "keep"
         if mode == "keep":
             strengths.append(
                 {
@@ -173,6 +182,8 @@ def adapt_nodes(
                 "id": f"adapt:{skill_id}",
                 "title": f"{skill.name}: {MODE_TITLE[mode] if ai_items else NO_AI_TITLE}",
                 "ai_resources": ai_items,
+                # No checked AI resource for this skill: the AI basics go inside the step.
+                "basics": [] if ai_items else (basics or []),
                 "skill": skill_id,
                 "essential": False,
                 "now": claim.level,
@@ -192,10 +203,39 @@ def adapt_nodes(
     return steps, strengths
 
 
-def _basics(pack: Pack, res: Resources, done: list[str], choice: AiBasics) -> list[Row]:
+def basics_items(pack: Pack, res: Resources, choice: AiBasics) -> list[Row]:
+    """The AI basics carried inside a step (BASICS_IN_STEP topics), or none when the person's CV
+    already shows AI work (src/pathway/planner.py `ai_basics_choice`)."""
     if not choice.shown:
         return []
-    return [{**n, "mode": "basics"} for n in _basics_nodes(pack, res, done)]
+    out = []
+    for topic in res.ai_basics:
+        if topic.id not in BASICS_IN_STEP:
+            continue
+        for c in topic.courses:
+            course = pack.courses[c]
+            out.append(
+                {
+                    "kind": "course",
+                    "topic": topic.title,
+                    "title": course.title,
+                    "provider": course.provider,
+                    "url": course.url,
+                    "minutes": course.minutes,
+                }
+            )
+        for v in res.videos_for(topic=topic.id)[: params.BASICS_VIDEOS_PER_TOPIC]:
+            out.append(
+                {
+                    "kind": "video",
+                    "topic": topic.title,
+                    "title": v.title,
+                    "provider": v.channel,
+                    "url": v.url,
+                    "minutes": v.minutes,
+                }
+            )
+    return out
 
 
 def current_job_path(
@@ -211,7 +251,15 @@ def current_job_path(
 ) -> tuple[Row, list[Row]]:
     """The no-destination path: AI basics, then the held skills AI is reshaping."""
     steps, strengths = adapt_nodes(
-        pack, res, soc, claims, task_rows, intensity, model_version, done=done
+        pack,
+        res,
+        soc,
+        claims,
+        task_rows,
+        intensity,
+        model_version,
+        done=done,
+        basics=basics_items(pack, res, choice),
     )
     track = {
         "id": "path",
@@ -220,7 +268,7 @@ def current_job_path(
             "Reskill the skills you already have for where your job is heading. Choose a role on "
             "My options to switch to that role's path."
         ),
-        "nodes": _basics(pack, res, done, choice) + steps,
+        "nodes": steps,
     }
     return track, strengths
 
@@ -240,7 +288,18 @@ def destination_path(
 ) -> Row:
     """The path to a chosen role: basics, adapt the role's skills you meet, learn its gaps."""
     met = {r.skill for r in match.requirements if (r.claimed or 0) >= r.required}
-    adapt, _ = adapt_nodes(pack, res, soc, claims, task_rows, intensity, model_version, met, done)
+    adapt, _ = adapt_nodes(
+        pack,
+        res,
+        soc,
+        claims,
+        task_rows,
+        intensity,
+        model_version,
+        met,
+        done,
+        basics_items(pack, res, path.ai_basics),
+    )
     learn = [
         {**n, "mode": "learn"}
         for n in _skill_nodes(pack, res, match, path, done, False, rows)
@@ -250,8 +309,8 @@ def destination_path(
         "id": "path",
         "title": f"Your path to {match.title}",
         "why": (
-            "One path: AI basics, the skills you already have that AI is reshaping, then the "
-            "skills this role needs. Start any step; each is a different skill."
+            "One path: the skills you already have that AI is reshaping, then the skills this "
+            "role needs. Start any step; each is a different skill."
         ),
-        "nodes": _basics(pack, res, done, path.ai_basics) + adapt + learn,
+        "nodes": adapt + learn,
     }

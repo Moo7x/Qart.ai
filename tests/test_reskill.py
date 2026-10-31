@@ -64,9 +64,11 @@ def test_without_a_destination_the_path_adapts_the_skills_the_person_has() -> No
     track, strengths = current_job_path(
         pack, res, SOC, claims, _task_rows(80.0), 0.5, 1, AiBasics(True, ""), []
     )
-    modes = [n["mode"] for n in track["nodes"]]
-    assert track["id"] == "path" and modes[0] == "basics"
-    adapt = [n for n in track["nodes"] if n["mode"] != "basics"]
+    assert track["id"] == "path"
+    assert all(n["mode"] in {"oversee", "use_ai"} for n in track["nodes"])  # no basics stops
+    adapt = track["nodes"]
+    # a step without its own AI resource carries the AI basics inside it
+    assert all(n["basics"] for n in adapt if not n["ai_resources"])
     assert {n["skill"] for n in adapt} | {s["skill"] for s in strengths} == set(claims)
     assert all(n["why"]["kind"] == "ai_trend" for n in adapt)
 

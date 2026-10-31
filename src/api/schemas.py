@@ -201,6 +201,17 @@ class TrackArticle(BaseModel):
     is_article: bool = True  # False: a web page or a page that refuses readers (no agent)
 
 
+class BasicsItem(BaseModel):
+    """An AI-basics course or video carried inside a step (prompting, responsible use)."""
+
+    kind: Literal["course", "video"]
+    topic: str
+    title: str
+    provider: str
+    url: str
+    minutes: int
+
+
 class AiResource(BaseModel):
     """A checked resource on doing a skill's work with AI (src/collectors/ai_resources.py)."""
 
@@ -239,6 +250,7 @@ class TrackNode(BaseModel):
     ai_use: float | None = None  # effective automation-style AI use on the skill's tasks
     ai_basis: str | None = None  # observed, predicted, mixed, occupation or none
     ai_resources: list[AiResource] | None = None  # adapt steps: doing the skill with AI
+    basics: list[BasicsItem] | None = None  # adapt steps without AI resources: AI basics inside
 
 
 class Track(BaseModel):

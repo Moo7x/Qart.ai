@@ -84,7 +84,19 @@ function aiPane(node: TrackNode): Pane[] {
     title: 'Doing this with AI',
     hint: 'Checked: each one shows this skill’s work and AI used on it (quotes from the page or video).',
     body: items.length === 0 ? (
-      <p className="m-0 text-graphite">No checked resource on doing this with AI yet. Start with the AI basics stops; the courses here cover the skill itself.</p>
+      <div className="flex flex-col gap-2">
+        <p className="m-0 text-graphite">No checked resource on doing this skill with AI yet. {node.basics?.length ? 'Start with these AI basics; the courses beside cover the skill itself.' : 'The courses beside cover the skill itself.'}</p>
+        {(node.basics ?? []).length > 0 && (
+          <ul className="m-0 flex list-none flex-col gap-2 p-0">
+            {(node.basics ?? []).map((b) => (
+              <li key={b.url} className="flex flex-col gap-0.5">
+                <a href={b.url} target="_blank" rel="noopener noreferrer" className="font-medium text-void">{b.title} ↗</a>
+                <span className="font-mono text-[11px] text-graphite">AI basics · {b.topic} · {b.provider} · {b.kind} · {b.minutes} min</span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
     ) : (
       <ul className="m-0 flex list-none flex-col gap-3 p-0">
         {items.map((r) => (
