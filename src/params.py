@@ -125,6 +125,10 @@ PROFILE_RETENTION_DAYS = 90
 # Status page: platform SDG totals are withheld while fewer people than this have a destination.
 # Declared, from the project rule that aggregates across people suppress groups under 5.
 PLATFORM_SDG_MIN_PROFILES = 5
+# Phase 1 commitment, measured from use (src/journey/impact.py): at least 80% of people reach ranked
+# roles and a plan within 5 minutes of pressing Start.
+TIME_TO_PLAN_TARGET_SECONDS = 300
+TIME_TO_PLAN_TARGET_SHARE = 0.8
 # Prices for the cost estimate (status page, scripts/cost.py). Declared, not measured: the OpenAI
 # list prices (USD per million tokens) checked on OpenAI's pricing page on 2026-10-31, and the
 # RunPod Serverless GPU price from the endpoint's console on 2026-10-31. The endpoint may run on

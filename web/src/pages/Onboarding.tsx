@@ -87,6 +87,8 @@ export function Onboarding() {
 
   const skillName = (id: string) => pack.data?.skills.find((s) => s.id === id)?.name ?? id
   const go = (n: number) => setStep(Math.max(0, Math.min(BUILDING, n)))
+  // When the person pressed Start: the time-to-plan measure (Phase 1 target, src/journey/impact.py).
+  const startedAt = useRef<number | null>(null)
 
   function applyExtraction(result: Extraction) {
     setExtraction(result)
@@ -164,6 +166,7 @@ export function Onboarding() {
         sdg_priorities: sdgs,
         skills,
         extraction_engine: extraction?.engine ?? existing.data?.profile.extraction_engine ?? 'none',
+        intake_seconds: editing ? (existing.data?.profile.intake_seconds ?? null) : startedAt.current === null ? null : Math.round((Date.now() - startedAt.current) / 1000),
       }
       setBuilt(null)
       setLog([])
@@ -274,7 +277,7 @@ export function Onboarding() {
               Qart.ai reads Malaysia's public labour and job-ad data, shows which of your skills are gaining weight, which roles fit you, and a free learning plan. Every number links to its source.
             </p>
             <div className="flex flex-col items-center gap-3 py-6">
-              <button type="button" className="btn btn-v min-h-[60px] px-10 text-[18px] font-semibold shadow-[0_10px_30px_rgba(108,71,255,0.35)]" onClick={() => go(1)}>{t('Start · about 3 minutes')}</button>
+              <button type="button" className="btn btn-v min-h-[60px] px-10 text-[18px] font-semibold shadow-[0_10px_30px_rgba(108,71,255,0.35)]" onClick={() => { startedAt.current = Date.now(); go(1) }}>{t('Start · about 3 minutes')}</button>
               {profileId && <Link to="/overview" className="btn">Continue with my saved profile</Link>}
               <span className="text-[13px] text-graphite">{t('Skip any question. The demo uses synthetic CVs only.')}</span>
             </div>

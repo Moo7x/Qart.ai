@@ -8,6 +8,26 @@ import type { StatusResponse } from '../typesAgents'
 
 const POLL_MS = 30_000
 
+function TimeToPlan({ t }: { t: NonNullable<StatusResponse['time_to_plan']> }) {
+  const share = t.people ? t.under_target / t.people : null
+  return (
+    <section className="section">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <h2 className="h2">Time to ranked roles and a plan</h2>
+        <KindLabel kind="observed" />
+      </div>
+      {t.people === 0 ? (
+        <p className="m-0 text-[14px] text-graphite">No timed journey yet. Each new profile records the minutes from Start to choosing a role.</p>
+      ) : (
+        <p className="m-0 text-[15px]">
+          <b className="font-mono text-[28px]">{share === null ? '—' : `${Math.round(100 * share)}%`}</b> of {t.people} {t.people === 1 ? 'person' : 'people'} got there within {t.target_seconds / 60} minutes (target {Math.round(100 * t.target_share)}%) · median {t.median_seconds === null ? '—' : `${Math.floor(t.median_seconds / 60)} min ${t.median_seconds % 60} s`}
+        </p>
+      )}
+      <p className="m-0 text-[12px] text-graphite">Measured from use: the intake timer plus the time until a destination was chosen. Our Phase 1 target.</p>
+    </section>
+  )
+}
+
 export function Status() {
   const view = useApi<StatusResponse>('/api/status', POLL_MS)
   const data = view.data
@@ -18,6 +38,7 @@ export function Status() {
         <h1 className="h1">Is the evidence fresh, and what does it cost?</h1>
         <p className="m-0 max-w-[700px] text-graphite">Measured from the app&rsquo;s own run log and usage counter. Cost multiplies the measured calls by declared list prices, so it is an estimate.</p>
       </header>
+      {data?.time_to_plan && <TimeToPlan t={data.time_to_plan} />}
       {view.loading && !data && <Loading what="the status" />}
       {view.error && <Problem what="the status" message={view.error} onRetry={view.reload} />}
       {data && (

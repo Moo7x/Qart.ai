@@ -162,6 +162,7 @@ export type ProfileData = {
   sdg_priorities: string[]
   skills: Record<string, SkillClaim>
   extraction_engine: string
+  intake_seconds?: number | null
 }
 
 export type GapColumn = 'ready' | 'bridgeable' | 'missing' | 'not_stated'

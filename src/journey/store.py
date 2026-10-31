@@ -56,6 +56,9 @@ class ProfileData(BaseModel):
     sdg_priorities: list[str] = []
     skills: dict[str, SkillClaim] = {}
     extraction_engine: str = ""
+    # Seconds from pressing Start to "Build my picture" in the intake, for the time-to-plan
+    # measure (src/journey/impact.py); None for edits and profiles made without the intake.
+    intake_seconds: float | None = Field(default=None, ge=0, le=86_400)
 
     def levels(self) -> dict[str, int | None]:
         return {skill: claim.level for skill, claim in self.skills.items()}

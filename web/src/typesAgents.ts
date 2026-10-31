@@ -97,6 +97,7 @@ export type StatusResponse = {
   cost: { label: 'estimate'; total_usd: number; prices_checked: string; gpu_price_set: boolean; note: string }
   fairness: { available: boolean; pairs?: number; identical?: boolean; max_fit_difference?: number; checked_at?: string }
   platform_sdg: { available: boolean; profiles?: number; min_profiles?: number; suppressed?: boolean; totals?: { target: string; hours: number }[] }
+  time_to_plan?: { people: number; median_seconds: number | null; under_target: number; target_seconds: number; target_share: number; kind: 'observed' }
 }
 
 // ---- C8 forecast (GET /api/forecast, src/api/evidence.py SeriesForecast) ----

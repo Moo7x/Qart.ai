@@ -22,7 +22,9 @@ from fastapi.testclient import TestClient
 
 from src.api.journey import load_personas
 from src.app import create_app
-from src.config import REPO_ROOT, Settings
+from src.config import REPO_ROOT, Settings, load_settings
+from src.db import make_engine
+from src.journey.impact import time_to_plan
 from src.levels import required_skills
 from src.match.engine import Evidence
 from src.match.fairness import paired_profile_check
@@ -131,7 +133,33 @@ def compute() -> dict[str, Any]:
         "coverage": coverage(),
         "personas": people,
         "fairness": paired_profile_check(load_pack(), evidence),
+        "time_to_plan": _measured_time_to_plan(),
     }
+
+
+def _measured_time_to_plan() -> dict[str, Any] | None:
+    """From the app's own database (local or the DATABASE_URL set), never from the personas."""
+    try:
+        engine = make_engine(load_settings().database_url)
+        try:
+            return time_to_plan(engine)
+        finally:
+            engine.dispose()
+    except Exception:  # noqa: BLE001  no database yet: the section says so
+        return None
+
+
+def _time_line(t: dict[str, Any] | None) -> str:
+    if not t or not t["people"]:
+        return (
+            "- No timed journey in this database yet (the intake records it for each new profile)."
+        )
+    share = t["under_target"] / t["people"]
+    return (
+        f"- **{share:.0%}** of {t['people']} timed journeys reached ranked roles and a chosen plan "
+        f"within {t['target_seconds'] // 60} minutes (target {t['target_share']:.0%}); median "
+        f"{t['median_seconds']} s. Observed from the app's database (src/journey/impact.py)."
+    )
 
 
 def render(k: dict[str, Any]) -> str:
@@ -193,6 +221,10 @@ def render(k: dict[str, Any]) -> str:
         f"- {fair['pairs']} pairs of synthetic CVs that differ only in protected attributes: "
         f"results {'identical' if fair['identical'] else 'NOT identical'}, largest fit difference "
         f"{fair['max_fit_difference']} points (checked {fair['checked_at']}).",
+        "",
+        "## 5. Time to ranked roles and a plan (Phase 1 target: 80% within 5 minutes)",
+        "",
+        _time_line(k["time_to_plan"]),
         "",
     ]
     return "\n".join(lines)

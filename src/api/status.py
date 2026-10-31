@@ -27,6 +27,7 @@ from src.evidence.store import (
     list_runs,
     query_observations,
 )
+from src.journey.impact import time_to_plan
 from src.journey.store import ProfileData, profile_table
 from src.match.engine import score_role
 from src.match.evidence import automation_evidence
@@ -170,4 +171,5 @@ def status(
         },
         "fairness": fairness(engine),
         "platform_sdg": platform_sdg(engine),
+        "time_to_plan": time_to_plan(engine),
     }
