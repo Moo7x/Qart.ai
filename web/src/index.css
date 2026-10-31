@@ -70,14 +70,14 @@
     min-width: 0;
     flex: 999 1 640px;
     flex-direction: column;
-    gap: 36px;
+    gap: 24px;
     width: 100%;
     max-width: 1520px;
     margin-inline: auto;
-    padding: 28px 20px 48px;
+    padding: 16px 20px 40px;
   }
   @media (min-width: 768px) {
-    .page { padding: 36px clamp(24px, 3vw, 56px) 64px; }
+    .page { padding: 20px clamp(24px, 3vw, 56px) 56px; }
   }
   .app-shell { display: flex; flex-direction: column; min-height: 100vh; }
   .app-shell > .page { flex: 1 1 auto; max-width: 1152px; }
@@ -225,8 +225,8 @@
     background: var(--color-violet-hover);
   }
   .h1 {
-    font-size: clamp(30px, 5vw, 44px);
-    line-height: 1.06;
+    font-size: clamp(24px, 3.2vw, 32px);
+    line-height: 1.1;
     letter-spacing: -0.02em;
     font-weight: 500;
     margin: 0;
@@ -359,9 +359,9 @@
   .q-g3, .q-g2 { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; }
   @media (min-width: 640px) { .q-g3, .q-g2 { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; } }
   @media (min-width: 1024px) { .q-g3 { grid-template-columns: repeat(3, minmax(0, 1fr)); } .q-span2 { grid-column: span 2; } .q-span3 { grid-column: 1 / -1; } }
-  .q-head-badge { display: inline-flex; align-items: center; gap: 8px; align-self: flex-start; padding: 6px 14px; border-radius: 999px; background: #fff; font-size: 13px; font-weight: 500; color: var(--color-ink); }
+  .q-head-badge { display: inline-flex; align-items: center; gap: 8px; align-self: flex-start; padding: 4px 12px; border-radius: 999px; background: #fff; font-size: 12px; font-weight: 500; color: var(--color-ink); }
   .q-head-badge::before { content: ''; width: 8px; height: 8px; border-radius: 99px; background: var(--color-violet); }
-  .q-h1 { margin: 0; font-size: clamp(32px, 6vw, 52px); line-height: 1.05; font-weight: 500; letter-spacing: -0.02em; color: var(--color-ink); }
+  .q-h1 { margin: 0; font-size: clamp(24px, 3.2vw, 34px); line-height: 1.1; font-weight: 500; letter-spacing: -0.02em; color: var(--color-ink); }
   .q-h3 { margin: 0; font-size: 20px; font-weight: 600; letter-spacing: -0.01em; line-height: 1.25; color: var(--color-ink); }
   .q-kicker { font-size: 13px; font-weight: 600; color: var(--color-violet); }
   .q-src { margin: 0; font-size: 12px; line-height: 1.5; color: var(--color-muted); }
@@ -551,3 +551,17 @@
     .r-detail { padding: 4px 10px 16px 42px; }
   }
 }
+
+/* SDG tiles on My plan: a slow loop from left to right (two copies of the row, the track moves
+   by half its width), paused on hover, focus or an open tile; still for reduced motion. */
+.sdg-marquee { overflow: hidden; mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent); }
+.sdg-track { display: flex; gap: 1rem; width: max-content; padding: 4px 0 8px; animation: sdg-loop 60s linear infinite; }
+.sdg-marquee:hover .sdg-track, .sdg-marquee:focus-within .sdg-track, .sdg-paused .sdg-track { animation-play-state: paused; }
+@keyframes sdg-loop { from { transform: translateX(-50%); } to { transform: translateX(0); } }
+@media (prefers-reduced-motion: reduce) { .sdg-track { animation: none; flex-wrap: wrap; width: auto; } }
+
+/* Thin, rounded scrollbars inside the step windows (instead of the default bar). */
+.thin-scroll { scrollbar-width: thin; scrollbar-color: #cfc3ff transparent; }
+.thin-scroll::-webkit-scrollbar { width: 6px; }
+.thin-scroll::-webkit-scrollbar-thumb { background: #cfc3ff; border-radius: 99px; }
+.thin-scroll::-webkit-scrollbar-track { background: transparent; }

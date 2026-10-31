@@ -35,10 +35,10 @@ export function Card({ label, className = '', children }: { label: string; class
 export function PageHead({ badge, title, sub, right }: { badge: string; title: ReactNode; sub?: ReactNode; right?: ReactNode }) {
   return (
     <header className="flex flex-wrap items-end justify-between gap-4">
-      <div className="flex min-w-0 max-w-[760px] flex-col gap-3.5">
+      <div className="flex min-w-0 max-w-[760px] flex-col gap-2">
         <span className="q-head-badge">{badge}</span>
         <h1 className="q-h1">{title}</h1>
-        {sub && <p className="m-0 text-[15px] leading-relaxed text-[#404040]">{sub}</p>}
+        {sub && <p className="m-0 text-[13px] leading-snug text-[#525252]">{sub}</p>}
       </div>
       {right}
     </header>
