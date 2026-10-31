@@ -23,14 +23,14 @@ planned levels counted as unevidenced (src/match/decision.py fit_range).
 
 import math
 from collections.abc import Mapping
-from dataclasses import asdict, dataclass, field
-from typing import Any
+from dataclasses import dataclass, field
+from dataclasses import fields as dataclass_fields
 
 from src import params
 from src.journey.store import SkillClaim, levels_of
 from src.match.decision import fit_range, is_evidenced
 from src.match.engine import Evidence, RequirementScore, RoleMatch, Scenario, score_role
-from src.pack import Course, Pack, SdgLink
+from src.pack import Course, Pack, SdgLink, SdgTarget
 from src.pathway.practice import load_practice
 
 MINUTES_PER_HOUR = 60
@@ -166,9 +166,31 @@ class Pathway:
         return set(self.study_levels)
 
 
-def pathway_out(path: Pathway) -> dict[str, Any]:
+@dataclass
+class PathwayOut(Pathway):
+    """The plan as `/pathway` returns it (C3): the plan, its study hours under their C3 name,
+    and the SDG targets, sources and catalogue date the page cites."""
+
+    study_hours: float = 0.0
+    sdg_targets: dict[str, SdgTarget] = field(default_factory=dict)
+    sdg_source: str = ""
+    courses_checked: str = ""
+    scenario: str = "moderate"
+
+
+def pathway_out(path: Pathway, pack: Pack | None = None, scenario: str = "moderate") -> PathwayOut:
     """The plan as the API returns it, with the C3 field names unchanged."""
-    return {**asdict(path), "study_hours": path.total_hours}
+    fields = {f.name: getattr(path, f.name) for f in dataclass_fields(Pathway)}
+    if pack is None:
+        return PathwayOut(**fields, study_hours=path.total_hours, scenario=scenario)
+    return PathwayOut(
+        **fields,
+        study_hours=path.total_hours,
+        sdg_targets=dict(pack.sdg.targets),
+        sdg_source=pack.sdg.source,
+        courses_checked=pack.courses_checked,
+        scenario=scenario,
+    )
 
 
 def ai_basics_choice(

@@ -60,7 +60,7 @@ def test_practice_steps_only_for_levels_above_2_and_totals_are_consistent(role_i
         assert 0 < p.time.low <= p.time.high
     expected = {r.skill for r in match.requirements if r.required > params.STUDY_MAX_LEVEL}
     assert {p.skill for p in path.practice_steps} == expected
-    assert pathway_out(path)["study_hours"] == path.total_hours
+    assert pathway_out(path).study_hours == path.total_hours
     assert path.total_hours == pytest.approx(sum(s.hours for s in path.steps))
     assert path.practice_weeks == WeekRange(
         sum(int(p.time.low or 0) for p in path.practice_steps),
