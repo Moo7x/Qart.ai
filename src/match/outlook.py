@@ -32,15 +32,15 @@ def _squash(text: str) -> str:
     return re.sub(r"[^a-z0-9]", "", text.lower())
 
 
-def occupation_market(soc: str, signals: list[Signal]) -> list[dict[str, str]]:
+def occupation_market(soc: str, signals: list[Signal]) -> list[dict[str, Any]]:
     """Job-market evidence for one occupation, each item observed, with its source, latest period
     and direction: the DOSM employment share of its major group, and its DOSM job-ad share where
     DOSM names the occupation. Empty when neither is in the evidence store."""
     by_id = {s.id: s for s in signals}
     occupation = field_profile().occupation(soc)
-    items: list[dict[str, str]] = []
+    items: list[dict[str, Any]] = []
 
-    def item(signal: Signal, text: str, source: str) -> dict[str, str]:
+    def item(signal: Signal, text: str, source: str) -> dict[str, Any]:
         latest = signal.points[-1].period if signal.points else ""
         return {
             "kind": "observed",
@@ -48,6 +48,8 @@ def occupation_market(soc: str, signals: list[Signal]) -> list[dict[str, str]]:
             "source": source,
             "period": latest,
             "direction": signal.direction,
+            "unit": signal.unit,
+            "points": [p.model_dump() for p in signal.points],
         }
 
     if occupation and occupation.isco:

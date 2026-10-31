@@ -279,6 +279,8 @@ export type MarketItem = {
   source: string
   period: string
   direction: "rising" | "weakening" | "stable" | "insufficient" | "expert"
+  unit: string
+  points: Point[]
 }
 
 export type MatchesOut = {

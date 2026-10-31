@@ -6,6 +6,7 @@ import { sendJSON, useApi } from '../api'
 import { Dots, SdgTag, levelText } from '../components/journey'
 import { DarkButton, Label, Legend, PageHead, ScenarioSwitch, Segmented, Serif } from '../components/atoms'
 import { FlowSteps } from '../components/FlowSteps'
+import { FitGauge } from '../components/MiniCharts'
 import { CompareRoles, JobPosts, Openings } from '../components/CompareRoles'
 import { BestQuestion, MeterRow, WhatIf } from '../components/Decision'
 import { ExplainRole } from '../components/ExplainRole'
@@ -405,6 +406,14 @@ export function Roles() {
                     {open && (
                       <div id={`r-detail-${r.role_id}`} className="j-step j-fwd r-detail flex flex-col gap-4">
                         <div className="flex flex-wrap items-start gap-x-6 gap-y-3">
+                          {r.band && (
+                            <div className="q-card w-[220px] flex-none items-center gap-1 border border-[#f0f0f0] p-3">
+                              <span className="self-start text-[13px] font-semibold">Your fit</span>
+                              <FitGauge fit={r.fit} band={r.band} thresholds={data.bands.thresholds} caption={`${data.scenario_label} · estimate`}>
+                                <button type="button" className="q-btn mt-1 min-h-[36px] bg-mist px-3 text-xs" onClick={() => setWhyFor(r)}>What these numbers mean</button>
+                              </FitGauge>
+                            </div>
+                          )}
                           <div className="flex min-w-0 flex-[1_1_300px] flex-col gap-2">
                             <span className="flex flex-wrap items-center gap-1.5 text-[13px]">Fit {Math.round(r.fit)} <Label kind="estimate" /> {r.band && <span className="rounded-full bg-[#fef3c7] px-2 py-0.5 text-xs font-semibold capitalize text-[#92400e]">{r.band} band</span>} range {Math.round(r.fit_range.low)}–{Math.round(r.fit_range.high)} <Label kind="assumption" /></span>
                             <p className="m-0 text-[13px]">Essentials still short: <b className="font-semibold">{r.essentials_short.map(skillName).join(', ') || 'none'}</b></p>

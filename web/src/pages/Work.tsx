@@ -4,6 +4,7 @@ import { useApi } from '../api'
 import type { RadarOut, WorkTask, WorkTodayOut } from '../apiTypes'
 import { Card, DarkLink, Label, ScenarioSwitch, SCENARIO_TEXT, Serif } from '../components/atoms'
 import { FlowSteps } from '../components/FlowSteps'
+import { ChangePill, Sparkline } from '../components/MiniCharts'
 import { Loading, Problem } from '../components/ui'
 import { WhyButton } from '../components/Why'
 import { useJourney } from '../state'
@@ -94,13 +95,18 @@ export function Work() {
               <section aria-label="Job market for your occupation" className="flex flex-col gap-1.5">
                 <span className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.06em] text-muted">Job market for your occupation <Label kind="observed" /></span>
                 {data.market.length === 0 && <p className="m-0 text-[13px] text-[#71717a]">Not in this snapshot of the evidence (missing, not zero).</p>}
-                <ul className="m-0 flex list-none flex-col gap-1 p-0">
-                  {data.market.map((m) => (
-                    <li key={m.text} className="flex items-start gap-2 text-[13px] leading-snug">
-                      <span aria-hidden="true" className={`font-bold ${m.direction === 'rising' ? 'text-rising' : m.direction === 'weakening' ? 'text-weak' : 'text-muted'}`}>{m.direction === 'rising' ? '↑' : m.direction === 'weakening' ? '↓' : '→'}</span>
-                      <span className="min-w-0">{m.text} <span className="text-muted">· {m.source}, {m.period}</span></span>
-                    </li>
-                  ))}
+                <ul className="m-0 flex list-none flex-col gap-1.5 p-0">
+                  {data.market.map((m) => {
+                    const last = m.points[m.points.length - 1]
+                    return (
+                      <li key={m.text} className="flex flex-wrap items-center gap-x-3 gap-y-1 rounded-xl border border-[#f0f0f0] bg-white px-3 py-2 text-[13px] shadow-[0_1px_2px_rgba(0,0,0,.03)]">
+                        <span className="min-w-[200px] flex-[1_1_260px] leading-snug" title={m.text}>{m.text.split(':')[0]} <span className="text-muted">· {m.source}, {m.period}</span></span>
+                        <Sparkline points={m.points} label={m.text.split(':')[0]} />
+                        {last && <span className="whitespace-nowrap font-semibold">{Math.round(last.value * 100) / 100}{m.unit.startsWith('%') ? '%' : ` ${m.unit}`}</span>}
+                        <ChangePill points={m.points} unit={m.unit} />
+                      </li>
+                    )
+                  })}
                 </ul>
               </section>
               <section aria-label="Your tasks and AI" className="flex flex-col gap-1.5">

@@ -11,7 +11,7 @@ from typing import Literal
 from pydantic import BaseModel, ConfigDict, Field
 
 from src.evidence.field import Occupation
-from src.evidence.signals import Signal
+from src.evidence.signals import Point, Signal
 from src.match.engine import RequirementScore
 from src.pack import CurrentRole, FitCheck
 from src.pathway.planner import PracticeStep
@@ -403,6 +403,8 @@ class MarketItem(BaseModel):
     source: str
     period: str
     direction: Literal["rising", "weakening", "stable", "insufficient", "expert"]
+    unit: str
+    points: list[Point]  # the observed series, oldest first, for the sparkline
 
 
 class WorkTodayOut(BaseModel):

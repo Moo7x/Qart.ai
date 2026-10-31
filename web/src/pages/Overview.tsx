@@ -1,11 +1,11 @@
 import { Link } from 'react-router-dom'
 import { useApi } from '../api'
 import { ScenarioSwitch, NextStep } from '../components/journey'
-import { PageHead, Serif } from '../components/atoms'
+import { Legend, PageHead, Serif } from '../components/atoms'
 import { OverviewTiles } from '../components/OverviewTiles'
 import { JobHub } from '../components/JobHub'
 import { OverviewGlance } from '../components/OverviewGlance'
-import { SkillRadar } from '../components/SkillRadar'
+import { RADAR_COLOURS, SkillRadar } from '../components/SkillRadar'
 import { Loading, Problem } from '../components/ui'
 import { useJourney } from '../state'
 import type { PackInfo, ProfileData, RadarAxis, RadarResponse } from '../types'
@@ -15,27 +15,21 @@ import type { PackInfo, ProfileData, RadarAxis, RadarResponse } from '../types'
 // pages; this page only summarises them.
 
 const EMPHASIS: Record<RadarAxis['emphasis'], [string, string, string]> = {
-  rising: ['↑', 'More weight', 'bg-rising text-white'],
-  weakening: ['↓', 'Less weight', 'bg-weak text-white'],
-  stable: ['→', 'No shift', 'bg-mist text-graphite'],
-  fixed: ['■', 'Essential, fixed', 'bg-void text-white'],
+  rising: ['▲', 'More weight', 'text-rising'],
+  weakening: ['▼', 'Less weight', 'text-weak'],
+  stable: ['→', 'No shift', 'text-muted'],
+  fixed: ['■', 'Essential, fixed', 'text-ink'],
 }
 
 function AxisRow({ axis }: { axis: RadarAxis }) {
   const [arrow, label, tone] = EMPHASIS[axis.emphasis]
-  const use = axis.ai_use
   return (
-    <li className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 border-t border-line py-2.5" title={axis.reason}>
-      <span className="min-w-0">
-        <span className="block font-semibold">{axis.name}</span>
-        {use && use.automation_share !== null && (
-          <span className="block text-[12px] text-graphite">{use.automation_share.toFixed(0)}% of AI use on its tasks is automation · observed</span>
-        )}
-      </span>
-      <span className={`inline-flex min-w-[150px] items-center justify-center gap-2 rounded-full px-3 py-1.5 text-[14px] font-semibold ${tone}`}>
-        <span aria-hidden="true" className="text-[18px] leading-none">{arrow}</span>{label}
-      </span>
-    </li>
+    <tr className="border-t border-[#f0f0f0]" title={axis.reason}>
+      <td className="py-1.5 pr-2">{axis.name}</td>
+      <td className="text-muted">{axis.claimed ?? '—'}</td>
+      <td className="font-semibold">{axis.required}</td>
+      <td className={`whitespace-nowrap text-right font-bold ${tone}`}><span aria-hidden="true">{arrow}</span><span className="sr-only">{label}</span></td>
+    </tr>
   )
 }
 
@@ -60,15 +54,17 @@ function PersonalRadar() {
       <div className="flex flex-wrap items-start gap-6">
         <div className="flex min-w-0 flex-[1_1_300px] flex-col items-center gap-2">
           <SkillRadar axes={data.axes} />
-          <div className="flex flex-wrap justify-center gap-4 font-mono text-[11px] text-graphite">
-            <span className="flex items-center gap-1.5"><span aria-hidden="true" className="inline-block h-0.5 w-5 bg-violet" />you</span>
-            <span className="flex items-center gap-1.5"><span aria-hidden="true" className="inline-block h-0.5 w-5 border-t border-dashed border-weak" />needed</span>
-            <span className="flex items-center gap-1.5"><span aria-hidden="true" className="inline-block h-0.5 w-5 bg-observed" />after your plan</span>
-          </div>
+          <Legend items={[{ swatch: RADAR_COLOURS.you, text: 'You (your claims)' }, { swatch: RADAR_COLOURS.needed, text: 'Needed (dashed)' }, { swatch: RADAR_COLOURS.after, text: 'After your plan (estimate)' }]} />
         </div>
-        <ul className="m-0 min-w-0 flex-[1.3_1_320px] list-none p-0">
-          {data.axes.map((a) => <AxisRow key={a.skill} axis={a} />)}
-        </ul>
+        <div className="q-card min-w-0 flex-[1_1_300px] gap-2 shadow-[0_10px_30px_rgba(108,71,255,.08)]">
+          <span className="text-[13px] font-semibold">How each skill moves · {data.scenario_label}</span>
+          <table className="w-full border-collapse text-[13px]">
+            <caption className="sr-only">Each skill: your level, the level needed and how its weight moves under this scenario</caption>
+            <thead><tr className="text-left text-[11px] text-muted"><th className="py-1 font-medium">Skill</th><th className="font-medium">You</th><th className="font-medium">Needs</th><th className="font-medium"><span className="sr-only">Weight</span></th></tr></thead>
+            <tbody>{data.axes.map((a) => <AxisRow key={a.skill} axis={a} />)}</tbody>
+          </table>
+          <p className="q-src">Levels are your claims. Arrows: weight under this scenario (assumption); essentials never move.</p>
+        </div>
       </div>
     </section>
   )

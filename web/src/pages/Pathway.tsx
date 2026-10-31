@@ -9,6 +9,8 @@ import { TrackMap } from '../components/TrackMap'
 import { ScenarioSwitch, NextStep, PROGRESS_EVENT } from '../components/journey'
 import { PageHead, Serif, VividTile } from '../components/atoms'
 import { FlowSteps } from '../components/FlowSteps'
+import { LevelBars } from '../components/MiniCharts'
+import type { RadarOut } from '../apiTypes'
 import { Loading, Problem } from '../components/ui'
 import { useJourney } from '../state'
 import type { PathwayResponse, ProfileData, ProgressResponse, Scenario, TracksResponse } from '../types'
@@ -38,6 +40,7 @@ function ProfilePathway({ profileId, scenario }: { profileId: string; scenario: 
   const sdg = useApi<SdgMatrix>(`/api/profiles/${profileId}/sdg?scenario=${scenario}`)
   const badges = useApi<Badge[]>(`/api/profiles/${profileId}/badges?scenario=${scenario}`)
   const profile = useApi<{ profile: ProfileData }>(`/api/profiles/${profileId}`)
+  const radar = useApi<RadarOut>(`/api/profiles/${profileId}/radar?scenario=${scenario}`)
   // Self-reported completion, saved per profile on the server; it never changes skills or fit.
   const progress = useApi<ProgressResponse>(`/api/profiles/${profileId}/progress?scenario=${scenario}`)
   const [state, setState] = useState<ProgressResponse | null>(null)
@@ -123,6 +126,14 @@ function ProfilePathway({ profileId, scenario }: { profileId: string; scenario: 
               {badges.data && <Badges badges={badges.data} />}
               <p className="m-0 mt-auto text-[13px] leading-normal text-[#33402a]">Badges come only from what you do: courses marked done, levels raised. Never from a model or a guess.</p>
             </VividTile>
+            {radar.data && (
+              <article aria-label="Your levels against the role" className="q-card q-span2">
+                <LevelBars
+                  title={`Your levels against what ${data.role_title} needs`}
+                  rows={radar.data.axes.map((a) => ({ skill: a.skill, name: a.name, you: a.claimed, needs: a.required, essential: a.essential }))}
+                />
+              </article>
+            )}
           </div>
 
           <section aria-label="Your roadmap" className="panel min-w-0 gap-5">
