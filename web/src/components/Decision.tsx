@@ -57,10 +57,10 @@ export function BestQuestion({ profileId, scenario, onAnswered }: { profileId: s
   }
 
   return (
-    <section className="card-light flex flex-col gap-2.5 border-l-4 border-violet px-6 py-4">
-      <span className="cap text-violet">The question that matters most for you now</span>
-      <h2 className="h2">How would you rate your {first.skill_name}?</h2>
-      <p className="m-0 text-[13px] text-graphite">{first.effect}</p>
+    <section aria-label="The question that matters most" className="q-card gap-2.5">
+      <span className="q-kicker">The question that matters most for you now</span>
+      <h2 className="q-h3">How would you rate your {first.skill_name}?</h2>
+      <p className="m-0 text-sm text-[#404040]">{first.effect}</p>
       <div className="max-w-[360px]">
         <LevelPicker skill={first.skill} level={null} label={`Your level in ${first.skill_name}`} disabled={busy} allowUnsure={false} onChange={(level) => { if (level !== null) void answer(level) }} />
       </div>

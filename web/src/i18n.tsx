@@ -151,16 +151,16 @@ export function useT() {
 export function LanguageSwitch() {
   const { lang, setLang } = useT()
   return (
-    <div className="flex flex-col gap-1 px-2.5">
-      <div className="flex gap-1" role="group" aria-label="Language / Bahasa">
+    <div className="flex flex-col gap-1">
+      <div className="q-seg" role="group" aria-label="Language / Bahasa">
         {(['en', 'ms'] as Lang[]).map((l) => (
-          <button key={l} type="button" aria-pressed={lang === l} onClick={() => setLang(l)} className={`cursor-pointer rounded-md border-0 px-2.5 py-1 text-xs ${lang === l ? 'bg-violet text-white' : 'bg-surface text-stone'}`}>
-            {l === 'en' ? 'English' : 'Bahasa Malaysia'}
+          <button key={l} type="button" aria-pressed={lang === l} onClick={() => setLang(l)}>
+            {l === 'en' ? 'EN' : 'BM'}
           </button>
         ))}
       </div>
       {lang === 'ms' && (
-        <span className="text-[10px] leading-tight text-slate-mid">
+        <span className="max-w-[220px] text-[10px] leading-tight text-muted">
           BM: navigasi, pendaftaran, tajuk dan butang utama. Bukti kekal dalam bahasa asal. Diterjemah oleh pasukan dengan bantuan AI; semakan penutur asli belum dibuat.
         </span>
       )}

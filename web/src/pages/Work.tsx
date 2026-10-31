@@ -81,8 +81,8 @@ export function Work() {
               </div>
               <div className="flex flex-wrap gap-2">
                 <Chip title="Expert view" grow="1 1 250px">
-                  <b className="font-semibold capitalize">{data.role.impact} impact</b>
-                  <span className="text-[#404040]">· {data.role.source}</span>
+                  <b className="font-semibold">{data.role.impact[0].toUpperCase() + data.role.impact.slice(1)} impact</b>
+                  <span className="text-[#404040]">· {data.role.source.replace('TalentCorp (2024) GBS study, PDF', 'TalentCorp 2024,')}</span>
                 </Chip>
                 <Chip title="Potential exposure" grow="2.4 1 420px">
                   {data.exposure ? <b className="font-semibold">{data.exposure.gradient}</b> : <span className="text-[#71717a]">no data</span>}
