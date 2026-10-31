@@ -24,11 +24,11 @@ const MAIN = [
   { to: '/roles', text: 'My options' },
   { to: '/pathway', text: 'My plan' },
   { to: '/future', text: 'Compare futures' },
-  { to: '/trends', text: 'Trends' },
 ]
 // The evidence pages stay one click away: the signal layer with its sources and dates is a
 // must-have (docs/PHASE2_PLAN.md §0).
 const EVIDENCE = [
+  { to: '/trends', text: 'Trends and forecasts' },
   { to: '/changes', text: 'What changed' },
   { to: '/live', text: 'Live intelligence' },
   { to: '/occupations', text: 'Any occupation' },
