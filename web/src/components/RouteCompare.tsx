@@ -1,87 +1,50 @@
+import { Bot, BookOpen } from 'lucide-react'
 import type { RouteMetrics, Scenario, TracksResponse } from '../types'
 
-function FitBar({ now, after, tone }: { now: number; after: number; tone: string }) {
-  return (
-    <span className="relative block h-2.5 w-full bg-mist" aria-hidden="true">
-      <span className="absolute inset-y-0 left-0 bg-stone" style={{ width: `${now}%` }} />
-      <span className={`absolute inset-y-0 ${tone}`} style={{ left: `${now}%`, width: `${Math.max(after - now, 0)}%` }} />
-    </span>
-  )
-}
-
-// "6.2 h plan + 2.3 h AI basics" for the with-AI route, so its total never looks like the plan's.
-function hoursText(m: RouteMetrics): string {
-  return m.ai_basics_hours && m.plan_hours !== undefined ? `${m.plan_hours} h plan + ${m.ai_basics_hours} h AI basics` : `${m.hours} h`
-}
+// Reskilling with and without AI, planned by the same rules. Two cards and one sentence on what
+// choosing the AI route means: extra study time against the fit it adds in each AI scenario.
 
 function signed(v: number, unit = ''): string {
   return `${v > 0 ? '+' : ''}${v.toFixed(1)}${unit}`
 }
 
-// Reskilling with and without AI, planned by the same rules: time, effort, fit and efficiency.
-export function RouteCompare({ data, scenario }: { data: TracksResponse['comparison']; scenario: Scenario }) {
+function Route({ title, icon, m, fitNow, scenario, tone, note }: { title: string; icon: React.ReactNode; m: RouteMetrics; fitNow: Record<Scenario, number>; scenario: Scenario; tone: string; note: string }) {
   const other: Scenario = scenario === 'fast' ? 'moderate' : 'fast'
-  const routes: [string, string, RouteMetrics, string][] = [
-    ['without', 'Without AI', data.without_ai, 'bg-[#e0892f]'],
-    ['with', 'With AI', data.with_ai, 'bg-violet'],
-  ]
+  return (
+    <div className={`flex flex-col gap-3 rounded-xl border-2 bg-paper p-5 ${tone}`}>
+      <span className="flex items-center gap-2 text-[17px] font-semibold">{icon}{title}</span>
+      <span className="text-[13px] text-graphite">{note}</span>
+      <div className="grid grid-cols-2 gap-3">
+        <span className="flex flex-col"><span className="cap">Study time</span><span className="font-mono text-[24px] leading-tight">{m.hours} h</span><span className="text-[12px] text-graphite">{m.courses} courses · {m.weeks} wk</span></span>
+        <span className="flex flex-col"><span className="cap">Fit after · {scenario}</span><span className="font-mono text-[24px] leading-tight">{Math.round(fitNow[scenario])} → {Math.round(m.fit_after[scenario])}</span><span className="text-[12px] text-graphite">{other}: {Math.round(m.fit_after[other])}</span></span>
+      </div>
+      {m.essentials_unmet.length > 0 && <span className="text-[12px] text-weak">Essentials still short: {m.essentials_unmet.join(', ')}</span>}
+    </div>
+  )
+}
+
+export function RouteCompare({ data, scenario }: { data: TracksResponse['comparison']; scenario: Scenario }) {
   const w = data.without_ai
   const a = data.with_ai
-  const rows: [string, (m: RouteMetrics) => string, string][] = [
-    ['Study time', (m) => `${hoursText(m)} · ${m.weeks} wk`, signed(a.hours - w.hours, ' h')],
-    ['Courses', (m) => String(m.courses), signed(a.courses - w.courses)],
-    [`Fit after · ${scenario}`, (m) => `${Math.round(m.fit_after[scenario])}/100`, signed(a.fit_after[scenario] - w.fit_after[scenario], ' pts')],
-    [`Fit after · ${other}`, (m) => `${Math.round(m.fit_after[other])}/100`, signed(a.fit_after[other] - w.fit_after[other], ' pts')],
-    ['Fit gained per 10 h', (m) => `${m.points_per_10h[scenario]} pts`, signed(a.points_per_10h[scenario] - w.points_per_10h[scenario], ' pts')],
-    ['Essentials still short', (m) => (m.essentials_unmet.length ? m.essentials_unmet.join(', ') : 'none'), ''],
-  ]
+  const extraHours = a.hours - w.hours
+  const gainFast = a.fit_after.fast - w.fit_after.fast
+  const gainModerate = a.fit_after.moderate - w.fit_after.moderate
+  const verdict =
+    gainFast > 0 || gainModerate > 0
+      ? `Choosing AI costs ${signed(extraHours, ' h')} of study and adds ${signed(gainModerate, ' fit points')} if AI adoption is moderate, ${signed(gainFast, '')} if it is fast: the skills that work with AI gain weight as AI takes over routine tasks.`
+      : `For this role the AI route adds ${signed(extraHours, ' h')} of study without raising your fit: its skills do not gain weight from AI yet.`
   return (
     <section className="section" aria-label="Reskilling with and without AI">
       <div className="flex flex-wrap items-baseline justify-between gap-2">
-        <h2 className="h2">Reskilling with AI or without: what it changes</h2>
-        <span className="tag bg-estimate-bg text-estimate">Estimate · same planner and course rules</span>
+        <h2 className="h2">With AI or without: what it changes for you</h2>
+        <span className="tag bg-estimate-bg text-estimate">Estimate</span>
       </div>
+      <p className="m-0 max-w-[820px] rounded-lg border-l-4 border-violet bg-violet-soft px-4 py-3 text-[15px] font-medium">{verdict}</p>
       <div className="grid gap-4 md:grid-cols-2">
-        {routes.map(([key, title, m, tone]) => (
-          <div key={key} className={`flex flex-col gap-2 border-t-2 pt-3 ${key === 'with' ? 'border-violet' : 'border-[#e0892f]'}`}>
-            <div className="flex items-baseline justify-between gap-2">
-              <h3 className="m-0 text-base font-semibold">{title}</h3>
-              <span className="font-mono text-[12px] text-graphite">{hoursText(m)} · {m.courses} courses</span>
-            </div>
-            {([scenario, other] as Scenario[]).map((s) => (
-              <div key={s} className="flex flex-col gap-1">
-                <span className="flex justify-between text-[12px]"><span className="text-graphite">Fit {Math.round(data.fit_now[s])} → <b className="text-void">{Math.round(m.fit_after[s])}</b></span><span className="cap">{s} adoption</span></span>
-                <FitBar now={data.fit_now[s]} after={m.fit_after[s]} tone={tone} />
-              </div>
-            ))}
-          </div>
-        ))}
+        <Route title="Without AI" icon={<BookOpen size={18} className="text-[#e0892f]" />} m={w} fitNow={data.fit_now} scenario={scenario} tone="border-[#f0c79a]" note="The role's skills as they are done today." />
+        <Route title="With AI" icon={<Bot size={18} className="text-violet" />} m={a} fitNow={data.fit_now} scenario={scenario} tone="border-violet" note={`Also the AI basics${a.ai_basics_hours ? ` (${a.ai_basics_hours} h)` : ''} and the data and digital skills the role needs.`} />
       </div>
-      <div className="overflow-x-auto">
-        <table className="w-full min-w-[480px] border-collapse text-[13px]">
-          <thead>
-            <tr className="cap text-left">
-              <th className="py-2 pr-2 font-normal">Measure</th>
-              <th className="px-2 py-2 font-normal">Without AI</th>
-              <th className="px-2 py-2 font-normal">With AI</th>
-              <th className="py-2 pl-2 text-right font-normal">Difference</th>
-            </tr>
-          </thead>
-          <tbody>
-            {rows.map(([label, value, diff]) => (
-              <tr key={label} className="border-t border-line">
-                <td className="py-2 pr-2">{label}</td>
-                <td className="px-2 py-2 font-mono">{value(w)}</td>
-                <td className="px-2 py-2 font-mono">{value(a)}</td>
-                <td className="py-2 pl-2 text-right font-mono font-semibold">{diff}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      <p className="m-0 text-[12px] text-graphite">
-        &ldquo;With AI&rdquo; means also learning the AI basics and the data and digital skills the role needs, not studying with an AI tutor. {a.ai_basics_hours ? `Its ${a.hours} h are ${a.plan_hours ?? (a.hours - a.ai_basics_hours).toFixed(1)} h of plan steps plus ${a.ai_basics_hours} h of AI basics. ` : ''}{data.note}
-      </p>
+      <p className="m-0 text-[12px] text-graphite">&ldquo;With AI&rdquo; means learning to work with AI tools, not studying with an AI tutor. Both routes use the same verified free courses and rules.</p>
     </section>
   )
 }

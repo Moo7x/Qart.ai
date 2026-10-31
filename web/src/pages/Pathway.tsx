@@ -2,15 +2,14 @@ import { useEffect, useState } from 'react'
 import { useT } from '../i18n'
 import { Link } from 'react-router-dom'
 import { sendJSON, useApi } from '../api'
-import { PlanCompare } from '../components/PlanCompare'
 import { RouteCompare } from '../components/RouteCompare'
-import { SdgHeatmap } from '../components/SdgHeatmap'
+import { SdgPlan } from '../components/SdgPlan'
 import { Badges } from '../components/Badges'
 import { TrackMap } from '../components/TrackMap'
-import { ScenarioSwitch, SdgTag, sdgColour, JourneyRoute, NextStep, PROGRESS_EVENT } from '../components/journey'
+import { ScenarioSwitch, JourneyRoute, NextStep, PROGRESS_EVENT } from '../components/journey'
 import { Loading, Problem } from '../components/ui'
 import { useJourney } from '../state'
-import type { PathwayResponse, ProgressResponse, Scenario, TracksResponse } from '../types'
+import type { PathwayResponse, ProfileData, ProgressResponse, Scenario, TracksResponse } from '../types'
 import type { Badge, SdgMatrix } from '../typesScoring'
 import { NeedProfile } from './Roles'
 
@@ -36,6 +35,7 @@ function ProfilePathway({ profileId, scenario }: { profileId: string; scenario: 
   const tracks = useApi<TracksResponse>(`/api/profiles/${profileId}/tracks?scenario=${scenario}`)
   const sdg = useApi<SdgMatrix>(`/api/profiles/${profileId}/sdg?scenario=${scenario}`)
   const badges = useApi<Badge[]>(`/api/profiles/${profileId}/badges?scenario=${scenario}`)
+  const profile = useApi<{ profile: ProfileData }>(`/api/profiles/${profileId}`)
   // Self-reported completion, saved per profile on the server; it never changes skills or fit.
   const progress = useApi<ProgressResponse>(`/api/profiles/${profileId}/progress?scenario=${scenario}`)
   const [state, setState] = useState<ProgressResponse | null>(null)
@@ -116,6 +116,7 @@ function ProfilePathway({ profileId, scenario }: { profileId: string; scenario: 
 
           <section aria-label="Your badges" className="panel min-w-0 gap-3">
             <h2 className="h2">Your badges</h2>
+            <span className="text-[12px] text-graphite">Earned only from what you do: courses marked done, levels raised.</span>
             {badges.error && <Problem what="your badges" message={badges.error} onRetry={badges.reload} />}
             {badges.data && <Badges badges={badges.data} />}
           </section>
@@ -148,14 +149,16 @@ function ProfilePathway({ profileId, scenario }: { profileId: string; scenario: 
 
           {tracks.data && <RouteCompare data={tracks.data.comparison} scenario={scenario} />}
 
-          <section id="sdg" aria-label="SDG contribution" className="panel min-w-0 gap-4">
-            <div className="flex flex-col gap-1">
-              <h2 className="h2">How your plan contributes to the SDGs</h2>
-              <p className="m-0 max-w-[720px] text-[13px] text-graphite">Each cell is the study hours a skill takes in your plan, counted toward every target that skill serves. Click a cell for the reason and its source.</p>
-            </div>
-            {sdg.loading && <Loading what="the SDG map" />}
-            {sdg.error && <Problem what="the SDG map" message={sdg.error} onRetry={sdg.reload} />}
-            {sdg.data && <SdgHeatmap data={sdg.data} />}
+          {sdg.loading && <Loading what="the SDG contribution" />}
+          {sdg.error && <Problem what="the SDG contribution" message={sdg.error} onRetry={sdg.reload} />}
+          {sdg.data && <SdgPlan matrix={sdg.data} path={data} goals={profile.data?.profile.sdg_priorities ?? []} />}
+
+          <section aria-label="Employer-funded training" className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-line bg-paper px-5 py-4">
+            <span className="flex max-w-[760px] flex-col gap-1 text-[13px]">
+              <span className="text-[15px] font-semibold">Need more than free courses? Ask about HRD Corp</span>
+              <span className="text-graphite">If your employer pays the HRD Corp levy, it can claim the cost of approved training. HRD Corp&rsquo;s e-LATiH platform also offers free courses. Qart.ai does not mark any programme as claimable until HRD Corp&rsquo;s own listing confirms it.</span>
+            </span>
+            <a className="btn min-h-[40px]" href="https://hrdcorp.gov.my" target="_blank" rel="noopener noreferrer">HRD Corp ↗</a>
           </section>
 
           {current?.plan && (
@@ -197,28 +200,6 @@ function ProfilePathway({ profileId, scenario }: { profileId: string; scenario: 
             </section>
           )}
 
-          <section aria-label="SDG contribution" className="sdg-band">
-            <div className="mx-auto flex max-w-[760px] flex-col items-center gap-2 text-center">
-              <span className="eyebrow">Sustainable Development Goals</span>
-              <h2 className="m-0 text-[26px] font-semibold leading-tight tracking-tight">How this plan contributes to {Object.keys(data.sdg_summary).length} SDG targets</h2>
-              <p className="m-0 text-[14px] text-graphite">
-                Fit for {data.role_title}: <span className="font-mono font-semibold text-void">{Math.round(data.fit_before)} → {Math.round(data.fit_after)}</span>{' '}
-                <span className="text-[12px] text-estimate">estimate after the plan</span>
-              </p>
-            </div>
-            <div className="sdg-grid">
-              {Object.entries(data.sdg_summary).map(([target, hows]) => (
-                <article key={target} className="sdg-card" style={{ borderLeftColor: sdgColour(target) }}>
-                  <span className="flex flex-wrap items-center gap-2"><SdgTag target={target} /><span className="text-[15px] font-semibold">{data.sdg_targets[target]?.title}</span></span>
-                  {hows.map((h) => <p key={h} className="m-0 text-[14px] leading-relaxed">{h}</p>)}
-                  <p className="m-0 text-[12px] italic text-graphite">&ldquo;{data.sdg_targets[target]?.text}&rdquo;</p>
-                </article>
-              ))}
-            </div>
-            <p className="m-0 text-center font-mono text-[11px] text-graphite">{data.sdg_source} · these are the mechanisms by which the plan contributes, not a measured impact</p>
-          </section>
-
-          <PlanCompare profileId={profileId} scenario={scenario} />
         </>
       )}
       <NextStep to="/future" label="See today versus future you" hint="Next: what this plan changes, in both scenarios" />
