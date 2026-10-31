@@ -76,7 +76,7 @@ def test_kavitha_gets_practice_wherever_a_core_skill_is_short(
     whose core skills she already meets, honestly has none (team decision, B6)."""
     kavitha = results["kavitha"]
     pid = kavitha["pid"]
-    at_two = {s for s, (level, _) in KAVITHA.items() if level >= params.NO_BEGINNER_FROM_LEVEL}
+    at_two = {s for s, (level, _) in KAVITHA.items() if level >= params.STUDY_MAX_LEVEL}
     roles = client.get(f"/api/profiles/{pid}/matches").json()["roles"]
     short = [
         r

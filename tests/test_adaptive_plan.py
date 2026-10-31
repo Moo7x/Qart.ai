@@ -60,7 +60,7 @@ def test_kavitha_skips_ai_basics_and_gets_no_beginner_course_for_her_skills() ->
         assert path.ai_basics["shown"] is False
         assert POWER_AUTOMATE in path.ai_basics["reason"]
         assert any(a["rule"] == "ai_basics_skipped" for a in path.adjustments)
-        at_two = {k for k, c in claims.items() if (c.level or 0) >= params.NO_BEGINNER_FROM_LEVEL}
+        at_two = {k for k, c in claims.items() if (c.level or 0) >= params.STUDY_MAX_LEVEL}
         for step in path.steps:
             assert not (step.course.level == "beginner" and step.skill in at_two), step.course.id
 

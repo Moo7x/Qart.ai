@@ -14,9 +14,8 @@ Rules (all explainable, no optimiser needed for a catalogue this size; docs/PHAS
 4. Study steps are laid out week by week at the person's weekly hours; a course is taken once.
 5. Every step names the skills it raises and the SDG targets those skills serve, with the reason.
 6. The plan adapts to the person (B5), and says so in `adjustments`: AI basics are skipped when
-   the person shows AI or automation work with evidence (`ai_basics_choice`); no beginner course
-   is planned for a skill already at NO_BEGINNER_FROM_LEVEL; a skill already at what study gives
-   goes straight to practice.
+   the person shows AI or automation work with evidence (`ai_basics_choice`); a skill already at
+   what study gives goes straight to practice, so no course (beginner or other) is planned for it.
 Fits after the plan are estimates: after study assumes the person finishes the courses; after
 practice also assumes the practice targets are reached. Both are ranges by the C2 rule, with
 planned levels counted as unevidenced (src/match/decision.py fit_range).
@@ -247,11 +246,8 @@ def plan_pathway(
                     f"{start[gap.skill]}, the most study can give.",
                 }
             )
+            continue  # no course can raise it, so none is planned and none is "missing"
         options = pack.courses_for(gap.skill)
-        # A guard: with STUDY_MAX_LEVEL at 2 such a skill gets no study at all (straight to
-        # practice), so no "no beginner" note is needed today.
-        if start.get(gap.skill, 0) >= params.NO_BEGINNER_FROM_LEVEL:
-            options = [c for c in options if c.level != "beginner"]
         if not options:
             uncovered.append(gap.skill_name)
             continue

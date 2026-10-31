@@ -272,6 +272,3 @@ AI_BASICS_SKILLS = (
 )
 AI_BASICS_SKIP_LEVEL = 3
 AI_BASICS_ALWAYS = ("student", "switcher")
-# No course labelled beginner is planned for a skill claimed at this level or above. Declared:
-# "aware" (2) already covers what a beginner course teaches.
-NO_BEGINNER_FROM_LEVEL = 2

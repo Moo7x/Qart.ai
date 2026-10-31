@@ -131,8 +131,9 @@ skipped (`journey_skipped`), shown as "continued anyway, not done".
 work with evidence: any of prompt engineering, automation, advanced technology integration or
 data management claimed at level 3 or above from a CV sentence or an accepted progress check
 (`AI_BASICS_SKILLS`, `AI_BASICS_SKIP_LEVEL`); the plan says "Skipped: your CV shows ‘…’" and
-keeps the track for "Show AI basics anyway". Students and switchers always see them. No beginner
-course is planned for a skill at level 2 or above, and such a skill goes straight to practice.
+keeps the track for "Show AI basics anyway". Students and switchers always see them. A skill at
+level 2 or above (the most study gives) goes straight to practice: no course, beginner or other,
+is planned for it, and it is never listed as "no verified free course yet".
 Every adjustment is listed under "Adjusted for you" with its rule.
 
 **My plan as three tracks.** `src/pathway/tracks.py` (GET `/api/profiles/{id}/tracks`) shows the
