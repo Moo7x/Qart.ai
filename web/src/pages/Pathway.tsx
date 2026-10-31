@@ -166,6 +166,14 @@ function ProfilePathway({ profileId, scenario }: { profileId: string; scenario: 
             <a className="btn min-h-[40px]" href="https://hrdcorp.gov.my" target="_blank" rel="noopener noreferrer">HRD Corp ↗</a>
           </section>
 
+          <section aria-label="Talk to a person" className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-line bg-paper px-5 py-4">
+            <span className="flex max-w-[760px] flex-col gap-1 text-[13px]">
+              <span className="text-[15px] font-semibold">A big decision? Talk to a person</span>
+              <span className="text-graphite">Qart.ai shows evidence and options; it does not decide for you. Before you change jobs or studies, talk it through with a career adviser: MYFutureJobs (PERKESO) offers free career services, and your university or TVET career centre can help too. Your employer&rsquo;s HR or L&amp;D team knows which training it will fund.</span>
+            </span>
+            <a className="btn min-h-[40px]" href="https://www.myfuturejobs.gov.my" target="_blank" rel="noopener noreferrer">MYFutureJobs ↗</a>
+          </section>
+
           {current?.plan && (
             <section aria-label="Your progress" className="panel gap-4">
               <div className="flex flex-wrap items-end justify-between gap-3">

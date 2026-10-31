@@ -18,6 +18,10 @@ def make_engine(database_url: str) -> Engine:
     url = make_url(database_url)
     if url.get_backend_name() == "sqlite" and url.database and url.database != ":memory:":
         Path(url.database).parent.mkdir(parents=True, exist_ok=True)
+    if url.get_backend_name() == "sqlite":
+        # Wait for a concurrent writer instead of failing at once (local runs and load tests;
+        # Replit uses Postgres). 30 s covers the slowest write the app makes.
+        return create_engine(database_url, connect_args={"timeout": 30})
     return create_engine(database_url)
 
 

@@ -114,7 +114,7 @@ def _demand(rows: list[Row]) -> dict[str, dict[str, Any]]:
     """Forecast per DOSM occupation group: change over the horizon, model and fetch date.
     Cached per evidence snapshot (row count and newest row id): the same rows give the same
     forecast, and a new snapshot (or a person's own cutoff) gets its own entry."""
-    key = (len(rows), max((int(r.get("id") or 0) for r in rows), default=0))
+    key = _snapshot(rows)
     if key in _DEMAND_CACHE:
         return _DEMAND_CACHE[key]
     out = {}
@@ -167,8 +167,26 @@ def categorise(
     ]
 
 
+_INDUSTRY_CACHE: dict[tuple[Any, ...], dict[str, Any]] = {}
+
+
+def _snapshot(rows: list[Row]) -> tuple[int, int]:
+    return len(rows), max((int(r.get("id") or 0) for r in rows), default=0)
+
+
 def industry(pack: Pack, rows: list[Row], task_rows: list[Row], scenario: str) -> dict[str, Any]:
-    """Every industry role with its category, demand and AI evidence, and the skills' direction."""
+    """Every industry role with its category, demand and AI evidence, and the skills' direction.
+    Cached per evidence snapshot, task-model version and scenario: ranking asks for it often."""
+    version = task_rows[0].get("version_id") if task_rows else None
+    key = (*_snapshot(rows), version, len(task_rows), scenario)
+    if key not in _INDUSTRY_CACHE:
+        if len(_INDUSTRY_CACHE) >= DEMAND_CACHE_SIZE * 2:
+            _INDUSTRY_CACHE.pop(next(iter(_INDUSTRY_CACHE)))
+        _INDUSTRY_CACHE[key] = _industry(pack, rows, task_rows, scenario)
+    return _INDUSTRY_CACHE[key]
+
+
+def _industry(pack: Pack, rows: list[Row], task_rows: list[Row], scenario: str) -> dict[str, Any]:
     intensity = params.SCENARIO_INTENSITY[scenario]
     pressure = task_pressure(task_rows)
     impacts, ilo, demand = _talentcorp(rows), _ilo(rows), _demand(rows)
