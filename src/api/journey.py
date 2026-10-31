@@ -11,7 +11,7 @@ from sqlalchemy import Engine, select
 
 from src import params
 from src.api.evidence import get_engine, get_settings
-from src.api.schemas import MatchesOut
+from src.api.schemas import FutureOut, MatchesOut, RadarOut, TracksOut
 from src.changes.store import baseline_cutoff
 from src.collectors.talentcorp import load_extraction
 from src.config import REPO_ROOT, Settings
@@ -414,7 +414,9 @@ def pathway(
     return pathway_out(path, person.pack, scenario)
 
 
-@router.get("/profiles/{profile_id}/tracks")
+@router.get(
+    "/profiles/{profile_id}/tracks", response_model=TracksOut, response_model_exclude_unset=True
+)
 def tracks(
     profile_id: str,
     scenario: Scenario = Query(default="moderate"),
@@ -456,7 +458,7 @@ def explain_role(
     return explain(facts(match, person.plan(match, scenario), SCENARIO_LABEL[scenario]), settings)
 
 
-@router.get("/profiles/{profile_id}/radar")
+@router.get("/profiles/{profile_id}/radar", response_model=RadarOut)
 def personal_radar(
     profile_id: str,
     scenario: Scenario = Query(default="moderate"),
@@ -514,7 +516,7 @@ def _talentcorp_market() -> dict[str, Any]:
     }
 
 
-@router.get("/profiles/{profile_id}/future")
+@router.get("/profiles/{profile_id}/future", response_model=FutureOut)
 def future(
     profile_id: str,
     role_id: str | None = Query(default=None, max_length=64),
