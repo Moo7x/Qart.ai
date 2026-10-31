@@ -53,6 +53,7 @@
 | 2026-10-24 | external service (links only) | Job-board search links: JobStreet Malaysia, Indeed Malaysia, MYFutureJobs (URL patterns opened 2026-10-24) | "See job posts" windows for each role | each site's terms; Qart links only, no scraping or storage | free | team |
 | 2026-10-24 | library | Recharts 3.10 | Trends charts: axes with units, gridlines, hover tooltips with value, period and source, legends; loaded only on the Trends page | MIT | free / open source | team |
 | 2026-10-23 | font | Geist and Geist Mono (Google Fonts) | Interface and data typography | SIL Open Font License 1.1 | free | team |
+| 2026-10-31 | font | Inter and Instrument Serif (Google Fonts) | Interface typography (Inter) and one italic accent word per heading (Instrument Serif), replacing Geist for text; Geist Mono stays for data | SIL Open Font License 1.1 | free | Meiirman |
 | 2026-10-23 | design reference | Clerk website style (colour, type and radius principles only) | Inspiration for the UI direction; no brand assets or components copied | — | public website | team |
 | 2026-10-23 | removed | axios | Replaced by the browser's fetch | — | — | team |
 | 2026-10-23 | library | python-docx 1.2.0 | Read synthetic DOCX CVs in memory | MIT (installed package metadata) | free / open source | team |
