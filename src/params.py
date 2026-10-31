@@ -348,3 +348,7 @@ AI_MAX_SKILLS_PER_ITEM = 2  # a resource counts for at most this many skills (it
 BASICS_VIDEOS_PER_TOPIC = (
     1  # AI-basics videos carried inside a step, per topic (the rest stay in the catalogue)
 )
+
+# --- Ranking check against TalentCorp's listed career moves (src/match/validation.py) ------------
+VALIDATION_LEVEL = 3  # "working": the synthetic person handles each typical skill of the role alone
+VALIDATION_TOP_K = 3  # a listed move counts as found when it is among the top 3 roles shown first

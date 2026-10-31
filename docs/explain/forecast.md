@@ -39,3 +39,12 @@ emerging, under moderate or fast AI adoption, with the evidence and the method b
 - "Change the data": a new Economic Index month re-fits the model; a new DOSM year re-forecasts
   demand; both change categories. Switching to fast AI moves roles at once.
 - "Why only two years?" The DOSM series is comparable from 2016, about ten points per group.
+
+## Does the ranking agree with an independent expert view? (src/match/validation.py)
+
+For each of the 11 current roles, a synthetic person holds its typical skills at "working" level;
+we check whether a career move TalentCorp lists for that role (read from the study, never an
+input to the score) is in the top 3. Live data, 2026-11-01: fit only 9 of 11 roles (recall 0.53),
+fit × outlook 8 of 11 (0.50). The misses: TalentCorp routes AP and AR analysts to accounting roles
+(cost, fixed assets), where our skills evidence points to the adjacent reporting roles (P2P, O2C).
+`python -m src.match.validation` prints the numbers and every miss; a test keeps the floor.
