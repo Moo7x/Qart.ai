@@ -244,15 +244,21 @@ def rank_roles(
     evidence: Evidence,
     interests: set[str] | None = None,
     intensity: float | None = None,
+    sdg_goals: set[str] | None = None,
 ) -> list[RoleMatch]:
-    """Every destination role, best fit first. Interests only re-order near-ties."""
+    """Every destination role, best fit first.
+
+    Interests and the SDGs the person cares about only re-order near-ties: among roles whose fit
+    differs by less than NEAR_TIE_POINTS, those matching more of them come first. Fit scores
+    never change, so an SDG choice changes which close option is shown first, never a score.
+    """
     matches = [
         score_role(pack, role, levels, scenario, evidence, intensity)
         for role in pack.destination_roles.values()
     ]
     matches.sort(key=lambda m: -m.fit)
-    if interests:
-        matches = _order_near_ties(pack, matches, interests)
+    if interests or sdg_goals:
+        matches = _order_near_ties(pack, matches, interests or set(), sdg_goals or set())
     return matches
 
 
@@ -260,15 +266,26 @@ def _interest_overlap(pack: Pack, match: RoleMatch, interests: set[str]) -> int:
     return sum(pack.skills[r.skill].kind in interests for r in match.requirements)
 
 
-def _order_near_ties(pack: Pack, matches: list[RoleMatch], interests: set[str]) -> list[RoleMatch]:
-    """Within groups of roles whose fit differs by less than NEAR_TIE_POINTS, put roles whose
-    requirements match the person's interests first. Fit scores themselves never change."""
+def sdg_overlap(pack: Pack, role_id: str, sdg_goals: set[str]) -> int:
+    """How many of the person's chosen goals (e.g. "8") the role's SDG targets (e.g. "8.5") serve."""
+    return len({link.target.split(".")[0] for link in pack.sdg.for_role(role_id)} & sdg_goals)
+
+
+def _order_near_ties(
+    pack: Pack, matches: list[RoleMatch], interests: set[str], sdg_goals: set[str]
+) -> list[RoleMatch]:
+    """Within groups of roles whose fit differs by less than NEAR_TIE_POINTS, put roles that match
+    the person's interests and chosen SDGs first. Fit scores themselves never change."""
+
+    def key(m: RoleMatch) -> int:
+        return -(_interest_overlap(pack, m, interests) + sdg_overlap(pack, m.role_id, sdg_goals))
+
     ordered: list[RoleMatch] = []
     group: list[RoleMatch] = []
     for match in matches:
         if group and group[0].fit - match.fit >= params.NEAR_TIE_POINTS:
-            ordered += sorted(group, key=lambda m: -_interest_overlap(pack, m, interests))
+            ordered += sorted(group, key=key)
             group = []
         group.append(match)
-    ordered += sorted(group, key=lambda m: -_interest_overlap(pack, m, interests))
+    ordered += sorted(group, key=key)
     return ordered

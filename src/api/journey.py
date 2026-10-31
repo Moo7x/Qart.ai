@@ -308,6 +308,11 @@ def _card(
         "effort_weeks": path.weeks,
         "uncovered": path.uncovered,
         "sdgs": _role_sdgs(pack, match),
+        # The person's chosen goals this role serves (they order near-ties; fit is unchanged).
+        "serves_goals": sorted(
+            {link.target.split(".")[0] for link in pack.sdg.for_role(match.role_id)}
+            & set(data.sdg_priorities)
+        ),
     }
 
 
@@ -323,7 +328,14 @@ def matches(
     evidence = automation_evidence(rows)
     signals = occupation_signals(rows) + job_ad_signals(rows)
     levels = data.levels()
-    ranked = rank_roles(pack, levels, scenario, evidence, set(data.interests) or None)
+    ranked = rank_roles(
+        pack,
+        levels,
+        scenario,
+        evidence,
+        set(data.interests) or None,
+        sdg_goals=set(data.sdg_priorities) or None,
+    )
     cards = [
         _card(
             pack,
