@@ -42,7 +42,7 @@ export function CvStep({
       <h2 id="j-title" className="m-0 text-[clamp(26px,4vw,38px)] font-medium leading-[1.08] tracking-[-0.02em]">
         Add your <Serif>CV</Serif>
       </h2>
-      <p className="m-0 text-[15px] text-[#404040]">{t('We pre-fill the next questions from it. Prefer not to? Skip and answer them yourself.')}</p>
+      <p className="m-0 text-[15px] text-[#404040]">We read your role and skills from it, each with the sentence it came from. Prefer not to? Use the form instead.</p>
       <label className="j-drop">
         <span className="text-[15px] font-semibold">{t('Drop a PDF, DOCX or text file')}</span>
         <span className="text-sm text-muted">or click to browse</span>
