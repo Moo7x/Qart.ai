@@ -90,10 +90,10 @@ export function OverviewTiles() {
           return (
             <div key={s.id} className="flex flex-col gap-1">
               <span className="flex flex-wrap items-end gap-2.5">
-                <VividNumber value={`${last.value}${s.unit.startsWith('%') ? '%' : ` ${s.unit}`}`} size={i === 0 ? 64 : 28} />
+                <VividNumber value={`${Math.round(last.value * 100) / 100}${s.unit.startsWith('%') ? '%' : ` ${s.unit}`}`} size={i === 0 ? 64 : 28} />
                 <span className="pb-1"><Label kind={s.kind === 'observed' ? 'observed' : 'assumption'} /></span>
               </span>
-              <span className="text-sm leading-snug text-[#33402a]">{s.title}{s.unit.startsWith('%') ? `, ${s.unit.slice(2)}` : ''} · {source?.name ?? s.evidence[0]?.source_id ?? ''} · {last.period}</span>
+              <span className="text-sm leading-snug text-[#33402a]">{s.title} · {source?.name ?? s.evidence[0]?.source_id ?? ''} · {last.period}</span>
             </div>
           )
         })}

@@ -590,7 +590,7 @@
     .w-head, .w-bar { display: none !important; }
     .w-mob { display: inline; }
     .w-scen, .w-scen [role=group] { width: 100%; }
-    .w-scen button { flex: 1 1 0; padding-inline: 6px; font-size: 13px; }
+    .w-scen button { flex: 1 1 0; min-width: 0; padding-inline: 4px; font-size: 12px; white-space: normal; }
   }
 }
 
