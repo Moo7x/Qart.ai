@@ -253,15 +253,20 @@ def run_now(
     engine: Engine = Depends(get_engine),
     settings: Settings = Depends(get_settings),
     x_admin_token: str | None = Header(default=None),
+    trigger: Literal["admin", "schedule"] = Query(default="admin"),
 ) -> RunStarted:
-    """Admin only. Starts a run in the background; GET /pipeline/runs shows its result."""
+    """Admin only. Starts a run in the background; GET /pipeline/runs shows its result.
+
+    `trigger=schedule` is what the daily GitHub Actions workflow sends, so its runs are logged as
+    scheduled rather than as an admin pressing Run now.
+    """
     if not settings.admin_token:
         raise HTTPException(
             status_code=503, detail="Run now is disabled: QART_ADMIN_TOKEN is not set"
         )
     if not x_admin_token or not hmac.compare_digest(x_admin_token, settings.admin_token):
         raise HTTPException(status_code=403, detail="admin token required")
-    background.add_task(run_pipeline, engine, "admin")
+    background.add_task(run_pipeline, engine, trigger)
     return RunStarted(
         status="started",
         note=f"a run started; if one is already running ({LOCK_NAME} lock) it is skipped",

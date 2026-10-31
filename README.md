@@ -173,7 +173,7 @@ The tests never call paid services. Code checks: `ruff check .` and `mypy src te
 
 - **Hosting:** the FastAPI backend and the built React frontend run as one Replit Autoscale deployment, the live demo above.
 - **Database:** Replit PostgreSQL holds profiles, plans, CV versions, dated evidence and update proposals.
-- **Scheduled pipeline:** a second Repl runs `python -m src.pipeline.run --trigger schedule` every day as a Replit Scheduled deployment against the same database, so evidence and run history keep updating even when nobody uses the app.
+- **Scheduled pipeline:** a second Repl runs `python -m src.pipeline.run --trigger schedule` every day as a Replit Scheduled deployment against the same database (`replit_serve.sh` with `QART_DEPLOY_ROLE=pipeline`), so evidence and run history keep updating even when nobody uses the app. The schedule is also in the repository: `.github/workflows/daily-pipeline.yml` asks the deployed app to start a run every day at 09:15 Malaysia time (`POST /api/pipeline/run?trigger=schedule` with the admin token). The run lock stops the two triggers overlapping, and every run, including "no change", is listed on Live intelligence → Run history.
 - **Secrets:** all keys live in Replit Secrets, never in the code.
 
 📄 Proof of use: [`submission/REPLIT PROOF OF USE.pdf`](submission/REPLIT%20PROOF%20OF%20USE.pdf)

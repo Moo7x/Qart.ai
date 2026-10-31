@@ -65,6 +65,14 @@ def test_run_now_requires_the_admin_token(
     response = client.post("/api/pipeline/run", headers={"X-Admin-Token": "test-admin-token"})
     assert response.status_code == 202
     assert calls and calls[0][1] == "admin"
+    scheduled = client.post(
+        "/api/pipeline/run?trigger=schedule", headers={"X-Admin-Token": "test-admin-token"}
+    )
+    assert scheduled.status_code == 202 and calls[-1][1] == "schedule"  # the daily workflow
+    other = client.post(
+        "/api/pipeline/run?trigger=x", headers={"X-Admin-Token": "test-admin-token"}
+    )
+    assert other.status_code == 422
 
 
 def test_runs_are_listed_newest_first(client: TestClient) -> None:

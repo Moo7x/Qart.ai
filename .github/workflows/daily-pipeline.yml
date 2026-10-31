@@ -1,0 +1,42 @@
+# Daily evidence pipeline trigger (a second, visible schedule).
+#
+# The primary daily run is a Replit Scheduled deployment that runs
+# `python -m src.pipeline.run --trigger schedule` (replit_serve.sh, QART_DEPLOY_ROLE=pipeline).
+# This workflow keeps the schedule in the repository and adds an independent trigger: once a day
+# it asks the deployed app to start a run through its admin endpoint. The pipeline's run lock
+# stops two runs overlapping, so the two triggers never collect twice at once.
+#
+# Repository secrets (Settings → Secrets and variables → Actions):
+#   QART_APP_URL      the deployed app, e.g. https://qartai.replit.app
+#   QART_ADMIN_TOKEN  the app's QART_ADMIN_TOKEN
+# Without them the job says so and succeeds, so a fork never fails.
+
+name: Daily evidence pipeline
+
+on:
+  schedule:
+    - cron: "15 1 * * *"  # 01:15 UTC = 09:15 in Malaysia, every day
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  trigger:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Start a pipeline run on the deployed app
+        env:
+          APP_URL: ${{ secrets.QART_APP_URL }}
+          ADMIN_TOKEN: ${{ secrets.QART_ADMIN_TOKEN }}
+        run: |
+          if [ -z "$APP_URL" ] || [ -z "$ADMIN_TOKEN" ]; then
+            echo "QART_APP_URL or QART_ADMIN_TOKEN is not set; nothing to trigger."
+            exit 0
+          fi
+          status=$(curl -s -o response.json -w "%{http_code}" -X POST \
+            -H "X-Admin-Token: $ADMIN_TOKEN" "$APP_URL/api/pipeline/run?trigger=schedule")
+          echo "HTTP $status"; cat response.json; echo
+          # 202: started (if a run already holds the lock, the new one is skipped and logged).
+          if [ "$status" != "202" ]; then exit 1; fi
