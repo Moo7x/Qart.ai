@@ -63,16 +63,8 @@ def role_outlook(
                     "source": "DOSM Job Market Insights",
                 }
             )
-    in_demand = {
-        _squash(r["entity"])
-        for r in rows
-        if r["source_id"] == "talentcorp_gbs_2024" and r["series"] == "talentcorp_in_demand_skill"
-    }
-    named = [
-        pack.skills[r.skill].name
-        for r in role.requires
-        if _squash(pack.skills[r.skill].name) in in_demand
-    ]
+    in_demand = _in_demand(rows)
+    named = [pack.skills[s].name for s in in_demand_skills(pack, role, rows)]
     if in_demand:
         items.append(
             {
@@ -109,3 +101,18 @@ def _mycol(rows: list[Row], isco: str | None) -> list[dict[str, str]]:
     else:
         text = f"This occupation is not among the {len(listed)} critical occupations in MyCOL."
     return [{"kind": "expert", "text": text, "source": source}]
+
+
+def _in_demand(rows: list[Row]) -> set[str]:
+    return {
+        _squash(r["entity"])
+        for r in rows
+        if r["source_id"] == "talentcorp_gbs_2024" and r["series"] == "talentcorp_in_demand_skill"
+    }
+
+
+def in_demand_skills(pack: Pack, role: DestinationRole, rows: list[Row]) -> list[str]:
+    """The role's skills TalentCorp names among its in-demand skills (expert view, PDF p. 25),
+    in the role's requirement order; empty when that list is not in the evidence store."""
+    named = _in_demand(rows)
+    return [r.skill for r in role.requires if _squash(pack.skills[r.skill].name) in named]

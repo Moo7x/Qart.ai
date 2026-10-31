@@ -41,7 +41,7 @@ from src.match.decision import (
 )
 from src.match.engine import Evidence, RoleMatch, Scenario, rank_roles
 from src.match.explain import explain, facts
-from src.match.outlook import role_outlook
+from src.match.outlook import in_demand_skills, role_outlook
 from src.match.pay import role_pay
 from src.match.radar import radar
 from src.match.tasks import task_view, work_view
@@ -315,6 +315,8 @@ def _card(
             r.skill: requirement_basis(pack, match.role_id, r.skill, rows)
             for r in match.requirements
         },
+        # Skills TalentCorp names as in demand (expert view, PDF p. 25): the row's trend line.
+        "in_demand": in_demand_skills(pack, role, rows),
         # The person's chosen goals this role serves (they order near-ties; fit is unchanged).
         "serves_goals": sorted(
             {link.target.split(".")[0] for link in pack.sdg.for_role(match.role_id)}

@@ -122,6 +122,7 @@ class RoleCard(BaseModel):
     uncovered: list[str]
     sdgs: list[SdgRef]
     requirement_basis: dict[str, SkillBasis]
+    in_demand: list[str]  # skill ids TalentCorp names as in demand (expert view)
     serves_goals: list[str]
 
 

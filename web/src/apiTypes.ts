@@ -511,6 +511,7 @@ export type RoleCard = {
   uncovered: string[]
   sdgs: SdgRef[]
   requirement_basis: Record<string, SkillBasis>
+  in_demand: string[]
   serves_goals: string[]
 }
 

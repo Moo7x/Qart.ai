@@ -300,9 +300,9 @@
     "below": "low",
     "kind": "assumption",
     "thresholds": {
-     "fair": 35,
-     "good": 55,
-     "strong": 75
+     "fair": 35.0,
+     "good": 55.0,
+     "strong": 75.0
     }
    },
    "current_impact": null,
@@ -432,6 +432,7 @@
       "ready": []
      },
      "impact": "medium",
+     "in_demand": [],
      "listed_transition": false,
      "longer_route": true,
      "meters": {
@@ -831,6 +832,7 @@
       "ready": []
      },
      "impact": "medium",
+     "in_demand": [],
      "listed_transition": false,
      "longer_route": true,
      "meters": {
@@ -1169,6 +1171,7 @@
       "ready": []
      },
      "impact": "medium",
+     "in_demand": [],
      "listed_transition": false,
      "longer_route": true,
      "meters": {
@@ -1500,6 +1503,7 @@
       "ready": []
      },
      "impact": "low",
+     "in_demand": [],
      "listed_transition": false,
      "longer_route": true,
      "meters": {
@@ -1863,6 +1867,7 @@
       "ready": []
      },
      "impact": "medium",
+     "in_demand": [],
      "listed_transition": false,
      "longer_route": true,
      "meters": {
@@ -2303,6 +2308,7 @@
       "ready": []
      },
      "impact": "medium",
+     "in_demand": [],
      "listed_transition": false,
      "longer_route": true,
      "meters": {
@@ -2755,6 +2761,7 @@
       "ready": []
      },
      "impact": "medium",
+     "in_demand": [],
      "listed_transition": false,
      "longer_route": true,
      "meters": {
@@ -3153,6 +3160,7 @@
       "ready": []
      },
      "impact": "medium",
+     "in_demand": [],
      "listed_transition": false,
      "longer_route": true,
      "meters": {
@@ -3648,6 +3656,7 @@
       "ready": []
      },
      "impact": "medium",
+     "in_demand": [],
      "listed_transition": false,
      "longer_route": true,
      "meters": {
@@ -4040,6 +4049,7 @@
       "ready": []
      },
      "impact": "medium",
+     "in_demand": [],
      "listed_transition": false,
      "longer_route": true,
      "meters": {
@@ -4508,10 +4518,10 @@
      "text": "Set and maintain the standard costs for your area and explain the variances.",
      "time": {
       "basis": "practice_estimate",
-      "high": 16,
-      "low": 8,
+      "high": 16.0,
+      "low": 8.0,
       "unit": "weeks",
-      "value": 8
+      "value": 8.0
      },
      "unlock": "study_done",
      "week_start": {
@@ -4549,10 +4559,10 @@
      "text": "Take over the accounting treatment for one transaction type in your area, with a reviewer checking only the exceptions.",
      "time": {
       "basis": "practice_estimate",
-      "high": 16,
-      "low": 8,
+      "high": 16.0,
+      "low": 8.0,
       "unit": "weeks",
-      "value": 8
+      "value": 8.0
      },
      "unlock": "study_done",
      "week_start": {
@@ -4590,10 +4600,10 @@
      "text": "Analyse your area's variances and explain their causes to the business.",
      "time": {
       "basis": "practice_estimate",
-      "high": 16,
-      "low": 8,
+      "high": 16.0,
+      "low": 8.0,
       "unit": "weeks",
-      "value": 8
+      "value": 8.0
      },
      "unlock": "study_done",
      "week_start": {
@@ -6243,10 +6253,10 @@
          "text": "Set and maintain the standard costs for your area and explain the variances.",
          "time": {
           "basis": "practice_estimate",
-          "high": 16,
-          "low": 8,
+          "high": 16.0,
+          "low": 8.0,
           "unit": "weeks",
-          "value": 8
+          "value": 8.0
          },
          "unlock": "study_done",
          "week_start": {
@@ -6346,10 +6356,10 @@
          "text": "Analyse your area's variances and explain their causes to the business.",
          "time": {
           "basis": "practice_estimate",
-          "high": 16,
-          "low": 8,
+          "high": 16.0,
+          "low": 8.0,
           "unit": "weeks",
-          "value": 8
+          "value": 8.0
          },
          "unlock": "study_done",
          "week_start": {
@@ -6462,10 +6472,10 @@
          "text": "Take over the accounting treatment for one transaction type in your area, with a reviewer checking only the exceptions.",
          "time": {
           "basis": "practice_estimate",
-          "high": 16,
-          "low": 8,
+          "high": 16.0,
+          "low": 8.0,
           "unit": "weeks",
-          "value": 8
+          "value": 8.0
          },
          "unlock": "study_done",
          "week_start": {
@@ -7074,9 +7084,9 @@
     "below": "low",
     "kind": "assumption",
     "thresholds": {
-     "fair": 35,
-     "good": 55,
-     "strong": 75
+     "fair": 35.0,
+     "good": 55.0,
+     "strong": 75.0
     }
    },
    "current_impact": null,
@@ -7223,6 +7233,7 @@
       ]
      },
      "impact": "medium",
+     "in_demand": [],
      "listed_transition": false,
      "longer_route": false,
      "meters": {
@@ -7680,6 +7691,7 @@
       ]
      },
      "impact": "medium",
+     "in_demand": [],
      "listed_transition": false,
      "longer_route": true,
      "meters": {
@@ -8090,6 +8102,7 @@
       ]
      },
      "impact": "medium",
+     "in_demand": [],
      "listed_transition": false,
      "longer_route": true,
      "meters": {
@@ -8478,6 +8491,7 @@
       ]
      },
      "impact": "medium",
+     "in_demand": [],
      "listed_transition": false,
      "longer_route": true,
      "meters": {
@@ -8779,6 +8793,7 @@
       ]
      },
      "impact": "medium",
+     "in_demand": [],
      "listed_transition": false,
      "longer_route": false,
      "meters": {
@@ -9157,6 +9172,7 @@
       ]
      },
      "impact": "medium",
+     "in_demand": [],
      "listed_transition": false,
      "longer_route": false,
      "meters": {
@@ -9641,6 +9657,7 @@
       ]
      },
      "impact": "medium",
+     "in_demand": [],
      "listed_transition": false,
      "longer_route": true,
      "meters": {
@@ -9999,6 +10016,7 @@
       ]
      },
      "impact": "low",
+     "in_demand": [],
      "listed_transition": false,
      "longer_route": false,
      "meters": {
@@ -10358,6 +10376,7 @@
       ]
      },
      "impact": "medium",
+     "in_demand": [],
      "listed_transition": false,
      "longer_route": true,
      "meters": {
@@ -10752,6 +10771,7 @@
       "ready": []
      },
      "impact": "medium",
+     "in_demand": [],
      "listed_transition": false,
      "longer_route": true,
      "meters": {
@@ -12055,7 +12075,7 @@
       "fast": 63.2,
       "moderate": 63.2
      },
-     "hours": 0,
+     "hours": 0.0,
      "points_per_10h": {
       "fast": 0.0,
       "moderate": 0.0
@@ -12811,9 +12831,9 @@
     "below": "low",
     "kind": "assumption",
     "thresholds": {
-     "fair": 35,
-     "good": 55,
-     "strong": 75
+     "fair": 35.0,
+     "good": 55.0,
+     "strong": 75.0
     }
    },
    "current_impact": null,
@@ -12930,6 +12950,7 @@
       ]
      },
      "impact": "medium",
+     "in_demand": [],
      "listed_transition": false,
      "longer_route": true,
      "meters": {
@@ -13267,6 +13288,7 @@
       ]
      },
      "impact": "medium",
+     "in_demand": [],
      "listed_transition": false,
      "longer_route": true,
      "meters": {
@@ -13616,6 +13638,7 @@
       "ready": []
      },
      "impact": "medium",
+     "in_demand": [],
      "listed_transition": false,
      "longer_route": true,
      "meters": {
@@ -14090,6 +14113,7 @@
       ]
      },
      "impact": "medium",
+     "in_demand": [],
      "listed_transition": false,
      "longer_route": true,
      "meters": {
@@ -14434,6 +14458,7 @@
       ]
      },
      "impact": "medium",
+     "in_demand": [],
      "listed_transition": false,
      "longer_route": true,
      "meters": {
@@ -14853,6 +14878,7 @@
       ]
      },
      "impact": "medium",
+     "in_demand": [],
      "listed_transition": false,
      "longer_route": true,
      "meters": {
@@ -15291,6 +15317,7 @@
       "ready": []
      },
      "impact": "medium",
+     "in_demand": [],
      "listed_transition": false,
      "longer_route": true,
      "meters": {
@@ -15752,6 +15779,7 @@
       "ready": []
      },
      "impact": "medium",
+     "in_demand": [],
      "listed_transition": false,
      "longer_route": true,
      "meters": {
@@ -16152,6 +16180,7 @@
       "ready": []
      },
      "impact": "medium",
+     "in_demand": [],
      "listed_transition": false,
      "longer_route": true,
      "meters": {
@@ -16513,6 +16542,7 @@
       "ready": []
      },
      "impact": "low",
+     "in_demand": [],
      "listed_transition": false,
      "longer_route": true,
      "meters": {
@@ -17014,10 +17044,10 @@
      "text": "Prepare your own reports end to end, including commentary on changes.",
      "time": {
       "basis": "practice_estimate",
-      "high": 16,
-      "low": 8,
+      "high": 16.0,
+      "low": 8.0,
       "unit": "weeks",
-      "value": 8
+      "value": 8.0
      },
      "unlock": "study_done",
      "week_start": {
@@ -17060,10 +17090,10 @@
      "text": "Handle your own invoice queue end to end, including credit notes and exceptions.",
      "time": {
       "basis": "practice_estimate",
-      "high": 16,
-      "low": 8,
+      "high": 16.0,
+      "low": 8.0,
       "unit": "weeks",
-      "value": 8
+      "value": 8.0
      },
      "unlock": "study_done",
      "week_start": {
@@ -18233,7 +18263,7 @@
       "fast": 36.4,
       "moderate": 36.4
      },
-     "hours": 0,
+     "hours": 0.0,
      "points_per_10h": {
       "fast": 0.0,
       "moderate": 0.0
@@ -18538,10 +18568,10 @@
          "text": "Prepare your own reports end to end, including commentary on changes.",
          "time": {
           "basis": "practice_estimate",
-          "high": 16,
-          "low": 8,
+          "high": 16.0,
+          "low": 8.0,
           "unit": "weeks",
-          "value": 8
+          "value": 8.0
          },
          "unlock": "study_done",
          "week_start": {
@@ -18710,10 +18740,10 @@
          "text": "Handle your own invoice queue end to end, including credit notes and exceptions.",
          "time": {
           "basis": "practice_estimate",
-          "high": 16,
-          "low": 8,
+          "high": 16.0,
+          "low": 8.0,
           "unit": "weeks",
-          "value": 8
+          "value": 8.0
          },
          "unlock": "study_done",
          "week_start": {
@@ -19411,9 +19441,9 @@
     "below": "low",
     "kind": "assumption",
     "thresholds": {
-     "fair": 35,
-     "good": 55,
-     "strong": 75
+     "fair": 35.0,
+     "good": 55.0,
+     "strong": 75.0
     }
    },
    "current_impact": null,
@@ -19565,6 +19595,7 @@
       ]
      },
      "impact": "medium",
+     "in_demand": [],
      "listed_transition": false,
      "longer_route": true,
      "meters": {
@@ -20050,6 +20081,7 @@
       ]
      },
      "impact": "medium",
+     "in_demand": [],
      "listed_transition": false,
      "longer_route": true,
      "meters": {
@@ -20413,6 +20445,7 @@
       ]
      },
      "impact": "medium",
+     "in_demand": [],
      "listed_transition": false,
      "longer_route": true,
      "meters": {
@@ -20853,6 +20886,7 @@
       "ready": []
      },
      "impact": "medium",
+     "in_demand": [],
      "listed_transition": false,
      "longer_route": true,
      "meters": {
@@ -21316,6 +21350,7 @@
       ]
      },
      "impact": "medium",
+     "in_demand": [],
      "listed_transition": false,
      "longer_route": true,
      "meters": {
@@ -21704,6 +21739,7 @@
       ]
      },
      "impact": "medium",
+     "in_demand": [],
      "listed_transition": false,
      "longer_route": true,
      "meters": {
@@ -22017,6 +22053,7 @@
       "ready": []
      },
      "impact": "low",
+     "in_demand": [],
      "listed_transition": false,
      "longer_route": true,
      "meters": {
@@ -22367,6 +22404,7 @@
       "ready": []
      },
      "impact": "medium",
+     "in_demand": [],
      "listed_transition": false,
      "longer_route": true,
      "meters": {
@@ -22718,6 +22756,7 @@
       "ready": []
      },
      "impact": "medium",
+     "in_demand": [],
      "listed_transition": false,
      "longer_route": true,
      "meters": {
@@ -23061,6 +23100,7 @@
       "ready": []
      },
      "impact": "medium",
+     "in_demand": [],
      "listed_transition": false,
      "longer_route": true,
      "meters": {
@@ -23620,10 +23660,10 @@
      "text": "Prepare your own reports end to end, including commentary on changes.",
      "time": {
       "basis": "practice_estimate",
-      "high": 16,
-      "low": 8,
+      "high": 16.0,
+      "low": 8.0,
       "unit": "weeks",
-      "value": 8
+      "value": 8.0
      },
      "unlock": "study_done",
      "week_start": {
@@ -24795,7 +24835,7 @@
       "fast": 33.3,
       "moderate": 33.3
      },
-     "hours": 0,
+     "hours": 0.0,
      "points_per_10h": {
       "fast": 0.0,
       "moderate": 0.0
@@ -25100,10 +25140,10 @@
          "text": "Prepare your own reports end to end, including commentary on changes.",
          "time": {
           "basis": "practice_estimate",
-          "high": 16,
-          "low": 8,
+          "high": 16.0,
+          "low": 8.0,
           "unit": "weeks",
-          "value": 8
+          "value": 8.0
          },
          "unlock": "study_done",
          "week_start": {
