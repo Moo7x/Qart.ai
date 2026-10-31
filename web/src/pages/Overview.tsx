@@ -1,8 +1,10 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useApi } from '../api'
 import { ScenarioSwitch, NextStep } from '../components/journey'
 import { Legend, PageHead, Serif } from '../components/atoms'
 import { OverviewTiles } from '../components/OverviewTiles'
+import { SkillSurvey } from '../components/SkillSurvey'
 import { JobHub } from '../components/JobHub'
 import { OverviewGlance } from '../components/OverviewGlance'
 import { RADAR_COLOURS, SkillRadar } from '../components/SkillRadar'
@@ -92,15 +94,18 @@ function CurrentJob() {
 
 export function Overview() {
   const { setProfileId, setScenario } = useJourney()
+  // Bumped when the skills survey closes, so every section reads the new answers.
+  const [refresh, setRefresh] = useState(0)
   return (
     <main className="page">
       <header className="flex flex-wrap items-end justify-between gap-3">
         <PageHead badge="Overview · GBS finance & accounting · Malaysia" title={<>Your <Serif>next</Serif> move starts here</>} />
         <Link to="/start" className="text-sm text-graphite underline underline-offset-4" onClick={() => { setProfileId(null); setScenario('moderate') }}>Start over</Link>
       </header>
-      <div className="q-tray"><OverviewTiles /></div>
-      <OverviewGlance />
-      <PersonalRadar />
+      <PersonalRadar key={`radar-${refresh}`} />
+      <SkillSurvey onDone={() => setRefresh((r) => r + 1)} />
+      <div className="q-tray"><OverviewTiles key={`tiles-${refresh}`} /></div>
+      <OverviewGlance key={`glance-${refresh}`} />
       <CurrentJob />
       <NextStep to="/roles" label="See the roles that fit you" hint="Next: compare the roles your skills lead to" />
     </main>

@@ -19,10 +19,13 @@ and plan stops use that same snapshot. Nothing here changes requirements, fit sc
 `/start` is the landing page (`pages/onboarding/Landing.tsx`, the decorative landscape in
 `components/HeroScene.tsx`) with a one-step CV popup over it (`CvPopup.tsx`, `CvStep.tsx`): upload a
 CV or use the form, see what was read (every level a claim), and "Continue" saves the profile and
-opens the Overview. On My options, roles are compact ranked rows with a fit range bar; the open row
+opens the Overview. The Overview opens with "Your skills as AI moves" (radar and how each skill
+moves), then "Increase the accuracy of your results" (`components/SkillSurvey.tsx`): a popup asks
+the up to three unrated skills whose answer would change the person's options most
+(`GET /questions`); each answer is saved as their own rating (`POST /answer`) and the radar, tiles
+and My options use it at once. On My options, roles are compact ranked rows with a fit range bar; the open row
 has a fit dial, Why?, evidence links and "Choose and continue", which leads to `/time` (hours and
-budget, saved on the profile) and then My plan. Unrated skills are rated through "The question that
-matters most"; "What matters to you" (interests, SDG goals) only orders near-tie roles. Shared
+budget, saved on the profile) and then My plan. "What matters to you" (interests, SDG goals) only orders near-tie roles. Shared
 pieces (labels, Why?, cards, segmented controls, vivid tiles, small charts) are in
 `components/atoms.tsx`, `components/MiniCharts.tsx` and `index.css`; all motion is inside
 `prefers-reduced-motion: no-preference`.

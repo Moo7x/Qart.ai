@@ -7,7 +7,7 @@ import { Dots, SdgTag, levelText } from '../components/journey'
 import { DarkButton, Label, Legend, PageHead, ScenarioSwitch, Segmented, Serif } from '../components/atoms'
 import { FitGauge } from '../components/MiniCharts'
 import { CompareRoles, JobPosts, Openings } from '../components/CompareRoles'
-import { BestQuestion, MeterRow, WhatIf } from '../components/Decision'
+import { MeterRow, WhatIf } from '../components/Decision'
 import { ExplainRole } from '../components/ExplainRole'
 import { ReportProblem } from '../components/Feedback'
 import { RoleTasks } from '../components/RoleTasks'
@@ -345,7 +345,6 @@ export function Roles() {
 
       {data && (
         <div className="q-tray flex flex-col gap-4">
-          <BestQuestion profileId={profileId} scenario={scenario} onAnswered={reloadAll} />
           {profile.data && <MattersToYou profileId={profileId} profile={profile.data.profile} onSaved={reloadAll} />}
           {data.current_role && (
             <div className="q-card flex-row flex-wrap items-center justify-between gap-3 px-5 py-3.5 text-[13px]">

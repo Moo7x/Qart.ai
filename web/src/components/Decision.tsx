@@ -1,9 +1,7 @@
 import { useState } from 'react'
-import { sendJSON, useApi } from '../api'
-import type { Meters, Question, RoleCard, Scenario, WhatIfResponse } from '../types'
-import { LevelPicker } from './LevelPicker'
+import { sendJSON } from '../api'
+import type { Meters, RoleCard, Scenario, WhatIfResponse } from '../types'
 import { LEVEL_MAX, levelName, useLevels } from './journey'
-import { Loading, Problem } from './ui'
 
 // Coverage, essentials and profile completeness kept apart, so one number never hides them.
 export function MeterRow({ meters, range }: { meters: Meters; range: { low: number; high: number } }) {
@@ -33,46 +31,6 @@ export function MeterRow({ meters, range }: { meters: Meters; range: { low: numb
 
 // The unstated skill whose answer changes this person's options most; answering saves a
 // self-rated claim (never verified) and the ranking is recomputed.
-export function BestQuestion({ profileId, scenario, onAnswered }: { profileId: string; scenario: Scenario; onAnswered: () => void }) {
-  const questions = useApi<Question[]>(`/api/profiles/${profileId}/questions?scenario=${scenario}`)
-  const [busy, setBusy] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  if (questions.loading) return <Loading what="the next question" />
-  if (questions.error) return <Problem what="the next question" message={questions.error} onRetry={questions.reload} />
-  const [first, ...rest] = questions.data ?? []
-  if (!first) return null
-
-  async function answer(level: number) {
-    setBusy(true)
-    setError(null)
-    try {
-      await sendJSON(`/api/profiles/${profileId}/answer`, { body: { skill: first.skill, level } })
-      questions.reload()
-      onAnswered()
-    } catch (reason) {
-      setError(reason instanceof Error ? reason.message : String(reason))
-    } finally {
-      setBusy(false)
-    }
-  }
-
-  return (
-    <section aria-label="The question that matters most" className="q-card gap-2.5">
-      <span className="q-kicker">The question that matters most for you now</span>
-      <h2 className="q-h3">How would you rate your {first.skill_name}?</h2>
-      <p className="m-0 text-sm text-[#404040]">{first.effect}</p>
-      <div className="max-w-[360px]">
-        <LevelPicker skill={first.skill} level={null} label={`Your level in ${first.skill_name}`} disabled={busy} allowUnsure={false} onChange={(level) => { if (level !== null) void answer(level) }} />
-      </div>
-      {error && <p role="alert" className="m-0 text-xs text-weak">{error}</p>}
-      <p className="m-0 text-xs text-graphite">
-        Your answer is saved as your own rating, not a verified level.
-        {rest.length > 0 && <> Next: {rest.map((q) => q.skill_name).join(', ')}.</>}
-      </p>
-    </section>
-  )
-}
-
 // Hypothetical levels → exact rank and fit changes; nothing is saved.
 export function WhatIf({ profileId, scenario, role }: { profileId: string; scenario: Scenario; role: RoleCard }) {
   const levels = useLevels()
