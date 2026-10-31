@@ -219,6 +219,13 @@ Kavitha's top fit above Nur's, AI basics for Hafiz and not for Kavitha, practice
 wherever a core skill is short, and every number in the role score (C2) and plan (C3) carrying a
 source or a label, including any number added later.
 
+**Report figures.** `python -m scripts.kpis` builds the app offline and writes
+`docs/KPI_RESULTS.md`: verified free-course coverage over the pinned Phase 1 set of 37 required
+skills (baseline 27/37, target at least 34/37), with skills added later reported apart; the free
+share of each persona's plan; the share of C2 and C3 numbers carrying a source or label
+(`src/match/labels.py`); and the C10 paired-profile check (`src/match/fairness.py`
+`paired_profile_check`, the same identities as the fairness test).
+
 **Fairness.** `tests/test_fairness.py` runs three synthetic versions of one CV that differ only
 in name, gender, religion, race, date of birth, marital status and contact details. It checks
 that the scrubbed text, the exact messages the language model would receive, the keyword
