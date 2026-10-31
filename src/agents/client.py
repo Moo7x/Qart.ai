@@ -1,16 +1,16 @@
 """Tool-calling chat for the agents, on AGENT_MODEL, with every call counted in the usage table.
 
-The JSON-schema calls of extraction and explanations go through src/llm.py; agents need the
-model to choose tools across several turns, so they call the chat API with `tools` here. The
-model only chooses tools and writes short reasons; code runs the tools and checks every answer.
+Both this and the JSON-schema calls of extraction and explanations go through `src/llm.py`
+`create` (time budget, no retries, usage row); agents add `tools` so the model can choose
+tools across several turns. The model only chooses tools and writes short reasons; code runs
+the tools and checks every answer.
 """
 
 import json
-import time
 from collections.abc import Callable
 from typing import Any
 
-from src import usage
+from src import llm
 from src.config import Settings
 
 # A chat turn: messages and tool definitions in, the assistant message out (as a plain dict).
@@ -19,57 +19,26 @@ Chat = Callable[[list[dict[str, Any]], list[dict[str, Any]]], dict[str, Any]]
 
 def openai_chat(settings: Settings, purpose: str, timeout: float) -> Chat:
     def chat(messages: list[dict[str, Any]], tools: list[dict[str, Any]]) -> dict[str, Any]:
-        from openai import OpenAI
-
-        client = OpenAI(
-            api_key=settings.llm_api_key,
-            base_url=settings.llm_base_url,
-            timeout=timeout,
-            max_retries=0,
+        request = {"messages": messages, "tools": tools, "tool_choice": "auto", "temperature": 0}
+        response = llm.create(
+            settings, model=settings.agent_model, purpose=purpose, timeout=timeout, request=request
         )
-        started = time.monotonic()
-        ok, tokens_in, tokens_out = False, None, None
-        try:
-            request: dict[str, Any] = {
-                "model": settings.agent_model,
-                "messages": messages,
-                "tools": tools,
-                "tool_choice": "auto",
-                "temperature": 0,
-            }
-            response = client.chat.completions.create(**request)
-            if response.usage is not None:
-                tokens_in, tokens_out = (
-                    response.usage.prompt_tokens,
-                    response.usage.completion_tokens,
-                )
-            message = response.choices[0].message
-            ok = True
-            return {
-                "role": "assistant",
-                "content": message.content or "",
-                "tool_calls": [
-                    {
-                        "id": call.id,
-                        "type": "function",
-                        "function": {
-                            "name": call.function.name,
-                            "arguments": call.function.arguments,
-                        },
-                    }
-                    for call in (message.tool_calls or [])
-                ],
-            }
-        finally:
-            usage.record(
-                purpose,
-                "openai",
-                settings.agent_model,
-                time.monotonic() - started,
-                ok,
-                tokens_in,
-                tokens_out,
-            )
+        message = response.choices[0].message
+        return {
+            "role": "assistant",
+            "content": message.content or "",
+            "tool_calls": [
+                {
+                    "id": call.id,
+                    "type": "function",
+                    "function": {
+                        "name": call.function.name,
+                        "arguments": call.function.arguments,
+                    },
+                }
+                for call in (message.tool_calls or [])
+            ],
+        }
 
     return chat
 

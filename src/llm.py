@@ -16,6 +16,38 @@ from src.config import Settings
 Complete = Callable[[list[dict[str, str]], dict[str, Any]], str]
 
 
+def create(
+    settings: Settings, *, model: str, purpose: str, timeout: float, request: dict[str, Any]
+) -> Any:
+    """One chat-completions call: a time budget, no retries, and one usage row (ok or not).
+
+    Returns the SDK response. `request` holds everything but the model (messages, and either
+    `response_format` or `tools`). Plain dicts are what the API takes; the SDK's TypedDicts add
+    nothing checkable here.
+    """
+    from openai import OpenAI
+
+    client = OpenAI(
+        api_key=settings.llm_api_key,
+        base_url=settings.llm_base_url,
+        timeout=timeout,
+        max_retries=0,
+    )
+    started = time.monotonic()
+    ok, tokens_in, tokens_out = False, None, None
+    try:
+        response = client.chat.completions.create(model=model, **request)
+        if response.usage is not None:
+            tokens_in = response.usage.prompt_tokens
+            tokens_out = response.usage.completion_tokens
+        ok = True
+        return response
+    finally:
+        usage.record(
+            purpose, "openai", model, time.monotonic() - started, ok, tokens_in, tokens_out
+        )
+
+
 def openai_complete(
     settings: Settings,
     *,
@@ -37,17 +69,7 @@ def openai_complete(
     model_name = model or settings.llm_model
 
     def complete(msgs: list[dict[str, str]], json_schema: dict[str, Any]) -> str:
-        from openai import OpenAI
-
-        client = OpenAI(
-            api_key=settings.llm_api_key,
-            base_url=settings.llm_base_url,
-            timeout=timeout,
-            max_retries=0,
-        )
-        # Plain dicts are what the API takes; the SDK's TypedDicts add nothing checkable here.
-        request: dict[str, Any] = {
-            "model": model_name,
+        request = {
             "messages": msgs,
             "response_format": {
                 "type": "json_schema",
@@ -55,18 +77,9 @@ def openai_complete(
             },
             "temperature": temperature,
         }
-        started = time.monotonic()
-        ok, tokens_in, tokens_out = False, None, None
-        try:
-            response = client.chat.completions.create(**request)
-            if response.usage is not None:
-                tokens_in = response.usage.prompt_tokens
-                tokens_out = response.usage.completion_tokens
-            ok = True
-            return response.choices[0].message.content or ""
-        finally:
-            usage.record(
-                purpose, "openai", model_name, time.monotonic() - started, ok, tokens_in, tokens_out
-            )
+        response = create(
+            settings, model=model_name, purpose=purpose, timeout=timeout, request=request
+        )
+        return response.choices[0].message.content or ""
 
     return complete
