@@ -43,7 +43,7 @@ def test_courses_are_free_sources_with_stated_length() -> None:
     assert len(pack.courses) >= 25
     for course in pack.courses.values():
         assert course.minutes > 0
-        assert course.provider.startswith(("Microsoft Learn", "OpenLearn"))
+        assert course.provider.startswith(("Microsoft Learn", "OpenLearn", "UN CC:Learn", "Alison"))
 
 
 def test_most_destination_skills_have_a_verified_course() -> None:

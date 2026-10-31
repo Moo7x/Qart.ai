@@ -29,6 +29,6 @@ def test_tax_analyst_appears_in_matches_with_components_pay_and_sdg(client: Test
     assert any(r["role_id"] == ROLE for r in matches["sdg_roles"])
     client.post(f"/api/profiles/{pid}/destination", json={"role_id": ROLE})
     path = client.get(f"/api/profiles/{pid}/pathway").json()
-    assert {"Green Tax Strategies", "Tax Preparation"} <= set(path["uncovered"])
+    assert "Tax Preparation" in path["uncovered"]  # Green Tax Strategies: UN CC:Learn course
     rows = {r["skill"] for r in client.get(f"/api/profiles/{pid}/sdg").json()["rows"]}
     assert "green_tax_strategies" in rows

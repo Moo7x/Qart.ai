@@ -5,20 +5,6 @@ checked: '2026-10-30'
 source: Microsoft Learn Catalog API (https://learn.microsoft.com/api/catalog/), fetched
   2026-10-30
 courses:
-- id: mslearn_learn_analyze_monitor_tune_ai_powered_business_solutions
-  title: Monitor, analyze, and tune AI agents
-  provider: Microsoft Learn
-  url: https://learn.microsoft.com/en-us/training/modules/analyze-monitor-tune-ai-powered-business-solutions/
-  minutes: 36
-  level: advanced
-  covers:
-  - continuous_improvement
-  time_basis: reading_estimate
-  hands_on: false
-  checked: '2026-10-30'
-  verified: false
-  match:
-    continuous_improvement: 0.481
 - id: mslearn_learn_bizapps_add_ai_model_process_invoice_online_workshop
   title: Add an AI model to process invoice forms - Online workshop
   provider: Microsoft Learn
@@ -33,6 +19,11 @@ courses:
   verified: false
   match:
     invoice_processing: 0.704
+  fit_check:
+    result: does_not_fit
+    by: gpt-4o-mini
+    quote: ''
+    checked: '2026-10-31'
 - id: mslearn_learn_bizapps_ai_builder_invoice_processing
   title: Extract invoice data with AI Builder’s prebuilt model
   provider: Microsoft Learn
@@ -44,9 +35,16 @@ courses:
   time_basis: reading_estimate
   hands_on: false
   checked: '2026-10-30'
-  verified: false
+  verified: true
   match:
     invoice_processing: 0.954
+  fit_check:
+    result: fits
+    by: gpt-4o-mini
+    quote: Learn the basics of invoice processing in AI Builder and how it can benefit
+      your organization.
+    checked: '2026-10-31'
+    skills_removed: []
 - id: mslearn_learn_bizapps_create_dashboards_power_bi
   title: Create dashboards in Power BI
   provider: Microsoft Learn
@@ -61,6 +59,11 @@ courses:
   verified: false
   match:
     dashboards: 0.679
+  fit_check:
+    result: unclear
+    by: gpt-4o-mini
+    quote: ''
+    checked: '2026-10-31'
 - id: mslearn_learn_bizapps_dashboard_in_a_day
   title: Dashboard in a Day - Online workshop
   provider: Microsoft Learn
@@ -72,9 +75,15 @@ courses:
   time_basis: reading_estimate
   hands_on: true
   checked: '2026-10-30'
-  verified: false
+  verified: true
   match:
     dashboards: 0.12
+  fit_check:
+    result: fits
+    by: gpt-4o-mini
+    quote: Explore using Power BI to create a mobile view, publish a report, build
+      a dashboard, and use storytelling with Power BI within PowerPoint.
+    checked: '2026-10-31'
 - id: mslearn_learn_bizapps_data_visualization_reports_power_bi
   title: Data visualization and reports in Power BI - Online workshop
   provider: Microsoft Learn
@@ -86,9 +95,14 @@ courses:
   time_basis: reading_estimate
   hands_on: true
   checked: '2026-10-30'
-  verified: false
+  verified: true
   match:
     data_visualisation: 0.844
+  fit_check:
+    result: fits
+    by: gpt-4o-mini
+    quote: Complete a full report that is ready for publishing on the Power BI Service.
+    checked: '2026-10-31'
 - id: mslearn_learn_bizapps_get_started_data_analytics
   title: Get started with Microsoft data analytics
   provider: Microsoft Learn
@@ -103,20 +117,11 @@ courses:
   verified: false
   match:
     big_data_analytics: 0.116
-- id: mslearn_learn_bizapps_integrate_teams_approval_online_workshop
-  title: Integrate with Microsoft Teams to get approvals - Online workshop
-  provider: Microsoft Learn
-  url: https://learn.microsoft.com/en-us/training/modules/integrate-teams-approval-online-workshop/
-  minutes: 29
-  level: beginner
-  covers:
-  - invoice_processing
-  time_basis: reading_estimate
-  hands_on: true
-  checked: '2026-10-30'
-  verified: false
-  match:
-    invoice_processing: 0.849
+  fit_check:
+    result: does_not_fit
+    by: gpt-4o-mini
+    quote: ''
+    checked: '2026-10-31'
 - id: mslearn_learn_bizapps_perform_analytics_power_bi
   title: Perform analytics in Power BI
   provider: Microsoft Learn
@@ -131,20 +136,11 @@ courses:
   verified: false
   match:
     big_data_analytics: 0.328
-- id: mslearn_learn_bizapps_power_platform_automate_client_script
-  title: Automate business process flows with client script
-  provider: Microsoft Learn
-  url: https://learn.microsoft.com/en-us/training/modules/power-platform-automate-client-script/
-  minutes: 41
-  level: advanced
-  covers:
-  - process_optimisation
-  time_basis: reading_estimate
-  hands_on: true
-  checked: '2026-10-30'
-  verified: false
-  match:
-    process_optimisation: 0.016
+  fit_check:
+    result: does_not_fit
+    by: gpt-4o-mini
+    quote: ''
+    checked: '2026-10-31'
 - id: mslearn_learn_bizapps_process_mining_process_owner
   title: Process mining for the process owner
   provider: Microsoft Learn
@@ -156,9 +152,17 @@ courses:
   time_basis: reading_estimate
   hands_on: false
   checked: '2026-10-30'
-  verified: false
+  verified: true
   match:
     process_optimisation: 0.049
+  fit_check:
+    result: fits
+    by: gpt-4o-mini
+    quote: Process mining in Power Automate can help organizations discover inefficiencies
+      in their processes and enable them to gain a deeper understanding of what goes
+      on within each process from start to finish.
+    checked: '2026-10-31'
+    skills_removed: []
 - id: mslearn_learn_bizapps_robotic_process_automation
   title: 'Solution architect series: Explore robotic process automation'
   provider: Microsoft Learn
@@ -170,9 +174,15 @@ courses:
   time_basis: reading_estimate
   hands_on: false
   checked: '2026-10-30'
-  verified: false
+  verified: true
   match:
     process_automation: 0.483
+  fit_check:
+    result: fits
+    by: gpt-4o-mini
+    quote: Explore options for automation and how to choose where to start.
+    checked: '2026-10-31'
+    skills_removed: []
 - id: mslearn_learn_bizapps_robotic_process_automation_online_workshop
   title: 'Power Automate: Automation - Online Workshop'
   provider: Microsoft Learn
@@ -184,9 +194,16 @@ courses:
   time_basis: reading_estimate
   hands_on: true
   checked: '2026-10-30'
-  verified: false
+  verified: true
   match:
     process_automation: 0.207
+  fit_check:
+    result: fits
+    by: gpt-4o-mini
+    quote: The automation doesn't send payments to vendors automatically. Instead,
+      a human supervisor approves and confirms that the invoice is real and ready
+      for payment before automation moves to the next step.
+    checked: '2026-10-31'
 - id: mslearn_learn_bizapps_work_automation_flow
   title: Automate processes with Robotic Process Automation and Power Automate for
     desktop
@@ -199,9 +216,15 @@ courses:
   time_basis: reading_estimate
   hands_on: false
   checked: '2026-10-30'
-  verified: false
+  verified: true
   match:
     process_automation: 0.737
+  fit_check:
+    result: fits
+    by: gpt-4o-mini
+    quote: Some business processes require supervision or input that's impossible
+      or risky to automate.
+    checked: '2026-10-31'
 - id: mslearn_learn_dynamics_accounting_distributions_invoice_validations_settlements_in_dynamics_365_finance_ops
   title: Work with accounting distributions, invoice validations, and settlements
     in Dynamics 365 Finance
@@ -214,23 +237,16 @@ courses:
   time_basis: reading_estimate
   hands_on: true
   checked: '2026-10-30'
-  verified: false
+  verified: true
   match:
     accounting_principles: 0.017
-- id: mslearn_learn_dynamics_apply_basic_performance_optimization_techniques_dynamics_365_finance_operations
-  title: Apply basic performance optimization in finance and operations apps
-  provider: Microsoft Learn
-  url: https://learn.microsoft.com/en-us/training/modules/apply-basic-performance-optimization-finance-operations/
-  minutes: 74
-  level: intermediate
-  covers:
-  - process_optimisation
-  time_basis: reading_estimate
-  hands_on: true
-  checked: '2026-10-30'
-  verified: false
-  match:
-    process_optimisation: 0.011
+  fit_check:
+    result: fits
+    by: gpt-4o-mini
+    quote: Accounting distributions are used to define how an amount is accounted
+      for.
+    checked: '2026-10-31'
+    skills_removed: []
 - id: mslearn_learn_dynamics_bank_reconciliation_dynamics_365_business_central
   title: Perform a bank reconciliation in Dynamics 365 Business Central
   provider: Microsoft Learn
@@ -242,9 +258,15 @@ courses:
   time_basis: reading_estimate
   hands_on: false
   checked: '2026-10-30'
-  verified: false
+  verified: true
   match:
     reconciliation: 0.093
+  fit_check:
+    result: fits
+    by: gpt-4o-mini
+    quote: The bank reconciliation feature is used to check the bank ledger entries
+      and the balance on the accounts against the statement from the bank.
+    checked: '2026-10-31'
 - id: mslearn_learn_dynamics_build_reports_dynamics_365_finance_operations
   title: Build reports for finance and operations apps
   provider: Microsoft Learn
@@ -258,11 +280,17 @@ courses:
   time_basis: reading_estimate
   hands_on: true
   checked: '2026-10-30'
-  verified: false
+  verified: true
   match:
     financial_reporting: 0.609
     data_visualisation: 0.205
     dashboards: 0.096
+  fit_check:
+    result: fits
+    by: gpt-4o-mini
+    quote: Design, create, and modify SSRS reports.
+    checked: '2026-10-31'
+    skills_removed: []
 - id: mslearn_learn_dynamics_cash_management_dynamics_365_business_central
   title: Set up cash management in Dynamics 365 Business Central
   provider: Microsoft Learn
@@ -274,9 +302,14 @@ courses:
   time_basis: reading_estimate
   hands_on: false
   checked: '2026-10-30'
-  verified: false
+  verified: true
   match:
     cash_application: 0.021
+  fit_check:
+    result: fits
+    by: gpt-4o-mini
+    quote: 'This module explains how to: - Create bank accounts in Business Central.'
+    checked: '2026-10-31'
 - id: mslearn_learn_dynamics_configure_credit_and_collections_in_dynamics_365_finance_ops
   title: Set up credit and collections in Dynamics 365 Finance
   provider: Microsoft Learn
@@ -288,9 +321,15 @@ courses:
   time_basis: reading_estimate
   hands_on: true
   checked: '2026-10-30'
-  verified: false
+  verified: true
   match:
     credit_collections: 0.945
+  fit_check:
+    result: fits
+    by: gpt-4o-mini
+    quote: Set up and manage collection letters.
+    checked: '2026-10-31'
+    skills_removed: []
 - id: mslearn_learn_dynamics_configure_electronic_reporting
   title: Configure electronic reporting in Dynamics 365 Finance
   provider: Microsoft Learn
@@ -298,13 +337,20 @@ courses:
   minutes: 51
   level: intermediate
   covers:
-  - reporting
+  - compliance_reporting
   time_basis: reading_estimate
   hands_on: true
   checked: '2026-10-30'
-  verified: false
+  verified: true
   match:
-    reporting: 0.264
+    compliance_reporting: null
+  fit_check:
+    result: fits
+    by: gpt-4o-mini
+    quote: generate business documents in the required format to electronically exchange
+      information with government bodies, banks, and other parties.
+    checked: '2026-10-31'
+    skills_removed: []
 - id: mslearn_learn_dynamics_configure_fixed_assets_mgmt_in_dynamics_365_finance_ops
   title: Configure fixed assets management in Dynamics 365 Finance
   provider: Microsoft Learn
@@ -319,6 +365,11 @@ courses:
   verified: false
   match:
     fixed_assets: 0.972
+  fit_check:
+    result: unclear
+    by: gpt-4o-mini
+    quote: ''
+    checked: '2026-10-31'
 - id: mslearn_learn_dynamics_configure_periodic_processes_d365_finance_ops
   title: Configure and perform periodic processes in Dynamics 365 Finance
   provider: Microsoft Learn
@@ -333,6 +384,11 @@ courses:
   verified: false
   match:
     reconciliation: 0.454
+  fit_check:
+    result: unclear
+    by: gpt-4o-mini
+    quote: ''
+    checked: '2026-10-31'
 - id: mslearn_learn_dynamics_configure_use_budget_planning
   title: Configure and use budget planning in Dynamics 365 Finance
   provider: Microsoft Learn
@@ -347,6 +403,11 @@ courses:
   verified: false
   match:
     budget_management: 0.137
+  fit_check:
+    result: unclear
+    by: gpt-4o-mini
+    quote: ''
+    checked: '2026-10-31'
 - id: mslearn_learn_dynamics_configure_use_general_ledger_dynamics_365_finance_ops
   title: Configure and use the general ledger in Dynamics 365 Finance
   provider: Microsoft Learn
@@ -358,9 +419,15 @@ courses:
   time_basis: reading_estimate
   hands_on: true
   checked: '2026-10-30'
-  verified: false
+  verified: true
   match:
     general_ledger: 0.86
+  fit_check:
+    result: fits
+    by: gpt-4o-mini
+    quote: Before you set up a chart of accounts, you should plan what the chart of
+      accounts is going to look like.
+    checked: '2026-10-31'
 - id: mslearn_learn_dynamics_configure_your_organization_in_finance_and_ops
   title: Configure your organization in finance and operations apps
   provider: Microsoft Learn
@@ -369,14 +436,21 @@ courses:
   level: intermediate
   covers:
   - erp
-  - systems_integration
   time_basis: reading_estimate
   hands_on: true
   checked: '2026-10-30'
-  verified: false
+  verified: true
   match:
     erp: 0.027
     systems_integration: 0.017
+  fit_check:
+    result: fits
+    by: gpt-4o-mini
+    quote: You must plan and configure your organization and create legal entities
+      as one of the first steps of implementing finance and operations apps.
+    checked: '2026-10-31'
+    skills_removed:
+    - systems_integration
 - id: mslearn_learn_dynamics_connect_intelligent_cloud_dynamics_365_business_central
   title: Migrate on-premises data to Dynamics 365 Business Central
   provider: Microsoft Learn
@@ -388,9 +462,15 @@ courses:
   time_basis: reading_estimate
   hands_on: false
   checked: '2026-10-30'
-  verified: false
+  verified: true
   match:
     data_migration: 0.388
+  fit_check:
+    result: fits
+    by: gpt-4o-mini
+    quote: Understand the steps to migrate to Business Central online.
+    checked: '2026-10-31'
+    skills_removed: []
 - id: mslearn_learn_dynamics_explore_reporting_tools_dynamics_365_finance_operations
   title: Explore reporting tools in finance and operations apps
   provider: Microsoft Learn
@@ -398,17 +478,23 @@ courses:
   minutes: 69
   level: intermediate
   covers:
-  - financial_reporting
   - reporting
   - data_visualisation
   time_basis: reading_estimate
   hands_on: true
   checked: '2026-10-30'
-  verified: false
+  verified: true
   match:
     financial_reporting: 0.835
     reporting: 0.608
     data_visualisation: 0.096
+  fit_check:
+    result: fits
+    by: gpt-4o-mini
+    quote: A report is a structured presentation of data.
+    checked: '2026-10-31'
+    skills_removed:
+    - financial_reporting
 - id: mslearn_learn_dynamics_general_ledger_daily_procedures_in_dynamics_365_finance_ops
   title: Perform general ledger daily procedures in Dynamics 365 Finance
   provider: Microsoft Learn
@@ -420,9 +506,14 @@ courses:
   time_basis: reading_estimate
   hands_on: true
   checked: '2026-10-30'
-  verified: false
+  verified: true
   match:
     general_ledger: 0.919
+  fit_check:
+    result: fits
+    by: gpt-4o-mini
+    quote: 'In this module, you''ll learn about: - General ledger processes.'
+    checked: '2026-10-31'
 - id: mslearn_learn_dynamics_get_started_implementation_project
   title: Get started with a finance and operations implementation project
   provider: Microsoft Learn
@@ -434,9 +525,16 @@ courses:
   time_basis: reading_estimate
   hands_on: false
   checked: '2026-10-30'
-  verified: false
+  verified: true
   match:
     financial_systems: 0.845
+  fit_check:
+    result: fits
+    by: gpt-4o-mini
+    quote: Learn about the implementation journey for a successful finance and operations
+      project.
+    checked: '2026-10-31'
+    skills_removed: []
 - id: mslearn_learn_dynamics_get_started_with_dynamics_365_for_finance_and_operations
   title: Get started with finance and operations apps
   provider: Microsoft Learn
@@ -444,13 +542,20 @@ courses:
   minutes: 657
   level: beginner
   covers:
-  - financial_reporting
+  - erp
   time_basis: reading_estimate
   hands_on: true
   checked: '2026-10-30'
-  verified: false
+  verified: true
   match:
-    financial_reporting: 0.01
+    erp: null
+  fit_check:
+    result: fits
+    by: gpt-4o-mini
+    quote: Learn how finance and operations apps support businesses to manage their
+      global financial systems, operational business processes, and streamlined supply
+      chains to empower people to make fast, informed decisions.
+    checked: '2026-10-31'
 - id: mslearn_learn_dynamics_implement_common_integration_features_in_dynamics_365_finance_ops
   title: Implement common integration features in finance and operations apps
   provider: Microsoft Learn
@@ -465,6 +570,11 @@ courses:
   verified: false
   match:
     financial_systems: 0.314
+  fit_check:
+    result: does_not_fit
+    by: gpt-4o-mini
+    quote: ''
+    checked: '2026-10-31'
 - id: mslearn_learn_dynamics_implement_cost_management
   title: Implement cost management in Dynamics 365 Finance
   provider: Microsoft Learn
@@ -483,6 +593,11 @@ courses:
     financial_systems: 0.519
     process_optimisation: 0.067
     budget_management: 0.025
+  fit_check:
+    result: does_not_fit
+    by: gpt-4o-mini
+    quote: ''
+    checked: '2026-10-31'
 - id: mslearn_learn_dynamics_manage_fixed_assets_finance
   title: Manage fixed assets in Dynamics 365 Finance
   provider: Microsoft Learn
@@ -497,6 +612,11 @@ courses:
   verified: false
   match:
     fixed_assets: 0.903
+  fit_check:
+    result: does_not_fit
+    by: gpt-4o-mini
+    quote: ''
+    checked: '2026-10-31'
 - id: mslearn_learn_dynamics_manage_fixed_assets_transactions
   title: Manage basic fixed assets transactions in Microsoft Dynamics 365 Business
     Central
@@ -509,9 +629,15 @@ courses:
   time_basis: reading_estimate
   hands_on: true
   checked: '2026-10-30'
-  verified: false
+  verified: true
   match:
     fixed_assets: 0.912
+  fit_check:
+    result: fits
+    by: gpt-4o-mini
+    quote: This module explains how to use the Calculate Depreciation batch job and
+      how to view the total depreciation for a fixed asset.
+    checked: '2026-10-31'
 - id: mslearn_learn_dynamics_migrate_data_dynamics_365_business_central
   title: Migrate data to Business Central
   provider: Microsoft Learn
@@ -523,9 +649,14 @@ courses:
   time_basis: reading_estimate
   hands_on: true
   checked: '2026-10-30'
-  verified: false
+  verified: true
   match:
     data_migration: 0.543
+  fit_check:
+    result: fits
+    by: gpt-4o-mini
+    quote: Perform data migration using the Data migration assisted setup wizard.
+    checked: '2026-10-31'
 - id: mslearn_learn_dynamics_migrate_data_go_live_with_dynamics_365_finance_ops
   title: Migrate data and go live with finance and operations apps
   provider: Microsoft Learn
@@ -538,10 +669,16 @@ courses:
   time_basis: reading_estimate
   hands_on: true
   checked: '2026-10-30'
-  verified: false
+  verified: true
   match:
     data_migration: 0.74
     data_management: 0.415
+  fit_check:
+    result: fits
+    by: gpt-4o-mini
+    quote: Learn how to prepare data for migration, by using the data management framework
+      to manage data entities and data entity packages in finance and operations apps.
+    checked: '2026-10-31'
 - id: mslearn_learn_dynamics_net_customers_vendors
   title: Customer and vendor netting in Dynamics 365 Finance
   provider: Microsoft Learn
@@ -556,20 +693,11 @@ courses:
   verified: false
   match:
     vendor_management: 0.061
-- id: mslearn_learn_dynamics_plan_config_global_address_book_in_dynamics_365_finance_ops
-  title: Plan and configure the global address book in finance and operations apps
-  provider: Microsoft Learn
-  url: https://learn.microsoft.com/en-us/training/modules/plan-config-global-address-book-finance-operations/
-  minutes: 59
-  level: intermediate
-  covers:
-  - erp
-  time_basis: reading_estimate
-  hands_on: true
-  checked: '2026-10-30'
-  verified: false
-  match:
-    erp: 0.017
+  fit_check:
+    result: unclear
+    by: gpt-4o-mini
+    quote: ''
+    checked: '2026-10-31'
 - id: mslearn_learn_dynamics_prepare_data_migration_to_dynamics_365_finance_ops
   title: Prepare data for migration to finance and operations apps
   provider: Microsoft Learn
@@ -582,10 +710,16 @@ courses:
   time_basis: reading_estimate
   hands_on: false
   checked: '2026-10-30'
-  verified: false
+  verified: true
   match:
     data_migration: 0.873
     data_management: 0.867
+  fit_check:
+    result: fits
+    by: gpt-4o-mini
+    quote: Generate field mapping between source and target data structures.
+    checked: '2026-10-31'
+    skills_removed: []
 - id: mslearn_learn_dynamics_present_business_applications_designs
   title: Present Business Applications designs to stakeholders
   provider: Microsoft Learn
@@ -597,24 +731,15 @@ courses:
   time_basis: reading_estimate
   hands_on: false
   checked: '2026-10-30'
-  verified: false
+  verified: true
   match:
     stakeholder_management: 0.111
-- id: mslearn_learn_dynamics_preventive_reactive_asset_management
-  title: Use preventive and reactive maintenance in Asset Management for Dynamics
-    365 Supply Chain Management
-  provider: Microsoft Learn
-  url: https://learn.microsoft.com/en-us/training/modules/preventive-reactive-asset-management/
-  minutes: 92
-  level: intermediate
-  covers:
-  - green_asset_management
-  time_basis: reading_estimate
-  hands_on: true
-  checked: '2026-10-30'
-  verified: false
-  match:
-    green_asset_management: 0.014
+  fit_check:
+    result: fits
+    by: gpt-4o-mini
+    quote: Presenting to your stakeholders is an important part of your work.
+    checked: '2026-10-31'
+    skills_removed: []
 - id: mslearn_learn_dynamics_process_customer_vendor_payments_dynamics_365_business_central
   title: Process customer and vendor payments in Microsoft Dynamics 365 Business Central
   provider: Microsoft Learn
@@ -626,23 +751,15 @@ courses:
   time_basis: reading_estimate
   hands_on: true
   checked: '2026-10-30'
-  verified: false
+  verified: true
   match:
     vendor_management: 0.138
-- id: mslearn_learn_dynamics_process_service
-  title: Process service in Dynamics 365 Business Central
-  provider: Microsoft Learn
-  url: https://learn.microsoft.com/en-us/training/modules/process-service/
-  minutes: 57
-  level: intermediate
-  covers:
-  - process_optimisation
-  time_basis: reading_estimate
-  hands_on: true
-  checked: '2026-10-30'
-  verified: false
-  match:
-    process_optimisation: 0.28
+  fit_check:
+    result: fits
+    by: gpt-4o-mini
+    quote: This module also describes the available options to pay vendors.
+    checked: '2026-10-31'
+    skills_removed: []
 - id: mslearn_learn_dynamics_processing_invoices_dynamics_365_business_central
   title: Processing vendor invoices in Dynamics 365 Business Central
   provider: Microsoft Learn
@@ -654,9 +771,14 @@ courses:
   time_basis: reading_estimate
   hands_on: false
   checked: '2026-10-30'
-  verified: false
+  verified: true
   match:
     invoice_processing: 0.736
+  fit_check:
+    result: fits
+    by: gpt-4o-mini
+    quote: '- Invoice from a purchase order.'
+    checked: '2026-10-31'
 - id: mslearn_learn_dynamics_reconcile_bank_accounts_dynamics_365_business_central
   title: Reconcile bank accounts in Microsoft Dynamics 365 Business Central
   provider: Microsoft Learn
@@ -668,9 +790,15 @@ courses:
   time_basis: reading_estimate
   hands_on: false
   checked: '2026-10-30'
-  verified: false
+  verified: true
   match:
     reconciliation: 0.051
+  fit_check:
+    result: fits
+    by: gpt-4o-mini
+    quote: The bank reconciliation feature is used to check the bank ledger entries
+      and the balance on the accounts against the statement from the bank.
+    checked: '2026-10-31'
 - id: mslearn_learn_dynamics_role_security_dynamics_365_finance_operations
   title: Implement role-based security in finance and operations apps
   provider: Microsoft Learn
@@ -679,28 +807,19 @@ courses:
   level: intermediate
   covers:
   - financial_systems
-  - erp
+  - internal_controls
   time_basis: reading_estimate
   hands_on: true
   checked: '2026-10-30'
   verified: false
   match:
     financial_systems: 0.376
-    erp: 0.014
-- id: mslearn_learn_dynamics_search_filter_sort_data_dynamics_365_business_central
-  title: Search, filter, sort, and select data in Business Central
-  provider: Microsoft Learn
-  url: https://learn.microsoft.com/en-us/training/modules/search-filter-sort-data-dynamics-365-business-central/
-  minutes: 45
-  level: beginner
-  covers:
-  - database_querying
-  time_basis: reading_estimate
-  hands_on: true
-  checked: '2026-10-30'
-  verified: false
-  match:
-    database_querying: 0.015
+    internal_controls: null
+  fit_check:
+    result: does_not_fit
+    by: gpt-4o-mini
+    quote: ''
+    checked: '2026-10-31'
 - id: mslearn_learn_dynamics_set_up_acquire_fixed_assets_finance
   title: Set up and acquire fixed assets in Dynamics 365 Finance
   provider: Microsoft Learn
@@ -712,9 +831,15 @@ courses:
   time_basis: reading_estimate
   hands_on: true
   checked: '2026-10-30'
-  verified: false
+  verified: true
   match:
     fixed_assets: 0.904
+  fit_check:
+    result: fits
+    by: gpt-4o-mini
+    quote: 'This module explains the following concepts: - Set up and create fixed
+      assets.'
+    checked: '2026-10-31'
 - id: mslearn_learn_dynamics_set_up_chart_accounts_finance
   title: Set up chart of accounts in Dynamics 365 Finance
   provider: Microsoft Learn
@@ -726,9 +851,16 @@ courses:
   time_basis: reading_estimate
   hands_on: true
   checked: '2026-10-30'
-  verified: false
+  verified: true
   match:
     general_ledger: 0.804
+  fit_check:
+    result: fits
+    by: gpt-4o-mini
+    quote: Dynamics 365 Finance helps you effectively structure and manage financial
+      accounts in your organization's general ledger system.
+    checked: '2026-10-31'
+    skills_removed: []
 - id: mslearn_learn_dynamics_setup_finance_insights
   title: Set up Finance insights in Dynamics 365 Finance
   provider: Microsoft Learn
@@ -740,9 +872,16 @@ courses:
   time_basis: reading_estimate
   hands_on: false
   checked: '2026-10-30'
-  verified: false
+  verified: true
   match:
     fpa: 0.217
+  fit_check:
+    result: fits
+    by: gpt-4o-mini
+    quote: your organization can forecast different aspects of Dynamics 365 Finance,
+      such as customer payments, cash flows, and budget proposals, by using intelligent
+      machine learning.
+    checked: '2026-10-31'
 - id: mslearn_learn_dynamics_setup_reporting_dynamics_365_business_central
   title: Set up Microsoft Dynamics 365 Business Central for reporting
   provider: Microsoft Learn
@@ -754,9 +893,16 @@ courses:
   time_basis: reading_estimate
   hands_on: true
   checked: '2026-10-30'
-  verified: false
+  verified: true
   match:
     reporting: 0.062
+  fit_check:
+    result: fits
+    by: gpt-4o-mini
+    quote: Find out how to customize document layouts and reports in Business Central
+      to follow your company's guidelines and preferences.
+    checked: '2026-10-31'
+    skills_removed: []
 - id: mslearn_learn_dynamics_setup_use_basic_budgeting_finance
   title: Set up and use basic budgeting Dynamics 365 Finance
   provider: Microsoft Learn
@@ -768,9 +914,15 @@ courses:
   time_basis: reading_estimate
   hands_on: true
   checked: '2026-10-30'
-  verified: false
+  verified: true
   match:
     budget_management: 0.098
+  fit_check:
+    result: fits
+    by: gpt-4o-mini
+    quote: Basic budgeting in Dynamics 365 Finance is the process of creating, managing,
+      and monitoring budgets.
+    checked: '2026-10-31'
 - id: mslearn_learn_dynamics_setup_use_budget_control_finance
   title: Set up and use budget control in Dynamics 365 Finance
   provider: Microsoft Learn
@@ -782,9 +934,15 @@ courses:
   time_basis: reading_estimate
   hands_on: true
   checked: '2026-10-30'
-  verified: false
+  verified: true
   match:
     budget_management: 0.293
+  fit_check:
+    result: fits
+    by: gpt-4o-mini
+    quote: This module provides information about how to set up and use basic budgeting
+      and budget control in Dynamics 365 Finance.
+    checked: '2026-10-31'
 - id: mslearn_learn_dynamics_transfer_gl_entries_dynamics_365_business_central
   title: Transfer general ledger entries to cost accounting in Dynamics 365 Business
     Central
@@ -797,9 +955,15 @@ courses:
   time_basis: reading_estimate
   hands_on: false
   checked: '2026-10-30'
-  verified: false
+  verified: true
   match:
     general_ledger: 0.879
+  fit_check:
+    result: fits
+    by: gpt-4o-mini
+    quote: Identify the reasons for transferring general ledger entries to cost accounting.
+    checked: '2026-10-31'
+    skills_removed: []
 - id: mslearn_learn_dynamics_upgrades_updates_finance_operations_apps
   title: Updates and upgrades for finance and operations apps
   provider: Microsoft Learn
@@ -808,14 +972,19 @@ courses:
   level: intermediate
   covers:
   - erp
-  - continuous_improvement
   time_basis: reading_estimate
   hands_on: false
   checked: '2026-10-30'
-  verified: false
+  verified: true
   match:
     erp: 0.306
-    continuous_improvement: 0.016
+  fit_check:
+    result: fits
+    by: gpt-4o-mini
+    quote: The world of enterprise resource planning (ERP) is continuously evolving
+      and helping customers scale up in productivity and streamline their operations.
+    checked: '2026-10-31'
+    skills_removed: []
 - id: mslearn_learn_dynamics_use_payment_journals_dynamics_365_business_central
   title: Use the payment reconciliation journal in Dynamics 365 Business Central
   provider: Microsoft Learn
@@ -827,9 +996,14 @@ courses:
   time_basis: reading_estimate
   hands_on: false
   checked: '2026-10-30'
-  verified: false
+  verified: true
   match:
     reconciliation: 0.017
+  fit_check:
+    result: fits
+    by: gpt-4o-mini
+    quote: Post and reconcile the payment reconciliation journal.
+    checked: '2026-10-31'
 - id: mslearn_learn_dynamics_work_implementation_tools_finance_operations
   title: Work with integration tools in finance and operations apps
   provider: Microsoft Learn
@@ -842,10 +1016,16 @@ courses:
   time_basis: reading_estimate
   hands_on: true
   checked: '2026-10-30'
-  verified: false
+  verified: true
   match:
     financial_systems: 0.127
     systems_integration: 0.014
+  fit_check:
+    result: fits
+    by: gpt-4o-mini
+    quote: Integrations are an important component of implementing finance and operations
+      apps.
+    checked: '2026-10-31'
 - id: mslearn_learn_dynamics_work_with_analytics_reporting_in_dynamics_365_finance_ops
   title: Work with analytics and reporting in finance and operations apps
   provider: Microsoft Learn
@@ -864,6 +1044,11 @@ courses:
     financial_reporting: 0.963
     fpa: 0.13
     erp: 0.052
+  fit_check:
+    result: does_not_fit
+    by: gpt-4o-mini
+    quote: ''
+    checked: '2026-10-31'
 - id: mslearn_learn_dynamics_work_with_cash_and_bank_in_dynamics_365_finance_ops
   title: Work with cash and bank management in Dynamics 365 Finance
   provider: Microsoft Learn
@@ -875,9 +1060,15 @@ courses:
   time_basis: reading_estimate
   hands_on: true
   checked: '2026-10-30'
-  verified: false
+  verified: true
   match:
     cash_application: 0.039
+  fit_check:
+    result: fits
+    by: gpt-4o-mini
+    quote: 'In this module, you will learn how to: - Work with cash and bank management
+      processes.'
+    checked: '2026-10-31'
 - id: mslearn_learn_dynamics_work_with_data_management_in_dynamics_365_finance_ops
   title: Work with data management in finance and operations apps
   provider: Microsoft Learn
@@ -891,11 +1082,17 @@ courses:
   time_basis: reading_estimate
   hands_on: true
   checked: '2026-10-30'
-  verified: false
+  verified: true
   match:
     data_management: 0.951
     data_validation: 0.221
     data_migration: 0.026
+  fit_check:
+    result: fits
+    by: gpt-4o-mini
+    quote: Clean up the staging tables.
+    checked: '2026-10-31'
+    skills_removed: []
 - id: mslearn_learn_dynamics_work_with_queries
   title: Work with queries in Dynamics 365 Business Central
   provider: Microsoft Learn
@@ -907,23 +1104,15 @@ courses:
   time_basis: reading_estimate
   hands_on: false
   checked: '2026-10-30'
-  verified: false
+  verified: true
   match:
     database_querying: 0.036
-- id: mslearn_learn_wwl_analyze_results_kql
-  title: Analyze query results using KQL
-  provider: Microsoft Learn
-  url: https://learn.microsoft.com/en-us/training/modules/analyze-results-kusto-query-language/
-  minutes: 37
-  level: intermediate
-  covers:
-  - sql
-  time_basis: reading_estimate
-  hands_on: false
-  checked: '2026-10-30'
-  verified: false
-  match:
-    sql: 0.014
+  fit_check:
+    result: fits
+    by: gpt-4o-mini
+    quote: Join, filter, and aggregate data in a Query object.
+    checked: '2026-10-31'
+    skills_removed: []
 - id: mslearn_learn_wwl_configure_sales_purchasing_business_central
   title: Configure sales and purchasing in Business Central
   provider: Microsoft Learn
@@ -938,6 +1127,11 @@ courses:
   verified: false
   match:
     vendor_management: 0.173
+  fit_check:
+    result: unclear
+    by: gpt-4o-mini
+    quote: ''
+    checked: '2026-10-31'
 - id: mslearn_learn_wwl_describe_account_payables_account_receivables
   title: Describe accounts payables and receivables in Dynamics 365 Finance
   provider: Microsoft Learn
@@ -952,6 +1146,11 @@ courses:
   verified: false
   match:
     credit_collections: 0.037
+  fit_check:
+    result: unclear
+    by: gpt-4o-mini
+    quote: ''
+    checked: '2026-10-31'
 - id: mslearn_learn_wwl_describe_reporting_integration
   title: Describe reporting and integration capabilities in Dynamics 365 finance and
     operations apps
@@ -960,15 +1159,21 @@ courses:
   minutes: 84
   level: beginner
   covers:
-  - financial_reporting
   - fpa
   time_basis: reading_estimate
   hands_on: false
   checked: '2026-10-30'
-  verified: false
+  verified: true
   match:
     financial_reporting: 0.572
     fpa: 0.015
+  fit_check:
+    result: fits
+    by: gpt-4o-mini
+    quote: Describe how Finance insights supports forecasting and anomaly detection.
+    checked: '2026-10-31'
+    skills_removed:
+    - financial_reporting
 - id: mslearn_learn_wwl_desktop_flows_robotic_process_automation_power_automate
   title: Desktop flows and Robotic Process Automation in Power Automate
   provider: Microsoft Learn
@@ -980,9 +1185,15 @@ courses:
   time_basis: reading_estimate
   hands_on: true
   checked: '2026-10-30'
-  verified: false
+  verified: true
   match:
     process_automation: 0.483
+  fit_check:
+    result: fits
+    by: gpt-4o-mini
+    quote: You'll also learn web automation, recording flows, and managing exceptions
+      and errors.
+    checked: '2026-10-31'
 - id: mslearn_learn_wwl_examine_components_of_modern_data_warehouse
   title: Explore fundamentals of large-scale analytics
   provider: Microsoft Learn
@@ -994,9 +1205,15 @@ courses:
   time_basis: reading_estimate
   hands_on: true
   checked: '2026-10-30'
-  verified: false
+  verified: true
   match:
     big_data_analytics: 0.879
+  fit_check:
+    result: fits
+    by: gpt-4o-mini
+    quote: Use Microsoft Fabric to ingest and analyze data.
+    checked: '2026-10-31'
+    skills_removed: []
 - id: mslearn_learn_wwl_explore_accounts_payable_accounts_receivable_microsoft_dynamics_365_finance
   title: Describe accounts payable and accounts receivable in Dynamics 365 Finance
   provider: Microsoft Learn
@@ -1009,10 +1226,17 @@ courses:
   time_basis: reading_estimate
   hands_on: false
   checked: '2026-10-30'
-  verified: false
+  verified: true
   match:
     invoice_processing: 0.35
     vendor_management: 0.058
+  fit_check:
+    result: fits
+    by: gpt-4o-mini
+    quote: Describe vendor payments and settlements, including three-way matching
+      concepts.
+    checked: '2026-10-31'
+    skills_removed: []
 - id: mslearn_learn_wwl_explore_fundamentals_of_data_visualization
   title: Explore fundamentals of data visualization
   provider: Microsoft Learn
@@ -1024,9 +1248,14 @@ courses:
   time_basis: reading_estimate
   hands_on: true
   checked: '2026-10-30'
-  verified: false
+  verified: true
   match:
     data_visualisation: 0.949
+  fit_check:
+    result: fits
+    by: gpt-4o-mini
+    quote: Identify common types of data visualization and their uses.
+    checked: '2026-10-31'
 - id: mslearn_learn_wwl_explore_general_ledger_dynamics_365
   title: Describe the general ledger in Dynamics 365 Finance
   provider: Microsoft Learn
@@ -1038,9 +1267,14 @@ courses:
   time_basis: reading_estimate
   hands_on: false
   checked: '2026-10-30'
-  verified: false
+  verified: true
   match:
     general_ledger: 0.861
+  fit_check:
+    result: fits
+    by: gpt-4o-mini
+    quote: '- Describe chart of accounts, including main accounts.'
+    checked: '2026-10-31'
 - id: mslearn_learn_wwl_fabric_transform_data_tsql
   title: Transform data using T-SQL in Microsoft Fabric
   provider: Microsoft Learn
@@ -1053,10 +1287,15 @@ courses:
   time_basis: reading_estimate
   hands_on: true
   checked: '2026-10-30'
-  verified: false
+  verified: true
   match:
     database_querying: 0.096
     sql: 0.083
+  fit_check:
+    result: fits
+    by: gpt-4o-mini
+    quote: Transform warehouse data using T-SQL queries
+    checked: '2026-10-31'
 - id: mslearn_learn_wwl_get_started_data_analytics
   title: Get started with data analytics
   provider: Microsoft Learn
@@ -1073,6 +1312,11 @@ courses:
   match:
     big_data_analytics: 0.239
     statistical_analytics: 0.049
+  fit_check:
+    result: does_not_fit
+    by: gpt-4o-mini
+    quote: ''
+    checked: '2026-10-31'
 - id: mslearn_learn_wwl_get_started_transact_sql_programming
   title: Get started with Transact-SQL programming
   provider: Microsoft Learn
@@ -1084,24 +1328,14 @@ courses:
   time_basis: reading_estimate
   hands_on: true
   checked: '2026-10-30'
-  verified: false
+  verified: true
   match:
     sql: 0.027
-- id: mslearn_learn_wwl_implement_cicd_in_fabric
-  title: Implement continuous integration and continuous delivery (CI/CD) in Microsoft
-    Fabric
-  provider: Microsoft Learn
-  url: https://learn.microsoft.com/en-us/training/modules/implement-cicd-in-fabric/
-  minutes: 46
-  level: beginner
-  covers:
-  - continuous_improvement
-  time_basis: reading_estimate
-  hands_on: true
-  checked: '2026-10-30'
-  verified: false
-  match:
-    continuous_improvement: 0.023
+  fit_check:
+    result: fits
+    by: gpt-4o-mini
+    quote: Describe the language elements of T-SQL used for simple programming tasks.
+    checked: '2026-10-31'
 - id: mslearn_learn_wwl_implement_manage_accounts_payable_expenses
   title: Manage accounts payable
   provider: Microsoft Learn
@@ -1109,28 +1343,19 @@ courses:
   minutes: 596
   level: intermediate
   covers:
-  - vendor_management
+  - invoice_processing
   time_basis: reading_estimate
   hands_on: true
   checked: '2026-10-30'
-  verified: false
+  verified: true
   match:
-    vendor_management: 0.081
-- id: mslearn_learn_wwl_introduce_configure_personalization_dynamics_365_finance_operations_apps
-  title: Get started with configuration and personalization in finance and operations
-    apps
-  provider: Microsoft Learn
-  url: https://learn.microsoft.com/en-us/training/modules/introduce-configure-personalization-dynamics-365-finance-operations-apps/
-  minutes: 11
-  level: beginner
-  covers:
-  - systems_integration
-  time_basis: reading_estimate
-  hands_on: true
-  checked: '2026-10-30'
-  verified: false
-  match:
-    systems_integration: 0.021
+    invoice_processing: null
+  fit_check:
+    result: fits
+    by: gpt-4o-mini
+    quote: You learn how to configure the Accounts payable module in Dynamics 365
+      Finance to empower accounts payable staff to perform their daily activities.
+    checked: '2026-10-31'
 - id: mslearn_learn_wwl_manage_budgeting
   title: Perform budgeting and forecasting
   provider: Microsoft Learn
@@ -1143,10 +1368,17 @@ courses:
   time_basis: reading_estimate
   hands_on: true
   checked: '2026-10-30'
-  verified: false
+  verified: true
   match:
     budget_management: 0.717
     fpa: 0.428
+  fit_check:
+    result: fits
+    by: gpt-4o-mini
+    quote: Basic budgeting in Dynamics 365 Finance is the process of creating, managing,
+      and monitoring budgets.
+    checked: '2026-10-31'
+    skills_removed: []
 - id: mslearn_learn_wwl_manage_fixed_assets
   title: Administer fixed assets and inventory
   provider: Microsoft Learn
@@ -1159,10 +1391,16 @@ courses:
   time_basis: reading_estimate
   hands_on: true
   checked: '2026-10-30'
-  verified: false
+  verified: true
   match:
     fixed_assets: 0.983
     it_asset_management: 0.019
+  fit_check:
+    result: fits
+    by: gpt-4o-mini
+    quote: Managing fixed assets involves careful tracking of depreciation, disposal,
+      and valuation.
+    checked: '2026-10-31'
 - id: mslearn_learn_wwl_process_financial_operations_business_central
   title: Process financial operations in Business Central
   provider: Microsoft Learn
@@ -1174,9 +1412,15 @@ courses:
   time_basis: reading_estimate
   hands_on: true
   checked: '2026-10-30'
-  verified: false
+  verified: true
   match:
     reconciliation: 0.048
+  fit_check:
+    result: fits
+    by: gpt-4o-mini
+    quote: Do you want to find out how to reconcile bank accounts in Dynamics 365
+      Business Central?
+    checked: '2026-10-31'
 - id: mslearn_learn_wwl_query_data_warehouse_microsoft_fabric
   title: Query a data warehouse in Microsoft Fabric
   provider: Microsoft Learn
@@ -1189,10 +1433,16 @@ courses:
   time_basis: reading_estimate
   hands_on: true
   checked: '2026-10-30'
-  verified: false
+  verified: true
   match:
     database_querying: 0.372
     sql: 0.013
+  fit_check:
+    result: fits
+    by: gpt-4o-mini
+    quote: Use the SQL query editor to write and run T-SQL queries against a data
+      warehouse.
+    checked: '2026-10-31'
 - id: mslearn_learn_wwl_query_relational_data_azure
   title: Query relational data in Azure
   provider: Microsoft Learn
@@ -1204,9 +1454,14 @@ courses:
   time_basis: reading_estimate
   hands_on: true
   checked: '2026-10-30'
-  verified: false
+  verified: true
   match:
     database_querying: 0.018
+  fit_check:
+    result: fits
+    by: gpt-4o-mini
+    quote: Describe query techniques for data using the SQL language
+    checked: '2026-10-31'
 - id: mslearn_learn_wwl_understand_data_concepts
   title: Understand data concepts
   provider: Microsoft Learn
@@ -1218,9 +1473,15 @@ courses:
   time_basis: reading_estimate
   hands_on: true
   checked: '2026-10-30'
-  verified: false
+  verified: true
   match:
     data_management: 0.241
+  fit_check:
+    result: fits
+    by: gpt-4o-mini
+    quote: Understanding data is key to many business operations.
+    checked: '2026-10-31'
+    skills_removed: []
 - id: mslearn_learn_wwl_understand_data_roles_services_products
   title: Understand data roles, services, and products
   provider: Microsoft Learn
@@ -1235,6 +1496,11 @@ courses:
   verified: false
   match:
     data_management: 0.364
+  fit_check:
+    result: does_not_fit
+    by: gpt-4o-mini
+    quote: ''
+    checked: '2026-10-31'
 - id: mslearn_learn_wwl_visualize_real_time_data_azure_stream_analytics_power_bi
   title: Visualize real-time data with Azure Stream Analytics and Power BI
   provider: Microsoft Learn
@@ -1246,20 +1512,11 @@ courses:
   time_basis: reading_estimate
   hands_on: true
   checked: '2026-10-30'
-  verified: false
+  verified: true
   match:
     data_visualisation: 0.738
-- id: mslearn_learn_wwl_work_with_data_kql
-  title: Work with data in Microsoft Sentinel using Kusto Query Language
-  provider: Microsoft Learn
-  url: https://learn.microsoft.com/en-us/training/modules/work-with-data-kusto-query-language/
-  minutes: 36
-  level: intermediate
-  covers:
-  - sql
-  time_basis: reading_estimate
-  hands_on: false
-  checked: '2026-10-30'
-  verified: false
-  match:
-    sql: 0.012
+  fit_check:
+    result: fits
+    by: gpt-4o-mini
+    quote: Create a real-time data visualization in Power BI.
+    checked: '2026-10-31'

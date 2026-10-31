@@ -1,0 +1,118 @@
+# Free courses from open providers for skills Microsoft Learn does not teach. Each page was read on
+# 2026-10-31 for its title, length, level and that study is free:
+#   UN CC:Learn (UNITAR and partner UN agencies): free self-paced e-courses; a certificate is issued
+#     on passing the quiz (an affiliated course may charge for its certificate).
+#   OpenLearn (The Open University): "free course", with a free statement of participation.
+#   Alison: "free course"; studying is free, a certificate or diploma is optional and paid.
+# Candidates (verified: false) are never planned until their fit is checked: by a person
+# (scripts/review_catalogue.py) or by the automatic fit check (python -m src.collectors.course_check).
+# `minutes` is the lower end of the length the provider states (time_basis: stated).
+checked: '2026-10-31'
+source: Course pages of UN CC:Learn, OpenLearn and Alison, read 2026-10-31
+courses:
+- id: uncc_green_fiscal_policy
+  title: Green Fiscal Policy
+  provider: UN CC:Learn
+  url: https://www.uncclearn.org/courses/green-fiscal-policy/
+  minutes: 120
+  level: beginner
+  covers:
+  - green_tax_strategies
+  time_basis: stated
+  hands_on: false
+  checked: '2026-10-31'
+  verified: true
+  fit_check:
+    result: fits
+    by: gpt-4o-mini
+    quote: Explain the rationale for greater use of green fiscal policy
+    checked: '2026-10-31'
+    skills_removed: []
+- id: uncc_sustainable_finance_taxonomies
+  title: Introduction to Sustainable Finance Taxonomies
+  provider: UN CC:Learn
+  url: https://www.uncclearn.org/courses/introduction-to-sustainable-finance-taxonomies/
+  minutes: 210
+  level: beginner
+  covers:
+  - green_asset_management
+  time_basis: stated
+  hands_on: false
+  checked: '2026-10-31'
+  verified: false
+  fit_check:
+    result: does_not_fit
+    by: gpt-4o-mini
+    quote: ''
+    checked: '2026-10-31'
+- id: openlearn_business_models_strategic_management
+  title: Business models in strategic management
+  provider: OpenLearn
+  url: https://www.open.edu/openlearn/money-business/business-models-strategic-management/content-section-0
+  minutes: 600
+  level: intermediate
+  covers:
+  - digital_business_model
+  time_basis: stated
+  hands_on: false
+  checked: '2026-10-31'
+  verified: false
+  fit_check:
+    result: unclear
+    by: gpt-4o-mini
+    quote: ''
+    checked: '2026-10-31'
+- id: alison_ohse_diploma
+  title: Diploma in Occupational Health, Safety and Environment (OHSE)
+  provider: Alison
+  url: https://alison.com/course/diploma-in-occupational-health-safety-and-environment-ohse
+  minutes: 900
+  level: intermediate
+  covers:
+  - ehs
+  time_basis: stated
+  hands_on: false
+  checked: '2026-10-31'
+  verified: true
+  fit_check:
+    result: fits
+    by: gpt-4o-mini
+    quote: Explain the importance of OHSE regulatory frameworks, including ISO 45001
+      and ISO 14001, and their role at the workplace
+    checked: '2026-10-31'
+- id: alison_iso_14001_internal_auditing
+  title: ISO 14001 Internal Auditing Strategies & Practices
+  provider: Alison
+  url: https://alison.com/course/iso-14001-internal-auditing-strategies-and-practices
+  minutes: 180
+  level: intermediate
+  covers:
+  - green_auditing
+  time_basis: stated
+  hands_on: false
+  checked: '2026-10-31'
+  verified: true
+  fit_check:
+    result: fits
+    by: gpt-4o-mini
+    quote: Explain important activities comprising an audit, such as audit activities,
+      opening meetings, and facility walkthroughs
+    checked: '2026-10-31'
+- id: alison_iso_50001_enms
+  title: ISO 50001:2018 - Elements of Energy Management System (EnMS)
+  provider: Alison
+  url: https://alison.com/course/iso-50001-2018-elements-of-energy-management-system-enms
+  minutes: 90
+  level: beginner
+  covers:
+  - energy_management
+  time_basis: stated
+  hands_on: false
+  checked: '2026-10-31'
+  verified: true
+  fit_check:
+    result: fits
+    by: gpt-4o-mini
+    quote: Explain the purpose of Energy measurement and information system and its
+      relation with the energy management system
+    checked: '2026-10-31'
