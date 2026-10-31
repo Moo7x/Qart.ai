@@ -50,10 +50,12 @@ def start_scout(
     engine: Engine = Depends(get_engine),
     settings: Settings = Depends(get_settings),
 ) -> RunStarted:
-    if body.skill not in load_pack().skills:
-        raise HTTPException(status_code=422, detail="unknown skill")
     res = load_resources()
-    if not res.videos_for(skill=body.skill) and not res.articles_for(skill=body.skill):
+    topics = {t.id for t in res.ai_basics}
+    if body.skill not in load_pack().skills and body.skill not in topics:
+        raise HTTPException(status_code=422, detail="unknown skill")
+    by = {"topic": body.skill} if body.skill in topics else {"skill": body.skill}
+    if not res.videos_for(**by) and not res.articles_for(**by):
         raise HTTPException(status_code=422, detail="no checked video or article for this skill")
     agent_engine = f"{settings.agent_model} agent" if settings.llm_configured else "ranking only"
     run_id = store.start(engine, "scout", body.skill, body.profile_id, agent_engine)

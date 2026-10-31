@@ -38,6 +38,8 @@ export type ScoutPick = {
   score: number
   reason: string
   source: string
+  // Articles: one link that highlights every chosen passage of the page at once.
+  page_url?: string
 }
 export type AgentRun = {
   id: string

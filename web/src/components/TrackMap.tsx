@@ -2,7 +2,7 @@ import { useCallback, useState } from 'react'
 import { useJourney } from '../state'
 import type { SkillBasis, Track, TrackNode } from '../types'
 import type { PracticeStep } from '../typesScoring'
-import { AgentButton, AgentRunWindow } from './AgentWindow'
+import { AgentRunWindow, BrainButton } from './AgentWindow'
 import { levelText } from './journey'
 import { Windows, type Pane } from './Windows'
 
@@ -139,15 +139,15 @@ function panes(node: TrackNode, state: State, blocker: string | null, done: stri
       ) : (
         <ul className="m-0 flex list-none flex-col gap-3 p-0">
           {node.videos.map((v) => (
-            <li key={v.id} className="flex flex-col gap-2">
-              <a href={v.url} target="_blank" rel="noopener noreferrer" className="grid grid-cols-[112px_minmax(0,1fr)] gap-3 text-void no-underline hover:underline">
+            <li key={v.id} className="flex items-start gap-3">
+              <a href={v.url} target="_blank" rel="noopener noreferrer" className="grid min-w-0 flex-auto grid-cols-[112px_minmax(0,1fr)] gap-3 text-void no-underline hover:underline">
                 <img src={`https://i.ytimg.com/vi/${videoId(v.url)}/mqdefault.jpg`} alt="" width={112} height={63} loading="lazy" className="h-[63px] w-[112px] bg-mist object-cover" />
                 <span className="flex min-w-0 flex-col gap-0.5">
                   <span className="font-medium leading-snug">{v.title}</span>
                   <span className="font-mono text-[11px] text-graphite">{v.channel} · {v.minutes} min · {v.published}</span>
                 </span>
               </a>
-              {node.skill && <span><AgentButton compact label="Agent: jump to the key minutes" onClick={() => onAgent(v.id, v.title)} /></span>}
+              <BrainButton label={`AI agent: open “${v.title}” at the key minute`} onClick={() => onAgent(v.id, v.title)} />
             </li>
           ))}
         </ul>
@@ -162,10 +162,12 @@ function panes(node: TrackNode, state: State, blocker: string | null, done: stri
       ) : (
         <ul className="m-0 flex list-none flex-col gap-2.5 p-0">
           {node.articles.map((a) => (
-            <li key={a.id} className="border-b border-line pb-2.5 last:border-0">
-              <a href={a.url} target="_blank" rel="noopener noreferrer" className="font-medium text-void">{a.title} ↗</a>
-              <span className="block font-mono text-[11px] text-graphite">{a.publisher}</span>
-              {node.skill && <span className="mt-1.5 block"><AgentButton compact label="Agent: jump to the key paragraph" onClick={() => onAgent(a.id, a.title)} /></span>}
+            <li key={a.id} className="flex items-start gap-3 border-b border-line pb-2.5 last:border-0">
+              <span className="min-w-0 flex-auto">
+                <a href={a.url} target="_blank" rel="noopener noreferrer" className="font-medium text-void">{a.title} ↗</a>
+                <span className="block font-mono text-[11px] text-graphite">{a.publisher}</span>
+              </span>
+              <BrainButton label={`AI agent: open “${a.title}” with its important passages highlighted`} onClick={() => onAgent(a.id, a.title)} />
             </li>
           ))}
         </ul>
@@ -302,8 +304,9 @@ export function TrackMap({ tracks, done, onToggle, onSkip, paused, checked }: { 
           key={`${open.track}-${open.node}`}
           title={`${tracks[open.track].title} · ${selected.title}`}
           panes={panes(selected, selectedState, blockerOf(open.track), done, onToggle, onSkip, paused, checked, (resourceId, resourceTitle) => {
-            if (!selected.skill) return
-            setAgent({ skill: selected.skill, skillName: selected.title, resourceId, resourceTitle })
+            // A skill stop runs on its skill; an AI-basics stop on its topic.
+            const basics = selected.mode === 'basics' || tracks[open.track].id === 'ai_basics'
+            setAgent({ skill: basics ? selected.id : selected.skill ?? selected.id, skillName: selected.title, resourceId, resourceTitle })
             setOpen(null)
           })}
           onClose={close}

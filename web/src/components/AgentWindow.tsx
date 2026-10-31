@@ -31,7 +31,7 @@ function videoThumb(url: string): string | null {
 function PickCard({ pick }: { pick: ScoutPick }) {
   const thumb = pick.kind === 'video' ? videoThumb(pick.url) : null
   return (
-    <a href={pick.url} target="_blank" rel="noopener noreferrer" className="agent-pick group flex gap-3 rounded-xl border border-[rgba(157,134,255,0.35)] bg-[rgba(255,255,255,0.04)] p-3 text-white no-underline hover:border-violet-light hover:bg-[rgba(157,134,255,0.12)]">
+    <a href={pick.kind === 'article' && pick.page_url ? pick.page_url : pick.url} target="_blank" rel="noopener noreferrer" className="agent-pick group flex gap-3 rounded-xl border border-[rgba(157,134,255,0.35)] bg-[rgba(255,255,255,0.04)] p-3 text-white no-underline hover:border-violet-light hover:bg-[rgba(157,134,255,0.12)]">
       {thumb ? (
         <span className="relative h-[72px] w-[128px] shrink-0 overflow-hidden rounded-lg bg-surface">
           <img src={thumb} alt="" width={128} height={72} className="h-full w-full object-cover" loading="lazy" />
@@ -166,6 +166,16 @@ export function AgentButton({ label, onClick, compact = false }: { label: string
     <button type="button" onClick={onClick} className={`agent-button inline-flex cursor-pointer items-center gap-2 rounded-full border-0 font-semibold text-white ${compact ? 'min-h-[34px] px-3 text-[12px]' : 'min-h-[44px] px-4 text-[14px]'}`}>
       <Bot size={compact ? 14 : 16} aria-hidden="true" />
       {label}
+    </button>
+  )
+}
+
+/** The small AI-brain button beside a video or article: the scout opens the video at the key
+ *  minute, or the article with its important passages highlighted. */
+export function BrainButton({ label, onClick }: { label: string; onClick: () => void }) {
+  return (
+    <button type="button" onClick={onClick} title={label} aria-label={label} className="agent-button inline-flex h-9 w-9 flex-none cursor-pointer items-center justify-center rounded-full border-0 text-white">
+      <Brain size={18} aria-hidden="true" />
     </button>
   )
 }
