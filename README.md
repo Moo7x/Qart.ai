@@ -20,10 +20,14 @@
 | Resource           | Link                                                   |
 | ------------------ | ------------------------------------------------------ |
 | GitHub Repository  | https://github.com/Moo7x/qart.ai                       |
-| Live Demo (Replit) | https://qartai.replit.app/start                        |
+| Live Demo (Replit) | https://qartai.replit.app                              |
+| Demo guide (two synthetic CVs) | [`submission/phase2/DEMO.md`](submission/phase2/DEMO.md) |
+| Demo Video (final) | https://youtu.be/_TpEkTakf44                           |
+| Slide Deck (final) | [`submission/phase2/SDC2026_Qart.ai_PitchDeck.pdf`](submission/phase2/SDC2026_Qart.ai_PitchDeck.pdf) |
+| Final Project & Prototype Report | [`submission/phase2/SDC2026_Qart.ai_Final.pdf`](submission/phase2/SDC2026_Qart.ai_Final.pdf) |
+| Technical & Tools Declaration (final) | [`submission/phase2/SDC2026_Qart.ai_TechDeclaration.pdf`](submission/phase2/SDC2026_Qart.ai_TechDeclaration.pdf) |
 | RunPod Endpoint    | Private serverless endpoint, called only by the server |
-| Slide Deck         | [`submission/SDC2026_Qart.ai_PitchDeck.pdf`](submission/SDC2026_Qart.ai_PitchDeck.pdf) |
-| Demo Video         | https://youtu.be/vUb9ipMBztw                           |
+| Preliminary round  | [`submission/`](submission/): proposal, declaration, deck, proof of use; video https://youtu.be/vUb9ipMBztw |
 
 ---
 
@@ -35,23 +39,25 @@ Malaysia's Global Business Services (GBS) sector employs about 250,000 people, a
 
 ### Solution
 
-Qart.ai turns that public evidence into a personal plan that can be checked. A person uploads a synthetic CV or answers a few questions; personal details are removed, and OpenAI gpt-4.1-mini reads the CV into skill claims, each quoting the CV. A daily pipeline collects seven public sources, and code then works out how much each skill matters under a moderate and a fast AI-adoption scenario, ranks nine real GBS finance roles with an explainable fit score and skills gap, and builds a roadmap: AI basics first, because nobody can adapt their work to AI without them, then reskilling without AI and with AI, from checked free courses, videos and articles.
+Qart.ai turns that public evidence into a personal plan that can be checked. A person uploads a synthetic CV or answers a few questions; personal details are removed, and OpenAI gpt-4.1-mini reads the CV into skill claims, each quoting the CV (the same CV always gets the same reading). A daily pipeline collects seven public sources, and from them Qart makes its own forecast: a trained model predicts how much AI already does on each task, backtested models forecast demand per job group, and 27 GBS finance roles are labelled Growing, Transforming, Shrinking, Emerging or Stable. Roles are ranked by an explainable fit score and that forecast. The reskilling path starts from the skills the person already has: each becomes "check and steer AI-run work" or "do it faster with AI", with checked courses and YouTube videos on doing that work with AI. Choosing a role turns it into the path to that role.
 
 What makes it different:
 
-- **Numbers come from code, not the model.** The language model only reads CVs and explains results in plain words; every score is computed from stored, dated observations and shows its source.
-- **The answer can change, in the open.** When new evidence arrives, Qart shows what would change in skill emphasis, scores and plan, and the person accepts or declines.
-- **Honest about uncertainty.** Two scenarios, every number labelled observed, assumption or estimate, and a trend is projected only if it beats simple baselines in a backtest.
-- **English and Malay.** Open models on a RunPod GPU match job titles in either language; Malay titles go from 0% to 75% top-1 accuracy compared with keyword search.
+- **Numbers come from code, not the model.** The language model reads CVs, checks resources and explains results in plain words; every score is computed from stored, dated observations and shows its source.
+- **Its own forecast, with measured error.** The task-level AI-use model (gradient boosting on BGE-M3 features) is chosen by 5-fold cross-validation: mean error 11.2 points against 16.2 for the average. A role is called Transforming only when two of three kinds of AI evidence agree.
+- **Reskilling for AI adoption.** Every step is about doing the work with AI; each course or video keeps the quote, from its page or captions, that shows AI used on that work.
+- **The answer can change, in the open.** When new evidence arrives, Qart shows what would change and the person accepts or declines; the change test lets anyone edit AI-use or job-market figures and see which roles move.
+- **Honest about uncertainty.** Two scenarios, every number labelled observed, assumption or estimate, and a demand trend is projected only if it beats "no change" in a backtest.
 
 ### Key Features
 
 - **Profile intake** — synthetic CV upload (PDF, DOCX or TXT), form or questionnaire. Personal details are removed first, and every skill quotes the CV. Levels stay the person's own claims.
 - **Live evidence layer** — seven registered public sources, collected daily by a Replit Scheduled deployment, each number with its source and date.
-- **Ranked future roles** — nine GBS finance roles with a fit score that shows every point, an essential-skill check and a skills gap.
-- **Reskilling roadmap** — three tracks with study hours and 33 courses, 48 videos and 41 articles, each checked by hand, plus a with/without-AI comparison.
-- **SDG mapping** — every role, skill and step tagged to an SDG target, with how the chosen path contributes.
-- **Two scenarios** — moderate and fast AI adoption, always labelled as estimates.
+- **Industry forecast** — 27 GBS finance roles in five categories, with the evidence and its strength; skills marked rising or declining.
+- **Ranked future roles** — 21 GBS finance roles with full skill requirements, ordered by fit × outlook, with a fit score that shows every point, an essential-skill check, a skills gap and "what would raise it".
+- **Reskilling path** — one path built from the person's own skills and how much AI does on their tasks, or to a chosen role; each step has courses, YouTube videos and articles on doing the work with AI, with study hours.
+- **SDG mapping** — every role, skill and step tagged to SDG 4.4, 4.3, 8.2 or 8.5 (12.6 for green skills), with how the chosen path contributes.
+- **Two scenarios** — moderate and fast AI adoption change weights, forecast and ranking, always labelled as estimates.
 - **The person decides** — *What changed* proposes evidence updates to accept or decline; the CV updates as steps are done and downloads as PDF.
 
 ### Who it is for
@@ -65,7 +71,7 @@ Working adults in GBS finance and accounting roles at risk of displacement, fres
 | Frontend      | React 19, TypeScript, Vite, Tailwind CSS, Recharts |
 | Backend       | Python 3.12, FastAPI, Pydantic, SQLAlchemy Core |
 | Database      | PostgreSQL on Replit; SQLite for local runs |
-| AI / Compute  | OpenAI gpt-4.1-mini (CV reading, plain-words explanations); RunPod Serverless GPU with BAAI/bge-m3 and bge-reranker-v2-m3 (job-title and skill matching) |
+| AI / Compute  | OpenAI gpt-4.1-mini (CV reading, resource checks, plain-words explanations, agents); RunPod Serverless GPU with BAAI/bge-m3 and bge-reranker-v2-m3 (matching, task-model features, resource ranking); scikit-learn models trained in the pipeline |
 | Hosting / Dev | Replit Autoscale (web app and API) and Replit Scheduled (daily evidence pipeline) |
 
 Every library, dataset and model, with its licence, is listed in [`docs/DECLARATION_LOG.md`](docs/DECLARATION_LOG.md).
@@ -79,7 +85,7 @@ Every library, dataset and model, with its licence, is listed in [`docs/DECLARAT
 ├── data/
 │   ├── sources.yaml         # Registered evidence sources: terms, limits, cadence
 │   ├── packs/gbs_fa/        # GBS finance field: roles, skills, tasks, resources, SDG targets
-│   ├── samples/             # Synthetic sample CVs (Nur, Hafiz, Mei)
+│   ├── samples/             # Synthetic sample CVs (Daniel, Aina, Nur, Hafiz, Mei, Kavitha)
 │   └── eval/                # Labelled job titles for the RunPod evaluation
 ├── docs/
 │   ├── PLAN.md              # Product and system design
@@ -94,15 +100,18 @@ Every library, dataset and model, with its licence, is listed in [`docs/DECLARAT
 │   ├── intake/              # CV files, personal-detail removal, skill extraction, skill search
 │   ├── collectors/          # One collector per registered source
 │   ├── evidence/            # Evidence store, measures, trends and labelled signals
-│   ├── match/               # Fit score, skills gap, scenarios, explanations
-│   ├── pathway/             # Roadmap tracks and planner
+│   ├── forecast/            # Task-level AI-use model and the industry forecast
+│   ├── match/               # Fit score, skills gap, scenarios, ranking check, explanations
+│   ├── pathway/             # Reskilling path and planner
+│   ├── agents/              # Resource scout and progress check (gpt-4.1-mini)
 │   ├── changes/             # Update proposals from new evidence
 │   ├── cv/, goal/, journey/ # CV versions, a user's goal role, progress
 │   ├── occupations/         # Any-occupation search across 1,016 occupations
 │   ├── pipeline/run.py      # The scheduled run: python -m src.pipeline.run
 │   ├── params.py            # Every threshold and weight, with its reason
 │   └── db.py                # One database layer for SQLite and PostgreSQL
-├── submission/              # Proposal, tools declaration, proof of use, pitch deck
+├── submission/              # Preliminary round: proposal, declaration, proof of use, deck
+│   └── phase2/              # Final round: report, declaration, deck, demo guide
 ├── tests/                   # pytest suite
 ├── web/                     # React frontend
 ├── .env.example             # Environment variable names (no values)
@@ -128,7 +137,7 @@ Every library, dataset and model, with its licence, is listed in [`docs/DECLARAT
                                                               7 public sources
 ```
 
-Every remote call has a time budget and a labelled fallback. The full diagram is Appendix A of [`submission/SDC2026_Qart.ai_TechDeclaration.pdf`](submission/SDC2026_Qart.ai_TechDeclaration.pdf); the modules are explained in [`docs/explain/`](docs/explain/ARCHITECTURE.md).
+After each collection the pipeline re-fits the task-level AI-use model and the demand forecasts, and the industry forecast is recomputed from them. Every remote call has a time budget and a labelled fallback. The final architecture is section 3.1 of [`submission/phase2/SDC2026_Qart.ai_Final.pdf`](submission/phase2/SDC2026_Qart.ai_Final.pdf); the modules are explained in [`docs/explain/`](docs/explain/ARCHITECTURE.md).
 
 ---
 
@@ -180,10 +189,10 @@ The tests never call paid services. Code checks: `ruff check .` and `mypy src te
 
 ## How We Use RunPod *(Required)*
 
-- **Workload:** GPU inference. A serverless worker serves two open models: `BAAI/bge-m3` (embeddings, MIT) and `BAAI/bge-reranker-v2-m3` (reranker, Apache-2.0). Nothing is trained.
+- **Workload:** GPU inference. A serverless worker serves two open models: `BAAI/bge-m3` (embeddings, MIT) and `BAAI/bge-reranker-v2-m3` (reranker, Apache-2.0). Nothing is trained on the GPU; its BGE-M3 vectors are the features of Qart's task-level AI-use model, trained in the pipeline.
 - **Setup:** `runpod/handler.py` runs as a **RunPod Serverless Endpoint**, built from `runpod/Dockerfile` in this repository (queue-based, min workers 0, max 1).
-- **Use in Qart.ai:** matching any job title, in English or Malay, to 1,016 occupations, and mapping a person's own words about their tasks to skills. Every call has a time budget and a labelled BM25 keyword fallback.
-- **Result:** on 40 labelled job titles, top-1 accuracy is 72% with the models and 58% with keyword search alone; for Malay titles, 75% and 0% ([`docs/RUNPOD_EVAL.md`](docs/RUNPOD_EVAL.md)).
+- **Use in Qart.ai:** matching any job title, in English or Malay, to 1,016 occupations; mapping a person's own words about their tasks to skills; features for the task-level AI-use model; ranking courses and videos on doing each skill with AI. Every call has a time budget and a labelled fallback.
+- **Result:** on 40 labelled job titles, top-1 accuracy is 72% with the models and 60% with keyword search alone; for Malay titles, 75% and 12% ([`docs/RUNPOD_EVAL.md`](docs/RUNPOD_EVAL.md)). For AI resources, precision at 3 rises from 0.21 (source order) to 0.31 with the reranker and 0.34 with the learned ranker ([`docs/RESOURCE_EVAL.md`](docs/RESOURCE_EVAL.md)).
 
 Example request:
 
@@ -201,15 +210,18 @@ curl -X POST https://api.runpod.ai/v2/$RUNPOD_ENDPOINT_ID/runsync \
 ## Challenges & Learnings
 
 - **Keeping the language model honest.** A model reading a CV can claim skills that are not there. Each claim has to quote the CV, code rejects quotes that are not in it, and the model is never allowed to produce a number.
-- **Matching in Malay.** Keyword search found 0% of Malay job titles. Moving matching to open multilingual models on a RunPod GPU raised it to 75%, and we measured it rather than assumed it.
+- **Matching in Malay.** Keyword search found 12% of Malay job titles. Moving matching to open multilingual models on a RunPod GPU raised it to 75%, and we measured it rather than assumed it.
 - **Cold GPUs.** A serverless GPU can take about 20 seconds to start, so every call got a time budget and a visible keyword fallback; no page waits for it.
-- **Trends that do not predict.** Our backtest found that no trend method beat a simple "no change" forecast for the occupation groups we follow, so Qart shows the observed history and does not project a trend, and says why.
+- **Forecasts that must earn their place.** Each demand series is projected only by a method that beats "no change" in a rolling backtest; otherwise Qart shows no change and says why. The task model is used only if it beats the average by 5% in cross-validation.
+- **Reskilling must be about AI.** Our first plan had a track "without AI"; feedback showed it missed the point. Every step now teaches doing the work with AI, and a resource is kept only when a quote on its page or in its captions shows AI used on that work.
+- **The same CV, two readings.** The model could link one CV sentence to different skills on different runs, giving two fits. The first reading of a CV is now stored and reused.
 - **Design for the user.** Walking through the app as users showed crowded pages and a plan that was hard to follow. We rebuilt the plan as a route with clear stops, made every question skippable, and kept the journey to about three minutes.
 
 ## Future Improvements
 
 - [ ] Test with at least 10 real users: time to a plan and whether they can explain their top role
-- [ ] Raise verified free-course coverage from 73% to 90% of required skills
+- [ ] Raise verified free-course coverage from 83% to 90% of required skills, and AI-adopted material beyond 23 of the 42
+- [ ] Human review of the resource labels, then retrain the rankers on a larger set
 - [ ] HR / L&D team view with aggregate skill gaps (groups under 5 hidden)
 - [ ] More fields beyond GBS finance and accounting
 - [ ] Native-speaker review of the Bahasa Malaysia interface
@@ -230,8 +242,10 @@ Both members iterated on the frontend and backend together once the first workin
 ## Submission Checklist
 
 - [x] Team name, domain and SDG track filled in
-- [x] Slide deck added in `submission/`
-- [x] Demo video link added
+- [x] Final Project & Prototype Report and final Technical & Tools Declaration in `submission/phase2/`
+- [ ] Final slide deck in `submission/phase2/`
+- [x] Final demo video link and demo guide added
+- [x] Preliminary slide deck and video in `submission/`
 - [x] Replit used, with proof of use in `submission/`
 - [x] RunPod used, with proof of use in `submission/`
 - [x] Preliminary proposal and Technical & Tools Declaration completed in `submission/`

@@ -1,6 +1,6 @@
 # Live demo: try Qart.ai with two synthetic CVs
 
-Live app: **https://qartai.replit.app** (no account needed).
+Live app: **https://qartai.replit.app** (no account needed). Recorded demo: https://youtu.be/_TpEkTakf44
 
 Both CVs are synthetic and labelled; no real person's data is used.
 
